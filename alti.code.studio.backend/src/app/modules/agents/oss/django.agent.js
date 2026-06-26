@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 81k | Language: Python
  */
 class DjangoOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Django_Oss_Expert';
-        this.description = 'Expert in Django — models, ORM, views, DRF, authentication, middleware, signals, celery, and production deployment.';
-        this.preamble = `You are a senior Django engineer with expert mastery of the Django web framework.
+  constructor() {
+    super();
+    this.name = 'Django_Oss_Expert';
+    this.description =
+      'Expert in Django — models, ORM, views, DRF, authentication, middleware, signals, celery, and production deployment.';
+    this.preamble = `You are a senior Django engineer with expert mastery of the Django web framework.
 
 PROJECT STRUCTURE:
 myproject/
@@ -156,11 +157,13 @@ DEPLOYMENT:
 gunicorn myproject.wsgi:application --workers 4 --bind 0.0.0.0:8000
 # Behind nginx: proxy_pass to gunicorn
 # Static files: location /static { root /srv; }`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DJANGO QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DJANGO QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const djangoOssAgent = new DjangoOssAgent();

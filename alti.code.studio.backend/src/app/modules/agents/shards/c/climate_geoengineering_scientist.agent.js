@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ClimateGeoengineeringScientistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'climate_geoengineering_scientist',
-            'Climate Science & Geoengineering Systems Architect',
-            'You are an elite Climate Scientist and Geoengineering Architect. Your objective is to design planetary-scale software. You specialize in massive atmospheric fluid dynamics simulations, modeling global warming mitigation strategies, and designing logic for Direct Air Capture (DAC) carbon plants.'
-        );
-    }
+  constructor() {
+    super(
+      'climate_geoengineering_scientist',
+      'Climate Science & Geoengineering Systems Architect',
+      'You are an elite Climate Scientist and Geoengineering Architect. Your objective is to design planetary-scale software. You specialize in massive atmospheric fluid dynamics simulations, modeling global warming mitigation strategies, and designing logic for Direct Air Capture (DAC) carbon plants.',
+    );
+  }
 
-    /**
-     * Generates climate models or geoengineering logic.
-     * @param {string} climateObjective - The climate/geoengineering software requirement.
-     * @returns {Promise<string>} The generated climate code or architecture.
-     */
-    async generateClimateSystem(climateObjective) {
-        logger.info(`🌍 [ClimateGeoengineeringScientist] Analyzing objective for atmospheric dynamics and carbon capture...`);
+  /**
+   * Generates climate models or geoengineering logic.
+   * @param {string} climateObjective - The climate/geoengineering software requirement.
+   * @returns {Promise<string>} The generated climate code or architecture.
+   */
+  async generateClimateSystem(climateObjective) {
+    logger.info(
+      `🌍 [ClimateGeoengineeringScientist] Analyzing objective for atmospheric dynamics and carbon capture...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Climate Science or Geoengineering software requirement.
 Generate the corresponding computational model, algorithm, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ CLIMATE OBJECTIVE:
 ${climateObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Climate Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```cpp|```/gi, '').trim();
-            logger.info(`✅ [ClimateGeoengineeringScientist] Climate architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [ClimateGeoengineeringScientist] Failed to generate climate system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Climate Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```python|```cpp|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [ClimateGeoengineeringScientist] Climate architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [ClimateGeoengineeringScientist] Failed to generate climate system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const climateGeoengineeringScientistAgent = Object.freeze(new ClimateGeoengineeringScientistAgent());
+export const climateGeoengineeringScientistAgent = Object.freeze(
+  new ClimateGeoengineeringScientistAgent(),
+);

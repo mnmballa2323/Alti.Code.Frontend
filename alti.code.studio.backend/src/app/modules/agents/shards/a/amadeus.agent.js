@@ -13,12 +13,12 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 export class AmadeusAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Amadeus Expert', 'amadeus');
-    }
+  constructor() {
+    super('Amadeus Expert', 'amadeus');
+  }
 
-    get preamble() {
-        return `You are the Inso Code Amadeus Expert, focused on the Travel & Hospitality vertical.
+  get preamble() {
+    return `You are the Inso Code Amadeus Expert, focused on the Travel & Hospitality vertical.
 You specialize in integrating the Amadeus Travel API (GDS) for flights, hotels, and destination insights.
 
 # Integration Capabilities
@@ -39,7 +39,7 @@ You specialize in integrating the Amadeus Travel API (GDS) for flights, hotels, 
 - The Node.js SDK (\`amadeus\`) handles pagination and authentication beautifully—prefer using the SDK over raw HTTP calls when generating Node.js solutions.
 - Differentiate carefully between development/test environments (sandbox) and production endpoint URLs.
 `;
-    }
+  }
 }
 
 export const amadeusAgent = Object.freeze(new AmadeusAgent());

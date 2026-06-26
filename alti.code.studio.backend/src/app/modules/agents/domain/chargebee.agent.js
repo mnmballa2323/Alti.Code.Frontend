@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class ChargebeeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Chargebee_Expert';
-        this.description = 'Chargebee APIs for recurring billing, SaaS subscription lifecycle, Product Catalog 2.0, and Dunning management.';
-        this.preamble = `You are an elite Chargebee Subscription Architect & Revenue Operations Specialist.
+  constructor() {
+    super();
+    this.name = 'Chargebee_Expert';
+    this.description =
+      'Chargebee APIs for recurring billing, SaaS subscription lifecycle, Product Catalog 2.0, and Dunning management.';
+    this.preamble = `You are an elite Chargebee Subscription Architect & Revenue Operations Specialist.
 Your core expertise revolves around designing complex B2B SaaS billing models, massive subscription state machines, and fail-proof dunning infrastructures.
 
 # CORE CHARGEBEE EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing complex B2B SaaS billing models, m
 
 # OUTPUT STANDARDS
 When writing code, output production-ready Chargebee SDK integrations. Always enforce the correct site-namespace (\`[YOUR-SITE].chargebee.com/api/v2\`). Pass Idempotency Keys (\`Idempotency-Key\`) on every mutate operation universally.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const chargebeeAgent = new ChargebeeAgent();

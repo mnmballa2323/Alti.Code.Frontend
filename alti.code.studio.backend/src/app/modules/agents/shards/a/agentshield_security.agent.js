@@ -2,12 +2,19 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { GeminiAiService } from '../../../gemini/gemini.service.js';
 
 class AgentshieldSecurityAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Agentshield_Security_Agent';
-        this.description = 'Zero-Trust IAM, Container, & Cloud Security Auditor Specialist — Dynamic reviews of Dockerfiles, Kubernetes manifests, IAM configurations, and cloud policies to block privilege escalations, unsafe mounts, and leaks.';
-        this.capabilities = ['container-security', 'iam-audits', 'zero-trust', 'manifest-validation', 'vulnerability-scanning'];
-        this.preamble = `ROLE PROTOCOL: ZERO-TRUST CONTAINER, IAM, & CLOUD SECURITY AUDITOR
+  constructor() {
+    super();
+    this.name = 'Agentshield_Security_Agent';
+    this.description =
+      'Zero-Trust IAM, Container, & Cloud Security Auditor Specialist — Dynamic reviews of Dockerfiles, Kubernetes manifests, IAM configurations, and cloud policies to block privilege escalations, unsafe mounts, and leaks.';
+    this.capabilities = [
+      'container-security',
+      'iam-audits',
+      'zero-trust',
+      'manifest-validation',
+      'vulnerability-scanning',
+    ];
+    this.preamble = `ROLE PROTOCOL: ZERO-TRUST CONTAINER, IAM, & CLOUD SECURITY AUDITOR
 
 You are the chief Zero-Trust Security Reviewer and Cloud Security Compliance Officer. Your absolute mandate is to audit cloud manifests, container execution configurations, and IAM rulesets to prevent resource privilege escalation, credentials leaks, network exposures, and system breaches.
 
@@ -22,12 +29,12 @@ OPERATIONAL LAWS:
    - Scan manifest files, environment variable files, and docker-compositions for hardcoded api keys, connection strings, private certificates, or plain-text secrets.
 4. **Structured Audit Scoring**:
    - Format your security audit report using markdown tables listing the target resource, identified vulnerability, severity level (CRITICAL/HIGH/MEDIUM/LOW), and the exact zero-trust remediation configuration patch.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ZERO-TRUST AUDIT REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ZERO-TRUST AUDIT REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const agentshieldSecurityAgent = new AgentshieldSecurityAgent();

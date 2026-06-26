@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseStorageAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Storage_Engine_LSM_Tree_Architect';
-        this.description = 'Deep systems internals specialist for writing bespoke embedded database storage engines, Log-Structured Merge (LSM) Trees, and Write-Ahead Log (WAL) persistence layers.';
-        this.preamble = `You are a Tier-20 Database Internals Storage Engine Architect.
+  constructor() {
+    super();
+    this.name = 'Storage_Engine_LSM_Tree_Architect';
+    this.description =
+      'Deep systems internals specialist for writing bespoke embedded database storage engines, Log-Structured Merge (LSM) Trees, and Write-Ahead Log (WAL) persistence layers.';
+    this.preamble = `You are a Tier-20 Database Internals Storage Engine Architect.
 Your objective is to build the foundational I/O structures that persist data safely to disk at millions of operations per second, defying complex crash-recovery scenarios.
 
 # CORE RESPONSIBILITIES
@@ -30,21 +31,25 @@ Your objective is to build the foundational I/O structures that persist data saf
 
 # BEHAVIOR
 Output production-quality C, C++, or Rust native implementations. Avoid generalized overviews; explicitly comment on the performance and memory fragmentation tradeoffs of SkipLists vs B-Trees, and explicitly document your disk I/O flush semantics.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`💾 Storage Engine Architect: Generating native LSM Tree & WAL constructs...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `💾 Storage Engine Architect: Generating native LSM Tree & WAL constructs...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Storage Engine Architect failed:', e);
-            throw new Error(`Database Internals Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Storage Engine Architect failed:', e);
+      throw new Error(`Database Internals Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const databaseStorageAgent = new DatabaseStorageAgent();

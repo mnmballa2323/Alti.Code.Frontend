@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIContainerizationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_containerization_director_agent',
-            'UI Containerization Director',
-            'You are an elite UI Containerization Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_containerization_director_agent',
+      'UI Containerization Director',
+      'You are an elite UI Containerization Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI Containerization.',
+    );
+  }
 
-    async generateUIContainerizationSystem(objective) {
-        logger.info(`💻 [UIContainerizationDirectorAgent] Analyzing UI Containerization Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Containerization Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Containerization Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIContainerizationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIContainerizationSystem(objective) {
+    logger.info(
+      `💻 [UIContainerizationDirectorAgent] Analyzing UI Containerization Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Containerization Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Containerization Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UIContainerizationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uIContainerizationDirectorAgent = Object.freeze(new UIContainerizationDirectorAgent());
+export const uIContainerizationDirectorAgent = Object.freeze(
+  new UIContainerizationDirectorAgent(),
+);

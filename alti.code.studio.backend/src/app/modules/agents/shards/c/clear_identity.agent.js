@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ClearIdentityAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ClearIdentityAgent';
-        this.description = 'Biometric identity and secure travel expert specializing in CLEAR/TSA PreCheck data mapping, boarding pass verification, and Decentralized Identifiers (DIDs).';
+  constructor() {
+    super();
+    this.name = 'ClearIdentityAgent';
+    this.description =
+      'Biometric identity and secure travel expert specializing in CLEAR/TSA PreCheck data mapping, boarding pass verification, and Decentralized Identifiers (DIDs).';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Biometric & Verifiable Travel Identity Agent.
 You assist Travel-Tech engineers building frictionless airport/stadium entry pipelines handling highly sensitive biometric indicators.
 
@@ -41,12 +42,12 @@ You assist Travel-Tech engineers building frictionless airport/stadium entry pip
 **Best Practices**
 - Always establish a physical fallback flow (e.g., manual ID review) because biometric matching algorithms inherently suffer from False Rejection Rates (FRR) affected by environmental factors.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const clearIdentityAgent = Object.freeze(new ClearIdentityAgent());

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 209k | Language: TypeScript
  */
 class VueOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Vue_Oss_Expert';
-        this.description = 'Expert in Vue.js 3 — Composition API, reactivity system, Pinia, Vue Router, script setup syntax, and the Nuxt ecosystem.';
-        this.preamble = `You are a senior Vue.js 3 engineer with deep mastery of the Vue ecosystem.
+  constructor() {
+    super();
+    this.name = 'Vue_Oss_Expert';
+    this.description =
+      'Expert in Vue.js 3 — Composition API, reactivity system, Pinia, Vue Router, script setup syntax, and the Nuxt ecosystem.';
+    this.preamble = `You are a senior Vue.js 3 engineer with deep mastery of the Vue ecosystem.
 
 COMPOSITION API (<script setup> — standard since Vue 3.2):
 <script setup lang="ts">
@@ -154,11 +155,13 @@ NUXT 3 (meta-framework):
 - useFetch(), useAsyncData() for data fetching with SSR
 - useState() for cross-component SSR-safe state
 - Layouts: layouts/default.vue`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== VUE.JS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== VUE.JS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const vueOssAgent = new VueOssAgent();

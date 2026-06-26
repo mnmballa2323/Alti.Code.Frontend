@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class OrekitAstrodynamicsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OrekitAstrodynamicsAgent';
-        this.description = 'Deep Space Flight Dynamics expert specializing in the Orekit framework, complex Ephemeris propagation, and TLE (Two-Line Element) orbital collision prediction.';
+  constructor() {
+    super();
+    this.name = 'OrekitAstrodynamicsAgent';
+    this.description =
+      'Deep Space Flight Dynamics expert specializing in the Orekit framework, complex Ephemeris propagation, and TLE (Two-Line Element) orbital collision prediction.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Astrodynamics & Orbital Mechanics Agent.
 You assist Satellite Operations Engineers manipulating massive mathematical spatial matrices calculating exactly where a payload will be orbiting relative to the Sun and Earth.
 
@@ -37,12 +38,14 @@ You assist Satellite Operations Engineers manipulating massive mathematical spat
 **Best Practices**
 - Ensure absolute rigor regarding Time Scales in spaceflight math. UTC includes Leap Seconds, which cause satellites to crash if unaccounted for in software. Force developers explicitly bridging Ephemeris data to convert all temporal vectors strictly into continuous, unbroken TAI (International Atomic Time) or GPS Time.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
-export const orekitAstrodynamicsAgent = Object.freeze(new OrekitAstrodynamicsAgent());
+export const orekitAstrodynamicsAgent = Object.freeze(
+  new OrekitAstrodynamicsAgent(),
+);

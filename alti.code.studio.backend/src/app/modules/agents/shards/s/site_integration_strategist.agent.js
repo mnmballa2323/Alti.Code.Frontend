@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteIntegrationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_integration_strategist_agent',
-            'Site Integration Strategist',
-            'You are an elite Site Integration Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Site Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'site_integration_strategist_agent',
+      'Site Integration Strategist',
+      'You are an elite Site Integration Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Site Integration.',
+    );
+  }
 
-    async generateSiteIntegrationSystem(objective) {
-        logger.info(`💻 [SiteIntegrationStrategistAgent] Analyzing Site Integration Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Integration Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Integration Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteIntegrationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteIntegrationSystem(objective) {
+    logger.info(
+      `💻 [SiteIntegrationStrategistAgent] Analyzing Site Integration Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Integration Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Integration Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SiteIntegrationStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const siteIntegrationStrategistAgent = Object.freeze(new SiteIntegrationStrategistAgent());
+export const siteIntegrationStrategistAgent = Object.freeze(
+  new SiteIntegrationStrategistAgent(),
+);

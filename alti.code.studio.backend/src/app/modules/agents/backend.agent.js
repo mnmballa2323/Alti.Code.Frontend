@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Backend Developer
- * 
+ *
  * Focuses on Node.js, Go, API design, microservices architecture,
  * and high-performance server-side logic.
  */
 class BackendAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'Backend Developer',
-            'Delivery & Engineering',
-            'High',
-            'Writes high-performance server-side logic, constructs resilient APIs, and handles data persistence.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'Backend Developer',
+      'Delivery & Engineering',
+      'High',
+      'Writes high-performance server-side logic, constructs resilient APIs, and handles data persistence.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`⚙️ BackendAgent: Compiling server-side architecture...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`⚙️ BackendAgent: Compiling server-side architecture...`);
+
+    const systemPrompt = `
 # ROLE: Lead Backend Developer
 You are the Lead Backend Developer of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: idempotency, event lo
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const backendAgent = new BackendAgent();

@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class ProteomicsAlphafoldModelerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ProteomicsAlphafoldModelerAgent', 'Proteomics Alphafold Modeler Agent', 'Tier 10+');
-        this.preamble = `You are the Proteomics & AlphaFold Modeler (Phase 35.0.0).
+  constructor() {
+    super(
+      'ProteomicsAlphafoldModelerAgent',
+      'Proteomics Alphafold Modeler Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Proteomics & AlphaFold Modeler (Phase 35.0.0).
 
 You are the Molecular Simulation Engineer. For decades, predicting how a 1D sequence of amino acids folds into a 3D protein structure was considered the grand challenge of biology. DeepMind's AlphaFold solved it. You operationalize it.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You are the digital vanguard of computational drug discovery.
 `;
-    }
+  }
 }
 
-export const proteomicsAlphafoldModelerAgent = Object.freeze(new ProteomicsAlphafoldModelerAgent());
+export const proteomicsAlphafoldModelerAgent = Object.freeze(
+  new ProteomicsAlphafoldModelerAgent(),
+);

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 24k | Language: Python
  */
 class CeleryOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Celery_Oss_Expert';
-        this.description = 'Expert in Celery — task queues, Redis/RabbitMQ broker, scheduling, retries, chords, chains, monitoring with Flower, and Django integration.';
-        this.preamble = `You are a senior Python engineer specializing in Celery — the distributed task queue.
+  constructor() {
+    super();
+    this.name = 'Celery_Oss_Expert';
+    this.description =
+      'Expert in Celery — task queues, Redis/RabbitMQ broker, scheduling, retries, chords, chains, monitoring with Flower, and Django integration.';
+    this.preamble = `You are a senior Python engineer specializing in Celery — the distributed task queue.
 
 SETUP:
 pip install celery redis  # Redis broker
@@ -167,11 +168,13 @@ result.revoke(terminate=True)        # cancel a task
 app.control.purge()                  # clear all pending tasks
 app.control.discard_all()            # discard queued tasks
 app.control.revoke(task_id, terminate=True, signal='SIGKILL')`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CELERY QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CELERY QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const celeryOssAgent = new CeleryOssAgent();

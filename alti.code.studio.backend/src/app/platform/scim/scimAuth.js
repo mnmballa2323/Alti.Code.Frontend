@@ -15,7 +15,7 @@ export const requireScimToken = async (req, res, next) => {
           schemas: ['urn:ietf:params:scim:api:messages:2.0:Error'],
           detail: 'Authorization header is missing or malformed.',
           status: '401',
-        })
+        }),
       );
     }
 
@@ -25,7 +25,7 @@ export const requireScimToken = async (req, res, next) => {
       logger.error('❌ [SCIM Auth] JWT secret configuration is missing');
       throw new ApiError(
         httpStatus.INTERNAL_SERVER_ERROR,
-        'JWT signing configuration is missing.'
+        'JWT signing configuration is missing.',
       );
     }
 
@@ -33,14 +33,17 @@ export const requireScimToken = async (req, res, next) => {
     try {
       decoded = jwt.verify(token, secret);
     } catch (err) {
-      logger.warn('⚠️ [SCIM Auth] SCIM token verification failed:', err.message);
+      logger.warn(
+        '⚠️ [SCIM Auth] SCIM token verification failed:',
+        err.message,
+      );
       throw new ApiError(
         httpStatus.UNAUTHORIZED,
         JSON.stringify({
           schemas: ['urn:ietf:params:scim:api:messages:2.0:Error'],
           detail: 'Invalid or expired SCIM token.',
           status: '401',
-        })
+        }),
       );
     }
 
@@ -52,7 +55,7 @@ export const requireScimToken = async (req, res, next) => {
           schemas: ['urn:ietf:params:scim:api:messages:2.0:Error'],
           detail: 'Token is missing tenant context.',
           status: '403',
-        })
+        }),
       );
     }
 
@@ -70,7 +73,7 @@ export const requireScimToken = async (req, res, next) => {
           schemas: ['urn:ietf:params:scim:api:messages:2.0:Error'],
           detail: 'Tenant workspace not found.',
           status: '403',
-        })
+        }),
       );
     }
 

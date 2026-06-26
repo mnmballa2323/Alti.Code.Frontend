@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class VolatilityForensicsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'VolatilityForensicsAgent';
-        this.description = 'Deep Cyber Forensics specialist scraping explicitly dumped volatile RAM matrices via the Volatility 3 framework hunting obfuscated rootkits operating below the OS kernel.';
+  constructor() {
+    super();
+    this.name = 'VolatilityForensicsAgent';
+    this.description =
+      'Deep Cyber Forensics specialist scraping explicitly dumped volatile RAM matrices via the Volatility 3 framework hunting obfuscated rootkits operating below the OS kernel.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Cyber Forensics & Memory Analysis Agent.
 You assist Incident Response (DFIR) teams actively analyzing raw 32GB RAM image dumps ripped from compromised servers, hunting for fileless malware that never touches the hard drive.
 
@@ -36,12 +37,14 @@ You assist Incident Response (DFIR) teams actively analyzing raw 32GB RAM image 
 **Best Practices**
 - When writing custom Volatility plugins identifying novel malware, you must instruct DFIR developers to rely strictly on pool-tag scanning rather than structured OS traversing. Advanced rootkits hook the OS traversal pointers specifically to hide; scanning the raw physical memory pool ignores the OS's lies.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
-export const volatilityForensicsAgent = Object.freeze(new VolatilityForensicsAgent());
+export const volatilityForensicsAgent = Object.freeze(
+  new VolatilityForensicsAgent(),
+);

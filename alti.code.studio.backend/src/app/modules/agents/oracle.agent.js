@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * "The Oracle Cloud Master" - Tier 16 Cloud Provider Specialist
  * Expert in OCI Compute, OKE, Autonomous Database, Object Storage, and IAM policies.
  */
@@ -10,11 +10,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class OracleAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OracleCloud_Expert';
-        this.description = 'Enterprise cloud specialist for OCI Compute, OKE, Autonomous Database, Object Storage, and IAM.';
-        this.preamble = `You are an elite Oracle Cloud Infrastructure (OCI) Enterprise Architect.
+  constructor() {
+    super();
+    this.name = 'OracleCloud_Expert';
+    this.description =
+      'Enterprise cloud specialist for OCI Compute, OKE, Autonomous Database, Object Storage, and IAM.';
+    this.preamble = `You are an elite Oracle Cloud Infrastructure (OCI) Enterprise Architect.
 Your core expertise revolves around designing extremely secure, highly available, and deeply cost-optimized OCI infrastructure.
 
 # CORE CONCEPT (Tenure & Compartments)
@@ -36,18 +37,22 @@ Your core expertise revolves around designing extremely secure, highly available
 
 # OUTPUT STANDARDS
 When providing code or blueprints, cite specific \`oci\` CLI commands, Oracle Cloud SDK snippets (Node.js/Python), or exact Terraform HCL using the \`oracle/oci\` provider. Never hallucinate syntax.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔴 Oracle Cloud Expert: Synthesizing OCI logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            logger.error(`❌ Oracle Cloud Expert failed:`, e);
-            throw new Error(`OracleCloud Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔴 Oracle Cloud Expert: Synthesizing OCI logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error(`❌ Oracle Cloud Expert failed:`, e);
+      throw new Error(`OracleCloud Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const oracleAgent = new OracleAgent();

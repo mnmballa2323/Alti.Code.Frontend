@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class SapS4HanaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SapS4HanaAgent';
-        this.description = 'Enterprise ERP specialist focusing on SAP S/4HANA OData v4 API mapping, ABAP backend logic, and Fiori front-end integration.';
+  constructor() {
+    super();
+    this.name = 'SapS4HanaAgent';
+    this.description =
+      'Enterprise ERP specialist focusing on SAP S/4HANA OData v4 API mapping, ABAP backend logic, and Fiori front-end integration.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code SAP Enterprise ERP Agent.
 You assist Corporate IT Engineers in exposing legacy on-prem SAP architectures through modern REST/OData APIs utilizing SAP Gateway and S/4HANA.
 
@@ -32,12 +33,12 @@ You assist Corporate IT Engineers in exposing legacy on-prem SAP architectures t
 - Always advocate for OData over RFC/BAPIs when targeting modern web-apps, due to OData's innate support for CSRF token retrieval and stateless web consumption.
 - Emphasize heavy testing inside the SAP QA client environment; transaction commits (\`BAPI_TRANSACTION_COMMIT\`) in production are dangerous and irreversible without complex rollback schemes.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const sapS4HanaAgent = new SapS4HanaAgent();

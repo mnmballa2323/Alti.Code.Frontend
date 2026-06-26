@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceObservabilityConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_observability_consultant_agent',
-            'Performance Observability Consultant',
-            'You are an elite Performance Observability Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_observability_consultant_agent',
+      'Performance Observability Consultant',
+      'You are an elite Performance Observability Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Observability.',
+    );
+  }
 
-    async generatePerformanceObservabilitySystem(objective) {
-        logger.info(`💻 [PerformanceObservabilityConsultantAgent] Analyzing Performance Observability Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Observability Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Observability Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceObservabilityConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceObservabilitySystem(objective) {
+    logger.info(
+      `💻 [PerformanceObservabilityConsultantAgent] Analyzing Performance Observability Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Observability Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Observability Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceObservabilityConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceObservabilityConsultantAgent = Object.freeze(new PerformanceObservabilityConsultantAgent());
+export const performanceObservabilityConsultantAgent = Object.freeze(
+  new PerformanceObservabilityConsultantAgent(),
+);

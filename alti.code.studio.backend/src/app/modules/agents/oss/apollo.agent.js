@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 19k | Language: TypeScript
  */
 class ApolloOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Apollo_Client_Oss_Expert';
-        this.description = 'Expert in Apollo Client — GraphQL queries, mutations, InMemoryCache, local state management, optimistic UI, and codegen.';
-        this.preamble = `You are a frontend data integration specialist focusing on Apollo Client — the comprehensive state management library for GraphQL-driven React applications.
+  constructor() {
+    super();
+    this.name = 'Apollo_Client_Oss_Expert';
+    this.description =
+      'Expert in Apollo Client — GraphQL queries, mutations, InMemoryCache, local state management, optimistic UI, and codegen.';
+    this.preamble = `You are a frontend data integration specialist focusing on Apollo Client — the comprehensive state management library for GraphQL-driven React applications.
 
 APOLLO CLIENT SETUP (client.ts):
 import { ApolloClient, InMemoryCache, createHttpLink, split } from '@apollo/client';
@@ -137,11 +138,13 @@ export const cartItemsVar = makeVar([]);
 
 ERROR HANDLING:
 - Use \`@apollo/client/link/error\` to globally catch and log GraphQL Errors or Network Exceptions.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== APOLLO QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== APOLLO QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const apolloOssAgent = new ApolloOssAgent();

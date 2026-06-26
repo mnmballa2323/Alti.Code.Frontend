@@ -1,13 +1,16 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * Session Validator Unit Tests
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import jwt from 'jsonwebtoken';
 import httpStatus from 'http-status';
-import { validateSessionToken, requirePlatformTenant } from './sessionValidator.js';
+import {
+  validateSessionToken,
+  requirePlatformTenant,
+} from './sessionValidator.js';
 import config from '../../../../config/index.js';
 
 describe('Platform Session Validator', () => {
@@ -26,7 +29,12 @@ describe('Platform Session Validator', () => {
 
   describe('validateSessionToken', () => {
     it('should successfully decode valid JWT tokens', () => {
-      const payload = { _id: 'user-1', role: 'user', tenantId: 'tenant-123', tenantRole: 'owner' };
+      const payload = {
+        _id: 'user-1',
+        role: 'user',
+        tenantId: 'tenant-123',
+        tenantRole: 'owner',
+      };
       const token = jwt.sign(payload, mockSecret, { expiresIn: '1h' });
 
       const decoded = validateSessionToken(token);
@@ -37,19 +45,26 @@ describe('Platform Session Validator', () => {
       const payload = { _id: 'user-1' };
       const expiredToken = jwt.sign(payload, mockSecret, { expiresIn: '-1s' });
 
-      expect(() => validateSessionToken(expiredToken)).toThrow('Invalid or expired session token.');
+      expect(() => validateSessionToken(expiredToken)).toThrow(
+        'Invalid or expired session token.',
+      );
     });
   });
 
   describe('requirePlatformTenant Express Middleware', () => {
     it('should inject req.user and call next() on valid token', () => {
-      const payload = { _id: 'user-1', role: 'user', tenantId: 'tenant-1', tenantRole: 'developer' };
+      const payload = {
+        _id: 'user-1',
+        role: 'user',
+        tenantId: 'tenant-1',
+        tenantRole: 'developer',
+      };
       const token = jwt.sign(payload, mockSecret);
 
       const req = {
         headers: {
-          authorization: `Bearer ${token}`
-        }
+          authorization: `Bearer ${token}`,
+        },
       };
       const res = {};
       const next = vi.fn();
@@ -62,18 +77,23 @@ describe('Platform Session Validator', () => {
         id: 'user-1',
         role: 'user',
         tenantId: 'tenant-1',
-        tenantRole: 'developer'
+        tenantRole: 'developer',
       });
     });
 
     it('should return FORBIDDEN if user lacks required tenant role', () => {
-      const payload = { _id: 'user-1', role: 'user', tenantId: 'tenant-1', tenantRole: 'viewer' };
+      const payload = {
+        _id: 'user-1',
+        role: 'user',
+        tenantId: 'tenant-1',
+        tenantRole: 'viewer',
+      };
       const token = jwt.sign(payload, mockSecret);
 
       const req = {
         headers: {
-          authorization: `Bearer ${token}`
-        }
+          authorization: `Bearer ${token}`,
+        },
       };
       const res = {};
       const next = vi.fn();
@@ -84,19 +104,24 @@ describe('Platform Session Validator', () => {
       expect(next).toHaveBeenCalledWith(
         expect.objectContaining({
           statusCode: httpStatus.FORBIDDEN,
-          message: 'Insufficient workspace access permissions.'
-        })
+          message: 'Insufficient workspace access permissions.',
+        }),
       );
     });
 
     it('should bypass tenant roles check if user global role is admin', () => {
-      const payload = { _id: 'admin-1', role: 'admin', tenantId: 'tenant-1', tenantRole: 'viewer' };
+      const payload = {
+        _id: 'admin-1',
+        role: 'admin',
+        tenantId: 'tenant-1',
+        tenantRole: 'viewer',
+      };
       const token = jwt.sign(payload, mockSecret);
 
       const req = {
         headers: {
-          authorization: `Bearer ${token}`
-        }
+          authorization: `Bearer ${token}`,
+        },
       };
       const res = {};
       const next = vi.fn();
@@ -118,8 +143,8 @@ describe('Platform Session Validator', () => {
       expect(next).toHaveBeenCalledWith(
         expect.objectContaining({
           statusCode: httpStatus.UNAUTHORIZED,
-          message: 'Authorization header missing or invalid format.'
-        })
+          message: 'Authorization header missing or invalid format.',
+        }),
       );
     });
   });

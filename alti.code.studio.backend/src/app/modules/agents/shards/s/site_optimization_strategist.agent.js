@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteOptimizationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_optimization_strategist_agent',
-            'Site Optimization Strategist',
-            'You are an elite Site Optimization Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Site Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'site_optimization_strategist_agent',
+      'Site Optimization Strategist',
+      'You are an elite Site Optimization Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Site Optimization.',
+    );
+  }
 
-    async generateSiteOptimizationSystem(objective) {
-        logger.info(`💻 [SiteOptimizationStrategistAgent] Analyzing Site Optimization Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Optimization Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Optimization Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteOptimizationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteOptimizationSystem(objective) {
+    logger.info(
+      `💻 [SiteOptimizationStrategistAgent] Analyzing Site Optimization Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Optimization Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Optimization Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SiteOptimizationStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const siteOptimizationStrategistAgent = Object.freeze(new SiteOptimizationStrategistAgent());
+export const siteOptimizationStrategistAgent = Object.freeze(
+  new SiteOptimizationStrategistAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataScalingPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_scaling_planner_agent',
-            'Data Scaling Planner',
-            'You are an elite Data Scaling Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Data Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'data_scaling_planner_agent',
+      'Data Scaling Planner',
+      'You are an elite Data Scaling Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Data Scaling.',
+    );
+  }
 
-    async generateDataScalingSystem(objective) {
-        logger.info(`💻 [DataScalingPlannerAgent] Analyzing Data Scaling Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Scaling Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Scaling Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataScalingPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataScalingSystem(objective) {
+    logger.info(
+      `💻 [DataScalingPlannerAgent] Analyzing Data Scaling Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Scaling Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Scaling Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataScalingPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataScalingPlannerAgent = Object.freeze(new DataScalingPlannerAgent());
+export const dataScalingPlannerAgent = Object.freeze(
+  new DataScalingPlannerAgent(),
+);

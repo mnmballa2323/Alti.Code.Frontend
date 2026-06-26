@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsVirtualizationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_virtualization_designer_agent',
-            'DevOps Virtualization Designer',
-            'You are an elite DevOps Virtualization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_virtualization_designer_agent',
+      'DevOps Virtualization Designer',
+      'You are an elite DevOps Virtualization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Virtualization.',
+    );
+  }
 
-    async generateDevOpsVirtualizationSystem(objective) {
-        logger.info(`💻 [DevOpsVirtualizationDesignerAgent] Analyzing DevOps Virtualization Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Virtualization Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Virtualization Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsVirtualizationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [DevOpsVirtualizationDesignerAgent] Analyzing DevOps Virtualization Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Virtualization Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Virtualization Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsVirtualizationDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsVirtualizationDesignerAgent = Object.freeze(new DevOpsVirtualizationDesignerAgent());
+export const devOpsVirtualizationDesignerAgent = Object.freeze(
+  new DevOpsVirtualizationDesignerAgent(),
+);

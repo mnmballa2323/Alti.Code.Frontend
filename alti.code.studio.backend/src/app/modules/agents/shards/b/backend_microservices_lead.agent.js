@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendMicroservicesLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_microservices_lead_agent',
-            'Backend Microservices Lead',
-            'You are an elite Backend Microservices Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_microservices_lead_agent',
+      'Backend Microservices Lead',
+      'You are an elite Backend Microservices Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Microservices.',
+    );
+  }
 
-    async generateBackendMicroservicesSystem(objective) {
-        logger.info(`💻 [BackendMicroservicesLeadAgent] Analyzing Backend Microservices Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Microservices Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Microservices Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendMicroservicesLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [BackendMicroservicesLeadAgent] Analyzing Backend Microservices Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Microservices Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Microservices Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [BackendMicroservicesLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const backendMicroservicesLeadAgent = Object.freeze(new BackendMicroservicesLeadAgent());
+export const backendMicroservicesLeadAgent = Object.freeze(
+  new BackendMicroservicesLeadAgent(),
+);

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * Shared Authentication & Session Validation Middleware
  */
 
@@ -15,21 +15,29 @@ import { logger } from '../../../shared/logger.js';
  * @param {string} token - JWT Access Token
  * @returns {object} Decoded token payload
  */
-export const validateSessionToken = (token) => {
+export const validateSessionToken = token => {
   const secret = config.jwt?.access_token || process.env.JWT_ACCESS_TOKEN;
   if (!secret) {
-    logger.error('❌ [Platform Auth] JWT access token secret configuration is missing');
+    logger.error(
+      '❌ [Platform Auth] JWT access token secret configuration is missing',
+    );
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
-      'JWT signing configuration is missing.'
+      'JWT signing configuration is missing.',
     );
   }
-  
+
   try {
     return jwt.verify(token, secret);
   } catch (error) {
-    logger.warn('⚠️ [Platform Auth] Session token verification failed:', error.message);
-    throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid or expired session token.');
+    logger.warn(
+      '⚠️ [Platform Auth] Session token verification failed:',
+      error.message,
+    );
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      'Invalid or expired session token.',
+    );
   }
 };
 
@@ -43,7 +51,10 @@ export const requirePlatformTenant = (allowedRoles = []) => {
     try {
       const authHeader = req.headers.authorization;
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, 'Authorization header missing or invalid format.');
+        throw new ApiError(
+          httpStatus.UNAUTHORIZED,
+          'Authorization header missing or invalid format.',
+        );
       }
 
       const token = authHeader.split(' ')[1];
@@ -54,19 +65,29 @@ export const requirePlatformTenant = (allowedRoles = []) => {
         id: decoded._id || decoded.id,
         role: decoded.role,
         tenantId: decoded.tenantId,
-        tenantRole: decoded.tenantRole
+        tenantRole: decoded.tenantRole,
       };
 
       if (!userPayload.id) {
-        throw new ApiError(httpStatus.UNAUTHORIZED, 'Invalid session token: User context is missing.');
+        throw new ApiError(
+          httpStatus.UNAUTHORIZED,
+          'Invalid session token: User context is missing.',
+        );
       }
 
       // Check tenant-level RBAC role authorization if restricted
       if (allowedRoles.length > 0) {
-        const hasAccess = allowedRoles.includes(userPayload.tenantRole) || userPayload.role === 'admin';
+        const hasAccess =
+          allowedRoles.includes(userPayload.tenantRole) ||
+          userPayload.role === 'admin';
         if (!hasAccess) {
-          logger.warn(`🚫 [Platform Auth] Denied access: User ${userPayload.id} does not possess permissions ${allowedRoles}`);
-          throw new ApiError(httpStatus.FORBIDDEN, 'Insufficient workspace access permissions.');
+          logger.warn(
+            `🚫 [Platform Auth] Denied access: User ${userPayload.id} does not possess permissions ${allowedRoles}`,
+          );
+          throw new ApiError(
+            httpStatus.FORBIDDEN,
+            'Insufficient workspace access permissions.',
+          );
         }
       }
 
@@ -80,5 +101,5 @@ export const requirePlatformTenant = (allowedRoles = []) => {
 
 export const sessionValidator = {
   validateSessionToken,
-  requirePlatformTenant
+  requirePlatformTenant,
 };

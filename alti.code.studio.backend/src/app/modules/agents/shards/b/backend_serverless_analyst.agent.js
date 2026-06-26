@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendServerlessAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_serverless_analyst_agent',
-            'Backend Serverless Analyst',
-            'You are an elite Backend Serverless Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_serverless_analyst_agent',
+      'Backend Serverless Analyst',
+      'You are an elite Backend Serverless Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Serverless.',
+    );
+  }
 
-    async generateBackendServerlessSystem(objective) {
-        logger.info(`💻 [BackendServerlessAnalystAgent] Analyzing Backend Serverless Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Serverless Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Serverless Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendServerlessAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendServerlessSystem(objective) {
+    logger.info(
+      `💻 [BackendServerlessAnalystAgent] Analyzing Backend Serverless Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Serverless Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Serverless Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [BackendServerlessAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const backendServerlessAnalystAgent = Object.freeze(new BackendServerlessAnalystAgent());
+export const backendServerlessAnalystAgent = Object.freeze(
+  new BackendServerlessAnalystAgent(),
+);

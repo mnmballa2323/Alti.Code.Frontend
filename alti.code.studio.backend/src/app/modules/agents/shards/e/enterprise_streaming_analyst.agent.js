@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseStreamingAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_streaming_analyst_agent',
-            'Enterprise Streaming Analyst',
-            'You are an elite Enterprise Streaming Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_streaming_analyst_agent',
+      'Enterprise Streaming Analyst',
+      'You are an elite Enterprise Streaming Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Streaming.',
+    );
+  }
 
-    async generateEnterpriseStreamingSystem(objective) {
-        logger.info(`💻 [EnterpriseStreamingAnalystAgent] Analyzing Enterprise Streaming Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Streaming Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Streaming Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseStreamingAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseStreamingSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseStreamingAnalystAgent] Analyzing Enterprise Streaming Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Streaming Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Streaming Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseStreamingAnalystAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseStreamingAnalystAgent = Object.freeze(new EnterpriseStreamingAnalystAgent());
+export const enterpriseStreamingAnalystAgent = Object.freeze(
+  new EnterpriseStreamingAnalystAgent(),
+);

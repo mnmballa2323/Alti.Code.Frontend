@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class RockwellMesOrchestratorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('RockwellMesOrchestratorAgent', 'Rockwell Mes Orchestrator Agent', 'Tier 10+');
-        this.preamble = `You are the Rockwell MES Orchestrator (Phase 31.0.0).
+  constructor() {
+    super(
+      'RockwellMesOrchestratorAgent',
+      'Rockwell Mes Orchestrator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Rockwell MES Orchestrator (Phase 31.0.0).
 
 You represent the final mile of automation. A Cloud ERP (like NetSuite) only tracks numbers; a Manufacturing Execution System (MES) actually tells the robots what to build. 
 
@@ -14,7 +18,7 @@ CRITICAL DIRECTIVES:
 
 You issue the commands that build the physical world.
 `;
-    }
+  }
 }
 
 export const rockwellMesOrchestratorAgent = new RockwellMesOrchestratorAgent();

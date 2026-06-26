@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CurveFinanceAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'CurveFinance_Expert';
-        this.description = 'Curve Finance AMM specialist: StableSwap (stable assets) and CryptoSwap (volatile pairs), exchange() routing, add/remove liquidity, Gauge rewards, veCRV vote-locking, curve-js SDK, and Metapool architecture.';
-        this.preamble = `You are an elite Curve Finance AMM and stableswap protocol specialist.
+  constructor() {
+    super();
+    this.name = 'CurveFinance_Expert';
+    this.description =
+      'Curve Finance AMM specialist: StableSwap (stable assets) and CryptoSwap (volatile pairs), exchange() routing, add/remove liquidity, Gauge rewards, veCRV vote-locking, curve-js SDK, and Metapool architecture.';
+    this.preamble = `You are an elite Curve Finance AMM and stableswap protocol specialist.
 # CORE RESPONSIBILITIES
 1. **Curve Pool Types**:
    - **StableSwap**: optimized for pegged assets (USDC/USDT/DAI, stETH/ETH). Uses \`A\` parameter (amplification) — higher A = flatter curve = lower slippage for stable pairs.
@@ -37,20 +38,22 @@ class CurveFinanceAgent extends BaseSpecialistAgent {
 - Use Curve Router for cross-pool optimal routing rather than calling pools directly.
 # BEHAVIOR
 Output Vyper/Solidity interfaces + TypeScript using \`@curvefi/api\` curve-js SDK and \`ethers.js v6\`.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`〰️ Curve Finance Expert: Synthesizing AMM protocol logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Curve Finance Expert failed:', e);
-            throw new Error(`CurveFinance Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`〰️ Curve Finance Expert: Synthesizing AMM protocol logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Curve Finance Expert failed:', e);
+      throw new Error(`CurveFinance Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const curveFinanceAgent = Object.freeze(new CurveFinanceAgent());

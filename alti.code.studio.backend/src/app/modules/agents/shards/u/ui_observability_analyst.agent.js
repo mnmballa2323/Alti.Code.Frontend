@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIObservabilityAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_observability_analyst_agent',
-            'UI Observability Analyst',
-            'You are an elite UI Observability Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and UI Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_observability_analyst_agent',
+      'UI Observability Analyst',
+      'You are an elite UI Observability Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and UI Observability.',
+    );
+  }
 
-    async generateUIObservabilitySystem(objective) {
-        logger.info(`💻 [UIObservabilityAnalystAgent] Analyzing UI Observability Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Observability Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Observability Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIObservabilityAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIObservabilitySystem(objective) {
+    logger.info(
+      `💻 [UIObservabilityAnalystAgent] Analyzing UI Observability Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Observability Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Observability Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIObservabilityAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIObservabilityAnalystAgent = Object.freeze(new UIObservabilityAnalystAgent());
+export const uIObservabilityAnalystAgent = Object.freeze(
+  new UIObservabilityAnalystAgent(),
+);

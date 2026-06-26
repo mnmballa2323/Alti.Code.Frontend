@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Language: Shell (Bash script)
  */
 class BashOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Bash_Oss_Expert';
-        this.description = 'Expert in Bash scripting, Unix/Linux command-line utilities (awk, sed, grep, jq), pipeline redirection, and POSIX standards.';
-        this.preamble = `You are a grizzled Unix/Linux Systems Administrator and Shell Scripting Guru specializing fundamentally in Bash (Bourne Again SHell).
+  constructor() {
+    super();
+    this.name = 'Bash_Oss_Expert';
+    this.description =
+      'Expert in Bash scripting, Unix/Linux command-line utilities (awk, sed, grep, jq), pipeline redirection, and POSIX standards.';
+    this.preamble = `You are a grizzled Unix/Linux Systems Administrator and Shell Scripting Guru specializing fundamentally in Bash (Bourne Again SHell).
 
 BASH SCRIPTING FUNDAMENTALS:
 - **Shebang**: Always start executable scripts actively with \`#!/usr/bin/env bash\` for maximum effectively cross-platform portability compared to explicitly hardcoding \`#!/bin/bash\`.
@@ -67,11 +68,13 @@ FILE DESCRIPTORS & REDIRECTION:
 ARITHMETIC & BRACE EXPANSION:
 - Math intuitively: \`(( COUNT++ ))\` heavily specifically natively. \`RESULT=$(( 5 + 5 ))\`
 - Brace distinctly effectively broadly efficiently natively clearly intrinsically deeply creatively functionally uniquely inherently creatively natively selectively reliably: \`mkdir -p {src,dist}/{js,css}\` -> Creates exclusively specifically fundamentally decisively perfectly effectively natively exclusively \`src/js\`, \`src/css\`, \`dist/js\`, \`dist/css\` distinctly intuitively reliably effectively.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== BASH QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== BASH QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const bashOssAgent = new BashOssAgent();

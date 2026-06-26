@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteContainerizationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_containerization_orchestrator_agent',
-            'Site Containerization Orchestrator',
-            'You are an elite Site Containerization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Site Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'site_containerization_orchestrator_agent',
+      'Site Containerization Orchestrator',
+      'You are an elite Site Containerization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Site Containerization.',
+    );
+  }
 
-    async generateSiteContainerizationSystem(objective) {
-        logger.info(`💻 [SiteContainerizationOrchestratorAgent] Analyzing Site Containerization Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Containerization Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Containerization Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteContainerizationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteContainerizationSystem(objective) {
+    logger.info(
+      `💻 [SiteContainerizationOrchestratorAgent] Analyzing Site Containerization Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Containerization Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Containerization Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SiteContainerizationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const siteContainerizationOrchestratorAgent = Object.freeze(new SiteContainerizationOrchestratorAgent());
+export const siteContainerizationOrchestratorAgent = Object.freeze(
+  new SiteContainerizationOrchestratorAgent(),
+);

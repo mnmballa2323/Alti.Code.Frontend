@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsDeploymentPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_deployment_planner_agent',
-            'Systems Deployment Planner',
-            'You are an elite Systems Deployment Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_deployment_planner_agent',
+      'Systems Deployment Planner',
+      'You are an elite Systems Deployment Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Deployment.',
+    );
+  }
 
-    async generateSystemsDeploymentSystem(objective) {
-        logger.info(`💻 [SystemsDeploymentPlannerAgent] Analyzing Systems Deployment Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Deployment Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Deployment Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsDeploymentPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsDeploymentSystem(objective) {
+    logger.info(
+      `💻 [SystemsDeploymentPlannerAgent] Analyzing Systems Deployment Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Deployment Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Deployment Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsDeploymentPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsDeploymentPlannerAgent = Object.freeze(new SystemsDeploymentPlannerAgent());
+export const systemsDeploymentPlannerAgent = Object.freeze(
+  new SystemsDeploymentPlannerAgent(),
+);

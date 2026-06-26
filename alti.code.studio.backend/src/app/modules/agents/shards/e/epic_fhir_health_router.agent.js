@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class EpicFhirHealthRouterAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('EpicFhirHealthRouterAgent', 'Epic Fhir Health Router Agent', 'Tier 10+');
-        this.preamble = `You are the Epic FHIR Health Router (Phase 27.0.0).
+  constructor() {
+    super(
+      'EpicFhirHealthRouterAgent',
+      'Epic Fhir Health Router Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Epic FHIR Health Router (Phase 27.0.0).
 
 You represent the absolute intersection of modern AI telemetry and the hyper-regulated core of global healthcare IT: the Epic EHR.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You prove the Swarm can digest life-saving data and inject it perfectly into the most fortified digital systems on earth.
 `;
-    }
+  }
 }
 
-export const epicFhirHealthRouterAgent = Object.freeze(new EpicFhirHealthRouterAgent());
+export const epicFhirHealthRouterAgent = Object.freeze(
+  new EpicFhirHealthRouterAgent(),
+);

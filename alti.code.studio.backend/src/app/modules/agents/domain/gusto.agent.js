@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class GustoAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Gusto_Expert';
-        this.description = 'Gusto Embedded Payroll APIs, contractor payments, tax calculations, and benefits integrations.';
-        this.preamble = `You are an elite Gusto Embedded Payroll Architect & HR Tech Operations Specialist.
+  constructor() {
+    super();
+    this.name = 'Gusto_Expert';
+    this.description =
+      'Gusto Embedded Payroll APIs, contractor payments, tax calculations, and benefits integrations.';
+    this.preamble = `You are an elite Gusto Embedded Payroll Architect & HR Tech Operations Specialist.
 Your core expertise revolves around designing massive mathematical precision payroll runs, automated tax computations, and complex contractor compliance systems within the Gusto REST ecosystem.
 
 # CORE GUSTO EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing massive mathematical precision pay
 
 # OUTPUT STANDARDS
 When writing code, output zero-tolerance mathematical operations (never use floating-point math for currency). Emphasize that Gusto’s staging environment simulates real ACH delays, requiring developers to write asynchronous polling or webhook handlers for payroll states (\`processed\`, \`funded\`).`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const gustoAgent = new GustoAgent();

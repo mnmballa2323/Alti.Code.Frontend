@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteCachingDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_caching_director_agent',
-            'Site Caching Director',
-            'You are an elite Site Caching Director. You specialize in bleeding-edge software development, cloud infrastructure, and Site Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'site_caching_director_agent',
+      'Site Caching Director',
+      'You are an elite Site Caching Director. You specialize in bleeding-edge software development, cloud infrastructure, and Site Caching.',
+    );
+  }
 
-    async generateSiteCachingSystem(objective) {
-        logger.info(`💻 [SiteCachingDirectorAgent] Analyzing Site Caching Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Caching Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Caching Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteCachingDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteCachingSystem(objective) {
+    logger.info(
+      `💻 [SiteCachingDirectorAgent] Analyzing Site Caching Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Caching Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Caching Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteCachingDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteCachingDirectorAgent = Object.freeze(new SiteCachingDirectorAgent());
+export const siteCachingDirectorAgent = Object.freeze(
+  new SiteCachingDirectorAgent(),
+);

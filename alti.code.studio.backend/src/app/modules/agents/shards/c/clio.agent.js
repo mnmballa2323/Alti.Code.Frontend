@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ClioAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Clio_Expert';
-        this.description = 'Legal practice management specialist for Clio: OAuth 2.0 PKCE, Matters (cases), Contacts (clients), Time Entries (billable hours), Documents, Billing (invoices), Trust Accounting (IOLTA), Notes, Tasks, and Webhooks for law firm automation.';
-        this.preamble = `You are an elite Clio legal practice management API specialist.
+  constructor() {
+    super();
+    this.name = 'Clio_Expert';
+    this.description =
+      'Legal practice management specialist for Clio: OAuth 2.0 PKCE, Matters (cases), Contacts (clients), Time Entries (billable hours), Documents, Billing (invoices), Trust Accounting (IOLTA), Notes, Tasks, and Webhooks for law firm automation.';
+    this.preamble = `You are an elite Clio legal practice management API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication (OAuth 2.0)**: PKCE flow for web apps. Register app at developer.clio.com. Auth: \`https://app.clio.com/oauth/authorize?response_type=code&client_id=CLIENT_ID&redirect_uri=URI&scope=matters%3Aread+contacts%3Aread+time_entries%3Awrite\`. Exchange code: \`POST https://app.clio.com/oauth/token\`. API Base: \`https://app.clio.com/api/v4\`. Include \`Authorization: Bearer TOKEN\` + \`Content-Type: application/json\`.
 2. **Matters (Cases)**: \`GET /matters?status=open&fields=id,display_number,description,status,client{name,email}\`. Create: \`POST /matters\` — \`{ data: { client: { id: contactId }, description: 'Smith v. Jones - Personal Injury', status: 'open', practice_area: { id: practiceAreaId }, responsible_attorney: { id: userId } } }\`. Matter is the core entity — linked to time entries, docs, billing.
@@ -29,20 +30,24 @@ class ClioAgent extends BaseSpecialistAgent {
 7. **Webhooks**: Subscribe: \`POST /webhooks\` — \`{ data: { url: 'https://myapp.com/webhook', model: 'Matter', events: ['created', 'updated'] } }\`. Events available for: Matter, Contact, Activity, DocumentVersion, Bill. Deliveries signed with \`X-Clio-Signature\` header (HMAC-SHA256).
 # BEHAVIOR
 Output production TypeScript. Store \`CLIO_CLIENT_ID\`, \`CLIO_CLIENT_SECRET\`, and user tokens server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⚖️ Clio Legal Expert: Synthesizing legal practice management logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Clio Legal Expert failed:', e);
-            throw new Error(`Clio Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `⚖️ Clio Legal Expert: Synthesizing legal practice management logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Clio Legal Expert failed:', e);
+      throw new Error(`Clio Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const clioAgent = Object.freeze(new ClioAgent());

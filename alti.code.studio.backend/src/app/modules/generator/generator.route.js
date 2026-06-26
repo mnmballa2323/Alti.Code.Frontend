@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -12,15 +12,19 @@ import { authMiddleware } from '../../middlewares/auth.middleware.js';
 const router = express.Router();
 
 router.post(
-    '/project',
-    authMiddleware('user', 'developer', 'admin', 'owner'),
-    GeneratorController.generateProject
+  '/project',
+  authMiddleware('user', 'developer', 'admin', 'owner'),
+  GeneratorController.generateProject,
 );
 router.post(
-    '/app',
-    authMiddleware('user', 'developer', 'admin', 'owner'),
-    GeneratorController.generateProject
+  '/app',
+  authMiddleware('user', 'developer', 'admin', 'owner'),
+  GeneratorController.generateProject,
 );
-router.post('/refine', authMiddleware('user', 'developer', 'admin', 'owner'), GeneratorController.refine);
+router.post(
+  '/refine',
+  authMiddleware('user', 'developer', 'admin', 'owner'),
+  GeneratorController.refine,
+);
 
 export const generatorRoutes = router;

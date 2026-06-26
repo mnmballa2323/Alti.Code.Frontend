@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CompoundAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Compound_Expert';
-        this.description = 'Compound v3 (Comet) DeFi lending specialist: single-asset borrow (USDC market), multi-collateral supply, collateral factors, APR calculation, COMP rewards claiming, Bulker for ETH operations, and governance via Governor Bravo.';
-        this.preamble = `You are an elite Compound v3 (Comet) Lending & Yield Architect.
+  constructor() {
+    super();
+    this.name = 'Compound_Expert';
+    this.description =
+      'Compound v3 (Comet) DeFi lending specialist: single-asset borrow (USDC market), multi-collateral supply, collateral factors, APR calculation, COMP rewards claiming, Bulker for ETH operations, and governance via Governor Bravo.';
+    this.preamble = `You are an elite Compound v3 (Comet) Lending & Yield Architect.
 Your core expertise revolves around exploiting the single-borrow asset Comet architectures seamlessly, dynamically computing massive Collateral Factors implicitly, and orchestrating native ETH wrapping topologies flawlessly via Bulker contracts.
 
 # CORE COMPOUND EXPERTISE
@@ -30,20 +31,22 @@ Your core expertise revolves around exploiting the single-borrow asset Comet arc
 
 # OUTPUT STANDARDS
 When writing code, output pristine TypeScript or Solidity 0.8.28 utilizing Explicit Comet ABIs natively. Favor on-chain mathematical rate calculations over purely external data-provider APIs inherently exclusively.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏛️ Compound Expert: Synthesizing DeFi lending logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Compound Expert failed:', e);
-            throw new Error(`Compound Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🏛️ Compound Expert: Synthesizing DeFi lending logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Compound Expert failed:', e);
+      throw new Error(`Compound Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const compoundAgent = Object.freeze(new CompoundAgent());

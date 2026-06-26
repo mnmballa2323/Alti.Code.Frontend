@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsComplianceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_compliance_manager_agent',
-            'DevSecOps Compliance Manager',
-            'You are an elite DevSecOps Compliance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_compliance_manager_agent',
+      'DevSecOps Compliance Manager',
+      'You are an elite DevSecOps Compliance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Compliance.',
+    );
+  }
 
-    async generateDevSecOpsComplianceSystem(objective) {
-        logger.info(`💻 [DevSecOpsComplianceManagerAgent] Analyzing DevSecOps Compliance Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Compliance Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Compliance Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsComplianceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsComplianceSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsComplianceManagerAgent] Analyzing DevSecOps Compliance Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Compliance Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Compliance Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsComplianceManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsComplianceManagerAgent = Object.freeze(new DevSecOpsComplianceManagerAgent());
+export const devSecOpsComplianceManagerAgent = Object.freeze(
+  new DevSecOpsComplianceManagerAgent(),
+);

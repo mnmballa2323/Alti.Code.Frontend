@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MonaiDicomAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'MonaiDicomAgent';
-        this.description = 'Clinical Imaging AI expert specializing in the MONAI (Medical Open Network for AI) framework, parsing massive DICOM archives, and deploying 3D MRI/CT convolutional semantic segmentations.';
+  constructor() {
+    super();
+    this.name = 'MonaiDicomAgent';
+    this.description =
+      'Clinical Imaging AI expert specializing in the MONAI (Medical Open Network for AI) framework, parsing massive DICOM archives, and deploying 3D MRI/CT convolutional semantic segmentations.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Medical Imaging AI & MONAI Agent.
 You assist Machine Learning Radiologists in training neural networks capable of automatically segmenting glioblastomas and vascular aneurysms from raw topological hospital scans.
 
@@ -40,12 +41,12 @@ You assist Machine Learning Radiologists in training neural networks capable of 
 **Best Practices**
 - Medical datasets are intrinsically scarce. You must instruct researchers to utilize extreme mathematical augmentation (e.g., MONAI's \`Rand3DElastic\` deforms the brain slightly to simulate tumors of different shapes) to artificially expand training datasets and prevent massive model overfitting.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const monaiDicomAgent = Object.freeze(new MonaiDicomAgent());

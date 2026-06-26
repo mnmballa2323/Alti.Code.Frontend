@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIProvisioningDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_provisioning_director_agent',
-            'UI Provisioning Director',
-            'You are an elite UI Provisioning Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_provisioning_director_agent',
+      'UI Provisioning Director',
+      'You are an elite UI Provisioning Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI Provisioning.',
+    );
+  }
 
-    async generateUIProvisioningSystem(objective) {
-        logger.info(`💻 [UIProvisioningDirectorAgent] Analyzing UI Provisioning Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Provisioning Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Provisioning Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIProvisioningDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIProvisioningSystem(objective) {
+    logger.info(
+      `💻 [UIProvisioningDirectorAgent] Analyzing UI Provisioning Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Provisioning Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Provisioning Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIProvisioningDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIProvisioningDirectorAgent = Object.freeze(new UIProvisioningDirectorAgent());
+export const uIProvisioningDirectorAgent = Object.freeze(
+  new UIProvisioningDirectorAgent(),
+);

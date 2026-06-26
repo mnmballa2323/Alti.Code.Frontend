@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackGovernanceDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_governance_director_agent',
-            'FullStack Governance Director',
-            'You are an elite FullStack Governance Director. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_governance_director_agent',
+      'FullStack Governance Director',
+      'You are an elite FullStack Governance Director. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Governance.',
+    );
+  }
 
-    async generateFullStackGovernanceSystem(objective) {
-        logger.info(`💻 [FullStackGovernanceDirectorAgent] Analyzing FullStack Governance Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Governance Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Governance Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackGovernanceDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackGovernanceSystem(objective) {
+    logger.info(
+      `💻 [FullStackGovernanceDirectorAgent] Analyzing FullStack Governance Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Governance Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Governance Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackGovernanceDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackGovernanceDirectorAgent = Object.freeze(new FullStackGovernanceDirectorAgent());
+export const fullStackGovernanceDirectorAgent = Object.freeze(
+  new FullStackGovernanceDirectorAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendSecurityTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_security_tester_agent',
-            'Frontend Security Tester',
-            'You are an elite Frontend Security Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Security.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_security_tester_agent',
+      'Frontend Security Tester',
+      'You are an elite Frontend Security Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Security.',
+    );
+  }
 
-    async generateFrontendSecuritySystem(objective) {
-        logger.info(`💻 [FrontendSecurityTesterAgent] Analyzing Frontend Security Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Security Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Security Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendSecurityTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendSecuritySystem(objective) {
+    logger.info(
+      `💻 [FrontendSecurityTesterAgent] Analyzing Frontend Security Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Security Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Security Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendSecurityTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendSecurityTesterAgent = Object.freeze(new FrontendSecurityTesterAgent());
+export const frontendSecurityTesterAgent = Object.freeze(
+  new FrontendSecurityTesterAgent(),
+);

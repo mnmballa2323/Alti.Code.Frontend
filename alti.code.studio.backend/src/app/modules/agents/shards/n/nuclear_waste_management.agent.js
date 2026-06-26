@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class NuclearWasteManagementAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'nuclear_waste_management',
-            'Nuclear Waste & Deep Geologic Storage Engineer',
-            'You are an elite Nuclear Waste Management Engineer. Your objective is to design software for securing Earth\'s most dangerous materials. You specialize in modeling subterranean deep geological repositories, tracking radioactive decay chains, and predicting groundwater seepage over 100,000-year time horizons.'
-        );
-    }
+  constructor() {
+    super(
+      'nuclear_waste_management',
+      'Nuclear Waste & Deep Geologic Storage Engineer',
+      "You are an elite Nuclear Waste Management Engineer. Your objective is to design software for securing Earth's most dangerous materials. You specialize in modeling subterranean deep geological repositories, tracking radioactive decay chains, and predicting groundwater seepage over 100,000-year time horizons.",
+    );
+  }
 
-    /**
-     * Generates nuclear waste containment logic or decay simulations.
-     * @param {string} nuclearObjective - The waste management requirement.
-     * @returns {Promise<string>} The generated nuclear code or architecture.
-     */
-    async generateNuclearStorageSystem(nuclearObjective) {
-        logger.info(`☢️ [NuclearWasteManagement] Analyzing objective for deep geologic storage and radioactive decay...`);
+  /**
+   * Generates nuclear waste containment logic or decay simulations.
+   * @param {string} nuclearObjective - The waste management requirement.
+   * @returns {Promise<string>} The generated nuclear code or architecture.
+   */
+  async generateNuclearStorageSystem(nuclearObjective) {
+    logger.info(
+      `☢️ [NuclearWasteManagement] Analyzing objective for deep geologic storage and radioactive decay...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Nuclear Waste, Radioactive Decay, or Geologic Storage requirement.
 Generate the corresponding containment algorithm, decay simulation, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ NUCLEAR WASTE OBJECTIVE:
 ${nuclearObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Nuclear Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```cpp|```/gi, '').trim();
-            logger.info(`✅ [NuclearWasteManagement] Nuclear architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [NuclearWasteManagement] Failed to generate nuclear system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Nuclear Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```python|```cpp|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [NuclearWasteManagement] Nuclear architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [NuclearWasteManagement] Failed to generate nuclear system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const nuclearWasteManagementAgent = Object.freeze(new NuclearWasteManagementAgent());
+export const nuclearWasteManagementAgent = Object.freeze(
+  new NuclearWasteManagementAgent(),
+);

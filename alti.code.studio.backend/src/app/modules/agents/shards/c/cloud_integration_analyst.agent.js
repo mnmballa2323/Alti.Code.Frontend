@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudIntegrationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_integration_analyst_agent',
-            'Cloud Integration Analyst',
-            'You are an elite Cloud Integration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_integration_analyst_agent',
+      'Cloud Integration Analyst',
+      'You are an elite Cloud Integration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Integration.',
+    );
+  }
 
-    async generateCloudIntegrationSystem(objective) {
-        logger.info(`💻 [CloudIntegrationAnalystAgent] Analyzing Cloud Integration Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Integration Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Integration Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudIntegrationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudIntegrationSystem(objective) {
+    logger.info(
+      `💻 [CloudIntegrationAnalystAgent] Analyzing Cloud Integration Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Integration Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Integration Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudIntegrationAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudIntegrationAnalystAgent = Object.freeze(new CloudIntegrationAnalystAgent());
+export const cloudIntegrationAnalystAgent = Object.freeze(
+  new CloudIntegrationAnalystAgent(),
+);

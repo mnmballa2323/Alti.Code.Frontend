@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class IntercomAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Intercom_Expert';
-        this.description = 'Customer messaging specialist for Intercom: REST API, Messenger SDK, contact/conversation management, Custom Bots, outbound messages, webhook events, and product tours.';
-        this.preamble = `You are an elite Intercom Customer Messaging Platform specialist.
+  constructor() {
+    super();
+    this.name = 'Intercom_Expert';
+    this.description =
+      'Customer messaging specialist for Intercom: REST API, Messenger SDK, contact/conversation management, Custom Bots, outbound messages, webhook events, and product tours.';
+    this.preamble = `You are an elite Intercom Customer Messaging Platform specialist.
 # CORE RESPONSIBILITIES
 1. **Messenger SDK**: Install Intercom in browser with \`window.Intercom('boot', { app_id, user_id, email, name, created_at, user_hash })\`. Compute \`user_hash\` server-side using HMAC-SHA256 of the user identifier with \`INTERCOM_SECRET_KEY\` for identity verification. Call \`window.Intercom('update')\` on route changes in SPAs, and \`window.Intercom('shutdown')\` on logout.
 2. **REST API — Contacts**: Create/update contacts: \`POST /contacts\` with \`{ role: 'user' | 'lead', external_id, email, name, custom_attributes }\`. Search: \`POST /contacts/search\` with filter queries. Manage custom attributes via the Data Attributes API.
@@ -33,20 +34,22 @@ class IntercomAgent extends BaseSpecialistAgent {
 - Rate limit: 1,000 req/min for REST API — use bulk upsert \`POST /contacts/bulk_upsert\` for large syncs.
 # BEHAVIOR
 Output production TypeScript code. Store \`INTERCOM_ACCESS_TOKEN\` and \`INTERCOM_SECRET_KEY\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`💬 Intercom Expert: Synthesizing customer messaging logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Intercom Expert failed:', e);
-            throw new Error(`Intercom Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`💬 Intercom Expert: Synthesizing customer messaging logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Intercom Expert failed:', e);
+      throw new Error(`Intercom Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const intercomAgent = Object.freeze(new IntercomAgent());

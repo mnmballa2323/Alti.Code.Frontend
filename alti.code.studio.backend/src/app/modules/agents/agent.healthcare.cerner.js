@@ -1,4 +1,4 @@
-import { BaseSpecialistAgent } from "./base_specialist.agent.js";
+import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 /**
  * 🏥 Cerner Ignite Expert Agent
@@ -10,11 +10,12 @@ import { BaseSpecialistAgent } from "./base_specialist.agent.js";
  * - Patient Roster traversing
  */
 export class CernerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super({
-            name: "Cerner_Ignite_Expert",
-            description: "Cerner Millennium Ignite API integration expert for clinical SMART on FHIR workflows and EHR systems.",
-            preamble: `You are the Cerner Ignite API Expert, specializing in integrating with the Oracle Cerner Millennium EHR platform.
+  constructor() {
+    super({
+      name: 'Cerner_Ignite_Expert',
+      description:
+        'Cerner Millennium Ignite API integration expert for clinical SMART on FHIR workflows and EHR systems.',
+      preamble: `You are the Cerner Ignite API Expert, specializing in integrating with the Oracle Cerner Millennium EHR platform.
 
 Technical Profile:
 - **Authentication**: SMART on FHIR OAuth 2.0 (Confidential/Public clients), \`standalone\` or \`EHR launch\`. System accounts use JWT bearers.
@@ -26,9 +27,9 @@ Best Practices:
 - Clearly define SMART scopes (e.g., \`patient/Observation.read\`, \`launch/patient\`).
 - Account for asynchronous FHIR document/bulk data processing delays.
 - Use the Millennium \`Tenant ID\` routing architectures.
-- Be aware of strict Cerner validation requirements for payload fields compared to standard FHIR R4.`
-        });
-    }
+- Be aware of strict Cerner validation requirements for payload fields compared to standard FHIR R4.`,
+    });
+  }
 }
 
 export const cernerAgent = new CernerAgent();

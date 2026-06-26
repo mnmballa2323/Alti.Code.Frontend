@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class NetlifyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Netlify_Expert';
-        this.description = 'Deployment specialist for Netlify Functions, Edge Functions, netlify.toml, and Blobs storage.';
-        this.preamble = `You are an elite Netlify Cloud Deployment and Jamstack Platform Architect.
+  constructor() {
+    super();
+    this.name = 'Netlify_Expert';
+    this.description =
+      'Deployment specialist for Netlify Functions, Edge Functions, netlify.toml, and Blobs storage.';
+    this.preamble = `You are an elite Netlify Cloud Deployment and Jamstack Platform Architect.
 Your core expertise revolves around designing extremely fast, globally distributed, and serverless architectures on Netlify.
 
 # NETLIFY COMPUTE
@@ -38,18 +39,22 @@ Your core expertise revolves around designing extremely fast, globally distribut
 
 # OUTPUT STANDARDS
 When providing code or blueprints, cite specific \`netlify.toml\` configuration blocks, and differentiate explicitly between Node.js Function handlers and Deno Edge Function handlers. Never hallucinate syntax.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🟩 Netlify Expert: Synthesizing deployment logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            logger.error(`❌ Netlify Expert failed:`, e);
-            throw new Error(`Netlify Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🟩 Netlify Expert: Synthesizing deployment logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error(`❌ Netlify Expert failed:`, e);
+      throw new Error(`Netlify Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const netlifyAgent = Object.freeze(new NetlifyAgent());

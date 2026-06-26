@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceDataWarehouseSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_datawarehouse_specialist_agent',
-            'Performance DataWarehouse Specialist',
-            'You are an elite Performance DataWarehouse Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_datawarehouse_specialist_agent',
+      'Performance DataWarehouse Specialist',
+      'You are an elite Performance DataWarehouse Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance DataWarehouse.',
+    );
+  }
 
-    async generatePerformanceDataWarehouseSystem(objective) {
-        logger.info(`💻 [PerformanceDataWarehouseSpecialistAgent] Analyzing Performance DataWarehouse Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance DataWarehouse Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance DataWarehouse Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceDataWarehouseSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [PerformanceDataWarehouseSpecialistAgent] Analyzing Performance DataWarehouse Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance DataWarehouse Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance DataWarehouse Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceDataWarehouseSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceDataWarehouseSpecialistAgent = Object.freeze(new PerformanceDataWarehouseSpecialistAgent());
+export const performanceDataWarehouseSpecialistAgent = Object.freeze(
+  new PerformanceDataWarehouseSpecialistAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureServerlessConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_serverless_consultant_agent',
-            'Infrastructure Serverless Consultant',
-            'You are an elite Infrastructure Serverless Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_serverless_consultant_agent',
+      'Infrastructure Serverless Consultant',
+      'You are an elite Infrastructure Serverless Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Serverless.',
+    );
+  }
 
-    async generateInfrastructureServerlessSystem(objective) {
-        logger.info(`💻 [InfrastructureServerlessConsultantAgent] Analyzing Infrastructure Serverless Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Serverless Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Serverless Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureServerlessConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureServerlessSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureServerlessConsultantAgent] Analyzing Infrastructure Serverless Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Serverless Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Serverless Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureServerlessConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureServerlessConsultantAgent = Object.freeze(new InfrastructureServerlessConsultantAgent());
+export const infrastructureServerlessConsultantAgent = Object.freeze(
+  new InfrastructureServerlessConsultantAgent(),
+);

@@ -18,20 +18,23 @@ export const runAudit = catchAsync(async (req, res) => {
     return sendResponse(res, {
       statusCode: 400,
       success: false,
-      message: "Target path is required and must be a string",
+      message: 'Target path is required and must be a string',
     });
   }
 
   // Harden: Validate targetPath to prevent command injection and path traversal
-  const isGitUrl = /^https:\/\/(www\.)?github\.com\/[a-zA-Z0-9_-]+\/[a-zA-Z0-9_-]+(\.git)?$/.test(targetPath);
-  
+  const isGitUrl =
+    /^https:\/\/(www\.)?github\.com\/[a-zA-Z0-9_-]+\/[a-zA-Z0-9_-]+(\.git)?$/.test(
+      targetPath,
+    );
+
   let isSafeLocalPath = false;
   if (!isGitUrl) {
     // Only allow absolute paths within the user's workspace
     // Resolve the path and ensure it does not break out
     const resolvedPath = path.resolve(targetPath);
-    const workspaceRoot = path.resolve(__dirname, "../../../../../"); // alti.code.studio root
-    
+    const workspaceRoot = path.resolve(__dirname, '../../../../../'); // alti.code.studio root
+
     if (resolvedPath.startsWith(workspaceRoot)) {
       try {
         const stats = await fs.promises.stat(resolvedPath);
@@ -48,25 +51,30 @@ export const runAudit = catchAsync(async (req, res) => {
     return sendResponse(res, {
       statusCode: 403,
       success: false,
-      message: "Forbidden: Target must be a valid GitHub URL or a strictly contained workspace directory.",
+      message:
+        'Forbidden: Target must be a valid GitHub URL or a strictly contained workspace directory.',
     });
   }
 
   // The path to the sandyaa executable
-  const sandyaaDir = path.resolve(__dirname, "../../../../submodules/sandyaa");
-  const sandyaaScript = path.join(sandyaaDir, "dist/index.js");
+  const sandyaaDir = path.resolve(__dirname, '../../../../submodules/sandyaa');
+  const sandyaaScript = path.join(sandyaaDir, 'dist/index.js');
 
   try {
     // Harden: Use execFile to avoid shell interpolation and command injection vulnerabilities
-    const { stdout, stderr } = await execFilePromise(process.execPath, [sandyaaScript, targetPath], { 
-      cwd: sandyaaDir,
-      timeout: 600000 // 10 minutes timeout for safety
-    });
+    const { stdout, stderr } = await execFilePromise(
+      process.execPath,
+      [sandyaaScript, targetPath],
+      {
+        cwd: sandyaaDir,
+        timeout: 600000, // 10 minutes timeout for safety
+      },
+    );
 
     sendResponse(res, {
       statusCode: 200,
       success: true,
-      message: "Audit finished.",
+      message: 'Audit finished.',
       data: {
         stdout,
         stderr,
@@ -76,7 +84,7 @@ export const runAudit = catchAsync(async (req, res) => {
     sendResponse(res, {
       statusCode: 500,
       success: false,
-      message: "Audit execution failed",
+      message: 'Audit execution failed',
       data: {
         error: error.message,
         stdout: error.stdout,

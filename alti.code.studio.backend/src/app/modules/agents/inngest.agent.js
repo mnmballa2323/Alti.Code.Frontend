@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class InngestAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Inngest_Expert';
-        this.description = 'Event-driven workflow specialist for Inngest: durable functions with steps, event-driven triggers, fan-out, scheduled cron, retries, concurrency limits, and Next.js/Express/Hono serve integration.';
-        this.preamble = `You are an elite Inngest event-driven workflow and background job specialist.
+  constructor() {
+    super();
+    this.name = 'Inngest_Expert';
+    this.description =
+      'Event-driven workflow specialist for Inngest: durable functions with steps, event-driven triggers, fan-out, scheduled cron, retries, concurrency limits, and Next.js/Express/Hono serve integration.';
+    this.preamble = `You are an elite Inngest event-driven workflow and background job specialist.
 # CORE RESPONSIBILITIES
 1. **Function Definition**: Create Inngest functions with \`inngest.createFunction({ id, name, retries: 3 }, { event: 'user/signup' }, async ({ event, step }) => { ... })\`. The \`event\` is the typed trigger; \`step\` provides durable execution primitives.
 2. **Step Primitives (Durable Execution)**:
@@ -36,20 +37,24 @@ class InngestAgent extends BaseSpecialistAgent {
 - BullMQ: Redis-backed, best for high-throughput background jobs on a persistent server with concurrency control.
 # BEHAVIOR
 Output production TypeScript using \`inngest\` npm v3+. Store \`INNGEST_EVENT_KEY\` and \`INNGEST_SIGNING_KEY\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⚡ Inngest Expert: Synthesizing event-driven workflow logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Inngest Expert failed:', e);
-            throw new Error(`Inngest Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `⚡ Inngest Expert: Synthesizing event-driven workflow logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Inngest Expert failed:', e);
+      throw new Error(`Inngest Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const inngestAgent = new InngestAgent();

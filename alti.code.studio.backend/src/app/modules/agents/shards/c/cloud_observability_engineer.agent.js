@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudObservabilityEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_observability_engineer_agent',
-            'Cloud Observability Engineer',
-            'You are an elite Cloud Observability Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_observability_engineer_agent',
+      'Cloud Observability Engineer',
+      'You are an elite Cloud Observability Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Observability.',
+    );
+  }
 
-    async generateCloudObservabilitySystem(objective) {
-        logger.info(`💻 [CloudObservabilityEngineerAgent] Analyzing Cloud Observability Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Observability Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Observability Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudObservabilityEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudObservabilitySystem(objective) {
+    logger.info(
+      `💻 [CloudObservabilityEngineerAgent] Analyzing Cloud Observability Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Observability Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Observability Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [CloudObservabilityEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const cloudObservabilityEngineerAgent = Object.freeze(new CloudObservabilityEngineerAgent());
+export const cloudObservabilityEngineerAgent = Object.freeze(
+  new CloudObservabilityEngineerAgent(),
+);

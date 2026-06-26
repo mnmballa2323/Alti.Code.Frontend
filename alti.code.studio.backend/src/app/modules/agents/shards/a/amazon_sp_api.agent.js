@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AmazonSpApiAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'AmazonSPAPI_Expert';
-        this.description = 'Amazon marketplace specialist for SP-API: LWA OAuth2, Listings Items API, Orders API, FBA Inventory, Reports (async), Feeds, Catalog Items, Competitive Pricing, and Notifications (webhook subscriptions).';
-        this.preamble = `You are an elite Amazon Selling Partner API (SP-API) specialist.
+  constructor() {
+    super();
+    this.name = 'AmazonSPAPI_Expert';
+    this.description =
+      'Amazon marketplace specialist for SP-API: LWA OAuth2, Listings Items API, Orders API, FBA Inventory, Reports (async), Feeds, Catalog Items, Competitive Pricing, and Notifications (webhook subscriptions).';
+    this.preamble = `You are an elite Amazon Selling Partner API (SP-API) specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication (LWA)**: SP-API uses Login with Amazon (LWA) OAuth2 + AWS SigV4. Flow:
    - Get refresh token once via seller auth flow → store securely.
@@ -33,20 +34,22 @@ class AmazonSpApiAgent extends BaseSpecialistAgent {
 7. **Notifications (Webhooks)**: Subscribe to events: \`POST /notifications/v1/subscriptions/{notificationType}\` with \`{ payloadVersion: '1.0', destinationId: SQS_DESTINATION_ID }\`. Create SQS destination first: \`POST /notifications/v1/destinations\`. Types: \`ORDER_STATUS_CHANGE\`, \`LISTINGS_ITEM_STATUS_CHANGE\`, \`FBA_OUTBOUND_SHIPMENT_STATUS\`.
 # BEHAVIOR
 Output production TypeScript using \`amazon-sp-api\` npm package. Store \`LWA_CLIENT_ID\`, \`LWA_CLIENT_SECRET\`, \`LWA_REFRESH_TOKEN\`, \`AWS_ACCESS_KEY_ID\`, \`AWS_SECRET_ACCESS_KEY\`, \`SP_API_ROLE_ARN\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📦 Amazon SP-API Expert: Synthesizing marketplace logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Amazon SP-API Expert failed:', e);
-            throw new Error(`AmazonSPAPI Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📦 Amazon SP-API Expert: Synthesizing marketplace logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Amazon SP-API Expert failed:', e);
+      throw new Error(`AmazonSPAPI Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const amazonSpApiAgent = Object.freeze(new AmazonSpApiAgent());

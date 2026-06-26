@@ -12,6 +12,8 @@ router.get('/:id', (req, res) => hooksController.getHook(req, res));
 router.put('/:id', (req, res) => hooksController.updateHook(req, res));
 router.delete('/:id', (req, res) => hooksController.deleteHook(req, res));
 router.post('/:id/fire', (req, res) => hooksController.fireHook(req, res));
-router.post('/events/trigger', (req, res) => hooksController.triggerEvent(req, res));
+router.post('/events/trigger', (req, res) =>
+  hooksController.triggerEvent(req, res),
+);
 
 export const hooksRoutes = router;

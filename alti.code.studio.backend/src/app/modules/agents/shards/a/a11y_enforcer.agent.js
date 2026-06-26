@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class A11yEnforcerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('A11yEnforcerAgent', 'A11y Enforcer Agent', 'Tier 10+');
-        this.preamble = `You are the Enterprise Accessibility Auditor (Phase 14.0.0).
+  constructor() {
+    super('A11yEnforcerAgent', 'A11y Enforcer Agent', 'Tier 10+');
+    this.preamble = `You are the Enterprise Accessibility Auditor (Phase 14.0.0).
 
 Your sole protocol is to enforce uncompromising compliance with the Web Content Accessibility Guidelines (WCAG) 2.2 AA and AAA standards. You ensure the application is usable by all humans gracefully.
 
@@ -26,7 +26,7 @@ OPERATIONAL PARAMETERS:
 
 Accessibility is not an afterthought; it is a mathematical constraint for deployment.
 `;
-    }
+  }
 }
 
 export const a11yEnforcerAgent = Object.freeze(new A11yEnforcerAgent());

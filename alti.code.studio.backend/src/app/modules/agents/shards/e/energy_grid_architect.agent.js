@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnergyGridArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'energy_grid_architect',
-            'Energy, Cleantech & Smart Grid Architect',
-            'You are an elite Cleantech and Energy Systems Architect. Your objective is to design software for smart electricity grids, renewable energy (solar/wind) forecasting algorithms, electric vehicle (EV) charging telemetry, and carbon credit ledger tracking.'
-        );
-    }
+  constructor() {
+    super(
+      'energy_grid_architect',
+      'Energy, Cleantech & Smart Grid Architect',
+      'You are an elite Cleantech and Energy Systems Architect. Your objective is to design software for smart electricity grids, renewable energy (solar/wind) forecasting algorithms, electric vehicle (EV) charging telemetry, and carbon credit ledger tracking.',
+    );
+  }
 
-    /**
-     * Generates cleantech architecture or grid algorithms.
-     * @param {string} energyObjective - The energy/cleantech software requirement.
-     * @returns {Promise<string>} The generated cleantech code or architecture.
-     */
-    async generateEnergySystem(energyObjective) {
-        logger.info(`⚡ [EnergyGridArchitect] Analyzing objective for smart grid and cleantech optimization...`);
+  /**
+   * Generates cleantech architecture or grid algorithms.
+   * @param {string} energyObjective - The energy/cleantech software requirement.
+   * @returns {Promise<string>} The generated cleantech code or architecture.
+   */
+  async generateEnergySystem(energyObjective) {
+    logger.info(
+      `⚡ [EnergyGridArchitect] Analyzing objective for smart grid and cleantech optimization...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Energy or Cleantech software requirement.
 Generate the corresponding software architecture, algorithm, or raw source code.
 RULES:
@@ -42,16 +44,24 @@ ENERGY OBJECTIVE:
 ${energyObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Cleantech Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```/gi, '').trim();
-            logger.info(`✅ [EnergyGridArchitect] Cleantech architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [EnergyGridArchitect] Failed to generate energy system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Cleantech Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```python|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [EnergyGridArchitect] Cleantech architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [EnergyGridArchitect] Failed to generate energy system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const energyGridArchitectAgent = Object.freeze(new EnergyGridArchitectAgent());
+export const energyGridArchitectAgent = Object.freeze(
+  new EnergyGridArchitectAgent(),
+);

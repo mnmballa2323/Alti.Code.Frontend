@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREResilienceArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_resilience_architect_agent',
-            'SRE Resilience Architect',
-            'You are an elite SRE Resilience Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_resilience_architect_agent',
+      'SRE Resilience Architect',
+      'You are an elite SRE Resilience Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Resilience.',
+    );
+  }
 
-    async generateSREResilienceSystem(objective) {
-        logger.info(`💻 [SREResilienceArchitectAgent] Analyzing SRE Resilience Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Resilience Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Resilience Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREResilienceArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREResilienceSystem(objective) {
+    logger.info(
+      `💻 [SREResilienceArchitectAgent] Analyzing SRE Resilience Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Resilience Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Resilience Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREResilienceArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREResilienceArchitectAgent = Object.freeze(new SREResilienceArchitectAgent());
+export const sREResilienceArchitectAgent = Object.freeze(
+  new SREResilienceArchitectAgent(),
+);

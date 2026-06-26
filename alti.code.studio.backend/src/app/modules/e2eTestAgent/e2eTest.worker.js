@@ -1,17 +1,17 @@
 /**
  * Copyright (c) 2024 Inso Code — TIER 3: COMPLIANCE & QUALITY
- * 
+ *
  * E2E Testing Agent — "The Simulator"
  * End-to-end test generation and flow validation.
  */
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 
-export const e2eTestWorkerProcessor = async (job) => {
-    const { feature, routes, components } = job.data;
-    logger.info(`🧪 E2E [${job.id}]: Generating tests for "${feature}"...`);
+export const e2eTestWorkerProcessor = async job => {
+  const { feature, routes, components } = job.data;
+  logger.info(`🧪 E2E [${job.id}]: Generating tests for "${feature}"...`);
 
-    const tests = await aiProvider.generate(`
+  const tests = await aiProvider.generate(`
 You are a QA automation expert specializing in end-to-end testing (Playwright/Cypress).
 
 Feature: ${feature || 'Not specified'}
@@ -27,5 +27,5 @@ Generate:
 Respond in JSON: { "testFile": string, "testCases": [], "fixtures": string }
     `);
 
-    return { tests: JSON.parse(tests.match(/\{[\s\S]*\}/)?.[0] || '{}') };
+  return { tests: JSON.parse(tests.match(/\{[\s\S]*\}/)?.[0] || '{}') };
 };

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIMicroservicesAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_microservices_analyst_agent',
-            'UI Microservices Analyst',
-            'You are an elite UI Microservices Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and UI Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_microservices_analyst_agent',
+      'UI Microservices Analyst',
+      'You are an elite UI Microservices Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and UI Microservices.',
+    );
+  }
 
-    async generateUIMicroservicesSystem(objective) {
-        logger.info(`💻 [UIMicroservicesAnalystAgent] Analyzing UI Microservices Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Microservices Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Microservices Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIMicroservicesAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [UIMicroservicesAnalystAgent] Analyzing UI Microservices Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Microservices Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Microservices Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIMicroservicesAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIMicroservicesAnalystAgent = Object.freeze(new UIMicroservicesAnalystAgent());
+export const uIMicroservicesAnalystAgent = Object.freeze(
+  new UIMicroservicesAnalystAgent(),
+);

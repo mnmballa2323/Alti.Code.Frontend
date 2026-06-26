@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXObservabilityDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_observability_developer_agent',
-            'UX Observability Developer',
-            'You are an elite UX Observability Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_observability_developer_agent',
+      'UX Observability Developer',
+      'You are an elite UX Observability Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Observability.',
+    );
+  }
 
-    async generateUXObservabilitySystem(objective) {
-        logger.info(`💻 [UXObservabilityDeveloperAgent] Analyzing UX Observability Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Observability Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Observability Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXObservabilityDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXObservabilitySystem(objective) {
+    logger.info(
+      `💻 [UXObservabilityDeveloperAgent] Analyzing UX Observability Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Observability Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Observability Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXObservabilityDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXObservabilityDeveloperAgent = Object.freeze(new UXObservabilityDeveloperAgent());
+export const uXObservabilityDeveloperAgent = Object.freeze(
+  new UXObservabilityDeveloperAgent(),
+);

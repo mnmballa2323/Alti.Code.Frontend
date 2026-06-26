@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityProvisioningDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_provisioning_developer_agent',
-            'Security Provisioning Developer',
-            'You are an elite Security Provisioning Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Security Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'security_provisioning_developer_agent',
+      'Security Provisioning Developer',
+      'You are an elite Security Provisioning Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Security Provisioning.',
+    );
+  }
 
-    async generateSecurityProvisioningSystem(objective) {
-        logger.info(`💻 [SecurityProvisioningDeveloperAgent] Analyzing Security Provisioning Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Provisioning Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Provisioning Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityProvisioningDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityProvisioningSystem(objective) {
+    logger.info(
+      `💻 [SecurityProvisioningDeveloperAgent] Analyzing Security Provisioning Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Provisioning Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Provisioning Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityProvisioningDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityProvisioningDeveloperAgent = Object.freeze(new SecurityProvisioningDeveloperAgent());
+export const securityProvisioningDeveloperAgent = Object.freeze(
+  new SecurityProvisioningDeveloperAgent(),
+);

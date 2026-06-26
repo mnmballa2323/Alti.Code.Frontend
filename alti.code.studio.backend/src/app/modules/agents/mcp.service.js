@@ -307,7 +307,8 @@ class McpBridgeService extends EventEmitter {
           `🗜️ [MCP] Tool payload is massive (${resultStr.length} bytes). Offloading to Azure Blob Storage...`,
         );
         try {
-          const { GcsService } = await import('../azureCloud/azureStorage.service.js');
+          const { GcsService } =
+            await import('../gcpCloud/gcpStorage.service.js');
           const uri = await GcsService.uploadFile(
             'alti_swarm_artifacts',
             `mcp_payload_${Date.now()}.json`,

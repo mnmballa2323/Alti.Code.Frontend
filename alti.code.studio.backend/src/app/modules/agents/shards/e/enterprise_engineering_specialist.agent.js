@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseEngineeringSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_engineering_specialist_agent',
-            'Enterprise Engineering Specialist',
-            'You are an elite Enterprise Engineering Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_engineering_specialist_agent',
+      'Enterprise Engineering Specialist',
+      'You are an elite Enterprise Engineering Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Engineering.',
+    );
+  }
 
-    async generateEnterpriseEngineeringSystem(objective) {
-        logger.info(`💻 [EnterpriseEngineeringSpecialistAgent] Analyzing Enterprise Engineering Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Engineering Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Engineering Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseEngineeringSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseEngineeringSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseEngineeringSpecialistAgent] Analyzing Enterprise Engineering Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Engineering Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Engineering Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseEngineeringSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseEngineeringSpecialistAgent = Object.freeze(new EnterpriseEngineeringSpecialistAgent());
+export const enterpriseEngineeringSpecialistAgent = Object.freeze(
+  new EnterpriseEngineeringSpecialistAgent(),
+);

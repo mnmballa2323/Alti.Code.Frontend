@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREMigrationArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_migration_architect_agent',
-            'SRE Migration Architect',
-            'You are an elite SRE Migration Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_migration_architect_agent',
+      'SRE Migration Architect',
+      'You are an elite SRE Migration Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Migration.',
+    );
+  }
 
-    async generateSREMigrationSystem(objective) {
-        logger.info(`💻 [SREMigrationArchitectAgent] Analyzing SRE Migration Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Migration Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Migration Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREMigrationArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREMigrationSystem(objective) {
+    logger.info(
+      `💻 [SREMigrationArchitectAgent] Analyzing SRE Migration Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Migration Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Migration Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREMigrationArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREMigrationArchitectAgent = Object.freeze(new SREMigrationArchitectAgent());
+export const sREMigrationArchitectAgent = Object.freeze(
+  new SREMigrationArchitectAgent(),
+);

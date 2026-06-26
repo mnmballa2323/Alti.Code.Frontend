@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataSecurityEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_security_engineer_agent',
-            'Data Security Engineer',
-            'You are an elite Data Security Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Data Security.'
-        );
-    }
+  constructor() {
+    super(
+      'data_security_engineer_agent',
+      'Data Security Engineer',
+      'You are an elite Data Security Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Data Security.',
+    );
+  }
 
-    async generateDataSecuritySystem(objective) {
-        logger.info(`💻 [DataSecurityEngineerAgent] Analyzing Data Security Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Security Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Security Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataSecurityEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataSecuritySystem(objective) {
+    logger.info(
+      `💻 [DataSecurityEngineerAgent] Analyzing Data Security Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Security Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Security Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataSecurityEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataSecurityEngineerAgent = Object.freeze(new DataSecurityEngineerAgent());
+export const dataSecurityEngineerAgent = Object.freeze(
+  new DataSecurityEngineerAgent(),
+);

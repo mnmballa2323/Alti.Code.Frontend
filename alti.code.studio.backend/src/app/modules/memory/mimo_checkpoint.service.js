@@ -4,30 +4,34 @@ import { logger } from '../../../shared/logger.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
 
 class MimoCheckpointService {
-    constructor() {
-        this.checkpointPath = path.join(process.cwd(), 'docs', 'checkpoint.md');
+  constructor() {
+    this.checkpointPath = path.join(process.cwd(), 'docs', 'checkpoint.md');
+  }
+
+  /**
+   * Checks if the accumulated context size exceeds thresholds,
+   * and compacts it by spawning a writer subagent.
+   *
+   * @param {Array<string>} contextArray - The current accumulated context strings.
+   * @param {number} thresholdChars - Character threshold to trigger compaction. Default: 150,000 (~30k tokens)
+   * @returns {Promise<Array<string>>} - The compacted context array.
+   */
+  async checkAndCompact(contextArray, thresholdChars = 150000) {
+    const totalSize = contextArray.join('\n').length;
+    logger.info(
+      `[MimoCheckpoint] Current context size: ${totalSize} chars. Threshold: ${thresholdChars} chars.`,
+    );
+
+    if (totalSize < thresholdChars) {
+      return contextArray;
     }
 
-    /**
-     * Checks if the accumulated context size exceeds thresholds,
-     * and compacts it by spawning a writer subagent.
-     * 
-     * @param {Array<string>} contextArray - The current accumulated context strings.
-     * @param {number} thresholdChars - Character threshold to trigger compaction. Default: 150,000 (~30k tokens)
-     * @returns {Promise<Array<string>>} - The compacted context array.
-     */
-    async checkAndCompact(contextArray, thresholdChars = 150000) {
-        const totalSize = contextArray.join('\n').length;
-        logger.info(`[MimoCheckpoint] Current context size: ${totalSize} chars. Threshold: ${thresholdChars} chars.`);
+    logger.warn(
+      `[MimoCheckpoint] ⚠️ Context size exceeded threshold! Running out-of-band writer subagent for compaction...`,
+    );
 
-        if (totalSize < thresholdChars) {
-            return contextArray;
-        }
-
-        logger.warn(`[MimoCheckpoint] ⚠️ Context size exceeded threshold! Running out-of-band writer subagent for compaction...`);
-
-        try {
-            const prompt = `
+    try {
+      const prompt = `
 You are the out-of-band Memory Checkpoint Writer subagent for Alti.Code.Studio.
 The current agent execution context has reached limit thresholds. You must compact this history.
 
@@ -43,26 +47,31 @@ Output the checkpoint in clean, professional markdown format. Do not wrap the ou
 ${contextArray.join('\n\n')}
 `;
 
-            const checkpointMarkdown = await GeminiAiService.generateContent(prompt);
-            const cleanedCheckpoint = checkpointMarkdown.trim().replace(/^```markdown\n|```$/g, '');
+      const checkpointMarkdown = await GeminiAiService.generateContent(prompt);
+      const cleanedCheckpoint = checkpointMarkdown
+        .trim()
+        .replace(/^```markdown\n|```$/g, '');
 
-            // Ensure destination directory exists and write checkpoint file
-            await fs.mkdir(path.dirname(this.checkpointPath), { recursive: true });
-            await fs.writeFile(this.checkpointPath, cleanedCheckpoint, 'utf8');
-            logger.info(`[MimoCheckpoint] ✅ Milestone checkpoint written to: ${this.checkpointPath}`);
+      // Ensure destination directory exists and write checkpoint file
+      await fs.mkdir(path.dirname(this.checkpointPath), { recursive: true });
+      await fs.writeFile(this.checkpointPath, cleanedCheckpoint, 'utf8');
+      logger.info(
+        `[MimoCheckpoint] ✅ Milestone checkpoint written to: ${this.checkpointPath}`,
+      );
 
-            // Compact context array: replace all historical entries with the new checkpoint reference
-            const compactedContext = [
-                `[MIMO_ACTIVE_CHECKPOINT] The context has been compacted due to token budget limits. Refer to the active milestone checkpoint below:\n\n${cleanedCheckpoint}`
-            ];
+      // Compact context array: replace all historical entries with the new checkpoint reference
+      const compactedContext = [
+        `[MIMO_ACTIVE_CHECKPOINT] The context has been compacted due to token budget limits. Refer to the active milestone checkpoint below:\n\n${cleanedCheckpoint}`,
+      ];
 
-            return compactedContext;
-
-        } catch (error) {
-            logger.error(`[MimoCheckpoint] Compaction failed: ${error.message}. Returning original context.`);
-            return contextArray;
-        }
+      return compactedContext;
+    } catch (error) {
+      logger.error(
+        `[MimoCheckpoint] Compaction failed: ${error.message}. Returning original context.`,
+      );
+      return contextArray;
     }
+  }
 }
 
 export const mimoCheckpointService = new MimoCheckpointService();

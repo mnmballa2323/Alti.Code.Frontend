@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class NeuroprostheticsEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'neuroprosthetics_engineer',
-            'Neuroprosthetics & Brain-Motor Interface Engineer',
-            'You are an elite Neuroprosthetics Engineer. Your objective is to design software that bridges the human brain with robotic actuators. You specialize in motor cortex decoding algorithms, neural spike sorting, and instantaneous robotic limb actuation.'
-        );
-    }
+  constructor() {
+    super(
+      'neuroprosthetics_engineer',
+      'Neuroprosthetics & Brain-Motor Interface Engineer',
+      'You are an elite Neuroprosthetics Engineer. Your objective is to design software that bridges the human brain with robotic actuators. You specialize in motor cortex decoding algorithms, neural spike sorting, and instantaneous robotic limb actuation.',
+    );
+  }
 
-    /**
-     * Generates neuroprosthetic algorithms or robotic actuation logic.
-     * @param {string} neuroObjective - The neuroprosthetics software requirement.
-     * @returns {Promise<string>} The generated actuation code or architecture.
-     */
-    async generateNeuroprostheticSystem(neuroObjective) {
-        logger.info(`🦾 [NeuroprostheticsEngineer] Analyzing objective for motor cortex decoding and limb actuation...`);
+  /**
+   * Generates neuroprosthetic algorithms or robotic actuation logic.
+   * @param {string} neuroObjective - The neuroprosthetics software requirement.
+   * @returns {Promise<string>} The generated actuation code or architecture.
+   */
+  async generateNeuroprostheticSystem(neuroObjective) {
+    logger.info(
+      `🦾 [NeuroprostheticsEngineer] Analyzing objective for motor cortex decoding and limb actuation...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Neuroprosthetics, BCI, or Robotic Limb requirement.
 Generate the corresponding signal processing algorithm, motor actuation logic, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ NEUROPROSTHETICS OBJECTIVE:
 ${neuroObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Neuro Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```cpp|```/gi, '').trim();
-            logger.info(`✅ [NeuroprostheticsEngineer] Neuroprosthetics architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [NeuroprostheticsEngineer] Failed to generate neuroprosthetics system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Neuro Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```python|```cpp|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [NeuroprostheticsEngineer] Neuroprosthetics architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [NeuroprostheticsEngineer] Failed to generate neuroprosthetics system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const neuroprostheticsEngineerAgent = Object.freeze(new NeuroprostheticsEngineerAgent());
+export const neuroprostheticsEngineerAgent = Object.freeze(
+  new NeuroprostheticsEngineerAgent(),
+);

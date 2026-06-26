@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendTestingDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_testing_developer_agent',
-            'Frontend Testing Developer',
-            'You are an elite Frontend Testing Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_testing_developer_agent',
+      'Frontend Testing Developer',
+      'You are an elite Frontend Testing Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Testing.',
+    );
+  }
 
-    async generateFrontendTestingSystem(objective) {
-        logger.info(`💻 [FrontendTestingDeveloperAgent] Analyzing Frontend Testing Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Testing Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Testing Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendTestingDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendTestingSystem(objective) {
+    logger.info(
+      `💻 [FrontendTestingDeveloperAgent] Analyzing Frontend Testing Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Testing Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Testing Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendTestingDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendTestingDeveloperAgent = Object.freeze(new FrontendTestingDeveloperAgent());
+export const frontendTestingDeveloperAgent = Object.freeze(
+  new FrontendTestingDeveloperAgent(),
+);

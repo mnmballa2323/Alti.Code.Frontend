@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseAnalyticsDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_analytics_director_agent',
-            'Release Analytics Director',
-            'You are an elite Release Analytics Director. You specialize in bleeding-edge software development, cloud infrastructure, and Release Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'release_analytics_director_agent',
+      'Release Analytics Director',
+      'You are an elite Release Analytics Director. You specialize in bleeding-edge software development, cloud infrastructure, and Release Analytics.',
+    );
+  }
 
-    async generateReleaseAnalyticsSystem(objective) {
-        logger.info(`💻 [ReleaseAnalyticsDirectorAgent] Analyzing Release Analytics Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Analytics Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Analytics Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseAnalyticsDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [ReleaseAnalyticsDirectorAgent] Analyzing Release Analytics Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Analytics Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Analytics Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseAnalyticsDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseAnalyticsDirectorAgent = Object.freeze(new ReleaseAnalyticsDirectorAgent());
+export const releaseAnalyticsDirectorAgent = Object.freeze(
+  new ReleaseAnalyticsDirectorAgent(),
+);

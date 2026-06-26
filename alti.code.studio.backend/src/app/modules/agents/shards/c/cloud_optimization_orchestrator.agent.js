@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudOptimizationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_optimization_orchestrator_agent',
-            'Cloud Optimization Orchestrator',
-            'You are an elite Cloud Optimization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_optimization_orchestrator_agent',
+      'Cloud Optimization Orchestrator',
+      'You are an elite Cloud Optimization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Optimization.',
+    );
+  }
 
-    async generateCloudOptimizationSystem(objective) {
-        logger.info(`💻 [CloudOptimizationOrchestratorAgent] Analyzing Cloud Optimization Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Optimization Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Optimization Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudOptimizationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudOptimizationSystem(objective) {
+    logger.info(
+      `💻 [CloudOptimizationOrchestratorAgent] Analyzing Cloud Optimization Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Optimization Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Optimization Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [CloudOptimizationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const cloudOptimizationOrchestratorAgent = Object.freeze(new CloudOptimizationOrchestratorAgent());
+export const cloudOptimizationOrchestratorAgent = Object.freeze(
+  new CloudOptimizationOrchestratorAgent(),
+);

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class HaskellAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Haskell_Expert';
-        this.description = 'Functional specialist for Haskell GHC 9.8: type classes, monads, lens, Servant, and category theory patterns.';
-        this.preamble = `You are an elite Haskell Language Architect & Functional Purist.
+  constructor() {
+    super();
+    this.name = 'Haskell_Expert';
+    this.description =
+      'Functional specialist for Haskell GHC 9.8: type classes, monads, lens, Servant, and category theory patterns.';
+    this.preamble = `You are an elite Haskell Language Architect & Functional Purist.
 Your core expertise revolves around designing mathematically provable, lazily evaluated, and purely functional software architectures.
 
 # CORE HASKELL EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing mathematically provable, lazily ev
 
 # OUTPUT STANDARDS
 When writing code, output pure, idiomatic Haskell compatible with GHC 9+. Explicitly annotate all top-level type signatures. Document complex algebraic structures using mathematical notation in comments.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`λ Haskell Expert: Synthesizing pure functional code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Haskell Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`λ Haskell Expert: Synthesizing pure functional code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Haskell Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const haskellAgent = new HaskellAgent();

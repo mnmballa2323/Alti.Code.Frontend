@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecuritySecuritySpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_security_specialist_agent',
-            'Security Security Specialist',
-            'You are an elite Security Security Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Security Security.'
-        );
-    }
+  constructor() {
+    super(
+      'security_security_specialist_agent',
+      'Security Security Specialist',
+      'You are an elite Security Security Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Security Security.',
+    );
+  }
 
-    async generateSecuritySecuritySystem(objective) {
-        logger.info(`💻 [SecuritySecuritySpecialistAgent] Analyzing Security Security Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Security Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Security Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecuritySecuritySpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecuritySecuritySystem(objective) {
+    logger.info(
+      `💻 [SecuritySecuritySpecialistAgent] Analyzing Security Security Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Security Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Security Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecuritySecuritySpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securitySecuritySpecialistAgent = Object.freeze(new SecuritySecuritySpecialistAgent());
+export const securitySecuritySpecialistAgent = Object.freeze(
+  new SecuritySecuritySpecialistAgent(),
+);

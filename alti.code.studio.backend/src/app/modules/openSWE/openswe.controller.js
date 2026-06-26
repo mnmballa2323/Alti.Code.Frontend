@@ -1,11 +1,11 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
 
-import { OpenSWEService } from "./openswe.service.js";
+import { OpenSWEService } from './openswe.service.js';
 
 export class OpenSWEController {
   static async analyze(req, res) {

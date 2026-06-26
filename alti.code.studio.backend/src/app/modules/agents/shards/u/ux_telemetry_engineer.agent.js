@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXTelemetryEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_telemetry_engineer_agent',
-            'UX Telemetry Engineer',
-            'You are an elite UX Telemetry Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_telemetry_engineer_agent',
+      'UX Telemetry Engineer',
+      'You are an elite UX Telemetry Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Telemetry.',
+    );
+  }
 
-    async generateUXTelemetrySystem(objective) {
-        logger.info(`💻 [UXTelemetryEngineerAgent] Analyzing UX Telemetry Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Telemetry Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Telemetry Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXTelemetryEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXTelemetrySystem(objective) {
+    logger.info(
+      `💻 [UXTelemetryEngineerAgent] Analyzing UX Telemetry Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Telemetry Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Telemetry Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXTelemetryEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXTelemetryEngineerAgent = Object.freeze(new UXTelemetryEngineerAgent());
+export const uXTelemetryEngineerAgent = Object.freeze(
+  new UXTelemetryEngineerAgent(),
+);

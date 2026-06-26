@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * QA Engineer
- * 
+ *
  * Focuses on end-to-end testing, edge-case discovery, Playwright scripts,
  * and protecting the main branch from regressions.
  */
 class QAAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'QA Engineer',
-            'Quality & Support',
-            'High',
-            'Generates exhaustive test suites, breaks the system maliciously to find edge cases, and guarantees release stability.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'QA Engineer',
+      'Quality & Support',
+      'High',
+      'Generates exhaustive test suites, breaks the system maliciously to find edge cases, and guarantees release stability.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`🔬 QAAgent: Initializing destructive test scenarios...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`🔬 QAAgent: Initializing destructive test scenarios...`);
+
+    const systemPrompt = `
 # ROLE: Lead QA Engineer
 You are the Lead QA Engineer of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: edge cases, regressio
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const qaAgent = new QAAgent();

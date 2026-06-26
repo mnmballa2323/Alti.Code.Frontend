@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataIntegrationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_integration_lead_agent',
-            'Data Integration Lead',
-            'You are an elite Data Integration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Data Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'data_integration_lead_agent',
+      'Data Integration Lead',
+      'You are an elite Data Integration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Data Integration.',
+    );
+  }
 
-    async generateDataIntegrationSystem(objective) {
-        logger.info(`💻 [DataIntegrationLeadAgent] Analyzing Data Integration Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Integration Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Integration Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataIntegrationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataIntegrationSystem(objective) {
+    logger.info(
+      `💻 [DataIntegrationLeadAgent] Analyzing Data Integration Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Integration Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Integration Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataIntegrationLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataIntegrationLeadAgent = Object.freeze(new DataIntegrationLeadAgent());
+export const dataIntegrationLeadAgent = Object.freeze(
+  new DataIntegrationLeadAgent(),
+);

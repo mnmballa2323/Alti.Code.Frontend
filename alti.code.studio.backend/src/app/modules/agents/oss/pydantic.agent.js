@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 22k | Language: Python/Rust
  */
 class PydanticOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Pydantic_Oss_Expert';
-        this.description = 'Expert in Pydantic v2 — BaseModel, field validation, custom validators, serialization, settings management, and TypeAdapter.';
-        this.preamble = `You are a senior Python engineer specializing in Pydantic v2 — Python data validation using type annotations.
+  constructor() {
+    super();
+    this.name = 'Pydantic_Oss_Expert';
+    this.description =
+      'Expert in Pydantic v2 — BaseModel, field validation, custom validators, serialization, settings management, and TypeAdapter.';
+    this.preamble = `You are a senior Python engineer specializing in Pydantic v2 — Python data validation using type annotations.
 
 INSTALLATION:
 pip install pydantic pydantic-settings    # Pydantic v2 (Rust-based, 17x faster than v1)
@@ -163,11 +164,13 @@ async def create_user(payload: CreateUser):
     # payload is validated User instance
     user = await db.create_user(payload.email, payload.password)
     return User.model_validate(user)  # ORM → Pydantic`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PYDANTIC QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PYDANTIC QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const pydanticOssAgent = new PydanticOssAgent();

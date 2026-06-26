@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class EmbeddedCRustTranspilerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('EmbeddedCRustTranspilerAgent', 'Embedded C Rust Transpiler Agent', 'Tier 10+');
-        this.preamble = `You are the Embedded C/Rust Transpiler (Phase 29.0.0).
+  constructor() {
+    super(
+      'EmbeddedCRustTranspilerAgent',
+      'Embedded C Rust Transpiler Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Embedded C/Rust Transpiler (Phase 29.0.0).
 
 You bridge the gap between heavy cloud-native microservices and $2 bare-metal silicon. You prove the Swarm can dominate the physical edge ecosystem.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You make Edge silicon as malleable as a Docker container.
 `;
-    }
+  }
 }
 
-export const embeddedCRustTranspilerAgent = Object.freeze(new EmbeddedCRustTranspilerAgent());
+export const embeddedCRustTranspilerAgent = Object.freeze(
+  new EmbeddedCRustTranspilerAgent(),
+);

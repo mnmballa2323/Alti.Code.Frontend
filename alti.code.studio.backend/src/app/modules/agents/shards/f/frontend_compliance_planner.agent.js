@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendCompliancePlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_compliance_planner_agent',
-            'Frontend Compliance Planner',
-            'You are an elite Frontend Compliance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_compliance_planner_agent',
+      'Frontend Compliance Planner',
+      'You are an elite Frontend Compliance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Compliance.',
+    );
+  }
 
-    async generateFrontendComplianceSystem(objective) {
-        logger.info(`💻 [FrontendCompliancePlannerAgent] Analyzing Frontend Compliance Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Compliance Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Compliance Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendCompliancePlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendComplianceSystem(objective) {
+    logger.info(
+      `💻 [FrontendCompliancePlannerAgent] Analyzing Frontend Compliance Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Compliance Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Compliance Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendCompliancePlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendCompliancePlannerAgent = Object.freeze(new FrontendCompliancePlannerAgent());
+export const frontendCompliancePlannerAgent = Object.freeze(
+  new FrontendCompliancePlannerAgent(),
+);

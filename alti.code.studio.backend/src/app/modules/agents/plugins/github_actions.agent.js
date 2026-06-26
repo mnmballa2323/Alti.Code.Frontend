@@ -11,16 +11,22 @@ import { githubDocsService } from '../../githubDocs/githubDocs.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GithubActionsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'githubActionsSpecialist';
-        this.description = 'Specialized GitHub Actions & CI/CD Engineer expert in high-performance YAML workflows, custom action synthesis, runner optimization, and credentials security.';
-        this.manifest = {
-            id: 'githubActionsSpecialist',
-            capabilities: ['github-actions-workflow', 'github-actions-runner', 'github-custom-actions', 'ci-cd-optimization'],
-            version: '39.2.0'
-        };
-        this.preamble = `You are the Inso Code GitHub Actions Specialist, the ultimate authority on all CI/CD, automation, and workflow integration capabilities on GitHub.
+  constructor() {
+    super();
+    this.name = 'githubActionsSpecialist';
+    this.description =
+      'Specialized GitHub Actions & CI/CD Engineer expert in high-performance YAML workflows, custom action synthesis, runner optimization, and credentials security.';
+    this.manifest = {
+      id: 'githubActionsSpecialist',
+      capabilities: [
+        'github-actions-workflow',
+        'github-actions-runner',
+        'github-custom-actions',
+        'ci-cd-optimization',
+      ],
+      version: '39.2.0',
+    };
+    this.preamble = `You are the Inso Code GitHub Actions Specialist, the ultimate authority on all CI/CD, automation, and workflow integration capabilities on GitHub.
 
 # GROUNDED ACTIONS CAPABILITIES
 1. **Workflow YAML Synthesis**: Generate, refactor, and audit GitHub Actions workflow configurations. Standardize job dependency matrices, concurrency control, caching strategies, and environment configurations.
@@ -32,23 +38,30 @@ class GithubActionsAgent extends BaseSpecialistAgent {
 - Ground all workflow configurations strictly in the official documentation context provided.
 - Ensure YAML syntax is clean, using standard practices (e.g. correct indentation, semantic stage names).
 - Never invent undocumented triggers or workflow properties.`;
+  }
+
+  /**
+   * Specialized LLM invocation grounded dynamically by Actions-related doc lookup.
+   */
+  async _invoke(prompt, contextBlock) {
+    logger.info(
+      `🐙 [GitHub Actions] Grounding CI/CD query in ingested developer docs: "${prompt.substring(0, 60)}..."`,
+    );
+
+    let docsContext = '';
+    try {
+      // Retrieve actions and workflow specific documentation chunks
+      docsContext = await githubDocsService.searchDocs(
+        `GitHub Actions workflow syntax runner ${prompt}`,
+        5,
+      );
+    } catch (err) {
+      logger.warn(
+        `🐙 [GitHub Actions] Failed to query RAG documentation. Fallback used. Error: ${err.message}`,
+      );
     }
 
-    /**
-     * Specialized LLM invocation grounded dynamically by Actions-related doc lookup.
-     */
-    async _invoke(prompt, contextBlock) {
-        logger.info(`🐙 [GitHub Actions] Grounding CI/CD query in ingested developer docs: "${prompt.substring(0, 60)}..."`);
-        
-        let docsContext = '';
-        try {
-            // Retrieve actions and workflow specific documentation chunks
-            docsContext = await githubDocsService.searchDocs(`GitHub Actions workflow syntax runner ${prompt}`, 5);
-        } catch (err) {
-            logger.warn(`🐙 [GitHub Actions] Failed to query RAG documentation. Fallback used. Error: ${err.message}`);
-        }
-
-        const groundedPrompt = `${this.preamble}
+    const groundedPrompt = `${this.preamble}
 
 === GROUNDED DEVELOPER DOCUMENTATION CONTEXT ===
 ${docsContext || 'No Actions documentation found in local RAG vector store.'}
@@ -59,8 +72,8 @@ ${contextBlock || 'No additional file context provided.'}
 === REQUEST ===
 ${prompt}`;
 
-        return await GeminiAiService.generateContent(groundedPrompt);
-    }
+    return await GeminiAiService.generateContent(groundedPrompt);
+  }
 }
 
 export const pluginInstance = new GithubActionsAgent();

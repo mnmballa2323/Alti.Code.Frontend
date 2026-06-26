@@ -64,7 +64,12 @@ export const PRESETS = [
   {
     name: 'sqlite',
     command: 'npx',
-    args: ['-y', '@modelcontextprotocol/server-sqlite', '--file', 'database.sqlite'],
+    args: [
+      '-y',
+      '@modelcontextprotocol/server-sqlite',
+      '--file',
+      'database.sqlite',
+    ],
     envKey: 'MCP_ENABLE_SQLITE',
   },
   {
@@ -206,7 +211,14 @@ export const PRESETS = [
   {
     name: 'docker',
     command: 'docker',
-    args: ['run', '-i', '--rm', '-v', '/var/run/docker.sock:/var/run/docker.sock', 'mcp/docker'],
+    args: [
+      'run',
+      '-i',
+      '--rm',
+      '-v',
+      '/var/run/docker.sock:/var/run/docker.sock',
+      'mcp/docker',
+    ],
     envKey: 'MCP_ENABLE_DOCKER',
   },
   {
@@ -258,7 +270,7 @@ export const PRESETS = [
   {
     name: 'codebase-memory',
     command: 'npx',
-    args: ['-y', 'codebase-memory-mcp', "--ui=true", "--port=9749"],
+    args: ['-y', 'codebase-memory-mcp', '--ui=true', '--port=9749'],
     envKey: 'MCP_ENABLE_CODEBASE_MEMORY',
   },
   {

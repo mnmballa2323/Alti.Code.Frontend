@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsScalingDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_scaling_director_agent',
-            'Systems Scaling Director',
-            'You are an elite Systems Scaling Director. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_scaling_director_agent',
+      'Systems Scaling Director',
+      'You are an elite Systems Scaling Director. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Scaling.',
+    );
+  }
 
-    async generateSystemsScalingSystem(objective) {
-        logger.info(`💻 [SystemsScalingDirectorAgent] Analyzing Systems Scaling Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Scaling Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Scaling Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsScalingDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsScalingSystem(objective) {
+    logger.info(
+      `💻 [SystemsScalingDirectorAgent] Analyzing Systems Scaling Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Scaling Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Scaling Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsScalingDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsScalingDirectorAgent = Object.freeze(new SystemsScalingDirectorAgent());
+export const systemsScalingDirectorAgent = Object.freeze(
+  new SystemsScalingDirectorAgent(),
+);

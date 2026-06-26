@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendMigrationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_migration_analyst_agent',
-            'Frontend Migration Analyst',
-            'You are an elite Frontend Migration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_migration_analyst_agent',
+      'Frontend Migration Analyst',
+      'You are an elite Frontend Migration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Migration.',
+    );
+  }
 
-    async generateFrontendMigrationSystem(objective) {
-        logger.info(`💻 [FrontendMigrationAnalystAgent] Analyzing Frontend Migration Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Migration Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Migration Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendMigrationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendMigrationSystem(objective) {
+    logger.info(
+      `💻 [FrontendMigrationAnalystAgent] Analyzing Frontend Migration Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Migration Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Migration Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendMigrationAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendMigrationAnalystAgent = Object.freeze(new FrontendMigrationAnalystAgent());
+export const frontendMigrationAnalystAgent = Object.freeze(
+  new FrontendMigrationAnalystAgent(),
+);

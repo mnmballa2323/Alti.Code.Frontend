@@ -19,132 +19,163 @@ import { telemetryBus } from './telemetry.bus.js';
 import { logger } from '../../../shared/logger.js';
 import { magikaService } from '../security/magika.service.js';
 
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 50 * 1024 * 1024 } }); // 50MB max
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 50 * 1024 * 1024 },
+}); // 50MB max
 
 export const telemetryRoutes = express.Router();
 
 // GET /metrics
 telemetryRoutes.get('/metrics', (req, res) => {
-    try {
-        const metrics = telemetryService.getMetrics();
-        return res.json({ success: true, data: metrics });
-    } catch (e) {
-        return res.status(500).json({ success: false, message: e.message });
-    }
+  try {
+    const metrics = telemetryService.getMetrics();
+    return res.json({ success: true, data: metrics });
+  } catch (e) {
+    return res.status(500).json({ success: false, message: e.message });
+  }
 });
 
 // GET /incidents?limit=20
 telemetryRoutes.get('/incidents', (req, res) => {
-    const limit = Math.min(parseInt(req.query.limit) || 20, 100);
-    return res.json({ success: true, data: telemetryService.getIncidents(limit) });
+  const limit = Math.min(parseInt(req.query.limit) || 20, 100);
+  return res.json({
+    success: true,
+    data: telemetryService.getIncidents(limit),
+  });
 });
 
 // POST /record/llm
 // Body: { model?, latencyMs, success, error?, tokens? }
 telemetryRoutes.post('/record/llm', (req, res) => {
-    try {
-        telemetryService.recordLlmCall(req.body);
-        return res.json({ success: true });
-    } catch (e) {
-        return res.status(500).json({ success: false, message: e.message });
-    }
+  try {
+    telemetryService.recordLlmCall(req.body);
+    return res.json({ success: true });
+  } catch (e) {
+    return res.status(500).json({ success: false, message: e.message });
+  }
 });
 
 // POST /record/exception
 // Body: { message, name?, context? }
 telemetryRoutes.post('/record/exception', (req, res) => {
-    const { message, name = 'Error', context = '' } = req.body;
-    if (!message) return res.status(400).json({ success: false, message: 'message is required.' });
-    const err = Object.assign(new Error(message), { constructor: { name } });
-    const result = telemetryService.recordException(err, context);
-    return res.json({ success: true, data: result });
+  const { message, name = 'Error', context = '' } = req.body;
+  if (!message)
+    return res
+      .status(400)
+      .json({ success: false, message: 'message is required.' });
+  const err = Object.assign(new Error(message), { constructor: { name } });
+  const result = telemetryService.recordException(err, context);
+  return res.json({ success: true, data: result });
 });
 
 // POST /detect — immediate anomaly check
 telemetryRoutes.post('/detect', async (req, res) => {
-    try {
-        res.status(202).json({ success: true, message: 'Anomaly detection triggered.' });
-        await telemetryService._runDetection();
-    } catch (e) {
-        logger.error('Telemetry /detect error:', e.message);
-    }
+  try {
+    res
+      .status(202)
+      .json({ success: true, message: 'Anomaly detection triggered.' });
+    await telemetryService._runDetection();
+  } catch (e) {
+    logger.error('Telemetry /detect error:', e.message);
+  }
 });
 
 // POST /detection/start
 // Body: { intervalMs? }
 telemetryRoutes.post('/detection/start', (req, res) => {
-    const { intervalMs } = req.body;
-    telemetryService.startDetection(intervalMs);
-    return res.json({ success: true, message: 'Anomaly detection started.' });
+  const { intervalMs } = req.body;
+  telemetryService.startDetection(intervalMs);
+  return res.json({ success: true, message: 'Anomaly detection started.' });
 });
 
 // POST /detection/stop
 telemetryRoutes.post('/detection/stop', (req, res) => {
-    telemetryService.stopDetection();
-    return res.json({ success: true, message: 'Anomaly detection stopped.' });
+  telemetryService.stopDetection();
+  return res.json({ success: true, message: 'Anomaly detection stopped.' });
 });
 
 // POST /video-debug — VideoEye Agent entrypoint
-telemetryRoutes.post('/video-debug', upload.single('video'), async (req, res) => {
+telemetryRoutes.post(
+  '/video-debug',
+  upload.single('video'),
+  async (req, res) => {
     try {
-        if (!req.file) {
-            return res.status(400).json({ success: false, message: 'No video file provided.' });
-        }
-        
-        // 🛡️ Sovereign Security Boundary: Magika AI Deep-Learning File Scan
-        // Ensures the uploaded buffer is authentically a WebM or MP4, blocking malicious spoofing.
-        try {
-            await magikaService.enforceFileType(req.file.buffer, ['webm', 'mp4'], req.file.originalname);
-        } catch (scanError) {
-            return res.status(403).json({ success: false, message: scanError.message });
-        }
+      if (!req.file) {
+        return res
+          .status(400)
+          .json({ success: false, message: 'No video file provided.' });
+      }
 
-        const { context, domSnapshot } = req.body;
-        
-        // Pass the video buffer and the DOM Snapshot to the Telemetry Service for Video Intelligence Analysis
-        const analysisResult = await telemetryService.analyzeVideoGlitch(req.file.buffer, context, domSnapshot);
-        
-        return res.json({ success: true, data: analysisResult });
+      // 🛡️ Sovereign Security Boundary: Magika AI Deep-Learning File Scan
+      // Ensures the uploaded buffer is authentically a WebM or MP4, blocking malicious spoofing.
+      try {
+        await magikaService.enforceFileType(
+          req.file.buffer,
+          ['webm', 'mp4'],
+          req.file.originalname,
+        );
+      } catch (scanError) {
+        return res
+          .status(403)
+          .json({ success: false, message: scanError.message });
+      }
+
+      const { context, domSnapshot } = req.body;
+
+      // Pass the video buffer and the DOM Snapshot to the Telemetry Service for Video Intelligence Analysis
+      const analysisResult = await telemetryService.analyzeVideoGlitch(
+        req.file.buffer,
+        context,
+        domSnapshot,
+      );
+
+      return res.json({ success: true, data: analysisResult });
     } catch (e) {
-        logger.error('Telemetry /video-debug error:', e.message);
-        return res.status(500).json({ success: false, message: e.message });
+      logger.error('Telemetry /video-debug error:', e.message);
+      return res.status(500).json({ success: false, message: e.message });
     }
-});
+  },
+);
 
 // GET /events — SSE stream
 telemetryRoutes.get('/events', (req, res) => {
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-    res.flushHeaders();
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.flushHeaders();
 
-    const sendEvent = (event, data) => {
-        try { res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`); } catch { }
-    };
+  const sendEvent = (event, data) => {
+    try {
+      res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
+    } catch {}
+  };
 
-    const events = [
-        'telemetry:event',
-        'anomaly:detected',
-        'incident:resolved',
-        'incident:vetoed',
-        'incident:injected',
-    ];
+  const events = [
+    'telemetry:event',
+    'anomaly:detected',
+    'incident:resolved',
+    'incident:vetoed',
+    'incident:injected',
+  ];
 
-    const handlers = events.map(event => {
-        const handler = (data) => sendEvent(event, data);
-        telemetryBus.on(event, handler);
-        return { event, handler };
-    });
+  const handlers = events.map(event => {
+    const handler = data => sendEvent(event, data);
+    telemetryBus.on(event, handler);
+    return { event, handler };
+  });
 
-    // Send initial metrics on connect
-    sendEvent('telemetry:connected', telemetryService.getMetrics());
+  // Send initial metrics on connect
+  sendEvent('telemetry:connected', telemetryService.getMetrics());
 
-    const hb = setInterval(() => {
-        try { res.write(': heartbeat\n\n'); } catch { }
-    }, 30_000);
+  const hb = setInterval(() => {
+    try {
+      res.write(': heartbeat\n\n');
+    } catch {}
+  }, 30_000);
 
-    req.on('close', () => {
-        clearInterval(hb);
-        handlers.forEach(({ event, handler }) => telemetryBus.off(event, handler));
-    });
+  req.on('close', () => {
+    clearInterval(hb);
+    handlers.forEach(({ event, handler }) => telemetryBus.off(event, handler));
+  });
 });

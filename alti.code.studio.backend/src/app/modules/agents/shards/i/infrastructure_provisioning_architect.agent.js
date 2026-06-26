@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureProvisioningArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_provisioning_architect_agent',
-            'Infrastructure Provisioning Architect',
-            'You are an elite Infrastructure Provisioning Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_provisioning_architect_agent',
+      'Infrastructure Provisioning Architect',
+      'You are an elite Infrastructure Provisioning Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Provisioning.',
+    );
+  }
 
-    async generateInfrastructureProvisioningSystem(objective) {
-        logger.info(`💻 [InfrastructureProvisioningArchitectAgent] Analyzing Infrastructure Provisioning Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Provisioning Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Provisioning Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureProvisioningArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureProvisioningSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureProvisioningArchitectAgent] Analyzing Infrastructure Provisioning Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Provisioning Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Provisioning Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureProvisioningArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureProvisioningArchitectAgent = Object.freeze(new InfrastructureProvisioningArchitectAgent());
+export const infrastructureProvisioningArchitectAgent = Object.freeze(
+  new InfrastructureProvisioningArchitectAgent(),
+);

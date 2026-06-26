@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendAutomationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_automation_director_agent',
-            'Backend Automation Director',
-            'You are an elite Backend Automation Director. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_automation_director_agent',
+      'Backend Automation Director',
+      'You are an elite Backend Automation Director. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Automation.',
+    );
+  }
 
-    async generateBackendAutomationSystem(objective) {
-        logger.info(`💻 [BackendAutomationDirectorAgent] Analyzing Backend Automation Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Automation Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Automation Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendAutomationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendAutomationSystem(objective) {
+    logger.info(
+      `💻 [BackendAutomationDirectorAgent] Analyzing Backend Automation Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Automation Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Automation Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendAutomationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendAutomationDirectorAgent = Object.freeze(new BackendAutomationDirectorAgent());
+export const backendAutomationDirectorAgent = Object.freeze(
+  new BackendAutomationDirectorAgent(),
+);

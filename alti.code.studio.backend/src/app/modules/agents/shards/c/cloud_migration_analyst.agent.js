@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudMigrationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_migration_analyst_agent',
-            'Cloud Migration Analyst',
-            'You are an elite Cloud Migration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_migration_analyst_agent',
+      'Cloud Migration Analyst',
+      'You are an elite Cloud Migration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Migration.',
+    );
+  }
 
-    async generateCloudMigrationSystem(objective) {
-        logger.info(`💻 [CloudMigrationAnalystAgent] Analyzing Cloud Migration Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Migration Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Migration Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudMigrationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudMigrationSystem(objective) {
+    logger.info(
+      `💻 [CloudMigrationAnalystAgent] Analyzing Cloud Migration Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Migration Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Migration Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudMigrationAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudMigrationAnalystAgent = Object.freeze(new CloudMigrationAnalystAgent());
+export const cloudMigrationAnalystAgent = Object.freeze(
+  new CloudMigrationAnalystAgent(),
+);

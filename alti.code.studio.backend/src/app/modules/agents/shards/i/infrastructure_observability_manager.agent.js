@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureObservabilityManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_observability_manager_agent',
-            'Infrastructure Observability Manager',
-            'You are an elite Infrastructure Observability Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_observability_manager_agent',
+      'Infrastructure Observability Manager',
+      'You are an elite Infrastructure Observability Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Observability.',
+    );
+  }
 
-    async generateInfrastructureObservabilitySystem(objective) {
-        logger.info(`💻 [InfrastructureObservabilityManagerAgent] Analyzing Infrastructure Observability Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Observability Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Observability Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureObservabilityManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureObservabilitySystem(objective) {
+    logger.info(
+      `💻 [InfrastructureObservabilityManagerAgent] Analyzing Infrastructure Observability Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Observability Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Observability Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureObservabilityManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureObservabilityManagerAgent = Object.freeze(new InfrastructureObservabilityManagerAgent());
+export const infrastructureObservabilityManagerAgent = Object.freeze(
+  new InfrastructureObservabilityManagerAgent(),
+);

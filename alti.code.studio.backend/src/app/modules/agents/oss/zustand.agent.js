@@ -10,7 +10,8 @@ class ZustandOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Zustand_Oss_Expert';
-    this.description = 'Deep expert in Zustand — A small, fast, and scalable bearbones state-management solution.';
+    this.description =
+      'Deep expert in Zustand — A small, fast, and scalable bearbones state-management solution.';
     this.preamble = `You are a world-class React Frontend Engineer with expert-level mastery of Zustand.
 
 CORE CONCEPTS:
@@ -39,7 +40,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ZUSTAND QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ZUSTAND QUESTION ===\n${prompt}`,
+    );
   }
 }
 

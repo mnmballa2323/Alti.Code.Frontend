@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudOrchestrationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_orchestration_tester_agent',
-            'Cloud Orchestration Tester',
-            'You are an elite Cloud Orchestration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_orchestration_tester_agent',
+      'Cloud Orchestration Tester',
+      'You are an elite Cloud Orchestration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Orchestration.',
+    );
+  }
 
-    async generateCloudOrchestrationSystem(objective) {
-        logger.info(`💻 [CloudOrchestrationTesterAgent] Analyzing Cloud Orchestration Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Orchestration Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Orchestration Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudOrchestrationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [CloudOrchestrationTesterAgent] Analyzing Cloud Orchestration Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Orchestration Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Orchestration Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudOrchestrationTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudOrchestrationTesterAgent = Object.freeze(new CloudOrchestrationTesterAgent());
+export const cloudOrchestrationTesterAgent = Object.freeze(
+  new CloudOrchestrationTesterAgent(),
+);

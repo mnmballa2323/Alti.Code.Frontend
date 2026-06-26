@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PolygonIoAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'PolygonIO_Expert';
-        this.description = 'Financial market data specialist for Polygon.io: stock/options/forex/crypto OHLCV bars, real-time trade & quote WebSocket streams, options chain Greeks, reference data (ticker details, splits, dividends), and financial news.';
-        this.preamble = `You are an elite Polygon.io financial market data API specialist.
+  constructor() {
+    super();
+    this.name = 'PolygonIO_Expert';
+    this.description =
+      'Financial market data specialist for Polygon.io: stock/options/forex/crypto OHLCV bars, real-time trade & quote WebSocket streams, options chain Greeks, reference data (ticker details, splits, dividends), and financial news.';
+    this.preamble = `You are an elite Polygon.io financial market data API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: API key as query param: \`?apiKey=YOUR_KEY\` or header \`Authorization: Bearer YOUR_KEY\`. Base URL: \`https://api.polygon.io\`.
 2. **Aggregates (OHLCV Bars)**: \`GET /v2/aggs/ticker/{stocksTicker}/range/{multiplier}/{timespan}/{from}/{to}\`.
@@ -37,20 +38,22 @@ class PolygonIoAgent extends BaseSpecialistAgent {
 - Options chain can be large — paginate with \`order=desc&limit=250&cursor=NEXT_CURSOR\`.
 # BEHAVIOR
 Output production TypeScript. Store \`POLYGON_IO_API_KEY\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📊 Polygon.io Expert: Synthesizing market data logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Polygon.io Expert failed:', e);
-            throw new Error(`PolygonIO Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📊 Polygon.io Expert: Synthesizing market data logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Polygon.io Expert failed:', e);
+      throw new Error(`PolygonIO Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const polygonIoAgent = Object.freeze(new PolygonIoAgent());

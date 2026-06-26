@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureComplianceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_compliance_manager_agent',
-            'Infrastructure Compliance Manager',
-            'You are an elite Infrastructure Compliance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_compliance_manager_agent',
+      'Infrastructure Compliance Manager',
+      'You are an elite Infrastructure Compliance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Compliance.',
+    );
+  }
 
-    async generateInfrastructureComplianceSystem(objective) {
-        logger.info(`💻 [InfrastructureComplianceManagerAgent] Analyzing Infrastructure Compliance Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Compliance Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Compliance Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureComplianceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureComplianceSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureComplianceManagerAgent] Analyzing Infrastructure Compliance Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Compliance Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Compliance Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureComplianceManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureComplianceManagerAgent = Object.freeze(new InfrastructureComplianceManagerAgent());
+export const infrastructureComplianceManagerAgent = Object.freeze(
+  new InfrastructureComplianceManagerAgent(),
+);

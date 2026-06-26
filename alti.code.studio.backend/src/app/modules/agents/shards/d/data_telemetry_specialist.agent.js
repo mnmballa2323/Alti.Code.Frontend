@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataTelemetrySpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_telemetry_specialist_agent',
-            'Data Telemetry Specialist',
-            'You are an elite Data Telemetry Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Data Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'data_telemetry_specialist_agent',
+      'Data Telemetry Specialist',
+      'You are an elite Data Telemetry Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Data Telemetry.',
+    );
+  }
 
-    async generateDataTelemetrySystem(objective) {
-        logger.info(`💻 [DataTelemetrySpecialistAgent] Analyzing Data Telemetry Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Telemetry Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Telemetry Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataTelemetrySpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataTelemetrySystem(objective) {
+    logger.info(
+      `💻 [DataTelemetrySpecialistAgent] Analyzing Data Telemetry Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Telemetry Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Telemetry Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataTelemetrySpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataTelemetrySpecialistAgent = Object.freeze(new DataTelemetrySpecialistAgent());
+export const dataTelemetrySpecialistAgent = Object.freeze(
+  new DataTelemetrySpecialistAgent(),
+);

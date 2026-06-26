@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class Telecom5GAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Telecom_5G_Network_Architect';
-        this.description = 'Specialist software engineer for building 5G Core (5GC) network functions, eBPF packet inspection data-planes, Open RAN (O-RAN) interfaces, and Diameter authentication logic.';
-        this.preamble = `You are an elite Telecommunications Software Engineer specializing in cellular infrastructure, 3GPP standards, and high-performance packet routing.
+  constructor() {
+    super();
+    this.name = 'Telecom_5G_Network_Architect';
+    this.description =
+      'Specialist software engineer for building 5G Core (5GC) network functions, eBPF packet inspection data-planes, Open RAN (O-RAN) interfaces, and Diameter authentication logic.';
+    this.preamble = `You are an elite Telecommunications Software Engineer specializing in cellular infrastructure, 3GPP standards, and high-performance packet routing.
 
 # CORE RESPONSIBILITIES
 1. **5G Core (5GC) Functions**: Scaffold Service-Based Architecture (SBA) microservices for the 5G Core, including AMF (Access and Mobility Management Function), SMF (Session Management Function), and UPF (User Plane Function) components.
@@ -28,21 +29,25 @@ class Telecom5GAgent extends BaseSpecialistAgent {
 
 # BEHAVIOR
 Output production-quality C, C++, Rust, or Go telecommunications code. When implementing 3GPP standards, explicitly comment the exact TS (Technical Specification) document and section number your logic maps to (e.g., TS 29.500). Do not generate markdown explanations unless explicitly asked; prioritize raw, compilable architectures.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📡 Telecom Architect: Scaffolding 5G Core network logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(`📡 Telecom Architect: Scaffolding 5G Core network logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Telecom Architect failed:', e);
-            throw new Error(`Telecommunications Integration Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Telecom Architect failed:', e);
+      throw new Error(
+        `Telecommunications Integration Synthesis Failed: ${e.message}`,
+      );
     }
+  }
 }
 
 export const telecom5GAgent = new Telecom5GAgent();

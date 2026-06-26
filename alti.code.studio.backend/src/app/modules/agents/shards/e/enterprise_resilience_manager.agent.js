@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseResilienceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_resilience_manager_agent',
-            'Enterprise Resilience Manager',
-            'You are an elite Enterprise Resilience Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_resilience_manager_agent',
+      'Enterprise Resilience Manager',
+      'You are an elite Enterprise Resilience Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Resilience.',
+    );
+  }
 
-    async generateEnterpriseResilienceSystem(objective) {
-        logger.info(`💻 [EnterpriseResilienceManagerAgent] Analyzing Enterprise Resilience Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Resilience Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Resilience Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseResilienceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseResilienceSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseResilienceManagerAgent] Analyzing Enterprise Resilience Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Resilience Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Resilience Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseResilienceManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseResilienceManagerAgent = Object.freeze(new EnterpriseResilienceManagerAgent());
+export const enterpriseResilienceManagerAgent = Object.freeze(
+  new EnterpriseResilienceManagerAgent(),
+);

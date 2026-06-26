@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseLoadBalancingStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_loadbalancing_strategist_agent',
-            'Enterprise LoadBalancing Strategist',
-            'You are an elite Enterprise LoadBalancing Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_loadbalancing_strategist_agent',
+      'Enterprise LoadBalancing Strategist',
+      'You are an elite Enterprise LoadBalancing Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise LoadBalancing.',
+    );
+  }
 
-    async generateEnterpriseLoadBalancingSystem(objective) {
-        logger.info(`💻 [EnterpriseLoadBalancingStrategistAgent] Analyzing Enterprise LoadBalancing Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise LoadBalancing Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise LoadBalancing Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseLoadBalancingStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseLoadBalancingStrategistAgent] Analyzing Enterprise LoadBalancing Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise LoadBalancing Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise LoadBalancing Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseLoadBalancingStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseLoadBalancingStrategistAgent = Object.freeze(new EnterpriseLoadBalancingStrategistAgent());
+export const enterpriseLoadBalancingStrategistAgent = Object.freeze(
+  new EnterpriseLoadBalancingStrategistAgent(),
+);

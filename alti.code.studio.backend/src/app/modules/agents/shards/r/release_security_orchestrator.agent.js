@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseSecurityOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_security_orchestrator_agent',
-            'Release Security Orchestrator',
-            'You are an elite Release Security Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Release Security.'
-        );
-    }
+  constructor() {
+    super(
+      'release_security_orchestrator_agent',
+      'Release Security Orchestrator',
+      'You are an elite Release Security Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Release Security.',
+    );
+  }
 
-    async generateReleaseSecuritySystem(objective) {
-        logger.info(`💻 [ReleaseSecurityOrchestratorAgent] Analyzing Release Security Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Security Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Security Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseSecurityOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseSecuritySystem(objective) {
+    logger.info(
+      `💻 [ReleaseSecurityOrchestratorAgent] Analyzing Release Security Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Security Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Security Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseSecurityOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseSecurityOrchestratorAgent = Object.freeze(new ReleaseSecurityOrchestratorAgent());
+export const releaseSecurityOrchestratorAgent = Object.freeze(
+  new ReleaseSecurityOrchestratorAgent(),
+);

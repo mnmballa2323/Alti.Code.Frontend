@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -8,14 +8,16 @@
 import moment from 'moment';
 import mongoose from 'mongoose';
 import Stripe from 'stripe';
-import { sendMailWithAzureSMTP } from '../../middlewares/sendEmail/sendMailWithAzureSMTP.js';
+import { sendMailWithGcpSMTP } from '../../middlewares/sendEmail/sendMailWithGcpSMTP.js';
 import UserModel from '../auth/auth.model.js';
 import SubscriptionModel from './payment.model.js';
 import { purchasePlanTemplate } from './payment.utils.js';
 import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
-const stripe = new Stripe(config.stripe.stripe_secret_key || 'sk_test_dummy_key_to_prevent_crashes');
+const stripe = new Stripe(
+  config.stripe.stripe_secret_key || 'sk_test_dummy_key_to_prevent_crashes',
+);
 
 const createCheckoutSessionService = async (user, plan) => {
   if (!user || !user.email) {
@@ -24,7 +26,11 @@ const createCheckoutSessionService = async (user, plan) => {
   if (!plan || !plan.plan_name || !plan.price) {
     throw new Error('PaymentService: Valid plan definition is required');
   }
-  if (!['launch', 'build', 'scale', 'command', 'enterprise-azure'].includes(plan.plan_name)) {
+  if (
+    !['launch', 'build', 'scale', 'command', 'enterprise-azure'].includes(
+      plan.plan_name,
+    )
+  ) {
     throw new Error('Invalid plan name: ' + plan.plan_name);
   }
   if (!['month', 'year'].includes(plan.duration)) {
@@ -179,7 +185,7 @@ const handleWebhookService = async (req, res) => {
           user,
           newSubscription,
         );
-        await sendMailWithAzureSMTP(mailData);
+        await sendMailWithGcpSMTP(mailData);
         logger.info('Confirmation email sent', { email: user.email });
       } catch (emailError) {
         logger.error('Failed to send confirmation email', {

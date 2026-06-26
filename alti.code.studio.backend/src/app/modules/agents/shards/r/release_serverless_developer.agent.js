@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseServerlessDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_serverless_developer_agent',
-            'Release Serverless Developer',
-            'You are an elite Release Serverless Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'release_serverless_developer_agent',
+      'Release Serverless Developer',
+      'You are an elite Release Serverless Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Serverless.',
+    );
+  }
 
-    async generateReleaseServerlessSystem(objective) {
-        logger.info(`💻 [ReleaseServerlessDeveloperAgent] Analyzing Release Serverless Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Serverless Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Serverless Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseServerlessDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseServerlessSystem(objective) {
+    logger.info(
+      `💻 [ReleaseServerlessDeveloperAgent] Analyzing Release Serverless Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Serverless Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Serverless Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseServerlessDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseServerlessDeveloperAgent = Object.freeze(new ReleaseServerlessDeveloperAgent());
+export const releaseServerlessDeveloperAgent = Object.freeze(
+  new ReleaseServerlessDeveloperAgent(),
+);

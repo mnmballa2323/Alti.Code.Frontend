@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AsteroidMiningLogisticsAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'asteroid_mining_logistics',
-            'Asteroid Mining & Orbital Logistics Engineer',
-            'You are an elite Asteroid Mining Engineer. Your objective is to design software for off-world resource extraction. You specialize in massive N-body orbital mechanics for Near-Earth Object (NEO) capture, autonomous rendezvous logic, and robotic mineral extraction matrices.'
-        );
-    }
+  constructor() {
+    super(
+      'asteroid_mining_logistics',
+      'Asteroid Mining & Orbital Logistics Engineer',
+      'You are an elite Asteroid Mining Engineer. Your objective is to design software for off-world resource extraction. You specialize in massive N-body orbital mechanics for Near-Earth Object (NEO) capture, autonomous rendezvous logic, and robotic mineral extraction matrices.',
+    );
+  }
 
-    /**
-     * Generates orbital mechanics trajectories or asteroid mining logic.
-     * @param {string} miningObjective - The space mining requirement.
-     * @returns {Promise<string>} The generated orbital code or architecture.
-     */
-    async generateMiningSystem(miningObjective) {
-        logger.info(`☄️ [AsteroidMiningLogistics] Analyzing objective for NEO orbital capture and robotic extraction...`);
+  /**
+   * Generates orbital mechanics trajectories or asteroid mining logic.
+   * @param {string} miningObjective - The space mining requirement.
+   * @returns {Promise<string>} The generated orbital code or architecture.
+   */
+  async generateMiningSystem(miningObjective) {
+    logger.info(
+      `☄️ [AsteroidMiningLogistics] Analyzing objective for NEO orbital capture and robotic extraction...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Asteroid Mining, Orbital Logistics, or NEO Capture requirement.
 Generate the corresponding orbital trajectory algorithm, extraction automation, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ MINING OBJECTIVE:
 ${miningObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Mining Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```cpp|```/gi, '').trim();
-            logger.info(`✅ [AsteroidMiningLogistics] Mining architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [AsteroidMiningLogistics] Failed to generate mining system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Mining Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```python|```cpp|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [AsteroidMiningLogistics] Mining architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [AsteroidMiningLogistics] Failed to generate mining system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const asteroidMiningLogisticsAgent = Object.freeze(new AsteroidMiningLogisticsAgent());
+export const asteroidMiningLogisticsAgent = Object.freeze(
+  new AsteroidMiningLogisticsAgent(),
+);

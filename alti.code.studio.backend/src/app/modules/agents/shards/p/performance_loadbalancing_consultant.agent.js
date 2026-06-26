@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceLoadBalancingConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_loadbalancing_consultant_agent',
-            'Performance LoadBalancing Consultant',
-            'You are an elite Performance LoadBalancing Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Performance LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_loadbalancing_consultant_agent',
+      'Performance LoadBalancing Consultant',
+      'You are an elite Performance LoadBalancing Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Performance LoadBalancing.',
+    );
+  }
 
-    async generatePerformanceLoadBalancingSystem(objective) {
-        logger.info(`💻 [PerformanceLoadBalancingConsultantAgent] Analyzing Performance LoadBalancing Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance LoadBalancing Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance LoadBalancing Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceLoadBalancingConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [PerformanceLoadBalancingConsultantAgent] Analyzing Performance LoadBalancing Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance LoadBalancing Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance LoadBalancing Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceLoadBalancingConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceLoadBalancingConsultantAgent = Object.freeze(new PerformanceLoadBalancingConsultantAgent());
+export const performanceLoadBalancingConsultantAgent = Object.freeze(
+  new PerformanceLoadBalancingConsultantAgent(),
+);

@@ -1,17 +1,19 @@
 /**
  * Copyright (c) 2024 Inso Code — TIER 4: OPERATIONS
- * 
+ *
  * Incident Agent — "The First Responder"
  * Incident response, root cause analysis, postmortem generation.
  */
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 
-export const incidentWorkerProcessor = async (job) => {
-    const { alert, logs, metrics, severity } = job.data;
-    logger.info(`🚨 Incident [${job.id}]: Responding to ${severity || 'P2'} incident...`);
+export const incidentWorkerProcessor = async job => {
+  const { alert, logs, metrics, severity } = job.data;
+  logger.info(
+    `🚨 Incident [${job.id}]: Responding to ${severity || 'P2'} incident...`,
+  );
 
-    const response = await aiProvider.reason(`
+  const response = await aiProvider.reason(`
 You are a senior SRE responding to a production incident.
 
 Alert: ${alert}
@@ -29,5 +31,5 @@ Provide:
 Respond in JSON: { "severity": string, "blastRadius": string, "rootCauses": [], "mitigation": [], "resolution": [], "postmortem": string }
     `);
 
-    return { incident: JSON.parse(response.match(/\{[\s\S]*\}/)?.[0] || '{}') };
+  return { incident: JSON.parse(response.match(/\{[\s\S]*\}/)?.[0] || '{}') };
 };

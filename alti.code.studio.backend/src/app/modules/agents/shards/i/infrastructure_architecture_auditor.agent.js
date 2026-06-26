@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureArchitectureAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_architecture_auditor_agent',
-            'Infrastructure Architecture Auditor',
-            'You are an elite Infrastructure Architecture Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_architecture_auditor_agent',
+      'Infrastructure Architecture Auditor',
+      'You are an elite Infrastructure Architecture Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Architecture.',
+    );
+  }
 
-    async generateInfrastructureArchitectureSystem(objective) {
-        logger.info(`💻 [InfrastructureArchitectureAuditorAgent] Analyzing Infrastructure Architecture Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Architecture Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Architecture Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureArchitectureAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureArchitectureSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureArchitectureAuditorAgent] Analyzing Infrastructure Architecture Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Architecture Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Architecture Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureArchitectureAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureArchitectureAuditorAgent = Object.freeze(new InfrastructureArchitectureAuditorAgent());
+export const infrastructureArchitectureAuditorAgent = Object.freeze(
+  new InfrastructureArchitectureAuditorAgent(),
+);

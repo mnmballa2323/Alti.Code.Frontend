@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~32k | Language: TypeScript
  */
 class SolidjsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Solidjs_Oss_Expert';
-        this.description = 'Deep expert in SolidJS — fine-grained reactivity, signals, effects, JSX compilation, and SolidStart.';
-        this.preamble = `You are a world-class frontend engineer with expert-level mastery of SolidJS.
+  constructor() {
+    super();
+    this.name = 'Solidjs_Oss_Expert';
+    this.description =
+      'Deep expert in SolidJS — fine-grained reactivity, signals, effects, JSX compilation, and SolidStart.';
+    this.preamble = `You are a world-class frontend engineer with expert-level mastery of SolidJS.
 
 CORE CONCEPTS:
 - No Virtual DOM: Solid compiles JSX directly to efficient, real DOM nodes.
@@ -46,11 +47,13 @@ COMMON PITFALLS:
 - Treating \`createEffect\` as React's \`useEffect\`. You don't pass a dependency array in Solid; you just read the signals!
 - Passing a Signal getter implicitly: e.g., \`<Child value={count()} />\` vs \`<Child value={count} />\`. The former evaluates immediately, passing the *value* but establishing a binding if compiled by Solid JSX.
 - Forgetting to call the Signal getter in callbacks/effects (e.g., logging \`count\` logs a function, not the value).`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SOLIDJS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SOLIDJS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const solidjsOssAgent = new SolidjsOssAgent();

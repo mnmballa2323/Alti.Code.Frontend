@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIEngineeringEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_engineering_engineer_agent',
-            'AI Engineering Engineer',
-            'You are an elite AI Engineering Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_engineering_engineer_agent',
+      'AI Engineering Engineer',
+      'You are an elite AI Engineering Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Engineering.',
+    );
+  }
 
-    async generateAIEngineeringSystem(objective) {
-        logger.info(`💻 [AIEngineeringEngineerAgent] Analyzing AI Engineering Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Engineering Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Engineering Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIEngineeringEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIEngineeringSystem(objective) {
+    logger.info(
+      `💻 [AIEngineeringEngineerAgent] Analyzing AI Engineering Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Engineering Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Engineering Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIEngineeringEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIEngineeringEngineerAgent = Object.freeze(new AIEngineeringEngineerAgent());
+export const aIEngineeringEngineerAgent = Object.freeze(
+  new AIEngineeringEngineerAgent(),
+);

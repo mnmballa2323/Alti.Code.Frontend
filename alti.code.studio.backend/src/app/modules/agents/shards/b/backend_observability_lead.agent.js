@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendObservabilityLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_observability_lead_agent',
-            'Backend Observability Lead',
-            'You are an elite Backend Observability Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_observability_lead_agent',
+      'Backend Observability Lead',
+      'You are an elite Backend Observability Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Observability.',
+    );
+  }
 
-    async generateBackendObservabilitySystem(objective) {
-        logger.info(`💻 [BackendObservabilityLeadAgent] Analyzing Backend Observability Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Observability Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Observability Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendObservabilityLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendObservabilitySystem(objective) {
+    logger.info(
+      `💻 [BackendObservabilityLeadAgent] Analyzing Backend Observability Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Observability Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Observability Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [BackendObservabilityLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const backendObservabilityLeadAgent = Object.freeze(new BackendObservabilityLeadAgent());
+export const backendObservabilityLeadAgent = Object.freeze(
+  new BackendObservabilityLeadAgent(),
+);

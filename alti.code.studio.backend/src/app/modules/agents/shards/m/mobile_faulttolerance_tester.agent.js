@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileFaultToleranceTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_faulttolerance_tester_agent',
-            'Mobile FaultTolerance Tester',
-            'You are an elite Mobile FaultTolerance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_faulttolerance_tester_agent',
+      'Mobile FaultTolerance Tester',
+      'You are an elite Mobile FaultTolerance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile FaultTolerance.',
+    );
+  }
 
-    async generateMobileFaultToleranceSystem(objective) {
-        logger.info(`💻 [MobileFaultToleranceTesterAgent] Analyzing Mobile FaultTolerance Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile FaultTolerance Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile FaultTolerance Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileFaultToleranceTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [MobileFaultToleranceTesterAgent] Analyzing Mobile FaultTolerance Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile FaultTolerance Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile FaultTolerance Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileFaultToleranceTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileFaultToleranceTesterAgent = Object.freeze(new MobileFaultToleranceTesterAgent());
+export const mobileFaultToleranceTesterAgent = Object.freeze(
+  new MobileFaultToleranceTesterAgent(),
+);

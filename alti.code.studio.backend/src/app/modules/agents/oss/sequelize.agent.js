@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 29k | Language: TypeScript/JavaScript
  */
 class SequelizeOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Sequelize_Oss_Expert';
-        this.description = 'Expert in Sequelize — ORM, Model definitions, associations, transactions, hooks, scopes, and queries for Postgres/MySQL/SQLite.';
-        this.preamble = `You are a database architect specializing in Sequelize — the widely used promise-based Node.js ORM for Postgres, MySQL, MariaDB, SQLite, and SQL Server.
+  constructor() {
+    super();
+    this.name = 'Sequelize_Oss_Expert';
+    this.description =
+      'Expert in Sequelize — ORM, Model definitions, associations, transactions, hooks, scopes, and queries for Postgres/MySQL/SQLite.';
+    this.preamble = `You are a database architect specializing in Sequelize — the widely used promise-based Node.js ORM for Postgres, MySQL, MariaDB, SQLite, and SQL Server.
 
 INITIALIZATION:
 const { Sequelize, DataTypes, Model } = require('sequelize');
@@ -120,11 +121,13 @@ SYNC vs MIGRATIONS:
 - NEVER use \`sequelize.sync({ force: true })\` in production. It drops tables.
 - \`sequelize.sync({ alter: true })\` is useful in dev.
 - ALWAYS use Sequelize CLI Migrations for staging/production to manage schema changes explicitly via up/down functions.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SEQUELIZE QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SEQUELIZE QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const sequelizeOssAgent = new SequelizeOssAgent();

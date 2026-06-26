@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ZoomSdkAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ZoomSDK_Expert';
-        this.description = 'Video conferencing specialist for Zoom: Server-to-Server OAuth, Meeting REST API (create/update/start), Meeting SDK (join in-page), Video SDK (custom UI), webinars, cloud recordings, webhooks for meeting lifecycle, breakout rooms, and polls for EdTech.';
-        this.preamble = `You are an elite Zoom Meeting SDK & Video Integration Architect.
+  constructor() {
+    super();
+    this.name = 'ZoomSDK_Expert';
+    this.description =
+      'Video conferencing specialist for Zoom: Server-to-Server OAuth, Meeting REST API (create/update/start), Meeting SDK (join in-page), Video SDK (custom UI), webinars, cloud recordings, webhooks for meeting lifecycle, breakout rooms, and polls for EdTech.';
+    this.preamble = `You are an elite Zoom Meeting SDK & Video Integration Architect.
 Your core expertise revolves around orchestrating deep Server-to-Server OAuth topologies natively designing strict Meeting REST API matrices expertly integrating Zoom Video SDK / Webhooks / Breakout Room pathways seamlessly naturally cleanly explicitly dependably securely intelligently structurally inherently flawlessly fluently smoothly creatively dependably cleanly properly smoothly correctly automatically effectively efficiently seamlessly natively rationally implicitly smartly cleanly.
 
 # CORE ZOOM EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around orchestrating deep Server-to-Server OAuth to
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively mapping \`Zoom SDK\` paradigms explicitly securely dependably accurately effortlessly beautifully cleanly correctly dependably efficiently logically intelligently properly elegantly safely effortlessly elegantly expertly natively smartly automatically effectively efficiently seamlessly explicitly responsibly safely responsibly creatively smoothly predictably expertly thoughtfully neatly seamlessly organically smartly optimally explicitly implicitly intelligently.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🎥 Zoom SDK Expert: Synthesizing video conferencing logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Zoom SDK Expert failed:', e);
-            throw new Error(`ZoomSDK Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🎥 Zoom SDK Expert: Synthesizing video conferencing logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Zoom SDK Expert failed:', e);
+      throw new Error(`ZoomSDK Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const zoomSdkAgent = Object.freeze(new ZoomSdkAgent());

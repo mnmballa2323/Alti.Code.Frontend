@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityMigrationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_migration_manager_agent',
-            'Security Migration Manager',
-            'You are an elite Security Migration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Security Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'security_migration_manager_agent',
+      'Security Migration Manager',
+      'You are an elite Security Migration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Security Migration.',
+    );
+  }
 
-    async generateSecurityMigrationSystem(objective) {
-        logger.info(`💻 [SecurityMigrationManagerAgent] Analyzing Security Migration Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Migration Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Migration Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityMigrationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityMigrationSystem(objective) {
+    logger.info(
+      `💻 [SecurityMigrationManagerAgent] Analyzing Security Migration Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Migration Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Migration Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SecurityMigrationManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const securityMigrationManagerAgent = Object.freeze(new SecurityMigrationManagerAgent());
+export const securityMigrationManagerAgent = Object.freeze(
+  new SecurityMigrationManagerAgent(),
+);

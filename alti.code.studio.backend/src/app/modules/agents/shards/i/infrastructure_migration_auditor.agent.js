@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureMigrationAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_migration_auditor_agent',
-            'Infrastructure Migration Auditor',
-            'You are an elite Infrastructure Migration Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_migration_auditor_agent',
+      'Infrastructure Migration Auditor',
+      'You are an elite Infrastructure Migration Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Migration.',
+    );
+  }
 
-    async generateInfrastructureMigrationSystem(objective) {
-        logger.info(`💻 [InfrastructureMigrationAuditorAgent] Analyzing Infrastructure Migration Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Migration Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Migration Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureMigrationAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureMigrationSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureMigrationAuditorAgent] Analyzing Infrastructure Migration Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Migration Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Migration Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureMigrationAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureMigrationAuditorAgent = Object.freeze(new InfrastructureMigrationAuditorAgent());
+export const infrastructureMigrationAuditorAgent = Object.freeze(
+  new InfrastructureMigrationAuditorAgent(),
+);

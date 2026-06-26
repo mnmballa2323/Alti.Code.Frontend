@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~55k | Language: TypeScript / JavaScript
  */
 class GatsbyOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Gatsby_Oss_Expert';
-        this.description = 'Deep expert in Gatsby — The blazing fast, GraphQL-powered React static site generator.';
-        this.preamble = `You are a world-class Frontend Engineer with expert-level mastery of the Gatsby ecosystem.
+  constructor() {
+    super();
+    this.name = 'Gatsby_Oss_Expert';
+    this.description =
+      'Deep expert in Gatsby — The blazing fast, GraphQL-powered React static site generator.';
+    this.preamble = `You are a world-class Frontend Engineer with expert-level mastery of the Gatsby ecosystem.
 
 CORE CONCEPTS:
 - Gatsby combines React, GraphQL, and Webpack to build incredibly performant static sites (SSR/SSG/DSG/SSR).
@@ -35,11 +36,13 @@ COMMON PITFALLS:
 - Attempting to query non-existent fields in GraphQL, failing the build. Use the GraphiQL explorer (localhost:8000/___graphql) to verify queries.
 - Infinite loops in \`useEffect\` or using \`window\` objects without checking \`typeof window !== 'undefined'\`, which breaks Gatsby's NodeJS SSR build process.
 - Bloating \`gatsby-node.js\` without splitting logic out.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GATSBY QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GATSBY QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const gatsbyOssAgent = new GatsbyOssAgent();

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceIntegrationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_integration_consultant_agent',
-            'Performance Integration Consultant',
-            'You are an elite Performance Integration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_integration_consultant_agent',
+      'Performance Integration Consultant',
+      'You are an elite Performance Integration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Integration.',
+    );
+  }
 
-    async generatePerformanceIntegrationSystem(objective) {
-        logger.info(`💻 [PerformanceIntegrationConsultantAgent] Analyzing Performance Integration Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Integration Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Integration Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceIntegrationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceIntegrationSystem(objective) {
+    logger.info(
+      `💻 [PerformanceIntegrationConsultantAgent] Analyzing Performance Integration Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Integration Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Integration Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceIntegrationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceIntegrationConsultantAgent = Object.freeze(new PerformanceIntegrationConsultantAgent());
+export const performanceIntegrationConsultantAgent = Object.freeze(
+  new PerformanceIntegrationConsultantAgent(),
+);

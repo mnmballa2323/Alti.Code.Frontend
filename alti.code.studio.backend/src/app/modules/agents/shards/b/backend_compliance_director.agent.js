@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendComplianceDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_compliance_director_agent',
-            'Backend Compliance Director',
-            'You are an elite Backend Compliance Director. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_compliance_director_agent',
+      'Backend Compliance Director',
+      'You are an elite Backend Compliance Director. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Compliance.',
+    );
+  }
 
-    async generateBackendComplianceSystem(objective) {
-        logger.info(`💻 [BackendComplianceDirectorAgent] Analyzing Backend Compliance Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Compliance Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Compliance Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendComplianceDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendComplianceSystem(objective) {
+    logger.info(
+      `💻 [BackendComplianceDirectorAgent] Analyzing Backend Compliance Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Compliance Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Compliance Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendComplianceDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendComplianceDirectorAgent = Object.freeze(new BackendComplianceDirectorAgent());
+export const backendComplianceDirectorAgent = Object.freeze(
+  new BackendComplianceDirectorAgent(),
+);

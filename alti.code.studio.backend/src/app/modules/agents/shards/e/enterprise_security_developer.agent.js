@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseSecurityDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_security_developer_agent',
-            'Enterprise Security Developer',
-            'You are an elite Enterprise Security Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Security.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_security_developer_agent',
+      'Enterprise Security Developer',
+      'You are an elite Enterprise Security Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Security.',
+    );
+  }
 
-    async generateEnterpriseSecuritySystem(objective) {
-        logger.info(`💻 [EnterpriseSecurityDeveloperAgent] Analyzing Enterprise Security Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Security Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Security Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseSecurityDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseSecuritySystem(objective) {
+    logger.info(
+      `💻 [EnterpriseSecurityDeveloperAgent] Analyzing Enterprise Security Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Security Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Security Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseSecurityDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseSecurityDeveloperAgent = Object.freeze(new EnterpriseSecurityDeveloperAgent());
+export const enterpriseSecurityDeveloperAgent = Object.freeze(
+  new EnterpriseSecurityDeveloperAgent(),
+);

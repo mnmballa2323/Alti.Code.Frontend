@@ -1,45 +1,56 @@
 # ==============================================================================
-# ALTI CODE STUDIO: Azure Monitor & Log Analytics Observability Module
+# ALTI CODE STUDIO: GCP Cloud Operations Observability Module
 # ==============================================================================
 
 terraform {
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
     }
   }
 }
 
 # ------------------------------------------------------------------------------
-# 1. Log Analytics Workspace
+# 1. Cloud Logging Bucket Configuration
 # ------------------------------------------------------------------------------
-resource "azurerm_log_analytics_workspace" "workspace" {
-  name                = "alti-logs-${var.customer_id}-${var.environment}"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  sku                 = "PerGB2018"
-  retention_in_days   = var.environment == "prod" ? 90 : 30
+resource "google_logging_project_bucket_config" "audit_bucket" {
+  location       = var.region
+  retention_days = var.environment == "prod" ? 90 : 30
+  bucket_id      = "alti-audit-${var.customer_id}-${var.environment}"
 }
 
 # ------------------------------------------------------------------------------
-# 2. Diagnostic Settings for Compute/Service nodes (Dynamic Association)
+# 2. Cloud Monitoring Dashboard (Simplified audit workspace equivalent)
 # ------------------------------------------------------------------------------
-resource "azurerm_monitor_diagnostic_setting" "audit_diagnostics" {
-  for_each                   = toset(var.target_resource_ids)
-  name                       = "alti-audit-logs-${var.environment}"
-  target_resource_id         = each.value
-  log_analytics_workspace_id = azurerm_log_analytics_workspace.workspace.id
-
-  # Dynamically routes logs (e.g. administrative/security audits)
-  enabled_log {
-    category_group = "allLogs"
+resource "google_monitoring_dashboard" "dashboard" {
+  dashboard_json = <<EOF
+{
+  "displayName": "Alti Sovereign Audit Dashboard (${var.environment})",
+  "gridLayout": {
+    "columns": "2",
+    "widgets": [
+      {
+        "title": "Compute Instance CPU Utilization",
+        "xyChart": {
+          "dataSets": [
+            {
+              "timeSeriesQuery": {
+                "timeSeriesFilter": {
+                  "filter": "metric.type=\"compute.googleapis.com/instance/cpu/utilization\" resource.type=\"gce_instance\"",
+                  "aggregation": {
+                    "perSeriesAligner": "ALIGN_MEAN"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
   }
-
-  metric {
-    category = "AllMetrics"
-    enabled  = true
-  }
+}
+EOF
 }
 
 # ------------------------------------------------------------------------------
@@ -55,33 +66,26 @@ variable "environment" {
   description = "Deployment environment (e.g. prod, staging)"
 }
 
-
-variable "location" {
+variable "region" {
   type        = string
-  description = "Azure region where resources will be created"
-}
-
-variable "resource_group_name" {
-  type        = string
-  description = "Name of the resource group"
+  description = "GCP region where resources will be created"
 }
 
 variable "target_resource_ids" {
   type        = list(string)
   default     = []
-  description = "List of Azure Resource IDs to associate with diagnostic logging"
+  description = "List of GCP instance names to associate with diagnostics/metrics"
 }
 
 # ------------------------------------------------------------------------------
 # Outputs
 # ------------------------------------------------------------------------------
-output "log_analytics_workspace_id" {
-  value       = azurerm_log_analytics_workspace.workspace.id
-  description = "The ID of the Log Analytics Workspace"
+output "logging_bucket_name" {
+  value       = google_logging_project_bucket_config.audit_bucket.id
+  description = "The Resource Name of the Cloud Logging Bucket"
 }
 
-output "log_analytics_workspace_primary_key" {
-  value       = azurerm_log_analytics_workspace.workspace.primary_shared_key
-  sensitive   = true
-  description = "The Shared Key of the Log Analytics Workspace"
+output "dashboard_name" {
+  value       = google_monitoring_dashboard.dashboard.id
+  description = "The Name of the Google Cloud Monitoring Dashboard"
 }

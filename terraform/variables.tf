@@ -1,5 +1,5 @@
 # ==============================================================================
-# ALTI CODE STUDIO: Azure Sovereign Cloud Terraform Variables
+# ALTI CODE STUDIO: GCP Sovereign Cloud Terraform Variables
 # ==============================================================================
 
 variable "customer_id" {
@@ -24,16 +24,22 @@ variable "environment" {
   }
 }
 
-variable "azure_commercial_region" {
-  description = "Azure Region for Commercial Cloud (IL2) deployment"
+variable "gcp_project_id" {
+  description = "The target Google Cloud Project ID"
   type        = string
-  default     = "eastus"
+  default     = "alti-code-studio-production"
 }
 
-variable "azure_government_region" {
-  description = "Azure Region for Government Cloud (IL4/IL5) deployment"
+variable "gcp_region_commercial" {
+  description = "GCP Region for Commercial Cloud deployment"
   type        = string
-  default     = "usgovvirginia"
+  default     = "us-central1"
+}
+
+variable "gcp_region_government" {
+  description = "GCP Region for Government Cloud deployment"
+  type        = string
+  default     = "us-gov-west1"
 }
 
 variable "ssh_public_key_path" {
@@ -42,47 +48,14 @@ variable "ssh_public_key_path" {
   default     = "~/.ssh/id_rsa.pub"
 }
 
-variable "tenant_id" {
-  description = "The Azure AD/Entra ID Directory Tenant ID"
-  type        = string
-  default     = "00000000-0000-0000-0000-000000000000"
-
-  validation {
-    condition     = can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", var.tenant_id))
-    error_message = "The tenant_id value must be a valid UUID format (e.g., 00000000-0000-0000-0000-000000000000)."
-  }
-}
-
-variable "subscription_id_commercial" {
-  description = "Subscription ID for Commercial Cloud (IL2) deployment"
-  type        = string
-  default     = "11111111-1111-1111-1111-111111111111"
-
-  validation {
-    condition     = can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", var.subscription_id_commercial))
-    error_message = "The subscription_id_commercial value must be a valid UUID format."
-  }
-}
-
-variable "subscription_id_government" {
-  description = "Subscription ID for Government Cloud (IL4/IL5) deployment"
-  type        = string
-  default     = "22222222-2222-2222-2222-222222222222"
-
-  validation {
-    condition     = can(regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$", var.subscription_id_government))
-    error_message = "The subscription_id_government value must be a valid UUID format."
-  }
-}
-
 variable "pg_admin_username" {
-  description = "Administrator login for PostgreSQL Flexible Server"
+  description = "Administrator login for PostgreSQL Database"
   type        = string
   default     = "altipgadmin"
 }
 
 variable "pg_admin_password" {
-  description = "Administrator password for PostgreSQL Flexible Server"
+  description = "Administrator password for PostgreSQL Database"
   type        = string
   default     = "P@ssw0rd1234!" # Avoid using default password in live environments
   sensitive   = true
@@ -107,80 +80,71 @@ variable "github_repository" {
 # ------------------------------------------------------------------------------
 # Deployment Option Toggles
 # ------------------------------------------------------------------------------
-variable "enable_azure_cloud" {
-  description = "Deploy the Azure Cloud tier (commercial multi-tenant VM)"
+variable "enable_gcp_cloud" {
+  description = "Deploy the GCP Cloud tier (commercial multi-tenant VM)"
   type        = bool
   default     = true
 }
 
-variable "enable_azure_dedicated" {
-  description = "Deploy the Azure Dedicated tier (commercial VM on dedicated host)"
+variable "enable_gcp_dedicated" {
+  description = "Deploy the GCP Dedicated tier (commercial VM on sole-tenant nodes)"
   type        = bool
   default     = false
 }
 
-variable "enable_azure_government" {
-  description = "Deploy the Azure Government tier (government VM)"
+variable "enable_gcp_government" {
+  description = "Deploy the GCP Government tier (government VM in Assured Workloads)"
   type        = bool
   default     = false
 }
 
 variable "admin_source_ip_range" {
-  description = "The CIDR or IP range allowed to SSH into the commercial nodes (default permits all)"
+  description = "The CIDR or IP range allowed to SSH into the commercial nodes"
   type        = string
-  default     = "*"
+  default     = "0.0.0.0/0"
 }
 
 # ------------------------------------------------------------------------------
 # Resource Sizing & SKUs
 # ------------------------------------------------------------------------------
-variable "vm_size_commercial" {
-  description = "VM size for Commercial Cloud VM"
+variable "machine_type_commercial" {
+  description = "GCP Machine Type for Commercial Cloud VM"
   type        = string
-  default     = "Standard_D8s_v5"
+  default     = "e2-standard-8"
 }
 
-variable "vm_size_dedicated" {
-  description = "VM size for Dedicated VM"
+variable "machine_type_dedicated" {
+  description = "GCP Machine Type for Dedicated VM"
   type        = string
-  default     = "Standard_D8s_v5"
+  default     = "e2-standard-8"
 }
 
-variable "vm_size_government" {
-  description = "VM size for Government VM"
+variable "machine_type_government" {
+  description = "GCP Machine Type for Government VM"
   type        = string
-  default     = "Standard_D8s_v5"
+  default     = "e2-standard-8"
 }
 
-variable "dedicated_host_sku" {
-  description = "The SKU for Azure Dedicated Host"
+variable "sole_tenant_node_type" {
+  description = "The Sole Tenant Node Type in GCP"
   type        = string
-  default     = "Dsv5-Type1"
+  default     = "c2-node-60-240"
 }
 
-variable "pg_db_sku_name" {
-  description = "The SKU for PostgreSQL Flexible Server"
+variable "pg_db_tier" {
+  description = "The database tier/SKU for Cloud SQL PostgreSQL"
   type        = string
-  default     = "GP_Standard_D4ds_v5"
+  default     = "db-custom-4-16384"
 }
 
-variable "redis_cache_sku" {
-  description = "The SKU for Redis Cache (Basic, Standard, Premium)"
+variable "redis_tier" {
+  description = "The tier for Memorystore Redis (BASIC or STANDARD_HA)"
   type        = string
-  default     = "Standard"
+  default     = "BASIC"
 }
 
-variable "redis_cache_capacity" {
-  description = "The capacity size for Redis Cache"
+variable "redis_memory_size_gb" {
+  description = "The memory size in GB for Redis Cache"
   type        = number
   default     = 1
 }
-
-variable "redis_cache_family" {
-  description = "The SKU family for Redis Cache (C for Basic/Standard, P for Premium)"
-  type        = string
-  default     = "C"
-}
-
-
-

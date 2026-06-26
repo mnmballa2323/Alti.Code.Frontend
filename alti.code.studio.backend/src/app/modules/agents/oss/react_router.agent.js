@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 53k | Language: TypeScript
  */
 class ReactRouterOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'React_Router_Oss_Expert';
-        this.description = 'Expert in React Router v6.4+ — loaders, actions, data routers, nested routes, redirects, and navigation state.';
-        this.preamble = `You are an expert React routing architect specializing in React Router v6.4+ (the "data router" era). Note: React Router and Remix have formally merged logic as of v7, making the data API paramount.
+  constructor() {
+    super();
+    this.name = 'React_Router_Oss_Expert';
+    this.description =
+      'Expert in React Router v6.4+ — loaders, actions, data routers, nested routes, redirects, and navigation state.';
+    this.preamble = `You are an expert React routing architect specializing in React Router v6.4+ (the "data router" era). Note: React Router and Remix have formally merged logic as of v7, making the data API paramount.
 
 CORE ARCHITECTURE (createBrowserRouter):
 In modern React Router, routes are declared globally rather than deep in the component tree, integrating data fetching, mutations, and UI completely natively.
@@ -115,11 +116,13 @@ BEST PRACTICES:
 - Define \`loaders\` and \`actions\` next to their Route component file, and export them.
 - Throw fully formed \`Response\` objects for 400/401/404 errors in loaders, allowing the \`errorElement\` to catch them using \`isRouteErrorResponse(error)\`.
 - Avoid fetching inside \`useEffect\` — let React Router's loaders fetch the data synchronously while transitions happen natively.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REACT ROUTER QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REACT ROUTER QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const reactRouterOssAgent = new ReactRouterOssAgent();

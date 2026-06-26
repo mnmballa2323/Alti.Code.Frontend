@@ -1,19 +1,19 @@
 import { captainAgent } from './captain.agent.js';
 
 const checkHealth = async () => {
-    return await captainAgent.monitorHealth();
+  return await captainAgent.monitorHealth();
 };
 
 const getStatus = async () => {
-    return captainAgent.getStatus();
+  return captainAgent.getStatus();
 };
 
 const declareEmergency = async (level, reason) => {
-    return captainAgent.declareEmergency(level, reason);
+  return captainAgent.declareEmergency(level, reason);
 };
 
 export const CaptainService = {
-    checkHealth,
-    getStatus,
-    declareEmergency
+  checkHealth,
+  getStatus,
+  declareEmergency,
 };

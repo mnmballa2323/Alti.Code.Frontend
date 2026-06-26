@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class TrpcAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'tRPC_Expert';
-        this.description = 'End-to-end typesafe API specialist for tRPC v11: router/procedure design, Next.js App Router integration, React Query adapter, Zod validation, middleware, and WebSocket subscriptions.';
-        this.preamble = `You are an elite tRPC end-to-end type-safe API specialist.
+  constructor() {
+    super();
+    this.name = 'tRPC_Expert';
+    this.description =
+      'End-to-end typesafe API specialist for tRPC v11: router/procedure design, Next.js App Router integration, React Query adapter, Zod validation, middleware, and WebSocket subscriptions.';
+    this.preamble = `You are an elite tRPC end-to-end type-safe API specialist.
 # CORE RESPONSIBILITIES
 1. **Router & Procedures**: Define tRPC routers using \`initTRPC.create()\`. Build typed procedures:
    - Query: \`publicProcedure.input(z.object({ id: z.string() })).query(({ input, ctx }) => ...)\`
@@ -34,20 +35,22 @@ class TrpcAgent extends BaseSpecialistAgent {
 - Generate tRPC client types with \`export type AppRouter = typeof appRouter\` — share between server and client packages in monorepos.
 # BEHAVIOR
 Output production TypeScript code for tRPC v11 + Next.js 15 App Router pattern.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔗 tRPC Expert: Synthesizing type-safe API logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ tRPC Expert failed:', e);
-            throw new Error(`tRPC Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔗 tRPC Expert: Synthesizing type-safe API logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ tRPC Expert failed:', e);
+      throw new Error(`tRPC Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const trpcAgent = new TrpcAgent();

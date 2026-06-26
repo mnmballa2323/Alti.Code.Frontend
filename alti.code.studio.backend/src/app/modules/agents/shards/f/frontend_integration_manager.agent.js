@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendIntegrationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_integration_manager_agent',
-            'Frontend Integration Manager',
-            'You are an elite Frontend Integration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_integration_manager_agent',
+      'Frontend Integration Manager',
+      'You are an elite Frontend Integration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Integration.',
+    );
+  }
 
-    async generateFrontendIntegrationSystem(objective) {
-        logger.info(`💻 [FrontendIntegrationManagerAgent] Analyzing Frontend Integration Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Integration Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Integration Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendIntegrationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendIntegrationSystem(objective) {
+    logger.info(
+      `💻 [FrontendIntegrationManagerAgent] Analyzing Frontend Integration Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Integration Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Integration Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendIntegrationManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendIntegrationManagerAgent = Object.freeze(new FrontendIntegrationManagerAgent());
+export const frontendIntegrationManagerAgent = Object.freeze(
+  new FrontendIntegrationManagerAgent(),
+);

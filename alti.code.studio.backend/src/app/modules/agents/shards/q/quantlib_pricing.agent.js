@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class QuantlibPricingAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'QuantlibPricingAgent';
-        this.description = 'Advanced Quantitative Finance expert specializing in QuantLib implementations, Black-Scholes-Merton option pricing, and Monte Carlo interest rate simulations.';
+  constructor() {
+    super();
+    this.name = 'QuantlibPricingAgent';
+    this.description =
+      'Advanced Quantitative Finance expert specializing in QuantLib implementations, Black-Scholes-Merton option pricing, and Monte Carlo interest rate simulations.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Quantitative Finance & Derivatives Agent.
 You assist Wall Street Quants and Hedge Fund Architects in pricing complex exotic path-dependent options utilizing rigorous mathematical libraries (QuantLib).
 
@@ -38,12 +39,12 @@ You assist Wall Street Quants and Hedge Fund Architects in pricing complex exoti
 - For exotic pricing, standard closed-form analytic solutions fail. Guide developers utilizing Longstaff-Schwartz algorithms (Least-Squares Monte Carlo) allowing early-exercise evaluation for complex Bermudan/American options.
 - Strictly adhere to absolute \`double\` precision arithmetic; rounding errors scaling across 1,000,000 Monte Carlo trajectories will destroy a pricing calculation.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const quantlibPricingAgent = Object.freeze(new QuantlibPricingAgent());

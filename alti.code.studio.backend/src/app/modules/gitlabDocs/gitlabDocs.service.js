@@ -28,7 +28,7 @@ class GitlabDocsService {
       );
       try {
         const { AzureSearchService } =
-          await import('../azureSearch/azureSearch.service.js');
+          await import('../gcpCloud/gcpSearch.service.js');
         const webResult = await AzureSearchService.getSearchContext(query);
         return `[Live Web Grounding Fallback]\n\n${webResult}`;
       } catch (error) {
@@ -125,7 +125,8 @@ RULES:
 - If no candidate fits, return { "agentId": "NONE" }
 - Return raw JSON only, no markdown.`;
 
-          const { azureGenAiService: AzureGenAiService } = await import('../ai/azureGenAi.service.js');
+          const { azureGenAiService: AzureGenAiService } =
+            await import('../ai/azureGenAi.service.js');
           const modelName = 'gemini-3.1-pro';
           const result = await AzureGenAiService.generateContent(
             prompt,

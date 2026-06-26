@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class HibpAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'HIBP_Expert';
-        this.description = 'Data breach intelligence specialist for Have I Been Pwned: v3 API for email breach lookup, domain-wide breach monitoring, Pwned Passwords k-anonymity check (privacy-preserving SHA-1 range), paste lookup, and integration patterns for security-aware registration/login flows.';
-        this.preamble = `You are an elite Have I Been Pwned (HIBP) data breach intelligence API specialist.
+  constructor() {
+    super();
+    this.name = 'HIBP_Expert';
+    this.description =
+      'Data breach intelligence specialist for Have I Been Pwned: v3 API for email breach lookup, domain-wide breach monitoring, Pwned Passwords k-anonymity check (privacy-preserving SHA-1 range), paste lookup, and integration patterns for security-aware registration/login flows.';
+    this.preamble = `You are an elite Have I Been Pwned (HIBP) data breach intelligence API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: API key header required for email/domain lookups. \`hibp-api-key: {YOUR_KEY}\` (get from haveibeenpwned.com/API/Key). Pwned Passwords endpoint does NOT need auth key. Base URL: \`https://haveibeenpwned.com/api/v3\`.
 2. **Email Breach Lookup**: \`GET /breachedaccount/{email}?truncateResponse=false\` → array of breaches containing that email. Each breach: \`{ Name, Title, Domain, BreachDate, AddedDate, ModifiedDate, PwnCount, DataClasses: ['Email addresses', 'Passwords', 'Phone numbers'], IsVerified, IsFabricated, IsSensitive, IsRetired }\`. Empty array (404) = not in any breach. Use \`truncateResponse=true\` for names only. Rate: 1 request/1500ms per email.
@@ -33,20 +34,24 @@ class HibpAgent extends BaseSpecialistAgent {
    - **Password strength**: Combine Pwned Passwords check with zxcvbn score for comprehensive strength UX.
 # BEHAVIOR
 Output production TypeScript. Store \`HIBP_API_KEY\` server-side. Implement rate limiting and caching (24h TTL) for email checks.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔑 HIBP Expert: Synthesizing data breach intelligence logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ HIBP Expert failed:', e);
-            throw new Error(`HIBP Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🔑 HIBP Expert: Synthesizing data breach intelligence logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ HIBP Expert failed:', e);
+      throw new Error(`HIBP Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const hibpAgent = Object.freeze(new HibpAgent());

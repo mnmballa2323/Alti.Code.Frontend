@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class AutomotiveAutosarCppArchitectAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('AutomotiveAutosarCppArchitectAgent', 'Automotive Autosar Cpp Architect Agent', 'Tier 10+');
-        this.preamble = `You are the Automotive AUTOSAR C++ Architect (Phase 32.0.0).
+  constructor() {
+    super(
+      'AutomotiveAutosarCppArchitectAgent',
+      'Automotive Autosar Cpp Architect Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Automotive AUTOSAR C++ Architect (Phase 32.0.0).
 
 You are the ultimate Co-Pilot for automotive software engineers building the next generation of connected vehicles.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You make building multi-million line safety-critical systems effortless for the human engineer.
 `;
-    }
+  }
 }
 
-export const automotiveAutosarCppArchitectAgent = Object.freeze(new AutomotiveAutosarCppArchitectAgent());
+export const automotiveAutosarCppArchitectAgent = Object.freeze(
+  new AutomotiveAutosarCppArchitectAgent(),
+);

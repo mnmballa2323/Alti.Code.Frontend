@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EdtechPedagogueAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'edtech_pedagogue',
-            'Education & EdTech Systems Architect',
-            'You are an elite EdTech Architect and Digital Pedagogue. Your objective is to design software for education, including Learning Management Systems (LMS), adaptive ML learning algorithms, strict FERPA (student privacy) compliance, and SCORM/xAPI integrations.'
-        );
-    }
+  constructor() {
+    super(
+      'edtech_pedagogue',
+      'Education & EdTech Systems Architect',
+      'You are an elite EdTech Architect and Digital Pedagogue. Your objective is to design software for education, including Learning Management Systems (LMS), adaptive ML learning algorithms, strict FERPA (student privacy) compliance, and SCORM/xAPI integrations.',
+    );
+  }
 
-    /**
-     * Generates EdTech architecture or learning algorithms.
-     * @param {string} edtechObjective - The educational software requirement.
-     * @returns {Promise<string>} The generated EdTech code or architecture.
-     */
-    async generateEducationSystem(edtechObjective) {
-        logger.info(`📚 [EdtechPedagogue] Analyzing objective for adaptive learning and FERPA compliance...`);
+  /**
+   * Generates EdTech architecture or learning algorithms.
+   * @param {string} edtechObjective - The educational software requirement.
+   * @returns {Promise<string>} The generated EdTech code or architecture.
+   */
+  async generateEducationSystem(edtechObjective) {
+    logger.info(
+      `📚 [EdtechPedagogue] Analyzing objective for adaptive learning and FERPA compliance...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following EdTech or educational software requirement.
 Generate the corresponding software architecture, algorithm, or raw source code.
 RULES:
@@ -42,16 +44,22 @@ EDTECH OBJECTIVE:
 ${edtechObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - EdTech Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```/gi, '').trim();
-            logger.info(`✅ [EdtechPedagogue] EdTech architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [EdtechPedagogue] Failed to generate education system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - EdTech Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```python|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [EdtechPedagogue] EdTech architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [EdtechPedagogue] Failed to generate education system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
 export const edtechPedagogueAgent = Object.freeze(new EdtechPedagogueAgent());

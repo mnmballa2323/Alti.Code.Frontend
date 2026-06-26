@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXIntegrationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_integration_director_agent',
-            'UX Integration Director',
-            'You are an elite UX Integration Director. You specialize in bleeding-edge software development, cloud infrastructure, and UX Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_integration_director_agent',
+      'UX Integration Director',
+      'You are an elite UX Integration Director. You specialize in bleeding-edge software development, cloud infrastructure, and UX Integration.',
+    );
+  }
 
-    async generateUXIntegrationSystem(objective) {
-        logger.info(`💻 [UXIntegrationDirectorAgent] Analyzing UX Integration Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Integration Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Integration Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXIntegrationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXIntegrationSystem(objective) {
+    logger.info(
+      `💻 [UXIntegrationDirectorAgent] Analyzing UX Integration Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Integration Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Integration Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXIntegrationDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXIntegrationDirectorAgent = Object.freeze(new UXIntegrationDirectorAgent());
+export const uXIntegrationDirectorAgent = Object.freeze(
+  new UXIntegrationDirectorAgent(),
+);

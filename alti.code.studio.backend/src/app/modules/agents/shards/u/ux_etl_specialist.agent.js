@@ -13,24 +13,29 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXETLSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_etl_specialist_agent',
-            'UX ETL Specialist',
-            'You are an elite UX ETL Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and UX ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_etl_specialist_agent',
+      'UX ETL Specialist',
+      'You are an elite UX ETL Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and UX ETL.',
+    );
+  }
 
-    async generateUXETLSystem(objective) {
-        logger.info(`💻 [UXETLSpecialistAgent] Analyzing UX ETL Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX ETL Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX ETL Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXETLSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXETLSystem(objective) {
+    logger.info(
+      `💻 [UXETLSpecialistAgent] Analyzing UX ETL Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX ETL Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX ETL Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXETLSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const uXETLSpecialistAgent = Object.freeze(new UXETLSpecialistAgent());

@@ -11,7 +11,7 @@ import { logger } from '../../shared/logger.js';
 class AstGrepService {
   /**
    * Helper to map language name strings to ast-grep Lang enum.
-   * @param {string} langName 
+   * @param {string} langName
    * @returns {Lang}
    */
   getLang(langName) {
@@ -46,8 +46,8 @@ class AstGrepService {
 
   /**
    * Parse code into an ast-grep root node.
-   * @param {string} langName 
-   * @param {string} source 
+   * @param {string} langName
+   * @param {string} source
    * @returns {object} SgRoot
    */
   parse(langName, source) {
@@ -57,8 +57,8 @@ class AstGrepService {
 
   /**
    * Asynchronously parse code into an ast-grep root node.
-   * @param {string} langName 
-   * @param {string} source 
+   * @param {string} langName
+   * @param {string} source
    * @returns {Promise<object>} SgRoot
    */
   async parseAsync(langName, source) {
@@ -68,8 +68,8 @@ class AstGrepService {
 
   /**
    * Find the first occurrence of a structural pattern.
-   * @param {string} langName 
-   * @param {string} source 
+   * @param {string} langName
+   * @param {string} source
    * @param {string} pattern - e.g. "console.log($MSG)"
    * @returns {object|null} Match object with matched text, range, and metavariables
    */
@@ -84,8 +84,8 @@ class AstGrepService {
 
   /**
    * Find all occurrences of a structural pattern.
-   * @param {string} langName 
-   * @param {string} source 
+   * @param {string} langName
+   * @param {string} source
    * @param {string} pattern - e.g. "console.log($MSG)"
    * @returns {Array<object>} Match objects
    */
@@ -98,14 +98,16 @@ class AstGrepService {
 
   /**
    * Perform structural search and replace (rewrite).
-   * @param {string} langName 
-   * @param {string} source 
+   * @param {string} langName
+   * @param {string} source
    * @param {string} pattern - e.g. "console.log($MSG)"
    * @param {string} rewritePattern - e.g. "logger.info($MSG)"
    * @returns {string} The transformed source code
    */
   rewrite(langName, source, pattern, rewritePattern) {
-    logger.info(`🔄 [ast-grep] Running rewrite pattern: "${pattern}" -> "${rewritePattern}"`);
+    logger.info(
+      `🔄 [ast-grep] Running rewrite pattern: "${pattern}" -> "${rewritePattern}"`,
+    );
     const root = this.parse(langName, source).root();
     const matches = root.findAll(pattern);
     if (matches.length === 0) return source;
@@ -135,11 +137,17 @@ class AstGrepService {
       for (const varName of seenVars) {
         const capturedNode = match.getMatch(varName);
         if (capturedNode) {
-          replacement = replacement.replace(new RegExp(`\\$${varName}`, 'g'), capturedNode.text());
+          replacement = replacement.replace(
+            new RegExp(`\\$${varName}`, 'g'),
+            capturedNode.text(),
+          );
         }
       }
 
-      result = result.substring(0, range.start.index) + replacement + result.substring(range.end.index);
+      result =
+        result.substring(0, range.start.index) +
+        replacement +
+        result.substring(range.end.index);
     }
 
     return result;
@@ -157,14 +165,14 @@ class AstGrepService {
         start: {
           line: range.start.line,
           column: range.start.column,
-          index: range.start.index
+          index: range.start.index,
         },
         end: {
           line: range.end.line,
           column: range.end.column,
-          index: range.end.index
-        }
-      }
+          index: range.end.index,
+        },
+      },
     };
   }
 }

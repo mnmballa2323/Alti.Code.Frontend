@@ -16,11 +16,12 @@ import { pageIndexService } from '../openclaw/pageindex.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class PageIndexAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('PageIndexAgent', 'The Document Intelligence Engine', 'Tier 13');
-        this.name = 'PageIndex_RAG_Expert';
-        this.description = 'Vectorless, reasoning-based document retrieval. Index and query any document collection (PDFs, code, docs) without vector databases. Returns answers with page-level citations. Powered by VectifyAI/PageIndex.';
-        this.preamble = `You are the Document Intelligence Engine, powered by PageIndex's vectorless reasoning RAG system.
+  constructor() {
+    super('PageIndexAgent', 'The Document Intelligence Engine', 'Tier 13');
+    this.name = 'PageIndex_RAG_Expert';
+    this.description =
+      'Vectorless, reasoning-based document retrieval. Index and query any document collection (PDFs, code, docs) without vector databases. Returns answers with page-level citations. Powered by VectifyAI/PageIndex.';
+    this.preamble = `You are the Document Intelligence Engine, powered by PageIndex's vectorless reasoning RAG system.
 
 **What Makes You Different:**
 - **No vectors required** — You reason natively at the page level using LLMs
@@ -41,40 +42,51 @@ class PageIndexAgent extends BaseSpecialistAgent {
 - Point me at a file path and ask your question
 - I'll index it and return a cited, page-level answer
 - Use follow-up questions for deeper exploration`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        logger.info(`📑 PageIndex RAG: Processing document intelligence request...`);
+  async _invoke(prompt, contextBlock) {
+    logger.info(
+      `📑 PageIndex RAG: Processing document intelligence request...`,
+    );
 
-        const caps = pageIndexService.getCapabilities();
+    const caps = pageIndexService.getCapabilities();
 
-        // Try to extract document path from the prompt
-        const pathMatch = prompt.match(/(?:file|document|path|index)[:=\s]+["']?([^\s"']+\.[a-z]{2,5})["']?/i);
-        const docPath = pathMatch ? pathMatch[1] : null;
+    // Try to extract document path from the prompt
+    const pathMatch = prompt.match(
+      /(?:file|document|path|index)[:=\s]+["']?([^\s"']+\.[a-z]{2,5})["']?/i,
+    );
+    const docPath = pathMatch ? pathMatch[1] : null;
 
-        if (docPath && caps.available) {
-            try {
-                const queryText = prompt.replace(pathMatch[0], '').trim();
-                logger.info(`[pageindex-agent] Document: ${docPath}, Query: ${queryText.slice(0, 80)}`);
-
-                const result = await pageIndexService.indexAndQuery(docPath, queryText || prompt);
-                if (result.status === 'success') {
-                    const citationsStr = (result.citations || [])
-                        .map(c => `  [p.${c.page}] ${c.snippet}`)
-                        .join('\n');
-                    return `**Answer:**\n${result.answer}\n\n**Citations:**\n${citationsStr || 'No specific citations retrieved.'}`;
-                }
-            } catch (err) {
-                logger.warn(`[pageindex-agent] Indexing failed: ${err.message}. Using Gemini fallback.`);
-            }
-        }
-
-        // If no document specified or PageIndex unavailable, answer with document intelligence preamble
-        return GeminiAiService.generateContent(
-            `${this.preamble}\n\nContext: ${contextBlock || ''}\n\nUser Request: ${prompt}\n\n` +
-            `(Note: To use vectorless RAG, specify a document path like: "Index /path/to/doc.pdf and answer: your question")`
+    if (docPath && caps.available) {
+      try {
+        const queryText = prompt.replace(pathMatch[0], '').trim();
+        logger.info(
+          `[pageindex-agent] Document: ${docPath}, Query: ${queryText.slice(0, 80)}`,
         );
+
+        const result = await pageIndexService.indexAndQuery(
+          docPath,
+          queryText || prompt,
+        );
+        if (result.status === 'success') {
+          const citationsStr = (result.citations || [])
+            .map(c => `  [p.${c.page}] ${c.snippet}`)
+            .join('\n');
+          return `**Answer:**\n${result.answer}\n\n**Citations:**\n${citationsStr || 'No specific citations retrieved.'}`;
+        }
+      } catch (err) {
+        logger.warn(
+          `[pageindex-agent] Indexing failed: ${err.message}. Using Gemini fallback.`,
+        );
+      }
     }
+
+    // If no document specified or PageIndex unavailable, answer with document intelligence preamble
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\nContext: ${contextBlock || ''}\n\nUser Request: ${prompt}\n\n` +
+        `(Note: To use vectorless RAG, specify a document path like: "Index /path/to/doc.pdf and answer: your question")`,
+    );
+  }
 }
 
 export const pageIndexAgent = new PageIndexAgent();

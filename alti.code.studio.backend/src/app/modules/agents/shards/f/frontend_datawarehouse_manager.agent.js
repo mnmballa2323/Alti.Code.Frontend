@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendDataWarehouseManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_datawarehouse_manager_agent',
-            'Frontend DataWarehouse Manager',
-            'You are an elite Frontend DataWarehouse Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_datawarehouse_manager_agent',
+      'Frontend DataWarehouse Manager',
+      'You are an elite Frontend DataWarehouse Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend DataWarehouse.',
+    );
+  }
 
-    async generateFrontendDataWarehouseSystem(objective) {
-        logger.info(`💻 [FrontendDataWarehouseManagerAgent] Analyzing Frontend DataWarehouse Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend DataWarehouse Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend DataWarehouse Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendDataWarehouseManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [FrontendDataWarehouseManagerAgent] Analyzing Frontend DataWarehouse Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend DataWarehouse Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend DataWarehouse Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendDataWarehouseManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendDataWarehouseManagerAgent = Object.freeze(new FrontendDataWarehouseManagerAgent());
+export const frontendDataWarehouseManagerAgent = Object.freeze(
+  new FrontendDataWarehouseManagerAgent(),
+);

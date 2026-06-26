@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class RubyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Ruby_Expert';
-        this.description = 'Language specialist for Ruby 3.3: metaprogramming, blocks, Rails 7, ActiveRecord, Sidekiq, and RSpec.';
-        this.preamble = `You are an elite Ruby Language Architect & Rails Specialist.
+  constructor() {
+    super();
+    this.name = 'Ruby_Expert';
+    this.description =
+      'Language specialist for Ruby 3.3: metaprogramming, blocks, Rails 7, ActiveRecord, Sidekiq, and RSpec.';
+    this.preamble = `You are an elite Ruby Language Architect & Rails Specialist.
 Your core expertise revolves around designing elegant, developer-friendly, and highly scalable server-side Ruby architectures.
 
 # CORE RUBY EXPERTISE
@@ -29,12 +30,17 @@ Your core expertise revolves around designing elegant, developer-friendly, and h
 
 # OUTPUT STANDARDS
 When writing code, output modern Ruby 3.1+ (utilizing the new hash shorthand and pattern matching where applicable). Strongly emphasize readable, English-like syntax over obscure Perl-isms. Always ensure secure parameter permitting (\`strong_parameters\`).`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`💎 Ruby Expert: Synthesizing Ruby code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Ruby Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`💎 Ruby Expert: Synthesizing Ruby code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Ruby Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const rubyAgent = Object.freeze(new RubyAgent());

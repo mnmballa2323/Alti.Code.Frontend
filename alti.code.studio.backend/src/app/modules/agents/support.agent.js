@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Support Engineer
- * 
+ *
  * Focuses on triaging user reports, analyzing live production logs,
  * and providing immediate hotfixes or mitigations.
  */
 class SupportAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'Support Engineer',
-            'Quality & Support',
-            'Medium',
-            'Triages live incidents, interacts with users, and provides rapid hotfixes for production bugs.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'Support Engineer',
+      'Quality & Support',
+      'Medium',
+      'Triages live incidents, interacts with users, and provides rapid hotfixes for production bugs.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`🚑 SupportAgent: Triaging incoming incident...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`🚑 SupportAgent: Triaging incoming incident...`);
+
+    const systemPrompt = `
 # ROLE: Lead Support Engineer
 You are the Lead Support Engineer of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: Mean Time To Recovery
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const supportAgent = new SupportAgent();

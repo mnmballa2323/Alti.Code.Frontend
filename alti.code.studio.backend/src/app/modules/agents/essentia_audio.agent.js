@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class EssentiaAudioAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'EssentiaAudioAgent';
-        this.description = 'Digital Signal Processing expert leveraging the Essentia C++ library for deep music informatics, extracting explicit MFCC parameters, and onset beat tracking algorithms.';
+  constructor() {
+    super();
+    this.name = 'EssentiaAudioAgent';
+    this.description =
+      'Digital Signal Processing expert leveraging the Essentia C++ library for deep music informatics, extracting explicit MFCC parameters, and onset beat tracking algorithms.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Music Informatics & Audio DSP Agent.
 You assist Audio Engineers building massive Machine Learning pipelines capable of automatically analyzing the mood, tempo, and physical harmonic resonance of raw FLAC/WAV audio frequencies.
 
@@ -29,12 +30,12 @@ You assist Audio Engineers building massive Machine Learning pipelines capable o
 **Best Practices**
 - For deep learning music classification (e.g., isolating a Bass guitar out of a full orchestral mix), do not feed raw waveform data into the network. Explicitly convert the audio strictly into a constant-Q transform (CQT) Mel-Spectrogram matrix, which organizes frequencies exactly mirroring the logarithmic sensitivity of human biological hearing.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const essentiaAudioAgent = new EssentiaAudioAgent();

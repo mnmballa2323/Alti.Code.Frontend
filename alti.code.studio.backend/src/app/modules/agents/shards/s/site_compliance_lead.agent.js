@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteComplianceLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_compliance_lead_agent',
-            'Site Compliance Lead',
-            'You are an elite Site Compliance Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Site Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'site_compliance_lead_agent',
+      'Site Compliance Lead',
+      'You are an elite Site Compliance Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Site Compliance.',
+    );
+  }
 
-    async generateSiteComplianceSystem(objective) {
-        logger.info(`💻 [SiteComplianceLeadAgent] Analyzing Site Compliance Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Compliance Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Compliance Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteComplianceLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteComplianceSystem(objective) {
+    logger.info(
+      `💻 [SiteComplianceLeadAgent] Analyzing Site Compliance Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Compliance Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Compliance Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteComplianceLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteComplianceLeadAgent = Object.freeze(new SiteComplianceLeadAgent());
+export const siteComplianceLeadAgent = Object.freeze(
+  new SiteComplianceLeadAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsLoadBalancingLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_loadbalancing_lead_agent',
-            'DevSecOps LoadBalancing Lead',
-            'You are an elite DevSecOps LoadBalancing Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_loadbalancing_lead_agent',
+      'DevSecOps LoadBalancing Lead',
+      'You are an elite DevSecOps LoadBalancing Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps LoadBalancing.',
+    );
+  }
 
-    async generateDevSecOpsLoadBalancingSystem(objective) {
-        logger.info(`💻 [DevSecOpsLoadBalancingLeadAgent] Analyzing DevSecOps LoadBalancing Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps LoadBalancing Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps LoadBalancing Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsLoadBalancingLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsLoadBalancingLeadAgent] Analyzing DevSecOps LoadBalancing Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps LoadBalancing Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps LoadBalancing Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsLoadBalancingLeadAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsLoadBalancingLeadAgent = Object.freeze(new DevSecOpsLoadBalancingLeadAgent());
+export const devSecOpsLoadBalancingLeadAgent = Object.freeze(
+  new DevSecOpsLoadBalancingLeadAgent(),
+);

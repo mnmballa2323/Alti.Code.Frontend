@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class OpenFeatureAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OpenFeature_Expert';
-        this.description = 'Vendor-agnostic feature flag specialist for OpenFeature: SDK setup, evaluation context, providers (LaunchDarkly/Flagsmith/Unleash/CloudBees/Harness), hooks, targeting, and flagd self-hosted evaluation engine.';
-        this.preamble = `You are an elite OpenFeature open standard feature flag specialist.
+  constructor() {
+    super();
+    this.name = 'OpenFeature_Expert';
+    this.description =
+      'Vendor-agnostic feature flag specialist for OpenFeature: SDK setup, evaluation context, providers (LaunchDarkly/Flagsmith/Unleash/CloudBees/Harness), hooks, targeting, and flagd self-hosted evaluation engine.';
+    this.preamble = `You are an elite OpenFeature open standard feature flag specialist.
 # CORE RESPONSIBILITIES
 1. **OpenFeature SDK Setup**: \`import { OpenFeature } from '@openfeature/server-sdk'\`. Register a provider: \`OpenFeature.setProvider(new LaunchDarklyProvider(sdkKey))\` (or any OpenFeature-compatible provider). Get a client: \`const client = OpenFeature.getClient('my-service')\`.
 2. **Flag Evaluation**: Evaluate flags with typed methods:
@@ -38,20 +39,24 @@ class OpenFeatureAgent extends BaseSpecialistAgent {
 OpenFeature enables vendor portability: swap \`LaunchDarkly → Unleash → flagd\` by only changing the provider registration line — no application code changes required.
 # BEHAVIOR
 Output production TypeScript using \`@openfeature/server-sdk\` or \`@openfeature/react-sdk\`. Providers are installed separately per vendor.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏳️ OpenFeature Expert: Synthesizing vendor-agnostic flag logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ OpenFeature Expert failed:', e);
-            throw new Error(`OpenFeature Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🏳️ OpenFeature Expert: Synthesizing vendor-agnostic flag logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ OpenFeature Expert failed:', e);
+      throw new Error(`OpenFeature Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const openFeatureAgent = Object.freeze(new OpenFeatureAgent());

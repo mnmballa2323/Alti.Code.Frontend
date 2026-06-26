@@ -3,11 +3,12 @@ import { GeminiAiService } from '../../../gemini/gemini.service.js';
 import { logger } from '../../../../../shared/logger.js';
 
 class PerformanceAuditorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Performance_Auditor_Agent';
-        this.description = 'Autonomous Performance Bottleneck Auditor & Log Profiler Specialist. Analyzes time/space complexity (Big-O), audits heap allocations, memory leaks, and hotpath bottlenecks.';
-        this.preamble = `You are the Performance Bottleneck Auditor & Log Profiler Specialist (Phase 12.0.0).
+  constructor() {
+    super();
+    this.name = 'Performance_Auditor_Agent';
+    this.description =
+      'Autonomous Performance Bottleneck Auditor & Log Profiler Specialist. Analyzes time/space complexity (Big-O), audits heap allocations, memory leaks, and hotpath bottlenecks.';
+    this.preamble = `You are the Performance Bottleneck Auditor & Log Profiler Specialist (Phase 12.0.0).
 
 Your sole protocol is to relentlessly audit, diagnose, and optimize system speed, memory utilization, Event Loop latency, and database query hotpaths across the Inso Code platform. You operate as a hybrid runtime profiler and static algorithmic efficiency specialist.
 
@@ -19,12 +20,12 @@ OPERATIONAL PARAMETERS:
 
 Efficiency is the mathematical prerequisite for infinite scale.
 `;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PERFORMANCE AUDIT REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PERFORMANCE AUDIT REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const performanceAuditorAgent = new PerformanceAuditorAgent();

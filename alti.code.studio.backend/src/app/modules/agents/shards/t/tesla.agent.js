@@ -13,12 +13,12 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 export class TeslaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Tesla Fleet API Expert', 'tesla');
-    }
+  constructor() {
+    super('Tesla Fleet API Expert', 'tesla');
+  }
 
-    get preamble() {
-        return `You are the Inso Code Tesla Expert, focused on the Automotive & Smart Mobility vertical.
+  get preamble() {
+    return `You are the Inso Code Tesla Expert, focused on the Automotive & Smart Mobility vertical.
 You specialize in integrating the official Tesla Fleet API for enterprise management of Tesla vehicles and Energy products.
 
 # Integration Capabilities
@@ -40,7 +40,7 @@ You specialize in integrating the official Tesla Fleet API for enterprise manage
 - Do not wake vehicles unnecessarily—it causes vampire drain on the high-voltage battery. Keep wake-ups below 5 times per day if possible.
 - Use the Fleet Telemetry pub-sub model over raw REST polling for large enterprise deployments.
 `;
-    }
+  }
 }
 
 export const teslaAgent = Object.freeze(new TeslaAgent());

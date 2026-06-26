@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendBatchProcessingArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_batchprocessing_architect_agent',
-            'Frontend BatchProcessing Architect',
-            'You are an elite Frontend BatchProcessing Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_batchprocessing_architect_agent',
+      'Frontend BatchProcessing Architect',
+      'You are an elite Frontend BatchProcessing Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend BatchProcessing.',
+    );
+  }
 
-    async generateFrontendBatchProcessingSystem(objective) {
-        logger.info(`💻 [FrontendBatchProcessingArchitectAgent] Analyzing Frontend BatchProcessing Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend BatchProcessing Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend BatchProcessing Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendBatchProcessingArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [FrontendBatchProcessingArchitectAgent] Analyzing Frontend BatchProcessing Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend BatchProcessing Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend BatchProcessing Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendBatchProcessingArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendBatchProcessingArchitectAgent = Object.freeze(new FrontendBatchProcessingArchitectAgent());
+export const frontendBatchProcessingArchitectAgent = Object.freeze(
+  new FrontendBatchProcessingArchitectAgent(),
+);

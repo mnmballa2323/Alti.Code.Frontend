@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Alti.Code.Studio
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -13,7 +13,9 @@ import { logger } from '../../shared/logger.js';
 class StirlingPdfService {
   constructor() {
     // Internal URL resolves to container name if running in docker-compose, otherwise fallback to host URL
-    this.apiUrl = config.private_cloud_mode ? 'http://stirling_pdf:8080' : config.stirlingPdfUrl;
+    this.apiUrl = config.private_cloud_mode
+      ? 'http://stirling_pdf:8080'
+      : config.stirlingPdfUrl;
   }
 
   /**
@@ -22,29 +24,47 @@ class StirlingPdfService {
    * @returns {Promise<Buffer>} The merged PDF buffer
    */
   async mergePDFs(fileBuffers) {
-    if (!fileBuffers || !Array.isArray(fileBuffers) || fileBuffers.length === 0) {
-      throw new Error('[StirlingPdfService] fileBuffers array is required and must not be empty.');
+    if (
+      !fileBuffers ||
+      !Array.isArray(fileBuffers) ||
+      fileBuffers.length === 0
+    ) {
+      throw new Error(
+        '[StirlingPdfService] fileBuffers array is required and must not be empty.',
+      );
     }
 
-    logger.info(`📄 [StirlingPdfService] Sending request to merge ${fileBuffers.length} PDFs...`);
+    logger.info(
+      `📄 [StirlingPdfService] Sending request to merge ${fileBuffers.length} PDFs...`,
+    );
 
     const form = new FormData();
     fileBuffers.forEach((buffer, idx) => {
-      form.append('fileInput', buffer, { filename: `doc_${idx}.pdf`, contentType: 'application/pdf' });
+      form.append('fileInput', buffer, {
+        filename: `doc_${idx}.pdf`,
+        contentType: 'application/pdf',
+      });
     });
 
     try {
-      const response = await axios.post(`${this.apiUrl}/api/v1/general/merge-pdfs`, form, {
-        headers: {
-          ...form.getHeaders()
+      const response = await axios.post(
+        `${this.apiUrl}/api/v1/general/merge-pdfs`,
+        form,
+        {
+          headers: {
+            ...form.getHeaders(),
+          },
+          responseType: 'arraybuffer',
         },
-        responseType: 'arraybuffer'
-      });
+      );
 
       logger.info('✅ [StirlingPdfService] PDFs merged successfully.');
       return Buffer.from(response.data);
     } catch (error) {
-      logger.error('❌ [StirlingPdfService] Failed to merge PDFs:', error.message);
+      logger.error(
+        '❌ [StirlingPdfService] Failed to merge PDFs:',
+        error.message,
+      );
       throw error;
     }
   }
@@ -60,24 +80,36 @@ class StirlingPdfService {
       throw new Error('[StirlingPdfService] fileBuffer is required.');
     }
 
-    logger.info(`📄 [StirlingPdfService] Compressing PDF (type: ${compressionType})...`);
+    logger.info(
+      `📄 [StirlingPdfService] Compressing PDF (type: ${compressionType})...`,
+    );
 
     const form = new FormData();
-    form.append('fileInput', fileBuffer, { filename: 'input.pdf', contentType: 'application/pdf' });
+    form.append('fileInput', fileBuffer, {
+      filename: 'input.pdf',
+      contentType: 'application/pdf',
+    });
     form.append('compressionType', compressionType);
 
     try {
-      const response = await axios.post(`${this.apiUrl}/api/v1/general/compress-pdf`, form, {
-        headers: {
-          ...form.getHeaders()
+      const response = await axios.post(
+        `${this.apiUrl}/api/v1/general/compress-pdf`,
+        form,
+        {
+          headers: {
+            ...form.getHeaders(),
+          },
+          responseType: 'arraybuffer',
         },
-        responseType: 'arraybuffer'
-      });
+      );
 
       logger.info('✅ [StirlingPdfService] PDF compressed successfully.');
       return Buffer.from(response.data);
     } catch (error) {
-      logger.error('❌ [StirlingPdfService] PDF compression failed:', error.message);
+      logger.error(
+        '❌ [StirlingPdfService] PDF compression failed:',
+        error.message,
+      );
       throw error;
     }
   }
@@ -93,20 +125,29 @@ class StirlingPdfService {
       throw new Error('[StirlingPdfService] fileBuffer is required.');
     }
 
-    logger.info(`📄 [StirlingPdfService] Executing OCR on PDF (lang: ${language})...`);
+    logger.info(
+      `📄 [StirlingPdfService] Executing OCR on PDF (lang: ${language})...`,
+    );
 
     const form = new FormData();
-    form.append('fileInput', fileBuffer, { filename: 'scan.pdf', contentType: 'application/pdf' });
+    form.append('fileInput', fileBuffer, {
+      filename: 'scan.pdf',
+      contentType: 'application/pdf',
+    });
     form.append('languages', language);
     form.append('ocrType', 'skip-text');
 
     try {
-      const response = await axios.post(`${this.apiUrl}/api/v1/general/ocr-pdf`, form, {
-        headers: {
-          ...form.getHeaders()
+      const response = await axios.post(
+        `${this.apiUrl}/api/v1/general/ocr-pdf`,
+        form,
+        {
+          headers: {
+            ...form.getHeaders(),
+          },
+          responseType: 'arraybuffer',
         },
-        responseType: 'arraybuffer'
-      });
+      );
 
       logger.info('✅ [StirlingPdfService] PDF OCR complete.');
       return Buffer.from(response.data);

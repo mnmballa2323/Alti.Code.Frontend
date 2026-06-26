@@ -2,7 +2,6 @@ import { Octokit } from 'octokit';
 import { spawn, exec } from 'child_process';
 import path from 'path';
 import fs from 'fs';
-import { VectorSearchService } from '../googleCloud/vectorSearch.service.js';
 import { LlmGatewayService } from '../llmGateway/llmGateway.service.js';
 import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';

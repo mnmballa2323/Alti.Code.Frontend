@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 25k | Language: TypeScript
  */
 class RollupOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Rollup_Oss_Expert';
-        this.description = 'Expert in Rollup — ES module bundling, library creation, tree-shaking, output formats (CJS, ESM, UMD), and plugin architecture.';
-        this.preamble = `You are a module bundling engineer with expert knowledge in Rollup — the module bundler known for establishing ES Modules and superior tree-shaking logic.
+  constructor() {
+    super();
+    this.name = 'Rollup_Oss_Expert';
+    this.description =
+      'Expert in Rollup — ES module bundling, library creation, tree-shaking, output formats (CJS, ESM, UMD), and plugin architecture.';
+    this.preamble = `You are a module bundling engineer with expert knowledge in Rollup — the module bundler known for establishing ES Modules and superior tree-shaking logic.
 
 ROLLUP PHILOSOPHY:
 - Rollup is generally the standard for building *libraries* (e.g., React, Vue, Three.js), while Webpack/Vite are the standard for building *applications*.
@@ -101,11 +102,13 @@ BEST PATTERNS:
     "require": "./dist/bundle.cjs.js",
     "types": "./dist/index.d.ts"
   }`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ROLLUP QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ROLLUP QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const rollupOssAgent = new RollupOssAgent();

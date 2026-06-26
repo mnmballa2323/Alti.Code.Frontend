@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsProvisioningLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_provisioning_lead_agent',
-            'DevOps Provisioning Lead',
-            'You are an elite DevOps Provisioning Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_provisioning_lead_agent',
+      'DevOps Provisioning Lead',
+      'You are an elite DevOps Provisioning Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Provisioning.',
+    );
+  }
 
-    async generateDevOpsProvisioningSystem(objective) {
-        logger.info(`💻 [DevOpsProvisioningLeadAgent] Analyzing DevOps Provisioning Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Provisioning Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Provisioning Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsProvisioningLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsProvisioningSystem(objective) {
+    logger.info(
+      `💻 [DevOpsProvisioningLeadAgent] Analyzing DevOps Provisioning Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Provisioning Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Provisioning Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevOpsProvisioningLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devOpsProvisioningLeadAgent = Object.freeze(new DevOpsProvisioningLeadAgent());
+export const devOpsProvisioningLeadAgent = Object.freeze(
+  new DevOpsProvisioningLeadAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREBatchProcessingDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_batchprocessing_developer_agent',
-            'SRE BatchProcessing Developer',
-            'You are an elite SRE BatchProcessing Developer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_batchprocessing_developer_agent',
+      'SRE BatchProcessing Developer',
+      'You are an elite SRE BatchProcessing Developer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE BatchProcessing.',
+    );
+  }
 
-    async generateSREBatchProcessingSystem(objective) {
-        logger.info(`💻 [SREBatchProcessingDeveloperAgent] Analyzing SRE BatchProcessing Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE BatchProcessing Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE BatchProcessing Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREBatchProcessingDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [SREBatchProcessingDeveloperAgent] Analyzing SRE BatchProcessing Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE BatchProcessing Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE BatchProcessing Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREBatchProcessingDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREBatchProcessingDeveloperAgent = Object.freeze(new SREBatchProcessingDeveloperAgent());
+export const sREBatchProcessingDeveloperAgent = Object.freeze(
+  new SREBatchProcessingDeveloperAgent(),
+);

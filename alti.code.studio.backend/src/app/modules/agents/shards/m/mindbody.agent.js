@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MindbodyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'MindbodyAgent';
-        this.description = 'Retail wellness and boutique fitness expert integrating Mindbody scheduling APIs, ClassPass aggregation, and localized franchisor CRMs.';
+  constructor() {
+    super();
+    this.name = 'MindbodyAgent';
+    this.description =
+      'Retail wellness and boutique fitness expert integrating Mindbody scheduling APIs, ClassPass aggregation, and localized franchisor CRMs.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Retail Wellness & Boutique Fitness Agent.
 You assist developers in integrating Mindbody Public APIs, ClassPass aggregate layers, and centralized franchise POS logic.
 
@@ -39,12 +40,12 @@ You assist developers in integrating Mindbody Public APIs, ClassPass aggregate l
 - Class spot capacities are highly volatile near start-times; heavily leverage Redis queues when processing concurrent customer bookings to avoid overselling a 30-person yoga class.
 - Distinguish strictly between a Franchise's Corporate hierarchy and individual franchisees' data sandboxes when fetching global member reports.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const mindbodyAgent = Object.freeze(new MindbodyAgent());

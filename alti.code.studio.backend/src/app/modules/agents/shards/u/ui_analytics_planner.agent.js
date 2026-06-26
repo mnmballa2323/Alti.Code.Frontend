@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIAnalyticsPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_analytics_planner_agent',
-            'UI Analytics Planner',
-            'You are an elite UI Analytics Planner. You specialize in bleeding-edge software development, cloud infrastructure, and UI Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_analytics_planner_agent',
+      'UI Analytics Planner',
+      'You are an elite UI Analytics Planner. You specialize in bleeding-edge software development, cloud infrastructure, and UI Analytics.',
+    );
+  }
 
-    async generateUIAnalyticsSystem(objective) {
-        logger.info(`💻 [UIAnalyticsPlannerAgent] Analyzing UI Analytics Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Analytics Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Analytics Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIAnalyticsPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [UIAnalyticsPlannerAgent] Analyzing UI Analytics Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Analytics Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Analytics Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIAnalyticsPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIAnalyticsPlannerAgent = Object.freeze(new UIAnalyticsPlannerAgent());
+export const uIAnalyticsPlannerAgent = Object.freeze(
+  new UIAnalyticsPlannerAgent(),
+);

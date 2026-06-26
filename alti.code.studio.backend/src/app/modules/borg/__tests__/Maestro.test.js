@@ -7,71 +7,73 @@ import { maestro } from '../Maestro.js';
 vi.mock('fs');
 const { execMock } = vi.hoisted(() => ({ execMock: vi.fn() }));
 vi.mock('child_process', () => ({
-    default: { exec: execMock },
-    exec: execMock
+  default: { exec: execMock },
+  exec: execMock,
 }));
 vi.mock('../../../shared/logger.js', () => ({
-    logger: {
-        info: vi.fn(),
-        warn: vi.fn(),
-        error: vi.fn(),
-    }
+  logger: {
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+  },
 }));
 
 describe('Maestro (Borg Worktree Manager)', () => {
-    // We isolate imports to apply mocks
-    beforeAll(() => {
-        // Mock util.promisify for exec
-        execMock.mockImplementation((cmd, options, cb) => {
-            if (typeof options === 'function') cb = options;
-            cb(null, { stdout: 'success', stderr: '' });
-        });
-
-        fs.existsSync.mockReturnValue(false); // Default to not exist
-        fs.mkdirSync.mockImplementation(() => { });
+  // We isolate imports to apply mocks
+  beforeAll(() => {
+    // Mock util.promisify for exec
+    execMock.mockImplementation((cmd, options, cb) => {
+      if (typeof options === 'function') cb = options;
+      cb(null, { stdout: 'success', stderr: '' });
     });
 
-    beforeEach(() => {
-        vi.clearAllMocks();
-        maestro.activeSwarms.clear();
-    });
+    fs.existsSync.mockReturnValue(false); // Default to not exist
+    fs.mkdirSync.mockImplementation(() => {});
+  });
 
-    it('should provision a new git worktree successfully', async () => {
-        fs.existsSync.mockReturnValue(false);
+  beforeEach(() => {
+    vi.clearAllMocks();
+    maestro.activeSwarms.clear();
+  });
 
-        const taskId = 'test-123';
-        const worktreePath = await maestro.provisionWorktree(taskId);
+  it('should provision a new git worktree successfully', async () => {
+    fs.existsSync.mockReturnValue(false);
 
-        expect(worktreePath).toContain(`task-${taskId}`);
-        expect(execMock).toHaveBeenCalled();
-        const execCall = execMock.mock.calls[0][0];
-        expect(execCall).toContain('git worktree add');
-        expect(maestro.activeSwarms.has(taskId)).toBe(true);
-    });
+    const taskId = 'test-123';
+    const worktreePath = await maestro.provisionWorktree(taskId);
 
-    it('should handle worktree provisioning failure and fallback to cwd', async () => {
-        fs.existsSync.mockReturnValue(false);
-        execMock.mockImplementationOnce((cmd, opts, cb) => cb(new Error('Git failure')));
+    expect(worktreePath).toContain(`task-${taskId}`);
+    expect(execMock).toHaveBeenCalled();
+    const execCall = execMock.mock.calls[0][0];
+    expect(execCall).toContain('git worktree add');
+    expect(maestro.activeSwarms.has(taskId)).toBe(true);
+  });
 
-        const taskId = 'fail-test';
-        const worktreePath = await maestro.provisionWorktree(taskId);
+  it('should handle worktree provisioning failure and fallback to cwd', async () => {
+    fs.existsSync.mockReturnValue(false);
+    execMock.mockImplementationOnce((cmd, opts, cb) =>
+      cb(new Error('Git failure')),
+    );
 
-        expect(worktreePath).toBe(process.cwd());
-    });
+    const taskId = 'fail-test';
+    const worktreePath = await maestro.provisionWorktree(taskId);
 
-    it('should cleanup an active worktree', async () => {
-        fs.existsSync.mockReturnValue(false);
-        const taskId = 'cleanup-test';
-        await maestro.provisionWorktree(taskId);
+    expect(worktreePath).toBe(process.cwd());
+  });
 
-        expect(maestro.activeSwarms.has(taskId)).toBe(true);
+  it('should cleanup an active worktree', async () => {
+    fs.existsSync.mockReturnValue(false);
+    const taskId = 'cleanup-test';
+    await maestro.provisionWorktree(taskId);
 
-        await maestro.cleanupWorktree(taskId);
+    expect(maestro.activeSwarms.has(taskId)).toBe(true);
 
-        expect(execMock).toHaveBeenCalledWith(
-            expect.stringContaining('git worktree remove'),
-            expect.any(Function)
-        );
-        expect(maestro.activeSwarms.has(taskId)).toBe(false);
-    });
+    await maestro.cleanupWorktree(taskId);
+
+    expect(execMock).toHaveBeenCalledWith(
+      expect.stringContaining('git worktree remove'),
+      expect.any(Function),
+    );
+    expect(maestro.activeSwarms.has(taskId)).toBe(false);
+  });
 });

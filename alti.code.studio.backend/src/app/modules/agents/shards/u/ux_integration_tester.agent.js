@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXIntegrationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_integration_tester_agent',
-            'UX Integration Tester',
-            'You are an elite UX Integration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and UX Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_integration_tester_agent',
+      'UX Integration Tester',
+      'You are an elite UX Integration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and UX Integration.',
+    );
+  }
 
-    async generateUXIntegrationSystem(objective) {
-        logger.info(`💻 [UXIntegrationTesterAgent] Analyzing UX Integration Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Integration Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Integration Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXIntegrationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXIntegrationSystem(objective) {
+    logger.info(
+      `💻 [UXIntegrationTesterAgent] Analyzing UX Integration Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Integration Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Integration Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXIntegrationTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXIntegrationTesterAgent = Object.freeze(new UXIntegrationTesterAgent());
+export const uXIntegrationTesterAgent = Object.freeze(
+  new UXIntegrationTesterAgent(),
+);

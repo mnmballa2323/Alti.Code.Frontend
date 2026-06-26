@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class DocuSignAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'DocuSign_Expert';
-        this.description = 'E-signature and contract automation specialist for DocuSign: eSignature REST API, embedded signing (iframe), envelope creation from templates, recipient routing, Connect webhooks for completion events, and bulk sending.';
-        this.preamble = `You are an elite DocuSign eSignature and contract automation specialist.
+  constructor() {
+    super();
+    this.name = 'DocuSign_Expert';
+    this.description =
+      'E-signature and contract automation specialist for DocuSign: eSignature REST API, embedded signing (iframe), envelope creation from templates, recipient routing, Connect webhooks for completion events, and bulk sending.';
+    this.preamble = `You are an elite DocuSign eSignature and contract automation specialist.
 # CORE RESPONSIBILITIES
 1. **OAuth 2.0 (JWT Grant)**: For server-side: generate RSA key pair, upload public key to DocuSign admin. JWT: \`{ iss: INTEGRATION_KEY, sub: USER_ID, aud: 'account-d.docusign.com', iat, exp, scope: 'signature impersonation' }\`. Sign with private key → \`POST https://account-d.docusign.com/oauth/token\` with \`{ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion: JWT }\` → \`access_token\`. SDK: \`npm install docusign-esign\`.
 2. **Create Envelope (Send for Signature)**:
@@ -36,20 +37,24 @@ class DocuSignAgent extends BaseSpecialistAgent {
 6. **Bulk Send**: Create a bulk send list with all signers CSV, send one template to all: \`POST /v2.1/accounts/{account}/bulk_send_lists\` → upload list. Then \`POST /v2.1/accounts/{account}/bulk_send_batch/send\` with template + list ID. Monitor batch: \`GET /v2.1/accounts/{account}/bulk_send_batch/{batchId}\`.
 # BEHAVIOR
 Output production TypeScript using \`docusign-esign\` npm SDK. Store \`DOCUSIGN_INTEGRATION_KEY\`, \`DOCUSIGN_USER_ID\`, \`DOCUSIGN_ACCOUNT_ID\`, \`DOCUSIGN_RSA_PRIVATE_KEY\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📝 DocuSign Expert: Synthesizing e-signature automation logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ DocuSign Expert failed:', e);
-            throw new Error(`DocuSign Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `📝 DocuSign Expert: Synthesizing e-signature automation logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ DocuSign Expert failed:', e);
+      throw new Error(`DocuSign Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const docuSignAgent = new DocuSignAgent();

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~20k | Language: TypeScript
  */
 class QwikOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Qwik_Oss_Expert';
-        this.description = 'Deep expert in Qwik — O(1) resumable frontend framework, fine-grained lazy loading, and Qwik City routing.';
-        this.preamble = `You are a world-class frontend engineer with expert-level mastery of Qwik and Qwik City.
+  constructor() {
+    super();
+    this.name = 'Qwik_Oss_Expert';
+    this.description =
+      'Deep expert in Qwik — O(1) resumable frontend framework, fine-grained lazy loading, and Qwik City routing.';
+    this.preamble = `You are a world-class frontend engineer with expert-level mastery of Qwik and Qwik City.
 
 CORE CONCEPTS:
 - Resumability: DO NOT mention hydration. Qwik does not hydrate. It serializes the application state and event listeners into HTML. The client *resumes* execution exactly where the server left off.
@@ -38,11 +39,13 @@ COMMON PITFALLS:
 - Passing non-serializable data (like classes, DOM references, or functions without the \`$()\` optimizer) across state or boundaries. Qwik MUST serialize state to HTML.
 - Forgetting the \`.value\` on \`useSignal\`.
 - Using normal camelCase event listeners (\`onClick\`) instead of the optimized \`onClick$\`.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== QWIK QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== QWIK QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const qwikOssAgent = new QwikOssAgent();

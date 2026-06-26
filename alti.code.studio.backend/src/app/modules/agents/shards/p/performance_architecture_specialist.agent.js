@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceArchitectureSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_architecture_specialist_agent',
-            'Performance Architecture Specialist',
-            'You are an elite Performance Architecture Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_architecture_specialist_agent',
+      'Performance Architecture Specialist',
+      'You are an elite Performance Architecture Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Architecture.',
+    );
+  }
 
-    async generatePerformanceArchitectureSystem(objective) {
-        logger.info(`💻 [PerformanceArchitectureSpecialistAgent] Analyzing Performance Architecture Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Architecture Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Architecture Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceArchitectureSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceArchitectureSystem(objective) {
+    logger.info(
+      `💻 [PerformanceArchitectureSpecialistAgent] Analyzing Performance Architecture Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Architecture Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Architecture Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceArchitectureSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceArchitectureSpecialistAgent = Object.freeze(new PerformanceArchitectureSpecialistAgent());
+export const performanceArchitectureSpecialistAgent = Object.freeze(
+  new PerformanceArchitectureSpecialistAgent(),
+);

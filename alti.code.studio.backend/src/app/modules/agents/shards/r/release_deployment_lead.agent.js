@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseDeploymentLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_deployment_lead_agent',
-            'Release Deployment Lead',
-            'You are an elite Release Deployment Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Release Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'release_deployment_lead_agent',
+      'Release Deployment Lead',
+      'You are an elite Release Deployment Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Release Deployment.',
+    );
+  }
 
-    async generateReleaseDeploymentSystem(objective) {
-        logger.info(`💻 [ReleaseDeploymentLeadAgent] Analyzing Release Deployment Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Deployment Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Deployment Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseDeploymentLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseDeploymentSystem(objective) {
+    logger.info(
+      `💻 [ReleaseDeploymentLeadAgent] Analyzing Release Deployment Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Deployment Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Deployment Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseDeploymentLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseDeploymentLeadAgent = Object.freeze(new ReleaseDeploymentLeadAgent());
+export const releaseDeploymentLeadAgent = Object.freeze(
+  new ReleaseDeploymentLeadAgent(),
+);

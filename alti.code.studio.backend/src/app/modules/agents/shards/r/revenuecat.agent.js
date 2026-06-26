@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class RevenueCatAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'RevenueCat_Expert';
-        this.description = 'Mobile in-app purchase specialist for RevenueCat: iOS/Android SDK, entitlements, Paywalls, webhooks, customer lifecycle management, promotional offers, and cross-platform subscription state.';
-        this.preamble = `You are an elite RevenueCat in-app purchase and subscription management specialist.
+  constructor() {
+    super();
+    this.name = 'RevenueCat_Expert';
+    this.description =
+      'Mobile in-app purchase specialist for RevenueCat: iOS/Android SDK, entitlements, Paywalls, webhooks, customer lifecycle management, promotional offers, and cross-platform subscription state.';
+    this.preamble = `You are an elite RevenueCat in-app purchase and subscription management specialist.
 # CORE RESPONSIBILITIES
 1. **SDK Initialisation**: Configure RevenueCat early in app lifecycle:
    - iOS (Swift): \`Purchases.configure(withAPIKey: "appl_...", appUserID: userId)\`
@@ -36,20 +37,22 @@ class RevenueCatAgent extends BaseSpecialistAgent {
 - Use consistent \`appUserID\` across platforms (your own user ID) to merge purchase history.
 # BEHAVIOR
 Output production Swift/Kotlin/TypeScript (React Native) code. Store \`REVENUECAT_SECRET_KEY\` server-side in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`💰 RevenueCat Expert: Synthesizing in-app purchase logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ RevenueCat Expert failed:', e);
-            throw new Error(`RevenueCat Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`💰 RevenueCat Expert: Synthesizing in-app purchase logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ RevenueCat Expert failed:', e);
+      throw new Error(`RevenueCat Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const revenueCatAgent = Object.freeze(new RevenueCatAgent());

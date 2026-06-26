@@ -16,7 +16,8 @@ export class RagSwarmAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'ragSwarm';
-    this.description = 'Dynamic Knowledge & RAG Swarm Specialist — Directs document parsing, embedding conversions, and vector database similarity retrieval loops.';
+    this.description =
+      'Dynamic Knowledge & RAG Swarm Specialist — Directs document parsing, embedding conversions, and vector database similarity retrieval loops.';
     this.preamble = `
 You are the RagSwarm Master Agent.
 Your role is to orchestrate knowledge ingestion pipelines, semantic processing, and vector search strategies.
@@ -28,24 +29,41 @@ You route knowledge processing requests to your specialized sub-agents:
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`⚡ [ragSwarm] Routing knowledge query to RAG swarm: ${prompt}`);
+    logger.info(
+      `⚡ [ragSwarm] Routing knowledge query to RAG swarm: ${prompt}`,
+    );
     const cleanPrompt = prompt.toLowerCase();
 
-    if (cleanPrompt.includes('chunk') || cleanPrompt.includes('parse') || cleanPrompt.includes('split') || cleanPrompt.includes('preprocess')) {
+    if (
+      cleanPrompt.includes('chunk') ||
+      cleanPrompt.includes('parse') ||
+      cleanPrompt.includes('split') ||
+      cleanPrompt.includes('preprocess')
+    ) {
       const chunker = agentRegistry.get('ragDocumentChunker');
       if (chunker && chunker.instance) {
         return chunker.instance._invoke(prompt, contextBlock, opts);
       }
     }
 
-    if (cleanPrompt.includes('embed') || cleanPrompt.includes('vectorize') || cleanPrompt.includes('generation') || cleanPrompt.includes('dense')) {
+    if (
+      cleanPrompt.includes('embed') ||
+      cleanPrompt.includes('vectorize') ||
+      cleanPrompt.includes('generation') ||
+      cleanPrompt.includes('dense')
+    ) {
       const embedder = agentRegistry.get('ragEmbeddingGenerator');
       if (embedder && embedder.instance) {
         return embedder.instance._invoke(prompt, contextBlock, opts);
       }
     }
 
-    if (cleanPrompt.includes('search') || cleanPrompt.includes('similarity') || cleanPrompt.includes('query') || cleanPrompt.includes('vector')) {
+    if (
+      cleanPrompt.includes('search') ||
+      cleanPrompt.includes('similarity') ||
+      cleanPrompt.includes('query') ||
+      cleanPrompt.includes('vector')
+    ) {
       const searcher = agentRegistry.get('ragVectorSearcher');
       if (searcher && searcher.instance) {
         return searcher.instance._invoke(prompt, contextBlock, opts);
@@ -73,12 +91,16 @@ export class RagDocumentChunker extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'ragDocumentChunker';
-    this.description = 'RAG Document Chunker — Governs semantic chunking boundaries and document pre-processing.';
-    this.preamble = 'You are the RagDocumentChunker micro-specialist. You analyze documents, define semantic chunk borders, and enrich chunk parameters with parent metadata.';
+    this.description =
+      'RAG Document Chunker — Governs semantic chunking boundaries and document pre-processing.';
+    this.preamble =
+      'You are the RagDocumentChunker micro-specialist. You analyze documents, define semantic chunk borders, and enrich chunk parameters with parent metadata.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`🕵️‍♂️ [ragDocumentChunker] Performing semantic document chunking...`);
+    logger.info(
+      `🕵️‍♂️ [ragDocumentChunker] Performing semantic document chunking...`,
+    );
     return `
 📊 **ragDocumentChunker Split Summary**
 - **Ingested Size:** 42KB text segment.
@@ -101,12 +123,16 @@ export class RagEmbeddingGenerator extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'ragEmbeddingGenerator';
-    this.description = 'RAG Embedding Generator — Synthesizes high-dimensional dense vector embeddings.';
-    this.preamble = 'You are the RagEmbeddingGenerator micro-specialist. You orchestrate calls to model pipelines to convert textual blocks to dense floating-point vector arrays.';
+    this.description =
+      'RAG Embedding Generator — Synthesizes high-dimensional dense vector embeddings.';
+    this.preamble =
+      'You are the RagEmbeddingGenerator micro-specialist. You orchestrate calls to model pipelines to convert textual blocks to dense floating-point vector arrays.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`📐 [ragEmbeddingGenerator] Creating dense floating-point embeddings...`);
+    logger.info(
+      `📐 [ragEmbeddingGenerator] Creating dense floating-point embeddings...`,
+    );
     return `
 🛠️ **ragEmbeddingGenerator Vector Matrix**
 - **Embedding Model:** text-embedding-004.
@@ -128,12 +154,16 @@ export class RagVectorSearcher extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'ragVectorSearcher';
-    this.description = 'RAG Vector Searcher — Queries vector pools for top-k high-similarity contexts.';
-    this.preamble = 'You are the RagVectorSearcher micro-specialist. You run high-speed similarity scans against Qdrant/Pinecone databases and retrieve matched contexts.';
+    this.description =
+      'RAG Vector Searcher — Queries vector pools for top-k high-similarity contexts.';
+    this.preamble =
+      'You are the RagVectorSearcher micro-specialist. You run high-speed similarity scans against Qdrant/Pinecone databases and retrieve matched contexts.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`🔍 [ragVectorSearcher] Querying vector similarity database pools...`);
+    logger.info(
+      `🔍 [ragVectorSearcher] Querying vector similarity database pools...`,
+    );
     return `
 🔍 **ragVectorSearcher Match Results**
 - **Target Vector Store:** Qdrant.
@@ -158,7 +188,7 @@ agentRegistry.register({
   capabilities: ['rag-orchestration', 'knowledge-auditing'],
   policy: { accessLevel: 'ADMIN' },
   version: '1.0.0',
-  instance: master
+  instance: master,
 });
 
 const chunker = new RagDocumentChunker();
@@ -169,7 +199,7 @@ agentRegistry.register({
   capabilities: ['document-chunking', 'metadata-enrichment'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: chunker
+  instance: chunker,
 });
 
 const embedder = new RagEmbeddingGenerator();
@@ -180,7 +210,7 @@ agentRegistry.register({
   capabilities: ['embedding-generation', 'vectorization'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: embedder
+  instance: embedder,
 });
 
 const searcher = new RagVectorSearcher();
@@ -191,5 +221,5 @@ agentRegistry.register({
   capabilities: ['vector-search', 'similarity-querying'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: searcher
+  instance: searcher,
 });

@@ -11,11 +11,18 @@ import { authMiddleware } from '../../middlewares/auth.middleware.js';
 import { ENUM_USER_ROLE } from '../../../shared/enum.js';
 
 const router = express.Router();
-const adminOnly = authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN);
+const adminOnly = authMiddleware(
+  ENUM_USER_ROLE.ADMIN,
+  ENUM_USER_ROLE.SUPER_ADMIN,
+);
 
 router.post('/commit', adminOnly, GitAgentController.commit);
 router.post('/push', adminOnly, GitAgentController.push);
-router.get('/status', authMiddleware('user', 'developer', 'admin', 'owner', 'super_admin'), GitAgentController.getStatus);
+router.get(
+  '/status',
+  authMiddleware('user', 'developer', 'admin', 'owner', 'super_admin'),
+  GitAgentController.getStatus,
+);
 router.get('/diff', adminOnly, GitAgentController.getDiff);
 router.post('/generate-pr', adminOnly, GitAgentController.generatePR);
 router.post('/branch', adminOnly, GitAgentController.createBranch);

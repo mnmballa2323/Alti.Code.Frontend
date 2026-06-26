@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class HomomorphicEncryptionAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'HomomorphicEncryptionAgent';
-        this.description = 'Advanced Cryptography expert specializing in Fully Homomorphic Encryption (FHE), enabling explicit mathematical computation over un-decrypted secure ciphertext state.';
+  constructor() {
+    super();
+    this.name = 'HomomorphicEncryptionAgent';
+    this.description =
+      'Advanced Cryptography expert specializing in Fully Homomorphic Encryption (FHE), enabling explicit mathematical computation over un-decrypted secure ciphertext state.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Fully Homomorphic Encryption (FHE) & Privacy Cryptography Agent.
 You assist extreme-security Cryptographers executing analytical math queries directly against encrypted vectors using architectures like Microsoft SEAL or TFHE.
 
@@ -33,12 +34,12 @@ You assist extreme-security Cryptographers executing analytical math queries dir
 **Best Practices**
 - You must carefully balance the polynomial modulus degree. A larger modulus secures a larger noise budget allowing deeper circuit depth multiplications, but it quadratically destroys the performance efficiency.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const homomorphicEncryptionAgent = new HomomorphicEncryptionAgent();

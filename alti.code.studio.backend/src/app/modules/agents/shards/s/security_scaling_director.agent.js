@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityScalingDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_scaling_director_agent',
-            'Security Scaling Director',
-            'You are an elite Security Scaling Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'security_scaling_director_agent',
+      'Security Scaling Director',
+      'You are an elite Security Scaling Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Scaling.',
+    );
+  }
 
-    async generateSecurityScalingSystem(objective) {
-        logger.info(`💻 [SecurityScalingDirectorAgent] Analyzing Security Scaling Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Scaling Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Scaling Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityScalingDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityScalingSystem(objective) {
+    logger.info(
+      `💻 [SecurityScalingDirectorAgent] Analyzing Security Scaling Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Scaling Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Scaling Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SecurityScalingDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const securityScalingDirectorAgent = Object.freeze(new SecurityScalingDirectorAgent());
+export const securityScalingDirectorAgent = Object.freeze(
+  new SecurityScalingDirectorAgent(),
+);

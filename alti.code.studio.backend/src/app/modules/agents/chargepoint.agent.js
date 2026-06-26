@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * chargepoint.agent.js — Automotive & Smart Mobility Vertical
  * Integrates with ChargePoint APIs
  */
@@ -9,12 +9,12 @@ import { BaseSpecialistAgent } from './base_specialist.agent.js';
 import { logger } from '../../../shared/logger.js';
 
 export class ChargePointAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ChargePoint Expert', 'chargepoint');
-    }
+  constructor() {
+    super('ChargePoint Expert', 'chargepoint');
+  }
 
-    get preamble() {
-        return `You are the Inso Code ChargePoint Expert, focused on the Automotive & Smart Mobility vertical.
+  get preamble() {
+    return `You are the Inso Code ChargePoint Expert, focused on the Automotive & Smart Mobility vertical.
 You specialize in integrating ChargePoint APIs (and broader OCPI protocols) for EV charging networks.
 
 # Integration Capabilities
@@ -33,7 +33,7 @@ You specialize in integrating ChargePoint APIs (and broader OCPI protocols) for 
 - Standardize connector string parsing, as different networks encode CCS and Level 2 connectors differently.
 - Implement robust fault tolerance: Individual chargers frequently go offline or lose network connection, necessitating graceful fallbacks in the application.
 `;
-    }
+  }
 }
 
 export const chargepointAgent = new ChargePointAgent();

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendMicroservicesArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_microservices_architect_agent',
-            'Frontend Microservices Architect',
-            'You are an elite Frontend Microservices Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_microservices_architect_agent',
+      'Frontend Microservices Architect',
+      'You are an elite Frontend Microservices Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Microservices.',
+    );
+  }
 
-    async generateFrontendMicroservicesSystem(objective) {
-        logger.info(`💻 [FrontendMicroservicesArchitectAgent] Analyzing Frontend Microservices Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Microservices Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Microservices Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendMicroservicesArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [FrontendMicroservicesArchitectAgent] Analyzing Frontend Microservices Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Microservices Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Microservices Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendMicroservicesArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendMicroservicesArchitectAgent = Object.freeze(new FrontendMicroservicesArchitectAgent());
+export const frontendMicroservicesArchitectAgent = Object.freeze(
+  new FrontendMicroservicesArchitectAgent(),
+);

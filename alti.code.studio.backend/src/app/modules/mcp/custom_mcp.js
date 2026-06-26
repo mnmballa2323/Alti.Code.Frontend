@@ -13,7 +13,8 @@ class GetSystemInfoTool extends MCPTool {
   constructor() {
     super();
     this.name = 'get_system_info';
-    this.description = 'Retrieve the current host system diagnostics (OS, free memory, load average, and CPU uptime).';
+    this.description =
+      'Retrieve the current host system diagnostics (OS, free memory, load average, and CPU uptime).';
     this.schema = z.object({});
   }
 
@@ -22,7 +23,7 @@ class GetSystemInfoTool extends MCPTool {
       const freeMem = os.freemem();
       const totalMem = os.totalmem();
       const loadAvg = os.loadavg();
-      
+
       const stats = {
         platform: os.platform(),
         arch: os.arch(),
@@ -31,32 +32,32 @@ class GetSystemInfoTool extends MCPTool {
         memoryUsage: {
           free: `${Math.round(freeMem / 1024 / 1024)} MB`,
           total: `${Math.round(totalMem / 1024 / 1024)} MB`,
-          percentFree: `${Math.round((freeMem / totalMem) * 100)}%`
+          percentFree: `${Math.round((freeMem / totalMem) * 100)}%`,
         },
         loadAverage: {
           '1m': loadAvg[0].toFixed(2),
           '5m': loadAvg[1].toFixed(2),
-          '15m': loadAvg[2].toFixed(2)
-        }
+          '15m': loadAvg[2].toFixed(2),
+        },
       };
 
       return {
         content: [
           {
             type: 'text',
-            text: JSON.stringify(stats, null, 2)
-          }
-        ]
+            text: JSON.stringify(stats, null, 2),
+          },
+        ],
       };
     } catch (error) {
       return {
         content: [
           {
             type: 'text',
-            text: `Failed to retrieve system diagnostics: ${error.message}`
-          }
+            text: `Failed to retrieve system diagnostics: ${error.message}`,
+          },
         ],
-        isError: true
+        isError: true,
       };
     }
   }
@@ -65,14 +66,18 @@ class GetSystemInfoTool extends MCPTool {
 // Instantiate the custom MCP Server
 const server = new MCPServer({
   name: 'alti-custom-diagnostics',
-  version: '1.0.0'
+  version: '1.0.0',
 });
 
 // Register our class-based tool
 server.addTool(GetSystemInfoTool);
 
 // Auto-run if executed directly via node command line
-if (process.argv[1] && (process.argv[1].endsWith('custom_mcp.js') || process.argv[1].endsWith('custom_mcp.js/index.js'))) {
+if (
+  process.argv[1] &&
+  (process.argv[1].endsWith('custom_mcp.js') ||
+    process.argv[1].endsWith('custom_mcp.js/index.js'))
+) {
   server.start();
 }
 

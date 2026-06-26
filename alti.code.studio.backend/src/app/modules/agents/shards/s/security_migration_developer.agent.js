@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityMigrationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_migration_developer_agent',
-            'Security Migration Developer',
-            'You are an elite Security Migration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Security Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'security_migration_developer_agent',
+      'Security Migration Developer',
+      'You are an elite Security Migration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Security Migration.',
+    );
+  }
 
-    async generateSecurityMigrationSystem(objective) {
-        logger.info(`💻 [SecurityMigrationDeveloperAgent] Analyzing Security Migration Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Migration Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Migration Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityMigrationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityMigrationSystem(objective) {
+    logger.info(
+      `💻 [SecurityMigrationDeveloperAgent] Analyzing Security Migration Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Migration Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Migration Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityMigrationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityMigrationDeveloperAgent = Object.freeze(new SecurityMigrationDeveloperAgent());
+export const securityMigrationDeveloperAgent = Object.freeze(
+  new SecurityMigrationDeveloperAgent(),
+);

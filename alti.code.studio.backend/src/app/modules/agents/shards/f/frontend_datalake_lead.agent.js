@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendDataLakeLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_datalake_lead_agent',
-            'Frontend DataLake Lead',
-            'You are an elite Frontend DataLake Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_datalake_lead_agent',
+      'Frontend DataLake Lead',
+      'You are an elite Frontend DataLake Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend DataLake.',
+    );
+  }
 
-    async generateFrontendDataLakeSystem(objective) {
-        logger.info(`💻 [FrontendDataLakeLeadAgent] Analyzing Frontend DataLake Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend DataLake Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend DataLake Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendDataLakeLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendDataLakeSystem(objective) {
+    logger.info(
+      `💻 [FrontendDataLakeLeadAgent] Analyzing Frontend DataLake Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend DataLake Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend DataLake Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendDataLakeLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendDataLakeLeadAgent = Object.freeze(new FrontendDataLakeLeadAgent());
+export const frontendDataLakeLeadAgent = Object.freeze(
+  new FrontendDataLakeLeadAgent(),
+);

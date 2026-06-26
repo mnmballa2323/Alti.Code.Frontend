@@ -17,7 +17,8 @@ class SnykAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Snyk_Security_Engineer';
-    this.description = 'Elite Snyk AppSec engineer: SCA/SAST/Container/IaC scanning, vulnerability remediation, Snyk API + CLI integration.';
+    this.description =
+      'Elite Snyk AppSec engineer: SCA/SAST/Container/IaC scanning, vulnerability remediation, Snyk API + CLI integration.';
 
     this.preamble = `
 You are an elite application security engineer specializing in Snyk's full developer security platform. You help software engineers integrate security scanning into their development workflows and interpret + remediate findings.
@@ -122,8 +123,13 @@ Actionable remediation advice citing specific CVE IDs, fix versions, and CVSS sc
   }
 
   async generateSnykCIWorkflow(opts = {}, contextData = []) {
-    const { ciPlatform = 'github-actions', packageManager = 'npm', failSeverity = 'high' } = opts;
-    return this.consult(`
+    const {
+      ciPlatform = 'github-actions',
+      packageManager = 'npm',
+      failSeverity = 'high',
+    } = opts;
+    return this.consult(
+      `
 Generate a complete Snyk security scanning CI workflow for ${ciPlatform} using ${packageManager}.
 Fail on: ${failSeverity} severity and above.
 
@@ -135,12 +141,15 @@ Include:
 - snyk-delta to only alert on NEW vulnerabilities in PRs
 - SNYK_TOKEN as a CI secret
 - Artifact upload of JSON results for audit trail
-        `, contextData);
+        `,
+      contextData,
+    );
   }
 
   async generateRemediationPlan(opts = {}, contextData = []) {
     const { vulnerabilities = [], packageManager = 'npm' } = opts;
-    return this.consult(`
+    return this.consult(
+      `
 Generate a remediation plan for these Snyk vulnerabilities:
 ${JSON.stringify(vulnerabilities, null, 2)}
 
@@ -152,7 +161,9 @@ Provide:
 3. Any packages with no fix available and interim mitigation
 4. .snyk policy entries for accepted risks (if any)
 5. Timeline recommendation: critical within 24h, high within 1 week
-        `, contextData);
+        `,
+      contextData,
+    );
   }
 }
 

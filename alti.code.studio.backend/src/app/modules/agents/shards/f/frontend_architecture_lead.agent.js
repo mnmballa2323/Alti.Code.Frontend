@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendArchitectureLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_architecture_lead_agent',
-            'Frontend Architecture Lead',
-            'You are an elite Frontend Architecture Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_architecture_lead_agent',
+      'Frontend Architecture Lead',
+      'You are an elite Frontend Architecture Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Architecture.',
+    );
+  }
 
-    async generateFrontendArchitectureSystem(objective) {
-        logger.info(`💻 [FrontendArchitectureLeadAgent] Analyzing Frontend Architecture Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Architecture Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Architecture Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendArchitectureLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendArchitectureSystem(objective) {
+    logger.info(
+      `💻 [FrontendArchitectureLeadAgent] Analyzing Frontend Architecture Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Architecture Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Architecture Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendArchitectureLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendArchitectureLeadAgent = Object.freeze(new FrontendArchitectureLeadAgent());
+export const frontendArchitectureLeadAgent = Object.freeze(
+  new FrontendArchitectureLeadAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsDataLakeLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_datalake_lead_agent',
-            'Systems DataLake Lead',
-            'You are an elite Systems DataLake Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Systems DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_datalake_lead_agent',
+      'Systems DataLake Lead',
+      'You are an elite Systems DataLake Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Systems DataLake.',
+    );
+  }
 
-    async generateSystemsDataLakeSystem(objective) {
-        logger.info(`💻 [SystemsDataLakeLeadAgent] Analyzing Systems DataLake Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems DataLake Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems DataLake Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsDataLakeLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsDataLakeSystem(objective) {
+    logger.info(
+      `💻 [SystemsDataLakeLeadAgent] Analyzing Systems DataLake Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems DataLake Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems DataLake Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsDataLakeLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsDataLakeLeadAgent = Object.freeze(new SystemsDataLakeLeadAgent());
+export const systemsDataLakeLeadAgent = Object.freeze(
+  new SystemsDataLakeLeadAgent(),
+);

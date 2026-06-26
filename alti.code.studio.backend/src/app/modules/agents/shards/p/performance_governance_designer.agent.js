@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceGovernanceDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_governance_designer_agent',
-            'Performance Governance Designer',
-            'You are an elite Performance Governance Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_governance_designer_agent',
+      'Performance Governance Designer',
+      'You are an elite Performance Governance Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Governance.',
+    );
+  }
 
-    async generatePerformanceGovernanceSystem(objective) {
-        logger.info(`💻 [PerformanceGovernanceDesignerAgent] Analyzing Performance Governance Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Governance Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Governance Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceGovernanceDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceGovernanceSystem(objective) {
+    logger.info(
+      `💻 [PerformanceGovernanceDesignerAgent] Analyzing Performance Governance Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Governance Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Governance Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceGovernanceDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceGovernanceDesignerAgent = Object.freeze(new PerformanceGovernanceDesignerAgent());
+export const performanceGovernanceDesignerAgent = Object.freeze(
+  new PerformanceGovernanceDesignerAgent(),
+);

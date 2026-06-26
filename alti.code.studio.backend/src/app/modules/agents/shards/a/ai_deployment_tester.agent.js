@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIDeploymentTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_deployment_tester_agent',
-            'AI Deployment Tester',
-            'You are an elite AI Deployment Tester. You specialize in bleeding-edge software development, cloud infrastructure, and AI Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_deployment_tester_agent',
+      'AI Deployment Tester',
+      'You are an elite AI Deployment Tester. You specialize in bleeding-edge software development, cloud infrastructure, and AI Deployment.',
+    );
+  }
 
-    async generateAIDeploymentSystem(objective) {
-        logger.info(`💻 [AIDeploymentTesterAgent] Analyzing AI Deployment Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Deployment Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Deployment Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIDeploymentTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIDeploymentSystem(objective) {
+    logger.info(
+      `💻 [AIDeploymentTesterAgent] Analyzing AI Deployment Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Deployment Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Deployment Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIDeploymentTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIDeploymentTesterAgent = Object.freeze(new AIDeploymentTesterAgent());
+export const aIDeploymentTesterAgent = Object.freeze(
+  new AIDeploymentTesterAgent(),
+);

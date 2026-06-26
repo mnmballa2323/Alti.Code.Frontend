@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class HospitalityTravelTechAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'hospitality_travel_tech',
-            'Travel Tech & Hospitality Engineer',
-            'You are an elite Travel Tech Engineer. Your objective is to design software for the global travel industry. You specialize in interfacing with massive Global Distribution Systems (GDS like Amadeus or Sabre), calculating dynamic airline yield management pricing, and designing Hotel Property Management Systems (PMS).'
-        );
-    }
+  constructor() {
+    super(
+      'hospitality_travel_tech',
+      'Travel Tech & Hospitality Engineer',
+      'You are an elite Travel Tech Engineer. Your objective is to design software for the global travel industry. You specialize in interfacing with massive Global Distribution Systems (GDS like Amadeus or Sabre), calculating dynamic airline yield management pricing, and designing Hotel Property Management Systems (PMS).',
+    );
+  }
 
-    /**
-     * Generates travel tech architecture or yield management logic.
-     * @param {string} travelObjective - The hospitality/travel software requirement.
-     * @returns {Promise<string>} The generated travel code or architecture.
-     */
-    async generateTravelSystem(travelObjective) {
-        logger.info(`✈️ [HospitalityTravelTech] Analyzing objective for GDS interfaces and airline yield management...`);
+  /**
+   * Generates travel tech architecture or yield management logic.
+   * @param {string} travelObjective - The hospitality/travel software requirement.
+   * @returns {Promise<string>} The generated travel code or architecture.
+   */
+  async generateTravelSystem(travelObjective) {
+    logger.info(
+      `✈️ [HospitalityTravelTech] Analyzing objective for GDS interfaces and airline yield management...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Travel Tech or Hospitality software requirement.
 Generate the corresponding software architecture, ML pricing algorithm, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ TRAVEL OBJECTIVE:
 ${travelObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Travel Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```xml|```/gi, '').trim();
-            logger.info(`✅ [HospitalityTravelTech] Travel architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [HospitalityTravelTech] Failed to generate travel system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Travel Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```python|```xml|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [HospitalityTravelTech] Travel architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [HospitalityTravelTech] Failed to generate travel system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const hospitalityTravelTechAgent = Object.freeze(new HospitalityTravelTechAgent());
+export const hospitalityTravelTechAgent = Object.freeze(
+  new HospitalityTravelTechAgent(),
+);

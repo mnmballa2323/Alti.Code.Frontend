@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendLoadBalancingLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_loadbalancing_lead_agent',
-            'Frontend LoadBalancing Lead',
-            'You are an elite Frontend LoadBalancing Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_loadbalancing_lead_agent',
+      'Frontend LoadBalancing Lead',
+      'You are an elite Frontend LoadBalancing Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend LoadBalancing.',
+    );
+  }
 
-    async generateFrontendLoadBalancingSystem(objective) {
-        logger.info(`💻 [FrontendLoadBalancingLeadAgent] Analyzing Frontend LoadBalancing Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend LoadBalancing Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend LoadBalancing Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendLoadBalancingLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [FrontendLoadBalancingLeadAgent] Analyzing Frontend LoadBalancing Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend LoadBalancing Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend LoadBalancing Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendLoadBalancingLeadAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendLoadBalancingLeadAgent = Object.freeze(new FrontendLoadBalancingLeadAgent());
+export const frontendLoadBalancingLeadAgent = Object.freeze(
+  new FrontendLoadBalancingLeadAgent(),
+);

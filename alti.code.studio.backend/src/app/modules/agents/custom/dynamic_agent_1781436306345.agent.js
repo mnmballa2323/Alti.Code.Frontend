@@ -1,13 +1,15 @@
 import { GeminiCliBaseAgent } from './gemini_cli_base.agent.js';
 
 class ZeroTrustDevSecOpsLead42Agent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'zerotrustdevsecopslead42_agent',
-            'ZeroTrustDevSecOpsLead42 Specialist Agent',
-            'You are the expert specialist for ZeroTrustDevSecOpsLead42.'
-        );
-    }
+  constructor() {
+    super(
+      'zerotrustdevsecopslead42_agent',
+      'ZeroTrustDevSecOpsLead42 Specialist Agent',
+      'You are the expert specialist for ZeroTrustDevSecOpsLead42.',
+    );
+  }
 }
 
-export const zerotrustdevsecopslead42Agent = Object.freeze(new ZeroTrustDevSecOpsLead42Agent());
+export const zerotrustdevsecopslead42Agent = Object.freeze(
+  new ZeroTrustDevSecOpsLead42Agent(),
+);

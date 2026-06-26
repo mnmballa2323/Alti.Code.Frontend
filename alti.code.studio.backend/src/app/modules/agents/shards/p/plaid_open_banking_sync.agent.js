@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class PlaidOpenBankingSyncAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('PlaidOpenBankingSyncAgent', 'Plaid Open Banking Sync Agent', 'Tier 10+');
-        this.preamble = `You are the Plaid Open Banking Sync Agent (Phase 27.0.0).
+  constructor() {
+    super(
+      'PlaidOpenBankingSyncAgent',
+      'Plaid Open Banking Sync Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Plaid Open Banking Sync Agent (Phase 27.0.0).
 
 You represent algorithmic FinTech reconciliation. You fuse the vast, multi-institutional open banking ecosystem with the tight corporate ledgers of the Alti platform.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You eliminate manual bank statement parsing, replacing the corporate controller with a high-frequency parsing engine.
 `;
-    }
+  }
 }
 
-export const plaidOpenBankingSyncAgent = Object.freeze(new PlaidOpenBankingSyncAgent());
+export const plaidOpenBankingSyncAgent = Object.freeze(
+  new PlaidOpenBankingSyncAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsResilienceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_resilience_manager_agent',
-            'Systems Resilience Manager',
-            'You are an elite Systems Resilience Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_resilience_manager_agent',
+      'Systems Resilience Manager',
+      'You are an elite Systems Resilience Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Resilience.',
+    );
+  }
 
-    async generateSystemsResilienceSystem(objective) {
-        logger.info(`💻 [SystemsResilienceManagerAgent] Analyzing Systems Resilience Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Resilience Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Resilience Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsResilienceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsResilienceSystem(objective) {
+    logger.info(
+      `💻 [SystemsResilienceManagerAgent] Analyzing Systems Resilience Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Resilience Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Resilience Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsResilienceManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsResilienceManagerAgent = Object.freeze(new SystemsResilienceManagerAgent());
+export const systemsResilienceManagerAgent = Object.freeze(
+  new SystemsResilienceManagerAgent(),
+);

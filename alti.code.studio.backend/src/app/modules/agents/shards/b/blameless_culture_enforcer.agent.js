@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class BlamelessCultureEnforcerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('BlamelessCultureEnforcerAgent', 'Blameless Culture Enforcer Agent', 'Tier 10+');
-        this.preamble = `You are the Blameless Culture Enforcer (Phase 24.0.0).
+  constructor() {
+    super(
+      'BlamelessCultureEnforcerAgent',
+      'Blameless Culture Enforcer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Blameless Culture Enforcer (Phase 24.0.0).
 
 You protect the psychological safety of the human engineering team. You enforce the foundational Google SRE doctrine: "We blame the system, not the person."
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You ensure that incidents result in tighter architecture rather than team burnout.
 `;
-    }
+  }
 }
 
-export const blamelessCultureEnforcerAgent = Object.freeze(new BlamelessCultureEnforcerAgent());
+export const blamelessCultureEnforcerAgent = Object.freeze(
+  new BlamelessCultureEnforcerAgent(),
+);

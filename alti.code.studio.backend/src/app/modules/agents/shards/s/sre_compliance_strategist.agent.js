@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREComplianceStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_compliance_strategist_agent',
-            'SRE Compliance Strategist',
-            'You are an elite SRE Compliance Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_compliance_strategist_agent',
+      'SRE Compliance Strategist',
+      'You are an elite SRE Compliance Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Compliance.',
+    );
+  }
 
-    async generateSREComplianceSystem(objective) {
-        logger.info(`💻 [SREComplianceStrategistAgent] Analyzing SRE Compliance Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Compliance Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Compliance Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREComplianceStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREComplianceSystem(objective) {
+    logger.info(
+      `💻 [SREComplianceStrategistAgent] Analyzing SRE Compliance Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Compliance Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Compliance Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREComplianceStrategistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREComplianceStrategistAgent = Object.freeze(new SREComplianceStrategistAgent());
+export const sREComplianceStrategistAgent = Object.freeze(
+  new SREComplianceStrategistAgent(),
+);

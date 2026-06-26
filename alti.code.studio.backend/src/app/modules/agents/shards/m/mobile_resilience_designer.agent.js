@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileResilienceDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_resilience_designer_agent',
-            'Mobile Resilience Designer',
-            'You are an elite Mobile Resilience Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_resilience_designer_agent',
+      'Mobile Resilience Designer',
+      'You are an elite Mobile Resilience Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Resilience.',
+    );
+  }
 
-    async generateMobileResilienceSystem(objective) {
-        logger.info(`💻 [MobileResilienceDesignerAgent] Analyzing Mobile Resilience Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Resilience Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Resilience Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileResilienceDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileResilienceSystem(objective) {
+    logger.info(
+      `💻 [MobileResilienceDesignerAgent] Analyzing Mobile Resilience Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Resilience Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Resilience Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [MobileResilienceDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const mobileResilienceDesignerAgent = Object.freeze(new MobileResilienceDesignerAgent());
+export const mobileResilienceDesignerAgent = Object.freeze(
+  new MobileResilienceDesignerAgent(),
+);

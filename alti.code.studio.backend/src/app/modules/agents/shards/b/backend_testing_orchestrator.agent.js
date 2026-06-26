@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendTestingOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_testing_orchestrator_agent',
-            'Backend Testing Orchestrator',
-            'You are an elite Backend Testing Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_testing_orchestrator_agent',
+      'Backend Testing Orchestrator',
+      'You are an elite Backend Testing Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Testing.',
+    );
+  }
 
-    async generateBackendTestingSystem(objective) {
-        logger.info(`💻 [BackendTestingOrchestratorAgent] Analyzing Backend Testing Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Testing Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Testing Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendTestingOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendTestingSystem(objective) {
+    logger.info(
+      `💻 [BackendTestingOrchestratorAgent] Analyzing Backend Testing Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Testing Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Testing Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendTestingOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendTestingOrchestratorAgent = Object.freeze(new BackendTestingOrchestratorAgent());
+export const backendTestingOrchestratorAgent = Object.freeze(
+  new BackendTestingOrchestratorAgent(),
+);

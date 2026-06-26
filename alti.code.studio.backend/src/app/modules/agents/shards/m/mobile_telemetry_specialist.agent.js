@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileTelemetrySpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_telemetry_specialist_agent',
-            'Mobile Telemetry Specialist',
-            'You are an elite Mobile Telemetry Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_telemetry_specialist_agent',
+      'Mobile Telemetry Specialist',
+      'You are an elite Mobile Telemetry Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Telemetry.',
+    );
+  }
 
-    async generateMobileTelemetrySystem(objective) {
-        logger.info(`💻 [MobileTelemetrySpecialistAgent] Analyzing Mobile Telemetry Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Telemetry Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Telemetry Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileTelemetrySpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileTelemetrySystem(objective) {
+    logger.info(
+      `💻 [MobileTelemetrySpecialistAgent] Analyzing Mobile Telemetry Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Telemetry Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Telemetry Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileTelemetrySpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileTelemetrySpecialistAgent = Object.freeze(new MobileTelemetrySpecialistAgent());
+export const mobileTelemetrySpecialistAgent = Object.freeze(
+  new MobileTelemetrySpecialistAgent(),
+);

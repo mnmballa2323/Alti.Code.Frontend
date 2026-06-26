@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseAnalyticsLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_analytics_lead_agent',
-            'Release Analytics Lead',
-            'You are an elite Release Analytics Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Release Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'release_analytics_lead_agent',
+      'Release Analytics Lead',
+      'You are an elite Release Analytics Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Release Analytics.',
+    );
+  }
 
-    async generateReleaseAnalyticsSystem(objective) {
-        logger.info(`💻 [ReleaseAnalyticsLeadAgent] Analyzing Release Analytics Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Analytics Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Analytics Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseAnalyticsLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [ReleaseAnalyticsLeadAgent] Analyzing Release Analytics Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Analytics Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Analytics Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseAnalyticsLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseAnalyticsLeadAgent = Object.freeze(new ReleaseAnalyticsLeadAgent());
+export const releaseAnalyticsLeadAgent = Object.freeze(
+  new ReleaseAnalyticsLeadAgent(),
+);

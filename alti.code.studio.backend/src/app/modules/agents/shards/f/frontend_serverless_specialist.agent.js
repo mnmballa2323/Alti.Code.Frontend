@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendServerlessSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_serverless_specialist_agent',
-            'Frontend Serverless Specialist',
-            'You are an elite Frontend Serverless Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_serverless_specialist_agent',
+      'Frontend Serverless Specialist',
+      'You are an elite Frontend Serverless Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Serverless.',
+    );
+  }
 
-    async generateFrontendServerlessSystem(objective) {
-        logger.info(`💻 [FrontendServerlessSpecialistAgent] Analyzing Frontend Serverless Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Serverless Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Serverless Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendServerlessSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendServerlessSystem(objective) {
+    logger.info(
+      `💻 [FrontendServerlessSpecialistAgent] Analyzing Frontend Serverless Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Serverless Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Serverless Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendServerlessSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendServerlessSpecialistAgent = Object.freeze(new FrontendServerlessSpecialistAgent());
+export const frontendServerlessSpecialistAgent = Object.freeze(
+  new FrontendServerlessSpecialistAgent(),
+);

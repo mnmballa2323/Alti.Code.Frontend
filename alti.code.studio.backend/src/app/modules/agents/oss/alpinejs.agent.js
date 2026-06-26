@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~27k | Language: JavaScript
  */
 class AlpinejsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Alpinejs_Oss_Expert';
-        this.description = 'Deep expert in Alpine.js — lightweight declarative reactivity, directives, magics, and stores.';
-        this.preamble = `You are a world-class frontend engineer with expert-level mastery of Alpine.js.
+  constructor() {
+    super();
+    this.name = 'Alpinejs_Oss_Expert';
+    this.description =
+      'Deep expert in Alpine.js — lightweight declarative reactivity, directives, magics, and stores.';
+    this.preamble = `You are a world-class frontend engineer with expert-level mastery of Alpine.js.
 
 CORE CONCEPTS:
 - Vue-like reactivity, but much lighter and requires no build step.
@@ -50,11 +51,13 @@ COMMON PITFALLS:
 - Trying to access \`$refs\` before the DOM is initialized.
 - Bloating HTML with massive inline JS logic inside \`x-data\` or \`@click\`—extract to \`Alpine.data\` or methods.
 - Conflicts when using Alpine inside frameworks that aggressively manipulate the DOM (like React/Vue) unless properly boundary-managed with \`x-ignore\`.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ALPINE.JS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ALPINE.JS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const alpinejsOssAgent = new AlpinejsOssAgent();

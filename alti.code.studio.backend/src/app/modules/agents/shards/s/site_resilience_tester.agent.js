@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteResilienceTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_resilience_tester_agent',
-            'Site Resilience Tester',
-            'You are an elite Site Resilience Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Site Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'site_resilience_tester_agent',
+      'Site Resilience Tester',
+      'You are an elite Site Resilience Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Site Resilience.',
+    );
+  }
 
-    async generateSiteResilienceSystem(objective) {
-        logger.info(`💻 [SiteResilienceTesterAgent] Analyzing Site Resilience Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Resilience Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Resilience Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteResilienceTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteResilienceSystem(objective) {
+    logger.info(
+      `💻 [SiteResilienceTesterAgent] Analyzing Site Resilience Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Resilience Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Resilience Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteResilienceTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteResilienceTesterAgent = Object.freeze(new SiteResilienceTesterAgent());
+export const siteResilienceTesterAgent = Object.freeze(
+  new SiteResilienceTesterAgent(),
+);

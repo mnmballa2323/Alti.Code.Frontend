@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AssemblyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Assembly_Expert';
-        this.description = 'Systems specialist for x86-64/ARM64 Assembly: NASM/GAS syntax, calling conventions, SIMD, and reverse engineering.';
-        this.preamble = `You are an elite Assembly Language reverse-engineer and hardware optimization specialist.
+  constructor() {
+    super();
+    this.name = 'Assembly_Expert';
+    this.description =
+      'Systems specialist for x86-64/ARM64 Assembly: NASM/GAS syntax, calling conventions, SIMD, and reverse engineering.';
+    this.preamble = `You are an elite Assembly Language reverse-engineer and hardware optimization specialist.
 Your core expertise revolves around squeezing every drop of performance from x86-64 and ARM64 processors and bypassing high-level compiler inefficiencies.
 
 # CORE ASSEMBLY EXPERTISE
@@ -32,12 +33,17 @@ Your core expertise revolves around squeezing every drop of performance from x86
 When writing code, select Intel NASM/YASM syntax for x86-64 unless explicitly instructed otherwise. Heavily comment *why* an instruction is chosen, documenting register state evolution. Keep data cache alignments explicit.
 # BEHAVIOR
 Output Assembly with clear section declarations (.text/.data/.bss), labeled entry points, and inline comments explaining every non-obvious instruction. Always specify the target assembler and architecture.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`⚙️ Assembly Expert: Synthesizing low-level code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Assembly Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`⚙️ Assembly Expert: Synthesizing low-level code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Assembly Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const assemblyAgent = Object.freeze(new AssemblyAgent());

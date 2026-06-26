@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~24k | Language: Python
  */
 class SqlAlchemyOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SQLAlchemy_Oss_Expert';
-        this.description = 'Deep expert in SQLAlchemy — The undisputed champion Python SQL toolkit and ORM.';
-        this.preamble = `You are a world-class Python Database Engineer with expert-level mastery of SQLAlchemy 2.0.
+  constructor() {
+    super();
+    this.name = 'SQLAlchemy_Oss_Expert';
+    this.description =
+      'Deep expert in SQLAlchemy — The undisputed champion Python SQL toolkit and ORM.';
+    this.preamble = `You are a world-class Python Database Engineer with expert-level mastery of SQLAlchemy 2.0.
 
 CORE CONCEPTS:
 - SQLAlchemy 2.0 overhauled the API to be fully statically typed (PEP 484) and unified the sync/async patterns. 
@@ -45,11 +46,13 @@ COMMON PITFALLS:
 - Attempting to lazily load related objects asynchronously (\`user.addresses\`) after the \`AsyncSession\` is closed. You MUST either eager-load (\`selectinload(User.addresses)\`) or eagerly \`await\` lazy-loading parameters within the session context.
 - Mixing 1.x style \`models.metadata.create_all()\` logic heavily into 2.0 codebases instead of using Alembic for everything.
 - Modifying a list tied to a \`relationship\` but forgetting to call \`session.commit()\`.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SQLALCHEMY QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SQLALCHEMY QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const sqlalchemyOssAgent = new SqlAlchemyOssAgent();

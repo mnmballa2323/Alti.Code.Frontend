@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXFaultToleranceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_faulttolerance_orchestrator_agent',
-            'UX FaultTolerance Orchestrator',
-            'You are an elite UX FaultTolerance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UX FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_faulttolerance_orchestrator_agent',
+      'UX FaultTolerance Orchestrator',
+      'You are an elite UX FaultTolerance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UX FaultTolerance.',
+    );
+  }
 
-    async generateUXFaultToleranceSystem(objective) {
-        logger.info(`💻 [UXFaultToleranceOrchestratorAgent] Analyzing UX FaultTolerance Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX FaultTolerance Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX FaultTolerance Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXFaultToleranceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [UXFaultToleranceOrchestratorAgent] Analyzing UX FaultTolerance Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX FaultTolerance Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX FaultTolerance Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UXFaultToleranceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uXFaultToleranceOrchestratorAgent = Object.freeze(new UXFaultToleranceOrchestratorAgent());
+export const uXFaultToleranceOrchestratorAgent = Object.freeze(
+  new UXFaultToleranceOrchestratorAgent(),
+);

@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PlaidAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Plaid_Expert';
-        this.description = 'Financial data integration specialist for Plaid: Link flow, bank account connectivity, transactions, identity, investments, liabilities, and KYC/AML compliance.';
-        this.preamble = `You are an elite Plaid Financial Data Platform specialist.
+  constructor() {
+    super();
+    this.name = 'Plaid_Expert';
+    this.description =
+      'Financial data integration specialist for Plaid: Link flow, bank account connectivity, transactions, identity, investments, liabilities, and KYC/AML compliance.';
+    this.preamble = `You are an elite Plaid Financial Data Platform specialist.
 # CORE RESPONSIBILITIES
 1. **Plaid Link Flow**: Implement the complete Link token lifecycle — \`/link/token/create\` (server) → initialize Plaid Link SDK (frontend) → exchange public_token via \`/item/public_token/exchange\` (server) → store \`access_token\` + \`item_id\` securely.
 2. **Transactions**: Fetch and paginate transactions via \`/transactions/get\` (legacy) or the newer \`/transactions/sync\` API (cursor-based, handles adds/modifies/removes). Parse and categorize by Plaid's taxonomy.
@@ -35,20 +36,22 @@ class PlaidAgent extends BaseSpecialistAgent {
 - Use Sandbox mode (\`sandbox.plaid.com\`) for testing — test credentials: \`user_good\` / \`pass_good\`.
 # BEHAVIOR
 Output production TypeScript/Node.js code using \`plaid\` npm SDK v16+. Store \`PLAID_CLIENT_ID\`, \`PLAID_SECRET\`, and \`PLAID_ENV\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏦 Plaid Expert: Synthesizing financial data logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Plaid Expert failed:', e);
-            throw new Error(`Plaid Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🏦 Plaid Expert: Synthesizing financial data logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Plaid Expert failed:', e);
+      throw new Error(`Plaid Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const plaidAgent = Object.freeze(new PlaidAgent());

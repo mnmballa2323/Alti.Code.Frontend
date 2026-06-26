@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -23,7 +23,7 @@ Settings.llm = new OpenAI({
     endpoint: process.env.AZURE_OPENAI_ENDPOINT || config.azureOpenAi?.endpoint,
     apiVersion: '2024-02-15-preview',
     deployment: 'gpt-4o',
-  }
+  },
 });
 
 Settings.embedModel = new OpenAIEmbedding({
@@ -32,16 +32,16 @@ Settings.embedModel = new OpenAIEmbedding({
     endpoint: process.env.AZURE_OPENAI_ENDPOINT || config.azureOpenAi?.endpoint,
     apiVersion: '2024-02-15-preview',
     deployment: 'text-embedding-3-small',
-  }
+  },
 });
 
 let chain = null;
 export async function createIndexFromFiles(filePaths) {
   const documents = await Promise.all(
-    filePaths.map(async (filePath) => {
+    filePaths.map(async filePath => {
       const text = await fs.readFile(filePath, 'utf-8');
       return new Document({ text, id_: filePath });
-    })
+    }),
   );
 
   const index = await VectorStoreIndex.fromDocuments(documents);
@@ -49,18 +49,19 @@ export async function createIndexFromFiles(filePaths) {
   const llamaRetriever = index.asRetriever();
 
   const retriever = {
-    getRelevantDocuments: async (input) => {
+    getRelevantDocuments: async input => {
       const results = await llamaRetriever.retrieve(input);
       return results.map(r => ({
         pageContent: r.node.getContent(),
         metadata: r.node.metadata ?? {},
       }));
-    }
+    },
   };
 
   const llm = new ChatOpenAI({
     temperature: 0.3,
-    azureOpenAIApiKey: process.env.AZURE_OPENAI_API_KEY || config.azureOpenAi?.apiKey,
+    azureOpenAIApiKey:
+      process.env.AZURE_OPENAI_API_KEY || config.azureOpenAi?.apiKey,
     azureOpenAIBasePath: `${process.env.AZURE_OPENAI_ENDPOINT || config.azureOpenAi?.endpoint}/openai/deployments`,
     azureOpenAIApiDeploymentName: 'gpt-4o',
     azureOpenAIApiVersion: '2024-02-15-preview',

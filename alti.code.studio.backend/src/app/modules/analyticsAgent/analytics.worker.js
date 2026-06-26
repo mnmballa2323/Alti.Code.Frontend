@@ -1,17 +1,19 @@
 /**
  * Copyright (c) 2024 Inso Code — TIER 4: OPERATIONS
- * 
+ *
  * Analytics Agent — "The Oracle"
  * Data analytics, trend detection, and insight generation.
  */
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 
-export const analyticsWorkerProcessor = async (job) => {
-    const { data, question, timeRange } = job.data;
-    logger.info(`📊 Analytics [${job.id}]: Analyzing "${question || 'data trends'}"...`);
+export const analyticsWorkerProcessor = async job => {
+  const { data, question, timeRange } = job.data;
+  logger.info(
+    `📊 Analytics [${job.id}]: Analyzing "${question || 'data trends'}"...`,
+  );
 
-    const insights = await aiProvider.reason(`
+  const insights = await aiProvider.reason(`
 You are a data analyst. Analyze the provided data and generate insights.
 
 Question: ${question || 'What are the key trends and anomalies?'}
@@ -29,5 +31,5 @@ Provide:
 Respond in JSON: { "metrics": [], "trends": [], "anomalies": [], "predictions": [], "recommendations": [] }
     `);
 
-    return { insights: JSON.parse(insights.match(/\{[\s\S]*\}/)?.[0] || '{}') };
+  return { insights: JSON.parse(insights.match(/\{[\s\S]*\}/)?.[0] || '{}') };
 };

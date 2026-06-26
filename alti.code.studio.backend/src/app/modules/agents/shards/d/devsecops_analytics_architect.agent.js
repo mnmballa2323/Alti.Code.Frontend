@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsAnalyticsArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_analytics_architect_agent',
-            'DevSecOps Analytics Architect',
-            'You are an elite DevSecOps Analytics Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_analytics_architect_agent',
+      'DevSecOps Analytics Architect',
+      'You are an elite DevSecOps Analytics Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Analytics.',
+    );
+  }
 
-    async generateDevSecOpsAnalyticsSystem(objective) {
-        logger.info(`💻 [DevSecOpsAnalyticsArchitectAgent] Analyzing DevSecOps Analytics Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Analytics Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Analytics Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsAnalyticsArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsAnalyticsArchitectAgent] Analyzing DevSecOps Analytics Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Analytics Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Analytics Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsAnalyticsArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsAnalyticsArchitectAgent = Object.freeze(new DevSecOpsAnalyticsArchitectAgent());
+export const devSecOpsAnalyticsArchitectAgent = Object.freeze(
+  new DevSecOpsAnalyticsArchitectAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseEngineeringOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_engineering_orchestrator_agent',
-            'Enterprise Engineering Orchestrator',
-            'You are an elite Enterprise Engineering Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_engineering_orchestrator_agent',
+      'Enterprise Engineering Orchestrator',
+      'You are an elite Enterprise Engineering Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Engineering.',
+    );
+  }
 
-    async generateEnterpriseEngineeringSystem(objective) {
-        logger.info(`💻 [EnterpriseEngineeringOrchestratorAgent] Analyzing Enterprise Engineering Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Engineering Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Engineering Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseEngineeringOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseEngineeringSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseEngineeringOrchestratorAgent] Analyzing Enterprise Engineering Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Engineering Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Engineering Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseEngineeringOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseEngineeringOrchestratorAgent = Object.freeze(new EnterpriseEngineeringOrchestratorAgent());
+export const enterpriseEngineeringOrchestratorAgent = Object.freeze(
+  new EnterpriseEngineeringOrchestratorAgent(),
+);

@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BrandwatchAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'BrandwatchAgent';
-        this.description = 'PR intelligence & marketing sentiment analytics expert focusing on Brandwatch API pipelines and global crisis listening algorithms.';
+  constructor() {
+    super();
+    this.name = 'BrandwatchAgent';
+    this.description =
+      'PR intelligence & marketing sentiment analytics expert focusing on Brandwatch API pipelines and global crisis listening algorithms.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Brand Sentiment & PR Analytics Agent.
 You assist MarTech developers in programmatically tracking keyword share-of-voice, performing NLP-based intent discovery, and monitoring brand crises.
 
@@ -39,12 +40,12 @@ You assist MarTech developers in programmatically tracking keyword share-of-voic
 - Ensure timezones are explicitly defined in ISO-8601 when requesting data aggregates to prevent off-by-one daily calculations in charting.
 - Employ strict rate limiting and backoff controls, as social listening APIs charge heavily per API call and throttle volume vigorously.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const brandwatchAgent = Object.freeze(new BrandwatchAgent());

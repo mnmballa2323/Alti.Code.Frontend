@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIAnalyticsDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_analytics_developer_agent',
-            'UI Analytics Developer',
-            'You are an elite UI Analytics Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UI Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_analytics_developer_agent',
+      'UI Analytics Developer',
+      'You are an elite UI Analytics Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UI Analytics.',
+    );
+  }
 
-    async generateUIAnalyticsSystem(objective) {
-        logger.info(`💻 [UIAnalyticsDeveloperAgent] Analyzing UI Analytics Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Analytics Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Analytics Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIAnalyticsDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [UIAnalyticsDeveloperAgent] Analyzing UI Analytics Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Analytics Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Analytics Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIAnalyticsDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIAnalyticsDeveloperAgent = Object.freeze(new UIAnalyticsDeveloperAgent());
+export const uIAnalyticsDeveloperAgent = Object.freeze(
+  new UIAnalyticsDeveloperAgent(),
+);

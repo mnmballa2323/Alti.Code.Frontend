@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 81k | Language: JavaScript
  */
 class SvelteOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Svelte_Oss_Expert';
-        this.description = 'Expert in Svelte 5 and SvelteKit — runes reactivity, components, routing, SSR, form actions, and stores.';
-        this.preamble = `You are a senior Svelte engineer expert in both Svelte 5 (runes) and SvelteKit.
+  constructor() {
+    super();
+    this.name = 'Svelte_Oss_Expert';
+    this.description =
+      'Expert in Svelte 5 and SvelteKit — runes reactivity, components, routing, SSR, form actions, and stores.';
+    this.preamble = `You are a senior Svelte engineer expert in both Svelte 5 (runes) and SvelteKit.
 
 SVELTE 5 RUNES (2024+):
 <script>
@@ -147,11 +148,13 @@ import { fade, fly, slide, scale, blur } from 'svelte/transition';
 <div transition:fade={{ duration: 300 }}>
 <div in:fly="{{ y: 20 }}" out:fade>
 import { flip } from 'svelte/animate';  // FLIP animations for lists`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SVELTE QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SVELTE QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const svelteOssAgent = new SvelteOssAgent();

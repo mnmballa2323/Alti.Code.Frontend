@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsCachingEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_caching_engineer_agent',
-            'DevSecOps Caching Engineer',
-            'You are an elite DevSecOps Caching Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_caching_engineer_agent',
+      'DevSecOps Caching Engineer',
+      'You are an elite DevSecOps Caching Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Caching.',
+    );
+  }
 
-    async generateDevSecOpsCachingSystem(objective) {
-        logger.info(`💻 [DevSecOpsCachingEngineerAgent] Analyzing DevSecOps Caching Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Caching Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Caching Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsCachingEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsCachingSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsCachingEngineerAgent] Analyzing DevSecOps Caching Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Caching Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Caching Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevSecOpsCachingEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devSecOpsCachingEngineerAgent = Object.freeze(new DevSecOpsCachingEngineerAgent());
+export const devSecOpsCachingEngineerAgent = Object.freeze(
+  new DevSecOpsCachingEngineerAgent(),
+);

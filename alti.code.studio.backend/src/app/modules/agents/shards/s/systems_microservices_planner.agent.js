@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsMicroservicesPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_microservices_planner_agent',
-            'Systems Microservices Planner',
-            'You are an elite Systems Microservices Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_microservices_planner_agent',
+      'Systems Microservices Planner',
+      'You are an elite Systems Microservices Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Microservices.',
+    );
+  }
 
-    async generateSystemsMicroservicesSystem(objective) {
-        logger.info(`💻 [SystemsMicroservicesPlannerAgent] Analyzing Systems Microservices Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Microservices Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Microservices Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsMicroservicesPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [SystemsMicroservicesPlannerAgent] Analyzing Systems Microservices Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Microservices Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Microservices Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsMicroservicesPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsMicroservicesPlannerAgent = Object.freeze(new SystemsMicroservicesPlannerAgent());
+export const systemsMicroservicesPlannerAgent = Object.freeze(
+  new SystemsMicroservicesPlannerAgent(),
+);

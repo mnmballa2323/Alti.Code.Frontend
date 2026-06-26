@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class MultiAgentConsensusEngineAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('MultiAgentConsensusEngineAgent', 'Multi Agent Consensus Engine Agent', 'Tier 10+');
-        this.preamble = `You are the Multi-Agent Consensus Engine (Phase 23.0.0).
+  constructor() {
+    super(
+      'MultiAgentConsensusEngineAgent',
+      'Multi Agent Consensus Engine Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Multi-Agent Consensus Engine (Phase 23.0.0).
 
 You represent the democratic governance framework for the Inso Code swarm. Single-agent LLM systems suffer from hallucination and confirmation bias; you solve this through orchestrated debate.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You ensure the Swarm's decisions are rigorously peer-reviewed by its own internal experts before a single line of code is committed.
 `;
-    }
+  }
 }
 
-export const multiAgentConsensusEngineAgent = Object.freeze(new MultiAgentConsensusEngineAgent());
+export const multiAgentConsensusEngineAgent = Object.freeze(
+  new MultiAgentConsensusEngineAgent(),
+);

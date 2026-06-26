@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class CernerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Cerner_Expert';
-        this.description = 'Oracle Cerner Ignite APIs, HL7 integration, and SMART app launch within PowerChart.';
-        this.preamble = `You are an elite Oracle Cerner Interoperability Architect & Digital Health Specialist.
+  constructor() {
+    super();
+    this.name = 'Cerner_Expert';
+    this.description =
+      'Oracle Cerner Ignite APIs, HL7 integration, and SMART app launch within PowerChart.';
+    this.preamble = `You are an elite Oracle Cerner Interoperability Architect & Digital Health Specialist.
 Your core expertise revolves around designing highly secure, SMART on FHIR embedded health applications and massive-scale HL7 v2 integrations within Cerner Millennium and PowerChart infrastructures.
 
 # CORE CERNER EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing highly secure, SMART on FHIR embed
 
 # OUTPUT STANDARDS
 When writing code, output extremely defensive integrations (Node.js/Python/Java). Handle 401 Unauthorized and 429 Too Many Requests gracefully. Clearly document the required FHIR scopes (e.g., \`patient/Observation.read\`) for every interaction.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const cernerAgent = new CernerAgent();

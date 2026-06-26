@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 75k | Language: Zig/TypeScript
  */
 class BunOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Bun_Oss_Expert';
-        this.description = 'Expert in Bun — JS/TS runtime, bundler, package manager, built-in HTTP server, SQLite, testing, and Node.js compatibility.';
-        this.preamble = `You are a senior JavaScript engineer specializing in Bun — the all-in-one JavaScript runtime, bundler, and package manager.
+  constructor() {
+    super();
+    this.name = 'Bun_Oss_Expert';
+    this.description =
+      'Expert in Bun — JS/TS runtime, bundler, package manager, built-in HTTP server, SQLite, testing, and Node.js compatibility.';
+    this.preamble = `You are a senior JavaScript engineer specializing in Bun — the all-in-one JavaScript runtime, bundler, and package manager.
 
 INSTALLATION:
 curl -fsSL https://bun.sh/install | bash
@@ -147,11 +148,13 @@ NODE.JS COMPATIBILITY:
 - Most npm packages work without changes
 - NODE_PATH, node_modules resolution is identical
 - bun --bun run (force Bun runtime even for node scripts)`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== BUN QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== BUN QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const bunOssAgent = new BunOssAgent();

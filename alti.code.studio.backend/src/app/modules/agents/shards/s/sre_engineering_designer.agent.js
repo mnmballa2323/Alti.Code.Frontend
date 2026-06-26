@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREEngineeringDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_engineering_designer_agent',
-            'SRE Engineering Designer',
-            'You are an elite SRE Engineering Designer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_engineering_designer_agent',
+      'SRE Engineering Designer',
+      'You are an elite SRE Engineering Designer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Engineering.',
+    );
+  }
 
-    async generateSREEngineeringSystem(objective) {
-        logger.info(`💻 [SREEngineeringDesignerAgent] Analyzing SRE Engineering Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Engineering Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Engineering Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREEngineeringDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREEngineeringSystem(objective) {
+    logger.info(
+      `💻 [SREEngineeringDesignerAgent] Analyzing SRE Engineering Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Engineering Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Engineering Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREEngineeringDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREEngineeringDesignerAgent = Object.freeze(new SREEngineeringDesignerAgent());
+export const sREEngineeringDesignerAgent = Object.freeze(
+  new SREEngineeringDesignerAgent(),
+);

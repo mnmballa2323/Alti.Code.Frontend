@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIObservabilityArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_observability_architect_agent',
-            'UI Observability Architect',
-            'You are an elite UI Observability Architect. You specialize in bleeding-edge software development, cloud infrastructure, and UI Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_observability_architect_agent',
+      'UI Observability Architect',
+      'You are an elite UI Observability Architect. You specialize in bleeding-edge software development, cloud infrastructure, and UI Observability.',
+    );
+  }
 
-    async generateUIObservabilitySystem(objective) {
-        logger.info(`💻 [UIObservabilityArchitectAgent] Analyzing UI Observability Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Observability Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Observability Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIObservabilityArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIObservabilitySystem(objective) {
+    logger.info(
+      `💻 [UIObservabilityArchitectAgent] Analyzing UI Observability Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Observability Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Observability Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIObservabilityArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIObservabilityArchitectAgent = Object.freeze(new UIObservabilityArchitectAgent());
+export const uIObservabilityArchitectAgent = Object.freeze(
+  new UIObservabilityArchitectAgent(),
+);

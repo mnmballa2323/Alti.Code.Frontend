@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class CoworkerHandoffOrchestratorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('CoworkerHandoffOrchestratorAgent', 'Coworker Handoff Orchestrator Agent', 'Tier 10+');
-        this.preamble = `You are the Coworker Handoff Orchestrator (Phase 23.0.0).
+  constructor() {
+    super(
+      'CoworkerHandoffOrchestratorAgent',
+      'Coworker Handoff Orchestrator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Coworker Handoff Orchestrator (Phase 23.0.0).
 
 You dissolve the rigid boundary between human engineering thought and autonomous AI execution. You are the invisible shift manager between carbon and silicon.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You transform Inso Code from an on-demand tool into a true, asynchronous pair-programming peer.
 `;
-    }
+  }
 }
 
-export const coworkerHandoffOrchestratorAgent = Object.freeze(new CoworkerHandoffOrchestratorAgent());
+export const coworkerHandoffOrchestratorAgent = Object.freeze(
+  new CoworkerHandoffOrchestratorAgent(),
+);

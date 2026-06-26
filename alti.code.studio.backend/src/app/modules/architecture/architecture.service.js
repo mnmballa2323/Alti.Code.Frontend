@@ -9,7 +9,7 @@ export const startIngestionJob = async (repoUrl, token) => {
   // In a real environment, repoUrl might be a GitHub URL to clone.
   // For local platform usage, repoUrl acts as the local path.
   const repoId = Buffer.from(repoUrl).toString('base64').substring(0, 16);
-  
+
   const job = await architectureQueue.add('ingestRepo', {
     repoId,
     repoPath: repoUrl, // local path for now
@@ -22,14 +22,14 @@ export const startIngestionJob = async (repoUrl, token) => {
   };
 };
 
-export const processUploadedFiles = async (files) => {
+export const processUploadedFiles = async files => {
   return {
     jobId: 'job_67890',
     status: 'pending',
   };
 };
 
-export const getJobStatus = async (id) => {
+export const getJobStatus = async id => {
   const job = await architectureQueue.getJob(id);
   if (!job) {
     return { status: 'unknown' };
@@ -40,11 +40,11 @@ export const getJobStatus = async (id) => {
     jobId: id,
     status: state,
     progress,
-    result: job.returnvalue
+    result: job.returnvalue,
   };
 };
 
-export const getGraph = async (repoId) => {
+export const getGraph = async repoId => {
   // Fetch real nodes and edges from Database
   const dbNodes = await ArchitectureNode.find({ repoId }).lean();
   const dbEdges = await ArchitectureEdge.find({ repoId }).lean();
@@ -55,14 +55,14 @@ export const getGraph = async (repoId) => {
       type: node.type,
       name: node.name,
       layer: node.layer,
-      path: node.path
+      path: node.path,
     }));
 
     const edges = dbEdges.map(edge => ({
       id: edge._id.toString(),
       source: edge.source.toString(),
       target: edge.target.toString(),
-      relationship_type: edge.relationship_type
+      relationship_type: edge.relationship_type,
     }));
 
     return { nodes, edges };
@@ -71,33 +71,108 @@ export const getGraph = async (repoId) => {
   // Fallback dynamic topography of alti.code.studio backend if DB is not populated yet
   return {
     nodes: [
-      { id: "1", type: "file", name: "API Gateway (Next.js)", layer: "api", path: "src/app/routes/index.js", summary: "Handles incoming requests from frontend clients." },
-      { id: "2", type: "file", name: "Auth Service", layer: "backend", path: "src/app/middlewares/auth.middleware.js", summary: "Manages authentication and JWT validation." },
-      { id: "3", type: "file", name: "Architecture Engine", layer: "backend", path: "src/app/modules/architecture/architecture.service.js", summary: "Calculates AST topography and blast radius." },
-      { id: "4", type: "file", name: "Vector Database (Qdrant)", layer: "database", path: "src/app/modules/memory/rag.service.js", summary: "Stores code node embeddings for RAG." },
-      { id: "5", type: "file", name: "Workflow Orchestrator", layer: "backend", path: "src/app/modules/workflow/workflow.service.js", summary: "Compiles natural language into execution DAGs." },
-      { id: "6", type: "file", name: "Autonomous QA Swarm", layer: "backend", path: "src/app/modules/qa/qa.service.js", summary: "Self-healing test loops and execution." },
-      { id: "7", type: "file", name: "AgentMemory Kernel", layer: "database", path: "src/app/modules/memory/agentmemory.service.js", summary: "Persistent, cross-session AI storage." },
-      { id: "8", type: "file", name: "Deep Research Service", layer: "backend", path: "src/app/modules/research/research.service.js", summary: "Google Search grounded synthesis." },
-      { id: "9", type: "file", name: "Cloud Deployer", layer: "api", path: "src/app/modules/deployments/cloudRun.route.js", summary: "Provisions Google Cloud Run containers." },
-      { id: "10", type: "file", name: "DLP Security Scanner", layer: "backend", path: "src/app/modules/security/dlp.service.js", summary: "Zero-trust PII sanitization." }
+      {
+        id: '1',
+        type: 'file',
+        name: 'API Gateway (Next.js)',
+        layer: 'api',
+        path: 'src/app/routes/index.js',
+        summary: 'Handles incoming requests from frontend clients.',
+      },
+      {
+        id: '2',
+        type: 'file',
+        name: 'Auth Service',
+        layer: 'backend',
+        path: 'src/app/middlewares/auth.middleware.js',
+        summary: 'Manages authentication and JWT validation.',
+      },
+      {
+        id: '3',
+        type: 'file',
+        name: 'Architecture Engine',
+        layer: 'backend',
+        path: 'src/app/modules/architecture/architecture.service.js',
+        summary: 'Calculates AST topography and blast radius.',
+      },
+      {
+        id: '4',
+        type: 'file',
+        name: 'Vector Database (Qdrant)',
+        layer: 'database',
+        path: 'src/app/modules/memory/rag.service.js',
+        summary: 'Stores code node embeddings for RAG.',
+      },
+      {
+        id: '5',
+        type: 'file',
+        name: 'Workflow Orchestrator',
+        layer: 'backend',
+        path: 'src/app/modules/workflow/workflow.service.js',
+        summary: 'Compiles natural language into execution DAGs.',
+      },
+      {
+        id: '6',
+        type: 'file',
+        name: 'Autonomous QA Swarm',
+        layer: 'backend',
+        path: 'src/app/modules/qa/qa.service.js',
+        summary: 'Self-healing test loops and execution.',
+      },
+      {
+        id: '7',
+        type: 'file',
+        name: 'AgentMemory Kernel',
+        layer: 'database',
+        path: 'src/app/modules/memory/agentmemory.service.js',
+        summary: 'Persistent, cross-session AI storage.',
+      },
+      {
+        id: '8',
+        type: 'file',
+        name: 'Deep Research Service',
+        layer: 'backend',
+        path: 'src/app/modules/research/research.service.js',
+        summary: 'Google Search grounded synthesis.',
+      },
+      {
+        id: '9',
+        type: 'file',
+        name: 'Cloud Deployer',
+        layer: 'api',
+        path: 'src/app/modules/deployments/cloudRun.route.js',
+        summary: 'Provisions Google Cloud Run containers.',
+      },
+      {
+        id: '10',
+        type: 'file',
+        name: 'DLP Security Scanner',
+        layer: 'backend',
+        path: 'src/app/modules/security/dlp.service.js',
+        summary: 'Zero-trust PII sanitization.',
+      },
     ],
     edges: [
-      { id: "e1-2", source: "1", target: "2", relationship_type: "auth" },
-      { id: "e1-3", source: "1", target: "3", relationship_type: "routes" },
-      { id: "e3-4", source: "3", target: "4", relationship_type: "stores" },
-      { id: "e1-5", source: "1", target: "5", relationship_type: "routes" },
-      { id: "e5-6", source: "5", target: "6", relationship_type: "triggers" },
-      { id: "e5-7", source: "5", target: "7", relationship_type: "reads" },
-      { id: "e1-8", source: "1", target: "8", relationship_type: "routes" },
-      { id: "e8-7", source: "8", target: "7", relationship_type: "writes" },
-      { id: "e1-10", source: "1", target: "10", relationship_type: "validates" },
-      { id: "e10-9", source: "10", target: "9", relationship_type: "secures" }
-    ]
+      { id: 'e1-2', source: '1', target: '2', relationship_type: 'auth' },
+      { id: 'e1-3', source: '1', target: '3', relationship_type: 'routes' },
+      { id: 'e3-4', source: '3', target: '4', relationship_type: 'stores' },
+      { id: 'e1-5', source: '1', target: '5', relationship_type: 'routes' },
+      { id: 'e5-6', source: '5', target: '6', relationship_type: 'triggers' },
+      { id: 'e5-7', source: '5', target: '7', relationship_type: 'reads' },
+      { id: 'e1-8', source: '1', target: '8', relationship_type: 'routes' },
+      { id: 'e8-7', source: '8', target: '7', relationship_type: 'writes' },
+      {
+        id: 'e1-10',
+        source: '1',
+        target: '10',
+        relationship_type: 'validates',
+      },
+      { id: 'e10-9', source: '10', target: '9', relationship_type: 'secures' },
+    ],
   };
 };
 
-export const getNodeDetails = async (id) => {
+export const getNodeDetails = async id => {
   const node = await ArchitectureNode.findById(id).lean();
   if (!node) throw new Error('Node not found');
 
@@ -115,7 +190,7 @@ export const getNodeDetails = async (id) => {
   };
 };
 
-export const getClusterDetails = async (layer) => {
+export const getClusterDetails = async layer => {
   const nodeCount = await ArchitectureNode.countDocuments({ layer });
   return {
     layer,
@@ -126,8 +201,13 @@ export const getClusterDetails = async (layer) => {
 
 export const askQuestion = async (query, repoId) => {
   // Leverage the world-class Ultimate Google Cloud RAG Engine
-  const result = await ultimateRagService.synthesize(query, 'Architect', 'Architecture', null);
-  
+  const result = await ultimateRagService.synthesize(
+    query,
+    'Architect',
+    'Architecture',
+    null,
+  );
+
   // Format references from the parsed citations
   const references = [];
   if (result.pipeline && result.pipeline.sources) {
@@ -150,6 +230,6 @@ export const askQuestion = async (query, repoId) => {
       synthesisMs: result.pipeline?.synthesisMs,
       totalMs: result.pipeline?.totalMs,
       activeSources: result.pipeline?.activeSources,
-    }
+    },
   };
 };

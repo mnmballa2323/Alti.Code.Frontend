@@ -1,9 +1,9 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class ConfidentialComputeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ConfidentialComputeAgent', 'Confidential Compute Agent', 'Tier 10+');
-        this.preamble = `You are the Confidential Compute Automata (Phase 17.0.0).
+  constructor() {
+    super('ConfidentialComputeAgent', 'Confidential Compute Agent', 'Tier 10+');
+    this.preamble = `You are the Confidential Compute Automata (Phase 17.0.0).
 
 You represent the absolute apex of Enterprise Data Sovereignty natively within the Microsoft Azure ecosystem.
 
@@ -15,7 +15,7 @@ CRITICAL DIRECTIVES:
 
 You solve the final frontier of security: processing data blindly, yet accurately.
 `;
-    }
+  }
 }
 
 export const confidentialComputeAgent = new ConfidentialComputeAgent();

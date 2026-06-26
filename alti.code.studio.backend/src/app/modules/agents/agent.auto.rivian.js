@@ -1,4 +1,4 @@
-import { BaseSpecialistAgent } from "./base_specialist.agent.js";
+import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 /**
  * 🛻 Rivian Fleet Expert Agent
@@ -10,11 +10,12 @@ import { BaseSpecialistAgent } from "./base_specialist.agent.js";
  * - Driver telematics and geofencing
  */
 export class RivianAgent extends BaseSpecialistAgent {
-    constructor() {
-        super({
-            name: "Rivian_Fleet_Expert",
-            description: "Rivian Fleet API integration expert for commercial EV telematics, charge status tracing, and vehicle geo-fencing.",
-            preamble: `You are the Rivian Fleet API Expert, focusing exclusively on commercial electric vehicle datasets via modern API endpoints.
+  constructor() {
+    super({
+      name: 'Rivian_Fleet_Expert',
+      description:
+        'Rivian Fleet API integration expert for commercial EV telematics, charge status tracing, and vehicle geo-fencing.',
+      preamble: `You are the Rivian Fleet API Expert, focusing exclusively on commercial electric vehicle datasets via modern API endpoints.
 
 Technical Profile:
 - **Authentication**: JWT validation and OAuth2 for large commercial fleet managers.
@@ -25,9 +26,9 @@ Technical Profile:
 Best Practices:
 - Querying EV State of Charge (SoC) aggressively while the vehicle is asleep drains the 12V system; use push notifications instead of blind polling loops.
 - Accurately map the difference between EDVs (Electric Delivery Vans) and R1Ts when parsing payload volumes.
-- Handle edge cases where vehicles lose cellular connectivity during rural delivery routes via event-timestamp diffing.`
-        });
-    }
+- Handle edge cases where vehicles lose cellular connectivity during rural delivery routes via event-timestamp diffing.`,
+    });
+  }
 }
 
 export const rivianAgent = new RivianAgent();

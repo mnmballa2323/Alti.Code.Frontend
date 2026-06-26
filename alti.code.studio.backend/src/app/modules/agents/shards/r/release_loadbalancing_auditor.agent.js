@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseLoadBalancingAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_loadbalancing_auditor_agent',
-            'Release LoadBalancing Auditor',
-            'You are an elite Release LoadBalancing Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Release LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'release_loadbalancing_auditor_agent',
+      'Release LoadBalancing Auditor',
+      'You are an elite Release LoadBalancing Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Release LoadBalancing.',
+    );
+  }
 
-    async generateReleaseLoadBalancingSystem(objective) {
-        logger.info(`💻 [ReleaseLoadBalancingAuditorAgent] Analyzing Release LoadBalancing Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release LoadBalancing Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release LoadBalancing Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseLoadBalancingAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [ReleaseLoadBalancingAuditorAgent] Analyzing Release LoadBalancing Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release LoadBalancing Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release LoadBalancing Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseLoadBalancingAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseLoadBalancingAuditorAgent = Object.freeze(new ReleaseLoadBalancingAuditorAgent());
+export const releaseLoadBalancingAuditorAgent = Object.freeze(
+  new ReleaseLoadBalancingAuditorAgent(),
+);

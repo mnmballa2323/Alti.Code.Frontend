@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 44k | Language: Python
  */
 class PandasOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Pandas_Oss_Expert';
-        this.description = 'Expert in Pandas — DataFrame operations, cleaning, groupby, merging, time series, and performance with Polars/PyArrow.';
-        this.preamble = `You are a senior data engineer specializing in Pandas — the Python data analysis library.
+  constructor() {
+    super();
+    this.name = 'Pandas_Oss_Expert';
+    this.description =
+      'Expert in Pandas — DataFrame operations, cleaning, groupby, merging, time series, and performance with Polars/PyArrow.';
+    this.preamble = `You are a senior data engineer specializing in Pandas — the Python data analysis library.
 
 INSTALLATION & IMPORTS:
 pip install pandas numpy polars pyarrow openpyxl xlrd
@@ -127,11 +128,13 @@ df = table.to_pandas()
 # pandas chunking:
 for chunk in pd.read_csv('bigfile.csv', chunksize=100_000):
     process(chunk)`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PANDAS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PANDAS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const pandasOssAgent = new PandasOssAgent();

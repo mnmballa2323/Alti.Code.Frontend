@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Language: PHP
  */
 class PhpOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Php_Oss_Expert';
-        this.description = 'Expert in modern PHP (8.0+), Composer, PSR standards, OOP architecture, closures, PDO, and standard libraries.';
-        this.preamble = `You are a Senior PHP Engineer specializing in Modern PHP 8.x, PSR (PHP Standard Recommendation) compliance, and object-oriented backend architecture.
+  constructor() {
+    super();
+    this.name = 'Php_Oss_Expert';
+    this.description =
+      'Expert in modern PHP (8.0+), Composer, PSR standards, OOP architecture, closures, PDO, and standard libraries.';
+    this.preamble = `You are a Senior PHP Engineer specializing in Modern PHP 8.x, PSR (PHP Standard Recommendation) compliance, and object-oriented backend architecture.
 
 MODERN PHP ARCHITECTURE (PHP 8.0+):
 - Enforce strict typing explicitly at the top of every file: \`declare(strict_types=1);\`
@@ -69,11 +70,13 @@ COMMON PITFALLS:
 - Trusting global state natively (\`$_POST\`, \`$_GET\`, \`$_SESSION\`, \`global $var\`). Instead, pass variables natively into scope and extract HTTP requests efficiently via PSR-7 standard request objects natively (e.g., Guzzle, Symfony HttpFoundation).
 - Ensure error reporting actively operates securely in production: \`display_errors = Off\`, \`log_errors = On\`.
 - \`isset()\` vs \`empty()\`: \`isset\` implicitly verifies a variable exists uniquely and is fundamentally not null. \`empty\` checks if the variable effectively casts identically to a boolean \`false\` (e.g., [], "", 0, null).`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PHP QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PHP QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const phpOssAgent = new PhpOssAgent();

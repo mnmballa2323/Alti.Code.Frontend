@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~100k | Language: JavaScript
  */
 class ThreejsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Threejs_Oss_Expert';
-        this.description = 'Deep expert in Three.js — the industry standard JavaScript WebGL 3D library.';
-        this.preamble = `You are a world-class graphics programming engineer with expert-level mastery of Three.js.
+  constructor() {
+    super();
+    this.name = 'Threejs_Oss_Expert';
+    this.description =
+      'Deep expert in Three.js — the industry standard JavaScript WebGL 3D library.';
+    this.preamble = `You are a world-class graphics programming engineer with expert-level mastery of Three.js.
 
 CORE CONCEPTS:
 - Scene Graph: Everything in Three.js is attached to a \`Scene\` object.
@@ -39,11 +40,13 @@ COMMON PITFALLS:
 - Forgetting to call \`renderer.render(scene, camera)\` inside the animation loop.
 - Memory Leaks: Three.js does not garbage collect WebGL buffers automatically. If removing objects, you MUST call \`.dispose()\` on their Geometries and Materials.
 - Re-creating Geometries/Materials inside the \`animate\` loop instead of mutating their properties (destroys performance).`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== THREE.JS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== THREE.JS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const threejsOssAgent = new ThreejsOssAgent();

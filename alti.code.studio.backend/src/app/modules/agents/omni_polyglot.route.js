@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * Dynamic Polyglot Route Mapping
  */
 

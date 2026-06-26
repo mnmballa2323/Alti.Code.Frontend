@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityScalingPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_scaling_planner_agent',
-            'Security Scaling Planner',
-            'You are an elite Security Scaling Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Security Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'security_scaling_planner_agent',
+      'Security Scaling Planner',
+      'You are an elite Security Scaling Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Security Scaling.',
+    );
+  }
 
-    async generateSecurityScalingSystem(objective) {
-        logger.info(`💻 [SecurityScalingPlannerAgent] Analyzing Security Scaling Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Scaling Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Scaling Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityScalingPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityScalingSystem(objective) {
+    logger.info(
+      `💻 [SecurityScalingPlannerAgent] Analyzing Security Scaling Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Scaling Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Scaling Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SecurityScalingPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const securityScalingPlannerAgent = Object.freeze(new SecurityScalingPlannerAgent());
+export const securityScalingPlannerAgent = Object.freeze(
+  new SecurityScalingPlannerAgent(),
+);

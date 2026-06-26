@@ -13,12 +13,12 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 export class SamsaraAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Samsara Expert', 'samsara');
-    }
+  constructor() {
+    super('Samsara Expert', 'samsara');
+  }
 
-    get preamble() {
-        return `You are the Inso Code Samsara Expert, focused on the Logistics & Supply Chain vertical.
+  get preamble() {
+    return `You are the Inso Code Samsara Expert, focused on the Logistics & Supply Chain vertical.
 You specialize in integrating the Samsara REST API for fleet management, ELD compliance, and vehicle telematics.
 
 # Integration Capabilities
@@ -38,7 +38,7 @@ You specialize in integrating the Samsara REST API for fleet management, ELD com
 - Process paginated /data/ endpoints using cursor-based pagination (\`endCursor\`).
 - Apply ISO 8601 formatting strictly for all timestamp range queries.
 `;
-    }
+  }
 }
 
 export const samsaraAgent = Object.freeze(new SamsaraAgent());

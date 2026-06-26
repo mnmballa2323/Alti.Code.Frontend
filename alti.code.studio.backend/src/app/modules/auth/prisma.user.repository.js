@@ -35,13 +35,15 @@ export const UserRepository = {
   /**
    * Find a user by their email address
    */
-  findByEmail: async (email) => {
+  findByEmail: async email => {
     try {
       return await prisma.user.findUnique({
         where: { email },
       });
     } catch (dbError) {
-      console.warn('⚠️ [Postgres Offline] Falling back to mock users database for findByEmail');
+      console.warn(
+        '⚠️ [Postgres Offline] Falling back to mock users database for findByEmail',
+      );
       const users = await getMockUsers();
       return users.find(u => u.email === email) || null;
     }
@@ -50,13 +52,15 @@ export const UserRepository = {
   /**
    * Find a user by their ID
    */
-  findById: async (id) => {
+  findById: async id => {
     try {
       return await prisma.user.findUnique({
         where: { id },
       });
     } catch (dbError) {
-      console.warn('⚠️ [Postgres Offline] Falling back to mock users database for findById');
+      console.warn(
+        '⚠️ [Postgres Offline] Falling back to mock users database for findById',
+      );
       const users = await getMockUsers();
       return users.find(u => u.id === id) || null;
     }
@@ -65,13 +69,13 @@ export const UserRepository = {
   /**
    * Create a new user with an automatically generated confirmation token
    */
-  createUser: async (userData) => {
+  createUser: async userData => {
     const confirmationToken = crypto.randomBytes(32).toString('hex');
     const date = new Date();
     date.setDate(date.getDate() + 1);
 
     try {
-      return await prisma.$transaction(async (tx) => {
+      return await prisma.$transaction(async tx => {
         const tenantName = `Workspace - ${userData.email.split('@')[0]}_${crypto.randomBytes(3).toString('hex')}`;
         const tenant = await tx.tenant.create({
           data: {
@@ -97,12 +101,18 @@ export const UserRepository = {
         });
       });
     } catch (dbError) {
-      console.warn('⚠️ [Postgres Offline] Falling back to mock users database for createUser');
+      console.warn(
+        '⚠️ [Postgres Offline] Falling back to mock users database for createUser',
+      );
       const users = await getMockUsers();
-      
-      const newUserId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
-      const newTenantId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
-      
+
+      const newUserId = crypto.randomUUID
+        ? crypto.randomUUID()
+        : crypto.randomBytes(16).toString('hex');
+      const newTenantId = crypto.randomUUID
+        ? crypto.randomUUID()
+        : crypto.randomBytes(16).toString('hex');
+
       // Auto-set admin role in dev/mock if email contains admin, else default to user
       let role = 'user';
       if (userData.email.includes('admin')) {
@@ -137,7 +147,7 @@ export const UserRepository = {
         deleteAccountOTP: null,
         deleteAccountExpires: null,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
 
       users.push(newUser);
@@ -149,7 +159,7 @@ export const UserRepository = {
   /**
    * Update a user's role and remove confirmation tokens
    */
-  confirmEmail: async (token) => {
+  confirmEmail: async token => {
     try {
       const user = await prisma.user.findFirst({
         where: { confirmationToken: token },
@@ -167,16 +177,18 @@ export const UserRepository = {
         },
       });
     } catch (dbError) {
-      console.warn('⚠️ [Postgres Offline] Falling back to mock users database for confirmEmail');
+      console.warn(
+        '⚠️ [Postgres Offline] Falling back to mock users database for confirmEmail',
+      );
       const users = await getMockUsers();
       const userIndex = users.findIndex(u => u.confirmationToken === token);
       if (userIndex === -1) return null;
-      
+
       const user = users[userIndex];
       user.role = 'user';
       user.confirmationToken = null;
       user.confirmationTokenExpires = null;
-      
+
       await saveMockUsers(users);
       return user;
     }
@@ -192,17 +204,19 @@ export const UserRepository = {
         data: updateData,
       });
     } catch (dbError) {
-      console.warn('⚠️ [Postgres Offline] Falling back to mock users database for updateUser');
+      console.warn(
+        '⚠️ [Postgres Offline] Falling back to mock users database for updateUser',
+      );
       const users = await getMockUsers();
       const userIndex = users.findIndex(u => u.id === id);
       if (userIndex === -1) return null;
-      
+
       users[userIndex] = {
         ...users[userIndex],
         ...updateData,
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
-      
+
       await saveMockUsers(users);
       return users[userIndex];
     }
@@ -211,17 +225,19 @@ export const UserRepository = {
   /**
    * Delete a user by ID
    */
-  deleteUser: async (id) => {
+  deleteUser: async id => {
     try {
       return await prisma.user.delete({
         where: { id },
       });
     } catch (dbError) {
-      console.warn('⚠️ [Postgres Offline] Falling back to mock users database for deleteUser');
+      console.warn(
+        '⚠️ [Postgres Offline] Falling back to mock users database for deleteUser',
+      );
       const users = await getMockUsers();
       const userIndex = users.findIndex(u => u.id === id);
       if (userIndex === -1) return null;
-      
+
       const [deletedUser] = users.splice(userIndex, 1);
       await saveMockUsers(users);
       return deletedUser;
@@ -231,9 +247,9 @@ export const UserRepository = {
   /**
    * Social Login Upsert Logic
    */
-  upsertSocialUser: async (payload) => {
+  upsertSocialUser: async payload => {
     const { email, id, provider, avatar } = payload;
-    
+
     try {
       let user = await prisma.user.findUnique({ where: { email } });
 
@@ -251,7 +267,7 @@ export const UserRepository = {
       }
 
       // Create new social user
-      return await prisma.$transaction(async (tx) => {
+      return await prisma.$transaction(async tx => {
         const tenantName = `Workspace - ${email.split('@')[0]}_${crypto.randomBytes(3).toString('hex')}`;
         const tenant = await tx.tenant.create({
           data: {
@@ -273,26 +289,35 @@ export const UserRepository = {
         });
       });
     } catch (dbError) {
-      console.warn('⚠️ [Postgres Offline] Falling back to mock users database for upsertSocialUser');
+      console.warn(
+        '⚠️ [Postgres Offline] Falling back to mock users database for upsertSocialUser',
+      );
       const users = await getMockUsers();
       let userIndex = users.findIndex(u => u.email === email);
-      
+
       if (userIndex !== -1) {
         users[userIndex] = {
           ...users[userIndex],
           googleId: provider === 'google' ? id : users[userIndex].googleId,
           githubId: provider === 'github' ? id : users[userIndex].githubId,
           avatar: avatar || users[userIndex].avatar,
-          role: users[userIndex].role === 'unauthorized' ? 'user' : users[userIndex].role,
-          updatedAt: new Date().toISOString()
+          role:
+            users[userIndex].role === 'unauthorized'
+              ? 'user'
+              : users[userIndex].role,
+          updatedAt: new Date().toISOString(),
         };
         await saveMockUsers(users);
         return users[userIndex];
       }
 
-      const newUserId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
-      const newTenantId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
-      
+      const newUserId = crypto.randomUUID
+        ? crypto.randomUUID()
+        : crypto.randomBytes(16).toString('hex');
+      const newTenantId = crypto.randomUUID
+        ? crypto.randomUUID()
+        : crypto.randomBytes(16).toString('hex');
+
       const newUser = {
         id: newUserId,
         tenantId: newTenantId,
@@ -321,12 +346,12 @@ export const UserRepository = {
         deleteAccountOTP: null,
         deleteAccountExpires: null,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
       };
 
       users.push(newUser);
       await saveMockUsers(users);
       return newUser;
     }
-  }
+  },
 };

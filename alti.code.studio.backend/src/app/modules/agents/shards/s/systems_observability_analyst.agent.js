@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsObservabilityAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_observability_analyst_agent',
-            'Systems Observability Analyst',
-            'You are an elite Systems Observability Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_observability_analyst_agent',
+      'Systems Observability Analyst',
+      'You are an elite Systems Observability Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Observability.',
+    );
+  }
 
-    async generateSystemsObservabilitySystem(objective) {
-        logger.info(`💻 [SystemsObservabilityAnalystAgent] Analyzing Systems Observability Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Observability Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Observability Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsObservabilityAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsObservabilitySystem(objective) {
+    logger.info(
+      `💻 [SystemsObservabilityAnalystAgent] Analyzing Systems Observability Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Observability Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Observability Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsObservabilityAnalystAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsObservabilityAnalystAgent = Object.freeze(new SystemsObservabilityAnalystAgent());
+export const systemsObservabilityAnalystAgent = Object.freeze(
+  new SystemsObservabilityAnalystAgent(),
+);

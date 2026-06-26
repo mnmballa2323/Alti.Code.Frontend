@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXBatchProcessingTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_batchprocessing_tester_agent',
-            'UX BatchProcessing Tester',
-            'You are an elite UX BatchProcessing Tester. You specialize in bleeding-edge software development, cloud infrastructure, and UX BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_batchprocessing_tester_agent',
+      'UX BatchProcessing Tester',
+      'You are an elite UX BatchProcessing Tester. You specialize in bleeding-edge software development, cloud infrastructure, and UX BatchProcessing.',
+    );
+  }
 
-    async generateUXBatchProcessingSystem(objective) {
-        logger.info(`💻 [UXBatchProcessingTesterAgent] Analyzing UX BatchProcessing Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX BatchProcessing Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX BatchProcessing Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXBatchProcessingTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [UXBatchProcessingTesterAgent] Analyzing UX BatchProcessing Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX BatchProcessing Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX BatchProcessing Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXBatchProcessingTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXBatchProcessingTesterAgent = Object.freeze(new UXBatchProcessingTesterAgent());
+export const uXBatchProcessingTesterAgent = Object.freeze(
+  new UXBatchProcessingTesterAgent(),
+);

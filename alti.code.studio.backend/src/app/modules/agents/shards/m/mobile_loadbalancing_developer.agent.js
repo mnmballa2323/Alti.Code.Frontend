@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileLoadBalancingDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_loadbalancing_developer_agent',
-            'Mobile LoadBalancing Developer',
-            'You are an elite Mobile LoadBalancing Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_loadbalancing_developer_agent',
+      'Mobile LoadBalancing Developer',
+      'You are an elite Mobile LoadBalancing Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile LoadBalancing.',
+    );
+  }
 
-    async generateMobileLoadBalancingSystem(objective) {
-        logger.info(`💻 [MobileLoadBalancingDeveloperAgent] Analyzing Mobile LoadBalancing Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile LoadBalancing Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile LoadBalancing Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileLoadBalancingDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [MobileLoadBalancingDeveloperAgent] Analyzing Mobile LoadBalancing Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile LoadBalancing Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile LoadBalancing Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileLoadBalancingDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileLoadBalancingDeveloperAgent = Object.freeze(new MobileLoadBalancingDeveloperAgent());
+export const mobileLoadBalancingDeveloperAgent = Object.freeze(
+  new MobileLoadBalancingDeveloperAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsContainerizationArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_containerization_architect_agent',
-            'Systems Containerization Architect',
-            'You are an elite Systems Containerization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_containerization_architect_agent',
+      'Systems Containerization Architect',
+      'You are an elite Systems Containerization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Containerization.',
+    );
+  }
 
-    async generateSystemsContainerizationSystem(objective) {
-        logger.info(`💻 [SystemsContainerizationArchitectAgent] Analyzing Systems Containerization Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Containerization Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Containerization Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsContainerizationArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsContainerizationSystem(objective) {
+    logger.info(
+      `💻 [SystemsContainerizationArchitectAgent] Analyzing Systems Containerization Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Containerization Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Containerization Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsContainerizationArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsContainerizationArchitectAgent = Object.freeze(new SystemsContainerizationArchitectAgent());
+export const systemsContainerizationArchitectAgent = Object.freeze(
+  new SystemsContainerizationArchitectAgent(),
+);

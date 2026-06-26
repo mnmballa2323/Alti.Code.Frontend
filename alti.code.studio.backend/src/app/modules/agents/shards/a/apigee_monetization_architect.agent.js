@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class ApimMonetizationArchitectAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ApimMonetizationArchitectAgent', 'Apim Monetization Architect Agent', 'Tier 10+');
-        this.preamble = `You are the Azure API Management Monetization Architect (Phase 22.0.0).
+  constructor() {
+    super(
+      'ApimMonetizationArchitectAgent',
+      'Apim Monetization Architect Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Azure API Management Monetization Architect (Phase 22.0.0).
 
 You represent the transition of Inso Code from an internal software factory into a public, revenue-generating B2B SaaS Orchestrator natively on Microsoft Azure.
 
@@ -25,8 +29,10 @@ CRITICAL DIRECTIVES:
 
 You turn source code directly into cash flow.
 `;
-    }
+  }
 }
 
-export const apimMonetizationArchitectAgent = Object.freeze(new ApimMonetizationArchitectAgent());
+export const apimMonetizationArchitectAgent = Object.freeze(
+  new ApimMonetizationArchitectAgent(),
+);
 export const apigeeMonetizationArchitectAgent = apimMonetizationArchitectAgent;

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendGovernanceTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_governance_tester_agent',
-            'Frontend Governance Tester',
-            'You are an elite Frontend Governance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_governance_tester_agent',
+      'Frontend Governance Tester',
+      'You are an elite Frontend Governance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Governance.',
+    );
+  }
 
-    async generateFrontendGovernanceSystem(objective) {
-        logger.info(`💻 [FrontendGovernanceTesterAgent] Analyzing Frontend Governance Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Governance Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Governance Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendGovernanceTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendGovernanceSystem(objective) {
+    logger.info(
+      `💻 [FrontendGovernanceTesterAgent] Analyzing Frontend Governance Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Governance Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Governance Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendGovernanceTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendGovernanceTesterAgent = Object.freeze(new FrontendGovernanceTesterAgent());
+export const frontendGovernanceTesterAgent = Object.freeze(
+  new FrontendGovernanceTesterAgent(),
+);

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * "The Accessibility Agent" - Tier 5 Growth Specialist
  * Possesses deep semantic context regarding WCAG 2.1, ADA, and Section 508 compliance.
  */
@@ -10,12 +10,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class AccessibilityAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Accessibility_Expert';
-        this.description = 'Growth specialist enforcing WCAG 2.1, ADA, and Section 508 UI compliance.';
+  constructor() {
+    super();
+    this.name = 'Accessibility_Expert';
+    this.description =
+      'Growth specialist enforcing WCAG 2.1, ADA, and Section 508 UI compliance.';
 
-        this.preamble = `You are an elite Digital Accessibility (a11y) specialist.
+    this.preamble = `You are an elite Digital Accessibility (a11y) specialist.
 Your core expertise revolves around ensuring user interfaces are fully compliant with WCAG 2.1 AA/AAA, ADA, and Section 508 standards.
 
 # CORE RESPONSIBILITIES
@@ -27,28 +28,30 @@ Your core expertise revolves around ensuring user interfaces are fully compliant
 # BEHAVIOR
 When auditing code or providing blueprints, provide explicit JSX or HTML patches that rectify the compliance failures. If analyzing CSS, strictly comment on color contrast ratios failing 4.5:1 heuristics.
 `;
+  }
+
+  /**
+   * Executes an a11y syntactic review or schema generation.
+   * @param {string} prompt
+   * @param {Array<object>} contextData Project files or AST snippets
+   * @returns {Promise<string>}
+   */
+  async consult(prompt, contextData = []) {
+    logger.info(`♿ Accessibility Expert: Synthesizing logic for prompt...`);
+    let combinedContext = contextData
+      .map(c => `[Context File: ${c.path}]\n${c.content}\n`)
+      .join('\n');
+
+    let finalPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
+
+    try {
+      const response = await GeminiAiService.generateContent(finalPrompt);
+      return response;
+    } catch (e) {
+      logger.error(`❌ Accessibility Expert: Consultation failed.`, e);
+      throw new Error(`Accessibility Synthesis Failed: ${e.message}`);
     }
-
-    /**
-     * Executes an a11y syntactic review or schema generation.
-     * @param {string} prompt 
-     * @param {Array<object>} contextData Project files or AST snippets
-     * @returns {Promise<string>}
-     */
-    async consult(prompt, contextData = []) {
-        logger.info(`♿ Accessibility Expert: Synthesizing logic for prompt...`);
-        let combinedContext = contextData.map(c => `[Context File: ${c.path}]\n${c.content}\n`).join('\n');
-
-        let finalPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
-
-        try {
-            const response = await GeminiAiService.generateContent(finalPrompt);
-            return response;
-        } catch (e) {
-            logger.error(`❌ Accessibility Expert: Consultation failed.`, e);
-            throw new Error(`Accessibility Synthesis Failed: ${e.message}`);
-        }
-    }
+  }
 }
 
 export const accessibilityAgent = new AccessibilityAgent();

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseProvisioningOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_provisioning_orchestrator_agent',
-            'Enterprise Provisioning Orchestrator',
-            'You are an elite Enterprise Provisioning Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_provisioning_orchestrator_agent',
+      'Enterprise Provisioning Orchestrator',
+      'You are an elite Enterprise Provisioning Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Provisioning.',
+    );
+  }
 
-    async generateEnterpriseProvisioningSystem(objective) {
-        logger.info(`💻 [EnterpriseProvisioningOrchestratorAgent] Analyzing Enterprise Provisioning Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Provisioning Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Provisioning Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseProvisioningOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseProvisioningSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseProvisioningOrchestratorAgent] Analyzing Enterprise Provisioning Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Provisioning Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Provisioning Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseProvisioningOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseProvisioningOrchestratorAgent = Object.freeze(new EnterpriseProvisioningOrchestratorAgent());
+export const enterpriseProvisioningOrchestratorAgent = Object.freeze(
+  new EnterpriseProvisioningOrchestratorAgent(),
+);

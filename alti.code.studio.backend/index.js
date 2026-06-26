@@ -194,7 +194,7 @@ import { acousticWorkspaceRouter } from './src/app/modules/agents/acoustic_works
 acousticWorkspaceRouter(app);
 
 import { dlpMiddleware } from './src/app/middlewares/dlp.middleware.js';
-import { CloudLoggingService } from './src/app/modules/azureCloud/azureLogging.service.js';
+import { CloudLoggingService } from './src/app/modules/gcpCloud/gcpLogging.service.js';
 import { autoProfilerService } from './src/app/modules/qa/auto_profiler.service.js';
 import onFinished from 'on-finished';
 

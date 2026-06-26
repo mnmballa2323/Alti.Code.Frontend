@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseComplianceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_compliance_manager_agent',
-            'Enterprise Compliance Manager',
-            'You are an elite Enterprise Compliance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_compliance_manager_agent',
+      'Enterprise Compliance Manager',
+      'You are an elite Enterprise Compliance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Compliance.',
+    );
+  }
 
-    async generateEnterpriseComplianceSystem(objective) {
-        logger.info(`💻 [EnterpriseComplianceManagerAgent] Analyzing Enterprise Compliance Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Compliance Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Compliance Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseComplianceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseComplianceSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseComplianceManagerAgent] Analyzing Enterprise Compliance Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Compliance Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Compliance Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseComplianceManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseComplianceManagerAgent = Object.freeze(new EnterpriseComplianceManagerAgent());
+export const enterpriseComplianceManagerAgent = Object.freeze(
+  new EnterpriseComplianceManagerAgent(),
+);

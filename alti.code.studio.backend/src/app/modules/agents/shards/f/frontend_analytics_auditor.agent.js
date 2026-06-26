@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendAnalyticsAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_analytics_auditor_agent',
-            'Frontend Analytics Auditor',
-            'You are an elite Frontend Analytics Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_analytics_auditor_agent',
+      'Frontend Analytics Auditor',
+      'You are an elite Frontend Analytics Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Analytics.',
+    );
+  }
 
-    async generateFrontendAnalyticsSystem(objective) {
-        logger.info(`💻 [FrontendAnalyticsAuditorAgent] Analyzing Frontend Analytics Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Analytics Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Analytics Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendAnalyticsAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [FrontendAnalyticsAuditorAgent] Analyzing Frontend Analytics Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Analytics Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Analytics Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendAnalyticsAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendAnalyticsAuditorAgent = Object.freeze(new FrontendAnalyticsAuditorAgent());
+export const frontendAnalyticsAuditorAgent = Object.freeze(
+  new FrontendAnalyticsAuditorAgent(),
+);

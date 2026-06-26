@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SRESecurityAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_security_auditor_agent',
-            'SRE Security Auditor',
-            'You are an elite SRE Security Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Security.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_security_auditor_agent',
+      'SRE Security Auditor',
+      'You are an elite SRE Security Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Security.',
+    );
+  }
 
-    async generateSRESecuritySystem(objective) {
-        logger.info(`💻 [SRESecurityAuditorAgent] Analyzing SRE Security Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Security Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Security Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SRESecurityAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSRESecuritySystem(objective) {
+    logger.info(
+      `💻 [SRESecurityAuditorAgent] Analyzing SRE Security Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Security Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Security Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SRESecurityAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sRESecurityAuditorAgent = Object.freeze(new SRESecurityAuditorAgent());
+export const sRESecurityAuditorAgent = Object.freeze(
+  new SRESecurityAuditorAgent(),
+);

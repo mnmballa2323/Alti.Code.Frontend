@@ -12,15 +12,16 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class ZustandAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'zustand';
-        this.description = 'Specializes in Zustand (MIT License) for barebones, fast React state management.';
-        this.license = 'MIT';
-    }
+  constructor() {
+    super();
+    this.name = 'zustand';
+    this.description =
+      'Specializes in Zustand (MIT License) for barebones, fast React state management.';
+    this.license = 'MIT';
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `
 You are the Zustand State Agent.
 You specialize in building strictly MIT-licensed frontend state management stores.
 Ensure all generated code handles middleware, devtools, and atomic selections efficiently.
@@ -32,8 +33,8 @@ Task:
 ${prompt}
         `.trim();
 
-        return `[ZustandAgent] Synthesized atomic state management logic using strictly MIT-licensed Zustand.`;
-    }
+    return `[ZustandAgent] Synthesized atomic state management logic using strictly MIT-licensed Zustand.`;
+  }
 }
 
 export const zustandAgent = Object.freeze(new ZustandAgent());

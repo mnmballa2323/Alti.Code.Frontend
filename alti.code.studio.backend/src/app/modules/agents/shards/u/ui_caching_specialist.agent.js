@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UICachingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_caching_specialist_agent',
-            'UI Caching Specialist',
-            'You are an elite UI Caching Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and UI Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_caching_specialist_agent',
+      'UI Caching Specialist',
+      'You are an elite UI Caching Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and UI Caching.',
+    );
+  }
 
-    async generateUICachingSystem(objective) {
-        logger.info(`💻 [UICachingSpecialistAgent] Analyzing UI Caching Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Caching Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Caching Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UICachingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUICachingSystem(objective) {
+    logger.info(
+      `💻 [UICachingSpecialistAgent] Analyzing UI Caching Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Caching Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Caching Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UICachingSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uICachingSpecialistAgent = Object.freeze(new UICachingSpecialistAgent());
+export const uICachingSpecialistAgent = Object.freeze(
+  new UICachingSpecialistAgent(),
+);

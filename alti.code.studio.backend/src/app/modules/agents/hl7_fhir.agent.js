@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class Hl7FhirAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Hl7FhirAgent';
-        this.description = 'Healthcare interoperability pioneer navigating complex HL7v2 pipe-delimiters, migrating to JSON FHIR R4 interfaces, and managing SMART-on-FHIR App Orchard auth.';
+  constructor() {
+    super();
+    this.name = 'Hl7FhirAgent';
+    this.description =
+      'Healthcare interoperability pioneer navigating complex HL7v2 pipe-delimiters, migrating to JSON FHIR R4 interfaces, and managing SMART-on-FHIR App Orchard auth.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Healthcare Interoperability & Medical Records Agent.
 You assist HealthTech developers communicating directly with massive core EMR/EHR systems like EPIC and Cerner Oracle.
 
@@ -33,12 +34,12 @@ You assist HealthTech developers communicating directly with massive core EMR/EH
 **Best Practices**
 - Ingesting HL7v2 over MLLP (Minimal Lower Layer Protocol) is inherently brittle. Always validate the MSH (Message Header) segment immediately and return explicit Application Acknowledgement (ACK) responses to prevent hospital interface engines from stalling.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const hl7FhirAgent = new Hl7FhirAgent();

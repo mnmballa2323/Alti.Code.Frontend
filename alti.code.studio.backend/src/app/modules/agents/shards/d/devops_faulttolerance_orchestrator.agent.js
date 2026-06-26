@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsFaultToleranceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_faulttolerance_orchestrator_agent',
-            'DevOps FaultTolerance Orchestrator',
-            'You are an elite DevOps FaultTolerance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_faulttolerance_orchestrator_agent',
+      'DevOps FaultTolerance Orchestrator',
+      'You are an elite DevOps FaultTolerance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps FaultTolerance.',
+    );
+  }
 
-    async generateDevOpsFaultToleranceSystem(objective) {
-        logger.info(`💻 [DevOpsFaultToleranceOrchestratorAgent] Analyzing DevOps FaultTolerance Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps FaultTolerance Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps FaultTolerance Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsFaultToleranceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [DevOpsFaultToleranceOrchestratorAgent] Analyzing DevOps FaultTolerance Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps FaultTolerance Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps FaultTolerance Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsFaultToleranceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsFaultToleranceOrchestratorAgent = Object.freeze(new DevOpsFaultToleranceOrchestratorAgent());
+export const devOpsFaultToleranceOrchestratorAgent = Object.freeze(
+  new DevOpsFaultToleranceOrchestratorAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIMigrationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_migration_developer_agent',
-            'AI Migration Developer',
-            'You are an elite AI Migration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_migration_developer_agent',
+      'AI Migration Developer',
+      'You are an elite AI Migration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Migration.',
+    );
+  }
 
-    async generateAIMigrationSystem(objective) {
-        logger.info(`💻 [AIMigrationDeveloperAgent] Analyzing AI Migration Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Migration Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Migration Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIMigrationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIMigrationSystem(objective) {
+    logger.info(
+      `💻 [AIMigrationDeveloperAgent] Analyzing AI Migration Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Migration Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Migration Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIMigrationDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIMigrationDeveloperAgent = Object.freeze(new AIMigrationDeveloperAgent());
+export const aIMigrationDeveloperAgent = Object.freeze(
+  new AIMigrationDeveloperAgent(),
+);

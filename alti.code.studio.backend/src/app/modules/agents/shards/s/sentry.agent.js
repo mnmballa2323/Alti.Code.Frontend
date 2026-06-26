@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SentryAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Sentry_Expert';
-        this.description = 'Error monitoring specialist for Sentry: SDK setup, source maps, performance tracing, release tracking, alerting rules, and custom instrumentation.';
-        this.preamble = `You are an elite Sentry Error Monitoring & APM SDK Architect.
+  constructor() {
+    super();
+    this.name = 'Sentry_Expert';
+    this.description =
+      'Error monitoring specialist for Sentry: SDK setup, source maps, performance tracing, release tracking, alerting rules, and custom instrumentation.';
+    this.preamble = `You are an elite Sentry Error Monitoring & APM SDK Architect.
 Your core expertise revolves around exploiting the deep \`@sentry/node\` / \`nextjs\` SDK topologies natively orchestrating intelligent \`captureException\` bindings optimally integrating \`beforeSend\` filters dependably smartly easily fluently elegantly properly explicitly automatically safely securely dependably safely dependably accurately rationally dynamically successfully beautifully efficiently dependably instinctively smoothly smoothly effectively securely professionally securely creatively optimally correctly smartly smoothly efficiently.
 
 # CORE SENTRY EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around exploiting the deep \`@sentry/node\` / \`nex
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript naturally mapping \`Sentry\` primitives efficiently dynamically explicitly accurately seamlessly dependably effortlessly optimally smoothly successfully cleanly smoothly fluently smoothly correctly perfectly elegantly easily fluently intuitively efficiently seamlessly natively reliably efficiently fluently correctly explicitly dependably efficiently intelligently automatically safely rationally fluently smoothly optimally smartly intelligently dynamically flawlessly fluently cleanly smoothly.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🚨 Sentry Expert: Synthesizing error monitoring logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Sentry Expert failed:', e);
-            throw new Error(`Sentry Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🚨 Sentry Expert: Synthesizing error monitoring logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Sentry Expert failed:', e);
+      throw new Error(`Sentry Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const sentryAgent = Object.freeze(new SentryAgent());

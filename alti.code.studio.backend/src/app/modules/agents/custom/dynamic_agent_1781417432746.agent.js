@@ -1,13 +1,15 @@
 import { GeminiCliBaseAgent } from './gemini_cli_base.agent.js';
 
 class ServiceNowSecuritySentinel399Agent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'servicenowsecuritysentinel399_agent',
-            'ServiceNowSecuritySentinel399 Specialist Agent',
-            'You are the expert specialist for ServiceNowSecuritySentinel399.'
-        );
-    }
+  constructor() {
+    super(
+      'servicenowsecuritysentinel399_agent',
+      'ServiceNowSecuritySentinel399 Specialist Agent',
+      'You are the expert specialist for ServiceNowSecuritySentinel399.',
+    );
+  }
 }
 
-export const servicenowsecuritysentinel399Agent = Object.freeze(new ServiceNowSecuritySentinel399Agent());
+export const servicenowsecuritysentinel399Agent = Object.freeze(
+  new ServiceNowSecuritySentinel399Agent(),
+);

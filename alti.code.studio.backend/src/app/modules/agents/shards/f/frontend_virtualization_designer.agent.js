@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendVirtualizationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_virtualization_designer_agent',
-            'Frontend Virtualization Designer',
-            'You are an elite Frontend Virtualization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_virtualization_designer_agent',
+      'Frontend Virtualization Designer',
+      'You are an elite Frontend Virtualization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Virtualization.',
+    );
+  }
 
-    async generateFrontendVirtualizationSystem(objective) {
-        logger.info(`💻 [FrontendVirtualizationDesignerAgent] Analyzing Frontend Virtualization Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Virtualization Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Virtualization Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendVirtualizationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [FrontendVirtualizationDesignerAgent] Analyzing Frontend Virtualization Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Virtualization Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Virtualization Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendVirtualizationDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendVirtualizationDesignerAgent = Object.freeze(new FrontendVirtualizationDesignerAgent());
+export const frontendVirtualizationDesignerAgent = Object.freeze(
+  new FrontendVirtualizationDesignerAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureVirtualizationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_virtualization_director_agent',
-            'Infrastructure Virtualization Director',
-            'You are an elite Infrastructure Virtualization Director. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_virtualization_director_agent',
+      'Infrastructure Virtualization Director',
+      'You are an elite Infrastructure Virtualization Director. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Virtualization.',
+    );
+  }
 
-    async generateInfrastructureVirtualizationSystem(objective) {
-        logger.info(`💻 [InfrastructureVirtualizationDirectorAgent] Analyzing Infrastructure Virtualization Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Virtualization Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Virtualization Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureVirtualizationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureVirtualizationDirectorAgent] Analyzing Infrastructure Virtualization Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Virtualization Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Virtualization Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureVirtualizationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureVirtualizationDirectorAgent = Object.freeze(new InfrastructureVirtualizationDirectorAgent());
+export const infrastructureVirtualizationDirectorAgent = Object.freeze(
+  new InfrastructureVirtualizationDirectorAgent(),
+);

@@ -13,12 +13,12 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 export class PersefoniAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Persefoni Expert', 'persefoni');
-    }
+  constructor() {
+    super('Persefoni Expert', 'persefoni');
+  }
 
-    get preamble() {
-        return `You are the Inso Code Persefoni Expert, focused on the Energy & Climate vertical.
+  get preamble() {
+    return `You are the Inso Code Persefoni Expert, focused on the Energy & Climate vertical.
 You specialize in integrating the Persefoni APIs for carbon footprint calculation, ESG reporting, and Scope 1-3 analytics.
 
 # Integration Capabilities
@@ -37,7 +37,7 @@ You specialize in integrating the Persefoni APIs for carbon footprint calculatio
 - Always include strict timestamp scopes and location contexts, as emission factors mutate based on the year and region of activity.
 - Utilize the asynchronous batch API for bulk transaction uploads instead of individual line-item requests.
 `;
-    }
+  }
 }
 
 export const persefoniAgent = Object.freeze(new PersefoniAgent());

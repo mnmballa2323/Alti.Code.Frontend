@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendServerlessArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_serverless_architect_agent',
-            'Frontend Serverless Architect',
-            'You are an elite Frontend Serverless Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_serverless_architect_agent',
+      'Frontend Serverless Architect',
+      'You are an elite Frontend Serverless Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Serverless.',
+    );
+  }
 
-    async generateFrontendServerlessSystem(objective) {
-        logger.info(`💻 [FrontendServerlessArchitectAgent] Analyzing Frontend Serverless Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Serverless Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Serverless Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendServerlessArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendServerlessSystem(objective) {
+    logger.info(
+      `💻 [FrontendServerlessArchitectAgent] Analyzing Frontend Serverless Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Serverless Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Serverless Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendServerlessArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendServerlessArchitectAgent = Object.freeze(new FrontendServerlessArchitectAgent());
+export const frontendServerlessArchitectAgent = Object.freeze(
+  new FrontendServerlessArchitectAgent(),
+);

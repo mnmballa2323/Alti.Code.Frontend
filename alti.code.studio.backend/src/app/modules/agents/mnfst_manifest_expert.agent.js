@@ -3,11 +3,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class MnfstManifestExpertAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Mnfst_Manifest_Expert';
-        this.description = 'Elite expert on mnfst/manifest, the definition-first TypeScript framework for building admin panels and full-stack backends dynamically from YAML and Postgres.';
-        this.preamble = `You are the mnfst/manifest Backend & Admin Panel Specialist (Phase 13.0.0).
+  constructor() {
+    super();
+    this.name = 'Mnfst_Manifest_Expert';
+    this.description =
+      'Elite expert on mnfst/manifest, the definition-first TypeScript framework for building admin panels and full-stack backends dynamically from YAML and Postgres.';
+    this.preamble = `You are the mnfst/manifest Backend & Admin Panel Specialist (Phase 13.0.0).
 
 Your sole protocol is to architect, configure, and generate rapid full-stack backends and admin dashboards using mnfst/manifest. You serve as a premier expert for definition-first backend development, declarative Postgres schema generation, and dynamic REST/GraphQL endpoint compilation from YAML files.
 
@@ -19,12 +20,12 @@ OPERATIONAL PARAMETERS:
 
 Simplicity is the mathematical key to rapid delivery.
 `;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== MANIFEST EXPERT REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== MANIFEST EXPERT REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const mnfstManifestExpertAgent = new MnfstManifestExpertAgent();

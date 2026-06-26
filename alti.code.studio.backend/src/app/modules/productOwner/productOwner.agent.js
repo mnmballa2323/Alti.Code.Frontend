@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * The Visionary — Product Owner Agent
- * Responsible for high-level decision making, feature prioritization, and 
+ * Responsible for high-level decision making, feature prioritization, and
  * converting vague requirements into structured user stories.
  */
 import fs from 'fs';
@@ -12,41 +12,48 @@ import { logger } from '../../../shared/logger.js';
 import { contextService } from '../cortex/context.service.js';
 
 class ProductOwnerAgent {
-    constructor() {
-        this.visionPath = path.resolve(process.cwd(), '../docs/VISION.md'); // Adjust path as needed
-        this.roadmapPath = path.resolve(process.cwd(), '../ROADMAP.md');
+  constructor() {
+    this.visionPath = path.resolve(process.cwd(), '../docs/VISION.md'); // Adjust path as needed
+    this.roadmapPath = path.resolve(process.cwd(), '../ROADMAP.md');
+  }
+
+  async _loadContext() {
+    try {
+      const vision = fs.existsSync(this.visionPath)
+        ? fs.readFileSync(this.visionPath, 'utf-8')
+        : 'Vision not found.';
+      const roadmap = fs.existsSync(this.roadmapPath)
+        ? fs.readFileSync(this.roadmapPath, 'utf-8')
+        : 'Roadmap not found.';
+      return { vision, roadmap };
+    } catch (error) {
+      logger.warn(`PO Agent failed to load context: ${error.message}`);
+      return { vision: '', roadmap: '' };
+    }
+  }
+
+  /**
+   * Analyze a high-level request and break it down
+   * @param {string} request
+   */
+  async analyzeRequest(request) {
+    const context = await this._loadContext();
+
+    // Enhance context with Codebase RAG
+    let codeContext = '';
+    try {
+      const ragResult = await contextService.query(request, { limit: 3 });
+      codeContext =
+        ragResult.answer +
+        '\n\nReferences:\n' +
+        ragResult.references.join('\n');
+      logger.info('PO Agent: Retrieved context from Cortex.');
+    } catch (err) {
+      logger.warn('PO Agent: Failed to retrieve Cortex context', err);
+      codeContext = 'No codebase context available.';
     }
 
-    async _loadContext() {
-        try {
-            const vision = fs.existsSync(this.visionPath) ? fs.readFileSync(this.visionPath, 'utf-8') : 'Vision not found.';
-            const roadmap = fs.existsSync(this.roadmapPath) ? fs.readFileSync(this.roadmapPath, 'utf-8') : 'Roadmap not found.';
-            return { vision, roadmap };
-        } catch (error) {
-            logger.warn(`PO Agent failed to load context: ${error.message}`);
-            return { vision: '', roadmap: '' };
-        }
-    }
-
-    /**
-     * Analyze a high-level request and break it down
-     * @param {string} request 
-     */
-    async analyzeRequest(request) {
-        const context = await this._loadContext();
-
-        // Enhance context with Codebase RAG
-        let codeContext = "";
-        try {
-            const ragResult = await contextService.query(request, { limit: 3 });
-            codeContext = ragResult.answer + "\n\nReferences:\n" + ragResult.references.join('\n');
-            logger.info("PO Agent: Retrieved context from Cortex.");
-        } catch (err) {
-            logger.warn("PO Agent: Failed to retrieve Cortex context", err);
-            codeContext = "No codebase context available.";
-        }
-
-        const prompt = `
+    const prompt = `
         You are "The Visionary", the Product Owner of this software project.
         
         PROJECT VISION:
@@ -79,28 +86,28 @@ class ProductOwnerAgent {
         }
         `;
 
-        try {
-            // Using 'reason' mode for analytical thinking
-            const response = await aiProvider.reason(prompt);
-            // Attempt to parse JSON from potential markdown wrapping
-            const jsonMatch = response.match(/\{[\s\S]*\}/);
-            if (jsonMatch) {
-                return JSON.parse(jsonMatch[0]);
-            }
-            return { raw: response };
-        } catch (error) {
-            logger.error(`Product Owner Analysis Failed: ${error.message}`);
-            throw error;
-        }
+    try {
+      // Using 'reason' mode for analytical thinking
+      const response = await aiProvider.reason(prompt);
+      // Attempt to parse JSON from potential markdown wrapping
+      const jsonMatch = response.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        return JSON.parse(jsonMatch[0]);
+      }
+      return { raw: response };
+    } catch (error) {
+      logger.error(`Product Owner Analysis Failed: ${error.message}`);
+      throw error;
     }
+  }
 
-    /**
-     * Generate User Stories for a specific feature
-     * @param {string} featureName 
-     * @param {string} featureDescription 
-     */
-    async generateUserStories(featureName, featureDescription) {
-        const prompt = `
+  /**
+   * Generate User Stories for a specific feature
+   * @param {string} featureName
+   * @param {string} featureDescription
+   */
+  async generateUserStories(featureName, featureDescription) {
+    const prompt = `
         As the Product Owner, create detailed User Stories for the following feature:
         
         Feature: ${featureName}
@@ -118,19 +125,19 @@ class ProductOwnerAgent {
         ]
         `;
 
-        try {
-            // Using 'generate' mode for creative writing
-            const response = await aiProvider.generate(prompt);
-            const jsonMatch = response.match(/\[[\s\S]*\]/);
-            if (jsonMatch) {
-                return JSON.parse(jsonMatch[0]);
-            }
-            return { raw: response };
-        } catch (error) {
-            logger.error(`Product Owner Story Gen Failed: ${error.message}`);
-            throw error;
-        }
+    try {
+      // Using 'generate' mode for creative writing
+      const response = await aiProvider.generate(prompt);
+      const jsonMatch = response.match(/\[[\s\S]*\]/);
+      if (jsonMatch) {
+        return JSON.parse(jsonMatch[0]);
+      }
+      return { raw: response };
+    } catch (error) {
+      logger.error(`Product Owner Story Gen Failed: ${error.message}`);
+      throw error;
     }
+  }
 }
 
 export const productOwnerAgent = new ProductOwnerAgent();

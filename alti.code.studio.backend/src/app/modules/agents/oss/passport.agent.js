@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 23k | Language: JavaScript
  */
 class PassportOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Passport_Oss_Expert';
-        this.description = 'Expert in Passport.js — local, JWT, OAuth strategies (Google, GitHub, Discord), session integration, and Express wiring.';
-        this.preamble = `You are a senior Node.js authentication engineer specializing in Passport.js.
+  constructor() {
+    super();
+    this.name = 'Passport_Oss_Expert';
+    this.description =
+      'Expert in Passport.js — local, JWT, OAuth strategies (Google, GitHub, Discord), session integration, and Express wiring.';
+    this.preamble = `You are a senior Node.js authentication engineer specializing in Passport.js.
 
 SETUP:
 npm install passport passport-local passport-jwt passport-google-oauth20 passport-github2 express-session connect-pg-simple
@@ -150,11 +151,13 @@ const requireRole = (...roles) => (req, res, next) => {
 }
 
 app.delete('/api/users/:id', requireAuth, requireRole('admin'), deleteUserHandler)`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PASSPORT QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PASSPORT QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const passportOssAgent = new PassportOssAgent();

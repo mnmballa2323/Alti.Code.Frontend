@@ -5,145 +5,169 @@ import { capabilityRouter } from './capability.router.js';
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class DynamicAgent extends BaseSpecialistAgent {
-    constructor(config) {
-        super(config.name, config.title || config.name, config.tier || 'Tier 21: Custom Creation');
-        this.description = config.description || '';
-        this.preamble = config.preamble || '';
-    }
+  constructor(config) {
+    super(
+      config.name,
+      config.title || config.name,
+      config.tier || 'Tier 21: Custom Creation',
+    );
+    this.description = config.description || '';
+    this.preamble = config.preamble || '';
+  }
 }
 
 class DynamicAgentLoaderService {
-    constructor() {
-        this.name = 'DynamicAgentLoaderService';
-        this.customDir = path.resolve(process.cwd(), 'src/app/modules/agents/custom');
-        this.loadedAgents = new Set();
+  constructor() {
+    this.name = 'DynamicAgentLoaderService';
+    this.customDir = path.resolve(
+      process.cwd(),
+      'src/app/modules/agents/custom',
+    );
+    this.loadedAgents = new Set();
+  }
+
+  init() {
+    logger.info(
+      '🧬 DynamicAgentLoaderService: Initializing hot-reload capabilities...',
+    );
+
+    // Ensure directory exists
+    if (!fs.existsSync(this.customDir)) {
+      fs.mkdirSync(this.customDir, { recursive: true });
     }
 
-    init() {
-        logger.info('🧬 DynamicAgentLoaderService: Initializing hot-reload capabilities...');
+    // Load existing
+    this.loadAll();
 
-        // Ensure directory exists
-        if (!fs.existsSync(this.customDir)) {
-            fs.mkdirSync(this.customDir, { recursive: true });
-        }
+    // Watch for new custom agents forged by the UI
+    fs.watch(this.customDir, (eventType, filename) => {
+      if (filename && filename.endsWith('.json')) {
+        // Throttle/debounce for save events
+        setTimeout(() => this.loadCustomAgent(filename), 500);
+      }
+    });
+  }
 
-        // Load existing
-        this.loadAll();
+  async loadAll() {
+    try {
+      let jsonFiles = [];
+      try {
+        jsonFiles = fs
+          .readdirSync(this.customDir)
+          .filter(file => file.endsWith('.json'))
+          .map(f => path.join(this.customDir, f));
+      } catch (err) {
+        logger.warn(`Failed to read custom agents directory: ${err.message}`);
+        return;
+      }
 
-        // Watch for new custom agents forged by the UI
-        fs.watch(this.customDir, (eventType, filename) => {
-            if (filename && filename.endsWith('.json')) {
-                // Throttle/debounce for save events
-                setTimeout(() => this.loadCustomAgent(filename), 500);
-            }
-        });
-    }
+      // Sort files alphabetically in descending order to load newest first
+      jsonFiles.sort((a, b) => b.localeCompare(a));
 
-    async loadAll() {
+      // Limit to at most 200 agents to avoid blocking the event loop on startup
+      const filesToLoad = jsonFiles.slice(0, 200);
+
+      logger.info(
+        `[Dynamic Loader] Found ${jsonFiles.length} agents on disk. Indexing newest ${filesToLoad.length} agents to prevent startup delay...`,
+      );
+
+      // Build the registry purely in memory (names -> paths)
+      this.agentRegistry = new Map();
+
+      for (let i = 0; i < filesToLoad.length; i++) {
+        const filePath = filesToLoad[i];
+        const filename = path.basename(filePath);
         try {
-            let jsonFiles = [];
-            try {
-                jsonFiles = fs.readdirSync(this.customDir)
-                    .filter(file => file.endsWith('.json'))
-                    .map(f => path.join(this.customDir, f));
-            } catch (err) {
-                logger.warn(`Failed to read custom agents directory: ${err.message}`);
-                return;
-            }
-            
-            // Sort files alphabetically in descending order to load newest first
-            jsonFiles.sort((a, b) => b.localeCompare(a));
-            
-            // Limit to at most 200 agents to avoid blocking the event loop on startup
-            const filesToLoad = jsonFiles.slice(0, 200);
-            
-            logger.info(`[Dynamic Loader] Found ${jsonFiles.length} agents on disk. Indexing newest ${filesToLoad.length} agents to prevent startup delay...`);
-            
-            // Build the registry purely in memory (names -> paths)
-            this.agentRegistry = new Map();
-            
-            for (let i = 0; i < filesToLoad.length; i++) {
-                const filePath = filesToLoad[i];
-                const filename = path.basename(filePath);
-                try {
-                    // Extract agent name statically without running any logic
-                    const content = fs.readFileSync(filePath, 'utf-8');
-                    const config = JSON.parse(content);
-                    if (config && config.name) {
-                        this.agentRegistry.set(config.name, {
-                            configPath: filePath,
-                            logicPath: filePath.replace('.json', '.agent.js')
-                        });
-                        this.loadedAgents.add(config.name);
-                        
-                        // Register lightweight stub with the router
-                        const stub = new DynamicAgent(config);
-                        capabilityRouter.registerAgent(stub, config.keywords || []);
-                    }
-                } catch (e) {
-                    logger.warn(`Failed to index ${filename}: ${e.message}`);
-                }
-            }
-            logger.info(`✅ [Dynamic Loader] Indexing Complete: Successfully mapped ${this.loadedAgents.size} agents to disk paths. Memory preserved.`);
-        } catch (e) {
-            logger.warn(`Failed to read custom agents directory: ${e.message}`);
-        }
-    }
-
-    async getAgentInstance(agentName) {
-        if (!this.agentRegistry || !this.agentRegistry.has(agentName)) {
-            return null;
-        }
-        
-        const paths = this.agentRegistry.get(agentName);
-        if (!fs.existsSync(paths.logicPath)) {
-            return null;
-        }
-
-        try {
-            // ONLY load into memory when specifically requested by the orchestrator
-            const moduleUrl = `file://${paths.logicPath}`;
-            const module = await import(moduleUrl);
-            
-            const exportedKey = Object.keys(module).find(k => module[k] && typeof module[k] === 'object');
-            if (exportedKey) {
-                return module[exportedKey];
-            }
-        } catch (e) {
-            logger.error(`Failed to lazy load native logic for [${agentName}]: ${e.message}`);
-        }
-        return null;
-    }
-
-    async loadCustomAgent(filename) {
-        try {
-            const filePath = path.join(this.customDir, filename);
-            if (!fs.existsSync(filePath)) return;
-
-            const config = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-            const agentName = config.name;
-
-            if (this.loadedAgents.has(agentName)) {
-                logger.info(`[Dynamic Loader] Updating index for existing agent: ${agentName}`);
-            }
-
-            if (!this.agentRegistry) this.agentRegistry = new Map();
-            
-            this.agentRegistry.set(agentName, {
-                configPath: filePath,
-                logicPath: filePath.replace('.json', '.agent.js')
+          // Extract agent name statically without running any logic
+          const content = fs.readFileSync(filePath, 'utf-8');
+          const config = JSON.parse(content);
+          if (config && config.name) {
+            this.agentRegistry.set(config.name, {
+              configPath: filePath,
+              logicPath: filePath.replace('.json', '.agent.js'),
             });
-            this.loadedAgents.add(agentName);
-            logger.info(`✅ Successfully indexed native logic path for [${agentName}]`);
-            
-            // Note: Native logic and fallback handling is now done inside getAgentInstance()
-            
-            // Optional: Still register the capability routes if needed 
-            // capabilityRouter.registerAgent(agentName, config);
+            this.loadedAgents.add(config.name);
+
+            // Register lightweight stub with the router
+            const stub = new DynamicAgent(config);
+            capabilityRouter.registerAgent(stub, config.keywords || []);
+          }
         } catch (e) {
-            logger.error(`[Dynamic Loader] Failed to parse custom agent ${filename}: ${e.message}`);
+          logger.warn(`Failed to index ${filename}: ${e.message}`);
         }
+      }
+      logger.info(
+        `✅ [Dynamic Loader] Indexing Complete: Successfully mapped ${this.loadedAgents.size} agents to disk paths. Memory preserved.`,
+      );
+    } catch (e) {
+      logger.warn(`Failed to read custom agents directory: ${e.message}`);
     }
+  }
+
+  async getAgentInstance(agentName) {
+    if (!this.agentRegistry || !this.agentRegistry.has(agentName)) {
+      return null;
+    }
+
+    const paths = this.agentRegistry.get(agentName);
+    if (!fs.existsSync(paths.logicPath)) {
+      return null;
+    }
+
+    try {
+      // ONLY load into memory when specifically requested by the orchestrator
+      const moduleUrl = `file://${paths.logicPath}`;
+      const module = await import(moduleUrl);
+
+      const exportedKey = Object.keys(module).find(
+        k => module[k] && typeof module[k] === 'object',
+      );
+      if (exportedKey) {
+        return module[exportedKey];
+      }
+    } catch (e) {
+      logger.error(
+        `Failed to lazy load native logic for [${agentName}]: ${e.message}`,
+      );
+    }
+    return null;
+  }
+
+  async loadCustomAgent(filename) {
+    try {
+      const filePath = path.join(this.customDir, filename);
+      if (!fs.existsSync(filePath)) return;
+
+      const config = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+      const agentName = config.name;
+
+      if (this.loadedAgents.has(agentName)) {
+        logger.info(
+          `[Dynamic Loader] Updating index for existing agent: ${agentName}`,
+        );
+      }
+
+      if (!this.agentRegistry) this.agentRegistry = new Map();
+
+      this.agentRegistry.set(agentName, {
+        configPath: filePath,
+        logicPath: filePath.replace('.json', '.agent.js'),
+      });
+      this.loadedAgents.add(agentName);
+      logger.info(
+        `✅ Successfully indexed native logic path for [${agentName}]`,
+      );
+
+      // Note: Native logic and fallback handling is now done inside getAgentInstance()
+
+      // Optional: Still register the capability routes if needed
+      // capabilityRouter.registerAgent(agentName, config);
+    } catch (e) {
+      logger.error(
+        `[Dynamic Loader] Failed to parse custom agent ${filename}: ${e.message}`,
+      );
+    }
+  }
 }
 
 export const dynamicAgentLoaderService = new DynamicAgentLoaderService();

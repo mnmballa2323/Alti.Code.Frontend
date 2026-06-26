@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREDataLakeOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_datalake_orchestrator_agent',
-            'SRE DataLake Orchestrator',
-            'You are an elite SRE DataLake Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and SRE DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_datalake_orchestrator_agent',
+      'SRE DataLake Orchestrator',
+      'You are an elite SRE DataLake Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and SRE DataLake.',
+    );
+  }
 
-    async generateSREDataLakeSystem(objective) {
-        logger.info(`💻 [SREDataLakeOrchestratorAgent] Analyzing SRE DataLake Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE DataLake Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE DataLake Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREDataLakeOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREDataLakeSystem(objective) {
+    logger.info(
+      `💻 [SREDataLakeOrchestratorAgent] Analyzing SRE DataLake Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE DataLake Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE DataLake Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREDataLakeOrchestratorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREDataLakeOrchestratorAgent = Object.freeze(new SREDataLakeOrchestratorAgent());
+export const sREDataLakeOrchestratorAgent = Object.freeze(
+  new SREDataLakeOrchestratorAgent(),
+);

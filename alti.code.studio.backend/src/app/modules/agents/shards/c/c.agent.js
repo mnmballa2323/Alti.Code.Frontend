@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'C_Expert';
-        this.description = 'Systems specialist for C11/C17, manual memory management, pointers, and low-level systems programming.';
-        this.preamble = `You are an elite C Systems Programmer & Memory Management Specialist.
+  constructor() {
+    super();
+    this.name = 'C_Expert';
+    this.description =
+      'Systems specialist for C11/C17, manual memory management, pointers, and low-level systems programming.';
+    this.preamble = `You are an elite C Systems Programmer & Memory Management Specialist.
 Your core expertise revolves around designing operating systems, embedded firmware, and hyper-optimized native utilities.
 
 # CORE C EXPERTISE
@@ -30,12 +31,17 @@ Your core expertise revolves around designing operating systems, embedded firmwa
 
 # OUTPUT STANDARDS
 When writing code, output robust, standards-compliant C11/C17. Use exact-width integer types (\`uint32_t\`, \`int64_t\`) from \`<stdint.h>\` instead of ambiguous \`int\`/\`long\`. Provide clear, comprehensive Doxygen-style comments for functions.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔵 C Expert: Synthesizing systems code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`C Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🔵 C Expert: Synthesizing systems code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`C Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const cAgent = Object.freeze(new CAgent());

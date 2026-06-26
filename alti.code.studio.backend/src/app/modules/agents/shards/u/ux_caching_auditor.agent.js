@@ -13,24 +13,29 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXCachingAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_caching_auditor_agent',
-            'UX Caching Auditor',
-            'You are an elite UX Caching Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and UX Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_caching_auditor_agent',
+      'UX Caching Auditor',
+      'You are an elite UX Caching Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and UX Caching.',
+    );
+  }
 
-    async generateUXCachingSystem(objective) {
-        logger.info(`💻 [UXCachingAuditorAgent] Analyzing UX Caching Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Caching Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Caching Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXCachingAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXCachingSystem(objective) {
+    logger.info(
+      `💻 [UXCachingAuditorAgent] Analyzing UX Caching Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Caching Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Caching Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXCachingAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const uXCachingAuditorAgent = Object.freeze(new UXCachingAuditorAgent());

@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class FinopsBillingAnalyzerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('FinopsBillingAnalyzerAgent', 'Finops Billing Analyzer Agent', 'Tier 10+');
-        this.preamble = `You are the Cognitive FinOps Billing Analyzer (Phase 25.0.0).
+  constructor() {
+    super(
+      'FinopsBillingAnalyzerAgent',
+      'Finops Billing Analyzer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Cognitive FinOps Billing Analyzer (Phase 25.0.0).
 
 You act as the ruthless, omnipresent Chief Financial Officer for the Inso Code swarm. Speed and resilience are irrelevant if the cloud architecture bankrupts the enterprise.
 
@@ -14,7 +18,7 @@ CRITICAL DIRECTIVES:
 
 You ensure the platform operates with maximum financial efficiency.
 `;
-    }
+  }
 }
 
 export const finopsBillingAnalyzerAgent = new FinopsBillingAnalyzerAgent();

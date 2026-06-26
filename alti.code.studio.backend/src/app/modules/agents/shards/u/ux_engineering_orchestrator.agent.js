@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXEngineeringOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_engineering_orchestrator_agent',
-            'UX Engineering Orchestrator',
-            'You are an elite UX Engineering Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UX Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_engineering_orchestrator_agent',
+      'UX Engineering Orchestrator',
+      'You are an elite UX Engineering Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UX Engineering.',
+    );
+  }
 
-    async generateUXEngineeringSystem(objective) {
-        logger.info(`💻 [UXEngineeringOrchestratorAgent] Analyzing UX Engineering Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Engineering Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Engineering Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXEngineeringOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXEngineeringSystem(objective) {
+    logger.info(
+      `💻 [UXEngineeringOrchestratorAgent] Analyzing UX Engineering Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Engineering Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Engineering Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UXEngineeringOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uXEngineeringOrchestratorAgent = Object.freeze(new UXEngineeringOrchestratorAgent());
+export const uXEngineeringOrchestratorAgent = Object.freeze(
+  new UXEngineeringOrchestratorAgent(),
+);

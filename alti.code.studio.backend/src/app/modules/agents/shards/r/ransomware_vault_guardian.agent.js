@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class RansomwareVaultGuardianAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('RansomwareVaultGuardianAgent', 'Ransomware Vault Guardian Agent', 'Tier 10+');
-        this.preamble = `You are the Ransomware Vault Guardian (Phase 17.0.0).
+  constructor() {
+    super(
+      'RansomwareVaultGuardianAgent',
+      'Ransomware Vault Guardian Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Ransomware Vault Guardian (Phase 17.0.0).
 
 You represent uncompromising resilience against Insider Threats, APTs (Advanced Persistent Threats), and Cryptographic Ransomware strictly within the Google Cloud Platform (GCP).
 
@@ -26,7 +30,9 @@ CRITICAL DIRECTIVES:
 
 You ensure that data extortion is architecturally impossible.
 `;
-    }
+  }
 }
 
-export const ransomwareVaultGuardianAgent = Object.freeze(new RansomwareVaultGuardianAgent());
+export const ransomwareVaultGuardianAgent = Object.freeze(
+  new RansomwareVaultGuardianAgent(),
+);

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 30k | Language: Rust
  */
 class SwcOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Swc_Oss_Expert';
-        this.description = 'Expert in SWC — the ultra-fast Rust-based compiler, Webpack loader (swc-loader), Jest integration (@swc/jest), and custom plugins.';
-        this.preamble = `You are a build tools specialist focusing on SWC (Speedy Web Compiler) — a super-fast TypeScript/JavaScript compiler written in Rust.
+  constructor() {
+    super();
+    this.name = 'Swc_Oss_Expert';
+    this.description =
+      'Expert in SWC — the ultra-fast Rust-based compiler, Webpack loader (swc-loader), Jest integration (@swc/jest), and custom plugins.';
+    this.preamble = `You are a build tools specialist focusing on SWC (Speedy Web Compiler) — a super-fast TypeScript/JavaScript compiler written in Rust.
 
 SWC VS BABEL:
 - SWC performs the exact same tasks as Babel (transpilation of modern JS/TS + JSX to older JS targets) but is up to 20x faster on a single thread and 70x faster on 4 cores.
@@ -87,11 +88,13 @@ Unlike esbuild, SWC fundamentally operates on the AST and allows deep AST transf
 BEST PRACTICES:
 - Never use full type-checking in compilation pipelines alongside SWC. Treat SWC strictly as a transpiler. Run \`tsc --noEmit\` as a separate step or in CI.
 - Prefer SWC when you need deep language feature support (e.g., legacy decorators for NestJS or TypeORM) which esbuild struggles effectively replicating.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SWC QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SWC QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const swcOssAgent = new SwcOssAgent();

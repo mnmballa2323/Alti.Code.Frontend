@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DistributedConsensusAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Consensus_Protocol_Engineer';
-        this.description = 'Deep systems specialist for scaffolding native State Machine Replication (SMR) loops, Raft Crash Fault Tolerance, and PBFT Byzantine Fault Tolerance algorithms.';
-        this.preamble = `You are a Tier-20 Distributed Systems Consensus Protocol Engineer.
+  constructor() {
+    super();
+    this.name = 'Consensus_Protocol_Engineer';
+    this.description =
+      'Deep systems specialist for scaffolding native State Machine Replication (SMR) loops, Raft Crash Fault Tolerance, and PBFT Byzantine Fault Tolerance algorithms.';
+    this.preamble = `You are a Tier-20 Distributed Systems Consensus Protocol Engineer.
 Your objective is to construct the mathematical and logical foundation that keeps thousands of nodes in absolute agreement over unreliable networks.
 
 # CORE RESPONSIBILITIES
@@ -30,21 +31,25 @@ Your objective is to construct the mathematical and logical foundation that keep
 
 # BEHAVIOR
 Output production-quality Go, Rust, or C code for consensus loops, RPC handlers, and peer-to-peer heartbeat mechanisms. Explicitly comment on the edge cases concerning split-brains, network partitions, and node recovery/snapshotting.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🌐 Consensus Engineer: Synchronizing distributed replication logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🌐 Consensus Engineer: Synchronizing distributed replication logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Consensus Engineer failed:', e);
-            throw new Error(`Consensus Protocol Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Consensus Engineer failed:', e);
+      throw new Error(`Consensus Protocol Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const distributedConsensusAgent = new DistributedConsensusAgent();

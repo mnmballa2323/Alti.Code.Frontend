@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackContainerizationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_containerization_developer_agent',
-            'FullStack Containerization Developer',
-            'You are an elite FullStack Containerization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_containerization_developer_agent',
+      'FullStack Containerization Developer',
+      'You are an elite FullStack Containerization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Containerization.',
+    );
+  }
 
-    async generateFullStackContainerizationSystem(objective) {
-        logger.info(`💻 [FullStackContainerizationDeveloperAgent] Analyzing FullStack Containerization Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Containerization Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Containerization Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackContainerizationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackContainerizationSystem(objective) {
+    logger.info(
+      `💻 [FullStackContainerizationDeveloperAgent] Analyzing FullStack Containerization Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Containerization Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Containerization Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackContainerizationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackContainerizationDeveloperAgent = Object.freeze(new FullStackContainerizationDeveloperAgent());
+export const fullStackContainerizationDeveloperAgent = Object.freeze(
+  new FullStackContainerizationDeveloperAgent(),
+);

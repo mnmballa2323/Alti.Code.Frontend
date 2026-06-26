@@ -178,7 +178,7 @@ export default function SwarmAnalyticsDashboard() {
                       <Chip
                         color={
                           m.circuitStatus === "OPEN"
-                            ? "error"
+                            ? "danger"
                             : m.circuitStatus === "HALF_OPEN"
                               ? "warning"
                               : "success"

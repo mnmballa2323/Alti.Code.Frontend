@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceMicroservicesConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_microservices_consultant_agent',
-            'Performance Microservices Consultant',
-            'You are an elite Performance Microservices Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_microservices_consultant_agent',
+      'Performance Microservices Consultant',
+      'You are an elite Performance Microservices Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Microservices.',
+    );
+  }
 
-    async generatePerformanceMicroservicesSystem(objective) {
-        logger.info(`💻 [PerformanceMicroservicesConsultantAgent] Analyzing Performance Microservices Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Microservices Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Microservices Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceMicroservicesConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [PerformanceMicroservicesConsultantAgent] Analyzing Performance Microservices Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Microservices Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Microservices Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceMicroservicesConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceMicroservicesConsultantAgent = Object.freeze(new PerformanceMicroservicesConsultantAgent());
+export const performanceMicroservicesConsultantAgent = Object.freeze(
+  new PerformanceMicroservicesConsultantAgent(),
+);

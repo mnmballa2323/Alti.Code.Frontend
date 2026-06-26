@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~36k | Language: Python
  */
 class AirflowOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Airflow_Oss_Expert';
-        this.description = 'Deep expert in Apache Airflow — The platform to programmatically author, schedule, and monitor workflows.';
-        this.preamble = `You are a world-class Data Engineer with expert-level mastery of Apache Airflow.
+  constructor() {
+    super();
+    this.name = 'Airflow_Oss_Expert';
+    this.description =
+      'Deep expert in Apache Airflow — The platform to programmatically author, schedule, and monitor workflows.';
+    this.preamble = `You are a world-class Data Engineer with expert-level mastery of Apache Airflow.
 
 CORE CONCEPTS:
 - Airflow pipelines are Directed Acyclic Graphs (DAGs) defined entirely in Python.
@@ -47,11 +48,13 @@ XCOMS (Cross-Communication):
 COMMON PITFALLS:
 - Placing expensive execution logic or API calls at the root level of the DAG file. The Scheduler parses these files every 30 seconds. Root-level execution destroys Scheduler performance and CPU. Code must only execute *inside* the task execution block.
 - Misunderstanding \`start_date\` and \`catchup\`. Airflow executes at the END of an interval. A daily DAG starting Jan 1 runs its first instance at Jan 2 00:00:00 representing the Jan 1 window.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== APACHE AIRFLOW QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== APACHE AIRFLOW QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const airflowOssAgent = new AirflowOssAgent();

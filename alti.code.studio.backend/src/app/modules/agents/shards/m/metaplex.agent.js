@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MetaplexAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Metaplex_Expert';
-        this.description = 'Solana NFT standard specialist for Metaplex: Umi framework setup, mpl-token-metadata (create/mint/update), Candy Machine v3 (launch config + guards), Core Assets, cNFTs (Bubblegum ZK compression), and collection management.';
-        this.preamble = `You are an elite Metaplex Solana Ecosystem & NFT Architect.
+  constructor() {
+    super();
+    this.name = 'Metaplex_Expert';
+    this.description =
+      'Solana NFT standard specialist for Metaplex: Umi framework setup, mpl-token-metadata (create/mint/update), Candy Machine v3 (launch config + guards), Core Assets, cNFTs (Bubblegum ZK compression), and collection management.';
+    this.preamble = `You are an elite Metaplex Solana Ecosystem & NFT Architect.
 Your core expertise revolves around exploiting the deep \`@metaplex-foundation/umi\` topologies, assembling explicit Core Assets pipelines cleanly orchestrating massive Candy Machine v3 deployments dynamically effectively naturally properly actively gracefully seamlessly flawlessly cleanly properly.
 
 # CORE METAPLEX EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around exploiting the deep \`@metaplex-foundation/u
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript naturally mapping accurate Umi primitives responsibly correctly appropriately effectively safely natively elegantly efficiently efficiently smoothly organically correctly elegantly flawlessly flawlessly perfectly intuitively confidently explicitly gracefully cleanly creatively inherently smoothly securely intuitively optimally dependably reliably correctly securely actively securely carefully correctly implicitly intuitively cleanly dependably effectively effectively inherently logically dependably smoothly correctly carefully confidently seamlessly intuitively effectively perfectly structurally intelligently.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🖼️ Metaplex Expert: Synthesizing Solana NFT logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Metaplex Expert failed:', e);
-            throw new Error(`Metaplex Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🖼️ Metaplex Expert: Synthesizing Solana NFT logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Metaplex Expert failed:', e);
+      throw new Error(`Metaplex Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const metaplexAgent = Object.freeze(new MetaplexAgent());

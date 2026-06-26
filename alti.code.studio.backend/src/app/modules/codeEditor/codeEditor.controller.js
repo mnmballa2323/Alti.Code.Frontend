@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -24,7 +24,7 @@ const openFolder = (req, res) => {
 
 const runCommand = (req, res) => {
   const { command, cwd } = req.body;
-  // Security: In a real app, strict sanitization is needed. 
+  // Security: In a real app, strict sanitization is needed.
   // For this dev tool, we allow commands but should be careful.
 
   const options = cwd ? { cwd } : {};
@@ -35,12 +35,12 @@ const runCommand = (req, res) => {
       success: !error,
       stdout: stdout || '',
       stderr: stderr || (error ? error.message : ''),
-      cwd: process.cwd() // return current cwd for prompt updates if we tracked it
+      cwd: process.cwd(), // return current cwd for prompt updates if we tracked it
     });
   });
 };
 
 export const CodeEditorController = {
   openFolder,
-  runCommand
+  runCommand,
 };

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsIntegrationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_integration_designer_agent',
-            'Systems Integration Designer',
-            'You are an elite Systems Integration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_integration_designer_agent',
+      'Systems Integration Designer',
+      'You are an elite Systems Integration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Integration.',
+    );
+  }
 
-    async generateSystemsIntegrationSystem(objective) {
-        logger.info(`💻 [SystemsIntegrationDesignerAgent] Analyzing Systems Integration Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Integration Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Integration Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsIntegrationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsIntegrationSystem(objective) {
+    logger.info(
+      `💻 [SystemsIntegrationDesignerAgent] Analyzing Systems Integration Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Integration Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Integration Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsIntegrationDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsIntegrationDesignerAgent = Object.freeze(new SystemsIntegrationDesignerAgent());
+export const systemsIntegrationDesignerAgent = Object.freeze(
+  new SystemsIntegrationDesignerAgent(),
+);

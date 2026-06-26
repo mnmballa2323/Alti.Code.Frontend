@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsEngineeringTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_engineering_tester_agent',
-            'DevSecOps Engineering Tester',
-            'You are an elite DevSecOps Engineering Tester. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_engineering_tester_agent',
+      'DevSecOps Engineering Tester',
+      'You are an elite DevSecOps Engineering Tester. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Engineering.',
+    );
+  }
 
-    async generateDevSecOpsEngineeringSystem(objective) {
-        logger.info(`💻 [DevSecOpsEngineeringTesterAgent] Analyzing DevSecOps Engineering Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Engineering Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Engineering Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsEngineeringTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsEngineeringSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsEngineeringTesterAgent] Analyzing DevSecOps Engineering Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Engineering Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Engineering Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsEngineeringTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsEngineeringTesterAgent = Object.freeze(new DevSecOpsEngineeringTesterAgent());
+export const devSecOpsEngineeringTesterAgent = Object.freeze(
+  new DevSecOpsEngineeringTesterAgent(),
+);

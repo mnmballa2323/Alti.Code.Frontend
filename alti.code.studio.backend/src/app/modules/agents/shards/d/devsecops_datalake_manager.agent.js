@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsDataLakeManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_datalake_manager_agent',
-            'DevSecOps DataLake Manager',
-            'You are an elite DevSecOps DataLake Manager. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_datalake_manager_agent',
+      'DevSecOps DataLake Manager',
+      'You are an elite DevSecOps DataLake Manager. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps DataLake.',
+    );
+  }
 
-    async generateDevSecOpsDataLakeSystem(objective) {
-        logger.info(`💻 [DevSecOpsDataLakeManagerAgent] Analyzing DevSecOps DataLake Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps DataLake Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps DataLake Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsDataLakeManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsDataLakeSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsDataLakeManagerAgent] Analyzing DevSecOps DataLake Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps DataLake Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps DataLake Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevSecOpsDataLakeManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devSecOpsDataLakeManagerAgent = Object.freeze(new DevSecOpsDataLakeManagerAgent());
+export const devSecOpsDataLakeManagerAgent = Object.freeze(
+  new DevSecOpsDataLakeManagerAgent(),
+);

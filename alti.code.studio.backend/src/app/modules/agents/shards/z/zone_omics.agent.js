@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ZoneOmicsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ZoneOmicsAgent';
-        this.description = 'PropTech specialist focusing on municipal zoning, land-use APIs, building permits, and FAR/Setback restrictions mapping.';
+  constructor() {
+    super();
+    this.name = 'ZoneOmicsAgent';
+    this.description =
+      'PropTech specialist focusing on municipal zoning, land-use APIs, building permits, and FAR/Setback restrictions mapping.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Real Estate Zoning & Land Management Agent.
 You assist PropTech developers modeling municipal zoning restrictions, permitting logic, and geographic land-use constraints.
 
@@ -43,12 +44,12 @@ You assist PropTech developers modeling municipal zoning restrictions, permittin
 **Best Practices**
 - Because local municipalities change codes unpredictably, cache zoning resolutions using \`Last-Modified\` tags and register webhooks if supported by the data vendor.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const zoneOmicsAgent = Object.freeze(new ZoneOmicsAgent());

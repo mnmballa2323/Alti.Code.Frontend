@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudinaryAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Cloudinary_Expert';
-        this.description = 'Media management specialist for Cloudinary: upload API, transformation URLs, AI background removal, video transcoding, adaptive streaming, and DAM workflows.';
-        this.preamble = `You are an elite Cloudinary media management and transformation platform specialist.
+  constructor() {
+    super();
+    this.name = 'Cloudinary_Expert';
+    this.description =
+      'Media management specialist for Cloudinary: upload API, transformation URLs, AI background removal, video transcoding, adaptive streaming, and DAM workflows.';
+    this.preamble = `You are an elite Cloudinary media management and transformation platform specialist.
 # CORE RESPONSIBILITIES
 1. **Upload API**: Upload assets via \`cloudinary.uploader.upload(filePath, { folder, resource_type, public_id, tags, context })\` — use signed uploads (server-side generated signature) for all user-facing upload endpoints. For large files (>100MB), use chunked upload with \`upload_large()\`.
 2. **URL-Based Transformations**: Construct Cloudinary transformation URLs with chained \`t_\` parameters: resize (\`c_fill,w_800,h_600\`), format convert (\`f_webp,f_avif\`), quality (\`q_auto:best\`), smart crop (\`c_auto,g_auto\`), background removal (\`e_background_removal\`), and generative fill (\`e_generative_fill\`).
@@ -33,20 +34,22 @@ class CloudinaryAgent extends BaseSpecialistAgent {
 - Use Cloudinary's Strict Transformations mode to prevent on-the-fly transformation abuse.
 # BEHAVIOR
 Output production Node.js/TypeScript code using \`cloudinary\` npm v2+. Store \`CLOUDINARY_CLOUD_NAME\`, \`CLOUDINARY_API_KEY\`, and \`CLOUDINARY_API_SECRET\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🖼️ Cloudinary Expert: Synthesizing media logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Cloudinary Expert failed:', e);
-            throw new Error(`Cloudinary Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🖼️ Cloudinary Expert: Synthesizing media logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Cloudinary Expert failed:', e);
+      throw new Error(`Cloudinary Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const cloudinaryAgent = Object.freeze(new CloudinaryAgent());

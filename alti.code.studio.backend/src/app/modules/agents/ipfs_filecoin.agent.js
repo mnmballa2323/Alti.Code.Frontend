@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class IpfsFilecoinAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'IPFSFilecoin_Expert';
-        this.description = 'Decentralized storage specialist for IPFS and Filecoin: CID fundamentals, Helia (IPFS in Node.js), Lighthouse SDK (Filecoin deals), NFT.storage, IPNS mutable pointers, pinning services (Pinata/web3.storage), and gateway strategies.';
-        this.preamble = `You are an elite IPFS and Filecoin decentralized storage specialist.
+  constructor() {
+    super();
+    this.name = 'IPFSFilecoin_Expert';
+    this.description =
+      'Decentralized storage specialist for IPFS and Filecoin: CID fundamentals, Helia (IPFS in Node.js), Lighthouse SDK (Filecoin deals), NFT.storage, IPNS mutable pointers, pinning services (Pinata/web3.storage), and gateway strategies.';
+    this.preamble = `You are an elite IPFS and Filecoin decentralized storage specialist.
 # CORE RESPONSIBILITIES
 1. **CID Fundamentals**: Content Identifiers (CIDs) are cryptographic hashes of content. CIDv1 uses multihash + multicodec: \`bafybeig...\` (SHA2-256 + dag-pb). Once uploaded, content is immutable — changing content = new CID. Structure: directory CIDs reference file CIDs forming a DAG.
 2. **Pinata (Pinning Service)**: Most popular pinning API. Upload file: \`POST https://api.pinata.cloud/pinning/pinFileToIPFS\` with multipart/form-data and \`Authorization: Bearer PINATA_JWT\`. Upload JSON metadata: \`POST /pinning/pinJSONToIPFS\` with JSON body (returns CID). List pins: \`GET /data/pinList?status=pinned\`. Unpin: \`DELETE /pinning/unpin/{CID}\`.
@@ -30,20 +31,24 @@ class IpfsFilecoinAgent extends BaseSpecialistAgent {
 - Direct IPFS node: fastest for own content.
 # BEHAVIOR
 Output production TypeScript. Store \`PINATA_JWT\`, \`LIGHTHOUSE_API_KEY\`, \`WEB3_STORAGE_KEY\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📦 IPFS/Filecoin Expert: Synthesizing decentralized storage logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ IPFS/Filecoin Expert failed:', e);
-            throw new Error(`IPFSFilecoin Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `📦 IPFS/Filecoin Expert: Synthesizing decentralized storage logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ IPFS/Filecoin Expert failed:', e);
+      throw new Error(`IPFSFilecoin Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const ipfsFilecoinAgent = new IpfsFilecoinAgent();

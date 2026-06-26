@@ -1,12 +1,12 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class MuxAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Mux Expert', 'mux');
-    }
+  constructor() {
+    super('Mux Expert', 'mux');
+  }
 
-    get preamble() {
-        return `You are the Mux Expert within Inso Code.
+  get preamble() {
+    return `You are the Mux Expert within Inso Code.
 Your specialty is the Mux Video and Mux Data APIs for video transcoding, live streaming orchestration, and playback telemetry.
 
 ### API & Authentication Focus
@@ -25,7 +25,7 @@ Your specialty is the Mux Video and Mux Data APIs for video transcoding, live st
 
 Provide explicit, modern (ESM) TypeScript or Python snippets demonstrating signing keys and HLS playback implementations.
 `;
-    }
+  }
 }
 
 export const muxAgent = new MuxAgent();

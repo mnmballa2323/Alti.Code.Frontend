@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileProvisioningDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_provisioning_designer_agent',
-            'Mobile Provisioning Designer',
-            'You are an elite Mobile Provisioning Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_provisioning_designer_agent',
+      'Mobile Provisioning Designer',
+      'You are an elite Mobile Provisioning Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Provisioning.',
+    );
+  }
 
-    async generateMobileProvisioningSystem(objective) {
-        logger.info(`💻 [MobileProvisioningDesignerAgent] Analyzing Mobile Provisioning Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Provisioning Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Provisioning Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileProvisioningDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileProvisioningSystem(objective) {
+    logger.info(
+      `💻 [MobileProvisioningDesignerAgent] Analyzing Mobile Provisioning Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Provisioning Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Provisioning Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileProvisioningDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileProvisioningDesignerAgent = Object.freeze(new MobileProvisioningDesignerAgent());
+export const mobileProvisioningDesignerAgent = Object.freeze(
+  new MobileProvisioningDesignerAgent(),
+);

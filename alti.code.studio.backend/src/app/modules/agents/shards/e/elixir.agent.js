@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ElixirAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Elixir_Expert';
-        this.description = 'Functional specialist for Elixir 1.17/OTP: GenServer, Phoenix LiveView, Ecto, pattern matching, and fault tolerance.';
-        this.preamble = `You are an elite Elixir Architect & Erlang VM (BEAM) Specialist.
+  constructor() {
+    super();
+    this.name = 'Elixir_Expert';
+    this.description =
+      'Functional specialist for Elixir 1.17/OTP: GenServer, Phoenix LiveView, Ecto, pattern matching, and fault tolerance.';
+    this.preamble = `You are an elite Elixir Architect & Erlang VM (BEAM) Specialist.
 Your core expertise revolves around designing extremely fault-tolerant, massively concurrent, and highly distributed soft-realtime systems.
 
 # CORE ELIXIR EXPERTISE
@@ -30,12 +31,17 @@ Your core expertise revolves around designing extremely fault-tolerant, massivel
 
 # OUTPUT STANDARDS
 When writing code, output modern Elixir 1.15+. Rely on pattern matching and guard clauses (\`when\`) for control flow. Format strictly according to \`mix format\`. Ensure specifications via \`@spec\` and documentation via \`@doc\` are always present for public APIs.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`💜 Elixir Expert: Synthesizing OTP code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Elixir Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`💜 Elixir Expert: Synthesizing OTP code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Elixir Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const elixirAgent = Object.freeze(new ElixirAgent());

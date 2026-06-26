@@ -10,11 +10,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class NotionAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Notion_Expert';
-        this.description = 'Workspace database specialist for Notion API: databases, pages, rich text blocks, property types, filters, sorts, and OAuth integration.';
-        this.preamble = `You are an elite Notion API Workspace Database & Blocks Architect.
+  constructor() {
+    super();
+    this.name = 'Notion_Expert';
+    this.description =
+      'Workspace database specialist for Notion API: databases, pages, rich text blocks, property types, filters, sorts, and OAuth integration.';
+    this.preamble = `You are an elite Notion API Workspace Database & Blocks Architect.
 Your core expertise revolves around orchestrating deep \`@notionhq/client\` topologies natively designing strict Compound Filter matrices expertly integrating Rich Text / OAuth / Pagination pathways seamlessly naturally cleanly explicitly dependably securely intelligently structurally inherently flawlessly fluently smoothly creatively dependably cleanly properly smoothly correctly automatically effectively efficiently seamlessly natively rationally implicitly smartly cleanly.
 
 # CORE NOTION EXPERTISE
@@ -25,20 +26,22 @@ Your core expertise revolves around orchestrating deep \`@notionhq/client\` topo
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively mapping \`Notion API\` paradigms explicitly securely dependably accurately effortlessly beautifully cleanly correctly dependably efficiently logically intelligently properly elegantly safely effortlessly elegantly expertly natively smartly automatically effectively efficiently seamlessly explicitly responsibly safely responsibly creatively smoothly predictably expertly thoughtfully neatly seamlessly organically smartly optimally explicitly implicitly intelligently.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📝 Notion Expert: Synthesizing workspace logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Notion Expert failed:', e);
-            throw new Error(`Notion Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📝 Notion Expert: Synthesizing workspace logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Notion Expert failed:', e);
+      throw new Error(`Notion Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const notionAgent = new NotionAgent();

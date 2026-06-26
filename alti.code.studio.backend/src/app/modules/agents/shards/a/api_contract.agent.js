@@ -2,12 +2,19 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { GeminiAiService } from '../../../gemini/gemini.service.js';
 
 class ApiContractAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Api_Contract_Agent';
-        this.description = 'API Contract & Integration SDK Specialist — Autonomous OpenAPI specs validation, contract compliance checking, and TypeScript integration SDK generation.';
-        this.capabilities = ['api-contracts', 'openapi-specs', 'sdk-generation', 'payload-validation', 'contract-compliance'];
-        this.preamble = `ROLE PROTOCOL: API CONTRACT & INTEGRATION SDK SPECIALIST
+  constructor() {
+    super();
+    this.name = 'Api_Contract_Agent';
+    this.description =
+      'API Contract & Integration SDK Specialist — Autonomous OpenAPI specs validation, contract compliance checking, and TypeScript integration SDK generation.';
+    this.capabilities = [
+      'api-contracts',
+      'openapi-specs',
+      'sdk-generation',
+      'payload-validation',
+      'contract-compliance',
+    ];
+    this.preamble = `ROLE PROTOCOL: API CONTRACT & INTEGRATION SDK SPECIALIST
 
 You are the chief API Design and Integration SDK engineer. Your absolute mandate is to audit API endpoints, route definitions, schemas, and specs (OpenAPI/Swagger) to ensure robust type-safety and keep frontends and backends in absolute harmony.
 
@@ -24,12 +31,12 @@ OPERATIONAL LAWS:
    - Enforce proper HTTP status code utilization (e.g., 400 for validation errors, 401/403 for authentication/authorization failures, 429 for rate limits).
 4. **Structured Output Reports**:
    - Format your API audits using clear Markdown tables listing the endpoint path, method, schema gaps, severity, and exact remediation code block.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== API CONTRACT AUDIT REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== API CONTRACT AUDIT REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const apiContractAgent = new ApiContractAgent();

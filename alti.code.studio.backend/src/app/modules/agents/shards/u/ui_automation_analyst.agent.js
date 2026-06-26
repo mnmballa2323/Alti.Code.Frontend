@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIAutomationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_automation_analyst_agent',
-            'UI Automation Analyst',
-            'You are an elite UI Automation Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and UI Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_automation_analyst_agent',
+      'UI Automation Analyst',
+      'You are an elite UI Automation Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and UI Automation.',
+    );
+  }
 
-    async generateUIAutomationSystem(objective) {
-        logger.info(`💻 [UIAutomationAnalystAgent] Analyzing UI Automation Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Automation Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Automation Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIAutomationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIAutomationSystem(objective) {
+    logger.info(
+      `💻 [UIAutomationAnalystAgent] Analyzing UI Automation Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Automation Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Automation Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIAutomationAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIAutomationAnalystAgent = Object.freeze(new UIAutomationAnalystAgent());
+export const uIAutomationAnalystAgent = Object.freeze(
+  new UIAutomationAnalystAgent(),
+);

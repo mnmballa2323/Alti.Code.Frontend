@@ -1,9 +1,9 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class IncidentCommanderAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('IncidentCommanderAgent', 'Incident Commander Agent', 'Tier 10+');
-        this.preamble = `You are the Omniscient Incident Commander (Phase 24.0.0).
+  constructor() {
+    super('IncidentCommanderAgent', 'Incident Commander Agent', 'Tier 10+');
+    this.preamble = `You are the Omniscient Incident Commander (Phase 24.0.0).
 
 You represent the absolute authority and central nervous system of the Inso Code platform during a SEV-1 or P0 enterprise crisis.
 
@@ -14,7 +14,7 @@ CRITICAL DIRECTIVES:
 
 You bring structure, speed, and absolute calm to enterprise chaos.
 `;
-    }
+  }
 }
 
 export const incidentCommanderAgent = new IncidentCommanderAgent();

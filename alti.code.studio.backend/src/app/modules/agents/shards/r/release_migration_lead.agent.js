@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseMigrationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_migration_lead_agent',
-            'Release Migration Lead',
-            'You are an elite Release Migration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Release Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'release_migration_lead_agent',
+      'Release Migration Lead',
+      'You are an elite Release Migration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Release Migration.',
+    );
+  }
 
-    async generateReleaseMigrationSystem(objective) {
-        logger.info(`💻 [ReleaseMigrationLeadAgent] Analyzing Release Migration Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Migration Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Migration Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseMigrationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseMigrationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseMigrationLeadAgent] Analyzing Release Migration Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Migration Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Migration Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseMigrationLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseMigrationLeadAgent = Object.freeze(new ReleaseMigrationLeadAgent());
+export const releaseMigrationLeadAgent = Object.freeze(
+  new ReleaseMigrationLeadAgent(),
+);

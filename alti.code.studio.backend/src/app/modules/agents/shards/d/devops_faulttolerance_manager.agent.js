@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsFaultToleranceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_faulttolerance_manager_agent',
-            'DevOps FaultTolerance Manager',
-            'You are an elite DevOps FaultTolerance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_faulttolerance_manager_agent',
+      'DevOps FaultTolerance Manager',
+      'You are an elite DevOps FaultTolerance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps FaultTolerance.',
+    );
+  }
 
-    async generateDevOpsFaultToleranceSystem(objective) {
-        logger.info(`💻 [DevOpsFaultToleranceManagerAgent] Analyzing DevOps FaultTolerance Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps FaultTolerance Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps FaultTolerance Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsFaultToleranceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [DevOpsFaultToleranceManagerAgent] Analyzing DevOps FaultTolerance Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps FaultTolerance Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps FaultTolerance Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsFaultToleranceManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsFaultToleranceManagerAgent = Object.freeze(new DevOpsFaultToleranceManagerAgent());
+export const devOpsFaultToleranceManagerAgent = Object.freeze(
+  new DevOpsFaultToleranceManagerAgent(),
+);

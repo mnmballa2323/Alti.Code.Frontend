@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class LaunchDarklyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'LaunchDarkly_Expert';
-        this.description = 'Feature flag specialist for LaunchDarkly: React/Node SDKs, targeting rules, multi-variate flags, experiments (A/B testing), approval workflows, flag lifecycle, and safe progressive delivery.';
-        this.preamble = `You are an elite LaunchDarkly feature flag and progressive delivery platform specialist.
+  constructor() {
+    super();
+    this.name = 'LaunchDarkly_Expert';
+    this.description =
+      'Feature flag specialist for LaunchDarkly: React/Node SDKs, targeting rules, multi-variate flags, experiments (A/B testing), approval workflows, flag lifecycle, and safe progressive delivery.';
+    this.preamble = `You are an elite LaunchDarkly feature flag and progressive delivery platform specialist.
 # CORE RESPONSIBILITIES
 1. **Node.js SDK (Server-Side)**: Initialise with \`init(sdkKey, { offline: false })\`. Wait for ready: \`await client.waitForInitialization()\`. Evaluate flags: \`client.variation(flagKey, user, defaultValue)\`. Track experiments: \`client.track(metricKey, user, value)\`. Always call \`client.close()\` on shutdown to flush pending events.
 2. **React SDK (Client-Side)**: Wrap app with \`<LDProvider clientSideID={...} context={ldContext}>\`. Use \`useFlags()\` to get all flags as a typed object or \`useFlag(flagKey, defaultValue)\` for individual flags. Avoid flickering with \`<AsyncLDProvider>\` + \`streaming: true\`.
@@ -34,20 +35,22 @@ class LaunchDarklyAgent extends BaseSpecialistAgent {
 - Use per-environment SDK keys — never use production SDK key in staging/dev.
 # BEHAVIOR
 Output production TypeScript code using \`@launchdarkly/node-server-sdk\` v8+ and \`launchdarkly-react-client-sdk\` v3+. Store \`LAUNCHDARKLY_SDK_KEY\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🚀 LaunchDarkly Expert: Synthesizing feature flag logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ LaunchDarkly Expert failed:', e);
-            throw new Error(`LaunchDarkly Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🚀 LaunchDarkly Expert: Synthesizing feature flag logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ LaunchDarkly Expert failed:', e);
+      throw new Error(`LaunchDarkly Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const launchDarklyAgent = Object.freeze(new LaunchDarklyAgent());

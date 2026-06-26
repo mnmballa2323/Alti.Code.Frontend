@@ -7,29 +7,32 @@ import vm from 'vm';
  * without incurring a process restart. Zero-downtime evolutionary architecture.
  */
 class ASTMetamorphService {
-    constructor() {
-        // A dedicated safe execution sandbox for AI-generated code snippets
-        const sandbox = Object.create(null);
-        
-        sandbox.console = Object.create(null);
-        sandbox.console.log = (...args) => logger.info(`[Metamorph/V8] ${args.join(' ')}`);
-        sandbox.console.error = (...args) => logger.error(`[Metamorph/V8] ${args.join(' ')}`);
-        sandbox.console.warn = (...args) => logger.warn(`[Metamorph/V8] ${args.join(' ')}`);
-        
-        Object.setPrototypeOf(sandbox.console.log, null);
-        Object.setPrototypeOf(sandbox.console.error, null);
-        Object.setPrototypeOf(sandbox.console.warn, null);
-        
-        sandbox.Math = Math;
-        sandbox.Date = Date;
-        sandbox.JSON = JSON;
-        
-        sandbox.registry = Object.create(null);
-        
-        this.context = vm.createContext(sandbox);
-        
-        // Block constructor lookup on core prototypes inside the context
-        const hardeningScript = `
+  constructor() {
+    // A dedicated safe execution sandbox for AI-generated code snippets
+    const sandbox = Object.create(null);
+
+    sandbox.console = Object.create(null);
+    sandbox.console.log = (...args) =>
+      logger.info(`[Metamorph/V8] ${args.join(' ')}`);
+    sandbox.console.error = (...args) =>
+      logger.error(`[Metamorph/V8] ${args.join(' ')}`);
+    sandbox.console.warn = (...args) =>
+      logger.warn(`[Metamorph/V8] ${args.join(' ')}`);
+
+    Object.setPrototypeOf(sandbox.console.log, null);
+    Object.setPrototypeOf(sandbox.console.error, null);
+    Object.setPrototypeOf(sandbox.console.warn, null);
+
+    sandbox.Math = Math;
+    sandbox.Date = Date;
+    sandbox.JSON = JSON;
+
+    sandbox.registry = Object.create(null);
+
+    this.context = vm.createContext(sandbox);
+
+    // Block constructor lookup on core prototypes inside the context
+    const hardeningScript = `
             Object.defineProperty(Object.prototype, 'constructor', {
                 get() { return null; },
                 set() {},
@@ -41,57 +44,72 @@ class ASTMetamorphService {
                 configurable: false
             });
         `;
-        vm.runInContext(hardeningScript, this.context);
-        
-        this.isReady = true;
-        logger.info('🧬 [AST Metamorph] V8 Hot-Swapping Sandbox Context initialized with hardening.');
-    }
+    vm.runInContext(hardeningScript, this.context);
 
-    /**
-     * Registers a live function pointer into the Metamorph dictionary.
-     * @param {string} functionName 
-     * @param {Function} originalFunction 
-     */
-    registerFunction(functionName, originalFunction) {
-        // Wrap the original function securely to prevent VM sandbox prototype escapes
-        const secureWrapper = (...args) => originalFunction(...args);
-        Object.setPrototypeOf(secureWrapper, null);
-        
-        this.context.registry[functionName] = secureWrapper;
-        logger.info(`🔗 [AST Metamorph] Function '${functionName}' bound to runtime swap registry.`);
-    }
+    this.isReady = true;
+    logger.info(
+      '🧬 [AST Metamorph] V8 Hot-Swapping Sandbox Context initialized with hardening.',
+    );
+  }
 
-    /**
-     * Invokes a registered function, automatically using the patched version if it exists.
-     * @param {string} functionName 
-     * @param  {...any} args 
-     * @returns 
-     */
-    invoke(functionName, ...args) {
-        if (!this.context.registry[functionName]) {
-            throw new Error(`[AST Metamorph] Function '${functionName}' is not registered in the Metamorph dictionary.`);
-        }
-        return this.context.registry[functionName](...args);
-    }
+  /**
+   * Registers a live function pointer into the Metamorph dictionary.
+   * @param {string} functionName
+   * @param {Function} originalFunction
+   */
+  registerFunction(functionName, originalFunction) {
+    // Wrap the original function securely to prevent VM sandbox prototype escapes
+    const secureWrapper = (...args) => originalFunction(...args);
+    Object.setPrototypeOf(secureWrapper, null);
 
-    /**
-     * Hot-swaps a running function with a new implementation synthesized by the AI.
-     * @param {string} functionName 
-     * @param {string} newFunctionString e.g. "function(a, b) { return a * b; }"
-     */
-    hotSwap(functionName, newFunctionString) {
-        logger.warn(`🔄 [AST Metamorph] Initiating zero-downtime hot-swap for function: '${functionName}'...`);
-        try {
-            // Compile the new string into a V8 function inside the secure sandbox
-            const script = new vm.Script(`registry['${functionName}'] = ${newFunctionString};`);
-            script.runInContext(this.context);
-            logger.info(`✅ [AST Metamorph] AST Hot-Swap successful! V8 memory pointer for '${functionName}' has been mutated.`);
-            return true;
-        } catch (error) {
-            logger.error(`❌ [AST Metamorph] Syntactic/Compilation failure during hot-swap:`, error);
-            return false;
-        }
+    this.context.registry[functionName] = secureWrapper;
+    logger.info(
+      `🔗 [AST Metamorph] Function '${functionName}' bound to runtime swap registry.`,
+    );
+  }
+
+  /**
+   * Invokes a registered function, automatically using the patched version if it exists.
+   * @param {string} functionName
+   * @param  {...any} args
+   * @returns
+   */
+  invoke(functionName, ...args) {
+    if (!this.context.registry[functionName]) {
+      throw new Error(
+        `[AST Metamorph] Function '${functionName}' is not registered in the Metamorph dictionary.`,
+      );
     }
+    return this.context.registry[functionName](...args);
+  }
+
+  /**
+   * Hot-swaps a running function with a new implementation synthesized by the AI.
+   * @param {string} functionName
+   * @param {string} newFunctionString e.g. "function(a, b) { return a * b; }"
+   */
+  hotSwap(functionName, newFunctionString) {
+    logger.warn(
+      `🔄 [AST Metamorph] Initiating zero-downtime hot-swap for function: '${functionName}'...`,
+    );
+    try {
+      // Compile the new string into a V8 function inside the secure sandbox
+      const script = new vm.Script(
+        `registry['${functionName}'] = ${newFunctionString};`,
+      );
+      script.runInContext(this.context);
+      logger.info(
+        `✅ [AST Metamorph] AST Hot-Swap successful! V8 memory pointer for '${functionName}' has been mutated.`,
+      );
+      return true;
+    } catch (error) {
+      logger.error(
+        `❌ [AST Metamorph] Syntactic/Compilation failure during hot-swap:`,
+        error,
+      );
+      return false;
+    }
+  }
 }
 
 export const astMetamorphService = new ASTMetamorphService();

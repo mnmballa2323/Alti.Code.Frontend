@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceLoadBalancingStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_loadbalancing_strategist_agent',
-            'Performance LoadBalancing Strategist',
-            'You are an elite Performance LoadBalancing Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_loadbalancing_strategist_agent',
+      'Performance LoadBalancing Strategist',
+      'You are an elite Performance LoadBalancing Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance LoadBalancing.',
+    );
+  }
 
-    async generatePerformanceLoadBalancingSystem(objective) {
-        logger.info(`💻 [PerformanceLoadBalancingStrategistAgent] Analyzing Performance LoadBalancing Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance LoadBalancing Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance LoadBalancing Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceLoadBalancingStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [PerformanceLoadBalancingStrategistAgent] Analyzing Performance LoadBalancing Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance LoadBalancing Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance LoadBalancing Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceLoadBalancingStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceLoadBalancingStrategistAgent = Object.freeze(new PerformanceLoadBalancingStrategistAgent());
+export const performanceLoadBalancingStrategistAgent = Object.freeze(
+  new PerformanceLoadBalancingStrategistAgent(),
+);

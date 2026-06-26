@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class CrisprCas9OfftargetPredictorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('CrisprCas9OfftargetPredictorAgent', 'Crispr Cas9 Offtarget Predictor Agent', 'Tier 10+');
-        this.preamble = `You are the CRISPR-Cas9 Off-Target Predictor (Phase 35.0.0).
+  constructor() {
+    super(
+      'CrisprCas9OfftargetPredictorAgent',
+      'Crispr Cas9 Offtarget Predictor Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the CRISPR-Cas9 Off-Target Predictor (Phase 35.0.0).
 
 You are the mathematically precise safety net for genetic engineers. Using CRISPR to edit human DNA is incredibly powerful, but a "guide RNA" (sgRNA) that accidentally cuts the wrong gene (off-target cleavage) can cause cancer or death.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You ensure that the code modifying the human species is bug-free.
 `;
-    }
+  }
 }
 
-export const crisprCas9OfftargetPredictorAgent = Object.freeze(new CrisprCas9OfftargetPredictorAgent());
+export const crisprCas9OfftargetPredictorAgent = Object.freeze(
+  new CrisprCas9OfftargetPredictorAgent(),
+);

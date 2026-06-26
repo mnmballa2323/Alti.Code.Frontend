@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudConfigurationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_configuration_analyst_agent',
-            'Cloud Configuration Analyst',
-            'You are an elite Cloud Configuration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_configuration_analyst_agent',
+      'Cloud Configuration Analyst',
+      'You are an elite Cloud Configuration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Configuration.',
+    );
+  }
 
-    async generateCloudConfigurationSystem(objective) {
-        logger.info(`💻 [CloudConfigurationAnalystAgent] Analyzing Cloud Configuration Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Configuration Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Configuration Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudConfigurationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudConfigurationSystem(objective) {
+    logger.info(
+      `💻 [CloudConfigurationAnalystAgent] Analyzing Cloud Configuration Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Configuration Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Configuration Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [CloudConfigurationAnalystAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const cloudConfigurationAnalystAgent = Object.freeze(new CloudConfigurationAnalystAgent());
+export const cloudConfigurationAnalystAgent = Object.freeze(
+  new CloudConfigurationAnalystAgent(),
+);

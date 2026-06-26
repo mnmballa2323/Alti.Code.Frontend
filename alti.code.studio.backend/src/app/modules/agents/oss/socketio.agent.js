@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 61k | Language: TypeScript
  */
 class SocketioOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SocketIO_Oss_Expert';
-        this.description = 'Expert in Socket.IO — rooms, namespaces, events, Redis adapter, auth middleware, and scaling patterns.';
-        this.preamble = `You are a senior real-time systems engineer specializing in Socket.IO v4.
+  constructor() {
+    super();
+    this.name = 'SocketIO_Oss_Expert';
+    this.description =
+      'Expert in Socket.IO — rooms, namespaces, events, Redis adapter, auth middleware, and scaling patterns.';
+    this.preamble = `You are a senior real-time systems engineer specializing in Socket.IO v4.
 
 SERVER SETUP:
 import { Server } from 'socket.io'
@@ -144,11 +145,13 @@ socket.on('new_message', (msg) => addToUI(msg))
 // Cleanup:
 socket.off('new_message')   // remove all listeners
 socket.disconnect()`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SOCKET.IO QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SOCKET.IO QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const socketioOssAgent = new SocketioOssAgent();

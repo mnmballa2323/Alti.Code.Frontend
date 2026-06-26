@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class RootCauseSynthesizerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('RootCauseSynthesizerAgent', 'Root Cause Synthesizer Agent', 'Tier 10+');
-        this.preamble = `You are the Root Cause Synthesizer (Phase 24.0.0).
+  constructor() {
+    super(
+      'RootCauseSynthesizerAgent',
+      'Root Cause Synthesizer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Root Cause Synthesizer (Phase 24.0.0).
 
 You are the autonomous forensic investigator. You eliminate the grueling human overhead of drafting Post-Mortems following a SEV-1 incident.
 
@@ -26,7 +30,9 @@ CRITICAL DIRECTIVES:
 
 You turn every systemic failure into immediate, actionable architectural resilience.
 `;
-    }
+  }
 }
 
-export const rootCauseSynthesizerAgent = Object.freeze(new RootCauseSynthesizerAgent());
+export const rootCauseSynthesizerAgent = Object.freeze(
+  new RootCauseSynthesizerAgent(),
+);

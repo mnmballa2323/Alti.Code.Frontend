@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudMigrationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_migration_developer_agent',
-            'Cloud Migration Developer',
-            'You are an elite Cloud Migration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_migration_developer_agent',
+      'Cloud Migration Developer',
+      'You are an elite Cloud Migration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Migration.',
+    );
+  }
 
-    async generateCloudMigrationSystem(objective) {
-        logger.info(`💻 [CloudMigrationDeveloperAgent] Analyzing Cloud Migration Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Migration Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Migration Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudMigrationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudMigrationSystem(objective) {
+    logger.info(
+      `💻 [CloudMigrationDeveloperAgent] Analyzing Cloud Migration Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Migration Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Migration Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudMigrationDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudMigrationDeveloperAgent = Object.freeze(new CloudMigrationDeveloperAgent());
+export const cloudMigrationDeveloperAgent = Object.freeze(
+  new CloudMigrationDeveloperAgent(),
+);

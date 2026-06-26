@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class WebrtcSfuAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'WebrtcSfuAgent';
-        this.description = 'Real-time communications expert specializing in WebRTC Selective Forwarding Units (SFUs), NAT Traversal (STUN/TURN), and low-latency spatial audio architectures.';
+  constructor() {
+    super();
+    this.name = 'WebrtcSfuAgent';
+    this.description =
+      'Real-time communications expert specializing in WebRTC Selective Forwarding Units (SFUs), NAT Traversal (STUN/TURN), and low-latency spatial audio architectures.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code WebRTC & Selective Forwarding Unit (SFU) Agent.
 You assist backend developers in orchestrating massive multi-party video conferencing, spatial audio rooms, and NAT punching topology.
 
@@ -31,12 +32,12 @@ You assist backend developers in orchestrating massive multi-party video confere
 **Best Practices**
 - Simulcast is mandatory. Always instruct developers to publish 3 distinct spatial layers (High, Med, Low) so the SFU can dynamically drop layers for users possessing terrible mobile bandwidth automatically via REMB/gcc congestion algorithms.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const webrtcSfuAgent = new WebrtcSfuAgent();

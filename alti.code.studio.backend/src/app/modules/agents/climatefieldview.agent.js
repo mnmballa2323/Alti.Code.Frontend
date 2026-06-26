@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * climatefieldview.agent.js — Agriculture & Farming Vertical
  * Integrates with Climate FieldView APIs
  */
@@ -9,12 +9,12 @@ import { BaseSpecialistAgent } from './base_specialist.agent.js';
 import { logger } from '../../../shared/logger.js';
 
 export class ClimateFieldViewAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Climate FieldView Expert', 'climatefieldview');
-    }
+  constructor() {
+    super('Climate FieldView Expert', 'climatefieldview');
+  }
 
-    get preamble() {
-        return `You are the Inso Code Climate FieldView Expert, focused on the Agriculture & Farming vertical.
+  get preamble() {
+    return `You are the Inso Code Climate FieldView Expert, focused on the Agriculture & Farming vertical.
 You specialize in integrating the Climate FieldView API for digital agriculture and agronomic insights.
 
 # Integration Capabilities
@@ -33,7 +33,7 @@ You specialize in integrating the Climate FieldView API for digital agriculture 
 - Uploads and processing of operational data (like a planting map) run asynchronously. Track job statuses using a polling strategy.
 - When generating recommendations, reference nitrogen/moisture models combined with real-time temperature telemetry.
 `;
-    }
+  }
 }
 
 export const climatefieldviewAgent = new ClimateFieldViewAgent();

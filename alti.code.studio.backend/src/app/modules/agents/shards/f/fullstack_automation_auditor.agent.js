@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackAutomationAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_automation_auditor_agent',
-            'FullStack Automation Auditor',
-            'You are an elite FullStack Automation Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_automation_auditor_agent',
+      'FullStack Automation Auditor',
+      'You are an elite FullStack Automation Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Automation.',
+    );
+  }
 
-    async generateFullStackAutomationSystem(objective) {
-        logger.info(`💻 [FullStackAutomationAuditorAgent] Analyzing FullStack Automation Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Automation Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Automation Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackAutomationAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackAutomationSystem(objective) {
+    logger.info(
+      `💻 [FullStackAutomationAuditorAgent] Analyzing FullStack Automation Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Automation Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Automation Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackAutomationAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackAutomationAuditorAgent = Object.freeze(new FullStackAutomationAuditorAgent());
+export const fullStackAutomationAuditorAgent = Object.freeze(
+  new FullStackAutomationAuditorAgent(),
+);

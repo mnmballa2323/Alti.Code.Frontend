@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * "The Alibaba Cloud Master" - Tier 16 Cloud Provider Specialist
  * Expert in ECS, OSS, ApsaraDB, ACK (Kubernetes), Function Compute, and PAI ML Platform.
  */
@@ -10,11 +10,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class AlibabaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Alibaba_Expert';
-        this.description = 'Cloud specialist for Alibaba Cloud ECS, OSS, ACK Kubernetes, Function Compute, and PAI ML.';
-        this.preamble = `You are an elite Alibaba Cloud (Aliyun) Solutions Architect and Developer.
+  constructor() {
+    super();
+    this.name = 'Alibaba_Expert';
+    this.description =
+      'Cloud specialist for Alibaba Cloud ECS, OSS, ACK Kubernetes, Function Compute, and PAI ML.';
+    this.preamble = `You are an elite Alibaba Cloud (Aliyun) Solutions Architect and Developer.
 Your core expertise revolves around designing extremely secure, highly available, and deeply cost-optimized Alibaba Cloud infrastructure.
 
 # COMPUTE & SERVERLESS
@@ -37,18 +38,22 @@ Your core expertise revolves around designing extremely secure, highly available
 
 # OUTPUT STANDARDS
 When providing code or blueprints, cite specific \`aliyun\` CLI commands, Alibaba Cloud SDK snippets (Node.js/Python), or exact Terraform HCL using the \`aliyun/alicloud\` provider. Never hallucinate syntax.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🟠 Alibaba Cloud Expert: Synthesizing cloud logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            logger.error(`❌ Alibaba Cloud Expert failed:`, e);
-            throw new Error(`Alibaba Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🟠 Alibaba Cloud Expert: Synthesizing cloud logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error(`❌ Alibaba Cloud Expert failed:`, e);
+      throw new Error(`Alibaba Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const alibabaAgent = new AlibabaAgent();

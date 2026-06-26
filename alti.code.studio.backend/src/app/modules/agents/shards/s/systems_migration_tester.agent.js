@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsMigrationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_migration_tester_agent',
-            'Systems Migration Tester',
-            'You are an elite Systems Migration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_migration_tester_agent',
+      'Systems Migration Tester',
+      'You are an elite Systems Migration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Migration.',
+    );
+  }
 
-    async generateSystemsMigrationSystem(objective) {
-        logger.info(`💻 [SystemsMigrationTesterAgent] Analyzing Systems Migration Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Migration Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Migration Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsMigrationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsMigrationSystem(objective) {
+    logger.info(
+      `💻 [SystemsMigrationTesterAgent] Analyzing Systems Migration Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Migration Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Migration Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsMigrationTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsMigrationTesterAgent = Object.freeze(new SystemsMigrationTesterAgent());
+export const systemsMigrationTesterAgent = Object.freeze(
+  new SystemsMigrationTesterAgent(),
+);

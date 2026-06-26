@@ -14,36 +14,42 @@ import { agentSService } from '../senses/agent_s.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AgentSAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('AgentS', 'The GUI Operator', 'Tier 13');
+  constructor() {
+    super('AgentS', 'The GUI Operator', 'Tier 13');
+  }
+
+  async _invoke(context) {
+    logger.info(
+      `🤖 GUI Operator: Receiving swarm intent for graphical desktop control: "${context.goal}"`,
+    );
+
+    try {
+      // Forward the goal instruction directly to the Simular AI Agent-S multimodal framework
+      const guiOutput = await agentSService.executeGUITask(context.goal);
+      const outputResult =
+        typeof guiOutput === 'object' ? guiOutput.result : guiOutput;
+      const trajectory =
+        typeof guiOutput === 'object' ? guiOutput.trajectory : [];
+
+      return {
+        status: 'success',
+        agent: this.name,
+        s_action: outputResult,
+        trajectory: trajectory,
+        message: `Task successfully executed via autonomous GUI interactions (Mouse/Keyboard).`,
+      };
+    } catch (error) {
+      logger.error(
+        `❌ GUI Operator: Agent-S execution failed: ${error.message}`,
+      );
+      return {
+        status: 'error',
+        agent: this.name,
+        error: error.message,
+        message: 'Failed to complete GUI interaction task.',
+      };
     }
-
-    async _invoke(context) {
-        logger.info(`🤖 GUI Operator: Receiving swarm intent for graphical desktop control: "${context.goal}"`);
-
-        try {
-            // Forward the goal instruction directly to the Simular AI Agent-S multimodal framework
-            const guiOutput = await agentSService.executeGUITask(context.goal);
-            const outputResult = typeof guiOutput === 'object' ? guiOutput.result : guiOutput;
-            const trajectory = typeof guiOutput === 'object' ? guiOutput.trajectory : [];
-
-            return {
-                status: 'success',
-                agent: this.name,
-                s_action: outputResult,
-                trajectory: trajectory,
-                message: `Task successfully executed via autonomous GUI interactions (Mouse/Keyboard).`
-            };
-        } catch (error) {
-            logger.error(`❌ GUI Operator: Agent-S execution failed: ${error.message}`);
-            return {
-                status: 'error',
-                agent: this.name,
-                error: error.message,
-                message: 'Failed to complete GUI interaction task.'
-            };
-        }
-    }
+  }
 }
 
 export const agentSAgent = Object.freeze(new AgentSAgent());

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteScalingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_scaling_specialist_agent',
-            'Site Scaling Specialist',
-            'You are an elite Site Scaling Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Site Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'site_scaling_specialist_agent',
+      'Site Scaling Specialist',
+      'You are an elite Site Scaling Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Site Scaling.',
+    );
+  }
 
-    async generateSiteScalingSystem(objective) {
-        logger.info(`💻 [SiteScalingSpecialistAgent] Analyzing Site Scaling Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Scaling Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Scaling Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteScalingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteScalingSystem(objective) {
+    logger.info(
+      `💻 [SiteScalingSpecialistAgent] Analyzing Site Scaling Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Scaling Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Scaling Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteScalingSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteScalingSpecialistAgent = Object.freeze(new SiteScalingSpecialistAgent());
+export const siteScalingSpecialistAgent = Object.freeze(
+  new SiteScalingSpecialistAgent(),
+);

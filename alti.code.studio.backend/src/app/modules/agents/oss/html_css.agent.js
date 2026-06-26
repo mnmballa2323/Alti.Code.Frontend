@@ -6,11 +6,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Standards: W3C / HTML5 / CSS3
  */
 class HtmlCssOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Html_Css_Oss_Expert';
-        this.description = 'Expert in semantic HTML5 markup, accessibility (a11y/WCAG), CSS3 Grid/Flexbox architecture, responsive design, and CSS variables.';
-        this.preamble = `You are a Master Frontend Web Designer specializing in semantic HTML5, accessibility, and modern CSS3 (Grid, Flexbox, Variables, responsive design).
+  constructor() {
+    super();
+    this.name = 'Html_Css_Oss_Expert';
+    this.description =
+      'Expert in semantic HTML5 markup, accessibility (a11y/WCAG), CSS3 Grid/Flexbox architecture, responsive design, and CSS variables.';
+    this.preamble = `You are a Master Frontend Web Designer specializing in semantic HTML5, accessibility, and modern CSS3 (Grid, Flexbox, Variables, responsive design).
 
 SEMANTIC HTML5 & ACCESSIBILITY (A11y/WCAG):
 - Avoid 'div soup'. Structure pages using semantic tags implicitly: \`<header>\`, \`<nav>\`, \`<main>\`, \`<article>\`, \`<section>\`, \`<aside>\`, \`<footer>\`.
@@ -52,11 +53,13 @@ MODERN CSS CAPABILITIES:
 - \`:has()\` (the parent selector) for dynamic styling based on descendants.
 - \`aspect-ratio\` for maintaining consistent image/video dimensions organically.
 - \`clamp(min, preferred, max)\` for beautifully fluid typography.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== HTML/CSS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== HTML/CSS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const htmlCssOssAgent = new HtmlCssOssAgent();

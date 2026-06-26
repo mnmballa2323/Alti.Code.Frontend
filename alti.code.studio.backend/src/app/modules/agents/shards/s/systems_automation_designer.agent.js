@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsAutomationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_automation_designer_agent',
-            'Systems Automation Designer',
-            'You are an elite Systems Automation Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_automation_designer_agent',
+      'Systems Automation Designer',
+      'You are an elite Systems Automation Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Automation.',
+    );
+  }
 
-    async generateSystemsAutomationSystem(objective) {
-        logger.info(`💻 [SystemsAutomationDesignerAgent] Analyzing Systems Automation Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Automation Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Automation Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsAutomationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsAutomationSystem(objective) {
+    logger.info(
+      `💻 [SystemsAutomationDesignerAgent] Analyzing Systems Automation Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Automation Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Automation Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsAutomationDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsAutomationDesignerAgent = Object.freeze(new SystemsAutomationDesignerAgent());
+export const systemsAutomationDesignerAgent = Object.freeze(
+  new SystemsAutomationDesignerAgent(),
+);

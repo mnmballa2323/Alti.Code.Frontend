@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PythonExpertAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Python_Expert';
-        this.description = 'Language specialist enforcing Pythonic patterns, AsyncIO, and Strict Type Hints.';
+  constructor() {
+    super();
+    this.name = 'Python_Expert';
+    this.description =
+      'Language specialist enforcing Pythonic patterns, AsyncIO, and Strict Type Hints.';
 
-        this.preamble = `You are an elite Python Application Architect & Concurrency Specialist.
+    this.preamble = `You are an elite Python Application Architect & Concurrency Specialist.
 Your core expertise revolves around designing highly performant, type-hinted, and robust enterprise Python architectures.
 
 # CORE PYTHON EXPERTISE
@@ -31,33 +32,35 @@ Your core expertise revolves around designing highly performant, type-hinted, an
 
 # OUTPUT STANDARDS
 When writing code, ensure it requires Python 3.10+ (utilizing \`match/case\` pattern matching and the \`|\` union operator). Always include docstrings (Google or Sphinx format). Prioritize clean architectural boundaries.`;
+  }
+
+  /**
+   * Executes a Python syntactic review or code generation.
+   * @param {string} prompt
+   * @param {Array<object>} contextData Project files or AST snippets
+   * @returns {Promise<string>}
+   */
+  async _invoke(prompt, contextData = []) {
+    logger.info(`💻 Python Expert: Synthesizing logic for prompt...`);
+    let combinedContext = '';
+    if (Array.isArray(contextData)) {
+      combinedContext = contextData
+        .map(c => `[Context File: ${c.path}]\\n${c.content}\\n`)
+        .join('\\n');
+    } else {
+      combinedContext = String(contextData);
     }
 
-    /**
-     * Executes a Python syntactic review or code generation.
-     * @param {string} prompt
-     * @param {Array<object>} contextData Project files or AST snippets
-     * @returns {Promise<string>}
-     */
-    async _invoke(prompt, contextData = []) {
-        logger.info(`💻 Python Expert: Synthesizing logic for prompt...`);
-        let combinedContext = '';
-        if (Array.isArray(contextData)) {
-            combinedContext = contextData.map(c => `[Context File: ${c.path}]\\n${c.content}\\n`).join('\\n');
-        } else {
-            combinedContext = String(contextData);
-        }
+    let finalPrompt = `${this.preamble}\\n\\n=== PROJECT CONTEXT ===\\n${combinedContext}\\n\\n=== USER REQUEST ===\\n${prompt}`;
 
-        let finalPrompt = `${this.preamble}\\n\\n=== PROJECT CONTEXT ===\\n${combinedContext}\\n\\n=== USER REQUEST ===\\n${prompt}`;
-
-        try {
-            const response = await GeminiAiService.generateContent(finalPrompt);
-            return response;
-        } catch (e) {
-            logger.error(`❌ Python Expert: Consultation failed.`, e);
-            throw new Error(`Python Synthesis Failed: ${e.message}`);
-        }
+    try {
+      const response = await GeminiAiService.generateContent(finalPrompt);
+      return response;
+    } catch (e) {
+      logger.error(`❌ Python Expert: Consultation failed.`, e);
+      throw new Error(`Python Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const pythonAgent = Object.freeze(new PythonExpertAgent());

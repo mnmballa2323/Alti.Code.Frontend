@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * "The Incident Response Agent" - Tier 4 Operations Specialist
  * Possesses deep semantic context regarding SRE practices,
  * blameless post-mortems, and root cause analysis from stack traces.
@@ -11,12 +11,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class IncidentAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Incident_Expert';
-        this.description = 'Site Reliability specialist diagnosing outages and synthesizing blameless post-mortems.';
+  constructor() {
+    super();
+    this.name = 'Incident_Expert';
+    this.description =
+      'Site Reliability specialist diagnosing outages and synthesizing blameless post-mortems.';
 
-        this.preamble = `You are an elite Site Reliability Engineer (SRE) and Incident Response commander.
+    this.preamble = `You are an elite Site Reliability Engineer (SRE) and Incident Response commander.
 Your core expertise revolves around diagnosing production outages, restoring service availability rapidly, and crafting Blameless Post-Mortems to prevent recurrence.
 
 # CORE RESPONSIBILITIES
@@ -28,28 +29,30 @@ Your core expertise revolves around diagnosing production outages, restoring ser
 # BEHAVIOR
 When auditing logs or providing blueprints, Output clear actionable steps. Do not focus on 'who' caused the issue, but 'what' systemic gap allowed the failure.
 `;
+  }
+
+  /**
+   * Executes an Incident IR review or Postmortem generation.
+   * @param {string} prompt
+   * @param {Array<object>} contextData Stack traces, raw logs, or architecture diagrams
+   * @returns {Promise<string>}
+   */
+  async consult(prompt, contextData = []) {
+    logger.info(`🚨 Incident Expert: Synthesizing IR logic for prompt...`);
+    let combinedContext = contextData
+      .map(c => `[Context File: ${c.path}]\n${c.content}\n`)
+      .join('\n');
+
+    let finalPrompt = `${this.preamble}\n\n=== LOG CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
+
+    try {
+      const response = await GeminiAiService.generateContent(finalPrompt);
+      return response;
+    } catch (e) {
+      logger.error(`❌ Incident Expert: Consultation failed.`, e);
+      throw new Error(`Incident Synthesis Failed: ${e.message}`);
     }
-
-    /**
-     * Executes an Incident IR review or Postmortem generation.
-     * @param {string} prompt 
-     * @param {Array<object>} contextData Stack traces, raw logs, or architecture diagrams
-     * @returns {Promise<string>}
-     */
-    async consult(prompt, contextData = []) {
-        logger.info(`🚨 Incident Expert: Synthesizing IR logic for prompt...`);
-        let combinedContext = contextData.map(c => `[Context File: ${c.path}]\n${c.content}\n`).join('\n');
-
-        let finalPrompt = `${this.preamble}\n\n=== LOG CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
-
-        try {
-            const response = await GeminiAiService.generateContent(finalPrompt);
-            return response;
-        } catch (e) {
-            logger.error(`❌ Incident Expert: Consultation failed.`, e);
-            throw new Error(`Incident Synthesis Failed: ${e.message}`);
-        }
-    }
+  }
 }
 
 export const incidentAgent = new IncidentAgent();

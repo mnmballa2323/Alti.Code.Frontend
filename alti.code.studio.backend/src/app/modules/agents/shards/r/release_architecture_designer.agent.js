@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseArchitectureDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_architecture_designer_agent',
-            'Release Architecture Designer',
-            'You are an elite Release Architecture Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'release_architecture_designer_agent',
+      'Release Architecture Designer',
+      'You are an elite Release Architecture Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Architecture.',
+    );
+  }
 
-    async generateReleaseArchitectureSystem(objective) {
-        logger.info(`💻 [ReleaseArchitectureDesignerAgent] Analyzing Release Architecture Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Architecture Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Architecture Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseArchitectureDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseArchitectureSystem(objective) {
+    logger.info(
+      `💻 [ReleaseArchitectureDesignerAgent] Analyzing Release Architecture Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Architecture Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Architecture Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseArchitectureDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseArchitectureDesignerAgent = Object.freeze(new ReleaseArchitectureDesignerAgent());
+export const releaseArchitectureDesignerAgent = Object.freeze(
+  new ReleaseArchitectureDesignerAgent(),
+);

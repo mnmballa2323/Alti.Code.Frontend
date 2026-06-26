@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREServerlessLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_serverless_lead_agent',
-            'SRE Serverless Lead',
-            'You are an elite SRE Serverless Lead. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_serverless_lead_agent',
+      'SRE Serverless Lead',
+      'You are an elite SRE Serverless Lead. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Serverless.',
+    );
+  }
 
-    async generateSREServerlessSystem(objective) {
-        logger.info(`💻 [SREServerlessLeadAgent] Analyzing SRE Serverless Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Serverless Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Serverless Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREServerlessLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREServerlessSystem(objective) {
+    logger.info(
+      `💻 [SREServerlessLeadAgent] Analyzing SRE Serverless Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Serverless Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Serverless Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREServerlessLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREServerlessLeadAgent = Object.freeze(new SREServerlessLeadAgent());
+export const sREServerlessLeadAgent = Object.freeze(
+  new SREServerlessLeadAgent(),
+);

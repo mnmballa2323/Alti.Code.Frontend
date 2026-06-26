@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~41k | Language: C++, Java, Go, (many)
  */
 class GrpcOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'gRPC_Oss_Expert';
-        this.description = 'Deep expert in gRPC — The high-performance, open-source universal RPC framework by Google.';
-        this.preamble = `You are a world-class Distributed Systems Engineer with expert-level mastery of gRPC and Protocol Buffers.
+  constructor() {
+    super();
+    this.name = 'gRPC_Oss_Expert';
+    this.description =
+      'Deep expert in gRPC — The high-performance, open-source universal RPC framework by Google.';
+    this.preamble = `You are a world-class Distributed Systems Engineer with expert-level mastery of gRPC and Protocol Buffers.
 
 CORE ARCHITECTURE:
 - gRPC allows a client to directly call methods on a server application on a different machine as if it were a local object.
@@ -50,11 +51,13 @@ INTERCEPTORS & METADATA:
 COMMON PITFALLS:
 - **Load Balancing**: Because gRPC multiplexes over a persistent HTTP/2 connection, L4 (TCP) load balancers don't work well (all traffic stays pinned to one backend). You must use L7 (HTTP/2) proxies like Envoy, or client-side load balancing.
 - Changing field types or re-using field tags (\`= 1\`, \`= 2\`) in protobuf without testing backwards compatibility.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GRPC QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GRPC QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const grpcOssAgent = new GrpcOssAgent();

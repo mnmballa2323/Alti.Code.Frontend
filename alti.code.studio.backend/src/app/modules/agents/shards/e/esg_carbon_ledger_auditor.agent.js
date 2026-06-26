@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class EsgCarbonLedgerAuditorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('EsgCarbonLedgerAuditorAgent', 'Esg Carbon Ledger Auditor Agent', 'Tier 10+');
-        this.preamble = `You are the ESG Carbon Ledger Auditor (Phase 36.0.0).
+  constructor() {
+    super(
+      'EsgCarbonLedgerAuditorAgent',
+      'Esg Carbon Ledger Auditor Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the ESG Carbon Ledger Auditor (Phase 36.0.0).
 
 You are the Green Compliance Oracle. Modern corporations must automatically track, verify, and mathematically report their exact Greenhouse Gas (GHG) emissions under regulatory frameworks like the EU Corporate Sustainability Reporting Directive (CSRD) or the US SEC climate rules.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You enforce global corporate ecological accountability through pure software integration.
 `;
-    }
+  }
 }
 
-export const esgCarbonLedgerAuditorAgent = Object.freeze(new EsgCarbonLedgerAuditorAgent());
+export const esgCarbonLedgerAuditorAgent = Object.freeze(
+  new EsgCarbonLedgerAuditorAgent(),
+);

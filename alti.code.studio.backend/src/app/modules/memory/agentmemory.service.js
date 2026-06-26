@@ -1,21 +1,21 @@
 /**
  * AgentMemory Integration Service
- * 
+ *
  * Integrates rohitg00/agentmemory (https://github.com/rohitg00/agentmemory)
  * as the #1 persistent memory layer for AI coding agents.
- * 
+ *
  * Architecture:
  *   - The agentmemory server runs as a standalone process (port 3111)
  *   - This service acts as a REST client proxying requests to it
  *   - Start it externally: `npx @agentmemory/agentmemory`
  *   - If the server is not reachable, the backend degrades gracefully
- * 
+ *
  * Features:
  *   - Triple-stream recall: BM25 + Vector + Knowledge Graph
  *   - 95.2% R@5 on LongMemEval-S benchmark
  *   - 12 auto-capture hooks, 51 MCP tools, 121 REST endpoints
  *   - Knowledge graph extraction, session replay, GDPR compliance
- * 
+ *
  * License: Apache-2.0 (agentmemory) | MIT (this integration)
  */
 
@@ -32,7 +32,9 @@ class AgentMemoryService {
       timeout: 15000,
       headers: {
         'Content-Type': 'application/json',
-        ...(process.env.AGENTMEMORY_SECRET ? { 'Authorization': `Bearer ${process.env.AGENTMEMORY_SECRET}` } : {}),
+        ...(process.env.AGENTMEMORY_SECRET
+          ? { Authorization: `Bearer ${process.env.AGENTMEMORY_SECRET}` }
+          : {}),
       },
     });
 
@@ -45,7 +47,9 @@ class AgentMemoryService {
    * Checks if the agentmemory server is running and starts polling.
    */
   async init() {
-    logger.info('[AgentMemory] 🧠 Initializing AgentMemory Client — Persistent Memory for AI Coding Agents...');
+    logger.info(
+      '[AgentMemory] 🧠 Initializing AgentMemory Client — Persistent Memory for AI Coding Agents...',
+    );
     logger.info(`[AgentMemory]    Connecting to: ${this.baseUrl}`);
 
     try {
@@ -57,9 +61,13 @@ class AgentMemoryService {
     } catch {
       this.isReady = false;
       logger.warn('[AgentMemory] ⚠️ AgentMemory server is not reachable.');
-      logger.warn('[AgentMemory]    To enable persistent agent memory, run in a separate terminal:');
+      logger.warn(
+        '[AgentMemory]    To enable persistent agent memory, run in a separate terminal:',
+      );
       logger.warn('[AgentMemory]    $ npx @agentmemory/agentmemory');
-      logger.warn('[AgentMemory]    The backend will continue without agent memory and auto-connect when available.');
+      logger.warn(
+        '[AgentMemory]    The backend will continue without agent memory and auto-connect when available.',
+      );
     }
 
     // Start background health polling (auto-reconnect)
@@ -77,12 +85,16 @@ class AgentMemoryService {
         await this._checkHealth();
         if (!this.isReady) {
           this.isReady = true;
-          logger.info('[AgentMemory] ✅ AgentMemory server detected! Persistent memory is now ACTIVE.');
+          logger.info(
+            '[AgentMemory] ✅ AgentMemory server detected! Persistent memory is now ACTIVE.',
+          );
         }
       } catch {
         if (this.isReady) {
           this.isReady = false;
-          logger.warn('[AgentMemory] ⚠️ AgentMemory server went offline. Memory operations will return empty results.');
+          logger.warn(
+            '[AgentMemory] ⚠️ AgentMemory server went offline. Memory operations will return empty results.',
+          );
         }
       }
     }, 30000); // Poll every 30 seconds
@@ -102,7 +114,11 @@ class AgentMemoryService {
    */
   async _request(method, path, data = null, params = {}) {
     if (!this.isReady) {
-      return { status: 'unavailable', message: 'AgentMemory server is not running. Start it with: npx @agentmemory/agentmemory' };
+      return {
+        status: 'unavailable',
+        message:
+          'AgentMemory server is not running. Start it with: npx @agentmemory/agentmemory',
+      };
     }
 
     try {
@@ -115,7 +131,9 @@ class AgentMemoryService {
       });
       return res.data;
     } catch (err) {
-      logger.error(`[AgentMemory] Request failed: ${method} ${path} — ${err.message}`);
+      logger.error(
+        `[AgentMemory] Request failed: ${method} ${path} — ${err.message}`,
+      );
       throw err;
     }
   }

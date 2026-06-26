@@ -1,17 +1,19 @@
 /**
  * Copyright (c) 2024 Inso Code — TIER 2: DATA & INFRASTRUCTURE
- * 
+ *
  * Performance Agent — "The Optimizer"
  * Profiling, bottleneck detection, and optimization recommendations.
  */
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 
-export const performanceWorkerProcessor = async (job) => {
-    const { code, metrics, endpoint } = job.data;
-    logger.info(`⚡ Performance [${job.id}]: Profiling ${endpoint || 'codebase'}...`);
+export const performanceWorkerProcessor = async job => {
+  const { code, metrics, endpoint } = job.data;
+  logger.info(
+    `⚡ Performance [${job.id}]: Profiling ${endpoint || 'codebase'}...`,
+  );
 
-    const analysis = await aiProvider.reason(`
+  const analysis = await aiProvider.reason(`
 You are a performance engineering expert.
 
 ${endpoint ? `Endpoint: ${endpoint}` : ''}
@@ -28,5 +30,5 @@ Provide:
 Respond in JSON: { "bottlenecks": [], "optimizations": [], "cachingStrategy": string, "asyncOpportunities": [], "memoryRisks": [] }
     `);
 
-    return { analysis: JSON.parse(analysis.match(/\{[\s\S]*\}/)?.[0] || '{}') };
+  return { analysis: JSON.parse(analysis.match(/\{[\s\S]*\}/)?.[0] || '{}') };
 };

@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class TwitchAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Twitch_Expert';
-        this.description = 'Twitch live streaming specialist: Helix API (streams/channels/users/clips), EventSub webhooks (subscriber/follow/raid events), OAuth 2.0 PKCE, chat integration (IRC + EventSub chat messages), Channel Points, Bits/Cheers, and Twitch Extensions.';
-        this.preamble = `You are an elite Twitch API Helix and live streaming ecosystem specialist.
+  constructor() {
+    super();
+    this.name = 'Twitch_Expert';
+    this.description =
+      'Twitch live streaming specialist: Helix API (streams/channels/users/clips), EventSub webhooks (subscriber/follow/raid events), OAuth 2.0 PKCE, chat integration (IRC + EventSub chat messages), Channel Points, Bits/Cheers, and Twitch Extensions.';
+    this.preamble = `You are an elite Twitch API Helix and live streaming ecosystem specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: Two types — App Access Token (server) and User Access Token (user actions). App: \`POST https://id.twitch.tv/oauth2/token?client_id=CLIENT_ID&client_secret=CLIENT_SECRET&grant_type=client_credentials\`. User: OAuth PKCE → authorization code flow. All requests: \`Authorization: Bearer TOKEN\` + \`Client-Id: CLIENT_ID\`.
 2. **Core Helix Endpoints** (Base: \`https://api.twitch.tv/helix\`):
@@ -33,20 +34,24 @@ class TwitchAgent extends BaseSpecialistAgent {
 7. **Predictions & Polls**: Create prediction: \`POST /predictions\` — \`{ broadcaster_id, title: 'Who wins?', outcomes: [{ title: 'Team A' }, { title: 'Team B' }], prediction_window: 60 }\`. Resolve: \`PATCH /predictions\` with \`status: 'RESOLVED', winning_outcome_id\`. Polls: \`POST /polls\` similarly.
 # BEHAVIOR
 Output production TypeScript. Store \`TWITCH_CLIENT_ID\` + \`TWITCH_CLIENT_SECRET\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🎮 Twitch Expert: Synthesizing live streaming platform logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Twitch Expert failed:', e);
-            throw new Error(`Twitch Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🎮 Twitch Expert: Synthesizing live streaming platform logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Twitch Expert failed:', e);
+      throw new Error(`Twitch Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const twitchAgent = Object.freeze(new TwitchAgent());

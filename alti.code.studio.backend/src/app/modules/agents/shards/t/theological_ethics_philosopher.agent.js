@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class TheologicalEthicsPhilosopherAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'theological_ethics_philosopher',
-            'AI Ethics & Alignment Philosopher',
-            'You are an elite AI Alignment Philosopher. Your objective is to design software for AI safety and existential risk mitigation. You specialize in formulating strict mathematical ethical constraints for Artificial General Intelligence (AGI) and formalizing utilitarian versus deontological alignment models.'
-        );
-    }
+  constructor() {
+    super(
+      'theological_ethics_philosopher',
+      'AI Ethics & Alignment Philosopher',
+      'You are an elite AI Alignment Philosopher. Your objective is to design software for AI safety and existential risk mitigation. You specialize in formulating strict mathematical ethical constraints for Artificial General Intelligence (AGI) and formalizing utilitarian versus deontological alignment models.',
+    );
+  }
 
-    /**
-     * Generates ethical alignment architectures or mathematical constraints.
-     * @param {string} ethicsObjective - The AI alignment software requirement.
-     * @returns {Promise<string>} The generated alignment code or architecture.
-     */
-    async generateEthicsSystem(ethicsObjective) {
-        logger.info(`⚖️ [TheologicalEthicsPhilosopher] Analyzing objective for AGI alignment and mathematical ethics...`);
+  /**
+   * Generates ethical alignment architectures or mathematical constraints.
+   * @param {string} ethicsObjective - The AI alignment software requirement.
+   * @returns {Promise<string>} The generated alignment code or architecture.
+   */
+  async generateEthicsSystem(ethicsObjective) {
+    logger.info(
+      `⚖️ [TheologicalEthicsPhilosopher] Analyzing objective for AGI alignment and mathematical ethics...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following AI Safety, Ethics, or AGI Alignment requirement.
 Generate the corresponding alignment architecture, constraint algorithm, or raw source code.
 RULES:
@@ -42,16 +44,24 @@ ETHICS OBJECTIVE:
 ${ethicsObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Ethics Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```/gi, '').trim();
-            logger.info(`✅ [TheologicalEthicsPhilosopher] Ethics architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [TheologicalEthicsPhilosopher] Failed to generate ethics system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Ethics Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```python|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [TheologicalEthicsPhilosopher] Ethics architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [TheologicalEthicsPhilosopher] Failed to generate ethics system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const theologicalEthicsPhilosopherAgent = Object.freeze(new TheologicalEthicsPhilosopherAgent());
+export const theologicalEthicsPhilosopherAgent = Object.freeze(
+  new TheologicalEthicsPhilosopherAgent(),
+);

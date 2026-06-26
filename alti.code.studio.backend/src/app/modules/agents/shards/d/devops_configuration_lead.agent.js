@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsConfigurationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_configuration_lead_agent',
-            'DevOps Configuration Lead',
-            'You are an elite DevOps Configuration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_configuration_lead_agent',
+      'DevOps Configuration Lead',
+      'You are an elite DevOps Configuration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Configuration.',
+    );
+  }
 
-    async generateDevOpsConfigurationSystem(objective) {
-        logger.info(`💻 [DevOpsConfigurationLeadAgent] Analyzing DevOps Configuration Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Configuration Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Configuration Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsConfigurationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsConfigurationSystem(objective) {
+    logger.info(
+      `💻 [DevOpsConfigurationLeadAgent] Analyzing DevOps Configuration Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Configuration Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Configuration Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevOpsConfigurationLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devOpsConfigurationLeadAgent = Object.freeze(new DevOpsConfigurationLeadAgent());
+export const devOpsConfigurationLeadAgent = Object.freeze(
+  new DevOpsConfigurationLeadAgent(),
+);

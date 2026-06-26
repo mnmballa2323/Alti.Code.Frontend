@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudResilienceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_resilience_orchestrator_agent',
-            'Cloud Resilience Orchestrator',
-            'You are an elite Cloud Resilience Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_resilience_orchestrator_agent',
+      'Cloud Resilience Orchestrator',
+      'You are an elite Cloud Resilience Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Resilience.',
+    );
+  }
 
-    async generateCloudResilienceSystem(objective) {
-        logger.info(`💻 [CloudResilienceOrchestratorAgent] Analyzing Cloud Resilience Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Resilience Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Resilience Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudResilienceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudResilienceSystem(objective) {
+    logger.info(
+      `💻 [CloudResilienceOrchestratorAgent] Analyzing Cloud Resilience Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Resilience Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Resilience Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [CloudResilienceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const cloudResilienceOrchestratorAgent = Object.freeze(new CloudResilienceOrchestratorAgent());
+export const cloudResilienceOrchestratorAgent = Object.freeze(
+  new CloudResilienceOrchestratorAgent(),
+);

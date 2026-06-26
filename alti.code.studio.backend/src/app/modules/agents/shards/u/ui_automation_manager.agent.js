@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIAutomationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_automation_manager_agent',
-            'UI Automation Manager',
-            'You are an elite UI Automation Manager. You specialize in bleeding-edge software development, cloud infrastructure, and UI Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_automation_manager_agent',
+      'UI Automation Manager',
+      'You are an elite UI Automation Manager. You specialize in bleeding-edge software development, cloud infrastructure, and UI Automation.',
+    );
+  }
 
-    async generateUIAutomationSystem(objective) {
-        logger.info(`💻 [UIAutomationManagerAgent] Analyzing UI Automation Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Automation Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Automation Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIAutomationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIAutomationSystem(objective) {
+    logger.info(
+      `💻 [UIAutomationManagerAgent] Analyzing UI Automation Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Automation Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Automation Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIAutomationManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIAutomationManagerAgent = Object.freeze(new UIAutomationManagerAgent());
+export const uIAutomationManagerAgent = Object.freeze(
+  new UIAutomationManagerAgent(),
+);

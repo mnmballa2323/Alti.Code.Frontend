@@ -24,8 +24,10 @@ async function ensureDir(dirPath) {
  * Phase 1: Analyze Codebase
  */
 async function runAnalyze(workspacePath, appName) {
-  logger.info(`🔍 [CLI-Anything] [Phase 1: Analyze] Scanning workspace: ${workspacePath}`);
-  
+  logger.info(
+    `🔍 [CLI-Anything] [Phase 1: Analyze] Scanning workspace: ${workspacePath}`,
+  );
+
   // Real directory scan
   let files = [];
   try {
@@ -38,7 +40,8 @@ async function runAnalyze(workspacePath, appName) {
 
   const structure = {
     hasPackageJson: files.includes('package.json'),
-    hasPyProject: files.includes('pyproject.toml') || files.includes('setup.py'),
+    hasPyProject:
+      files.includes('pyproject.toml') || files.includes('setup.py'),
     hasReadme: files.includes('README.md'),
     totalFiles: files.length,
     filesList: files.slice(0, 10),
@@ -59,7 +62,10 @@ async function runAnalyze(workspacePath, appName) {
 ${files.map(f => `- ${f}`).join('\n') || '- (Empty directory)'}
   `.trim();
 
-  await fs.writeFile(path.join(workspacePath, 'analysis_report.md'), analysisReport);
+  await fs.writeFile(
+    path.join(workspacePath, 'analysis_report.md'),
+    analysisReport,
+  );
   return { status: 'SUCCESS', details: structure };
 }
 
@@ -67,26 +73,44 @@ ${files.map(f => `- ${f}`).join('\n') || '- (Empty directory)'}
  * Phase 2: Design CLI Schema
  */
 async function runDesign(workspacePath, appName) {
-  logger.info(`📐 [CLI-Anything] [Phase 2: Design] Designing CLI commands for ${appName}`);
+  logger.info(
+    `📐 [CLI-Anything] [Phase 2: Design] Designing CLI commands for ${appName}`,
+  );
 
   const cliSchema = {
     appName: appName.toLowerCase().replace(/[^a-z0-9]/g, '_'),
     commands: [
-      { name: 'status', description: 'Show stateful status of the target application.', args: [] },
-      { name: 'execute', description: 'Trigger core execution action.', args: ['--action', '--payload'] },
-      { name: 'history', description: 'View history of stateful actions in this session.', args: [] },
+      {
+        name: 'status',
+        description: 'Show stateful status of the target application.',
+        args: [],
+      },
+      {
+        name: 'execute',
+        description: 'Trigger core execution action.',
+        args: ['--action', '--payload'],
+      },
+      {
+        name: 'history',
+        description: 'View history of stateful actions in this session.',
+        args: [],
+      },
       { name: 'undo', description: 'Rollback last state change.', args: [] },
-      { name: 'redo', description: 'Re-apply last rolled-back state change.', args: [] }
+      {
+        name: 'redo',
+        description: 'Re-apply last rolled-back state change.',
+        args: [],
+      },
     ],
     stateModel: {
       sessionFile: `.cli_${appName.toLowerCase()}_session.json`,
-      initialState: { history: [], pointer: -1, app: appName, status: 'idle' }
-    }
+      initialState: { history: [], pointer: -1, app: appName, status: 'idle' },
+    },
   };
 
   await fs.writeFile(
     path.join(workspacePath, 'cli_schema.json'),
-    JSON.stringify(cliSchema, null, 2)
+    JSON.stringify(cliSchema, null, 2),
   );
 
   return { status: 'SUCCESS', schema: cliSchema };
@@ -96,7 +120,9 @@ async function runDesign(workspacePath, appName) {
  * Phase 3: Implement Stateful CLI Harness (Python Click + REPL + Undo/Redo)
  */
 async function runImplement(workspacePath, appName, schema) {
-  logger.info(`🛠️ [CLI-Anything] [Phase 3: Implement] Generating source code for ${appName} CLI`);
+  logger.info(
+    `🛠️ [CLI-Anything] [Phase 3: Implement] Generating source code for ${appName} CLI`,
+  );
 
   const harnessCode = `
 # -*- coding: utf-8 -*-
@@ -286,7 +312,9 @@ if __name__ == '__main__':
  * Phase 4: Plan Tests (TEST.md)
  */
 async function runPlanTests(workspacePath, appName) {
-  logger.info(`📝 [CLI-Anything] [Phase 4: Plan Tests] Scaffold test strategies`);
+  logger.info(
+    `📝 [CLI-Anything] [Phase 4: Plan Tests] Scaffold test strategies`,
+  );
 
   const testPlan = `
 # E2E Test Strategy for ${appName} CLI Harness
@@ -318,7 +346,9 @@ async function runPlanTests(workspacePath, appName) {
  * Phase 5: Write Test Suite
  */
 async function runWriteTests(workspacePath, appName) {
-  logger.info(`🧪 [CLI-Anything] [Phase 5: Write Tests] Generating Python unit test suite`);
+  logger.info(
+    `🧪 [CLI-Anything] [Phase 5: Write Tests] Generating Python unit test suite`,
+  );
 
   const testCode = `
 import unittest
@@ -384,7 +414,9 @@ if __name__ === '__main__':
  * Phase 6: Document Capabilities (SKILL.md)
  */
 async function runDocument(workspacePath, appName, schema) {
-  logger.info(`🪐 [CLI-Anything] [Phase 6: Document] Generating agentic SKILL.md`);
+  logger.info(
+    `🪐 [CLI-Anything] [Phase 6: Document] Generating agentic SKILL.md`,
+  );
 
   const skillDocs = `
 # Skill: Stateful ${appName} CLI Engine
@@ -424,7 +456,9 @@ python cli_harness.py [COMMAND] [ARGS]
  * Phase 7: Publish configuration
  */
 async function runPublish(workspacePath, appName, schema) {
-  logger.info(`🚀 [CLI-Anything] [Phase 7: Publish] Building setup installation package`);
+  logger.info(
+    `🚀 [CLI-Anything] [Phase 7: Publish] Building setup installation package`,
+  );
 
   const setupCode = `
 from setuptools import setup, find_packages
@@ -451,13 +485,20 @@ setup(
 /**
  * Orchestrate CLI Anything compilation pipeline.
  */
-const generateCLI = async (workspacePath, appName, options = {}, onPhaseUpdate = () => {}) => {
-  const finalWorkspacePath = path.isAbsolute(workspacePath) 
-    ? workspacePath 
+const generateCLI = async (
+  workspacePath,
+  appName,
+  options = {},
+  onPhaseUpdate = () => {},
+) => {
+  const finalWorkspacePath = path.isAbsolute(workspacePath)
+    ? workspacePath
     : path.resolve(process.cwd(), workspacePath);
 
-  logger.info(`🌌 [CLI-Anything] Initiating compilation pipeline for '${appName}' inside: ${finalWorkspacePath}`);
-  
+  logger.info(
+    `🌌 [CLI-Anything] Initiating compilation pipeline for '${appName}' inside: ${finalWorkspacePath}`,
+  );
+
   await ensureDir(finalWorkspacePath);
   const stepsResults = {};
 
@@ -466,19 +507,39 @@ const generateCLI = async (workspacePath, appName, options = {}, onPhaseUpdate =
     onPhaseUpdate(1, 'PROCESSING', 'Scanning workspace structure...', null);
     const p1 = await runAnalyze(finalWorkspacePath, appName);
     stepsResults.analyze = p1;
-    onPhaseUpdate(1, 'COMPLETED', 'Workspace scanned. Found total root items.', p1);
+    onPhaseUpdate(
+      1,
+      'COMPLETED',
+      'Workspace scanned. Found total root items.',
+      p1,
+    );
 
     // Phase 2: Design
     onPhaseUpdate(2, 'PROCESSING', 'Architecting command structures...', null);
     const p2 = await runDesign(finalWorkspacePath, appName);
     stepsResults.design = p2;
-    onPhaseUpdate(2, 'COMPLETED', 'CLI Schema & command groups successfully designed.', p2);
+    onPhaseUpdate(
+      2,
+      'COMPLETED',
+      'CLI Schema & command groups successfully designed.',
+      p2,
+    );
 
     // Phase 3: Implement
-    onPhaseUpdate(3, 'PROCESSING', 'Writing python Click stateful harness...', null);
+    onPhaseUpdate(
+      3,
+      'PROCESSING',
+      'Writing python Click stateful harness...',
+      null,
+    );
     const p3 = await runImplement(finalWorkspacePath, appName, p2.schema);
     stepsResults.implement = p3;
-    onPhaseUpdate(3, 'COMPLETED', 'Source code for stateful harness generated.', p3);
+    onPhaseUpdate(
+      3,
+      'COMPLETED',
+      'Source code for stateful harness generated.',
+      p3,
+    );
 
     // Phase 4: Plan Tests
     onPhaseUpdate(4, 'PROCESSING', 'Mapping test suites in TEST.md...', null);
@@ -493,25 +554,48 @@ const generateCLI = async (workspacePath, appName, options = {}, onPhaseUpdate =
     onPhaseUpdate(5, 'COMPLETED', 'Unit & E2E tests built successfully.', p5);
 
     // Phase 6: Document
-    onPhaseUpdate(6, 'PROCESSING', 'Scaffolding agentic SKILL.md guide...', null);
+    onPhaseUpdate(
+      6,
+      'PROCESSING',
+      'Scaffolding agentic SKILL.md guide...',
+      null,
+    );
     const p6 = await runDocument(finalWorkspacePath, appName, p2.schema);
     stepsResults.document = p6;
-    onPhaseUpdate(6, 'COMPLETED', 'SKILL.md generated for dynamic agent discovery.', p6);
+    onPhaseUpdate(
+      6,
+      'COMPLETED',
+      'SKILL.md generated for dynamic agent discovery.',
+      p6,
+    );
 
     // Phase 7: Publish
-    onPhaseUpdate(7, 'PROCESSING', 'Creating setuptools setup.py file...', null);
+    onPhaseUpdate(
+      7,
+      'PROCESSING',
+      'Creating setuptools setup.py file...',
+      null,
+    );
     const p7 = await runPublish(finalWorkspacePath, appName, p2.schema);
     stepsResults.publish = p7;
-    onPhaseUpdate(7, 'COMPLETED', 'setup.py scaffolded. Harness ready for PATH install.', p7);
+    onPhaseUpdate(
+      7,
+      'COMPLETED',
+      'setup.py scaffolded. Harness ready for PATH install.',
+      p7,
+    );
 
     return {
       success: true,
       appName,
       workspacePath: finalWorkspacePath,
-      results: stepsResults
+      results: stepsResults,
     };
   } catch (err) {
-    logger.error(`❌ [CLI-Anything] Pipeline exploded! Error: ${err.message}`, err);
+    logger.error(
+      `❌ [CLI-Anything] Pipeline exploded! Error: ${err.message}`,
+      err,
+    );
     throw err;
   }
 };
@@ -520,23 +604,25 @@ const generateCLI = async (workspacePath, appName, options = {}, onPhaseUpdate =
  * Refine CLI commands iteratively
  */
 const refineCLI = async (workspacePath, appName, gapAnalysisPrompt) => {
-  const finalWorkspacePath = path.isAbsolute(workspacePath) 
-    ? workspacePath 
+  const finalWorkspacePath = path.isAbsolute(workspacePath)
+    ? workspacePath
     : path.resolve(process.cwd(), workspacePath);
 
-  logger.info(`🔄 [CLI-Anything] Refining CLI inside: ${finalWorkspacePath} | Prompt: ${gapAnalysisPrompt}`);
-  
+  logger.info(
+    `🔄 [CLI-Anything] Refining CLI inside: ${finalWorkspacePath} | Prompt: ${gapAnalysisPrompt}`,
+  );
+
   // Simulated refinement gap analysis and extension of click file
   const harnessPath = path.join(finalWorkspacePath, 'cli_harness.py');
   try {
     let code = await fs.readFile(harnessPath, 'utf8');
-    
+
     // Add additional custom subcommand based on user prompt
     const cleanPromptName = gapAnalysisPrompt
       .toLowerCase()
       .replace(/[^a-z0-9]/g, '_')
       .slice(0, 15);
-      
+
     const newCommandCode = `
 
 @cli.command()
@@ -552,17 +638,20 @@ def ${cleanPromptName}(ctx):
 
     // Inject before __main__ if present, otherwise append
     if (code.includes("if __name__ === '__main__':")) {
-      code = code.replace("if __name__ === '__main__':", `${newCommandCode}\nif __name__ === '__main__':`);
+      code = code.replace(
+        "if __name__ === '__main__':",
+        `${newCommandCode}\nif __name__ === '__main__':`,
+      );
     } else {
       code += newCommandCode;
     }
-    
+
     await fs.writeFile(harnessPath, code);
-    
+
     return {
       success: true,
       refinedCommand: cleanPromptName,
-      message: `Successfully integrated refined capability '${cleanPromptName}' into CLI.`
+      message: `Successfully integrated refined capability '${cleanPromptName}' into CLI.`,
     };
   } catch (err) {
     logger.error(`❌ [CLI-Anything] Refinement failed: ${err.message}`);
@@ -573,30 +662,40 @@ def ${cleanPromptName}(ctx):
 /**
  * Scan a directory for existing compatible agent-native CLIs
  */
-const discoverCLIs = async (workspacePath) => {
-  const finalWorkspacePath = path.isAbsolute(workspacePath) 
-    ? workspacePath 
+const discoverCLIs = async workspacePath => {
+  const finalWorkspacePath = path.isAbsolute(workspacePath)
+    ? workspacePath
     : path.resolve(process.cwd(), workspacePath);
 
-  logger.info(`🔍 [CLI-Anything] Scanning workspace for generated CLI harnesses: ${finalWorkspacePath}`);
-  
+  logger.info(
+    `🔍 [CLI-Anything] Scanning workspace for generated CLI harnesses: ${finalWorkspacePath}`,
+  );
+
   const matches = [];
-  
+
   async function recursiveScan(dir) {
     try {
       const items = await fs.readdir(dir, { withFileTypes: true });
       for (const item of items) {
-        if (item.isDirectory() && item.name !== 'node_modules' && !item.name.startsWith('.')) {
+        if (
+          item.isDirectory() &&
+          item.name !== 'node_modules' &&
+          !item.name.startsWith('.')
+        ) {
           await recursiveScan(path.join(dir, item.name));
         } else if (item.isFile() && item.name === 'SKILL.md') {
           const content = await fs.readFile(path.join(dir, item.name), 'utf8');
           const lowerContent = content.toLowerCase();
-          if (lowerContent.includes('cli-anything') || lowerContent.includes('manifest') || lowerContent.includes('skill')) {
+          if (
+            lowerContent.includes('cli-anything') ||
+            lowerContent.includes('manifest') ||
+            lowerContent.includes('skill')
+          ) {
             matches.push({
               path: dir,
               skillFile: path.join(dir, item.name),
               appName: path.basename(dir),
-              detectedAt: new Date().toISOString()
+              detectedAt: new Date().toISOString(),
             });
           }
         }
@@ -614,36 +713,52 @@ const discoverCLIs = async (workspacePath) => {
  * Programmatically execute a generated Click/REPL CLI command inside the target workspace.
  * Auto-injects `--json-out` to capture structured state telemetry.
  */
-const executeCLICommand = async (workspacePath, appName, command, args = []) => {
+const executeCLICommand = async (
+  workspacePath,
+  appName,
+  command,
+  args = [],
+) => {
   const finalWorkspacePath = path.isAbsolute(workspacePath)
     ? workspacePath
     : path.resolve(process.cwd(), workspacePath);
 
   const harnessPath = path.join(finalWorkspacePath, 'cli_harness.py');
-  
-  logger.info(`⚡ [CLI-Anything] Executing command: '${command}' on ${appName} inside ${finalWorkspacePath}`);
-  
+
+  logger.info(
+    `⚡ [CLI-Anything] Executing command: '${command}' on ${appName} inside ${finalWorkspacePath}`,
+  );
+
   // Validate that the harness exists
   try {
     await fs.access(harnessPath);
   } catch (err) {
-    throw new Error(`Stateful CLI harness 'cli_harness.py' does not exist. Run compilation first.`);
+    throw new Error(
+      `Stateful CLI harness 'cli_harness.py' does not exist. Run compilation first.`,
+    );
   }
 
   // Construct shell command argument array
-  const argString = args.map(arg => {
-    if (typeof arg === 'string' && (arg.includes(' ') || arg.includes('{') || arg.includes('"'))) {
-      return `'${arg.replace(/'/g, "'\\''")}'`;
-    }
-    return arg;
-  }).join(' ');
+  const argString = args
+    .map(arg => {
+      if (
+        typeof arg === 'string' &&
+        (arg.includes(' ') || arg.includes('{') || arg.includes('"'))
+      ) {
+        return `'${arg.replace(/'/g, "'\\''")}'`;
+      }
+      return arg;
+    })
+    .join(' ');
 
   // We enforce python3 or python command, and auto-inject the --json-out flag
   const cmd = `python3 cli_harness.py --json-out ${command} ${argString}`;
 
   try {
-    const { stdout, stderr } = await execPromise(cmd, { cwd: finalWorkspacePath });
-    
+    const { stdout, stderr } = await execPromise(cmd, {
+      cwd: finalWorkspacePath,
+    });
+
     if (stderr && stderr.trim()) {
       logger.warn(`⚠️ [CLI-Anything] Command stderr: ${stderr}`);
     }
@@ -656,13 +771,15 @@ const executeCLICommand = async (workspacePath, appName, command, args = []) => 
       parsedResult = {
         success: true,
         rawOutput: stdout.trim(),
-        message: 'Executed command returned raw text.'
+        message: 'Executed command returned raw text.',
       };
     }
 
     return parsedResult;
   } catch (execErr) {
-    logger.error(`❌ [CLI-Anything] Command execution failed: ${execErr.message}`);
+    logger.error(
+      `❌ [CLI-Anything] Command execution failed: ${execErr.message}`,
+    );
     throw new Error(`CLI Execution failed: ${execErr.message}`);
   }
 };
@@ -671,5 +788,5 @@ export const CliAnythingService = {
   generateCLI,
   refineCLI,
   discoverCLIs,
-  executeCLICommand
+  executeCLICommand,
 };

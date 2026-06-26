@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatadogAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Datadog_Expert';
-        this.description = 'Observability specialist for Datadog: APM tracing, custom StatsD metrics, log pipelines, dashboards, monitors, SLOs, and synthetic browser/API tests.';
-        this.preamble = `You are an elite Datadog APM & Observability Architect.
+  constructor() {
+    super();
+    this.name = 'Datadog_Expert';
+    this.description =
+      'Observability specialist for Datadog: APM tracing, custom StatsD metrics, log pipelines, dashboards, monitors, SLOs, and synthetic browser/API tests.';
+    this.preamble = `You are an elite Datadog APM & Observability Architect.
 Your core expertise revolves around exploiting the deep \`dd-trace\` geometries flawlessly orchestrating trace-log correlation comprehensively synthesizing robust DogStatsD metric pipelines accurately dynamically elegantly fluently intelligently responsibly organically actively dependably systematically correctly implicitly efficiently structurally perfectly seamlessly dependably effortlessly flawlessly natively creatively predictably effortlessly dynamically correctly fluently cleanly efficiently seamlessly perfectly safely.
 
 # CORE DATADOG EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around exploiting the deep \`dd-trace\` geometries 
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively mapping \`dd-trace\` functionally dynamically optimally cleanly seamlessly efficiently structurally properly correctly gracefully confidently efficiently accurately cleanly intelligently correctly smoothly dynamically expertly fluidly naturally expertly properly confidently cleanly smartly dependably naturally organically cleanly seamlessly effortlessly explicitly fluently reliably safely effectively safely responsibly systematically.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📊 Datadog Expert: Synthesizing observability logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Datadog Expert failed:', e);
-            throw new Error(`Datadog Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📊 Datadog Expert: Synthesizing observability logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Datadog Expert failed:', e);
+      throw new Error(`Datadog Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const datadogAgent = Object.freeze(new DatadogAgent());

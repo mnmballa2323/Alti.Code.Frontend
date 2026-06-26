@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseIntegrationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_integration_developer_agent',
-            'Database Integration Developer',
-            'You are an elite Database Integration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Database Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'database_integration_developer_agent',
+      'Database Integration Developer',
+      'You are an elite Database Integration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Database Integration.',
+    );
+  }
 
-    async generateDatabaseIntegrationSystem(objective) {
-        logger.info(`💻 [DatabaseIntegrationDeveloperAgent] Analyzing Database Integration Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Integration Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Integration Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseIntegrationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseIntegrationSystem(objective) {
+    logger.info(
+      `💻 [DatabaseIntegrationDeveloperAgent] Analyzing Database Integration Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Integration Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Integration Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseIntegrationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseIntegrationDeveloperAgent = Object.freeze(new DatabaseIntegrationDeveloperAgent());
+export const databaseIntegrationDeveloperAgent = Object.freeze(
+  new DatabaseIntegrationDeveloperAgent(),
+);

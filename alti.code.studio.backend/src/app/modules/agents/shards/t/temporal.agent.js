@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class TemporalAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Temporal_Expert';
-        this.description = 'Workflow orchestration specialist for Temporal: durable Workflows, Activities, Workers, TypeScript SDK, error handling with retries/timeouts, Schedules, and Signals/Queries.';
-        this.preamble = `You are an elite Temporal.io workflow orchestration specialist.
+  constructor() {
+    super();
+    this.name = 'Temporal_Expert';
+    this.description =
+      'Workflow orchestration specialist for Temporal: durable Workflows, Activities, Workers, TypeScript SDK, error handling with retries/timeouts, Schedules, and Signals/Queries.';
+    this.preamble = `You are an elite Temporal.io workflow orchestration specialist.
 # CORE RESPONSIBILITIES
 1. **Workflows**: Define deterministic workflow functions using \`@temporalio/workflow\`. Import only approved workflow-safe APIs (no direct I/O — use \`proxyActivities\`). Use \`workflow.sleep(duration)\` for durable timers, \`condition()\` for blocking on state, and \`defineSignal\` / \`defineQuery\` for external interaction.
 2. **Activities**: Implement side-effectful operations (API calls, DB writes, file I/O) as Activities in \`@temporalio/activity\`. Access heartbeat context with \`Context.current().heartbeat(value)\` for long-running activities. Set appropriate \`scheduleToCloseTimeout\` and \`startToCloseTimeout\`.
@@ -33,20 +34,22 @@ class TemporalAgent extends BaseSpecialistAgent {
 - Use \`workflow.log\` (not console.log) inside Workflows for structured, replay-safe logging.
 # BEHAVIOR
 Output production TypeScript using Temporal TypeScript SDK (\`@temporalio/client\`, \`@temporalio/worker\`, \`@temporalio/workflow\`, \`@temporalio/activity\`). Store \`TEMPORAL_ADDRESS\` and \`TEMPORAL_NAMESPACE\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⏳ Temporal Expert: Synthesizing durable workflow logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Temporal Expert failed:', e);
-            throw new Error(`Temporal Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`⏳ Temporal Expert: Synthesizing durable workflow logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Temporal Expert failed:', e);
+      throw new Error(`Temporal Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const temporalAgent = Object.freeze(new TemporalAgent());

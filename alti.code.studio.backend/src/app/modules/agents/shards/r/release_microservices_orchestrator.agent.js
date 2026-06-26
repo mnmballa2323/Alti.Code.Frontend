@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseMicroservicesOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_microservices_orchestrator_agent',
-            'Release Microservices Orchestrator',
-            'You are an elite Release Microservices Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Release Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'release_microservices_orchestrator_agent',
+      'Release Microservices Orchestrator',
+      'You are an elite Release Microservices Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Release Microservices.',
+    );
+  }
 
-    async generateReleaseMicroservicesSystem(objective) {
-        logger.info(`💻 [ReleaseMicroservicesOrchestratorAgent] Analyzing Release Microservices Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Microservices Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Microservices Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseMicroservicesOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [ReleaseMicroservicesOrchestratorAgent] Analyzing Release Microservices Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Microservices Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Microservices Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseMicroservicesOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseMicroservicesOrchestratorAgent = Object.freeze(new ReleaseMicroservicesOrchestratorAgent());
+export const releaseMicroservicesOrchestratorAgent = Object.freeze(
+  new ReleaseMicroservicesOrchestratorAgent(),
+);

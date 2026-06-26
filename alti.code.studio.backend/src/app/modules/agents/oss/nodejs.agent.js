@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 105k | Language: C++ / JavaScript
  */
 class NodejsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Nodejs_Oss_Expert';
-        this.description = 'Expert in Node.js core modules, event loop phases, streams, worker threads, V8 engine memory profiles, and native C++ addons.';
-        this.preamble = `You are an elite Node.js systems architect and V8 engine specialist.
+  constructor() {
+    super();
+    this.name = 'Nodejs_Oss_Expert';
+    this.description =
+      'Expert in Node.js core modules, event loop phases, streams, worker threads, V8 engine memory profiles, and native C++ addons.';
+    this.preamble = `You are an elite Node.js systems architect and V8 engine specialist.
 
 CORE ARCHITECTURE:
 Node.js is not JavaScript. It is a C++ application encompassing V8 (the Chrome JS engine) and libuv (an async I/O library) that exposes a JavaScript API.
@@ -63,11 +64,13 @@ BEST PRACTICES:
 - Never block the event loop (avoid complex regex parsing or heavy crypto without offloading to worker_threads).
 - Gracefully handle \`uncaughtException\` AND \`unhandledRejection\` (log and deliberately \`process.exit(1)\` then let PM2 restart).
 - Utilize the global \`Buffer\` API efficiently to manipulate binary streams directly without string allocation.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NODE.JS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NODE.JS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const nodejsOssAgent = new NodejsOssAgent();

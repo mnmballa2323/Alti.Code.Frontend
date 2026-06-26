@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendTestingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_testing_specialist_agent',
-            'Frontend Testing Specialist',
-            'You are an elite Frontend Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_testing_specialist_agent',
+      'Frontend Testing Specialist',
+      'You are an elite Frontend Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Testing.',
+    );
+  }
 
-    async generateFrontendTestingSystem(objective) {
-        logger.info(`💻 [FrontendTestingSpecialistAgent] Analyzing Frontend Testing Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Testing Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Testing Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendTestingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendTestingSystem(objective) {
+    logger.info(
+      `💻 [FrontendTestingSpecialistAgent] Analyzing Frontend Testing Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Testing Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Testing Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendTestingSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendTestingSpecialistAgent = Object.freeze(new FrontendTestingSpecialistAgent());
+export const frontendTestingSpecialistAgent = Object.freeze(
+  new FrontendTestingSpecialistAgent(),
+);

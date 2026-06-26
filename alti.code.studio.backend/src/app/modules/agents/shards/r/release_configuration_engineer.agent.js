@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseConfigurationEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_configuration_engineer_agent',
-            'Release Configuration Engineer',
-            'You are an elite Release Configuration Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'release_configuration_engineer_agent',
+      'Release Configuration Engineer',
+      'You are an elite Release Configuration Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Configuration.',
+    );
+  }
 
-    async generateReleaseConfigurationSystem(objective) {
-        logger.info(`💻 [ReleaseConfigurationEngineerAgent] Analyzing Release Configuration Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Configuration Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Configuration Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseConfigurationEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseConfigurationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseConfigurationEngineerAgent] Analyzing Release Configuration Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Configuration Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Configuration Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseConfigurationEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseConfigurationEngineerAgent = Object.freeze(new ReleaseConfigurationEngineerAgent());
+export const releaseConfigurationEngineerAgent = Object.freeze(
+  new ReleaseConfigurationEngineerAgent(),
+);

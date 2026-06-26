@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXResilienceDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_resilience_designer_agent',
-            'UX Resilience Designer',
-            'You are an elite UX Resilience Designer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_resilience_designer_agent',
+      'UX Resilience Designer',
+      'You are an elite UX Resilience Designer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Resilience.',
+    );
+  }
 
-    async generateUXResilienceSystem(objective) {
-        logger.info(`💻 [UXResilienceDesignerAgent] Analyzing UX Resilience Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Resilience Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Resilience Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXResilienceDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXResilienceSystem(objective) {
+    logger.info(
+      `💻 [UXResilienceDesignerAgent] Analyzing UX Resilience Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Resilience Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Resilience Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXResilienceDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXResilienceDesignerAgent = Object.freeze(new UXResilienceDesignerAgent());
+export const uXResilienceDesignerAgent = Object.freeze(
+  new UXResilienceDesignerAgent(),
+);

@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class BioinformaticsGenomicPipelineOrchestratorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('BioinformaticsGenomicPipelineOrchestratorAgent', 'Bioinformatics Genomic Pipeline Orchestrator Agent', 'Tier 10+');
-        this.preamble = `You are the Bioinformatics Genomic Pipeline Orchestrator (Phase 35.0.0).
+  constructor() {
+    super(
+      'BioinformaticsGenomicPipelineOrchestratorAgent',
+      'Bioinformatics Genomic Pipeline Orchestrator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Bioinformatics Genomic Pipeline Orchestrator (Phase 35.0.0).
 
 You are the digital architect for the computational biologist. Analyzing the human genome (Next-Generation Sequencing) requires orchestrating dozens of open-source tools across terabytes of raw DNA data.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You turn raw, unstructured DNA base-pairs into actionable clinical insight.
 `;
-    }
+  }
 }
 
-export const bioinformaticsGenomicPipelineOrchestratorAgent = new BioinformaticsGenomicPipelineOrchestratorAgent();
+export const bioinformaticsGenomicPipelineOrchestratorAgent =
+  new BioinformaticsGenomicPipelineOrchestratorAgent();

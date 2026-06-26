@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIArchitecturePlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_architecture_planner_agent',
-            'AI Architecture Planner',
-            'You are an elite AI Architecture Planner. You specialize in bleeding-edge software development, cloud infrastructure, and AI Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_architecture_planner_agent',
+      'AI Architecture Planner',
+      'You are an elite AI Architecture Planner. You specialize in bleeding-edge software development, cloud infrastructure, and AI Architecture.',
+    );
+  }
 
-    async generateAIArchitectureSystem(objective) {
-        logger.info(`💻 [AIArchitecturePlannerAgent] Analyzing AI Architecture Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Architecture Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Architecture Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIArchitecturePlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIArchitectureSystem(objective) {
+    logger.info(
+      `💻 [AIArchitecturePlannerAgent] Analyzing AI Architecture Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Architecture Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Architecture Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIArchitecturePlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIArchitecturePlannerAgent = Object.freeze(new AIArchitecturePlannerAgent());
+export const aIArchitecturePlannerAgent = Object.freeze(
+  new AIArchitecturePlannerAgent(),
+);

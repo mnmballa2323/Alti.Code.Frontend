@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataTestingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_testing_specialist_agent',
-            'Data Testing Specialist',
-            'You are an elite Data Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Data Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'data_testing_specialist_agent',
+      'Data Testing Specialist',
+      'You are an elite Data Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Data Testing.',
+    );
+  }
 
-    async generateDataTestingSystem(objective) {
-        logger.info(`💻 [DataTestingSpecialistAgent] Analyzing Data Testing Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Testing Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Testing Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataTestingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataTestingSystem(objective) {
+    logger.info(
+      `💻 [DataTestingSpecialistAgent] Analyzing Data Testing Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Testing Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Testing Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataTestingSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataTestingSpecialistAgent = Object.freeze(new DataTestingSpecialistAgent());
+export const dataTestingSpecialistAgent = Object.freeze(
+  new DataTestingSpecialistAgent(),
+);

@@ -13,11 +13,23 @@ import { validateRequest } from '../../middlewares/validateRequest/validateReque
 import { OrchestratorValidation } from './orchestrator.validation.js';
 
 const router = express.Router();
-const adminOnly = authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN);
+const adminOnly = authMiddleware(
+  ENUM_USER_ROLE.ADMIN,
+  ENUM_USER_ROLE.SUPER_ADMIN,
+);
 
 // Mission — natural language goal → autonomous execution
-router.post('/mission', adminOnly, validateRequest(OrchestratorValidation.missionZodSchema), OrchestratorController.startMission);
-router.get('/mission/:traceId', adminOnly, OrchestratorController.getMissionStatus);
+router.post(
+  '/mission',
+  adminOnly,
+  validateRequest(OrchestratorValidation.missionZodSchema),
+  OrchestratorController.startMission,
+);
+router.get(
+  '/mission/:traceId',
+  adminOnly,
+  OrchestratorController.getMissionStatus,
+);
 router.get('/missions', adminOnly, OrchestratorController.listMissions);
 
 export const orchestratorRoutes = router;

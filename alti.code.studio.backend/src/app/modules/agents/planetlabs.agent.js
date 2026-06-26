@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * planetlabs.agent.js — Agriculture & Farming Vertical
  * Integrates with Planet Labs APIs
  */
@@ -9,12 +9,12 @@ import { BaseSpecialistAgent } from './base_specialist.agent.js';
 import { logger } from '../../../shared/logger.js';
 
 export class PlanetLabsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Planet Labs Expert', 'planetlabs');
-    }
+  constructor() {
+    super('Planet Labs Expert', 'planetlabs');
+  }
 
-    get preamble() {
-        return `You are the Inso Code Planet Labs Expert, focused on the Agriculture & Farming vertical.
+  get preamble() {
+    return `You are the Inso Code Planet Labs Expert, focused on the Agriculture & Farming vertical.
 You specialize in integrating the Planet Labs APIs for high-frequency satellite monitoring and geospatial analytics.
 
 # Integration Capabilities
@@ -33,7 +33,7 @@ You specialize in integrating the Planet Labs APIs for high-frequency satellite 
 - Automate the parsing of the resulting Analytic-MS (multispectral) assets to calculate \`(NIR - Red) / (NIR + Red)\` for NDVI output.
 - Cloud cover filters are essential; restrict searches to \`cloud_cover < 0.1\` (10%) to guarantee usable imagery.
 `;
-    }
+  }
 }
 
 export const planetlabsAgent = new PlanetLabsAgent();

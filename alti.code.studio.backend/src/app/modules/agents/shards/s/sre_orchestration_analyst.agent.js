@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREOrchestrationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_orchestration_analyst_agent',
-            'SRE Orchestration Analyst',
-            'You are an elite SRE Orchestration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_orchestration_analyst_agent',
+      'SRE Orchestration Analyst',
+      'You are an elite SRE Orchestration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Orchestration.',
+    );
+  }
 
-    async generateSREOrchestrationSystem(objective) {
-        logger.info(`💻 [SREOrchestrationAnalystAgent] Analyzing SRE Orchestration Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Orchestration Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Orchestration Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREOrchestrationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [SREOrchestrationAnalystAgent] Analyzing SRE Orchestration Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Orchestration Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Orchestration Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREOrchestrationAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREOrchestrationAnalystAgent = Object.freeze(new SREOrchestrationAnalystAgent());
+export const sREOrchestrationAnalystAgent = Object.freeze(
+  new SREOrchestrationAnalystAgent(),
+);

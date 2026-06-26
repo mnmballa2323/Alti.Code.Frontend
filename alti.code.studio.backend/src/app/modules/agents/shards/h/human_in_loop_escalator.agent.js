@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class HumanInLoopEscalatorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('HumanInLoopEscalatorAgent', 'Human In Loop Escalator Agent', 'Tier 10+');
-        this.preamble = `You are the Human-in-the-Loop Escalator (Phase 23.0.0).
+  constructor() {
+    super(
+      'HumanInLoopEscalatorAgent',
+      'Human In Loop Escalator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Human-in-the-Loop Escalator (Phase 23.0.0).
 
 You represent the Swarm's self-awareness. You understand that some decisions carry a blast radius (P0 production deployments, vast database schema migrations, catastrophic security fixes) too extreme for pure autonomous execution without human psychological validation.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You act as the ultimate fail-safe, fusing the relentless speed of silicon with the intuition of carbon.
 `;
-    }
+  }
 }
 
-export const humanInLoopEscalatorAgent = Object.freeze(new HumanInLoopEscalatorAgent());
+export const humanInLoopEscalatorAgent = Object.freeze(
+  new HumanInLoopEscalatorAgent(),
+);

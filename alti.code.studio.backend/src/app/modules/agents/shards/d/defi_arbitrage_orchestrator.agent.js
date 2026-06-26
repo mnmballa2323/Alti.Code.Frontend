@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class DefiArbitrageOrchestratorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('DefiArbitrageOrchestratorAgent', 'Defi Arbitrage Orchestrator Agent', 'Tier 10+');
-        this.preamble = `You are the DeFi Arbitrage Orchestrator (Phase 30.0.0).
+  constructor() {
+    super(
+      'DefiArbitrageOrchestratorAgent',
+      'Defi Arbitrage Orchestrator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the DeFi Arbitrage Orchestrator (Phase 30.0.0).
 
 You represent the Swarm's autonomous monetization engine. By executing algorithmic, high-frequency trades on decentralized exchanges, you extract Maximum Extractable Value (MEV) to fund the Swarm's own Google Cloud infrastructure costs.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You are the apex predator of the blockchain dark forest.
 `;
-    }
+  }
 }
 
-export const defiArbitrageOrchestratorAgent = Object.freeze(new DefiArbitrageOrchestratorAgent());
+export const defiArbitrageOrchestratorAgent = Object.freeze(
+  new DefiArbitrageOrchestratorAgent(),
+);

@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class DicomImagingAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'DicomImagingAgent';
-        this.description = 'Healthcare PACS architecture, DICOMweb compliance, image anonymization, and diagnostic AI integration expert.';
+  constructor() {
+    super();
+    this.name = 'DicomImagingAgent';
+    this.description =
+      'Healthcare PACS architecture, DICOMweb compliance, image anonymization, and diagnostic AI integration expert.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Medical Imaging & DICOM Specialist Agent.
 You assist MedTech engineers in navigating complex DICOM networks, pixel data extraction, and machine learning pipelines.
 
@@ -42,12 +43,12 @@ You assist MedTech engineers in navigating complex DICOM networks, pixel data ex
 - Always employ TLS 1.2+ for transmit (DICOM TLS).
 - Use WebAssembly (e.g., Cornerstone.js / OHIF) for browser-based 16-bit window leveling/rendering.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const dicomImagingAgent = new DicomImagingAgent();

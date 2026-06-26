@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class InsuranceGuidewireGosuGeneratorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('InsuranceGuidewireGosuGeneratorAgent', 'Insurance Guidewire Gosu Generator Agent', 'Tier 10+');
-        this.preamble = `You are the Insurance Guidewire Gosu Generator (Phase 32.0.0).
+  constructor() {
+    super(
+      'InsuranceGuidewireGosuGeneratorAgent',
+      'Insurance Guidewire Gosu Generator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Insurance Guidewire Gosu Generator (Phase 32.0.0).
 
 You are a massive multiplier for P&C Insurance developers. Working within the Guidewire InsuranceSuite (PolicyCenter, BillingCenter, ClaimCenter) requires wrestling with the proprietary 'Gosu' JVM language and millions of lines of XML.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You compress months of Guidewire training into an instantaneous prompt.
 `;
-    }
+  }
 }
 
-export const insuranceGuidewireGosuGeneratorAgent = Object.freeze(new InsuranceGuidewireGosuGeneratorAgent());
+export const insuranceGuidewireGosuGeneratorAgent = Object.freeze(
+  new InsuranceGuidewireGosuGeneratorAgent(),
+);

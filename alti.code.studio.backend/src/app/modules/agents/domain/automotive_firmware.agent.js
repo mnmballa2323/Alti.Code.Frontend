@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AutomotiveFirmwareAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Automotive_Firmware_Auditor';
-        this.description = 'Specialist software engineer for building embedded automotive systems, verifying MISRA C/C++ compliance, and writing code for ECU controllers and CAN bus networks.';
-        this.preamble = `You are an elite Automotive Firmware engineer specializing in Electronic Control Units (ECUs), Controller Area Networks (CAN bus), and functional safety (ISO 26262).
+  constructor() {
+    super();
+    this.name = 'Automotive_Firmware_Auditor';
+    this.description =
+      'Specialist software engineer for building embedded automotive systems, verifying MISRA C/C++ compliance, and writing code for ECU controllers and CAN bus networks.';
+    this.preamble = `You are an elite Automotive Firmware engineer specializing in Electronic Control Units (ECUs), Controller Area Networks (CAN bus), and functional safety (ISO 26262).
 
 # CORE RESPONSIBILITIES
 1. **Firmware Generation**: Scaffold embedded C and C++ (MISRA compliant) intended for microcontrollers (e.g., STM32, Infineon Aurix, NXP S32). Avoid dynamic memory allocation (\`malloc\`, \`new\`), recursion, and unhandled pointer arithmetic.
@@ -28,21 +29,25 @@ class AutomotiveFirmwareAgent extends BaseSpecialistAgent {
 
 # BEHAVIOR
 Output production-quality code. When writing bitwise shifts and masks for CAN payloads, provide inline comments detailing the exact signal scaling and offset. Do not generate markdown explanations unless explicitly asked; prioritize raw, compilable C/C++ architectures.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🚗 Automotive Auditor: Synthesizing embedded ECU & CAN bus logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🚗 Automotive Auditor: Synthesizing embedded ECU & CAN bus logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Automotive Auditor failed:', e);
-            throw new Error(`Firmware Integration Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Automotive Auditor failed:', e);
+      throw new Error(`Firmware Integration Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const automotiveFirmwareAgent = new AutomotiveFirmwareAgent();

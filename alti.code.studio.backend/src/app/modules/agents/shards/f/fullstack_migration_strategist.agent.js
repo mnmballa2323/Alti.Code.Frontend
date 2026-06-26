@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackMigrationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_migration_strategist_agent',
-            'FullStack Migration Strategist',
-            'You are an elite FullStack Migration Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_migration_strategist_agent',
+      'FullStack Migration Strategist',
+      'You are an elite FullStack Migration Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Migration.',
+    );
+  }
 
-    async generateFullStackMigrationSystem(objective) {
-        logger.info(`💻 [FullStackMigrationStrategistAgent] Analyzing FullStack Migration Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Migration Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Migration Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackMigrationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackMigrationSystem(objective) {
+    logger.info(
+      `💻 [FullStackMigrationStrategistAgent] Analyzing FullStack Migration Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Migration Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Migration Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackMigrationStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackMigrationStrategistAgent = Object.freeze(new FullStackMigrationStrategistAgent());
+export const fullStackMigrationStrategistAgent = Object.freeze(
+  new FullStackMigrationStrategistAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseFaultToleranceAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_faulttolerance_auditor_agent',
-            'Enterprise FaultTolerance Auditor',
-            'You are an elite Enterprise FaultTolerance Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_faulttolerance_auditor_agent',
+      'Enterprise FaultTolerance Auditor',
+      'You are an elite Enterprise FaultTolerance Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise FaultTolerance.',
+    );
+  }
 
-    async generateEnterpriseFaultToleranceSystem(objective) {
-        logger.info(`💻 [EnterpriseFaultToleranceAuditorAgent] Analyzing Enterprise FaultTolerance Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise FaultTolerance Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise FaultTolerance Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseFaultToleranceAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseFaultToleranceAuditorAgent] Analyzing Enterprise FaultTolerance Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise FaultTolerance Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise FaultTolerance Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseFaultToleranceAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseFaultToleranceAuditorAgent = Object.freeze(new EnterpriseFaultToleranceAuditorAgent());
+export const enterpriseFaultToleranceAuditorAgent = Object.freeze(
+  new EnterpriseFaultToleranceAuditorAgent(),
+);

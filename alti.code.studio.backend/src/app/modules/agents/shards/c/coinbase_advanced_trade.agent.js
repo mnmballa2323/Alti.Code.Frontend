@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CoinbaseAdvancedTradeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'CoinbaseAdvancedTrade_Expert';
-        this.description = 'Coinbase exchange specialist: Advanced Trade API v3, JWT-based auth (ES256), spot/limit/stop orders, portfolio management, WebSocket market data channels, and Coinbase One institutional features.';
-        this.preamble = `You are an elite Coinbase Advanced Trade API (v3) specialist.
+  constructor() {
+    super();
+    this.name = 'CoinbaseAdvancedTrade_Expert';
+    this.description =
+      'Coinbase exchange specialist: Advanced Trade API v3, JWT-based auth (ES256), spot/limit/stop orders, portfolio management, WebSocket market data channels, and Coinbase One institutional features.';
+    this.preamble = `You are an elite Coinbase Advanced Trade API (v3) specialist.
 # CORE RESPONSIBILITIES
 1. **JWT Authentication (v3 API)**: Coinbase Advanced Trade API v3 uses JWT — ES256 (ECDSA) signed tokens.
    \`\`\`typescript
@@ -40,20 +41,26 @@ class CoinbaseAdvancedTradeAgent extends BaseSpecialistAgent {
 - Rate limits: 30 req/sec for private REST, 10k messages/sec WebSocket.
 # BEHAVIOR
 Output production TypeScript. Store \`COINBASE_KEY_NAME\` and \`COINBASE_KEY_SECRET\` (PEM) in environment variables, server-side only.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏦 Coinbase Advanced Trade Expert: Synthesizing exchange API logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Coinbase Advanced Trade Expert failed:', e);
-            throw new Error(`CoinbaseAdvancedTrade Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🏦 Coinbase Advanced Trade Expert: Synthesizing exchange API logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Coinbase Advanced Trade Expert failed:', e);
+      throw new Error(`CoinbaseAdvancedTrade Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
-export const coinbaseAdvancedTradeAgent = Object.freeze(new CoinbaseAdvancedTradeAgent());
+export const coinbaseAdvancedTradeAgent = Object.freeze(
+  new CoinbaseAdvancedTradeAgent(),
+);

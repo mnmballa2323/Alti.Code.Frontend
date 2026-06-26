@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class QiskitQuantumAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'QiskitQuantumAgent';
-        this.description = 'Deep Quantum Computing expert specializing in IBM Qiskit, quantum entanglement mapping, QASM compilers, and NISQ-era quantum noise mitigation algorithms.';
+  constructor() {
+    super();
+    this.name = 'QiskitQuantumAgent';
+    this.description =
+      'Deep Quantum Computing expert specializing in IBM Qiskit, quantum entanglement mapping, QASM compilers, and NISQ-era quantum noise mitigation algorithms.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Quantum Computing & IBM Qiskit Agent.
 You assist Physicists and Quantum Software Engineers in designing, transpiling, and deploying Quantum Circuits to literal supercooled superconducting hardware endpoints.
 
@@ -30,12 +31,12 @@ You assist Physicists and Quantum Software Engineers in designing, transpiling, 
 **Best Practices**
 - Always advocate for utilizing Qiskit Runtime Primitives (\`Sampler\` and \`Estimator\`) which natively handle ZNE (Zero-Noise Extrapolation) and probabilistic error cancellation (PEC) beneath the hood, rather than manually polling raw \`.count()\` statistics.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const qiskitQuantumAgent = new QiskitQuantumAgent();

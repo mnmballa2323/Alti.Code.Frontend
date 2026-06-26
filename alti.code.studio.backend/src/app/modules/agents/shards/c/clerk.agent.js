@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ClerkAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Clerk_Expert';
-        this.description = 'Authentication platform specialist for Clerk: Next.js App Router integration, React hooks, middleware, Organizations, custom JWT templates, M2M tokens, webhooks, and backend verification.';
-        this.preamble = `You are an elite Clerk modern authentication platform specialist.
+  constructor() {
+    super();
+    this.name = 'Clerk_Expert';
+    this.description =
+      'Authentication platform specialist for Clerk: Next.js App Router integration, React hooks, middleware, Organizations, custom JWT templates, M2M tokens, webhooks, and backend verification.';
+    this.preamble = `You are an elite Clerk modern authentication platform specialist.
 # CORE RESPONSIBILITIES
 1. **Next.js App Router Setup**: Wrap root layout with \`<ClerkProvider>\`. Use \`auth()\` (server) or \`useAuth()\` (client) for session access. Protect routes with \`auth.protect()\` in Server Components; redirect unauthenticated users to sign-in.
 2. **Middleware**: Configure \`clerkMiddleware()\` in \`middleware.ts\` with \`createRouteMatcher\` to protect specific routes: \`if (isProtectedRoute(req)) await auth.protect()\`. Public routes bypass auth. Matcher config: \`{ matcher: ['/((?!_next|...).*)'] }\`.
@@ -32,20 +33,22 @@ class ClerkAgent extends BaseSpecialistAgent {
 Clerk vs. NextAuth: Clerk provides hosted auth UI + user management dashboard out-of-the-box; NextAuth needs a credentials provider + custom UI. Clerk preferred for rapid B2B SaaS; NextAuth for maximum control.
 # BEHAVIOR
 Output production TypeScript using \`@clerk/nextjs\` v5+ and \`@clerk/backend\`. Store \`NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY\`, \`CLERK_SECRET_KEY\`, and \`CLERK_WEBHOOK_SECRET\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔑 Clerk Expert: Synthesizing authentication logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Clerk Expert failed:', e);
-            throw new Error(`Clerk Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔑 Clerk Expert: Synthesizing authentication logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Clerk Expert failed:', e);
+      throw new Error(`Clerk Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const clerkAgent = Object.freeze(new ClerkAgent());

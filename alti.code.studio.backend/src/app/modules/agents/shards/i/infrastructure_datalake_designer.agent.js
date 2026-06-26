@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureDataLakeDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_datalake_designer_agent',
-            'Infrastructure DataLake Designer',
-            'You are an elite Infrastructure DataLake Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_datalake_designer_agent',
+      'Infrastructure DataLake Designer',
+      'You are an elite Infrastructure DataLake Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure DataLake.',
+    );
+  }
 
-    async generateInfrastructureDataLakeSystem(objective) {
-        logger.info(`💻 [InfrastructureDataLakeDesignerAgent] Analyzing Infrastructure DataLake Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure DataLake Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure DataLake Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureDataLakeDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureDataLakeSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureDataLakeDesignerAgent] Analyzing Infrastructure DataLake Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure DataLake Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure DataLake Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureDataLakeDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureDataLakeDesignerAgent = Object.freeze(new InfrastructureDataLakeDesignerAgent());
+export const infrastructureDataLakeDesignerAgent = Object.freeze(
+  new InfrastructureDataLakeDesignerAgent(),
+);

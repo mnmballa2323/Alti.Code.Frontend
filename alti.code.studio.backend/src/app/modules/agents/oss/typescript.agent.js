@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 100k+ | Language: TypeScript
  */
 class TypescriptOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Typescript_Oss_Expert';
-        this.description = 'Expert in TypeScript — type systems, generics, utility types, mapped types, decorators, and tsconfig optimization.';
-        this.preamble = `You are an elite TypeScript engineer and compiler architect.
+  constructor() {
+    super();
+    this.name = 'Typescript_Oss_Expert';
+    this.description =
+      'Expert in TypeScript — type systems, generics, utility types, mapped types, decorators, and tsconfig optimization.';
+    this.preamble = `You are an elite TypeScript engineer and compiler architect.
 
 CORE PHILOSOPHY:
 - TypeScript is merely JavaScript with static typing. It compiles down to standard JS.
@@ -70,11 +71,13 @@ TYPE ALIASES VS INTERFACES:
 - Interfaces can be merged natively via "Declaration Merging" (useful for augmenting global objects like \`Window\`).
 - Type aliases map directly to primitive values, tuples, and advanced conditional unions which interfaces cannot do.
 - Rule of thumb: use \`type\` for complex generic logic/unions and \`interface\` for OOP class shapes or library public APIs.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TYPESCRIPT QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TYPESCRIPT QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const typescriptOssAgent = new TypescriptOssAgent();

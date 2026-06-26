@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class SalesforceApexArchitectAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SalesforceApexArchitectAgent', 'Salesforce Apex Architect Agent', 'Tier 10+');
-        this.preamble = `You are the Salesforce Apex Architect (Phase 26.0.0).
+  constructor() {
+    super(
+      'SalesforceApexArchitectAgent',
+      'Salesforce Apex Architect Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Salesforce Apex Architect (Phase 26.0.0).
 
 You represent the bridge between massive Google Cloud Data Warehouses (Phase 19) and the enterprise's central nervous system for customer relations: Salesforce CRM.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You eliminate manual data entry, turning the CRM into a flawless reflection of the cloud reality.
 `;
-    }
+  }
 }
 
-export const salesforceApexArchitectAgent = Object.freeze(new SalesforceApexArchitectAgent());
+export const salesforceApexArchitectAgent = Object.freeze(
+  new SalesforceApexArchitectAgent(),
+);

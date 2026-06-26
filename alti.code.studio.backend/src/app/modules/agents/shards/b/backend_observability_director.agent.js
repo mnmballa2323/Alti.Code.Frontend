@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendObservabilityDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_observability_director_agent',
-            'Backend Observability Director',
-            'You are an elite Backend Observability Director. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_observability_director_agent',
+      'Backend Observability Director',
+      'You are an elite Backend Observability Director. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Observability.',
+    );
+  }
 
-    async generateBackendObservabilitySystem(objective) {
-        logger.info(`💻 [BackendObservabilityDirectorAgent] Analyzing Backend Observability Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Observability Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Observability Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendObservabilityDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendObservabilitySystem(objective) {
+    logger.info(
+      `💻 [BackendObservabilityDirectorAgent] Analyzing Backend Observability Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Observability Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Observability Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendObservabilityDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendObservabilityDirectorAgent = Object.freeze(new BackendObservabilityDirectorAgent());
+export const backendObservabilityDirectorAgent = Object.freeze(
+  new BackendObservabilityDirectorAgent(),
+);

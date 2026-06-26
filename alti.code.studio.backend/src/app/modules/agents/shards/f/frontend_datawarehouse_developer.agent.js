@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendDataWarehouseDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_datawarehouse_developer_agent',
-            'Frontend DataWarehouse Developer',
-            'You are an elite Frontend DataWarehouse Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_datawarehouse_developer_agent',
+      'Frontend DataWarehouse Developer',
+      'You are an elite Frontend DataWarehouse Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend DataWarehouse.',
+    );
+  }
 
-    async generateFrontendDataWarehouseSystem(objective) {
-        logger.info(`💻 [FrontendDataWarehouseDeveloperAgent] Analyzing Frontend DataWarehouse Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend DataWarehouse Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend DataWarehouse Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendDataWarehouseDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [FrontendDataWarehouseDeveloperAgent] Analyzing Frontend DataWarehouse Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend DataWarehouse Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend DataWarehouse Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendDataWarehouseDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendDataWarehouseDeveloperAgent = Object.freeze(new FrontendDataWarehouseDeveloperAgent());
+export const frontendDataWarehouseDeveloperAgent = Object.freeze(
+  new FrontendDataWarehouseDeveloperAgent(),
+);

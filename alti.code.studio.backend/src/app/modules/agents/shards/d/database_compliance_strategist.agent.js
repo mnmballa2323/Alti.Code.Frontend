@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseComplianceStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_compliance_strategist_agent',
-            'Database Compliance Strategist',
-            'You are an elite Database Compliance Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Database Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'database_compliance_strategist_agent',
+      'Database Compliance Strategist',
+      'You are an elite Database Compliance Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Database Compliance.',
+    );
+  }
 
-    async generateDatabaseComplianceSystem(objective) {
-        logger.info(`💻 [DatabaseComplianceStrategistAgent] Analyzing Database Compliance Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Compliance Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Compliance Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseComplianceStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseComplianceSystem(objective) {
+    logger.info(
+      `💻 [DatabaseComplianceStrategistAgent] Analyzing Database Compliance Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Compliance Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Compliance Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseComplianceStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseComplianceStrategistAgent = Object.freeze(new DatabaseComplianceStrategistAgent());
+export const databaseComplianceStrategistAgent = Object.freeze(
+  new DatabaseComplianceStrategistAgent(),
+);

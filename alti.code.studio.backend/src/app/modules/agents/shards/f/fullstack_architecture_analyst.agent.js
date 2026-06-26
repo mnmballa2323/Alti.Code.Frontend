@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackArchitectureAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_architecture_analyst_agent',
-            'FullStack Architecture Analyst',
-            'You are an elite FullStack Architecture Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_architecture_analyst_agent',
+      'FullStack Architecture Analyst',
+      'You are an elite FullStack Architecture Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Architecture.',
+    );
+  }
 
-    async generateFullStackArchitectureSystem(objective) {
-        logger.info(`💻 [FullStackArchitectureAnalystAgent] Analyzing FullStack Architecture Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Architecture Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Architecture Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackArchitectureAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackArchitectureSystem(objective) {
+    logger.info(
+      `💻 [FullStackArchitectureAnalystAgent] Analyzing FullStack Architecture Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Architecture Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Architecture Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackArchitectureAnalystAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackArchitectureAnalystAgent = Object.freeze(new FullStackArchitectureAnalystAgent());
+export const fullStackArchitectureAnalystAgent = Object.freeze(
+  new FullStackArchitectureAnalystAgent(),
+);

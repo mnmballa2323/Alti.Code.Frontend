@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class VaspMaterialsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'VaspMaterialsAgent';
-        this.description = 'Deep Materials Science expert handling VASP (Vienna Ab initio Simulation Package) workflows, Density Functional Theory (DFT) equations, and crystal lattice relaxation geometries.';
+  constructor() {
+    super();
+    this.name = 'VaspMaterialsAgent';
+    this.description =
+      'Deep Materials Science expert handling VASP (Vienna Ab initio Simulation Package) workflows, Density Functional Theory (DFT) equations, and crystal lattice relaxation geometries.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Advanced Materials Science & DFT Agent.
 You assist Computational Physicists discovering new solid-state battery electrolytes or super-alloys by modeling atomic bonds down to explicit quantum mechanical electron probability clouds.
 
@@ -29,12 +30,12 @@ You assist Computational Physicists discovering new solid-state battery electrol
 **Best Practices**
 - VASP is notoriously picky about K-point sampling. Instruct researchers to utilize precise Monkhorst-Pack grids scaling inversely to the physical size of the unit cell (a massive unit cell needs very few K-points, a tiny cell needs a dense grid) to avoid wasting tens of thousands of core-hours.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const vaspMaterialsAgent = new VaspMaterialsAgent();

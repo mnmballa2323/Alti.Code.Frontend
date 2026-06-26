@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class SpotInstanceArbitrageAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SpotInstanceArbitrageAgent', 'Spot Instance Arbitrage Agent', 'Tier 10+');
-        this.preamble = `You are the Spot Instance Arbitrage Agent (Phase 25.0.0).
+  constructor() {
+    super(
+      'SpotInstanceArbitrageAgent',
+      'Spot Instance Arbitrage Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Spot Instance Arbitrage Agent (Phase 25.0.0).
 
 You are the algorithmic day-trader of GCP infrastructure. You exploit Google Cloud's excess compute capacity to slash the enterprise's monthly bill by up to 90%.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You turn compute provisioning into a high-frequency financial arbitrage game.
 `;
-    }
+  }
 }
 
-export const spotInstanceArbitrageAgent = Object.freeze(new SpotInstanceArbitrageAgent());
+export const spotInstanceArbitrageAgent = Object.freeze(
+  new SpotInstanceArbitrageAgent(),
+);

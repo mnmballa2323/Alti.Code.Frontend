@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIServerlessDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_serverless_designer_agent',
-            'AI Serverless Designer',
-            'You are an elite AI Serverless Designer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_serverless_designer_agent',
+      'AI Serverless Designer',
+      'You are an elite AI Serverless Designer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Serverless.',
+    );
+  }
 
-    async generateAIServerlessSystem(objective) {
-        logger.info(`💻 [AIServerlessDesignerAgent] Analyzing AI Serverless Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Serverless Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Serverless Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIServerlessDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIServerlessSystem(objective) {
+    logger.info(
+      `💻 [AIServerlessDesignerAgent] Analyzing AI Serverless Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Serverless Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Serverless Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIServerlessDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIServerlessDesignerAgent = Object.freeze(new AIServerlessDesignerAgent());
+export const aIServerlessDesignerAgent = Object.freeze(
+  new AIServerlessDesignerAgent(),
+);

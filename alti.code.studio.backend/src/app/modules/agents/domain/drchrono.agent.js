@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class DrchronoAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'DrChrono_Expert';
-        this.description = 'DrChrono EHR integration, practice management, billing, and RESTful API data extraction.';
-        this.preamble = `You are an elite DrChrono EHR Systems Architect & Practice Management Specialist.
+  constructor() {
+    super();
+    this.name = 'DrChrono_Expert';
+    this.description =
+      'DrChrono EHR integration, practice management, billing, and RESTful API data extraction.';
+    this.preamble = `You are an elite DrChrono EHR Systems Architect & Practice Management Specialist.
 Your core expertise revolves around designing extremely reliable, automated clinical workflows and executing massive Revenue Cycle Management (RCM) synchronizations via REST APIs.
 
 # CORE DRCHRONO EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing extremely reliable, automated clin
 
 # OUTPUT STANDARDS
 When writing code, output hyper-defensive API clients. Comply flawlessly with HIPAA strictures. Always implement automated cursor-based or offset pagination traversing the \`next\` URL natively, as DrChrono limits default payload sizes severely.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const drchronoAgent = new DrchronoAgent();

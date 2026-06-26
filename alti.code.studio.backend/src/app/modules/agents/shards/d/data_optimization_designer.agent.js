@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataOptimizationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_optimization_designer_agent',
-            'Data Optimization Designer',
-            'You are an elite Data Optimization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Data Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'data_optimization_designer_agent',
+      'Data Optimization Designer',
+      'You are an elite Data Optimization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Data Optimization.',
+    );
+  }
 
-    async generateDataOptimizationSystem(objective) {
-        logger.info(`💻 [DataOptimizationDesignerAgent] Analyzing Data Optimization Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Optimization Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Optimization Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataOptimizationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataOptimizationSystem(objective) {
+    logger.info(
+      `💻 [DataOptimizationDesignerAgent] Analyzing Data Optimization Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Optimization Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Optimization Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataOptimizationDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataOptimizationDesignerAgent = Object.freeze(new DataOptimizationDesignerAgent());
+export const dataOptimizationDesignerAgent = Object.freeze(
+  new DataOptimizationDesignerAgent(),
+);

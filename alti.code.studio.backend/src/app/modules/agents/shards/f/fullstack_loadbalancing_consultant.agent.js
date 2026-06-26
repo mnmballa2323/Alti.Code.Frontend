@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackLoadBalancingConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_loadbalancing_consultant_agent',
-            'FullStack LoadBalancing Consultant',
-            'You are an elite FullStack LoadBalancing Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_loadbalancing_consultant_agent',
+      'FullStack LoadBalancing Consultant',
+      'You are an elite FullStack LoadBalancing Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack LoadBalancing.',
+    );
+  }
 
-    async generateFullStackLoadBalancingSystem(objective) {
-        logger.info(`💻 [FullStackLoadBalancingConsultantAgent] Analyzing FullStack LoadBalancing Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack LoadBalancing Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack LoadBalancing Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackLoadBalancingConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [FullStackLoadBalancingConsultantAgent] Analyzing FullStack LoadBalancing Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack LoadBalancing Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack LoadBalancing Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackLoadBalancingConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackLoadBalancingConsultantAgent = Object.freeze(new FullStackLoadBalancingConsultantAgent());
+export const fullStackLoadBalancingConsultantAgent = Object.freeze(
+  new FullStackLoadBalancingConsultantAgent(),
+);

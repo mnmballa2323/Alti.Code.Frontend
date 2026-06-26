@@ -1,6 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { tenantDbRouter, tenantCache } from './tenantDbRouter.js';
-import { prisma, getTenantPrisma, getSchemaConnectionUrl } from './prismaClient.js';
+import {
+  prisma,
+  getTenantPrisma,
+  getSchemaConnectionUrl,
+} from './prismaClient.js';
 
 // Mock prismaClient
 vi.mock('./prismaClient.js', () => {
@@ -56,7 +60,9 @@ describe('Platform Tenant Database Router Middleware', () => {
     const next = vi.fn();
 
     // Mock findUnique to return tenant without dedicatedDatabaseUrl
-    prisma.tenant.findUnique.mockResolvedValueOnce({ dedicatedDatabaseUrl: null });
+    prisma.tenant.findUnique.mockResolvedValueOnce({
+      dedicatedDatabaseUrl: null,
+    });
 
     await tenantDbRouter(req, res, next);
 
@@ -76,8 +82,10 @@ describe('Platform Tenant Database Router Middleware', () => {
     const next = vi.fn();
 
     const mockTenantDbClient = { query: vi.fn() };
-    
-    prisma.tenant.findUnique.mockResolvedValueOnce({ dedicatedDatabaseUrl: dbUrl });
+
+    prisma.tenant.findUnique.mockResolvedValueOnce({
+      dedicatedDatabaseUrl: dbUrl,
+    });
     getTenantPrisma.mockReturnValueOnce(mockTenantDbClient);
 
     await tenantDbRouter(req, res, next);
@@ -93,7 +101,8 @@ describe('Platform Tenant Database Router Middleware', () => {
 
   it('should route requests to schema-level connection pool when SCHEMA_ISOLATION_ACTIVE is active', async () => {
     process.env.SCHEMA_ISOLATION_ACTIVE = 'true';
-    process.env.DATABASE_URL = 'postgresql://shared:pass@127.0.0.1:5432/shareddb';
+    process.env.DATABASE_URL =
+      'postgresql://shared:pass@127.0.0.1:5432/shareddb';
 
     const tenantId = 'tenant-789';
     const req = { user: { tenantId } };
@@ -102,7 +111,9 @@ describe('Platform Tenant Database Router Middleware', () => {
 
     const mockTenantSchemaClient = { query: vi.fn() };
 
-    prisma.tenant.findUnique.mockResolvedValueOnce({ dedicatedDatabaseUrl: null });
+    prisma.tenant.findUnique.mockResolvedValueOnce({
+      dedicatedDatabaseUrl: null,
+    });
     getTenantPrisma.mockReturnValueOnce(mockTenantSchemaClient);
 
     await tenantDbRouter(req, res, next);
@@ -114,25 +125,34 @@ describe('Platform Tenant Database Router Middleware', () => {
     expect(getSchemaConnectionUrl).toHaveBeenCalledWith(
       'postgresql://shared:pass@127.0.0.1:5432/shareddb',
       tenantId,
-      null
+      null,
     );
-    expect(getTenantPrisma).toHaveBeenCalledWith(tenantId, expect.stringContaining('schema=tenant_tenant789'));
+    expect(getTenantPrisma).toHaveBeenCalledWith(
+      tenantId,
+      expect.stringContaining('schema=tenant_tenant789'),
+    );
     expect(req.db).toBe(mockTenantSchemaClient);
     expect(next).toHaveBeenCalledWith();
   });
 
   it('should route requests to product-partitioned schema connection pool when x-product-id header is provided', async () => {
     process.env.SCHEMA_ISOLATION_ACTIVE = 'true';
-    process.env.DATABASE_URL = 'postgresql://shared:pass@127.0.0.1:5432/shareddb';
+    process.env.DATABASE_URL =
+      'postgresql://shared:pass@127.0.0.1:5432/shareddb';
 
     const tenantId = 'tenant-789';
-    const req = { user: { tenantId }, headers: { 'x-product-id': 'product-abc' } };
+    const req = {
+      user: { tenantId },
+      headers: { 'x-product-id': 'product-abc' },
+    };
     const res = {};
     const next = vi.fn();
 
     const mockTenantSchemaClient = { query: vi.fn() };
 
-    prisma.tenant.findUnique.mockResolvedValueOnce({ dedicatedDatabaseUrl: null });
+    prisma.tenant.findUnique.mockResolvedValueOnce({
+      dedicatedDatabaseUrl: null,
+    });
     getTenantPrisma.mockReturnValueOnce(mockTenantSchemaClient);
 
     await tenantDbRouter(req, res, next);
@@ -140,9 +160,12 @@ describe('Platform Tenant Database Router Middleware', () => {
     expect(getSchemaConnectionUrl).toHaveBeenCalledWith(
       'postgresql://shared:pass@127.0.0.1:5432/shareddb',
       tenantId,
-      'product-abc'
+      'product-abc',
     );
-    expect(getTenantPrisma).toHaveBeenCalledWith('tenant-789:product-abc', expect.stringContaining('schema=tenant_tenant789_product_productabc'));
+    expect(getTenantPrisma).toHaveBeenCalledWith(
+      'tenant-789:product-abc',
+      expect.stringContaining('schema=tenant_tenant789_product_productabc'),
+    );
     expect(req.db).toBe(mockTenantSchemaClient);
     expect(next).toHaveBeenCalledWith();
   });
@@ -168,7 +191,9 @@ describe('Platform Tenant Database Router Middleware', () => {
     const next = vi.fn();
 
     const mockTenantDbClient = { query: vi.fn() };
-    prisma.tenant.findUnique.mockResolvedValueOnce({ dedicatedDatabaseUrl: dbUrl });
+    prisma.tenant.findUnique.mockResolvedValueOnce({
+      dedicatedDatabaseUrl: dbUrl,
+    });
     getTenantPrisma.mockReturnValue(mockTenantDbClient);
 
     // First call: should query database and populate cache

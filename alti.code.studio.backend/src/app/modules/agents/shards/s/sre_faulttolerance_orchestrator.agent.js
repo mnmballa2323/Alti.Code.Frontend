@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREFaultToleranceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_faulttolerance_orchestrator_agent',
-            'SRE FaultTolerance Orchestrator',
-            'You are an elite SRE FaultTolerance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and SRE FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_faulttolerance_orchestrator_agent',
+      'SRE FaultTolerance Orchestrator',
+      'You are an elite SRE FaultTolerance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and SRE FaultTolerance.',
+    );
+  }
 
-    async generateSREFaultToleranceSystem(objective) {
-        logger.info(`💻 [SREFaultToleranceOrchestratorAgent] Analyzing SRE FaultTolerance Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE FaultTolerance Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE FaultTolerance Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREFaultToleranceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [SREFaultToleranceOrchestratorAgent] Analyzing SRE FaultTolerance Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE FaultTolerance Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE FaultTolerance Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREFaultToleranceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREFaultToleranceOrchestratorAgent = Object.freeze(new SREFaultToleranceOrchestratorAgent());
+export const sREFaultToleranceOrchestratorAgent = Object.freeze(
+  new SREFaultToleranceOrchestratorAgent(),
+);

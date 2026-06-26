@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendDataLakeAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_datalake_auditor_agent',
-            'Frontend DataLake Auditor',
-            'You are an elite Frontend DataLake Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_datalake_auditor_agent',
+      'Frontend DataLake Auditor',
+      'You are an elite Frontend DataLake Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend DataLake.',
+    );
+  }
 
-    async generateFrontendDataLakeSystem(objective) {
-        logger.info(`💻 [FrontendDataLakeAuditorAgent] Analyzing Frontend DataLake Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend DataLake Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend DataLake Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendDataLakeAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendDataLakeSystem(objective) {
+    logger.info(
+      `💻 [FrontendDataLakeAuditorAgent] Analyzing Frontend DataLake Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend DataLake Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend DataLake Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendDataLakeAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendDataLakeAuditorAgent = Object.freeze(new FrontendDataLakeAuditorAgent());
+export const frontendDataLakeAuditorAgent = Object.freeze(
+  new FrontendDataLakeAuditorAgent(),
+);

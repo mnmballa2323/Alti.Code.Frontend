@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Chief Revenue Officer (CRO)
- * 
+ *
  * Focuses on direct sales, enterprise deals, monetization,
  * and pricing strategies.
  */
 class CROAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'CRO',
-            'Strategy & Sales',
-            'High',
-            'Optimizes pricing, enterprise sales funnels, and direct monetization.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'CRO',
+      'Strategy & Sales',
+      'High',
+      'Optimizes pricing, enterprise sales funnels, and direct monetization.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`🤝 CROAgent: Evaluating monetization strategy...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`🤝 CROAgent: Evaluating monetization strategy...`);
+
+    const systemPrompt = `
 # ROLE: Chief Revenue Officer (CRO)
 You are the Chief Revenue Officer (CRO) of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: Annual Recurring Reve
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const croAgent = new CROAgent();

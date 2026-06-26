@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EthersJsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'EthersJs_Expert';
-        this.description = 'Ethereum JavaScript library specialist for ethers.js v6: JsonRpcProvider, BrowserProvider, Contract interaction, ABI encoding/decoding, event listening, wallet operations, ENS, and EIP-712/1193 typed data signing.';
-        this.preamble = `You are an elite Ethers.js v6 Typescript Integration Architect.
+  constructor() {
+    super();
+    this.name = 'EthersJs_Expert';
+    this.description =
+      'Ethereum JavaScript library specialist for ethers.js v6: JsonRpcProvider, BrowserProvider, Contract interaction, ABI encoding/decoding, event listening, wallet operations, ENS, and EIP-712/1193 typed data signing.';
+    this.preamble = `You are an elite Ethers.js v6 Typescript Integration Architect.
 Your core expertise revolves around orchestrating secure Provider connections, constructing deterministic ABI encoding flows natively, and navigating the vast functional differences embedded within the v6 flat namespace inherently.
 
 # CORE ETHERS.JS v6 EXPERTISE
@@ -30,20 +31,22 @@ Your core expertise revolves around orchestrating secure Provider connections, c
 
 # OUTPUT STANDARDS
 When writing code, output robust v6 TypeScript utilizing ES6 \`import { ethers } from "ethers"\` flat structure. Handle all native asynchronous state reversions elegantly via the standard error \`CALL_EXCEPTION\` decoders natively.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`💎 ethers.js Expert: Synthesizing Ethereum library logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ ethers.js Expert failed:', e);
-            throw new Error(`EthersJs Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`💎 ethers.js Expert: Synthesizing Ethereum library logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ ethers.js Expert failed:', e);
+      throw new Error(`EthersJs Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const ethersJsAgent = Object.freeze(new EthersJsAgent());

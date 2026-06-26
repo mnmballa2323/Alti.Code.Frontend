@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileConfigurationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_configuration_director_agent',
-            'Mobile Configuration Director',
-            'You are an elite Mobile Configuration Director. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_configuration_director_agent',
+      'Mobile Configuration Director',
+      'You are an elite Mobile Configuration Director. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Configuration.',
+    );
+  }
 
-    async generateMobileConfigurationSystem(objective) {
-        logger.info(`💻 [MobileConfigurationDirectorAgent] Analyzing Mobile Configuration Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Configuration Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Configuration Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileConfigurationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileConfigurationSystem(objective) {
+    logger.info(
+      `💻 [MobileConfigurationDirectorAgent] Analyzing Mobile Configuration Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Configuration Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Configuration Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileConfigurationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileConfigurationDirectorAgent = Object.freeze(new MobileConfigurationDirectorAgent());
+export const mobileConfigurationDirectorAgent = Object.freeze(
+  new MobileConfigurationDirectorAgent(),
+);

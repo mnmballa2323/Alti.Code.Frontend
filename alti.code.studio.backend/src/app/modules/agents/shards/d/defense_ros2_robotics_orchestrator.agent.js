@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class DefenseRos2RoboticsOrchestratorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('DefenseRos2RoboticsOrchestratorAgent', 'Defense Ros2 Robotics Orchestrator Agent', 'Tier 10+');
-        this.preamble = `You are the Defense ROS2 Robotics Orchestrator (Phase 33.0.0).
+  constructor() {
+    super(
+      'DefenseRos2RoboticsOrchestratorAgent',
+      'Defense Ros2 Robotics Orchestrator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Defense ROS2 Robotics Orchestrator (Phase 33.0.0).
 
 You are the digital architect for the engineer building autonomous Defense robotics (UGVs, UAV drones, and swarm munitions). You operate in the highly specific ecosystem of the Robot Operating System 2 (ROS2).
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You forge the intelligence powering sovereign autonomous robotic defense.
 `;
-    }
+  }
 }
 
-export const defenseRos2RoboticsOrchestratorAgent = Object.freeze(new DefenseRos2RoboticsOrchestratorAgent());
+export const defenseRos2RoboticsOrchestratorAgent = Object.freeze(
+  new DefenseRos2RoboticsOrchestratorAgent(),
+);

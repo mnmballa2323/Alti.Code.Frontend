@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class LemonSqueezyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'LemonSqueezy_Expert';
-        this.description = 'Developer-first billing specialist for Lemon Squeezy: REST API, checkouts, subscription management, license key activation, webhooks, customer portal, affiliates, and global tax compliance.';
-        this.preamble = `You are an elite Lemon Squeezy billing and monetisation platform specialist.
+  constructor() {
+    super();
+    this.name = 'LemonSqueezy_Expert';
+    this.description =
+      'Developer-first billing specialist for Lemon Squeezy: REST API, checkouts, subscription management, license key activation, webhooks, customer portal, affiliates, and global tax compliance.';
+    this.preamble = `You are an elite Lemon Squeezy billing and monetisation platform specialist.
 # CORE RESPONSIBILITIES
 1. **Checkouts**: Create hosted checkout via REST: \`POST https://api.lemonsqueezy.com/v1/checkouts\` with \`{ data: { type: 'checkouts', attributes: { checkout_data: { email, custom: { user_id } }, product_options: { redirect_url }, checkout_options: { logo: true } }, relationships: { store: { data: { type: 'stores', id: storeId } }, variant: { data: { type: 'variants', id: variantId } } } } }\`. Redirect user to \`data.attributes.url\`.
 2. **Subscriptions**: List subscriptions: \`GET /v1/subscriptions?filter[user_email]=email\`. Get subscription: \`GET /v1/subscriptions/:id\`. Cancel (at period end): \`DELETE /v1/subscriptions/:id\`. Pause: \`POST /v1/subscriptions/:id\` with \`{ data: { attributes: { pause: { mode: 'void' } } } }\`. Update plan (upgrade/downgrade): \`PATCH /v1/subscriptions/:id\` changing \`variant_id\`.
@@ -30,20 +31,22 @@ class LemonSqueezyAgent extends BaseSpecialistAgent {
 All API requests: \`Authorization: Bearer YOUR_API_KEY\` + \`Accept: application/vnd.api+json\` + \`Content-Type: application/vnd.api+json\` (JSON:API spec).
 # BEHAVIOR
 Output production TypeScript/Node.js code. Store \`LEMONSQUEEZY_API_KEY\` and \`LEMONSQUEEZY_WEBHOOK_SECRET\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🍋 LemonSqueezy Expert: Synthesizing billing logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ LemonSqueezy Expert failed:', e);
-            throw new Error(`LemonSqueezy Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🍋 LemonSqueezy Expert: Synthesizing billing logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ LemonSqueezy Expert failed:', e);
+      throw new Error(`LemonSqueezy Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const lemonSqueezyAgent = Object.freeze(new LemonSqueezyAgent());

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureOrchestrationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_orchestration_planner_agent',
-            'Infrastructure Orchestration Planner',
-            'You are an elite Infrastructure Orchestration Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_orchestration_planner_agent',
+      'Infrastructure Orchestration Planner',
+      'You are an elite Infrastructure Orchestration Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Orchestration.',
+    );
+  }
 
-    async generateInfrastructureOrchestrationSystem(objective) {
-        logger.info(`💻 [InfrastructureOrchestrationPlannerAgent] Analyzing Infrastructure Orchestration Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Orchestration Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Orchestration Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureOrchestrationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureOrchestrationPlannerAgent] Analyzing Infrastructure Orchestration Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Orchestration Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Orchestration Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureOrchestrationPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureOrchestrationPlannerAgent = Object.freeze(new InfrastructureOrchestrationPlannerAgent());
+export const infrastructureOrchestrationPlannerAgent = Object.freeze(
+  new InfrastructureOrchestrationPlannerAgent(),
+);

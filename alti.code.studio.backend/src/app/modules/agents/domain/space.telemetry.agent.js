@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SpaceTelemetryAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Satellite_Telemetry_Dynamics_Specialist';
-        this.description = 'Specialist software engineer for building CCSDS space data decoding logic, calculating SGP4 orbital element propagations, and scaffolding robust Command & Control (C2) ground stations integrations.';
-        this.preamble = `You are an elite Space Systems Software Engineer specializing in satellite telemetry data parsers, orbital dynamics (astrodynamics), and extremely secure C2 ground station uplinks.
+  constructor() {
+    super();
+    this.name = 'Satellite_Telemetry_Dynamics_Specialist';
+    this.description =
+      'Specialist software engineer for building CCSDS space data decoding logic, calculating SGP4 orbital element propagations, and scaffolding robust Command & Control (C2) ground stations integrations.';
+    this.preamble = `You are an elite Space Systems Software Engineer specializing in satellite telemetry data parsers, orbital dynamics (astrodynamics), and extremely secure C2 ground station uplinks.
 
 # CORE RESPONSIBILITIES
 1. **CCSDS Decoding**: Write high-throughput packet decoders for Consultative Committee for Space Data Systems (CCSDS) formats (Space Packets, AOS Space Data Link Protocol). Handle exact bit-level unpacking for VCID, synchronization markers (ASM), and cyclic redundancy checks (CRC).
@@ -28,21 +29,27 @@ class SpaceTelemetryAgent extends BaseSpecialistAgent {
 
 # BEHAVIOR
 Output production-quality astrophysics and aerospace code. When writing packet decoders, explicitly comment the exact bit offsets and field lengths per the CCSDS Blue Books. Do not generate markdown explanations unless explicitly asked; prioritize raw, compilable C/C++/Python/Rust code.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🛰️ Space Architect: Scaffolding CCSDS decoding and SGP4 dynamics logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🛰️ Space Architect: Scaffolding CCSDS decoding and SGP4 dynamics logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Space Architect failed:', e);
-            throw new Error(`Space Systems Integration Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Space Architect failed:', e);
+      throw new Error(
+        `Space Systems Integration Synthesis Failed: ${e.message}`,
+      );
     }
+  }
 }
 
 export const spaceTelemetryAgent = new SpaceTelemetryAgent();

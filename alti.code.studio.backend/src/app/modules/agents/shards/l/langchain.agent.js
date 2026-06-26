@@ -20,7 +20,9 @@ class LangChainOpenWorkAgent extends BaseSpecialistAgent {
   }
 
   async _invoke(context) {
-    logger.info(`🤖 LangChain Delegator: Planning OpenWork execution for context: "${context.goal}"`);
+    logger.info(
+      `🤖 LangChain Delegator: Planning OpenWork execution for context: "${context.goal}"`,
+    );
 
     // 1. Synthesize the deepagentsjs plan
     const prompt = `You are the elite LangChain / OpenWork Swarm Orchestrator.
@@ -38,7 +40,9 @@ Return ONLY the raw intent string, no markdown natively organically natively fla
     const openworkIntent = await GeminiAiService.generateContent(prompt);
     const cleanIntent = openworkIntent.replace(/^["'\`]+|["'\`]+$/g, '').trim();
 
-    logger.info(`🤖 LangChain Delegator: Translated goal into OpenWork Subagent Intent: "${cleanIntent}"`);
+    logger.info(
+      `🤖 LangChain Delegator: Translated goal into OpenWork Subagent Intent: "${cleanIntent}"`,
+    );
 
     // 2. Delegate through the Cloud Proxy Tunnel (using the existing tunnel mechanism but targeting OpenWork)
     try {
@@ -46,7 +50,7 @@ Return ONLY the raw intent string, no markdown natively organically natively fla
       // Here, we adapt the existing tunnel concept to invoke the local OpenWork engine.
       const surrogateOutput = await openclawProxyService.delegateToLocalHost(
         `[OPENWORK_DELEGATION] ${cleanIntent}`,
-        "Return the exact stdout, Subagent traces, or HITL approval results."
+        'Return the exact stdout, Subagent traces, or HITL approval results.',
       );
 
       return {
@@ -54,15 +58,17 @@ Return ONLY the raw intent string, no markdown natively organically natively fla
         agent: this.name,
         openwork_subagent_action: cleanIntent,
         host_output: surrogateOutput,
-        message: `The physical host machine successfully executed the OpenWork intent via deepagentsjs.`
+        message: `The physical host machine successfully executed the OpenWork intent via deepagentsjs.`,
       };
     } catch (error) {
-      logger.error(`❌ LangChain Delegator: OpenWork execution failed on physical host: ${error.message}`);
+      logger.error(
+        `❌ LangChain Delegator: OpenWork execution failed on physical host: ${error.message}`,
+      );
       return {
         status: 'error',
         agent: this.name,
         error: error.message,
-        message: 'Failed to delegate task to the local OpenWork engine.'
+        message: 'Failed to delegate task to the local OpenWork engine.',
       };
     }
   }

@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DarkMatterPhysicistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'dark_matter_physicist',
-            'Dark Matter Physicist & Cosmologist',
-            'You are an elite Dark Matter Physicist. Your objective is to design software for understanding the invisible universe. You specialize in WIMP (Weakly Interacting Massive Particle) detection algorithms and massive N-body galactic rotation curve simulations.'
-        );
-    }
+  constructor() {
+    super(
+      'dark_matter_physicist',
+      'Dark Matter Physicist & Cosmologist',
+      'You are an elite Dark Matter Physicist. Your objective is to design software for understanding the invisible universe. You specialize in WIMP (Weakly Interacting Massive Particle) detection algorithms and massive N-body galactic rotation curve simulations.',
+    );
+  }
 
-    /**
-     * Generates dark matter models or cosmological simulations.
-     * @param {string} physicsObjective - The dark matter physics requirement.
-     * @returns {Promise<string>} The generated cosmological simulation code or architecture.
-     */
-    async generateDarkMatterSystem(physicsObjective) {
-        logger.info(`🌌 [DarkMatterPhysicist] Analyzing objective for WIMP detection and galactic rotation...`);
+  /**
+   * Generates dark matter models or cosmological simulations.
+   * @param {string} physicsObjective - The dark matter physics requirement.
+   * @returns {Promise<string>} The generated cosmological simulation code or architecture.
+   */
+  async generateDarkMatterSystem(physicsObjective) {
+    logger.info(
+      `🌌 [DarkMatterPhysicist] Analyzing objective for WIMP detection and galactic rotation...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Dark Matter Physics, Cosmology, or Astrophysics requirement.
 Generate the corresponding detection algorithm, N-body simulation logic, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ DARK MATTER OBJECTIVE:
 ${physicsObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Dark Matter Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```cpp|```/gi, '').trim();
-            logger.info(`✅ [DarkMatterPhysicist] Dark matter architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [DarkMatterPhysicist] Failed to generate dark matter system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Dark Matter Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```python|```cpp|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [DarkMatterPhysicist] Dark matter architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [DarkMatterPhysicist] Failed to generate dark matter system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const darkMatterPhysicistAgent = Object.freeze(new DarkMatterPhysicistAgent());
+export const darkMatterPhysicistAgent = Object.freeze(
+  new DarkMatterPhysicistAgent(),
+);

@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GovtechSecurityAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Defense_GovTech_Security_Architect';
-        this.description = 'Specialist software engineer for building FIPS 140-3 cryptographic boundaries, mapping NIST SP 800-53 controls to infrastructure-as-code (IaC), and bootstrapping FedRAMP/DoD IL5 environment zero-trust configurations.';
-        this.preamble = `You are an elite Defense & GovTech Cybersecurity Engineer specializing in ultra-secure federal computing environments, cryptograhic modules, and strict compliance-as-code.
+  constructor() {
+    super();
+    this.name = 'Defense_GovTech_Security_Architect';
+    this.description =
+      'Specialist software engineer for building FIPS 140-3 cryptographic boundaries, mapping NIST SP 800-53 controls to infrastructure-as-code (IaC), and bootstrapping FedRAMP/DoD IL5 environment zero-trust configurations.';
+    this.preamble = `You are an elite Defense & GovTech Cybersecurity Engineer specializing in ultra-secure federal computing environments, cryptograhic modules, and strict compliance-as-code.
 
 # CORE RESPONSIBILITIES
 1. **FIPS 140-3 Cryptography**: Scaffold FIPS-compliant cryptographic boundaries in C/Rust or bindings to approved libraries (e.g., OpenSSL FIPS provider, BoringCrypto). Enforce the use of AES-256-GCM, SHA-256 for KDFs, and ban non-approved algorithms (RC4, SHA-1).
@@ -28,21 +29,25 @@ class GovtechSecurityAgent extends BaseSpecialistAgent {
 
 # BEHAVIOR
 Output production-quality IaC, policies, and cryptographic logic. When asserting security controls, explicitly comment which NIST SP 800-53 control family/identifier the code satisfies. Do not generate markdown explanations unless explicitly asked; prioritize raw, immediately deployable security structures.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🛡️ GovTech Architect: Scaffolding strict NIST/FedRAMP compliance logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🛡️ GovTech Architect: Scaffolding strict NIST/FedRAMP compliance logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ GovTech Architect failed:', e);
-            throw new Error(`Defense Security Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ GovTech Architect failed:', e);
+      throw new Error(`Defense Security Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const govtechSecurityAgent = new GovtechSecurityAgent();

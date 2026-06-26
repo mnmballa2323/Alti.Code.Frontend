@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudDataWarehouseManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_datawarehouse_manager_agent',
-            'Cloud DataWarehouse Manager',
-            'You are an elite Cloud DataWarehouse Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_datawarehouse_manager_agent',
+      'Cloud DataWarehouse Manager',
+      'You are an elite Cloud DataWarehouse Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud DataWarehouse.',
+    );
+  }
 
-    async generateCloudDataWarehouseSystem(objective) {
-        logger.info(`💻 [CloudDataWarehouseManagerAgent] Analyzing Cloud DataWarehouse Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud DataWarehouse Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud DataWarehouse Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudDataWarehouseManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [CloudDataWarehouseManagerAgent] Analyzing Cloud DataWarehouse Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud DataWarehouse Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud DataWarehouse Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [CloudDataWarehouseManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const cloudDataWarehouseManagerAgent = Object.freeze(new CloudDataWarehouseManagerAgent());
+export const cloudDataWarehouseManagerAgent = Object.freeze(
+  new CloudDataWarehouseManagerAgent(),
+);

@@ -1,13 +1,17 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * Shared Tenant Database Router Middleware
- * 
+ *
  * Dynamically resolves connection pools for multi-tenant isolation,
  * mapping incoming requests to their respective database schemas.
  */
 
-import { getTenantPrisma, prisma, getSchemaConnectionUrl } from './prismaClient.js';
+import {
+  getTenantPrisma,
+  prisma,
+  getSchemaConnectionUrl,
+} from './prismaClient.js';
 
 // In-memory cache for tenant configurations
 export const tenantCache = new Map();
@@ -54,8 +58,13 @@ export const tenantDbRouter = async (req, res, next) => {
     } else if (process.env.SCHEMA_ISOLATION_ACTIVE === 'true') {
       const baseDbUrl = process.env.DATABASE_URL;
       if (baseDbUrl) {
-        const productId = req.headers?.['x-product-id'] || req.user?.productId || null;
-        const schemaUrl = getSchemaConnectionUrl(baseDbUrl, tenantId, productId);
+        const productId =
+          req.headers?.['x-product-id'] || req.user?.productId || null;
+        const schemaUrl = getSchemaConnectionUrl(
+          baseDbUrl,
+          tenantId,
+          productId,
+        );
         const poolKey = productId ? `${tenantId}:${productId}` : tenantId;
         req.db = getTenantPrisma(poolKey, schemaUrl);
       } else {

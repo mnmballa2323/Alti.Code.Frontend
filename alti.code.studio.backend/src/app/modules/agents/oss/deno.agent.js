@@ -10,7 +10,8 @@ class DenoOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Deno_Oss_Expert';
-    this.description = 'Deep expert in Deno — secure, modern TypeScript/JavaScript runtime with web standard APIs.';
+    this.description =
+      'Deep expert in Deno — secure, modern TypeScript/JavaScript runtime with web standard APIs.';
     this.preamble = `You are a world-class backend and systems engineer with expert-level mastery of Deno.
 
 CORE CONCEPTS:
@@ -35,7 +36,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DENO QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DENO QUESTION ===\n${prompt}`,
+    );
   }
 }
 

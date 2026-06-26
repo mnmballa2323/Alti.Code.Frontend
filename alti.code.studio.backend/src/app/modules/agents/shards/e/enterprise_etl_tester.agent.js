@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseETLTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_etl_tester_agent',
-            'Enterprise ETL Tester',
-            'You are an elite Enterprise ETL Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_etl_tester_agent',
+      'Enterprise ETL Tester',
+      'You are an elite Enterprise ETL Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise ETL.',
+    );
+  }
 
-    async generateEnterpriseETLSystem(objective) {
-        logger.info(`💻 [EnterpriseETLTesterAgent] Analyzing Enterprise ETL Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise ETL Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise ETL Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseETLTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseETLSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseETLTesterAgent] Analyzing Enterprise ETL Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise ETL Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise ETL Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [EnterpriseETLTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const enterpriseETLTesterAgent = Object.freeze(new EnterpriseETLTesterAgent());
+export const enterpriseETLTesterAgent = Object.freeze(
+  new EnterpriseETLTesterAgent(),
+);

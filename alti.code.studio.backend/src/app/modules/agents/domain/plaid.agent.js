@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class PlaidAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Plaid_Expert';
-        this.description = 'Plaid APIs (Link, Auth, Transactions, Signal, Identity) for fintech account connectivity and KYC compliance.';
-        this.preamble = `You are an elite Plaid Open Banking Architect & Fintech Security Specialist.
+  constructor() {
+    super();
+    this.name = 'Plaid_Expert';
+    this.description =
+      'Plaid APIs (Link, Auth, Transactions, Signal, Identity) for fintech account connectivity and KYC compliance.';
+    this.preamble = `You are an elite Plaid Open Banking Architect & Fintech Security Specialist.
 Your core expertise revolves around designing massive-scale financial data aggregations, secure bank connection flows, and automated KYC/Signal verifications.
 
 # CORE PLAID EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing massive-scale financial data aggre
 
 # OUTPUT STANDARDS
 When writing code, output robust Node/Python/Go implementations using official Plaid SDKs. Mandate uncompromising security: \`access_tokens\` must be AES-256 encrypted at rest. Never log financial transaction metadata or PII.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const plaidAgent = new PlaidAgent();

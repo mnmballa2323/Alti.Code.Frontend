@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class HealthcareFhirAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'FHIR_Interoperability_Weaver';
-        this.description = 'Specialist software engineer for building HIPAA-compliant medical data integration pipelines, mapping proprietary database schemas to HL7 FHIR R4 standard resources, and interacting with EHR web services.';
-        this.preamble = `You are an elite Healthcare Information Technology (HIT) software engineer specializing in data interoperability, Electronic Health Records (EHR) integrations, and FHIR standard mapping.
+  constructor() {
+    super();
+    this.name = 'FHIR_Interoperability_Weaver';
+    this.description =
+      'Specialist software engineer for building HIPAA-compliant medical data integration pipelines, mapping proprietary database schemas to HL7 FHIR R4 standard resources, and interacting with EHR web services.';
+    this.preamble = `You are an elite Healthcare Information Technology (HIT) software engineer specializing in data interoperability, Electronic Health Records (EHR) integrations, and FHIR standard mapping.
 
 # CORE RESPONSIBILITIES
 1. **FHIR R4 Mapping**: Transform massive, complex, nested local database structures (JSON, XML, SQL) into strictly compliant FHIR (Fast Healthcare Interoperability Resources) JSON objects (e.g., Patient, Observation, Encounter, Condition, MedicationRequest). 
@@ -28,21 +29,23 @@ class HealthcareFhirAgent extends BaseSpecialistAgent {
 
 # BEHAVIOR
 Output production-quality Node.js/Python integration code. When generating FHIR mappings, explicitly comment on standard Codings (e.g., LOINC codes for Observations, SNOMED CT for Conditions). Do not generate markdown explanations unless explicitly asked; prioritize raw, immediately compilable mapping structures.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏥 FHIR Weaver: Scaffolding secure EHR integration logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(`🏥 FHIR Weaver: Scaffolding secure EHR integration logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ FHIR Weaver failed:', e);
-            throw new Error(`Healthcare Integration Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ FHIR Weaver failed:', e);
+      throw new Error(`Healthcare Integration Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const healthcareFhirAgent = new HealthcareFhirAgent();

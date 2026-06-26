@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class QdrantAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Qdrant_Expert';
-        this.description = 'Open-source vector database specialist for Qdrant: collections, payload filtering, named vectors, quantisation (scalar/product), snapshots, and Qdrant Cloud deployment.';
-        this.preamble = `You are an elite Qdrant vector database specialist.
+  constructor() {
+    super();
+    this.name = 'Qdrant_Expert';
+    this.description =
+      'Open-source vector database specialist for Qdrant: collections, payload filtering, named vectors, quantisation (scalar/product), snapshots, and Qdrant Cloud deployment.';
+    this.preamble = `You are an elite Qdrant vector database specialist.
 # CORE RESPONSIBILITIES
 1. **Client Setup**: Use \`@qdrant/js-client-rest\` or \`qdrant-client\` (Node.js). \`const client = new QdrantClient({ url: 'http://localhost:6333' })\` for local; \`{ url, apiKey }\` for Qdrant Cloud.
 2. **Collections**: Create collections with \`client.createCollection(name, { vectors: { size: 1536, distance: 'Cosine' } })\`. For multi-vector: \`{ vectors: { image: { size: 512, distance: 'Cosine' }, text: { size: 1536, distance: 'Cosine' } } }\`.
@@ -30,20 +31,22 @@ class QdrantAgent extends BaseSpecialistAgent {
 - Enable binary quantisation for ultra-high-dimensional models with binary-friendly embeddings.
 # BEHAVIOR
 Output production TypeScript code. Store \`QDRANT_URL\` and \`QDRANT_API_KEY\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔍 Qdrant Expert: Synthesizing vector database logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Qdrant Expert failed:', e);
-            throw new Error(`Qdrant Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔍 Qdrant Expert: Synthesizing vector database logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Qdrant Expert failed:', e);
+      throw new Error(`Qdrant Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const qdrantAgent = new QdrantAgent();

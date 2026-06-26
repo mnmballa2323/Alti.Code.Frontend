@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class NanotechnologyMolecularEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'nanotechnology_molecular_engineer',
-            'Nanotechnology & Molecular Engineer',
-            'You are an elite Nanotechnology Engineer. Your objective is to design software for manipulating matter at the atomic level. You specialize in designing theoretical molecular machines, nanoscale targeted drug delivery systems, and modeling graphene electronics physics.'
-        );
-    }
+  constructor() {
+    super(
+      'nanotechnology_molecular_engineer',
+      'Nanotechnology & Molecular Engineer',
+      'You are an elite Nanotechnology Engineer. Your objective is to design software for manipulating matter at the atomic level. You specialize in designing theoretical molecular machines, nanoscale targeted drug delivery systems, and modeling graphene electronics physics.',
+    );
+  }
 
-    /**
-     * Generates nanotech simulations or molecular algorithms.
-     * @param {string} nanoObjective - The nanotechnology software requirement.
-     * @returns {Promise<string>} The generated nanotech code or architecture.
-     */
-    async generateNanotechSystem(nanoObjective) {
-        logger.info(`🔬 [NanotechnologyMolecularEngineer] Analyzing objective for molecular machines and graphene physics...`);
+  /**
+   * Generates nanotech simulations or molecular algorithms.
+   * @param {string} nanoObjective - The nanotechnology software requirement.
+   * @returns {Promise<string>} The generated nanotech code or architecture.
+   */
+  async generateNanotechSystem(nanoObjective) {
+    logger.info(
+      `🔬 [NanotechnologyMolecularEngineer] Analyzing objective for molecular machines and graphene physics...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Nanotechnology, Molecular Engineering, or Quantum Chemistry requirement.
 Generate the corresponding computational physics model, molecular dynamics script, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ NANOTECH OBJECTIVE:
 ${nanoObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Nanotech Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```cpp|```/gi, '').trim();
-            logger.info(`✅ [NanotechnologyMolecularEngineer] Nanotech architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [NanotechnologyMolecularEngineer] Failed to generate nanotech system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Nanotech Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```python|```cpp|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [NanotechnologyMolecularEngineer] Nanotech architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [NanotechnologyMolecularEngineer] Failed to generate nanotech system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const nanotechnologyMolecularEngineerAgent = Object.freeze(new NanotechnologyMolecularEngineerAgent());
+export const nanotechnologyMolecularEngineerAgent = Object.freeze(
+  new NanotechnologyMolecularEngineerAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIProvisioningEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_provisioning_engineer_agent',
-            'AI Provisioning Engineer',
-            'You are an elite AI Provisioning Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_provisioning_engineer_agent',
+      'AI Provisioning Engineer',
+      'You are an elite AI Provisioning Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Provisioning.',
+    );
+  }
 
-    async generateAIProvisioningSystem(objective) {
-        logger.info(`💻 [AIProvisioningEngineerAgent] Analyzing AI Provisioning Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Provisioning Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Provisioning Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIProvisioningEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIProvisioningSystem(objective) {
+    logger.info(
+      `💻 [AIProvisioningEngineerAgent] Analyzing AI Provisioning Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Provisioning Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Provisioning Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIProvisioningEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIProvisioningEngineerAgent = Object.freeze(new AIProvisioningEngineerAgent());
+export const aIProvisioningEngineerAgent = Object.freeze(
+  new AIProvisioningEngineerAgent(),
+);

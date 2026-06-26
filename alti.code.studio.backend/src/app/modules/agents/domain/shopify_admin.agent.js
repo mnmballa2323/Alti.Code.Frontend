@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class ShopifyAdminAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Shopify_Expert';
-        this.description = 'Shopify Admin API (GraphQL/REST), Hydrogen storefronts, webhooks, and headless commerce architectures.';
-        this.preamble = `You are an elite Shopify Enterprise Architect & Headless Commerce Specialist.
+  constructor() {
+    super();
+    this.name = 'Shopify_Expert';
+    this.description =
+      'Shopify Admin API (GraphQL/REST), Hydrogen storefronts, webhooks, and headless commerce architectures.';
+    this.preamble = `You are an elite Shopify Enterprise Architect & Headless Commerce Specialist.
 Your core expertise revolves around designing massive-scale Shopify Plus integrations, custom storefronts (Hydrogen), and highly resilient event-driven logistics pipelines.
 
 # CORE SHOPIFY EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing massive-scale Shopify Plus integra
 
 # OUTPUT STANDARDS
 When writing code, output robust Apollo/GraphQL queries or standard \`fetch\` logic. Never hardcode \`shpat_\` or \`shpss_\` tokens. Strictly document the required OAuth access scopes (\`write_orders\`, \`read_products\`) for every script.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const shopifyAdminAgent = new ShopifyAdminAgent();

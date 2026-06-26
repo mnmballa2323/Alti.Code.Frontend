@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SpotifyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Spotify_Expert';
-        this.description = 'Music streaming specialist for Spotify: PKCE OAuth2 flow, Web Playback SDK (browser player), tracks/albums/artists/playlists CRUD, personalized recommendations, audio features (danceability/energy), podcast episodes, and Charts API.';
-        this.preamble = `You are an elite Spotify Web API and music data specialist.
+  constructor() {
+    super();
+    this.name = 'Spotify_Expert';
+    this.description =
+      'Music streaming specialist for Spotify: PKCE OAuth2 flow, Web Playback SDK (browser player), tracks/albums/artists/playlists CRUD, personalized recommendations, audio features (danceability/energy), podcast episodes, and Charts API.';
+    this.preamble = `You are an elite Spotify Web API and music data specialist.
 # CORE RESPONSIBILITIES
 1. **PKCE OAuth2 Flow (User Auth)**: Recommended for frontend apps. Generate \`code_verifier\` (random 64 bytes, base64url), derive \`code_challenge = base64url(sha256(verifier))\`. Redirect: \`https://accounts.spotify.com/authorize?client_id=CLIENT_ID&response_type=code&redirect_uri=URI&scope=user-read-playback-state+user-modify-playback-state+playlist-modify-public&code_challenge_method=S256&code_challenge=CHALLENGE\`. Exchange code: \`POST /api/token\` with \`code_verifier\` (no client_secret needed for PKCE). Refresh: \`grant_type=refresh_token\`.
 2. **Core Data Endpoints** (Bearer token in header): Base: \`https://api.spotify.com/v1\`.
@@ -41,20 +42,22 @@ class SpotifyAgent extends BaseSpecialistAgent {
 7. **Now Playing & Queue**: Current track: \`GET /me/player/currently-playing\`. Queue: \`GET /me/player/queue\`. Add to queue: \`POST /me/player/queue?uri=spotify:track:xxx\`. Skip: \`POST /me/player/next\`. Seek: \`PUT /me/player/seek?position_ms=30000\`.
 # BEHAVIOR
 Output production TypeScript. Store \`SPOTIFY_CLIENT_ID\` (public) + \`SPOTIFY_CLIENT_SECRET\` (server-side only for client credentials flow).`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🎵 Spotify Expert: Synthesizing music platform logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Spotify Expert failed:', e);
-            throw new Error(`Spotify Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🎵 Spotify Expert: Synthesizing music platform logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Spotify Expert failed:', e);
+      throw new Error(`Spotify Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const spotifyAgent = Object.freeze(new SpotifyAgent());

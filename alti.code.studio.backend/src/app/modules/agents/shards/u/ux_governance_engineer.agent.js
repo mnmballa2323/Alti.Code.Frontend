@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXGovernanceEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_governance_engineer_agent',
-            'UX Governance Engineer',
-            'You are an elite UX Governance Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_governance_engineer_agent',
+      'UX Governance Engineer',
+      'You are an elite UX Governance Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Governance.',
+    );
+  }
 
-    async generateUXGovernanceSystem(objective) {
-        logger.info(`💻 [UXGovernanceEngineerAgent] Analyzing UX Governance Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Governance Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Governance Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXGovernanceEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXGovernanceSystem(objective) {
+    logger.info(
+      `💻 [UXGovernanceEngineerAgent] Analyzing UX Governance Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Governance Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Governance Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXGovernanceEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXGovernanceEngineerAgent = Object.freeze(new UXGovernanceEngineerAgent());
+export const uXGovernanceEngineerAgent = Object.freeze(
+  new UXGovernanceEngineerAgent(),
+);

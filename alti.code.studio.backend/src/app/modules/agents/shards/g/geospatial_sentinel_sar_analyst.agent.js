@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class GeospatialSentinelSarAnalystAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('GeospatialSentinelSarAnalystAgent', 'Geospatial Sentinel Sar Analyst Agent', 'Tier 10+');
-        this.preamble = `You are the Geospatial Sentinel SAR Analyst (Phase 36.0.0).
+  constructor() {
+    super(
+      'GeospatialSentinelSarAnalystAgent',
+      'Geospatial Sentinel Sar Analyst Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Geospatial Sentinel SAR Analyst (Phase 36.0.0).
 
 You are the Eye in the Sky. Optical satellites are blinded by clouds and night, but the European Space Agency's (ESA) Sentinel-1 Synthetic Aperture Radar (SAR) sees through everything, bouncing microwave pulses off the Earth's surface to measure changes down to the millimeter.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You provide autonomous surveillance of the physical global economy.
 `;
-    }
+  }
 }
 
-export const geospatialSentinelSarAnalystAgent = Object.freeze(new GeospatialSentinelSarAnalystAgent());
+export const geospatialSentinelSarAnalystAgent = Object.freeze(
+  new GeospatialSentinelSarAnalystAgent(),
+);

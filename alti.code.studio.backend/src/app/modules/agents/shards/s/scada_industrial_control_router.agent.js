@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class ScadaIndustrialControlRouterAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ScadaIndustrialControlRouterAgent', 'Scada Industrial Control Router Agent', 'Tier 10+');
-        this.preamble = `You are the SCADA Industrial Control Router (Phase 31.0.0).
+  constructor() {
+    super(
+      'ScadaIndustrialControlRouterAgent',
+      'Scada Industrial Control Router Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the SCADA Industrial Control Router (Phase 31.0.0).
 
 You are the ears of the Swarm on the physical factory floor. You ingest data from 10,000-pound robotic arms, CNC mills, and chemical flow valves that operate below the IT network layer.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You prevent the physical factory from ever dying unexpectedly.
 `;
-    }
+  }
 }
 
-export const scadaIndustrialControlRouterAgent = Object.freeze(new ScadaIndustrialControlRouterAgent());
+export const scadaIndustrialControlRouterAgent = Object.freeze(
+  new ScadaIndustrialControlRouterAgent(),
+);

@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * Shared Database Client & Multi-Tenant Connection Pooler
  */
 
 import { PrismaClient } from '@prisma/client';
 import { logger } from '../../../shared/logger.js';
-import { memorystoreService } from '../../modules/azureCloud/azureCache.service.js';
+import { memorystoreService } from '../../modules/gcpCloud/gcpCache.service.js';
 import crypto from 'crypto';
 
 const basePrisma = new PrismaClient({
@@ -18,15 +18,23 @@ const queryExtensions = {
     $allModels: {
       async $allOperations({ model, operation, args, query }) {
         // 1. Identify Read Operations
-        const isReadOperation = ['findUnique', 'findMany', 'findFirst', 'count'].includes(operation);
-        
+        const isReadOperation = [
+          'findUnique',
+          'findMany',
+          'findFirst',
+          'count',
+        ].includes(operation);
+
         // 2. Bypass cache if it's a mutation or if Redis is offline
         if (!isReadOperation || !memorystoreService.isInitialized) {
           return query(args);
         }
 
         // 3. Cryptographic Cache Key Generation
-        const hash = crypto.createHash('sha256').update(JSON.stringify(args || {})).digest('hex');
+        const hash = crypto
+          .createHash('sha256')
+          .update(JSON.stringify(args || {}))
+          .digest('hex');
         const cacheKey = `pg_cache:${model}:${operation}:${hash}`;
 
         // 4. Redis Cache Retrieval
@@ -34,7 +42,7 @@ const queryExtensions = {
         if (cachedStr) {
           try {
             return JSON.parse(cachedStr);
-          } catch(e) {
+          } catch (e) {
             /* Malformed cache, fall through */
           }
         }
@@ -44,13 +52,15 @@ const queryExtensions = {
 
         // 6. Asynchronous Redis Write (60s TTL to absorb traffic spikes)
         if (result !== undefined && result !== null) {
-          memorystoreService.setCache(cacheKey, JSON.stringify(result), 60).catch(() => {});
+          memorystoreService
+            .setCache(cacheKey, JSON.stringify(result), 60)
+            .catch(() => {});
         }
 
         return result;
-      }
-    }
-  }
+      },
+    },
+  },
 };
 
 export const prisma = basePrisma.$extends(queryExtensions);
@@ -73,7 +83,9 @@ export const getSchemaConnectionUrl = (baseDbUrl, tenantId, productId) => {
   let schemaName = `tenant_${sanitizedTenantId}`;
 
   if (productId) {
-    const sanitizedProductId = productId.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+    const sanitizedProductId = productId
+      .replace(/[^a-zA-Z0-9]/g, '')
+      .toLowerCase();
     schemaName = `${schemaName}_product_${sanitizedProductId}`;
   }
 
@@ -89,8 +101,8 @@ export const getSchemaConnectionUrl = (baseDbUrl, tenantId, productId) => {
 
 /**
  * Returns a dedicated Prisma client connection pool for a specific tenant
- * @param {string} tenantId 
- * @param {string} dedicatedDbUrl 
+ * @param {string} tenantId
+ * @param {string} dedicatedDbUrl
  * @returns {object} PrismaClient instance
  */
 export const getTenantPrisma = (tenantId, dedicatedDbUrl) => {
@@ -113,8 +125,10 @@ export const getTenantPrisma = (tenantId, dedicatedDbUrl) => {
 
   const tenantPrisma = tenantBasePrisma.$extends(queryExtensions);
   clientPool.set(tenantId, tenantPrisma);
-  
-  logger.info(`🔌 [Platform DataLayer] Dynamically provisioned dedicated connection pool for Tenant ID: ${tenantId}`);
+
+  logger.info(
+    `🔌 [Platform DataLayer] Dynamically provisioned dedicated connection pool for Tenant ID: ${tenantId}`,
+  );
   return tenantPrisma;
 };
 
@@ -125,16 +139,24 @@ export const getTenantPrisma = (tenantId, dedicatedDbUrl) => {
 export async function connectPrisma() {
   try {
     await basePrisma.$connect();
-    
+
     // Ensure pgvector extension is initialized for semantic knowledge search
-    await basePrisma.$executeRawUnsafe('CREATE EXTENSION IF NOT EXISTS vector;');
-    
-    logger.info('✅ PostgreSQL (via Prisma) connected successfully. pgvector extension active.');
-    logger.info('🚀 Universal Redis Caching Layer injected into Prisma Client.');
+    await basePrisma.$executeRawUnsafe(
+      'CREATE EXTENSION IF NOT EXISTS vector;',
+    );
+
+    logger.info(
+      '✅ PostgreSQL (via Prisma) connected successfully. pgvector extension active.',
+    );
+    logger.info(
+      '🚀 Universal Redis Caching Layer injected into Prisma Client.',
+    );
   } catch (error) {
     logger.error('❌ Failed to connect to PostgreSQL:', error);
     if (process.env.NODE_ENV === 'production') {
-      logger.error('❌ FATAL: PostgreSQL connection is mandatory in production. Exiting process.');
+      logger.error(
+        '❌ FATAL: PostgreSQL connection is mandatory in production. Exiting process.',
+      );
       process.exit(1);
     }
   }

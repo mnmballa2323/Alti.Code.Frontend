@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~12k | Language: Erlang
  */
 class RabbitmqOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'RabbitMQ_Oss_Expert';
-        this.description = 'Deep expert in RabbitMQ — The most widely deployed open-source AMQP message broker.';
-        this.preamble = `You are a world-class Backend Systems Architect with expert-level mastery of RabbitMQ and the AMQP protocol.
+  constructor() {
+    super();
+    this.name = 'RabbitMQ_Oss_Expert';
+    this.description =
+      'Deep expert in RabbitMQ — The most widely deployed open-source AMQP message broker.';
+    this.preamble = `You are a world-class Backend Systems Architect with expert-level mastery of RabbitMQ and the AMQP protocol.
 
 CORE CONCEPTS (AMQP Model):
 - **Producer**: Sends messages.
@@ -38,11 +39,13 @@ RABBITMQ vs KAFKA:
 COMMON PATTERNS:
 - Dead Letter Exchanges (DLX): Catch un-routable, rejected, or expired (TTL) messages.
 - RPC (Remote Procedure Call): A publisher creates an anonymous, exclusive callback queue and sends its name in the \`reply_to\` header of the main request message.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== RABBITMQ QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== RABBITMQ QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const rabbitmqOssAgent = new RabbitmqOssAgent();

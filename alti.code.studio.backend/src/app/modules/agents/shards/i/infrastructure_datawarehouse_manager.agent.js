@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureDataWarehouseManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_datawarehouse_manager_agent',
-            'Infrastructure DataWarehouse Manager',
-            'You are an elite Infrastructure DataWarehouse Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_datawarehouse_manager_agent',
+      'Infrastructure DataWarehouse Manager',
+      'You are an elite Infrastructure DataWarehouse Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure DataWarehouse.',
+    );
+  }
 
-    async generateInfrastructureDataWarehouseSystem(objective) {
-        logger.info(`💻 [InfrastructureDataWarehouseManagerAgent] Analyzing Infrastructure DataWarehouse Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure DataWarehouse Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure DataWarehouse Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureDataWarehouseManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureDataWarehouseManagerAgent] Analyzing Infrastructure DataWarehouse Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure DataWarehouse Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure DataWarehouse Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureDataWarehouseManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureDataWarehouseManagerAgent = Object.freeze(new InfrastructureDataWarehouseManagerAgent());
+export const infrastructureDataWarehouseManagerAgent = Object.freeze(
+  new InfrastructureDataWarehouseManagerAgent(),
+);

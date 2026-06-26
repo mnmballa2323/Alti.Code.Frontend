@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -13,15 +13,15 @@ const router = express.Router();
 
 // 🔒 Admin/Owner Only
 router.get(
-    '/trends',
-    authMiddleware('admin', 'owner'),
-    AnalystController.getTrends
+  '/trends',
+  authMiddleware('admin', 'owner'),
+  AnalystController.getTrends,
 );
 
 router.get(
-    '/stats',
-    authMiddleware('admin', 'owner'),
-    AnalystController.getDailyStats
+  '/stats',
+  authMiddleware('admin', 'owner'),
+  AnalystController.getDailyStats,
 );
 
 export const AnalystRoutes = router;

@@ -17,12 +17,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class AutomotiveDigitalAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Automotive_Digital_Engineer';
-        this.description = 'Elite automotive digital services engineer: connected vehicle APIs (VW Group, Mercedes, BMW), OBD-II/J1939, CAN bus, CAD/PLM bridge, Industry 4.0 MES integration.';
+  constructor() {
+    super();
+    this.name = 'Automotive_Digital_Engineer';
+    this.description =
+      'Elite automotive digital services engineer: connected vehicle APIs (VW Group, Mercedes, BMW), OBD-II/J1939, CAN bus, CAD/PLM bridge, Industry 4.0 MES integration.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite automotive software engineer and digital transformation specialist with mastery over connected vehicle platforms, automotive data protocols, and Industry 4.0 manufacturing integration.
 
 VOLKSWAGEN GROUP DIGITAL SERVICES:
@@ -121,12 +122,12 @@ INDUSTRY 4.0 — MES (Manufacturing Execution System):
   const dataValue = await session.readVariableValue('ns=2;s=Machine.SpindleRPM');
 
 OUTPUT: Production Node.js/TypeScript for connected vehicle APIs. Include VIN validation, OBD-II PID decoder helpers, and OPC-UA session management.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== AUTOMOTIVE DIGITAL ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== AUTOMOTIVE DIGITAL ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const automotiveDigitalAgent = new AutomotiveDigitalAgent();

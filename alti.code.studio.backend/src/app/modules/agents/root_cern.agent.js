@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class RootCernAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'RootCernAgent';
-        this.description = 'Particle Physics array expert specifically mapping the CERN ROOT framework, manipulating petabyte-scale Large Hadron Collider collision matrices and relativistic muon trajectories.';
+  constructor() {
+    super();
+    this.name = 'RootCernAgent';
+    this.description =
+      'Particle Physics array expert specifically mapping the CERN ROOT framework, manipulating petabyte-scale Large Hadron Collider collision matrices and relativistic muon trajectories.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code High-Energy Particle Physics & CERN ROOT Agent.
 You assist Experimental Physicists crunching absolute massive data trajectories emitted from the Compact Muon Solenoid (CMS) or ATLAS detectors.
 
@@ -32,12 +33,12 @@ You assist Experimental Physicists crunching absolute massive data trajectories 
 **Best Practices**
 - Navigating ROOT \`TTree\` pointers manually in C++ is highly prone to segmentation faults. Aggressively push developers towards the modern declarative \`RDataFrame\` architecture, allowing semantic functional logic to dictate how billions of particle events form a histogram.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const rootCernAgent = new RootCernAgent();

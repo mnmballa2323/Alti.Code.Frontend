@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class RailwayAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Railway_Expert';
-        this.description = 'PaaS specialist for Railway deployments, nixpacks buildpacks, service linking, and Cron Jobs.';
-        this.preamble = `You are an elite Railway PaaS and Deployment Specialist.
+  constructor() {
+    super();
+    this.name = 'Railway_Expert';
+    this.description =
+      'PaaS specialist for Railway deployments, nixpacks buildpacks, service linking, and Cron Jobs.';
+    this.preamble = `You are an elite Railway PaaS and Deployment Specialist.
 Your core expertise revolves around designing extremely rapid, zero-config container deployments on Railway's infrastructure.
 
 # DEPLOYMENT & BUILD
@@ -37,18 +38,22 @@ Your core expertise revolves around designing extremely rapid, zero-config conta
 
 # OUTPUT STANDARDS
 When providing code or blueprints, output specific \`railway.json\` configurations, \`nixpacks.toml\` overrides, or \`railway\` CLI commands. Emphasize Developer Experience (DX) and speed. Never hallucinate syntax.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🚄 Railway Expert: Synthesizing deployment logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            logger.error(`❌ Railway Expert failed:`, e);
-            throw new Error(`Railway Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🚄 Railway Expert: Synthesizing deployment logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error(`❌ Railway Expert failed:`, e);
+      throw new Error(`Railway Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const railwayAgent = Object.freeze(new RailwayAgent());

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteVirtualizationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_virtualization_consultant_agent',
-            'Site Virtualization Consultant',
-            'You are an elite Site Virtualization Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Site Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'site_virtualization_consultant_agent',
+      'Site Virtualization Consultant',
+      'You are an elite Site Virtualization Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Site Virtualization.',
+    );
+  }
 
-    async generateSiteVirtualizationSystem(objective) {
-        logger.info(`💻 [SiteVirtualizationConsultantAgent] Analyzing Site Virtualization Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Virtualization Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Virtualization Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteVirtualizationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [SiteVirtualizationConsultantAgent] Analyzing Site Virtualization Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Virtualization Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Virtualization Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SiteVirtualizationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const siteVirtualizationConsultantAgent = Object.freeze(new SiteVirtualizationConsultantAgent());
+export const siteVirtualizationConsultantAgent = Object.freeze(
+  new SiteVirtualizationConsultantAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudSecurityConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_security_consultant_agent',
-            'Cloud Security Consultant',
-            'You are an elite Cloud Security Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Security.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_security_consultant_agent',
+      'Cloud Security Consultant',
+      'You are an elite Cloud Security Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Security.',
+    );
+  }
 
-    async generateCloudSecuritySystem(objective) {
-        logger.info(`💻 [CloudSecurityConsultantAgent] Analyzing Cloud Security Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Security Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Security Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudSecurityConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudSecuritySystem(objective) {
+    logger.info(
+      `💻 [CloudSecurityConsultantAgent] Analyzing Cloud Security Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Security Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Security Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudSecurityConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudSecurityConsultantAgent = Object.freeze(new CloudSecurityConsultantAgent());
+export const cloudSecurityConsultantAgent = Object.freeze(
+  new CloudSecurityConsultantAgent(),
+);

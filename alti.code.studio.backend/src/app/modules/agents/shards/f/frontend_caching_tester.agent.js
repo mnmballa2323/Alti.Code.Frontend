@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendCachingTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_caching_tester_agent',
-            'Frontend Caching Tester',
-            'You are an elite Frontend Caching Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_caching_tester_agent',
+      'Frontend Caching Tester',
+      'You are an elite Frontend Caching Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Caching.',
+    );
+  }
 
-    async generateFrontendCachingSystem(objective) {
-        logger.info(`💻 [FrontendCachingTesterAgent] Analyzing Frontend Caching Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Caching Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Caching Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendCachingTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendCachingSystem(objective) {
+    logger.info(
+      `💻 [FrontendCachingTesterAgent] Analyzing Frontend Caching Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Caching Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Caching Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendCachingTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendCachingTesterAgent = Object.freeze(new FrontendCachingTesterAgent());
+export const frontendCachingTesterAgent = Object.freeze(
+  new FrontendCachingTesterAgent(),
+);

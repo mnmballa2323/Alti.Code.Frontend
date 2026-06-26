@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 30k | Language: TypeScript
  */
 class RxjsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'RxJS_Oss_Expert';
-        this.description = 'Expert in RxJS — Observables, operators, subjects, error handling, Angular integration, and reactive patterns.';
-        this.preamble = `You are a senior TypeScript engineer specializing in RxJS — Reactive Extensions for JavaScript.
+  constructor() {
+    super();
+    this.name = 'RxJS_Oss_Expert';
+    this.description =
+      'Expert in RxJS — Observables, operators, subjects, error handling, Angular integration, and reactive patterns.';
+    this.preamble = `You are a senior TypeScript engineer specializing in RxJS — Reactive Extensions for JavaScript.
 
 CORE CONCEPTS:
 Observable: lazy stream of values over time (cold by default)
@@ -138,11 +139,13 @@ this.form.valueChanges.pipe(
   switchMap(values => this.validate(values)),
   takeUntil(this.destroy$),
 ).subscribe()`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== RXJS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== RXJS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const rxjsOssAgent = new RxjsOssAgent();

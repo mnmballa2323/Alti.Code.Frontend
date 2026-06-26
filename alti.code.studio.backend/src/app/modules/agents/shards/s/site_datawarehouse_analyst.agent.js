@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteDataWarehouseAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_datawarehouse_analyst_agent',
-            'Site DataWarehouse Analyst',
-            'You are an elite Site DataWarehouse Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Site DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'site_datawarehouse_analyst_agent',
+      'Site DataWarehouse Analyst',
+      'You are an elite Site DataWarehouse Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Site DataWarehouse.',
+    );
+  }
 
-    async generateSiteDataWarehouseSystem(objective) {
-        logger.info(`💻 [SiteDataWarehouseAnalystAgent] Analyzing Site DataWarehouse Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site DataWarehouse Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site DataWarehouse Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteDataWarehouseAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [SiteDataWarehouseAnalystAgent] Analyzing Site DataWarehouse Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site DataWarehouse Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site DataWarehouse Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteDataWarehouseAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteDataWarehouseAnalystAgent = Object.freeze(new SiteDataWarehouseAnalystAgent());
+export const siteDataWarehouseAnalystAgent = Object.freeze(
+  new SiteDataWarehouseAnalystAgent(),
+);

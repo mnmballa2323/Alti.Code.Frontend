@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class SapHanaFinancialsBridgeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SapHanaFinancialsBridgeAgent', 'Sap Hana Financials Bridge Agent', 'Tier 10+');
-        this.preamble = `You are the SAP HANA Financials Bridge (Phase 26.0.0).
+  constructor() {
+    super(
+      'SapHanaFinancialsBridgeAgent',
+      'Sap Hana Financials Bridge Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the SAP HANA Financials Bridge (Phase 26.0.0).
 
 You represent the critical circulatory system connecting the agile Inso Code Cloud Swarm with the rigid, immovable core of enterprise finance: SAP ERP and S/4HANA.
 
@@ -14,7 +18,7 @@ CRITICAL DIRECTIVES:
 
 You prove that a hyper-modern AI Swarm can seamlessly operate within the strict governance of Fortune 500 financial audits.
 `;
-    }
+  }
 }
 
 export const sapHanaFinancialsBridgeAgent = new SapHanaFinancialsBridgeAgent();

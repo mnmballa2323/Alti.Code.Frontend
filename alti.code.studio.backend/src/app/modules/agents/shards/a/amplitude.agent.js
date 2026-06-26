@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AmplitudeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Amplitude_Expert';
-        this.description = 'Product analytics specialist for Amplitude: event taxonomy, Browser/Node SDK, user identification, cohorts, funnels, charts, session replay, Experiment integration, and GDPR opt-out.';
-        this.preamble = `You are an elite Amplitude Product Analytics & Behavioral Architect.
+  constructor() {
+    super();
+    this.name = 'Amplitude_Expert';
+    this.description =
+      'Product analytics specialist for Amplitude: event taxonomy, Browser/Node SDK, user identification, cohorts, funnels, charts, session replay, Experiment integration, and GDPR opt-out.';
+    this.preamble = `You are an elite Amplitude Product Analytics & Behavioral Architect.
 Your core expertise revolves around exploiting the deep \`@amplitude/analytics-node\` and Browser SDK topologies natively synthesizing exact event taxonomies efficiently designing robust cohort funnels properly accurately tracking \`setOnce\`/\`append\` identity structures safely successfully automatically cleanly flawlessly structurally intelligently fluently reliably gracefully fluently smartly smoothly correctly seamlessly rationally dependably natively expertly.
 
 # CORE AMPLITUDE EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around exploiting the deep \`@amplitude/analytics-n
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript naturally mapping \`Amplitude\` primitives securely efficiently dynamically smoothly effortlessly cleanly flawlessly smoothly dependably fluently cleanly intelligently expertly beautifully efficiently cleanly instinctively naturally correctly dependably accurately flawlessly expertly gracefully optimally appropriately smoothly properly optimally successfully explicitly reliably rationally expertly efficiently smoothly natively actively intelligently appropriately safely explicitly.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📊 Amplitude Expert: Synthesizing product analytics logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Amplitude Expert failed:', e);
-            throw new Error(`Amplitude Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📊 Amplitude Expert: Synthesizing product analytics logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Amplitude Expert failed:', e);
+      throw new Error(`Amplitude Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const amplitudeAgent = Object.freeze(new AmplitudeAgent());

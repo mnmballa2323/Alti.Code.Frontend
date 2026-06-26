@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityEngineeringDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_engineering_director_agent',
-            'Security Engineering Director',
-            'You are an elite Security Engineering Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'security_engineering_director_agent',
+      'Security Engineering Director',
+      'You are an elite Security Engineering Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Engineering.',
+    );
+  }
 
-    async generateSecurityEngineeringSystem(objective) {
-        logger.info(`💻 [SecurityEngineeringDirectorAgent] Analyzing Security Engineering Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Engineering Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Engineering Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityEngineeringDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityEngineeringSystem(objective) {
+    logger.info(
+      `💻 [SecurityEngineeringDirectorAgent] Analyzing Security Engineering Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Engineering Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Engineering Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityEngineeringDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityEngineeringDirectorAgent = Object.freeze(new SecurityEngineeringDirectorAgent());
+export const securityEngineeringDirectorAgent = Object.freeze(
+  new SecurityEngineeringDirectorAgent(),
+);

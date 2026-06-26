@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREServerlessStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_serverless_strategist_agent',
-            'SRE Serverless Strategist',
-            'You are an elite SRE Serverless Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_serverless_strategist_agent',
+      'SRE Serverless Strategist',
+      'You are an elite SRE Serverless Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Serverless.',
+    );
+  }
 
-    async generateSREServerlessSystem(objective) {
-        logger.info(`💻 [SREServerlessStrategistAgent] Analyzing SRE Serverless Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Serverless Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Serverless Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREServerlessStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREServerlessSystem(objective) {
+    logger.info(
+      `💻 [SREServerlessStrategistAgent] Analyzing SRE Serverless Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Serverless Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Serverless Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREServerlessStrategistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREServerlessStrategistAgent = Object.freeze(new SREServerlessStrategistAgent());
+export const sREServerlessStrategistAgent = Object.freeze(
+  new SREServerlessStrategistAgent(),
+);

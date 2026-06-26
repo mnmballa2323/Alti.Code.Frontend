@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXOptimizationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_optimization_planner_agent',
-            'UX Optimization Planner',
-            'You are an elite UX Optimization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and UX Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_optimization_planner_agent',
+      'UX Optimization Planner',
+      'You are an elite UX Optimization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and UX Optimization.',
+    );
+  }
 
-    async generateUXOptimizationSystem(objective) {
-        logger.info(`💻 [UXOptimizationPlannerAgent] Analyzing UX Optimization Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Optimization Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Optimization Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXOptimizationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXOptimizationSystem(objective) {
+    logger.info(
+      `💻 [UXOptimizationPlannerAgent] Analyzing UX Optimization Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Optimization Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Optimization Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXOptimizationPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXOptimizationPlannerAgent = Object.freeze(new UXOptimizationPlannerAgent());
+export const uXOptimizationPlannerAgent = Object.freeze(
+  new UXOptimizationPlannerAgent(),
+);

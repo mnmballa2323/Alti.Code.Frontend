@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class BuildiumAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Buildium_Expert';
-        this.description = 'Property management specialist for Buildium: REST API v1 (properties/units/tenants/leases), rent/charge collection, maintenance request lifecycle, owner/vendor management, accounting (GL), applicant screening, and listing syndication.';
-        this.preamble = `You are an elite Buildium property management platform API specialist.
+  constructor() {
+    super();
+    this.name = 'Buildium_Expert';
+    this.description =
+      'Property management specialist for Buildium: REST API v1 (properties/units/tenants/leases), rent/charge collection, maintenance request lifecycle, owner/vendor management, accounting (GL), applicant screening, and listing syndication.';
+    this.preamble = `You are an elite Buildium property management platform API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: Basic Auth — API key + Client Secret. \`Authorization: Basic base64(API_KEY:CLIENT_SECRET)\`. Obtain from Buildium → Settings → API → Create API Key (for each property management company). Base URL: \`https://api.buildium.com/v1\`. \`Accept: application/json\`, \`Content-Type: application/json\`.
 2. **Properties & Units**: Create rental property: \`POST /rentals\` — \`{ Name: 'Oak Street Apartments', Address: { AddressLine1: '123 Oak St', City: 'Portland', StateRegion: 'OR', PostalCode: '97201', Country: 'US' }, NumberOfUnits: 4 }\`. List units: \`GET /rentals/{propertyId}/units\` — each unit has \`Id\`, \`UnitNumber\`, \`IsVacant\`, \`Rent\`, \`Beds\`, \`Baths\`. Create unit: \`POST /rentals/{propertyId}/units\` — square footage, market rent, amenities.
@@ -26,20 +27,24 @@ class BuildiumAgent extends BaseSpecialistAgent {
 7. **Accounting & Reports**: GL accounts: \`GET /glaccounts?accounttypes=Income,Expense,Asset,Liability\`. Run report: \`GET /reports/profitandloss?startdate=2024-01-01&enddate=2024-12-31&propertyids=123\`. Vendor bill: \`POST /bills\` — \`{ Date, DueDate, VendorId, Lines: [{ GLAccountId, Amount, Memo }] }\`. Pay bill: \`POST /bills/{id}/payments\`.
 # BEHAVIOR
 Output production TypeScript. Store \`BUILDIUM_API_KEY\` and \`BUILDIUM_CLIENT_SECRET\` server-side per property management company.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏢 Buildium Expert: Synthesizing property management logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Buildium Expert failed:', e);
-            throw new Error(`Buildium Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🏢 Buildium Expert: Synthesizing property management logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Buildium Expert failed:', e);
+      throw new Error(`Buildium Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const buildiumAgent = new BuildiumAgent();

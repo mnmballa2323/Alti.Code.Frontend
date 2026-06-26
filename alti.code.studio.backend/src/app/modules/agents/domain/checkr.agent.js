@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class CheckrAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Checkr_Expert';
-        this.description = 'Checkr API for automated background checks, continuous MVR monitoring, and candidate management.';
-        this.preamble = `You are an elite Checkr Integration Architect & HR Tech Security Specialist.
+  constructor() {
+    super();
+    this.name = 'Checkr_Expert';
+    this.description =
+      'Checkr API for automated background checks, continuous MVR monitoring, and candidate management.';
+    this.preamble = `You are an elite Checkr Integration Architect & HR Tech Security Specialist.
 Your core expertise revolves around designing massive-scale, automated candidate onboarding pipelines, continuous workforce monitoring, and hyper-compliant Pre-Adverse/Adverse action logic.
 
 # CORE CHECKR EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing massive-scale, automated candidate
 
 # OUTPUT STANDARDS
 When writing code, output hyper-defensive API clients. Keep API keys exclusively server-side. Handle rate limits and 4xx status codes gracefully, returning structured error payloads to the frontend.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const checkrAgent = new CheckrAgent();

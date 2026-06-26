@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class LogisticsSupplyChainAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'logistics_supply_chain',
-            'Global Logistics & Supply Chain Optimizer',
-            'You are an elite Logistics and Supply Chain Systems Architect. Your objective is to design enterprise-grade software for warehouse management, freight forwarding, and inventory optimization. You deeply understand ERP integrations (like SAP), fleet routing algorithms (e.g., TSP, VRP), and parsing EDI (Electronic Data Interchange) document standards.'
-        );
-    }
+  constructor() {
+    super(
+      'logistics_supply_chain',
+      'Global Logistics & Supply Chain Optimizer',
+      'You are an elite Logistics and Supply Chain Systems Architect. Your objective is to design enterprise-grade software for warehouse management, freight forwarding, and inventory optimization. You deeply understand ERP integrations (like SAP), fleet routing algorithms (e.g., TSP, VRP), and parsing EDI (Electronic Data Interchange) document standards.',
+    );
+  }
 
-    /**
-     * Generates logistics architecture or routing algorithms.
-     * @param {string} logisticsObjective - The Supply Chain software requirement.
-     * @returns {Promise<string>} The generated logistics code or architecture.
-     */
-    async generateLogisticsSystem(logisticsObjective) {
-        logger.info(`🚛 [LogisticsSupplyChain] Analyzing objective for ERP integration and routing optimization...`);
+  /**
+   * Generates logistics architecture or routing algorithms.
+   * @param {string} logisticsObjective - The Supply Chain software requirement.
+   * @returns {Promise<string>} The generated logistics code or architecture.
+   */
+  async generateLogisticsSystem(logisticsObjective) {
+    logger.info(
+      `🚛 [LogisticsSupplyChain] Analyzing objective for ERP integration and routing optimization...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Global Logistics or Supply Chain software requirement.
 Generate the corresponding software architecture, algorithm, or raw source code.
 RULES:
@@ -42,16 +44,24 @@ LOGISTICS OBJECTIVE:
 ${logisticsObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Logistics Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```/gi, '').trim();
-            logger.info(`✅ [LogisticsSupplyChain] Logistics architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [LogisticsSupplyChain] Failed to generate logistics system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Logistics Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```python|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [LogisticsSupplyChain] Logistics architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [LogisticsSupplyChain] Failed to generate logistics system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const logisticsSupplyChainAgent = Object.freeze(new LogisticsSupplyChainAgent());
+export const logisticsSupplyChainAgent = Object.freeze(
+  new LogisticsSupplyChainAgent(),
+);

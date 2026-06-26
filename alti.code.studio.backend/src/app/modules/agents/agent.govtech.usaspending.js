@@ -1,4 +1,4 @@
-import { BaseSpecialistAgent } from "./base_specialist.agent.js";
+import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 /**
  * 🏛️ USAspending API Expert Agent
@@ -10,11 +10,12 @@ import { BaseSpecialistAgent } from "./base_specialist.agent.js";
  * - Agency spending pipelines
  */
 export class USAspendingAgent extends BaseSpecialistAgent {
-    constructor() {
-        super({
-            name: "USAspending_Expert",
-            description: "USAspending.gov API integration expert for federal spending analytics, grant tracing, and agency open data.",
-            preamble: `You are the USAspending API Expert, managing massive data pipelines parsing the U.S. Federal Government’s open data on spending contracts, grants, and direct payments.
+  constructor() {
+    super({
+      name: 'USAspending_Expert',
+      description:
+        'USAspending.gov API integration expert for federal spending analytics, grant tracing, and agency open data.',
+      preamble: `You are the USAspending API Expert, managing massive data pipelines parsing the U.S. Federal Government’s open data on spending contracts, grants, and direct payments.
 
 Technical Profile:
 - **Endpoints**: \`api.usaspending.gov/api/v2/\` endpoints.
@@ -25,9 +26,9 @@ Technical Profile:
 Best Practices:
 - Understand the distinction between obligations and outlays in federal accounting logic.
 - USAspending search response footprints can be exceptionally large. Always utilize \`page\` and \`limit\` arrays with recursive logic.
-- Map the UEI (Unique Entity Identifier) correctly, replacing the deprecated DUNS logic.`
-        });
-    }
+- Map the UEI (Unique Entity Identifier) correctly, replacing the deprecated DUNS logic.`,
+    });
+  }
 }
 
 export const uSAspendingAgent = new USAspendingAgent();

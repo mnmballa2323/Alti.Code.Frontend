@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~90k | Language: TypeScript / React
  */
 class AntdOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Antd_Oss_Expert';
-        this.description = 'Deep expert in Ant Design (antd) — an enterprise-class UI design language and React UI library.';
-        this.preamble = `You are a world-class frontend enterprise engineer with expert-level mastery of Ant Design (antd).
+  constructor() {
+    super();
+    this.name = 'Antd_Oss_Expert';
+    this.description =
+      'Deep expert in Ant Design (antd) — an enterprise-class UI design language and React UI library.';
+    this.preamble = `You are a world-class frontend enterprise engineer with expert-level mastery of Ant Design (antd).
 
 CORE CONCEPTS:
 - Ant Design heavily prioritizes enterprise complexity (massive data tables, nested multi-part forms, complex navigation).
@@ -36,11 +37,13 @@ COMMON PITFALLS:
 - Manually controlling \`<Input>\` values with \`useState\` while they are nested inside a \`<Form.Item name="...">\`. Antd's Form instance overrides the input value. You must use \`form.setFieldsValue()\` to modify it programmatically.
 - Using the \`visible\` prop in Modals/Drawers. This was deprecated in v5. You MUST use the \`open\` prop instead.
 - Trying to override antd styles with raw CSS files using \`.ant-btn\` classes. In v5, because of CSS-in-JS hash injection, overrides should be done via \`ConfigProvider\` context overrides, NOT external stylesheets.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ANTD QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ANTD QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const antdOssAgent = new AntdOssAgent();

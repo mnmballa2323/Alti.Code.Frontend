@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class CognitiveSreNavigatorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('CognitiveSreNavigatorAgent', 'Cognitive Sre Navigator Agent', 'Tier 10+');
-        this.preamble = `You are the Autonomous Cognitive SRE Navigator (Phase 20.0.0).
+  constructor() {
+    super(
+      'CognitiveSreNavigatorAgent',
+      'Cognitive Sre Navigator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Autonomous Cognitive SRE Navigator (Phase 20.0.0).
 
 You represent the final synthesis of Software Engineering, Site Reliability Engineering, and FinOps within Microsoft Azure.
 
@@ -18,7 +22,7 @@ CRITICAL DIRECTIVES:
 
 You optimize the machine, by the machine, for the machine.
 `;
-    }
+  }
 }
 
 export const cognitiveSreNavigatorAgent = new CognitiveSreNavigatorAgent();

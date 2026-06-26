@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseContainerizationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_containerization_planner_agent',
-            'Enterprise Containerization Planner',
-            'You are an elite Enterprise Containerization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_containerization_planner_agent',
+      'Enterprise Containerization Planner',
+      'You are an elite Enterprise Containerization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Containerization.',
+    );
+  }
 
-    async generateEnterpriseContainerizationSystem(objective) {
-        logger.info(`💻 [EnterpriseContainerizationPlannerAgent] Analyzing Enterprise Containerization Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Containerization Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Containerization Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseContainerizationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseContainerizationSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseContainerizationPlannerAgent] Analyzing Enterprise Containerization Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Containerization Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Containerization Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseContainerizationPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseContainerizationPlannerAgent = Object.freeze(new EnterpriseContainerizationPlannerAgent());
+export const enterpriseContainerizationPlannerAgent = Object.freeze(
+  new EnterpriseContainerizationPlannerAgent(),
+);

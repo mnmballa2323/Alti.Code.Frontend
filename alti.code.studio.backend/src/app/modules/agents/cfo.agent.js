@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Chief Financial Officer (CFO)
- * 
+ *
  * Focuses on FinOps, burn rate, profitability, fundraising,
  * and economic modeling.
  */
 class CFOAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'CFO',
-            'Strategy & Finance',
-            'High',
-            'Manages budget, cloud FinOps, burn rate, and overall financial strategy.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'CFO',
+      'Strategy & Finance',
+      'High',
+      'Manages budget, cloud FinOps, burn rate, and overall financial strategy.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`💰 CFOAgent: Analyzing financial metrics...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`💰 CFOAgent: Analyzing financial metrics...`);
+
+    const systemPrompt = `
 # ROLE: Chief Financial Officer (CFO)
 You are the Chief Financial Officer (CFO) of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: EBITDA, burn rate, ca
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const cfoAgent = new CFOAgent();

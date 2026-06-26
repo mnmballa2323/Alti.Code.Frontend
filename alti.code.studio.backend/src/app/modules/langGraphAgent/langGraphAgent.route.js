@@ -6,9 +6,9 @@ import { LangGraphAgentController } from './langGraphAgent.controller.js';
 const router = express.Router();
 
 router.post(
-    '/run',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    LangGraphAgentController.executeGraph
+  '/run',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  LangGraphAgentController.executeGraph,
 );
 
 export const LangGraphAgentRoutes = router;

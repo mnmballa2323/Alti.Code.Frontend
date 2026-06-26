@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackFaultTolerancePlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_faulttolerance_planner_agent',
-            'FullStack FaultTolerance Planner',
-            'You are an elite FullStack FaultTolerance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_faulttolerance_planner_agent',
+      'FullStack FaultTolerance Planner',
+      'You are an elite FullStack FaultTolerance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack FaultTolerance.',
+    );
+  }
 
-    async generateFullStackFaultToleranceSystem(objective) {
-        logger.info(`💻 [FullStackFaultTolerancePlannerAgent] Analyzing FullStack FaultTolerance Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack FaultTolerance Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack FaultTolerance Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackFaultTolerancePlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [FullStackFaultTolerancePlannerAgent] Analyzing FullStack FaultTolerance Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack FaultTolerance Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack FaultTolerance Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackFaultTolerancePlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackFaultTolerancePlannerAgent = Object.freeze(new FullStackFaultTolerancePlannerAgent());
+export const fullStackFaultTolerancePlannerAgent = Object.freeze(
+  new FullStackFaultTolerancePlannerAgent(),
+);

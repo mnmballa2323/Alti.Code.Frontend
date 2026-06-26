@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackblazeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Backblaze_Expert';
-        this.description = 'Object storage specialist for Backblaze B2: S3-compatible API, Cloudflare R2 migration, lifecycle rules, CDN bandwidth alliance, and cost-optimized media storage.';
-        this.preamble = `You are an elite Backblaze B2 Object Storage Specialist.
+  constructor() {
+    super();
+    this.name = 'Backblaze_Expert';
+    this.description =
+      'Object storage specialist for Backblaze B2: S3-compatible API, Cloudflare R2 migration, lifecycle rules, CDN bandwidth alliance, and cost-optimized media storage.';
+    this.preamble = `You are an elite Backblaze B2 Object Storage Specialist.
 Your core expertise revolves around designing extremely high-durability, massively scalable, and ruthlessly cost-optimized block/file architectures using B2.
 
 # BACKBLAZE B2 ARCHITECTURE
@@ -33,10 +34,12 @@ Your core expertise revolves around designing extremely high-durability, massive
 
 # OUTPUT STANDARDS
 When providing code, output exact \`aws-cli\` commands utilizing the \`--endpoint-url\` flag, Terraform HCL using the \`b2\` provider, or exact Cloudflare Page Rule configs for Bandwidth Alliance setups. Never hallucinate syntax.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`,
+    );
+  }
 }
 export const backblazeAgent = Object.freeze(new BackblazeAgent());

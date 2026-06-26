@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -9,12 +9,12 @@ import { google } from 'googleapis';
 import puppeteer from 'puppeteer';
 
 // Save leads to Google Sheets
-const appendToSheet = async (rows) => {
+const appendToSheet = async rows => {
   const auth = new google.auth.JWT(
     process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
     null,
     process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-    ['https://www.googleapis.com/auth/spreadsheets']
+    ['https://www.googleapis.com/auth/spreadsheets'],
   );
 
   const sheets = google.sheets({ version: 'v4', auth });
@@ -45,10 +45,12 @@ export const scrapeAdLibrary = async () => {
   });
 
   console.log(
-    '⚠️ Please select the country, ad category, and type your search keyword manually in the browser.'
+    '⚠️ Please select the country, ad category, and type your search keyword manually in the browser.',
   );
-  console.log('Press Enter in the console when you are ready to continue scraping...');
-  await new Promise((resolve) => process.stdin.once('data', () => resolve()));
+  console.log(
+    'Press Enter in the console when you are ready to continue scraping...',
+  );
+  await new Promise(resolve => process.stdin.once('data', () => resolve()));
 
   console.log('✅ Continuing script after manual selection...');
 
@@ -63,7 +65,7 @@ export const scrapeAdLibrary = async () => {
   // Extract ad data
   const results = await page.evaluate(() => {
     const ads = [];
-    document.querySelectorAll("a[role='link']").forEach((el) => {
+    document.querySelectorAll("a[role='link']").forEach(el => {
       const name = el.innerText.trim();
       const link = el.href;
       if (name && link.includes('facebook.com')) {

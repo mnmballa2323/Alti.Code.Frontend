@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsMigrationSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_migration_specialist_agent',
-            'Systems Migration Specialist',
-            'You are an elite Systems Migration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_migration_specialist_agent',
+      'Systems Migration Specialist',
+      'You are an elite Systems Migration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Migration.',
+    );
+  }
 
-    async generateSystemsMigrationSystem(objective) {
-        logger.info(`💻 [SystemsMigrationSpecialistAgent] Analyzing Systems Migration Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Migration Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Migration Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsMigrationSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsMigrationSystem(objective) {
+    logger.info(
+      `💻 [SystemsMigrationSpecialistAgent] Analyzing Systems Migration Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Migration Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Migration Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsMigrationSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsMigrationSpecialistAgent = Object.freeze(new SystemsMigrationSpecialistAgent());
+export const systemsMigrationSpecialistAgent = Object.freeze(
+  new SystemsMigrationSpecialistAgent(),
+);

@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Chief Executive Officer (CEO)
- * 
+ *
  * Focuses on overall company vision, driving cross-departmental execution,
  * and ensuring product-market fit.
  */
 class CEOAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'CEO',
-            'Strategy & Execution',
-            'High',
-            'Drives company vision, cross-functional execution, and primary strategic leadership.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'CEO',
+      'Strategy & Execution',
+      'High',
+      'Drives company vision, cross-functional execution, and primary strategic leadership.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`👔 CEOAgent: Synthesizing executive strategy...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`👔 CEOAgent: Synthesizing executive strategy...`);
+
+    const systemPrompt = `
 # ROLE: Chief Executive Officer (CEO)
 You are the Chief Executive Officer (CEO) of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: execution velocity, p
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const ceoAgent = new CEOAgent();

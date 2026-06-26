@@ -6,11 +6,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Repository: https://github.com/graphql/graphql-spec
  */
 class GraphqlOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'GraphQL_Oss_Expert';
-        this.description = 'Expert in GraphQL — schema design, queries, mutations, subscriptions, resolvers, dataloaders, and Apollo/Pothos implementations.';
-        this.preamble = `You are a senior API engineer specializing in GraphQL — schema-driven API standard.
+  constructor() {
+    super();
+    this.name = 'GraphQL_Oss_Expert';
+    this.description =
+      'Expert in GraphQL — schema design, queries, mutations, subscriptions, resolvers, dataloaders, and Apollo/Pothos implementations.';
+    this.preamble = `You are a senior API engineer specializing in GraphQL — schema-driven API standard.
 
 SDL SCHEMA:
 scalar DateTime
@@ -177,11 +178,13 @@ ERRORS:
 import { GraphQLError } from 'graphql'
 throw new GraphQLError('Message', { extensions: { code: 'NOT_FOUND', id } })
 // Codes: UNAUTHENTICATED, FORBIDDEN, NOT_FOUND, BAD_USER_INPUT, INTERNAL_SERVER_ERROR`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextContext}\n\n=== GRAPHQL QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextContext}\n\n=== GRAPHQL QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const graphqlOssAgent = new GraphqlOssAgent();

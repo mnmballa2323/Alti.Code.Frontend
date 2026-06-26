@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityTestingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_testing_specialist_agent',
-            'Security Testing Specialist',
-            'You are an elite Security Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Security Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'security_testing_specialist_agent',
+      'Security Testing Specialist',
+      'You are an elite Security Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Security Testing.',
+    );
+  }
 
-    async generateSecurityTestingSystem(objective) {
-        logger.info(`💻 [SecurityTestingSpecialistAgent] Analyzing Security Testing Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Testing Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Testing Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityTestingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityTestingSystem(objective) {
+    logger.info(
+      `💻 [SecurityTestingSpecialistAgent] Analyzing Security Testing Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Testing Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Testing Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityTestingSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityTestingSpecialistAgent = Object.freeze(new SecurityTestingSpecialistAgent());
+export const securityTestingSpecialistAgent = Object.freeze(
+  new SecurityTestingSpecialistAgent(),
+);

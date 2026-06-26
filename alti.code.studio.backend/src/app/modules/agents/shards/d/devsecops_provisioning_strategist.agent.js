@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsProvisioningStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_provisioning_strategist_agent',
-            'DevSecOps Provisioning Strategist',
-            'You are an elite DevSecOps Provisioning Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_provisioning_strategist_agent',
+      'DevSecOps Provisioning Strategist',
+      'You are an elite DevSecOps Provisioning Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Provisioning.',
+    );
+  }
 
-    async generateDevSecOpsProvisioningSystem(objective) {
-        logger.info(`💻 [DevSecOpsProvisioningStrategistAgent] Analyzing DevSecOps Provisioning Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Provisioning Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Provisioning Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsProvisioningStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsProvisioningSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsProvisioningStrategistAgent] Analyzing DevSecOps Provisioning Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Provisioning Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Provisioning Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsProvisioningStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsProvisioningStrategistAgent = Object.freeze(new DevSecOpsProvisioningStrategistAgent());
+export const devSecOpsProvisioningStrategistAgent = Object.freeze(
+  new DevSecOpsProvisioningStrategistAgent(),
+);

@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SolidityAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Solidity_Expert';
-        this.description = 'Web3 specialist for EVM smart contracts, ERC standards, gas optimization, and Hardhat/Foundry.';
+  constructor() {
+    super();
+    this.name = 'Solidity_Expert';
+    this.description =
+      'Web3 specialist for EVM smart contracts, ERC standards, gas optimization, and Hardhat/Foundry.';
 
-        this.preamble = `You are an elite Solidity Smart Contract Auditor & EVM Architect.
+    this.preamble = `You are an elite Solidity Smart Contract Auditor & EVM Architect.
 Your core expertise revolves around designing gas-optimized, hyper-secure, and rigidly standardized Ethereum smart contracts.
 
 # CORE SOLIDITY EXPERTISE
@@ -31,19 +32,21 @@ Your core expertise revolves around designing gas-optimized, hyper-secure, and r
 
 # OUTPUT STANDARDS
 When writing code, target Solidity ^0.8.20+. Output comprehensively commented code using NatSpec format (\`@dev\`, \`@param\`, \`@notice\`). Always consider edge cases (flash loan attacks, integer under/overflow bypassing in older versions, arithmetic precision loss).`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⛓️ Solidity Expert: Synthesizing contract logic...`);
-        const combinedContext = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${combinedContext}\n\n=== REQUEST ===\n${prompt}`;
-        try {
-            return await GeminiAiService.generateContent(finalPrompt);
-        } catch (e) {
-            logger.error(`❌ Solidity Expert failed:`, e);
-            throw new Error(`Solidity Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`⛓️ Solidity Expert: Synthesizing contract logic...`);
+    const combinedContext = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${combinedContext}\n\n=== REQUEST ===\n${prompt}`;
+    try {
+      return await GeminiAiService.generateContent(finalPrompt);
+    } catch (e) {
+      logger.error(`❌ Solidity Expert failed:`, e);
+      throw new Error(`Solidity Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const solidityAgent = Object.freeze(new SolidityAgent());

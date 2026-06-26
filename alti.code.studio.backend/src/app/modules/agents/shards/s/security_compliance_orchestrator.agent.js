@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityComplianceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_compliance_orchestrator_agent',
-            'Security Compliance Orchestrator',
-            'You are an elite Security Compliance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Security Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'security_compliance_orchestrator_agent',
+      'Security Compliance Orchestrator',
+      'You are an elite Security Compliance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Security Compliance.',
+    );
+  }
 
-    async generateSecurityComplianceSystem(objective) {
-        logger.info(`💻 [SecurityComplianceOrchestratorAgent] Analyzing Security Compliance Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Compliance Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Compliance Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityComplianceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityComplianceSystem(objective) {
+    logger.info(
+      `💻 [SecurityComplianceOrchestratorAgent] Analyzing Security Compliance Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Compliance Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Compliance Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityComplianceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityComplianceOrchestratorAgent = Object.freeze(new SecurityComplianceOrchestratorAgent());
+export const securityComplianceOrchestratorAgent = Object.freeze(
+  new SecurityComplianceOrchestratorAgent(),
+);

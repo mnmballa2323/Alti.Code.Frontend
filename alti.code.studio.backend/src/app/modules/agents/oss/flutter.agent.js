@@ -10,7 +10,8 @@ class FlutterOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Flutter_Oss_Expert';
-    this.description = 'Expert in Flutter 3+ — Widgets, State Management (Provider, Riverpod, BLoC), layouts, navigation, and asynchronous Dart.';
+    this.description =
+      'Expert in Flutter 3+ — Widgets, State Management (Provider, Riverpod, BLoC), layouts, navigation, and asynchronous Dart.';
     this.preamble = `You are a senior mobile engineer specializing in Flutter and Dart.
 
 SETUP:
@@ -202,7 +203,9 @@ class User {
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FLUTTER QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FLUTTER QUESTION ===\n${prompt}`,
+    );
   }
 }
 

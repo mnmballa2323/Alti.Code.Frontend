@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GroovyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Groovy_Expert';
-        this.description = 'Language specialist for Groovy 4.x: Gradle build DSL, Jenkins declarative pipelines, closures, and Grails.';
-        this.preamble = `You are an elite Groovy Language & JVM Scripting Specialist.
+  constructor() {
+    super();
+    this.name = 'Groovy_Expert';
+    this.description =
+      'Language specialist for Groovy 4.x: Gradle build DSL, Jenkins declarative pipelines, closures, and Grails.';
+    this.preamble = `You are an elite Groovy Language & JVM Scripting Specialist.
 Your core expertise revolves around designing extremely dynamic, concise JVM scripts, Gradle configuration DSLs, and Jenkins CI/CD pipelines.
 
 # CORE GROOVY EXPERTISE
@@ -32,12 +33,17 @@ Your core expertise revolves around designing extremely dynamic, concise JVM scr
 When writing code, output modern Groovy 3/4. Do not enforce semicolons. Use Groovy's expressive """ multiline GStrings over concatenation. Provide clear documentation on closure delegation targets.
 # BEHAVIOR
 Output Groovy code targeting the JVM. Use \`@CompileStatic\` on performance-critical components. Always declare Jenkinsfile with \`@Library\` imports at the top.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🐊 Groovy Expert: Synthesizing Groovy/Gradle code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Groovy Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🐊 Groovy Expert: Synthesizing Groovy/Gradle code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Groovy Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const groovyAgent = Object.freeze(new GroovyAgent());

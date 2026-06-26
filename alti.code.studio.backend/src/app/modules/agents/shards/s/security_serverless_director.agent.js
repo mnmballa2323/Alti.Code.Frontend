@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityServerlessDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_serverless_director_agent',
-            'Security Serverless Director',
-            'You are an elite Security Serverless Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'security_serverless_director_agent',
+      'Security Serverless Director',
+      'You are an elite Security Serverless Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Serverless.',
+    );
+  }
 
-    async generateSecurityServerlessSystem(objective) {
-        logger.info(`💻 [SecurityServerlessDirectorAgent] Analyzing Security Serverless Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Serverless Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Serverless Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityServerlessDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityServerlessSystem(objective) {
+    logger.info(
+      `💻 [SecurityServerlessDirectorAgent] Analyzing Security Serverless Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Serverless Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Serverless Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityServerlessDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityServerlessDirectorAgent = Object.freeze(new SecurityServerlessDirectorAgent());
+export const securityServerlessDirectorAgent = Object.freeze(
+  new SecurityServerlessDirectorAgent(),
+);

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -17,7 +17,11 @@ const cyberdesk = null;
 
 // Launch a new desktop
 const launchDesktops = async () => {
-  if (!cyberdesk) throw new ApiError(httpStatus.NOT_IMPLEMENTED, "Cyberdesk is not installed.");
+  if (!cyberdesk)
+    throw new ApiError(
+      httpStatus.NOT_IMPLEMENTED,
+      'Cyberdesk is not installed.',
+    );
   const result = await cyberdesk.launchDesktop({
     timeout_ms: 600000,
   });
@@ -35,7 +39,7 @@ const launchDesktops = async () => {
 
 // Get desktop info
 const getDesktopInfo = async desktopId => {
-  if (!cyberdesk) throw new Error("Cyberdesk is not installed.");
+  if (!cyberdesk) throw new Error('Cyberdesk is not installed.');
   const result = await cyberdesk.getDesktop({ path: { id: desktopId } });
   if ('error' in result) throw new Error(result.error);
   return result;
@@ -43,7 +47,7 @@ const getDesktopInfo = async desktopId => {
 
 // Perform a mouse click
 const clickMouse = async (desktopId, x, y) => {
-  if (!cyberdesk) throw new Error("Cyberdesk is not installed.");
+  if (!cyberdesk) throw new Error('Cyberdesk is not installed.');
   const result = await cyberdesk.executeComputerAction({
     path: { id: desktopId },
     body: {
@@ -65,7 +69,7 @@ const clickMouse = async (desktopId, x, y) => {
 
 // Execute bash command
 const executeBash = async (desktopId, command) => {
-  if (!cyberdesk) throw new Error("Cyberdesk is not installed.");
+  if (!cyberdesk) throw new Error('Cyberdesk is not installed.');
   const result = await cyberdesk.executeBashAction({
     path: { id: desktopId },
     body: { command },
@@ -82,7 +86,7 @@ const executeBash = async (desktopId, command) => {
 
 // Terminate desktop
 const terminateDesktop = async desktopId => {
-  if (!cyberdesk) throw new Error("Cyberdesk is not installed.");
+  if (!cyberdesk) throw new Error('Cyberdesk is not installed.');
   const result = await cyberdesk.terminateDesktop({ path: { id: desktopId } });
   return result;
 };

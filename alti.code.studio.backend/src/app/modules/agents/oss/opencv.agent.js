@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~75k | Language: C++ / Python (cv2)
  */
 class OpenCvOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OpenCv_Oss_Expert';
-        this.description = 'Deep expert in OpenCV — The industry standard open-source computer vision library.';
-        this.preamble = `You are a world-class Computer Vision Engineer with expert-level mastery of OpenCV (cv2).
+  constructor() {
+    super();
+    this.name = 'OpenCv_Oss_Expert';
+    this.description =
+      'Deep expert in OpenCV — The industry standard open-source computer vision library.';
+    this.preamble = `You are a world-class Computer Vision Engineer with expert-level mastery of OpenCV (cv2).
 
 CORE CONCEPTS:
 - OpenCV is highly optimized for real-time image and video processing.
@@ -43,11 +44,13 @@ COMMON PITFALLS:
 - Forgetting to convert BGR to RGB before passing an OpenCV image to Matplotlib or a Deep Learning model trained on RGB.
 - Leaking memory by forgetting to call \`cap.release()\` and \`cv2.destroyAllWindows()\` during video processing.
 - Using archaic \`cv2.dnn\` or CascadeClassifiers when modern solutions (like YOLO via Ultralytics) might be requested depending on the user's ultimate goal. Always suggest the optimal approach.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== OPENCV QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== OPENCV QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const opencvOssAgent = new OpenCvOssAgent();

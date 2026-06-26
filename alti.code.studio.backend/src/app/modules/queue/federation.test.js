@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -10,54 +10,54 @@ import { workerService } from './worker.service.js';
 
 // Mocks
 vi.mock('../../../shared/logger.js', () => ({
-    logger: {
-        info: vi.fn(),
-        error: vi.fn(),
-        warn: vi.fn(),
-    }
+  logger: {
+    info: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+  },
 }));
 
 // Mock BullMQ Workers
 vi.mock('bullmq', () => {
-    return {
-        Worker: class {
-            constructor(queueName, processor) {
-                global.mockWorkers = global.mockWorkers || {};
-                global.mockWorkers[queueName] = processor;
-                this.on = vi.fn();
-            }
-        },
-        Queue: class { }
-    };
+  return {
+    Worker: class {
+      constructor(queueName, processor) {
+        global.mockWorkers = global.mockWorkers || {};
+        global.mockWorkers[queueName] = processor;
+        this.on = vi.fn();
+      }
+    },
+    Queue: class {},
+  };
 });
 
 // Mock Dependencies
 vi.mock('../securityAgent/security.worker.js', () => ({
-    securityWorkerProcessor: vi.fn()
+  securityWorkerProcessor: vi.fn(),
 }));
 vi.mock('../devOpsAgent/devops.worker.js', () => ({
-    devOpsWorkerProcessor: vi.fn()
+  devOpsWorkerProcessor: vi.fn(),
 }));
 vi.mock('../refactorAgent/refactor.worker.js', () => ({
-    refactorWorkerProcessor: vi.fn()
+  refactorWorkerProcessor: vi.fn(),
 }));
 vi.mock('../audit/audit.worker.js', () => ({
-    auditWorkerProcessor: vi.fn()
+  auditWorkerProcessor: vi.fn(),
 }));
 
 describe('Galactic Federation (Worker Swarm)', () => {
-    beforeEach(() => {
-        vi.clearAllMocks();
-        global.mockWorkers = {};
-    });
+  beforeEach(() => {
+    vi.clearAllMocks();
+    global.mockWorkers = {};
+  });
 
-    it('should register all specialized agents upon initialization', async () => {
-        await workerService.init();
+  it('should register all specialized agents upon initialization', async () => {
+    await workerService.init();
 
-        // Check if all queues have assigned processors
-        expect(global.mockWorkers['audit-queue']).toBeDefined();
-        expect(global.mockWorkers['refactor-queue']).toBeDefined();
-        expect(global.mockWorkers['security-queue']).toBeDefined();
-        expect(global.mockWorkers['devops-queue']).toBeDefined();
-    });
+    // Check if all queues have assigned processors
+    expect(global.mockWorkers['audit-queue']).toBeDefined();
+    expect(global.mockWorkers['refactor-queue']).toBeDefined();
+    expect(global.mockWorkers['security-queue']).toBeDefined();
+    expect(global.mockWorkers['devops-queue']).toBeDefined();
+  });
 });

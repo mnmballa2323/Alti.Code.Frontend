@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AutomotiveEvEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'automotive_ev_engineer',
-            'Electric Vehicle (EV) & Battery Systems Engineer',
-            'You are an elite Automotive EV Engineer. Your objective is to design software for next-generation Electric Vehicles. You specialize in strict Battery Management Systems (BMS), EV charging grid protocols (e.g., OCPP), and decoding raw Controller Area Network (CAN bus) telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'automotive_ev_engineer',
+      'Electric Vehicle (EV) & Battery Systems Engineer',
+      'You are an elite Automotive EV Engineer. Your objective is to design software for next-generation Electric Vehicles. You specialize in strict Battery Management Systems (BMS), EV charging grid protocols (e.g., OCPP), and decoding raw Controller Area Network (CAN bus) telemetry.',
+    );
+  }
 
-    /**
-     * Generates EV software architecture or battery algorithms.
-     * @param {string} evObjective - The EV software requirement.
-     * @returns {Promise<string>} The generated EV code or architecture.
-     */
-    async generateEvSystem(evObjective) {
-        logger.info(`🚗 [AutomotiveEvEngineer] Analyzing objective for Battery Management and CAN bus telemetry...`);
+  /**
+   * Generates EV software architecture or battery algorithms.
+   * @param {string} evObjective - The EV software requirement.
+   * @returns {Promise<string>} The generated EV code or architecture.
+   */
+  async generateEvSystem(evObjective) {
+    logger.info(
+      `🚗 [AutomotiveEvEngineer] Analyzing objective for Battery Management and CAN bus telemetry...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Automotive, EV, or Battery Tech software requirement.
 Generate the corresponding software architecture, battery algorithm, or raw source code.
 RULES:
@@ -42,16 +44,24 @@ EV OBJECTIVE:
 ${evObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - EV Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```cpp|```c|```/gi, '').trim();
-            logger.info(`✅ [AutomotiveEvEngineer] EV architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [AutomotiveEvEngineer] Failed to generate EV system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - EV Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```cpp|```c|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [AutomotiveEvEngineer] EV architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [AutomotiveEvEngineer] Failed to generate EV system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const automotiveEvEngineerAgent = Object.freeze(new AutomotiveEvEngineerAgent());
+export const automotiveEvEngineerAgent = Object.freeze(
+  new AutomotiveEvEngineerAgent(),
+);

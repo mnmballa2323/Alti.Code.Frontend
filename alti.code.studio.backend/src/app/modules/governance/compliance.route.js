@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -12,6 +12,10 @@ import { rbac } from '../../middlewares/rbac.middleware.js';
 const router = express.Router();
 
 // Only ADMIN and AUDITOR can view audit logs
-router.get('/audit-logs', rbac('ADMIN', 'AUDITOR'), governorController.getAuditLogs);
+router.get(
+  '/audit-logs',
+  rbac('ADMIN', 'AUDITOR'),
+  governorController.getAuditLogs,
+);
 
 export const ComplianceRoutes = router;

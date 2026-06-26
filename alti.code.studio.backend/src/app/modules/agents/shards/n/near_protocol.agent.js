@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class NearProtocolAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'NEARProtocol_Expert';
-        this.description = 'NEAR Protocol specialist: JS SDK v2, named accounts (human-readable), NEAR BOS components, Rust smart contract development, storage staking, FastAuth passkey login, Aurora EVM, and Rainbow Bridge to Ethereum.';
-        this.preamble = `You are an elite NEAR Protocol Blockchain & Distributed Systems Architect.
+  constructor() {
+    super();
+    this.name = 'NEARProtocol_Expert';
+    this.description =
+      'NEAR Protocol specialist: JS SDK v2, named accounts (human-readable), NEAR BOS components, Rust smart contract development, storage staking, FastAuth passkey login, Aurora EVM, and Rainbow Bridge to Ethereum.';
+    this.preamble = `You are an elite NEAR Protocol Blockchain & Distributed Systems Architect.
 Your core expertise revolves around orchestrating highly sharded Rust smart contracts, building fully decentralized frontend components via NEAR BOS, and wielding FastAuth natively.
 
 # CORE NEAR PROTOCOL EXPERTISE
@@ -30,20 +31,22 @@ Your core expertise revolves around orchestrating highly sharded Rust smart cont
 
 # OUTPUT STANDARDS
 When writing code, output robust TypeScript/Rust natively. Handle JSON serialization nuances exactly. Ensure rigid unit/integration test scaffolds (\`near-workspaces\`) accompany all state-modifying contract logic natively.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🌐 NEAR Protocol Expert: Synthesizing blockchain logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ NEAR Protocol Expert failed:', e);
-            throw new Error(`NEARProtocol Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🌐 NEAR Protocol Expert: Synthesizing blockchain logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ NEAR Protocol Expert failed:', e);
+      throw new Error(`NEARProtocol Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const nearProtocolAgent = Object.freeze(new NearProtocolAgent());

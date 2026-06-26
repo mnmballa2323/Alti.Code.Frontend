@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIStreamingAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_streaming_analyst_agent',
-            'UI Streaming Analyst',
-            'You are an elite UI Streaming Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and UI Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_streaming_analyst_agent',
+      'UI Streaming Analyst',
+      'You are an elite UI Streaming Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and UI Streaming.',
+    );
+  }
 
-    async generateUIStreamingSystem(objective) {
-        logger.info(`💻 [UIStreamingAnalystAgent] Analyzing UI Streaming Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Streaming Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Streaming Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIStreamingAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIStreamingSystem(objective) {
+    logger.info(
+      `💻 [UIStreamingAnalystAgent] Analyzing UI Streaming Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Streaming Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Streaming Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIStreamingAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIStreamingAnalystAgent = Object.freeze(new UIStreamingAnalystAgent());
+export const uIStreamingAnalystAgent = Object.freeze(
+  new UIStreamingAnalystAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceAutomationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_automation_lead_agent',
-            'Performance Automation Lead',
-            'You are an elite Performance Automation Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_automation_lead_agent',
+      'Performance Automation Lead',
+      'You are an elite Performance Automation Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Automation.',
+    );
+  }
 
-    async generatePerformanceAutomationSystem(objective) {
-        logger.info(`💻 [PerformanceAutomationLeadAgent] Analyzing Performance Automation Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Automation Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Automation Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceAutomationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceAutomationSystem(objective) {
+    logger.info(
+      `💻 [PerformanceAutomationLeadAgent] Analyzing Performance Automation Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Automation Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Automation Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceAutomationLeadAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceAutomationLeadAgent = Object.freeze(new PerformanceAutomationLeadAgent());
+export const performanceAutomationLeadAgent = Object.freeze(
+  new PerformanceAutomationLeadAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceConfigurationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_configuration_designer_agent',
-            'Performance Configuration Designer',
-            'You are an elite Performance Configuration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_configuration_designer_agent',
+      'Performance Configuration Designer',
+      'You are an elite Performance Configuration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Configuration.',
+    );
+  }
 
-    async generatePerformanceConfigurationSystem(objective) {
-        logger.info(`💻 [PerformanceConfigurationDesignerAgent] Analyzing Performance Configuration Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Configuration Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Configuration Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceConfigurationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceConfigurationSystem(objective) {
+    logger.info(
+      `💻 [PerformanceConfigurationDesignerAgent] Analyzing Performance Configuration Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Configuration Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Configuration Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceConfigurationDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceConfigurationDesignerAgent = Object.freeze(new PerformanceConfigurationDesignerAgent());
+export const performanceConfigurationDesignerAgent = Object.freeze(
+  new PerformanceConfigurationDesignerAgent(),
+);

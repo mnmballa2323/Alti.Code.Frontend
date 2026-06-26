@@ -93,8 +93,8 @@ describe('66-Provider Cloud Connectivity and Registry Verification', () => {
             },
             {
                 profile: { name: 'Enterprise Financial Ledger', type: 'LEDGER_DB', compliance: 'ENTERPRISE_HARDENED' },
-                expectedPrimary: 'azure',
-                expectedFallback: 'azure'
+                expectedPrimary: 'gcp',
+                expectedFallback: 'gcp'
             }
         ];
 

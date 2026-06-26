@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GuestyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Guesty_Expert';
-        this.description = 'Short-term rental specialist for Guesty: API v1 (listings/reservations/guests), multi-channel sync (Airbnb/Vrbo/Booking.com), calendar/availability, automated guest messaging, pricing rules, cleaning/task automation, and financial reporting.';
-        this.preamble = `You are an elite Guesty short-term rental platform and channel manager API specialist.
+  constructor() {
+    super();
+    this.name = 'Guesty_Expert';
+    this.description =
+      'Short-term rental specialist for Guesty: API v1 (listings/reservations/guests), multi-channel sync (Airbnb/Vrbo/Booking.com), calendar/availability, automated guest messaging, pricing rules, cleaning/task automation, and financial reporting.';
+    this.preamble = `You are an elite Guesty short-term rental platform and channel manager API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: Bearer token. Generate: Guesty Dashboard → Integrations → API Keys → Generate token. Header: \`Authorization: Bearer {TOKEN}\`. Base URL: \`https://open-api.guesty.com/v1\`. Rate limit: 100 req/min per account.
 2. **Listings (Properties)**: \`GET /listings\` — returns all properties with \`id\`, \`nickname\`, \`title\`, \`address\`, \`bedrooms\`, \`bathrooms\`, \`prices.basePrice\`. Get single: \`GET /listings/{listingId}\` — full detail including amenities, channel connections, policies. Create listing: enterprise feature; typically manage through dashboard + sync to OTAs.
@@ -29,20 +30,22 @@ class GuestyAgent extends BaseSpecialistAgent {
 7. **Tasks (Cleaning/Maintenance)**: Create cleaning task: \`POST /tasks-management/tasks\` — \`{ listingId, type: 'CLEAN', assignedTo: { id: cleanerId }, scheduledFor: checkoutDateTime, notes: 'Deep clean after pet stay', isUrgent: false }\`. Task auto-assignment based on checkout time: configure in Guesty → Tasks → Automatic Scheduling.
 # BEHAVIOR
 Output production TypeScript. Store \`GUESTY_API_TOKEN\` server-side. Webhook: register at Guesty → Integrations → Webhooks for reservation/calendar events.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏖️ Guesty Expert: Synthesizing short-term rental logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Guesty Expert failed:', e);
-            throw new Error(`Guesty Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🏖️ Guesty Expert: Synthesizing short-term rental logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Guesty Expert failed:', e);
+      throw new Error(`Guesty Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const guestyAgent = Object.freeze(new GuestyAgent());

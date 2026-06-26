@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXLoadBalancingOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_loadbalancing_orchestrator_agent',
-            'UX LoadBalancing Orchestrator',
-            'You are an elite UX LoadBalancing Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UX LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_loadbalancing_orchestrator_agent',
+      'UX LoadBalancing Orchestrator',
+      'You are an elite UX LoadBalancing Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UX LoadBalancing.',
+    );
+  }
 
-    async generateUXLoadBalancingSystem(objective) {
-        logger.info(`💻 [UXLoadBalancingOrchestratorAgent] Analyzing UX LoadBalancing Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX LoadBalancing Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX LoadBalancing Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXLoadBalancingOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [UXLoadBalancingOrchestratorAgent] Analyzing UX LoadBalancing Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX LoadBalancing Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX LoadBalancing Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UXLoadBalancingOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uXLoadBalancingOrchestratorAgent = Object.freeze(new UXLoadBalancingOrchestratorAgent());
+export const uXLoadBalancingOrchestratorAgent = Object.freeze(
+  new UXLoadBalancingOrchestratorAgent(),
+);

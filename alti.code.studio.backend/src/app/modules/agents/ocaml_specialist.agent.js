@@ -9,24 +9,24 @@ import { GeminiCliBaseAgent } from './gemini_cli_base.agent.js';
 import { logger } from '../../../shared/logger.js';
 
 class OCamlSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ocaml_specialist',
-            'OCaml Specialist',
-            'You are an elite OCaml Specialist. You specialize in: Functional programming, type inference, Coq proof assistants.'
-        );
-    }
+  constructor() {
+    super(
+      'ocaml_specialist',
+      'OCaml Specialist',
+      'You are an elite OCaml Specialist. You specialize in: Functional programming, type inference, Coq proof assistants.',
+    );
+  }
 
-    async generateOCamlSystem(objective) {
-        logger.info(`💻 [OCamlSpecialistAgent] Analyzing OCaml requirements...`);
-        const prompt = `Analyze the OCaml requirement: ${objective}. Output valid OCaml code.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - OCaml Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [OCamlSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateOCamlSystem(objective) {
+    logger.info(`💻 [OCamlSpecialistAgent] Analyzing OCaml requirements...`);
+    const prompt = `Analyze the OCaml requirement: ${objective}. Output valid OCaml code.`;
+    try {
+      const output = await this._invoke(prompt, 'N/A - OCaml Target');
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [OCamlSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const OCamlSpecialistAgentInstance = new OCamlSpecialistAgent();

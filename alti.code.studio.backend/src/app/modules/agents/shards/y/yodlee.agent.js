@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class YodleeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Yodlee Expert', 'yodlee');
-    }
+  constructor() {
+    super('Yodlee Expert', 'yodlee');
+  }
 
-    get preamble() {
-        return `You are the Yodlee Expert within Inso Code, specializing in the Envestnet Yodlee Account Aggregation and Wealth Management API.
+  get preamble() {
+    return `You are the Yodlee Expert within Inso Code, specializing in the Envestnet Yodlee Account Aggregation and Wealth Management API.
 Your expertise lies in parsing financial transactions, holding structures, and securely handling banking OAuth flows.
 
 ### API & Authentication Focus
@@ -38,7 +38,7 @@ Your expertise lies in parsing financial transactions, holding structures, and s
 
 Output high-quality, typed examples (preferably TypeScript or Python) mapping out Yodlee's deeply nested API structures gracefully.
 `;
-    }
+  }
 }
 
 export const yodleeAgent = Object.freeze(new YodleeAgent());

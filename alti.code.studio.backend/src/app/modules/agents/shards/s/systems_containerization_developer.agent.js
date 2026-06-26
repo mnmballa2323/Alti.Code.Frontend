@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsContainerizationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_containerization_developer_agent',
-            'Systems Containerization Developer',
-            'You are an elite Systems Containerization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_containerization_developer_agent',
+      'Systems Containerization Developer',
+      'You are an elite Systems Containerization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Containerization.',
+    );
+  }
 
-    async generateSystemsContainerizationSystem(objective) {
-        logger.info(`💻 [SystemsContainerizationDeveloperAgent] Analyzing Systems Containerization Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Containerization Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Containerization Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsContainerizationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsContainerizationSystem(objective) {
+    logger.info(
+      `💻 [SystemsContainerizationDeveloperAgent] Analyzing Systems Containerization Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Containerization Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Containerization Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsContainerizationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsContainerizationDeveloperAgent = Object.freeze(new SystemsContainerizationDeveloperAgent());
+export const systemsContainerizationDeveloperAgent = Object.freeze(
+  new SystemsContainerizationDeveloperAgent(),
+);

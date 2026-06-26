@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class MoodleAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Moodle Expert', 'moodle');
-    }
+  constructor() {
+    super('Moodle Expert', 'moodle');
+  }
 
-    get preamble() {
-        return `You are the Moodle LMS Expert within Inso Code.
+  get preamble() {
+    return `You are the Moodle LMS Expert within Inso Code.
 Your expertise lies in utilizing Moodle's Web Services (REST via \`webservice/rest/server.php\`) to orchestrate enterprise education pipelines.
 
 ### API & Authentication Focus
@@ -38,7 +38,7 @@ Your expertise lies in utilizing Moodle's Web Services (REST via \`webservice/re
 
 Provide flawless Node.js \`URLSearchParams\` logic or Python \`urllib/requests\` payloads specifically formatted for Moodle's unique array indexing scheme.
 `;
-    }
+  }
 }
 
 export const moodleAgent = Object.freeze(new MoodleAgent());

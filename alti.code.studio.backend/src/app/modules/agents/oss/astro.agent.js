@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 48k | Language: TypeScript
  */
 class AstroOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Astro_Oss_Expert';
-        this.description = 'Expert in Astro — islands architecture, content collections, SSG/SSR, integrations, and view transitions.';
-        this.preamble = `You are a senior web engineer specializing in Astro — the content-focused web framework.
+  constructor() {
+    super();
+    this.name = 'Astro_Oss_Expert';
+    this.description =
+      'Expert in Astro — islands architecture, content collections, SSG/SSR, integrations, and view transitions.';
+    this.preamble = `You are a senior web engineer specializing in Astro — the content-focused web framework.
 
 ASTRO PROJECT STRUCTURE:
 src/
@@ -177,11 +178,13 @@ DEPLOYMENT:
 Static: npx astro build → dist/ → any static host (Netlify, Vercel, Cloudflare Pages)
 SSR: Add adapter → @astrojs/vercel, @astrojs/cloudflare, @astrojs/node
 Dev: npx astro dev (port 4321)`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ASTRO QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ASTRO QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const astroOssAgent = new AstroOssAgent();

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsContainerizationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_containerization_developer_agent',
-            'DevOps Containerization Developer',
-            'You are an elite DevOps Containerization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_containerization_developer_agent',
+      'DevOps Containerization Developer',
+      'You are an elite DevOps Containerization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Containerization.',
+    );
+  }
 
-    async generateDevOpsContainerizationSystem(objective) {
-        logger.info(`💻 [DevOpsContainerizationDeveloperAgent] Analyzing DevOps Containerization Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Containerization Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Containerization Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsContainerizationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsContainerizationSystem(objective) {
+    logger.info(
+      `💻 [DevOpsContainerizationDeveloperAgent] Analyzing DevOps Containerization Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Containerization Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Containerization Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsContainerizationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsContainerizationDeveloperAgent = Object.freeze(new DevOpsContainerizationDeveloperAgent());
+export const devOpsContainerizationDeveloperAgent = Object.freeze(
+  new DevOpsContainerizationDeveloperAgent(),
+);

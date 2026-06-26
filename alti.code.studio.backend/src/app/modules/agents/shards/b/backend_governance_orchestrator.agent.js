@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendGovernanceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_governance_orchestrator_agent',
-            'Backend Governance Orchestrator',
-            'You are an elite Backend Governance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_governance_orchestrator_agent',
+      'Backend Governance Orchestrator',
+      'You are an elite Backend Governance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Governance.',
+    );
+  }
 
-    async generateBackendGovernanceSystem(objective) {
-        logger.info(`💻 [BackendGovernanceOrchestratorAgent] Analyzing Backend Governance Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Governance Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Governance Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendGovernanceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendGovernanceSystem(objective) {
+    logger.info(
+      `💻 [BackendGovernanceOrchestratorAgent] Analyzing Backend Governance Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Governance Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Governance Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendGovernanceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendGovernanceOrchestratorAgent = Object.freeze(new BackendGovernanceOrchestratorAgent());
+export const backendGovernanceOrchestratorAgent = Object.freeze(
+  new BackendGovernanceOrchestratorAgent(),
+);

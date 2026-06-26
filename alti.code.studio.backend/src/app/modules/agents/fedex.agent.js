@@ -17,12 +17,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class FedExAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'FedEx_Shipping_Engineer';
-        this.description = 'Elite FedEx API engineer: OAuth 2.0 auth, rate quotes, shipment creation, tracking, address validation, pickup scheduling, label generation.';
+  constructor() {
+    super();
+    this.name = 'FedEx_Shipping_Engineer';
+    this.description =
+      'Elite FedEx API engineer: OAuth 2.0 auth, rate quotes, shipment creation, tracking, address validation, pickup scheduling, label generation.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite logistics and shipping integration engineer specializing in the FedEx Developer API Platform (v1 REST APIs).
 
 AUTHENTICATION — OAuth 2.0:
@@ -149,16 +150,21 @@ ERROR CODES:
   Always check output.alerts[] for warnings even on 200 responses
 
 OUTPUT: Production Node.js/TypeScript with full error handling, OAuth token caching, and retry on 401.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== LOGISTICS ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== LOGISTICS ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 
-    async generateShipmentFlow(opts = {}, contextData = []) {
-        const { serviceType = 'FEDEX_GROUND', labelFormat = 'PDF', withTracking = true } = opts;
-        return this.consult(`
+  async generateShipmentFlow(opts = {}, contextData = []) {
+    const {
+      serviceType = 'FEDEX_GROUND',
+      labelFormat = 'PDF',
+      withTracking = true,
+    } = opts;
+    return this.consult(
+      `
 Generate a complete FedEx shipment flow in TypeScript:
 Service: ${serviceType}, Label format: ${labelFormat}
 
@@ -170,8 +176,10 @@ Include:
 - ${withTracking ? 'Tracking status polling with human-readable event descriptions' : ''}
 - Full error handling (auth errors, invalid address, weight exceeded)
 - Retry logic for transient 5xx errors
-        `, contextData);
-    }
+        `,
+      contextData,
+    );
+  }
 }
 
 export const fedexAgent = new FedExAgent();

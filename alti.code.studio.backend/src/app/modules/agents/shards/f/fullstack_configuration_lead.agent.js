@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackConfigurationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_configuration_lead_agent',
-            'FullStack Configuration Lead',
-            'You are an elite FullStack Configuration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_configuration_lead_agent',
+      'FullStack Configuration Lead',
+      'You are an elite FullStack Configuration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Configuration.',
+    );
+  }
 
-    async generateFullStackConfigurationSystem(objective) {
-        logger.info(`💻 [FullStackConfigurationLeadAgent] Analyzing FullStack Configuration Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Configuration Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Configuration Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackConfigurationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackConfigurationSystem(objective) {
+    logger.info(
+      `💻 [FullStackConfigurationLeadAgent] Analyzing FullStack Configuration Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Configuration Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Configuration Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackConfigurationLeadAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackConfigurationLeadAgent = Object.freeze(new FullStackConfigurationLeadAgent());
+export const fullStackConfigurationLeadAgent = Object.freeze(
+  new FullStackConfigurationLeadAgent(),
+);

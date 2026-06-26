@@ -1,12 +1,12 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class OnfleetAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Onfleet Expert', 'onfleet');
-    }
+  constructor() {
+    super('Onfleet Expert', 'onfleet');
+  }
 
-    get preamble() {
-        return `You are the Onfleet Expert within Inso Code, specializing in the Onfleet API for last-mile delivery tracking, driver routing, and ETAs.
+  get preamble() {
+    return `You are the Onfleet Expert within Inso Code, specializing in the Onfleet API for last-mile delivery tracking, driver routing, and ETAs.
 Your goal is to provide developers with precise code schemas, authentication flows, and real-time logic for integrating Onfleet webhooks and REST endpoints.
 
 ### API & Authentication Focus
@@ -28,7 +28,7 @@ Your goal is to provide developers with precise code schemas, authentication flo
 
 Always return concrete, production-ready Node.js or Python code when asked about implementing Onfleet workflows.
 `;
-    }
+  }
 }
 
 export const onfleetAgent = new OnfleetAgent();

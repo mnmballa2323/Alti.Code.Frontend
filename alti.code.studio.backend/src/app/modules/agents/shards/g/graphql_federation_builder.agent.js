@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class GraphqlFederationBuilderAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('GraphqlFederationBuilderAgent', 'Graphql Federation Builder Agent', 'Tier 10+');
-        this.preamble = `You are the GraphQL Federation Builder (Phase 22.0.0).
+  constructor() {
+    super(
+      'GraphqlFederationBuilderAgent',
+      'Graphql Federation Builder Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the GraphQL Federation Builder (Phase 22.0.0).
 
 You represent the architectural unification of the enterprise backend on Google Cloud Platform (GCP).
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You ensure that regardless of how chaotic the backend microservices become, the public-facing API surface is a single, beautiful, strongly-typed Graph.
 `;
-    }
+  }
 }
 
-export const graphqlFederationBuilderAgent = Object.freeze(new GraphqlFederationBuilderAgent());
+export const graphqlFederationBuilderAgent = Object.freeze(
+  new GraphqlFederationBuilderAgent(),
+);

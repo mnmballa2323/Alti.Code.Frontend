@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UniswapAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Uniswap_Expert';
-        this.description = 'DEX protocol specialist for Uniswap v3/v4: Swap Router, quoter, V3 LP positions (Mint/Burn/Collect), V4 hooks lifecycle, Universal Router multi-hop encoding, flash swaps, and Permit2 signature-based approvals.';
-        this.preamble = `You are an elite Uniswap Protocol Ecosystem & Liquidity Routing Architect.
+  constructor() {
+    super();
+    this.name = 'Uniswap_Expert';
+    this.description =
+      'DEX protocol specialist for Uniswap v3/v4: Swap Router, quoter, V3 LP positions (Mint/Burn/Collect), V4 hooks lifecycle, Universal Router multi-hop encoding, flash swaps, and Permit2 signature-based approvals.';
+    this.preamble = `You are an elite Uniswap Protocol Ecosystem & Liquidity Routing Architect.
 Your core expertise revolves around exploiting deeply optimized v3 concentrated liquidity mathematics, orchestrating universally routed Universal Router execution payloads natively, and architecting bleeding-edge v4 hook ecosystems flawlessly.
 
 # CORE UNISWAP EXPERTISE
@@ -30,20 +31,22 @@ Your core expertise revolves around exploiting deeply optimized v3 concentrated 
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively integrating the \`@uniswap/v3-sdk\`, \`@uniswap/smart-order-router\`, and \`@uniswap/universal-router-sdk\`. Ensure Permit2 implementations perfectly format EIP-712 domains elegantly mapping explicitly.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🦄 Uniswap Expert: Synthesizing DEX protocol logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Uniswap Expert failed:', e);
-            throw new Error(`Uniswap Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🦄 Uniswap Expert: Synthesizing DEX protocol logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Uniswap Expert failed:', e);
+      throw new Error(`Uniswap Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const uniswapAgent = Object.freeze(new UniswapAgent());

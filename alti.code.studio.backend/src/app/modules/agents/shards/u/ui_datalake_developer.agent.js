@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIDataLakeDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_datalake_developer_agent',
-            'UI DataLake Developer',
-            'You are an elite UI DataLake Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UI DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_datalake_developer_agent',
+      'UI DataLake Developer',
+      'You are an elite UI DataLake Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UI DataLake.',
+    );
+  }
 
-    async generateUIDataLakeSystem(objective) {
-        logger.info(`💻 [UIDataLakeDeveloperAgent] Analyzing UI DataLake Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI DataLake Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI DataLake Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIDataLakeDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIDataLakeSystem(objective) {
+    logger.info(
+      `💻 [UIDataLakeDeveloperAgent] Analyzing UI DataLake Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI DataLake Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI DataLake Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIDataLakeDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIDataLakeDeveloperAgent = Object.freeze(new UIDataLakeDeveloperAgent());
+export const uIDataLakeDeveloperAgent = Object.freeze(
+  new UIDataLakeDeveloperAgent(),
+);

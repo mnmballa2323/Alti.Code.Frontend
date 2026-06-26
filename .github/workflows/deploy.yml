@@ -1,4 +1,4 @@
-name: Build and Deploy (GitOps)
+name: Build, Verify, and Deploy (GitOps)
 
 on:
   push:
@@ -21,10 +21,44 @@ env:
   SERVICE_ACCOUNT: 'github-actions-deployer@alti-code-studio-production.iam.gserviceaccount.com'
 
 jobs:
+  # ----------------------------------------------------------------------------
+  # Job 1: Static Code and Dependency Security Analysis
+  # ----------------------------------------------------------------------------
+  security-audit:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Install Backend Dependencies
+      run: |
+        cd alti.code.studio.backend
+        npm ci --legacy-peer-deps
+
+    - name: Run ESLint (Static Security Check)
+      run: |
+        cd alti.code.studio.backend
+        # Runs the newly configured eslint-plugin-security rules
+        npm run lint
+
+    - name: Audit Backend Dependencies
+      run: |
+        cd alti.code.studio.backend
+        # Fail the build if high or critical dependencies vulnerabilities are found
+        npm audit --audit-level=high
+
+  # ----------------------------------------------------------------------------
+  # Job 2: Build and Scan Container Images
+  # ----------------------------------------------------------------------------
   build-and-push:
+    needs: security-audit
     runs-on: ubuntu-latest
 
-    # Required for GCP Workload Identity Federation
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -49,24 +83,51 @@ jobs:
         password: '${{ steps.auth.outputs.access_token }}'
         registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
 
-    - name: Build and Push Backend
+    - name: Build Local Images
       run: |
         TAG="${GITHUB_SHA::7}"
-        IMAGE_URI="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${BACKEND_IMAGE}:${TAG}"
-        
-        docker build -t $IMAGE_URI ./alti.code.studio.backend
-        docker push $IMAGE_URI
+        docker build -t backend-local ./alti.code.studio.backend
+        docker build -t frontend-local ./alti.code.studio.frontend
 
-    - name: Build and Push Frontend
+    # Scan the backend image for OS & application package vulnerabilities
+    - name: Scan Backend Image with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'backend-local'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
+
+    # Scan the frontend image for OS & application package vulnerabilities
+    - name: Scan Frontend Image with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'frontend-local'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL,HIGH'
+
+    - name: Tag and Push Images to Google Artifact Registry (GAR)
       run: |
         TAG="${GITHUB_SHA::7}"
-        IMAGE_URI="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${FRONTEND_IMAGE}:${TAG}"
+        BACKEND_URI="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${BACKEND_IMAGE}:${TAG}"
+        FRONTEND_URI="${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${FRONTEND_IMAGE}:${TAG}"
         
-        docker build -t $IMAGE_URI ./alti.code.studio.frontend
-        docker push $IMAGE_URI
+        # Tag images
+        docker tag backend-local $BACKEND_URI
+        docker tag frontend-local $FRONTEND_URI
+        
+        # Push images
+        docker push $BACKEND_URI
+        docker push $FRONTEND_URI
 
-  # In a pure GitOps model (ArgoCD), this step commits the new IMAGE tags 
-  # back into a deployment repository, which ArgoCD automatically synchronizes.
+  # ----------------------------------------------------------------------------
+  # Job 3: GitOps Manifest Synchronization (ArgoCD)
+  # ----------------------------------------------------------------------------
   sync-manifests:
     needs: build-and-push
     runs-on: ubuntu-latest
@@ -79,9 +140,6 @@ jobs:
     - name: Update Kustomize image tags
       run: |
         cd k8s
-        # Simulating a kustomize image set command which ArgoCD reads
         echo "Image tag updated to ${GITHUB_SHA::7}"
         # kustomize edit set image backend=${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${BACKEND_IMAGE}:${GITHUB_SHA::7}
         # kustomize edit set image frontend=${GAR_LOCATION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/${FRONTEND_IMAGE}:${GITHUB_SHA::7}
-        
-    # ArgoCD running inside GKE watches the repo and will automatically sync this commit

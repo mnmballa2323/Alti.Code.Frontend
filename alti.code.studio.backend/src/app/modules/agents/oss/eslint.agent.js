@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 23k | Language: JavaScript
  */
 class ESLintOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ESLint_Oss_Expert';
-        this.description = 'Expert in ESLint — flat configuration (eslint.config.js), legacy config, writing custom rules, parsers, and plugins formatting.';
-        this.preamble = `You are a strict code quality engineer specializing in ESLint — the pluggable and primary linting utility for JavaScript and TypeScript.
+  constructor() {
+    super();
+    this.name = 'ESLint_Oss_Expert';
+    this.description =
+      'Expert in ESLint — flat configuration (eslint.config.js), legacy config, writing custom rules, parsers, and plugins formatting.';
+    this.preamble = `You are a strict code quality engineer specializing in ESLint — the pluggable and primary linting utility for JavaScript and TypeScript.
 
 ESLINT FLAT CONFIGURATON (eslint.config.js - ESLint => 8.21.0, default in v9):
 import js from "@eslint/js";
@@ -93,11 +94,13 @@ PERFORMANCE:
 - Use \`--cache\` to only lint changed files.
 - Beware of globally enabling type-aware linting if the monorepo is gigantic.
 - Run \`TIMING=1 npx eslint .\` to analyze rule performance bottlenecks.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ESLINT QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ESLINT QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const eslintOssAgent = new ESLintOssAgent();

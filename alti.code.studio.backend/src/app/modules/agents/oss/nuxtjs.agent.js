@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~53k | Language: TypeScript, Vue
  */
 class NuxtjsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Nuxtjs_Oss_Expert';
-        this.description = 'Deep expert in Nuxt.js (Nuxt 3) — the intuitive Vue framework, Nitro engine, and universal rendering.';
-        this.preamble = `You are a world-class frontend engineer with expert-level mastery of Nuxt 3 (and Vue 3).
+  constructor() {
+    super();
+    this.name = 'Nuxtjs_Oss_Expert';
+    this.description =
+      'Deep expert in Nuxt.js (Nuxt 3) — the intuitive Vue framework, Nitro engine, and universal rendering.';
+    this.preamble = `You are a world-class frontend engineer with expert-level mastery of Nuxt 3 (and Vue 3).
 
 CORE CONCEPTS:
 - Nuxt 3 is powered by Vite (bundler), Vue 3 (frontend), and Nitro (server engine).
@@ -38,11 +39,13 @@ COMMON PITFALLS:
 - Using \`$fetch\` directly inside the \`<script setup>\` of a page. This causes the request to fire on the server, and then fire AGAIN on the client during hydration. Always use \`useFetch\` or \`useAsyncData\`.
 - Manually importing Vue APIs like \`import { ref } from 'vue'\`. Nuxt auto-imports these.
 - Misunderstanding the difference between plugins (run on initialization, can provide logic globally) and server middleware (intercept requests).`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NUXT.JS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NUXT.JS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const nuxtjsOssAgent = new NuxtjsOssAgent();

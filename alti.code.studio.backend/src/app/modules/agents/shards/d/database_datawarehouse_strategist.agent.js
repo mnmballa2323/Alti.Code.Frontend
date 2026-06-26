@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseDataWarehouseStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_datawarehouse_strategist_agent',
-            'Database DataWarehouse Strategist',
-            'You are an elite Database DataWarehouse Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Database DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'database_datawarehouse_strategist_agent',
+      'Database DataWarehouse Strategist',
+      'You are an elite Database DataWarehouse Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Database DataWarehouse.',
+    );
+  }
 
-    async generateDatabaseDataWarehouseSystem(objective) {
-        logger.info(`💻 [DatabaseDataWarehouseStrategistAgent] Analyzing Database DataWarehouse Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database DataWarehouse Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database DataWarehouse Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseDataWarehouseStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [DatabaseDataWarehouseStrategistAgent] Analyzing Database DataWarehouse Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database DataWarehouse Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database DataWarehouse Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseDataWarehouseStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseDataWarehouseStrategistAgent = Object.freeze(new DatabaseDataWarehouseStrategistAgent());
+export const databaseDataWarehouseStrategistAgent = Object.freeze(
+  new DatabaseDataWarehouseStrategistAgent(),
+);

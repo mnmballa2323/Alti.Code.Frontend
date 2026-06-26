@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityAutomationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_automation_director_agent',
-            'Security Automation Director',
-            'You are an elite Security Automation Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'security_automation_director_agent',
+      'Security Automation Director',
+      'You are an elite Security Automation Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Automation.',
+    );
+  }
 
-    async generateSecurityAutomationSystem(objective) {
-        logger.info(`💻 [SecurityAutomationDirectorAgent] Analyzing Security Automation Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Automation Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Automation Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityAutomationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityAutomationSystem(objective) {
+    logger.info(
+      `💻 [SecurityAutomationDirectorAgent] Analyzing Security Automation Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Automation Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Automation Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityAutomationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityAutomationDirectorAgent = Object.freeze(new SecurityAutomationDirectorAgent());
+export const securityAutomationDirectorAgent = Object.freeze(
+  new SecurityAutomationDirectorAgent(),
+);

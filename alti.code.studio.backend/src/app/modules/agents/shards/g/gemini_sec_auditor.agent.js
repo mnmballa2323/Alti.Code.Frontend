@@ -13,22 +13,24 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GeminiSecAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'gemini_sec_auditor',
-            'Security and Vulnerability Scanner (Gemini CLI Native)',
-            'You are a Gemini CLI-native security auditing agent. You analyze source code specifically for OWASP Top 10 vulnerabilities, hardcoded secrets, and injection flaws.'
-        );
-    }
+  constructor() {
+    super(
+      'gemini_sec_auditor',
+      'Security and Vulnerability Scanner (Gemini CLI Native)',
+      'You are a Gemini CLI-native security auditing agent. You analyze source code specifically for OWASP Top 10 vulnerabilities, hardcoded secrets, and injection flaws.',
+    );
+  }
 
-    /**
-     * Scans a file for security vulnerabilities using Gemini CLI capabilities.
-     * @param {string} sourceCode
-     */
-    async auditSecurity(sourceCode) {
-        logger.info(`🛡️ [GeminiSecAuditor] Initiating static security analysis via CLI...`);
+  /**
+   * Scans a file for security vulnerabilities using Gemini CLI capabilities.
+   * @param {string} sourceCode
+   */
+  async auditSecurity(sourceCode) {
+    logger.info(
+      `🛡️ [GeminiSecAuditor] Initiating static security analysis via CLI...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Perform a severe static analysis audit on the provided context block.
 Identify any:
 - Hardcoded API keys or secrets
@@ -43,25 +45,30 @@ Return a strict JSON report in this format:
 }
         `;
 
-        try {
-            // Using a specialized prompt, but we could also invoke a theoretical `gemini-sec-scan` extension
-            const rawOutput = await this._invoke(prompt, sourceCode);
-            const cleanOutput = rawOutput.replace(/```json|```/g, '').trim();
-            const report = JSON.parse(cleanOutput);
+    try {
+      // Using a specialized prompt, but we could also invoke a theoretical `gemini-sec-scan` extension
+      const rawOutput = await this._invoke(prompt, sourceCode);
+      const cleanOutput = rawOutput.replace(/```json|```/g, '').trim();
+      const report = JSON.parse(cleanOutput);
 
-            if (!report.isSecure) {
-                logger.warn(`🛡️ [GeminiSecAuditor] Detected ${report.vulnerabilities.length} vulnerabilities!`);
-            } else {
-                logger.info(`🛡️ [GeminiSecAuditor] Code verified secure.`);
-            }
+      if (!report.isSecure) {
+        logger.warn(
+          `🛡️ [GeminiSecAuditor] Detected ${report.vulnerabilities.length} vulnerabilities!`,
+        );
+      } else {
+        logger.info(`🛡️ [GeminiSecAuditor] Code verified secure.`);
+      }
 
-            return report;
-        } catch (err) {
-            logger.error(`❌ [GeminiSecAuditor] Audit failed: ${err.message}`);
-            // Fail open or fail closed depending on strictness
-            return { isSecure: false, vulnerabilities: [{ type: "AUDIT_FAILURE", description: err.message }] };
-        }
+      return report;
+    } catch (err) {
+      logger.error(`❌ [GeminiSecAuditor] Audit failed: ${err.message}`);
+      // Fail open or fail closed depending on strictness
+      return {
+        isSecure: false,
+        vulnerabilities: [{ type: 'AUDIT_FAILURE', description: err.message }],
+      };
     }
+  }
 }
 
 export const geminiSecAuditorAgent = Object.freeze(new GeminiSecAuditorAgent());

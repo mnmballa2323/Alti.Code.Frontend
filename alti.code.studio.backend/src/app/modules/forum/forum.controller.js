@@ -1,14 +1,13 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
 
-const pick = require("../../middlewares/other/pick");
-const { paginationFields } = require("./forum.constant");
+const pick = require('../../middlewares/other/pick');
+const { paginationFields } = require('./forum.constant');
 const {
-
   deleteCommentServices,
   getCommnetService,
   getForumService,
@@ -18,8 +17,8 @@ const {
   deleteForumService,
   getForumSuggestionService,
   addUserForumActivityServices,
-} = require("./forum.service");
-const { addForumServices } = require("./forum.service");
+} = require('./forum.service');
+const { addForumServices } = require('./forum.service');
 
 module.exports.addForum = async (req, res, next) => {
   // logger.info(req.body, "blog dataaaa");
@@ -28,13 +27,13 @@ module.exports.addForum = async (req, res, next) => {
     const result = await addForumServices(data);
 
     res.status(200).json({
-      status: "success",
-      message: "Add Forum Successfully",
+      status: 'success',
+      message: 'Add Forum Successfully',
       data: result,
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: "Forum doesn't add successfully",
       error: error.message,
     });
@@ -43,8 +42,7 @@ module.exports.addForum = async (req, res, next) => {
 
 module.exports.getForum = async (req, res) => {
   try {
-
-    const filters = pick(req.query, ["searchTerm", "title",  "category"]);
+    const filters = pick(req.query, ['searchTerm', 'title', 'category']);
 
     const paginationOptions = pick(req.query, paginationFields);
 
@@ -52,13 +50,13 @@ module.exports.getForum = async (req, res) => {
     // const result = await getBlogService(req.body)
 
     res.status(200).json({
-      status: "success",
-      message: "Get Forums Successfully",
+      status: 'success',
+      message: 'Get Forums Successfully',
       data: result,
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: "Couldn't get fourms successfully",
       error: error.message,
     });
@@ -71,13 +69,13 @@ module.exports.getForumById = async (req, res) => {
   try {
     const result = await getForumServiceById(id);
     res.status(200).json({
-      status: "Success",
-      message: "Get forum by id successfully",
+      status: 'Success',
+      message: 'Get forum by id successfully',
       data: result,
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: "Couldn't not get forum by id",
       error: error.message,
     });
@@ -90,13 +88,13 @@ module.exports.getForumByEmail = async (req, res) => {
   try {
     const result = await getForumServiceByEmail(email);
     res.status(200).json({
-      status: "Success",
-      message: "Get forum by email successfully",
+      status: 'Success',
+      message: 'Get forum by email successfully',
       data: result,
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: "Couldn't not get forum by email",
       error: error.message,
     });
@@ -108,13 +106,13 @@ exports.updateForum = async (req, res) => {
     const { id } = req.params;
     const result = await updateForumService(id, req.body);
     res.status(200).json({
-      status: "Success",
-      message: "Forum Update Successfully",
+      status: 'Success',
+      message: 'Forum Update Successfully',
       data: result,
     });
   } catch (error) {
     res.status(400).json({
-      status: "Fail",
+      status: 'Fail',
       message: "Forum couldn't Update Successfully",
       error: error.message,
     });
@@ -129,18 +127,18 @@ exports.deleteForum = async (req, res) => {
 
     if (!result.deletedCount) {
       return res.status(400).json({
-        status: "fail",
+        status: 'fail',
         error: "Could't delete the forum",
       });
     }
     res.status(200).json({
-      status: "Success",
-      message: "Forum Delete Successfully",
+      status: 'Success',
+      message: 'Forum Delete Successfully',
       data: result,
     });
   } catch (error) {
     res.status(400).json({
-      status: "Fail",
+      status: 'Fail',
       message: "Forum couldn't Delete Successfully",
       error: error.message,
     });
@@ -156,13 +154,13 @@ module.exports.getForumSuggestion = async (req, res) => {
     const result = await getForumSuggestionService(suggestion);
 
     res.status(200).json({
-      status: "success",
-      message: "Get Forums suggestion Successfully",
+      status: 'success',
+      message: 'Get Forums suggestion Successfully',
       data: result,
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: "Couldn't get fourms suggestion",
       error: error.message,
     });
@@ -178,13 +176,13 @@ module.exports.addUserForumActivity = async (req, res, next) => {
     const result = await addUserForumActivityServices(data);
 
     res.status(200).json({
-      status: "success",
-      message: "Successfully Added",
+      status: 'success',
+      message: 'Successfully Added',
       data: result,
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: "Doesn't add comment",
       error: error.message,
     });
@@ -200,13 +198,13 @@ module.exports.getComment = async (req, res) => {
     // logger.info(result, 'comments dataaa')
 
     res.status(200).json({
-      status: "success",
-      message: "Get Comment Successfully",
+      status: 'success',
+      message: 'Get Comment Successfully',
       data: result,
     });
   } catch (error) {
     res.status(400).json({
-      status: "fail",
+      status: 'fail',
       message: "Couldn't get Comment successfully",
       error: error.message,
     });
@@ -219,18 +217,18 @@ exports.deleteComment = async (req, res) => {
 
     if (!result.deletedCount) {
       return res.status(400).json({
-        status: "fail",
+        status: 'fail',
         error: "Could't delete the Comment",
       });
     }
     res.status(200).json({
-      status: "Success",
-      message: "Comment Delete Successfully",
+      status: 'Success',
+      message: 'Comment Delete Successfully',
       data: result,
     });
   } catch (error) {
     res.status(400).json({
-      status: "Fail",
+      status: 'Fail',
       message: "Blog couldn't Delete Successfully",
       error: error.message,
     });

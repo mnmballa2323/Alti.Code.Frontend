@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIContainerizationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_containerization_lead_agent',
-            'AI Containerization Lead',
-            'You are an elite AI Containerization Lead. You specialize in bleeding-edge software development, cloud infrastructure, and AI Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_containerization_lead_agent',
+      'AI Containerization Lead',
+      'You are an elite AI Containerization Lead. You specialize in bleeding-edge software development, cloud infrastructure, and AI Containerization.',
+    );
+  }
 
-    async generateAIContainerizationSystem(objective) {
-        logger.info(`💻 [AIContainerizationLeadAgent] Analyzing AI Containerization Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Containerization Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Containerization Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIContainerizationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIContainerizationSystem(objective) {
+    logger.info(
+      `💻 [AIContainerizationLeadAgent] Analyzing AI Containerization Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Containerization Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Containerization Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIContainerizationLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIContainerizationLeadAgent = Object.freeze(new AIContainerizationLeadAgent());
+export const aIContainerizationLeadAgent = Object.freeze(
+  new AIContainerizationLeadAgent(),
+);

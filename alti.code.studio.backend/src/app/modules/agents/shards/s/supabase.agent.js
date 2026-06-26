@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SupabaseAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Supabase_Architect';
-        this.description = 'Elite Supabase engineer: Postgres, RLS, Auth, Realtime, Storage, Edge Functions, pg_vector.';
+  constructor() {
+    super();
+    this.name = 'Supabase_Architect';
+    this.description =
+      'Elite Supabase engineer: Postgres, RLS, Auth, Realtime, Storage, Edge Functions, pg_vector.';
 
-        this.preamble = `You are an elite Supabase Platform & Postgres Architect.
+    this.preamble = `You are an elite Supabase Platform & Postgres Architect.
 Your core expertise revolves around orchestrating deep \`supabase-js\` topologies natively designing strict Row Level Security (RLS) matrices expertly integrating Auth/Storage/Realtime/Edge Functions seamlessly naturally cleanly explicitly dependably securely intelligently structurally inherently flawlessly fluently smoothly creatively dependably cleanly properly smoothly correctly automatically effectively efficiently seamlessly natively rationally implicitly smartly cleanly.
 
 # CORE SUPABASE EXPERTISE
@@ -30,16 +31,17 @@ Your core expertise revolves around orchestrating deep \`supabase-js\` topologie
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively mapping \`Supabase\` paradigms explicitly securely dependably accurately effortlessly beautifully cleanly correctly dependably efficiently logically intelligently properly elegantly safely effortlessly elegantly expertly natively smartly automatically effectively efficiently seamlessly explicitly responsibly safely responsibly creatively smoothly predictably expertly thoughtfully neatly seamlessly organically smartly optimally explicitly implicitly intelligently.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble} \n\n === CONTEXT ===\n${contextBlock} \n\n === ENGINEER REQUEST ===\n${prompt} `;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble} \n\n === CONTEXT ===\n${contextBlock} \n\n === ENGINEER REQUEST ===\n${prompt} `;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 
-    async generateRLSPolicies(opts = {}, contextData = []) {
-        const { table = '', ownership = 'user_id', roles = [] } = opts;
-        return this.consult(`
+  async generateRLSPolicies(opts = {}, contextData = []) {
+    const { table = '', ownership = 'user_id', roles = [] } = opts;
+    return this.consult(
+      `
 Generate complete Row Level Security policies for the "${table}" table.
 Ownership column: ${ownership}
         Roles: ${roles.length ? roles.join(', ') : 'user (standard auth.uid())'}
@@ -52,12 +54,19 @@ Ownership column: ${ownership}
             - DELETE policy
                 - ${roles.includes('admin') ? 'Admin bypass policy using JWT role claim' : ''}
         - Test queries using SET LOCAL ROLE to verify policies
-        `, contextData);
-    }
+        `,
+      contextData,
+    );
+  }
 
-    async generateRealtimeSubscription(opts = {}, contextData = []) {
-        const { table = 'messages', events = ['INSERT', 'UPDATE', 'DELETE'], filter = '' } = opts;
-        return this.consult(`
+  async generateRealtimeSubscription(opts = {}, contextData = []) {
+    const {
+      table = 'messages',
+      events = ['INSERT', 'UPDATE', 'DELETE'],
+      filter = '',
+    } = opts;
+    return this.consult(
+      `
 Generate a Supabase Realtime subscription for the "${table}" table.
             Events: ${events.join(', ')}
 ${filter ? 'Filter: ' + filter : 'No filter — subscribe to all changes'}
@@ -68,8 +77,10 @@ ${filter ? 'Filter: ' + filter : 'No filter — subscribe to all changes'}
                 - TypeScript types for the payload
                     - Error handling for subscription failures
                         - React hook wrapper
-                            `, contextData);
-    }
+                            `,
+      contextData,
+    );
+  }
 }
 
 export const supabaseAgent = Object.freeze(new SupabaseAgent());

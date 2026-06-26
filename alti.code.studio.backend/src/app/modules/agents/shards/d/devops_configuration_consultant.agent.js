@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsConfigurationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_configuration_consultant_agent',
-            'DevOps Configuration Consultant',
-            'You are an elite DevOps Configuration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_configuration_consultant_agent',
+      'DevOps Configuration Consultant',
+      'You are an elite DevOps Configuration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Configuration.',
+    );
+  }
 
-    async generateDevOpsConfigurationSystem(objective) {
-        logger.info(`💻 [DevOpsConfigurationConsultantAgent] Analyzing DevOps Configuration Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Configuration Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Configuration Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsConfigurationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsConfigurationSystem(objective) {
+    logger.info(
+      `💻 [DevOpsConfigurationConsultantAgent] Analyzing DevOps Configuration Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Configuration Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Configuration Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsConfigurationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsConfigurationConsultantAgent = Object.freeze(new DevOpsConfigurationConsultantAgent());
+export const devOpsConfigurationConsultantAgent = Object.freeze(
+  new DevOpsConfigurationConsultantAgent(),
+);

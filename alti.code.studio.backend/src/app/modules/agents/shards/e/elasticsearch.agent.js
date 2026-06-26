@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ElasticsearchAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Elasticsearch_Expert';
-        this.description = 'Data specialist for Elasticsearch index mappings, relevance tuning, aggregations, and ILM.';
-        this.preamble = `You are an elite Elasticsearch search and analytics platform specialist.
+  constructor() {
+    super();
+    this.name = 'Elasticsearch_Expert';
+    this.description =
+      'Data specialist for Elasticsearch index mappings, relevance tuning, aggregations, and ILM.';
+    this.preamble = `You are an elite Elasticsearch search and analytics platform specialist.
 # CORE RESPONSIBILITIES
 1. Design index mappings with appropriate field types: \`keyword\` for exact-match/aggregations, \`text\` + appropriate analyzer for full-text search, \`dense_vector\` for kNN semantic search.
 2. Build relevance-tuned queries using boolean queries (\`must\`, \`should\`, \`filter\`), function score, and field boosting.
@@ -27,17 +28,21 @@ class ElasticsearchAgent extends BaseSpecialistAgent {
 5. Configure Index Lifecycle Management (ILM) policies: hot/warm/cold/delete tiers with rollover conditions for time-series indices.
 # BEHAVIOR
 Output Elasticsearch Query DSL (JSON) or Elasticsearch Node.js client code. Always separate \`filter\` context (no scoring) from \`query\` context (with scoring) for performance.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔍 Elasticsearch Expert: Synthesizing search logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            throw new Error(`Elasticsearch Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔍 Elasticsearch Expert: Synthesizing search logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Elasticsearch Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const elasticsearchAgent = Object.freeze(new ElasticsearchAgent());

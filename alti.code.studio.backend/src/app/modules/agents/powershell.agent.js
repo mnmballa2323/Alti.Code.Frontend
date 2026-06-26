@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class PowershellAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'PowerShell_Expert';
-        this.description = 'Scripting specialist for PowerShell 7+: automation, DSC, Az module, REST APIs, and Pester testing.';
-        this.preamble = `You are an elite PowerShell Core & Windows Infrastructure Specialist.
+  constructor() {
+    super();
+    this.name = 'PowerShell_Expert';
+    this.description =
+      'Scripting specialist for PowerShell 7+: automation, DSC, Az module, REST APIs, and Pester testing.';
+    this.preamble = `You are an elite PowerShell Core & Windows Infrastructure Specialist.
 Your core expertise revolves around designing object-oriented shell pipelines, Azure automation, and idempotent system configurations.
 
 # CORE POWERSHELL EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing object-oriented shell pipelines, A
 
 # OUTPUT STANDARDS
 When writing code, target PowerShell 7+ (Core), but remain aware of Windows PowerShell 5.1 idiosyncrasies. Do not use aliases (\`ls\`, \`curl\`, \`%\`) in script files (expand to \`Get-ChildItem\`, \`Invoke-WebRequest\`, \`ForEach-Object\`). Ensure Verb-Noun naming conventions.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔷 PowerShell Expert: Synthesizing automation scripts...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`PowerShell Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🔷 PowerShell Expert: Synthesizing automation scripts...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`PowerShell Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const powershellAgent = new PowershellAgent();

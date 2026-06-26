@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsAnalyticsManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_analytics_manager_agent',
-            'Systems Analytics Manager',
-            'You are an elite Systems Analytics Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_analytics_manager_agent',
+      'Systems Analytics Manager',
+      'You are an elite Systems Analytics Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Analytics.',
+    );
+  }
 
-    async generateSystemsAnalyticsSystem(objective) {
-        logger.info(`💻 [SystemsAnalyticsManagerAgent] Analyzing Systems Analytics Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Analytics Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Analytics Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsAnalyticsManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [SystemsAnalyticsManagerAgent] Analyzing Systems Analytics Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Analytics Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Analytics Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsAnalyticsManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsAnalyticsManagerAgent = Object.freeze(new SystemsAnalyticsManagerAgent());
+export const systemsAnalyticsManagerAgent = Object.freeze(
+  new SystemsAnalyticsManagerAgent(),
+);

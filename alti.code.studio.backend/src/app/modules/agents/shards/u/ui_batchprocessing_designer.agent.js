@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIBatchProcessingDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_batchprocessing_designer_agent',
-            'UI BatchProcessing Designer',
-            'You are an elite UI BatchProcessing Designer. You specialize in bleeding-edge software development, cloud infrastructure, and UI BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_batchprocessing_designer_agent',
+      'UI BatchProcessing Designer',
+      'You are an elite UI BatchProcessing Designer. You specialize in bleeding-edge software development, cloud infrastructure, and UI BatchProcessing.',
+    );
+  }
 
-    async generateUIBatchProcessingSystem(objective) {
-        logger.info(`💻 [UIBatchProcessingDesignerAgent] Analyzing UI BatchProcessing Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI BatchProcessing Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI BatchProcessing Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIBatchProcessingDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [UIBatchProcessingDesignerAgent] Analyzing UI BatchProcessing Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI BatchProcessing Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI BatchProcessing Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UIBatchProcessingDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uIBatchProcessingDesignerAgent = Object.freeze(new UIBatchProcessingDesignerAgent());
+export const uIBatchProcessingDesignerAgent = Object.freeze(
+  new UIBatchProcessingDesignerAgent(),
+);

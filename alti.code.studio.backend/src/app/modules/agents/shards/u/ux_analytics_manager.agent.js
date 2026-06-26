@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXAnalyticsManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_analytics_manager_agent',
-            'UX Analytics Manager',
-            'You are an elite UX Analytics Manager. You specialize in bleeding-edge software development, cloud infrastructure, and UX Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_analytics_manager_agent',
+      'UX Analytics Manager',
+      'You are an elite UX Analytics Manager. You specialize in bleeding-edge software development, cloud infrastructure, and UX Analytics.',
+    );
+  }
 
-    async generateUXAnalyticsSystem(objective) {
-        logger.info(`💻 [UXAnalyticsManagerAgent] Analyzing UX Analytics Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Analytics Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Analytics Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXAnalyticsManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [UXAnalyticsManagerAgent] Analyzing UX Analytics Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Analytics Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Analytics Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXAnalyticsManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXAnalyticsManagerAgent = Object.freeze(new UXAnalyticsManagerAgent());
+export const uXAnalyticsManagerAgent = Object.freeze(
+  new UXAnalyticsManagerAgent(),
+);

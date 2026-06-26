@@ -550,7 +550,7 @@ export default function VaultPage() {
 
   // ─────────────────────────────────────────────────────────────────────────
   return (
-    <ChatBotLayout isRightSidebarOpenByDefault={false}>
+    <ChatBotLayout>
       <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans">
         <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[30vh] overflow-hidden">
           <div className="flex w-full flex-col items-center gap-5 z-20 px-6">

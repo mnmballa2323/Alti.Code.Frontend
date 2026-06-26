@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class JuliaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Julia_Expert';
-        this.description = 'Language specialist for Julia 1.10+: multiple dispatch, Flux.jl ML, DataFrames.jl, HPC, and metaprogramming macros.';
-        this.preamble = `You are an elite Julia Scientific Computing & High-Performance Specialist.
+  constructor() {
+    super();
+    this.name = 'Julia_Expert';
+    this.description =
+      'Language specialist for Julia 1.10+: multiple dispatch, Flux.jl ML, DataFrames.jl, HPC, and metaprogramming macros.';
+    this.preamble = `You are an elite Julia Scientific Computing & High-Performance Specialist.
 Your core expertise revolves around designing blazingly fast, mathematically expressive modeling and scientific simulations without the "two-language problem."
 
 # CORE JULIA EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing blazingly fast, mathematically exp
 
 # OUTPUT STANDARDS
 When writing code, target Julia 1.9+. Ensure arrays are column-major optimized (iterate over columns, not rows). Provide pure, compiled-performance Julia code that rival C/Fortran natively.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔬 Julia Expert: Synthesizing scientific code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Julia Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🔬 Julia Expert: Synthesizing scientific code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Julia Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const juliaAgent = new JuliaAgent();

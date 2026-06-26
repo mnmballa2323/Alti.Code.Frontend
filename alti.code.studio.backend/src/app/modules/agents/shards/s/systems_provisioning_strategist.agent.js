@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsProvisioningStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_provisioning_strategist_agent',
-            'Systems Provisioning Strategist',
-            'You are an elite Systems Provisioning Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_provisioning_strategist_agent',
+      'Systems Provisioning Strategist',
+      'You are an elite Systems Provisioning Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Provisioning.',
+    );
+  }
 
-    async generateSystemsProvisioningSystem(objective) {
-        logger.info(`💻 [SystemsProvisioningStrategistAgent] Analyzing Systems Provisioning Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Provisioning Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Provisioning Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsProvisioningStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsProvisioningSystem(objective) {
+    logger.info(
+      `💻 [SystemsProvisioningStrategistAgent] Analyzing Systems Provisioning Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Provisioning Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Provisioning Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsProvisioningStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsProvisioningStrategistAgent = Object.freeze(new SystemsProvisioningStrategistAgent());
+export const systemsProvisioningStrategistAgent = Object.freeze(
+  new SystemsProvisioningStrategistAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UILoadBalancingLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_loadbalancing_lead_agent',
-            'UI LoadBalancing Lead',
-            'You are an elite UI LoadBalancing Lead. You specialize in bleeding-edge software development, cloud infrastructure, and UI LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_loadbalancing_lead_agent',
+      'UI LoadBalancing Lead',
+      'You are an elite UI LoadBalancing Lead. You specialize in bleeding-edge software development, cloud infrastructure, and UI LoadBalancing.',
+    );
+  }
 
-    async generateUILoadBalancingSystem(objective) {
-        logger.info(`💻 [UILoadBalancingLeadAgent] Analyzing UI LoadBalancing Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI LoadBalancing Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI LoadBalancing Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UILoadBalancingLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUILoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [UILoadBalancingLeadAgent] Analyzing UI LoadBalancing Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI LoadBalancing Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI LoadBalancing Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UILoadBalancingLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uILoadBalancingLeadAgent = Object.freeze(new UILoadBalancingLeadAgent());
+export const uILoadBalancingLeadAgent = Object.freeze(
+  new UILoadBalancingLeadAgent(),
+);

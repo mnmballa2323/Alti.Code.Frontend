@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureSecurityDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_security_designer_agent',
-            'Infrastructure Security Designer',
-            'You are an elite Infrastructure Security Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Security.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_security_designer_agent',
+      'Infrastructure Security Designer',
+      'You are an elite Infrastructure Security Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Security.',
+    );
+  }
 
-    async generateInfrastructureSecuritySystem(objective) {
-        logger.info(`💻 [InfrastructureSecurityDesignerAgent] Analyzing Infrastructure Security Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Security Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Security Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureSecurityDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureSecuritySystem(objective) {
+    logger.info(
+      `💻 [InfrastructureSecurityDesignerAgent] Analyzing Infrastructure Security Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Security Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Security Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureSecurityDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureSecurityDesignerAgent = Object.freeze(new InfrastructureSecurityDesignerAgent());
+export const infrastructureSecurityDesignerAgent = Object.freeze(
+  new InfrastructureSecurityDesignerAgent(),
+);

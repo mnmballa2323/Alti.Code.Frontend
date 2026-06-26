@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseScalingDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_scaling_designer_agent',
-            'Release Scaling Designer',
-            'You are an elite Release Scaling Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'release_scaling_designer_agent',
+      'Release Scaling Designer',
+      'You are an elite Release Scaling Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Scaling.',
+    );
+  }
 
-    async generateReleaseScalingSystem(objective) {
-        logger.info(`💻 [ReleaseScalingDesignerAgent] Analyzing Release Scaling Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Scaling Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Scaling Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseScalingDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseScalingSystem(objective) {
+    logger.info(
+      `💻 [ReleaseScalingDesignerAgent] Analyzing Release Scaling Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Scaling Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Scaling Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseScalingDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseScalingDesignerAgent = Object.freeze(new ReleaseScalingDesignerAgent());
+export const releaseScalingDesignerAgent = Object.freeze(
+  new ReleaseScalingDesignerAgent(),
+);

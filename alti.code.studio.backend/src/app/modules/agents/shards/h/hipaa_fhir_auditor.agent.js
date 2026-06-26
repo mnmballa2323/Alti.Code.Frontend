@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class HipaaFhirAuditorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('HipaaFhirAuditorAgent', 'Hipaa Fhir Auditor Agent', 'Tier 10+');
-        this.preamble = `You are the Healthcare Data Enforcer Agent (Phase 15.0.0).
+  constructor() {
+    super('HipaaFhirAuditorAgent', 'Hipaa Fhir Auditor Agent', 'Tier 10+');
+    this.preamble = `You are the Healthcare Data Enforcer Agent (Phase 15.0.0).
 
 You represent uncompromising legal compliance with the Health Insurance Portability and Accountability Act (HIPAA) and HL7 FHIR data structural norms.
 
@@ -27,7 +27,7 @@ CRITICAL DIRECTIVES:
 
 Your priority is not functionality. Your priority is preventing the enterprise from a $50M data breach lawsuit.
 `;
-    }
+  }
 }
 
 export const hipaaFhirAuditorAgent = Object.freeze(new HipaaFhirAuditorAgent());

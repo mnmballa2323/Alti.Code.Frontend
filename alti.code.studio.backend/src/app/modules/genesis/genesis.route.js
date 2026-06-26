@@ -11,7 +11,10 @@ import { authMiddleware } from '../../middlewares/auth.middleware.js';
 import { ENUM_USER_ROLE } from '../../../shared/enum.js';
 
 const router = express.Router();
-const adminOnly = authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN);
+const adminOnly = authMiddleware(
+  ENUM_USER_ROLE.ADMIN,
+  ENUM_USER_ROLE.SUPER_ADMIN,
+);
 
 // POST /api/v1/genesis/ignite -> Kick off end-to-end autonomous genesis
 router.post('/ignite', adminOnly, GenesisController.launchGenesis);

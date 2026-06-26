@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIAnalyticsOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_analytics_orchestrator_agent',
-            'AI Analytics Orchestrator',
-            'You are an elite AI Analytics Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and AI Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_analytics_orchestrator_agent',
+      'AI Analytics Orchestrator',
+      'You are an elite AI Analytics Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and AI Analytics.',
+    );
+  }
 
-    async generateAIAnalyticsSystem(objective) {
-        logger.info(`💻 [AIAnalyticsOrchestratorAgent] Analyzing AI Analytics Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Analytics Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Analytics Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIAnalyticsOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [AIAnalyticsOrchestratorAgent] Analyzing AI Analytics Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Analytics Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Analytics Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIAnalyticsOrchestratorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIAnalyticsOrchestratorAgent = Object.freeze(new AIAnalyticsOrchestratorAgent());
+export const aIAnalyticsOrchestratorAgent = Object.freeze(
+  new AIAnalyticsOrchestratorAgent(),
+);

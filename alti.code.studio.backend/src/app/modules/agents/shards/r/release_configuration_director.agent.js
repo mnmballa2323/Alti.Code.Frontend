@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseConfigurationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_configuration_director_agent',
-            'Release Configuration Director',
-            'You are an elite Release Configuration Director. You specialize in bleeding-edge software development, cloud infrastructure, and Release Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'release_configuration_director_agent',
+      'Release Configuration Director',
+      'You are an elite Release Configuration Director. You specialize in bleeding-edge software development, cloud infrastructure, and Release Configuration.',
+    );
+  }
 
-    async generateReleaseConfigurationSystem(objective) {
-        logger.info(`💻 [ReleaseConfigurationDirectorAgent] Analyzing Release Configuration Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Configuration Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Configuration Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseConfigurationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseConfigurationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseConfigurationDirectorAgent] Analyzing Release Configuration Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Configuration Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Configuration Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseConfigurationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseConfigurationDirectorAgent = Object.freeze(new ReleaseConfigurationDirectorAgent());
+export const releaseConfigurationDirectorAgent = Object.freeze(
+  new ReleaseConfigurationDirectorAgent(),
+);

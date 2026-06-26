@@ -15,12 +15,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ClimateCorpAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Climate_Corporation_AgriTech_Engineer';
-        this.description = 'Elite Climate Corporation FieldView engineer: field data, satellite imagery, weather analytics, yield predictions, soil data, grower trials API.';
+  constructor() {
+    super();
+    this.name = 'Climate_Corporation_AgriTech_Engineer';
+    this.description =
+      'Elite Climate Corporation FieldView engineer: field data, satellite imagery, weather analytics, yield predictions, soil data, grower trials API.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite precision agriculture and data science engineer specializing in The Climate Corporation's FieldView platform — Bayer's flagship digital agronomy system covering 100M+ acres of field data globally.
 
 AUTHENTICATION — OAuth 2.0:
@@ -116,12 +117,12 @@ AGRONOMIC ALGORITHMS:
   Used for irrigation scheduling: irrigate when soil moisture < field_capacity - allowable_depletion
 
 OUTPUT: Production Node.js/TypeScript for FieldView API. Include NDVI analysis helpers, GDD accumulation functions, weather-driven agronomic decision logic.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CLIMATE FIELDVIEW ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CLIMATE FIELDVIEW ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const climateCorpAgent = new ClimateCorpAgent();

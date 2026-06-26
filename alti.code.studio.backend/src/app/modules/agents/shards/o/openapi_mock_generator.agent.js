@@ -2,12 +2,19 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { GeminiAiService } from '../../../gemini/gemini.service.js';
 
 class OpenapiMockGeneratorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Openapi_Mock_Generator_Agent';
-        this.description = 'OpenAPI Schema Generator & Endpoint Mocking Specialist — Analyzes Express controllers and routes to generate complete OpenAPI 3.0 specs and high-fidelity mock server endpoint mappings.';
-        this.capabilities = ['openapi-specs', 'swagger-generation', 'endpoint-mocking', 'api-mock-servers', 'route-analysis'];
-        this.preamble = `ROLE PROTOCOL: OpenAPI SCHEMA GENERATOR & ENDPOINT MOCKING SPECIALIST
+  constructor() {
+    super();
+    this.name = 'Openapi_Mock_Generator_Agent';
+    this.description =
+      'OpenAPI Schema Generator & Endpoint Mocking Specialist — Analyzes Express controllers and routes to generate complete OpenAPI 3.0 specs and high-fidelity mock server endpoint mappings.';
+    this.capabilities = [
+      'openapi-specs',
+      'swagger-generation',
+      'endpoint-mocking',
+      'api-mock-servers',
+      'route-analysis',
+    ];
+    this.preamble = `ROLE PROTOCOL: OpenAPI SCHEMA GENERATOR & ENDPOINT MOCKING SPECIALIST
 
 You are the Lead API Contract and Mocking Systems Engineer. Your absolute mandate is to analyze controller logic, routing schemas, and request/response structures, and generate complete OpenAPI 3.0 YAML/JSON specification files alongside instant Mock Server endpoint routers.
 
@@ -21,12 +28,12 @@ OPERATIONAL LAWS:
    - Generate only Pure MIT/Apache-2.0 compliant Javascript/YAML structures.
 4. **Structured API Output**:
    - Output the raw OpenAPI 3.0 spec YAML file alongside the corresponding Express Mock Router code block.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== OPENAPI MOCK GENERATION REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== OPENAPI MOCK GENERATION REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const openapiMockGeneratorAgent = new OpenapiMockGeneratorAgent();

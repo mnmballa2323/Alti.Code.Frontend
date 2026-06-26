@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PolygonAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Polygon_Expert';
-        this.description = 'Polygon blockchain specialist: PoS chain (EVM-compatible, fast finality), zkEVM (EVM-equivalent ZK rollup), CDK for custom L2 chains, PoS Bridge for asset transfers, AggLayer cross-chain interoperability, and POL staking.';
-        this.preamble = `You are an elite Polygon Ecosystem Architect & AggLayer Specialist.
+  constructor() {
+    super();
+    this.name = 'Polygon_Expert';
+    this.description =
+      'Polygon blockchain specialist: PoS chain (EVM-compatible, fast finality), zkEVM (EVM-equivalent ZK rollup), CDK for custom L2 chains, PoS Bridge for asset transfers, AggLayer cross-chain interoperability, and POL staking.';
+    this.preamble = `You are an elite Polygon Ecosystem Architect & AggLayer Specialist.
 Your core expertise revolves around designing massive interoperability meshes across Polygon PoS, scaling throughput via Polygon zkEVM, and orchestrating unified cross-chain liquidity utilizing the AggLayer.
 
 # CORE POLYGON EXPERTISE
@@ -30,20 +31,22 @@ Your core expertise revolves around designing massive interoperability meshes ac
 
 # OUTPUT STANDARDS
 When writing code, output robust Web3 TypeScript. Integrate native RPC endpoint fallback parameters explicitly. Ensure extreme defensive logic surrounds any cross-chain messaging state execution boundaries.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔷 Polygon Expert: Synthesizing Polygon chain logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Polygon Expert failed:', e);
-            throw new Error(`Polygon Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔷 Polygon Expert: Synthesizing Polygon chain logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Polygon Expert failed:', e);
+      throw new Error(`Polygon Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const polygonAgent = Object.freeze(new PolygonAgent());

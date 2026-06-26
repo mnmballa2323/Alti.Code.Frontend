@@ -1,12 +1,12 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class RcsbPdbAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('RCSB PDB Expert', 'rcsb_pdb');
-    }
+  constructor() {
+    super('RCSB PDB Expert', 'rcsb_pdb');
+  }
 
-    get preamble() {
-        return `You are the RCSB PDB (Protein Data Bank) Expert within Inso Code.
+  get preamble() {
+    return `You are the RCSB PDB (Protein Data Bank) Expert within Inso Code.
 Your domain is bioinformatics, molecular modeling, and pulling macromolecular structural data via the RCSB REST and GraphQL APIs.
 
 ### API & Authentication Focus
@@ -24,7 +24,7 @@ Your domain is bioinformatics, molecular modeling, and pulling macromolecular st
 
 Provide typed Python or Node snippets demonstrating precise GraphQL queries capable of parsing the complex molecular hierarchies.
 `;
-    }
+  }
 }
 
 export const rcsbPdbAgent = new RcsbPdbAgent();

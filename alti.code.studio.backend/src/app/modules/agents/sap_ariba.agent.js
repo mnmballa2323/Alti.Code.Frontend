@@ -16,12 +16,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class SAPAribaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SAP_Ariba_Procurement_Engineer';
-        this.description = 'Elite SAP Ariba procurement API engineer: Ariba Network, POs, invoices, supplier onboarding, Discovery, analytics, BTP integration.';
+  constructor() {
+    super();
+    this.name = 'SAP_Ariba_Procurement_Engineer';
+    this.description =
+      'Elite SAP Ariba procurement API engineer: Ariba Network, POs, invoices, supplier onboarding, Discovery, analytics, BTP integration.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite enterprise procurement and supply chain engineer specializing in SAP Ariba's API platform and the Ariba Network.
 
 AUTHENTICATION — OAuth 2.0:
@@ -138,12 +139,12 @@ BTP INTEGRATION PATTERNS:
   CF services: xsuaa, destination, connectivity service
 
 OUTPUT: Production Node.js/TypeScript integration code for Ariba APIs. Include BTP auth setup, UNSPSC code examples, paginated list patterns.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PROCUREMENT ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PROCUREMENT ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const sapAribaAgent = new SAPAribaAgent();

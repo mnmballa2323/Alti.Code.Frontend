@@ -1,50 +1,72 @@
 import mongoose from 'mongoose';
 
-const SkillSchema = new mongoose.Schema({
+const SkillSchema = new mongoose.Schema(
+  {
     name: { type: String, required: true, unique: true },
     description: { type: String },
     systemInstruction: { type: String, required: true },
     version: { type: Number, default: 1 },
     isActive: { type: Boolean, default: true },
-    failures: [{
+    failures: [
+      {
         input: { type: String, required: true },
         expected: { type: String },
         criteria: { type: String },
         feedback: { type: String },
-        timestamp: { type: Date, default: Date.now }
-    }],
-    successes: [{
+        timestamp: { type: Date, default: Date.now },
+      },
+    ],
+    successes: [
+      {
         input: { type: String, required: true },
         output: { type: String, required: true },
-        timestamp: { type: Date, default: Date.now }
-    }]
-}, { timestamps: true });
+        timestamp: { type: Date, default: Date.now },
+      },
+    ],
+  },
+  { timestamps: true },
+);
 
-const SkillOptRunSchema = new mongoose.Schema({
+const SkillOptRunSchema = new mongoose.Schema(
+  {
     skillName: { type: String, required: true },
-    status: { type: String, enum: ['queued', 'running', 'success', 'failed'], default: 'running' },
+    status: {
+      type: String,
+      enum: ['queued', 'running', 'success', 'failed'],
+      default: 'running',
+    },
     initialSystemInstruction: { type: String, required: true },
     optimizedSystemInstruction: { type: String },
-    epochs: [{
+    epochs: [
+      {
         epoch: { type: Number, required: true },
         baseScore: { type: Number, required: true },
         candidateScore: { type: Number },
-        appliedEdits: [{
-            type: { type: String, enum: ['ADD', 'DELETE', 'REPLACE'], required: true },
+        appliedEdits: [
+          {
+            type: {
+              type: String,
+              enum: ['ADD', 'DELETE', 'REPLACE'],
+              required: true,
+            },
             targetText: { type: String },
             replacementText: { type: String },
-            rationale: { type: String }
-        }],
+            rationale: { type: String },
+          },
+        ],
         feedback: { type: String },
-        accepted: { type: Boolean, default: false }
-    }],
+        accepted: { type: Boolean, default: false },
+      },
+    ],
     parameters: {
-        maxEpochs: { type: Number, default: 3 },
-        batchSize: { type: Number, default: 5 },
-        learningRate: { type: Number, default: 0.5 }
+      maxEpochs: { type: Number, default: 3 },
+      batchSize: { type: Number, default: 5 },
+      learningRate: { type: Number, default: 0.5 },
     },
-    error: { type: String }
-}, { timestamps: true });
+    error: { type: String },
+  },
+  { timestamps: true },
+);
 
 // Indexes for high performance querying
 SkillSchema.index({ name: 1 });

@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerlAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Perl_Expert';
-        this.description = 'Language specialist for Perl 5.38: regex engine, CPAN, Moose OOP, text processing, and bioinformatics tools.';
-        this.preamble = `You are an elite Perl Regular Expression & Text Processing Specialist.
+  constructor() {
+    super();
+    this.name = 'Perl_Expert';
+    this.description =
+      'Language specialist for Perl 5.38: regex engine, CPAN, Moose OOP, text processing, and bioinformatics tools.';
+    this.preamble = `You are an elite Perl Regular Expression & Text Processing Specialist.
 Your core expertise revolves around system administration, forensic text parsing, and maintaining legacy robust Perl pipelines.
 
 # CORE PERL EXPERTISE
@@ -30,12 +31,17 @@ Your core expertise revolves around system administration, forensic text parsing
 
 # OUTPUT STANDARDS
 When writing code, target Perl 5.38+. Avoid "golfing" or overly obfuscated Perl-isms. Even though Perl supports "There's More Than One Way To Do It" (TMTOWTDI), YOU must always select the most readable, maintainable, and explicitly documented way.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🐪 Perl Expert: Synthesizing Perl code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Perl Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🐪 Perl Expert: Synthesizing Perl code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Perl Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const perlAgent = Object.freeze(new PerlAgent());

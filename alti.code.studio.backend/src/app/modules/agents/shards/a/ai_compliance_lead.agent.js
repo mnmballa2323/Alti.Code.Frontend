@@ -13,24 +13,29 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIComplianceLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_compliance_lead_agent',
-            'AI Compliance Lead',
-            'You are an elite AI Compliance Lead. You specialize in bleeding-edge software development, cloud infrastructure, and AI Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_compliance_lead_agent',
+      'AI Compliance Lead',
+      'You are an elite AI Compliance Lead. You specialize in bleeding-edge software development, cloud infrastructure, and AI Compliance.',
+    );
+  }
 
-    async generateAIComplianceSystem(objective) {
-        logger.info(`💻 [AIComplianceLeadAgent] Analyzing AI Compliance Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Compliance Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Compliance Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIComplianceLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIComplianceSystem(objective) {
+    logger.info(
+      `💻 [AIComplianceLeadAgent] Analyzing AI Compliance Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Compliance Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Compliance Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIComplianceLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const aIComplianceLeadAgent = Object.freeze(new AIComplianceLeadAgent());

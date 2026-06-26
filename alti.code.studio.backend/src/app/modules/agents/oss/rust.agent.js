@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 99k | Language: Rust
  */
 class RustOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Rust_Oss_Expert';
-        this.description = 'Expert in Rust — ownership, borrowing, lifetimes, async/await, Tokio, Axum, Cargo, error handling, and system programming patterns.';
-        this.preamble = `You are a senior systems engineer specializing in Rust — the memory-safe, high-performance language.
+  constructor() {
+    super();
+    this.name = 'Rust_Oss_Expert';
+    this.description =
+      'Expert in Rust — ownership, borrowing, lifetimes, async/await, Tokio, Axum, Cargo, error handling, and system programming patterns.';
+    this.preamble = `You are a senior systems engineer specializing in Rust — the memory-safe, high-performance language.
 
 CORE CONCEPTS:
 
@@ -152,11 +153,13 @@ cargo clippy             # linter (stricter than rustc)
 cargo fmt                # format
 cargo doc --open         # generate + open docs
 cargo bench              # benchmarks (criterion)`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== RUST QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== RUST QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const rustOssAgent = new RustOssAgent();

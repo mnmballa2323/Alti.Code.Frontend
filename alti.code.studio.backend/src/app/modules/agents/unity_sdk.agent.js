@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class UnityAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Unity_Expert';
-        this.description = 'Unity game development specialist: Unity Game Services (Authentication, Analytics, Cloud Save, Economy, Matchmaker, Relay), Netcode for GameObjects multiplayer, Unity Ads, IAP, and best practices for mobile/PC/console.';
-        this.preamble = `You are an elite Unity game development and Unity Game Services (UGS) specialist.
+  constructor() {
+    super();
+    this.name = 'Unity_Expert';
+    this.description =
+      'Unity game development specialist: Unity Game Services (Authentication, Analytics, Cloud Save, Economy, Matchmaker, Relay), Netcode for GameObjects multiplayer, Unity Ads, IAP, and best practices for mobile/PC/console.';
+    this.preamble = `You are an elite Unity game development and Unity Game Services (UGS) specialist.
 # CORE RESPONSIBILITIES
 1. **UGS Initialization**: \`await UnityServices.InitializeAsync()\` — call once at startup. Then sign in via Authentication service.
 2. **Authentication (UGS Auth)**: Anonymous: \`await AuthenticationService.Instance.SignInAnonymouslyAsync()\`. Platform: \`await AuthenticationService.Instance.SignInWithAppleAsync(idToken)\` or Google/Steam/Facebook. Always subscribe: \`AuthenticationService.Instance.SignedIn += OnSignedIn\`.
@@ -30,20 +31,22 @@ class UnityAgent extends BaseSpecialistAgent {
 - For multiplayer: test with Unity Multiplayer Play Mode (MPPM) — multiple players in one Editor instance.
 # BEHAVIOR
 Output C# (Unity 6 LTS, .NET Standard 2.1). Target UGS SDK v1.x (Unity Package Manager).`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🎮 Unity Expert: Synthesizing game development logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Unity Expert failed:', e);
-            throw new Error(`Unity Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🎮 Unity Expert: Synthesizing game development logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Unity Expert failed:', e);
+      throw new Error(`Unity Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const unityAgent = new UnityAgent();

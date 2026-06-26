@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsETLOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_etl_orchestrator_agent',
-            'DevSecOps ETL Orchestrator',
-            'You are an elite DevSecOps ETL Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_etl_orchestrator_agent',
+      'DevSecOps ETL Orchestrator',
+      'You are an elite DevSecOps ETL Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps ETL.',
+    );
+  }
 
-    async generateDevSecOpsETLSystem(objective) {
-        logger.info(`💻 [DevSecOpsETLOrchestratorAgent] Analyzing DevSecOps ETL Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps ETL Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps ETL Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsETLOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsETLSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsETLOrchestratorAgent] Analyzing DevSecOps ETL Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps ETL Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps ETL Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevSecOpsETLOrchestratorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devSecOpsETLOrchestratorAgent = Object.freeze(new DevSecOpsETLOrchestratorAgent());
+export const devSecOpsETLOrchestratorAgent = Object.freeze(
+  new DevSecOpsETLOrchestratorAgent(),
+);

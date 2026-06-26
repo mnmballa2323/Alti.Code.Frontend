@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIIntegrationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_integration_designer_agent',
-            'AI Integration Designer',
-            'You are an elite AI Integration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_integration_designer_agent',
+      'AI Integration Designer',
+      'You are an elite AI Integration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Integration.',
+    );
+  }
 
-    async generateAIIntegrationSystem(objective) {
-        logger.info(`💻 [AIIntegrationDesignerAgent] Analyzing AI Integration Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Integration Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Integration Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIIntegrationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIIntegrationSystem(objective) {
+    logger.info(
+      `💻 [AIIntegrationDesignerAgent] Analyzing AI Integration Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Integration Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Integration Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIIntegrationDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIIntegrationDesignerAgent = Object.freeze(new AIIntegrationDesignerAgent());
+export const aIIntegrationDesignerAgent = Object.freeze(
+  new AIIntegrationDesignerAgent(),
+);

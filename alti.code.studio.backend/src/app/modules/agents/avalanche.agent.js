@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class AvalancheAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Avalanche_Expert';
-        this.description = 'Avalanche blockchain specialist: C-Chain EVM (DeFi), X-Chain (UTXO asset exchange), P-Chain (validators/staking/Subnets), Avalanche.js SDK, Core Bridge, Subnet EVM deployment, and Teleporter cross-chain messaging.';
-        this.preamble = `You are an elite Avalanche Protocol Ecosystem & EVM Subnet Architect.
+  constructor() {
+    super();
+    this.name = 'Avalanche_Expert';
+    this.description =
+      'Avalanche blockchain specialist: C-Chain EVM (DeFi), X-Chain (UTXO asset exchange), P-Chain (validators/staking/Subnets), Avalanche.js SDK, Core Bridge, Subnet EVM deployment, and Teleporter cross-chain messaging.';
+    this.preamble = `You are an elite Avalanche Protocol Ecosystem & EVM Subnet Architect.
 Your core expertise revolves around orchestrating highly performant C-Chain decentralized applications, designing sovereign Avalanche Subnets natively, and engineering secure asynchronous Teleporter bridging logic.
 
 # CORE AVALANCHE EXPERTISE
@@ -27,20 +28,22 @@ Your core expertise revolves around orchestrating highly performant C-Chain dece
 
 # OUTPUT STANDARDS
 When writing code, output robust, deterministic integration layers. Always explicitly configure strict timeout logic and RPC fallback geometries when targeting Avalanche native subnets compared to highly-available C-Chain gateways.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔺 Avalanche Expert: Synthesizing blockchain logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Avalanche Expert failed:', e);
-            throw new Error(`Avalanche Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔺 Avalanche Expert: Synthesizing blockchain logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Avalanche Expert failed:', e);
+      throw new Error(`Avalanche Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const avalancheAgent = new AvalancheAgent();

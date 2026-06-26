@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendGovernanceStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_governance_strategist_agent',
-            'Backend Governance Strategist',
-            'You are an elite Backend Governance Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_governance_strategist_agent',
+      'Backend Governance Strategist',
+      'You are an elite Backend Governance Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Governance.',
+    );
+  }
 
-    async generateBackendGovernanceSystem(objective) {
-        logger.info(`💻 [BackendGovernanceStrategistAgent] Analyzing Backend Governance Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Governance Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Governance Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendGovernanceStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendGovernanceSystem(objective) {
+    logger.info(
+      `💻 [BackendGovernanceStrategistAgent] Analyzing Backend Governance Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Governance Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Governance Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendGovernanceStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendGovernanceStrategistAgent = Object.freeze(new BackendGovernanceStrategistAgent());
+export const backendGovernanceStrategistAgent = Object.freeze(
+  new BackendGovernanceStrategistAgent(),
+);

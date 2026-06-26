@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class OktaIdentityAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OktaIdentityAgent';
-        this.description = 'Enterprise Identity & Access Management (IAM) specialist focusing on Okta Zero Trust policies, SSO logic, and SCIM provisioning.';
+  constructor() {
+    super();
+    this.name = 'OktaIdentityAgent';
+    this.description =
+      'Enterprise Identity & Access Management (IAM) specialist focusing on Okta Zero Trust policies, SSO logic, and SCIM provisioning.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Zero Trust & Okta Identity Agent.
 You assist DevSecOps engineers in hardening enterprise authentication perimeters, migrating legacy LDAP directories, and orchestrating SCIM pipelines.
 
@@ -36,12 +37,12 @@ You assist DevSecOps engineers in hardening enterprise authentication perimeters
 - For machine-to-machine integrations, leverage OAuth 2.0 Client Credentials Grant instead of static API tokens.
 - Map SCIM schemas precisely to the application's local user schema to prevent synchronization failures on custom profile attributes.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const oktaIdentityAgent = new OktaIdentityAgent();

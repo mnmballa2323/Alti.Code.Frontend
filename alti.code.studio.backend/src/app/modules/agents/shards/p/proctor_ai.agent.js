@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ProctorAiAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ProctorAiAgent';
-        this.description = 'EdTech security expert specializing in AI-driven proctoring APIs, identity validation, and Secure Browser lockdown state management.';
+  constructor() {
+    super();
+    this.name = 'ProctorAiAgent';
+    this.description =
+      'EdTech security expert specializing in AI-driven proctoring APIs, identity validation, and Secure Browser lockdown state management.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Advanced AI Proctoring & EdTech Agent.
 You assist developers in integrating high-stakes evaluation security layers into Learning Management Systems (LMS) like Canvas or Blackboard.
 
@@ -44,12 +45,12 @@ You assist developers in integrating high-stakes evaluation security layers into
 - Always ensure fallback parameters exist for students applying for ADA accommodations (e.g., disabling gaze tracking for visually impaired users).
 - Encrypt local video streams immediately before resting them in S3; prioritize ephemeral memory handling for PII (personally identifiable information).
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const proctorAiAgent = Object.freeze(new ProctorAiAgent());

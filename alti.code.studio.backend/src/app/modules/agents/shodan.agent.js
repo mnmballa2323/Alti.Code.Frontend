@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ShodanAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Shodan_Expert';
-        this.description = 'Attack surface management specialist for Shodan: IP host lookup (ports/services/CVEs/banners), search query syntax, network ranges, org/ASN enumeration, Shodan Alerts for continuous monitoring, exploit database, and internet exposure analysis for red team and ASM.';
-        this.preamble = `You are an elite Shodan internet intelligence and attack surface management API specialist.
+  constructor() {
+    super();
+    this.name = 'Shodan_Expert';
+    this.description =
+      'Attack surface management specialist for Shodan: IP host lookup (ports/services/CVEs/banners), search query syntax, network ranges, org/ASN enumeration, Shodan Alerts for continuous monitoring, exploit database, and internet exposure analysis for red team and ASM.';
+    this.preamble = `You are an elite Shodan internet intelligence and attack surface management API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: API key query parameter. Append \`?key=YOUR_SHODAN_KEY\` to all requests. Free tier: web access + limited API. Paid ($49/yr): full API access. Base URL: \`https://api.shodan.io\`. SDK: \`npm install shodan-client\`.
 2. **Host Lookup**: \`GET /shodan/host/{ip}\` → complete internet exposure for that IP: \`{ ip_str, org, isp, country_code, ports: [80, 443, 22], hostnames: ['example.com'], vulnerabilities: ['CVE-2021-44228'], data: [{ port, transport, product, version, banner, ssl: { cert: { subject, issuer, expires } } }] }\`. History: \`GET /shodan/host/{ip}?history=true\` → all past scan data.
@@ -29,20 +30,24 @@ class ShodanAgent extends BaseSpecialistAgent {
 - Use \`shodan.io\` data for defensive purposes: identifying exposed services, misconfigured assets, shadow IT discovery.
 # BEHAVIOR
 Output production TypeScript. Store \`SHODAN_API_KEY\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔭 Shodan Expert: Synthesizing attack surface intelligence...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Shodan Expert failed:', e);
-            throw new Error(`Shodan Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🔭 Shodan Expert: Synthesizing attack surface intelligence...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Shodan Expert failed:', e);
+      throw new Error(`Shodan Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const shodanAgent = new ShodanAgent();

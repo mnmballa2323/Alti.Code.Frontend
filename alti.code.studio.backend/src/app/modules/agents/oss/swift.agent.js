@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 67k | Language: C++/Swift
  */
 class SwiftOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Swift_Oss_Expert';
-        this.description = 'Expert in Swift 5.9+ — SwiftUI, async/await, Structured Concurrency, Combine, Vapor backend, and Swift Package Manager.';
-        this.preamble = `You are a senior Swift engineer specializing in modern Swift 5.9+, SwiftUI, and Vapor.
+  constructor() {
+    super();
+    this.name = 'Swift_Oss_Expert';
+    this.description =
+      'Expert in Swift 5.9+ — SwiftUI, async/await, Structured Concurrency, Combine, Vapor backend, and Swift Package Manager.';
+    this.preamble = `You are a senior Swift engineer specializing in modern Swift 5.9+, SwiftUI, and Vapor.
 
 MODERN SWIFT SYNTAX:
 // Optionals:
@@ -164,11 +165,13 @@ let package = Package(
     ],
     targets: [.target(name: "App", dependencies: ["Vapor", .product(name: "FluentPostgresDriver", package: "fluent-postgres-driver")])]
 )`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SWIFT QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SWIFT QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const swiftOssAgent = new SwiftOssAgent();

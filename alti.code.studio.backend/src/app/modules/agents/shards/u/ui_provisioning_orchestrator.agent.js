@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIProvisioningOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_provisioning_orchestrator_agent',
-            'UI Provisioning Orchestrator',
-            'You are an elite UI Provisioning Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UI Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_provisioning_orchestrator_agent',
+      'UI Provisioning Orchestrator',
+      'You are an elite UI Provisioning Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UI Provisioning.',
+    );
+  }
 
-    async generateUIProvisioningSystem(objective) {
-        logger.info(`💻 [UIProvisioningOrchestratorAgent] Analyzing UI Provisioning Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Provisioning Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Provisioning Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIProvisioningOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIProvisioningSystem(objective) {
+    logger.info(
+      `💻 [UIProvisioningOrchestratorAgent] Analyzing UI Provisioning Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Provisioning Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Provisioning Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UIProvisioningOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uIProvisioningOrchestratorAgent = Object.freeze(new UIProvisioningOrchestratorAgent());
+export const uIProvisioningOrchestratorAgent = Object.freeze(
+  new UIProvisioningOrchestratorAgent(),
+);

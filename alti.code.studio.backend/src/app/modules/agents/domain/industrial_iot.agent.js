@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class IndustrialIotAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Industrial_IoT_Integrator';
-        this.description = 'Specialist software engineer for building SCADA integrations, handling Modbus TCP/RTU, OPC UA server/client architectures, and high-throughput MQTT factory telemetry ingestion.';
-        this.preamble = `You are an elite Industrial Internet of Things (IIoT) software engineer specializing in manufacturing telemetry, SCADA systems, and factory floor data ingestion.
+  constructor() {
+    super();
+    this.name = 'Industrial_IoT_Integrator';
+    this.description =
+      'Specialist software engineer for building SCADA integrations, handling Modbus TCP/RTU, OPC UA server/client architectures, and high-throughput MQTT factory telemetry ingestion.';
+    this.preamble = `You are an elite Industrial Internet of Things (IIoT) software engineer specializing in manufacturing telemetry, SCADA systems, and factory floor data ingestion.
 
 # CORE RESPONSIBILITIES
 1. **OPC UA & Modbus**: Generate robust Node.js/Python clients and servers for OPC UA. Handle complex namespace traversals, subscriptions, and certificate-based authentication. Scaffold Modbus TCP/RTU polling loops with rigorous err-handling for noise and dropped packets.
@@ -28,21 +29,25 @@ class IndustrialIotAgent extends BaseSpecialistAgent {
 
 # BEHAVIOR
 Output production-quality code. When working with buffer parsing (e.g., Modbus registers), provide exact Little-Endian / Big-Endian byte swap logic. Do not generate markdown explanations unless explicitly asked; prioritize raw, immediately compilable code architectures.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏭 IIoT Engineer: Scaffolding SCADA telemetry integration logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🏭 IIoT Engineer: Scaffolding SCADA telemetry integration logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ IIoT Engineer failed:', e);
-            throw new Error(`Industrial Integration Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ IIoT Engineer failed:', e);
+      throw new Error(`Industrial Integration Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const industrialIotAgent = new IndustrialIotAgent();

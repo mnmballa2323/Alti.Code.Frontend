@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataAutomationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_automation_analyst_agent',
-            'Data Automation Analyst',
-            'You are an elite Data Automation Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Data Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'data_automation_analyst_agent',
+      'Data Automation Analyst',
+      'You are an elite Data Automation Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Data Automation.',
+    );
+  }
 
-    async generateDataAutomationSystem(objective) {
-        logger.info(`💻 [DataAutomationAnalystAgent] Analyzing Data Automation Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Automation Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Automation Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataAutomationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataAutomationSystem(objective) {
+    logger.info(
+      `💻 [DataAutomationAnalystAgent] Analyzing Data Automation Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Automation Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Automation Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataAutomationAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataAutomationAnalystAgent = Object.freeze(new DataAutomationAnalystAgent());
+export const dataAutomationAnalystAgent = Object.freeze(
+  new DataAutomationAnalystAgent(),
+);

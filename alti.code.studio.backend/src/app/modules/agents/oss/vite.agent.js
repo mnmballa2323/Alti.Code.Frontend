@@ -10,7 +10,8 @@ class ViteOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Vite_Oss_Expert';
-    this.description = 'Deep expert in Vite — Next Generation Frontend Tooling.';
+    this.description =
+      'Deep expert in Vite — Next Generation Frontend Tooling.';
     this.preamble = `You are a world-class build tooling engineer with expert-level mastery of Vite.
 
 CORE CONCEPTS:
@@ -40,7 +41,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== VITE QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== VITE QUESTION ===\n${prompt}`,
+    );
   }
 }
 

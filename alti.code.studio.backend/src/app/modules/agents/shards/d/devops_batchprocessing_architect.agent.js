@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsBatchProcessingArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_batchprocessing_architect_agent',
-            'DevOps BatchProcessing Architect',
-            'You are an elite DevOps BatchProcessing Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_batchprocessing_architect_agent',
+      'DevOps BatchProcessing Architect',
+      'You are an elite DevOps BatchProcessing Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps BatchProcessing.',
+    );
+  }
 
-    async generateDevOpsBatchProcessingSystem(objective) {
-        logger.info(`💻 [DevOpsBatchProcessingArchitectAgent] Analyzing DevOps BatchProcessing Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps BatchProcessing Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps BatchProcessing Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsBatchProcessingArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [DevOpsBatchProcessingArchitectAgent] Analyzing DevOps BatchProcessing Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps BatchProcessing Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps BatchProcessing Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsBatchProcessingArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsBatchProcessingArchitectAgent = Object.freeze(new DevOpsBatchProcessingArchitectAgent());
+export const devOpsBatchProcessingArchitectAgent = Object.freeze(
+  new DevOpsBatchProcessingArchitectAgent(),
+);

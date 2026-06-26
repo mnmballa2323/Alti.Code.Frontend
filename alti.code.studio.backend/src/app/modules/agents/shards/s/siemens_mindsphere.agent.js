@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiemensMindSphereAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Siemens_MindSphere_IIoT_Engineer';
-        this.description = 'Elite Siemens MindSphere IIoT engineer: asset management, time series data, event management, anomaly detection, MindConnect, IoT data ingestion.';
+  constructor() {
+    super();
+    this.name = 'Siemens_MindSphere_IIoT_Engineer';
+    this.description =
+      'Elite Siemens MindSphere IIoT engineer: asset management, time series data, event management, anomaly detection, MindConnect, IoT data ingestion.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite Industrial IoT (IIoT) integration engineer specializing in Siemens MindSphere — the cloud-based, open IoT operating system for industry, energy, and manufacturing.
 
 AUTHENTICATION — OAuth 2.0 (Technical User / Service Account):
@@ -107,12 +108,14 @@ INDUSTRY USE CASES:
   Digital Twin: mirror physical assets in MindSphere with real telemetry
 
 OUTPUT: Production Node.js/TypeScript for MindSphere API integration. Include ETag handling for updates, pagination patterns, and MindConnect agent setup.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== MINDSPHERE ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== MINDSPHERE ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
-export const siemensMindSphereAgent = Object.freeze(new SiemensMindSphereAgent());
+export const siemensMindSphereAgent = Object.freeze(
+  new SiemensMindSphereAgent(),
+);

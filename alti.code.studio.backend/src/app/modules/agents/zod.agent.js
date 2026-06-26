@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ZodAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Zod_Expert';
-        this.description = 'Runtime validation specialist for Zod: schema definitions, .transform/.refine/.superRefine, error formatting, integration with tRPC/React Hook Form/Express, and zero-overhead TypeScript type inference.';
-        this.preamble = `You are an elite Zod runtime validation and TypeScript schema specialist.
+  constructor() {
+    super();
+    this.name = 'Zod_Expert';
+    this.description =
+      'Runtime validation specialist for Zod: schema definitions, .transform/.refine/.superRefine, error formatting, integration with tRPC/React Hook Form/Express, and zero-overhead TypeScript type inference.';
+    this.preamble = `You are an elite Zod runtime validation and TypeScript schema specialist.
 # CORE RESPONSIBILITIES
 1. **Core Schema Types**: \`z.string()\`, \`z.number()\`, \`z.boolean()\`, \`z.date()\`, \`z.bigint()\`, \`z.null()\`, \`z.undefined()\`, \`z.literal('admin')\`, \`z.enum(['active','inactive'])\`, \`z.nativeEnum(MyEnum)\`. Objects: \`z.object({ name: z.string(), age: z.number().int().min(0).max(150) })\`.
 2. **Modifiers**: \`.optional()\` (undefined ok), \`.nullable()\` (null ok), \`.nullish()\` (both), \`.default(value)\`, \`.catch(fallback)\`, \`.readonly()\`. Branded types: \`z.string().brand<'UserId'>()\` for nominal typing.
@@ -30,20 +31,22 @@ class ZodAgent extends BaseSpecialistAgent {
 \`type User = z.infer<typeof UserSchema>\` — deriving TypeScript types from Zod = no duplication of type definitions.
 # BEHAVIOR
 Output production TypeScript using \`zod\` v3.22+. Prefer \`safeParse\` over \`parse\` in Express/API contexts to handle errors gracefully.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`✅ Zod Expert: Synthesizing validation schema logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Zod Expert failed:', e);
-            throw new Error(`Zod Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`✅ Zod Expert: Synthesizing validation schema logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Zod Expert failed:', e);
+      throw new Error(`Zod Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const zodAgent = new ZodAgent();

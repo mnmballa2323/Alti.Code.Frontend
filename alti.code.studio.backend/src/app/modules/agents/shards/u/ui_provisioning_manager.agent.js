@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIProvisioningManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_provisioning_manager_agent',
-            'UI Provisioning Manager',
-            'You are an elite UI Provisioning Manager. You specialize in bleeding-edge software development, cloud infrastructure, and UI Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_provisioning_manager_agent',
+      'UI Provisioning Manager',
+      'You are an elite UI Provisioning Manager. You specialize in bleeding-edge software development, cloud infrastructure, and UI Provisioning.',
+    );
+  }
 
-    async generateUIProvisioningSystem(objective) {
-        logger.info(`💻 [UIProvisioningManagerAgent] Analyzing UI Provisioning Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Provisioning Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Provisioning Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIProvisioningManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIProvisioningSystem(objective) {
+    logger.info(
+      `💻 [UIProvisioningManagerAgent] Analyzing UI Provisioning Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Provisioning Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Provisioning Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIProvisioningManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIProvisioningManagerAgent = Object.freeze(new UIProvisioningManagerAgent());
+export const uIProvisioningManagerAgent = Object.freeze(
+  new UIProvisioningManagerAgent(),
+);

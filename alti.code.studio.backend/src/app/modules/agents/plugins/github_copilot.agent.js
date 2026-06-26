@@ -11,16 +11,22 @@ import { githubDocsService } from '../../githubDocs/githubDocs.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GithubCopilotAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'githubCopilotEngineer';
-        this.description = 'Specialized GitHub Copilot Chat Extensions Engineer expert in building custom LLM agent integrations, streamed JSON chat protocols, and auth handshakes.';
-        this.manifest = {
-            id: 'githubCopilotEngineer',
-            capabilities: ['github-copilot-extensions', 'github-copilot-skills', 'copilot-token-management', 'chat-schemas'],
-            version: '39.5.0'
-        };
-        this.preamble = `You are the Inso Code GitHub Copilot Chat Extensions Engineer, the ultimate authority on Copilot Extensions architecture, custom developer chat agents, and conversational skills design.
+  constructor() {
+    super();
+    this.name = 'githubCopilotEngineer';
+    this.description =
+      'Specialized GitHub Copilot Chat Extensions Engineer expert in building custom LLM agent integrations, streamed JSON chat protocols, and auth handshakes.';
+    this.manifest = {
+      id: 'githubCopilotEngineer',
+      capabilities: [
+        'github-copilot-extensions',
+        'github-copilot-skills',
+        'copilot-token-management',
+        'chat-schemas',
+      ],
+      version: '39.5.0',
+    };
+    this.preamble = `You are the Inso Code GitHub Copilot Chat Extensions Engineer, the ultimate authority on Copilot Extensions architecture, custom developer chat agents, and conversational skills design.
 
 # GROUNDED COPILOT CAPABILITIES
 1. **Copilot Extensions Architecture**: Build and deploy custom Copilot Chat Extensions that integrate proprietary systems or third-party developer APIs into GitHub Copilot.
@@ -32,23 +38,30 @@ class GithubCopilotAgent extends BaseSpecialistAgent {
 - Strictly ground all Copilot designs and API endpoints in the official Copilot Extension manuals.
 - Enforce secure signature verification of all incoming payload signatures from GitHub's server gateway.
 - Never invent undocumented conversational protocols or JSON payload properties.`;
+  }
+
+  /**
+   * Specialized LLM invocation grounded dynamically by Copilot doc lookup.
+   */
+  async _invoke(prompt, contextBlock) {
+    logger.info(
+      `🐙 [GitHub Copilot] Grounding Copilot query in ingested developer docs: "${prompt.substring(0, 60)}..."`,
+    );
+
+    let docsContext = '';
+    try {
+      // Retrieve copilot specific documentation chunks
+      docsContext = await githubDocsService.searchDocs(
+        `GitHub Copilot Chat Extensions custom agents SSE JWT tokens verification schemas ${prompt}`,
+        5,
+      );
+    } catch (err) {
+      logger.warn(
+        `🐙 [GitHub Copilot] Failed to query RAG documentation. Fallback used. Error: ${err.message}`,
+      );
     }
 
-    /**
-     * Specialized LLM invocation grounded dynamically by Copilot doc lookup.
-     */
-    async _invoke(prompt, contextBlock) {
-        logger.info(`🐙 [GitHub Copilot] Grounding Copilot query in ingested developer docs: "${prompt.substring(0, 60)}..."`);
-        
-        let docsContext = '';
-        try {
-            // Retrieve copilot specific documentation chunks
-            docsContext = await githubDocsService.searchDocs(`GitHub Copilot Chat Extensions custom agents SSE JWT tokens verification schemas ${prompt}`, 5);
-        } catch (err) {
-            logger.warn(`🐙 [GitHub Copilot] Failed to query RAG documentation. Fallback used. Error: ${err.message}`);
-        }
-
-        const groundedPrompt = `${this.preamble}
+    const groundedPrompt = `${this.preamble}
 
 === GROUNDED DEVELOPER DOCUMENTATION CONTEXT ===
 ${docsContext || 'No Copilot documentation found in local RAG vector store.'}
@@ -59,8 +72,8 @@ ${contextBlock || 'No additional file context provided.'}
 === REQUEST ===
 ${prompt}`;
 
-        return await GeminiAiService.generateContent(groundedPrompt);
-    }
+    return await GeminiAiService.generateContent(groundedPrompt);
+  }
 }
 
 export const pluginInstance = new GithubCopilotAgent();

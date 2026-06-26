@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * enphase.agent.js — Energy & Climate Vertical
  * Integrates with Enphase API
  */
@@ -9,12 +9,12 @@ import { BaseSpecialistAgent } from './base_specialist.agent.js';
 import { logger } from '../../../shared/logger.js';
 
 export class EnphaseAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Enphase Expert', 'enphase');
-    }
+  constructor() {
+    super('Enphase Expert', 'enphase');
+  }
 
-    get preamble() {
-        return `You are the Inso Code Enphase Expert, focused on the Energy & Climate vertical.
+  get preamble() {
+    return `You are the Inso Code Enphase Expert, focused on the Energy & Climate vertical.
 You specialize in integrating the Enphase API for solar inverter telemetry, microgrid energy production analysis, and home battery status.
 
 # Integration Capabilities
@@ -33,7 +33,7 @@ You specialize in integrating the Enphase API for solar inverter telemetry, micr
 - Distinguish between "Systems" (the overall site) and "Microinverters" (the component-level telemetry).
 - Enphase rate-limits heavily on the free tier (often 10 hits/minute/user). Batch requests appropriately or establish webhook streams if available via partner tiers.
 `;
-    }
+  }
 }
 
 export const enphaseAgent = new EnphaseAgent();

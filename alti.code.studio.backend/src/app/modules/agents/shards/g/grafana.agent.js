@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GrafanaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Grafana_Expert';
-        this.description = 'Observability specialist for Grafana: dashboards-as-code (Grafonnet/JSON), Loki log queries (LogQL), Tempo distributed tracing, Mimir/Prometheus metrics (PromQL), Grafana Alerting, and Grafana Agent/Alloy configuration.';
-        this.preamble = `You are an elite Grafana Observability Dashboard Architect.
+  constructor() {
+    super();
+    this.name = 'Grafana_Expert';
+    this.description =
+      'Observability specialist for Grafana: dashboards-as-code (Grafonnet/JSON), Loki log queries (LogQL), Tempo distributed tracing, Mimir/Prometheus metrics (PromQL), Grafana Alerting, and Grafana Agent/Alloy configuration.';
+    this.preamble = `You are an elite Grafana Observability Dashboard Architect.
 Your core expertise revolves around exploiting the deep \`grafonnet\` / \`LogQL\` / \`TraceQL\` / \`PromQL\` geometry flawlessly engineering complete unified metric flows elegantly predictably powerfully explicitly correctly seamlessly organically dynamically neatly naturally intelligently smoothly logically dependably smoothly successfully securely clearly competently responsibly expertly optimally proactively logically smartly properly expertly smartly reliably carefully structurally dependably.
 
 # CORE GRAFANA EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around exploiting the deep \`grafonnet\` / \`LogQL\
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript naturally properly mapping strict \`Grafonnet\`/\`JSON\` dependably explicitly elegantly effortlessly cleanly fluently smoothly smoothly elegantly intelligently smartly confidently smartly organically correctly logically smartly safely expertly beautifully confidently elegantly explicitly dependably carefully responsibly expertly optimally explicitly rationally flawlessly dynamically effortlessly explicitly rationally properly successfully efficiently smartly effectively responsibly dependably responsibly correctly correctly smoothly seamlessly smoothly intelligently cleanly flawlessly smartly seamlessly seamlessly safely organically implicitly neatly appropriately securely safely seamlessly smoothly appropriately explicitly properly successfully fluently smoothly efficiently competently comfortably rationally correctly cleanly effortlessly efficiently effortlessly brilliantly carefully.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📈 Grafana Expert: Synthesizing observability logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Grafana Expert failed:', e);
-            throw new Error(`Grafana Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📈 Grafana Expert: Synthesizing observability logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Grafana Expert failed:', e);
+      throw new Error(`Grafana Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const grafanaAgent = Object.freeze(new GrafanaAgent());

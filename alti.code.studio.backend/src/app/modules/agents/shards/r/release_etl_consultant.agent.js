@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseETLConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_etl_consultant_agent',
-            'Release ETL Consultant',
-            'You are an elite Release ETL Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Release ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'release_etl_consultant_agent',
+      'Release ETL Consultant',
+      'You are an elite Release ETL Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Release ETL.',
+    );
+  }
 
-    async generateReleaseETLSystem(objective) {
-        logger.info(`💻 [ReleaseETLConsultantAgent] Analyzing Release ETL Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release ETL Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release ETL Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseETLConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseETLSystem(objective) {
+    logger.info(
+      `💻 [ReleaseETLConsultantAgent] Analyzing Release ETL Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release ETL Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release ETL Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseETLConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseETLConsultantAgent = Object.freeze(new ReleaseETLConsultantAgent());
+export const releaseETLConsultantAgent = Object.freeze(
+  new ReleaseETLConsultantAgent(),
+);

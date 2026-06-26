@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -24,7 +24,12 @@ import Llama from './dyad.model.js';
 const SESSION_MEMORY_MAX = 500;
 const sessionMemoryStore = new Map();
 
-const claudeResponseService = async (prompt, userId, sessionId, model = 'claude-sonnet-4-5-20250929') => {
+const claudeResponseService = async (
+  prompt,
+  userId,
+  sessionId,
+  model = 'claude-sonnet-4-5-20250929',
+) => {
   let memory = sessionMemoryStore.get(sessionId);
   if (!memory) {
     memory = new BufferMemory({
@@ -46,19 +51,19 @@ const claudeResponseService = async (prompt, userId, sessionId, model = 'claude-
       role: msg._getType() === 'human' ? 'user' : 'assistant',
       content: msg.content,
     }));
-    
+
     const finalPrompt = `History:\n${JSON.stringify(formattedHistory)}\n\nUser: ${prompt}`;
 
     const startTime = Date.now();
 
     // Use LlmGatewayService enforcing AWS Bedrock architecture
     const completion = await LlmGatewayService.routeCompletion(
-        userId,
-        sessionId,
-        finalPrompt,
-        model,
-        'General',
-        0.5
+      userId,
+      sessionId,
+      finalPrompt,
+      model,
+      'General',
+      0.5,
     );
 
     const endTime = Date.now();

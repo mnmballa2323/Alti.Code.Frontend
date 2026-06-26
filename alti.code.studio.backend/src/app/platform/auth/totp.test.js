@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { generateSecret, getTotpCode, verifyTotp, getOtpauthUri } from './totp.js';
+import {
+  generateSecret,
+  getTotpCode,
+  verifyTotp,
+  getOtpauthUri,
+} from './totp.js';
 
 describe('TOTP Auth Engine (RFC 6238)', () => {
   it('should generate a 32-character base32 secret key', () => {
@@ -14,7 +19,7 @@ describe('TOTP Auth Engine (RFC 6238)', () => {
     const secret = generateSecret();
     const currentTimeStep = Math.floor(Date.now() / 1000 / 30);
     const code = getTotpCode(secret, currentTimeStep);
-    
+
     expect(code.length).toBe(6);
     expect(/^\d{6}$/.test(code)).toBe(true);
 
@@ -25,7 +30,7 @@ describe('TOTP Auth Engine (RFC 6238)', () => {
   it('should verify codes within clock drift window step', () => {
     const secret = generateSecret();
     const currentTimeStep = Math.floor(Date.now() / 1000 / 30);
-    
+
     // Generate code for 1 step back (-30 seconds)
     const prevCode = getTotpCode(secret, currentTimeStep - 1);
     expect(verifyTotp(secret, prevCode, 1)).toBe(true);
@@ -50,6 +55,8 @@ describe('TOTP Auth Engine (RFC 6238)', () => {
     const secret = 'JBSWY3DPEHPK3PXP';
     const email = 'user@example.com';
     const uri = getOtpauthUri(secret, email, 'Inso Code');
-    expect(uri).toBe('otpauth://totp/Inso%20Code:user%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=Inso%20Code');
+    expect(uri).toBe(
+      'otpauth://totp/Inso%20Code:user%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=Inso%20Code',
+    );
   });
 });

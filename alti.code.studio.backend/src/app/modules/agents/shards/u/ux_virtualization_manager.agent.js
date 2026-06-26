@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXVirtualizationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_virtualization_manager_agent',
-            'UX Virtualization Manager',
-            'You are an elite UX Virtualization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and UX Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_virtualization_manager_agent',
+      'UX Virtualization Manager',
+      'You are an elite UX Virtualization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and UX Virtualization.',
+    );
+  }
 
-    async generateUXVirtualizationSystem(objective) {
-        logger.info(`💻 [UXVirtualizationManagerAgent] Analyzing UX Virtualization Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Virtualization Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Virtualization Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXVirtualizationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [UXVirtualizationManagerAgent] Analyzing UX Virtualization Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Virtualization Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Virtualization Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXVirtualizationManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXVirtualizationManagerAgent = Object.freeze(new UXVirtualizationManagerAgent());
+export const uXVirtualizationManagerAgent = Object.freeze(
+  new UXVirtualizationManagerAgent(),
+);

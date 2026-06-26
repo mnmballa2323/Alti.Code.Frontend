@@ -13,24 +13,29 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsETLTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_etl_tester_agent',
-            'Systems ETL Tester',
-            'You are an elite Systems ETL Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Systems ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_etl_tester_agent',
+      'Systems ETL Tester',
+      'You are an elite Systems ETL Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Systems ETL.',
+    );
+  }
 
-    async generateSystemsETLSystem(objective) {
-        logger.info(`💻 [SystemsETLTesterAgent] Analyzing Systems ETL Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems ETL Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems ETL Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsETLTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsETLSystem(objective) {
+    logger.info(
+      `💻 [SystemsETLTesterAgent] Analyzing Systems ETL Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems ETL Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems ETL Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsETLTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const systemsETLTesterAgent = Object.freeze(new SystemsETLTesterAgent());

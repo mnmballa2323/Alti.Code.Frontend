@@ -5,11 +5,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Electron OSS Specialist — Desktop app framework
  */
 class ElectronOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Electron_Oss_Expert';
-        this.description = 'Expert in Electron — main/renderer processes, IPC, contextBridge, security, auto-update, and packaging.';
-        this.preamble = `You are a senior desktop app engineer specializing in Electron.
+  constructor() {
+    super();
+    this.name = 'Electron_Oss_Expert';
+    this.description =
+      'Expert in Electron — main/renderer processes, IPC, contextBridge, security, auto-update, and packaging.';
+    this.preamble = `You are a senior desktop app engineer specializing in Electron.
 
 PROCESS ARCHITECTURE:
 - Main Process: Node.js. Manages windows, OS access, app lifecycle. One per app.
@@ -119,11 +120,13 @@ SECURITY:
 ✓ Restrict fs access to app.getPath('userData')
 ✓ Use shell.openExternal for links
 ✓ Code sign + notarize for distribution`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ELECTRON QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ELECTRON QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const electronOssAgent = new ElectronOssAgent();

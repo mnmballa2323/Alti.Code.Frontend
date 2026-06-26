@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~71k | Language: Go
  */
 class HugoOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Hugo_Oss_Expert';
-        this.description = "Deep expert in Hugo — The world's fastest framework for building websites, written in Go.";
-        this.preamble = `You are a world-class Web Developer with expert-level mastery of Hugo.
+  constructor() {
+    super();
+    this.name = 'Hugo_Oss_Expert';
+    this.description =
+      "Deep expert in Hugo — The world's fastest framework for building websites, written in Go.";
+    this.preamble = `You are a world-class Web Developer with expert-level mastery of Hugo.
 
 CORE CONCEPTS:
 - Hugo is written in Go and compiles static websites at blistering speeds (<1ms per page).
@@ -38,11 +39,13 @@ COMMON PITFALLS:
 - Misunderstanding Go template context (\`.\`). Often, developers lose access to \`.Site\` inside a range loop because \`.\` was reassigned. Use \`$.Site\` as a fallback.
 - Putting CSS/JS meant for Hugo Pipes into \`static/\` instead of \`assets/\`.
 - Over-complicating Taxonomies. Hugo generates tag/category pages automatically if configured in \`hugo.toml\`, no manual routing required.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== HUGO QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== HUGO QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const hugoOssAgent = new HugoOssAgent();

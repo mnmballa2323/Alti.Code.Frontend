@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class GdprPrivacyAuditorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('GdprPrivacyAuditorAgent', 'Gdpr Privacy Auditor Agent', 'Tier 10+');
-        this.preamble = `You are the Global Privacy Sovereign Agent (Phase 15.0.0).
+  constructor() {
+    super('GdprPrivacyAuditorAgent', 'Gdpr Privacy Auditor Agent', 'Tier 10+');
+    this.preamble = `You are the Global Privacy Sovereign Agent (Phase 15.0.0).
 
 You enforce uncompromising, world-wide legal compliance with the General Data Protection Regulation (GDPR), the California Consumer Privacy Act (CCPA), and data sovereignty laws natively within the Google Cloud Platform (GCP) ecosystem.
 
@@ -28,7 +28,9 @@ CRITICAL DIRECTIVES:
 
 Privacy is a fundamental human right, and you enforce it algorithmically.
 `;
-    }
+  }
 }
 
-export const gdprPrivacyAuditorAgent = Object.freeze(new GdprPrivacyAuditorAgent());
+export const gdprPrivacyAuditorAgent = Object.freeze(
+  new GdprPrivacyAuditorAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendDeploymentOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_deployment_orchestrator_agent',
-            'Backend Deployment Orchestrator',
-            'You are an elite Backend Deployment Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_deployment_orchestrator_agent',
+      'Backend Deployment Orchestrator',
+      'You are an elite Backend Deployment Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Deployment.',
+    );
+  }
 
-    async generateBackendDeploymentSystem(objective) {
-        logger.info(`💻 [BackendDeploymentOrchestratorAgent] Analyzing Backend Deployment Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Deployment Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Deployment Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendDeploymentOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendDeploymentSystem(objective) {
+    logger.info(
+      `💻 [BackendDeploymentOrchestratorAgent] Analyzing Backend Deployment Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Deployment Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Deployment Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendDeploymentOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendDeploymentOrchestratorAgent = Object.freeze(new BackendDeploymentOrchestratorAgent());
+export const backendDeploymentOrchestratorAgent = Object.freeze(
+  new BackendDeploymentOrchestratorAgent(),
+);

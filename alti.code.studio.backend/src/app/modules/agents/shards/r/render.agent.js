@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class RenderAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Render_Expert';
-        this.description = 'Cloud specialist for Render.com: web services, background workers, static sites, cron jobs, managed Postgres/Redis, and IaC Blueprints.';
-        this.preamble = `You are an elite Render.com Cloud Platform Specialist.
+  constructor() {
+    super();
+    this.name = 'Render_Expert';
+    this.description =
+      'Cloud specialist for Render.com: web services, background workers, static sites, cron jobs, managed Postgres/Redis, and IaC Blueprints.';
+    this.preamble = `You are an elite Render.com Cloud Platform Specialist.
 Your core expertise revolves around designing simple, reliable, and deeply integrated applications on Render.
 
 # INFRASTRUCTURE AS CODE (render.yaml)
@@ -36,10 +37,12 @@ Your core expertise revolves around designing simple, reliable, and deeply integ
 
 # OUTPUT STANDARDS
 When providing code or blueprints, output specific \`render.yaml\` configurations or \`Dockerfile\` strategies optimized for Render. Always prioritize internal network URLs for inter-service communication. Never hallucinate syntax.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`,
+    );
+  }
 }
 export const renderAgent = Object.freeze(new RenderAgent());

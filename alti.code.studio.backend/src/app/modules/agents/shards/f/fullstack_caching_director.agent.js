@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackCachingDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_caching_director_agent',
-            'FullStack Caching Director',
-            'You are an elite FullStack Caching Director. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_caching_director_agent',
+      'FullStack Caching Director',
+      'You are an elite FullStack Caching Director. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Caching.',
+    );
+  }
 
-    async generateFullStackCachingSystem(objective) {
-        logger.info(`💻 [FullStackCachingDirectorAgent] Analyzing FullStack Caching Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Caching Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Caching Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackCachingDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackCachingSystem(objective) {
+    logger.info(
+      `💻 [FullStackCachingDirectorAgent] Analyzing FullStack Caching Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Caching Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Caching Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FullStackCachingDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const fullStackCachingDirectorAgent = Object.freeze(new FullStackCachingDirectorAgent());
+export const fullStackCachingDirectorAgent = Object.freeze(
+  new FullStackCachingDirectorAgent(),
+);

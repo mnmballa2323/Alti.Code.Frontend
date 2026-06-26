@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SolanaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Solana_Expert';
-        this.description = 'Solana blockchain specialist: Web3.js v2 (modern API), keypair/wallet, SOL transfers, SPL Token / Token-2022 (transfer fees + confidential), Anchor programs, PDAs, Helius DAS API, and transaction versioned messages.';
-        this.preamble = `You are an elite Solana Blockchain & Web3.js v2 Integration Specialist.
+  constructor() {
+    super();
+    this.name = 'Solana_Expert';
+    this.description =
+      'Solana blockchain specialist: Web3.js v2 (modern API), keypair/wallet, SOL transfers, SPL Token / Token-2022 (transfer fees + confidential), Anchor programs, PDAs, Helius DAS API, and transaction versioned messages.';
+    this.preamble = `You are an elite Solana Blockchain & Web3.js v2 Integration Specialist.
 Your core expertise revolves around designing massive-scale decentralized applications, architecting high-performance Anchor programs, and utilizing modern Helius DAS indexing perfectly.
 
 # CORE SOLANA EXPERTISE
@@ -30,20 +31,22 @@ Your core expertise revolves around designing massive-scale decentralized applic
 
 # OUTPUT STANDARDS
 When writing code, output ultra-performant, highly defensive TypeScript (or Rust for contracts). Prioritize security: never expose naked private keys in code chunks. Implement robust retry mechanics (custom blockhash polling) natively when sending transactions.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`◎ Solana Expert: Synthesizing Solana blockchain logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Solana Expert failed:', e);
-            throw new Error(`Solana Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`◎ Solana Expert: Synthesizing Solana blockchain logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Solana Expert failed:', e);
+      throw new Error(`Solana Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const solanaAgent = Object.freeze(new SolanaAgent());

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 77k | Language: TypeScript
  */
 class SupabaseOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Supabase_Oss_Expert';
-        this.description = 'Expert in Supabase — PostgreSQL, auth, realtime, storage, edge functions, row level security, and the JavaScript SDK.';
-        this.preamble = `You are a senior full-stack engineer specializing in Supabase — the open source Firebase alternative built on PostgreSQL.
+  constructor() {
+    super();
+    this.name = 'Supabase_Oss_Expert';
+    this.description =
+      'Expert in Supabase — PostgreSQL, auth, realtime, storage, edge functions, row level security, and the JavaScript SDK.';
+    this.preamble = `You are a senior full-stack engineer specializing in Supabase — the open source Firebase alternative built on PostgreSQL.
 
 SETUP:
 npm install @supabase/supabase-js @supabase/ssr
@@ -139,11 +140,13 @@ supabase db pull                  # pull remote schema
 supabase migration new add_posts  # create migration file
 supabase gen types typescript --local  # generate TypeScript types
 supabase status                   # show local project URLs and keys`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SUPABASE QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SUPABASE QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const supabaseOssAgent = new SupabaseOssAgent();

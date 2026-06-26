@@ -4,11 +4,11 @@ import { logger } from '../../../shared/logger.js';
 import { agentRegistry } from './agent.registry.js';
 import { selfExpandingSwarmService } from './self_expanding_swarm.service.js';
 import { vectorStoreService } from '../memory/vector.store.js';
-import { memorystoreService } from '../azureCloud/azureCache.service.js';
-import { AzureSearchService } from '../azureSearch/azureSearch.service.js';
-import { spannerGraphService } from '../azureCloud/azureCosmosGraph.service.js';
-import { GoogleDlpService } from '../ai/azureDlp.service.js';
-import { workflowService } from '../azureCloud/azureWorkflow.service.js';
+import { memorystoreService } from '../gcpCloud/gcpCache.service.js';
+import { AzureSearchService } from '../gcpCloud/gcpSearch.service.js';
+import { spannerGraphService } from '../gcpCloud/gcpSpannerGraph.service.js';
+import { GoogleDlpService } from '../ai/gcpDlp.service.js';
+import { workflowService } from '../gcpCloud/gcpWorkflow.service.js';
 import crypto from 'crypto';
 import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
 import fs from 'fs';
@@ -17,122 +17,166 @@ import path from 'path';
 import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
 
 class CapabilityRouter {
-    constructor() {
-        this.modelName = (config.azure && config.azure.model_name) || 'gpt-5.5';
-        this.isIndexed = false;
+  constructor() {
+    this.modelName = (config.azure && config.azure.model_name) || 'gpt-5.5';
+    this.isIndexed = false;
+  }
+
+  get model() {
+    if (!this._model) {
+      this._model = AzureGenAiService.getGenerativeModel(this.modelName);
+    }
+    return this._model;
+  }
+
+  get table() {
+    return CAPABILITY_TABLE;
+  }
+
+  /**
+   * Initializes the Agentic RAG system by generating embeddings for all 10,000+ agents
+   * and storing them in the vector database if they aren't already there.
+   */
+  async indexAgents() {
+    if (this.isIndexed) return;
+
+    logger.info(
+      `🗺️ [CapabilityRouter] Bootstrapping Agentic RAG Vector Index for massive scale...`,
+    );
+    try {
+      await agentRegistry.loadPlugins();
+    } catch (pluginErr) {
+      logger.warn(
+        `⚠️ [CapabilityRouter] Failed to load dynamic plugins before indexing: ${pluginErr.message}`,
+      );
     }
 
-    get model() {
-        if (!this._model) {
-            this._model = AzureGenAiService.getGenerativeModel(this.modelName);
-        }
-        return this._model;
+    const availableAgents = agentRegistry.list();
+
+    try {
+      let count = 0;
+      const BATCH_SIZE = 50;
+
+      for (let i = 0; i < availableAgents.length; i += BATCH_SIZE) {
+        const batch = availableAgents.slice(i, i + BATCH_SIZE);
+        const batchPromises = batch.map(agent => {
+          return vectorStoreService.pool
+            .query(
+              "SELECT id FROM alti_memory WHERE metadata->>'agentId' = $1 AND metadata->>'type' = 'agent_profile' LIMIT 1",
+              [agent.name],
+            )
+            .then(async checkRes => {
+              if (checkRes.rows.length > 0) {
+                return;
+              }
+              const agentDocument = `Agent Name: ${agent.name}\nDescription: ${agent.description}\nCapabilities: ${agent.capabilities?.join(', ')}`;
+              await vectorStoreService.add(agentDocument, {
+                type: 'agent_profile',
+                agentId: agent.name,
+              });
+              count++;
+            })
+            .catch(e => {
+              logger.warn(
+                `⚠️ Failed to index agent ${agent.name}: ${e.message}`,
+              );
+            });
+        });
+
+        await Promise.all(batchPromises);
+        logger.info(
+          `🚀 [CapabilityRouter] Processed batch ${i / BATCH_SIZE + 1} (${availableAgents.length} total agents processed)`,
+        );
+      }
+
+      this.isIndexed = true;
+      logger.info(
+        `✅ [CapabilityRouter] Successfully bootstrapped agent profiles into Vector Store (${count} new agents added).`,
+      );
+    } catch (error) {
+      logger.error(
+        `❌ [CapabilityRouter] Failed to index agent profiles: ${error.message}`,
+      );
+    }
+  }
+
+  async route(query) {
+    // 1. Redis Intent Cache Check (O(1) Zero-Latency Retrieval)
+    // Hash the query to create a safe Redis key
+    const queryHash = crypto.createHash('sha256').update(query).digest('hex');
+    const cacheKey = `intent_route:${queryHash}`;
+
+    const cachedAgentId = await memorystoreService.getCache(cacheKey);
+    if (cachedAgentId) {
+      logger.info(
+        `⚡ [CapabilityRouter] ZERO-LATENCY CACHE HIT: Routed "${query.slice(0, 30)}..." to [${cachedAgentId}] in <1ms`,
+      );
+      return {
+        agentId: cachedAgentId,
+        semanticMatch: true,
+        dynamicallyForged: false,
+      };
     }
 
-    get table() {
-        return CAPABILITY_TABLE;
+    // Ensure index is ready
+    if (!this.isIndexed) {
+      await this.indexAgents();
     }
 
-    /**
-     * Initializes the Agentic RAG system by generating embeddings for all 10,000+ agents
-     * and storing them in the vector database if they aren't already there.
-     */
-    async indexAgents() {
-        if (this.isIndexed) return;
-        
-        logger.info(`🗺️ [CapabilityRouter] Bootstrapping Agentic RAG Vector Index for massive scale...`);
-        try {
-            await agentRegistry.loadPlugins();
-        } catch (pluginErr) {
-            logger.warn(`⚠️ [CapabilityRouter] Failed to load dynamic plugins before indexing: ${pluginErr.message}`);
-        }
+    logger.info(
+      `🗺️ [CapabilityRouter] Executing Agentic RAG search for query: "${query}"`,
+    );
 
-        const availableAgents = agentRegistry.list();
-        
-        try {
-            let count = 0;
-            const BATCH_SIZE = 50;
-            
-            for (let i = 0; i < availableAgents.length; i += BATCH_SIZE) {
-                const batch = availableAgents.slice(i, i + BATCH_SIZE);
-                const batchPromises = batch.map(agent => {
-                    return vectorStoreService.pool.query(
-                        "SELECT id FROM alti_memory WHERE metadata->>'agentId' = $1 AND metadata->>'type' = 'agent_profile' LIMIT 1",
-                        [agent.name]
-                    ).then(async (checkRes) => {
-                        if (checkRes.rows.length > 0) {
-                            return;
-                        }
-                        const agentDocument = `Agent Name: ${agent.name}\nDescription: ${agent.description}\nCapabilities: ${agent.capabilities?.join(', ')}`;
-                        await vectorStoreService.add(agentDocument, { 
-                            type: 'agent_profile', 
-                            agentId: agent.name 
-                        });
-                        count++;
-                    }).catch(e => {
-                        logger.warn(`⚠️ Failed to index agent ${agent.name}: ${e.message}`);
-                    });
-                });
-                
-                await Promise.all(batchPromises);
-                logger.info(`🚀 [CapabilityRouter] Processed batch ${i / BATCH_SIZE + 1} (${availableAgents.length} total agents processed)`);
-            }
-            
-            this.isIndexed = true;
-            logger.info(`✅ [CapabilityRouter] Successfully bootstrapped agent profiles into Vector Store (${count} new agents added).`);
-        } catch (error) {
-            logger.error(`❌ [CapabilityRouter] Failed to index agent profiles: ${error.message}`);
-        }
+    // 2. Vector Search (Retrieve Top 10 most mathematically relevant agents)
+    const searchResults = await vectorStoreService.search(query, 10);
+    let candidateAgents = [];
+
+    if (
+      searchResults.documents &&
+      searchResults.documents[0] &&
+      searchResults.documents[0].length > 0
+    ) {
+      candidateAgents = searchResults.documents[0]; // array of stringified agent profiles
+
+      // 3. Vector Short-Circuiting (Heuristic Bypass)
+      const topDistance = searchResults.distances[0][0];
+      const topAgentMeta = searchResults.metadatas[0][0];
+
+      // If Cosine Distance is exceptionally tight (< 0.15), we bypass the 1.5s LLM generation
+      if (topDistance < 0.15 && topAgentMeta && topAgentMeta.agentId) {
+        logger.info(
+          `🚀 [CapabilityRouter] HEURISTIC SHORT-CIRCUIT: Exact mathematical match found (Distance: ${topDistance.toFixed(3)}). Bypassing LLM...`,
+        );
+        // Cache the fast result
+        await memorystoreService.setCache(
+          cacheKey,
+          topAgentMeta.agentId,
+          86400,
+        ); // 24hr TTL
+        return {
+          agentId: topAgentMeta.agentId,
+          semanticMatch: true,
+          dynamicallyForged: false,
+        };
+      }
+    } else {
+      // Fallback if vector search is offline or empty
+      logger.warn(
+        '⚠️ [CapabilityRouter] Vector search returned empty, falling back to core agents.',
+      );
+      candidateAgents = agentRegistry
+        .list()
+        .slice(0, 10)
+        .map(a => `Agent Name: ${a.name}\nDescription: ${a.description}`);
     }
 
-    async route(query) {
-        // 1. Redis Intent Cache Check (O(1) Zero-Latency Retrieval)
-        // Hash the query to create a safe Redis key
-        const queryHash = crypto.createHash('sha256').update(query).digest('hex');
-        const cacheKey = `intent_route:${queryHash}`;
-        
-        const cachedAgentId = await memorystoreService.getCache(cacheKey);
-        if (cachedAgentId) {
-            logger.info(`⚡ [CapabilityRouter] ZERO-LATENCY CACHE HIT: Routed "${query.slice(0, 30)}..." to [${cachedAgentId}] in <1ms`);
-            return { agentId: cachedAgentId, semanticMatch: true, dynamicallyForged: false };
-        }
+    logger.info(
+      `🗺️ [CapabilityRouter] Retrieved ${candidateAgents.length} candidates from Vector DB. Routing to Gemini...`,
+    );
 
-        // Ensure index is ready
-        if (!this.isIndexed) {
-            await this.indexAgents();
-        }
-
-        logger.info(`🗺️ [CapabilityRouter] Executing Agentic RAG search for query: "${query}"`);
-        
-        // 2. Vector Search (Retrieve Top 10 most mathematically relevant agents)
-        const searchResults = await vectorStoreService.search(query, 10);
-        let candidateAgents = [];
-        
-        if (searchResults.documents && searchResults.documents[0] && searchResults.documents[0].length > 0) {
-            candidateAgents = searchResults.documents[0]; // array of stringified agent profiles
-            
-            // 3. Vector Short-Circuiting (Heuristic Bypass)
-            const topDistance = searchResults.distances[0][0];
-            const topAgentMeta = searchResults.metadatas[0][0];
-            
-            // If Cosine Distance is exceptionally tight (< 0.15), we bypass the 1.5s LLM generation
-            if (topDistance < 0.15 && topAgentMeta && topAgentMeta.agentId) {
-                logger.info(`🚀 [CapabilityRouter] HEURISTIC SHORT-CIRCUIT: Exact mathematical match found (Distance: ${topDistance.toFixed(3)}). Bypassing LLM...`);
-                // Cache the fast result
-                await memorystoreService.setCache(cacheKey, topAgentMeta.agentId, 86400); // 24hr TTL
-                return { agentId: topAgentMeta.agentId, semanticMatch: true, dynamicallyForged: false };
-            }
-        } else {
-            // Fallback if vector search is offline or empty
-            logger.warn('⚠️ [CapabilityRouter] Vector search returned empty, falling back to core agents.');
-            candidateAgents = agentRegistry.list().slice(0, 10).map(a => `Agent Name: ${a.name}\nDescription: ${a.description}`);
-        }
-
-        logger.info(`🗺️ [CapabilityRouter] Retrieved ${candidateAgents.length} candidates from Vector DB. Routing to Gemini...`);
-
-        // 4. Gemini Semantic Final Router
-        // Now we only pass the TOP 10 candidates instead of 10,000, saving millions of tokens.
-        const prompt = `
+    // 4. Gemini Semantic Final Router
+    // Now we only pass the TOP 10 candidates instead of 10,000, saving millions of tokens.
+    const prompt = `
             You are the Capability Router for Inso Code's autonomous swarm.
             A task requires semantic fallback routing.
             
@@ -148,133 +192,198 @@ class CapabilityRouter {
             Return ONLY raw JSON, no markdown formatting.
         `;
 
-        try {
-            const result = await this.model.generateContent(prompt);
-            const text = result.response.text();
-            const jsonMatch = text.match(/\{[\s\S]*\}/);
-            
-            if (jsonMatch) {
-                const decision = JSON.parse(jsonMatch[0]);
-                
-                if (decision.agentId === 'MISSING_CAPABILITY') {
-                    logger.warn(`⚠️ [CapabilityRouter] No capability found. Scanning federated ARD catalogs for dynamic provisioning: ${decision.reason}`);
-                    
-                    const provisionedAgentId = await this.findAndProvisionCapability(query);
-                    if (provisionedAgentId) {
-                        logger.info(`✨ [CapabilityRouter] Routing query directly to newly provisioned agent: [${provisionedAgentId}]`);
-                        return { agentId: provisionedAgentId, semanticMatch: true, dynamicallyForged: true };
-                    }
-                    
-                    // Trigger dynamic expansion to forge the new agent if ARD discovery didn't find anything
-                    const newAgentId = await selfExpandingSwarmService.expandSwarm(decision.reason);
-                    return { agentId: newAgentId || 'jules', semanticMatch: true, dynamicallyForged: !!newAgentId };
-                }
-                
-                logger.info(`🗺️ [CapabilityRouter] Semantically routed to: ${decision.agentId}`);
-                // Cache the LLM decision to skip this latency next time
-                await memorystoreService.setCache(cacheKey, decision.agentId, 86400); // 24hr TTL
+    try {
+      const result = await this.model.generateContent(prompt);
+      const text = result.response.text();
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
 
-                // 🧠 AgentMemory: Record routing decision for pattern learning
-                AgentMemoryHooks.captureDecision(
-                    `CapabilityRouter routed query to [${decision.agentId}]`,
-                    `Query: "${query.substring(0, 200)}". Reason: ${decision.reason}`,
-                    { agentId: decision.agentId, routingMethod: 'semantic_llm' }
-                ).catch(() => {});
+      if (jsonMatch) {
+        const decision = JSON.parse(jsonMatch[0]);
 
-                return { agentId: decision.agentId, semanticMatch: true, dynamicallyForged: false };
-            }
-        } catch (error) {
-            logger.error('CapabilityRouter evaluation failed.', error);
+        if (decision.agentId === 'MISSING_CAPABILITY') {
+          logger.warn(
+            `⚠️ [CapabilityRouter] No capability found. Scanning federated ARD catalogs for dynamic provisioning: ${decision.reason}`,
+          );
+
+          const provisionedAgentId =
+            await this.findAndProvisionCapability(query);
+          if (provisionedAgentId) {
+            logger.info(
+              `✨ [CapabilityRouter] Routing query directly to newly provisioned agent: [${provisionedAgentId}]`,
+            );
+            return {
+              agentId: provisionedAgentId,
+              semanticMatch: true,
+              dynamicallyForged: true,
+            };
+          }
+
+          // Trigger dynamic expansion to forge the new agent if ARD discovery didn't find anything
+          const newAgentId = await selfExpandingSwarmService.expandSwarm(
+            decision.reason,
+          );
+          return {
+            agentId: newAgentId || 'jules',
+            semanticMatch: true,
+            dynamicallyForged: !!newAgentId,
+          };
         }
-        
-        // Final fallback
-        return { agentId: 'jules', semanticMatch: false, dynamicallyForged: false };
+
+        logger.info(
+          `🗺️ [CapabilityRouter] Semantically routed to: ${decision.agentId}`,
+        );
+        // Cache the LLM decision to skip this latency next time
+        await memorystoreService.setCache(cacheKey, decision.agentId, 86400); // 24hr TTL
+
+        // 🧠 AgentMemory: Record routing decision for pattern learning
+        AgentMemoryHooks.captureDecision(
+          `CapabilityRouter routed query to [${decision.agentId}]`,
+          `Query: "${query.substring(0, 200)}". Reason: ${decision.reason}`,
+          { agentId: decision.agentId, routingMethod: 'semantic_llm' },
+        ).catch(() => {});
+
+        return {
+          agentId: decision.agentId,
+          semanticMatch: true,
+          dynamicallyForged: false,
+        };
+      }
+    } catch (error) {
+      logger.error('CapabilityRouter evaluation failed.', error);
     }
 
-    /**
-     * Generates a Multi-Agent Directed Acyclic Graph (DAG) for end-to-end tasks.
-     * @param {string} query 
-     * @param {object} visualContext - Optional { data: 'base64', mimeType: 'image/png' }
-     */
-    async routeWorkflow(query, visualContext = null) {
-        // Ensure index is ready
-        if (!this.isIndexed) {
-            await this.indexAgents();
-        }
+    // Final fallback
+    return { agentId: 'jules', semanticMatch: false, dynamicallyForged: false };
+  }
 
-        logger.info(`🛡️ [CapabilityRouter] Intercepting query for Zero-Trust PII Redaction via Google Cloud DLP...`);
-        let sanitizedQuery = query;
-        try {
-            sanitizedQuery = await GoogleDlpService.redactText(query);
-            if (sanitizedQuery !== query) {
-                 logger.warn(`🚨 [CapabilityRouter] PII or Credentials detected in query! Payload has been mathematically redacted.`);
+  /**
+   * Generates a Multi-Agent Directed Acyclic Graph (DAG) for end-to-end tasks.
+   * @param {string} query
+   * @param {object} visualContext - Optional { data: 'base64', mimeType: 'image/png' }
+   */
+  async routeWorkflow(query, visualContext = null) {
+    // Ensure index is ready
+    if (!this.isIndexed) {
+      await this.indexAgents();
+    }
+
+    logger.info(
+      `🛡️ [CapabilityRouter] Intercepting query for Zero-Trust PII Redaction via Google Cloud DLP...`,
+    );
+    let sanitizedQuery = query;
+    try {
+      sanitizedQuery = await GoogleDlpService.redactText(query);
+      if (sanitizedQuery !== query) {
+        logger.warn(
+          `🚨 [CapabilityRouter] PII or Credentials detected in query! Payload has been mathematically redacted.`,
+        );
+      }
+    } catch (e) {
+      logger.warn(
+        `⚠️ [CapabilityRouter] DLP Redaction failed, proceeding with caution: ${e.message}`,
+      );
+    }
+
+    logger.info(
+      `🗺️ [CapabilityRouter] Executing Agentic RAG search for WORKFLOW query: "${sanitizedQuery}"`,
+    );
+
+    // Retrieve Top 15 candidates for a complex workflow
+    const searchResults = await vectorStoreService.search(sanitizedQuery, 15);
+    let candidateAgents = [];
+
+    if (
+      searchResults.documents &&
+      searchResults.documents[0] &&
+      searchResults.documents[0].length > 0
+    ) {
+      candidateAgents = searchResults.documents[0];
+    } else {
+      candidateAgents = agentRegistry
+        .list()
+        .slice(0, 15)
+        .map(a => `Agent Name: ${a.name}\nDescription: ${a.description}`);
+    }
+
+    logger.info(
+      `🔍 [CapabilityRouter] Grounding architectural query in real-time Azure search...`,
+    );
+    let searchContext = '';
+    try {
+      searchContext = await AzureSearchService.getSearchContext(
+        `software architecture best practices for: ${sanitizedQuery}`,
+      );
+    } catch (e) {
+      logger.warn(
+        `⚠️ [CapabilityRouter] Search grounding failed, proceeding with base model weights: ${e.message}`,
+      );
+    }
+
+    logger.info(
+      `🕸️ [CapabilityRouter] Calculating AST blast radius via Azure Cosmos Graph...`,
+    );
+    let astContext = '';
+    try {
+      // Extract a naive core entity from the query (in a production system, an NLP parser would isolate the exact domain)
+      const coreEntityMatch = sanitizedQuery.match(
+        /(?:update|refactor|build|create) ([\w]+)/i,
+      );
+      const startNodeId = coreEntityMatch
+        ? coreEntityMatch[1].toLowerCase()
+        : 'core_system';
+
+      const astHops = await spannerGraphService.executeAstGraphTraversal(
+        startNodeId,
+        3,
+      );
+      if (astHops && astHops.length > 0) {
+        astContext = astHops
+          .map(
+            hop =>
+              `- ${hop.file_path}: [${hop.name}] -> DEPENDS ON [${startNodeId}]`,
+          )
+          .join('\n');
+      }
+    } catch (e) {
+      logger.warn(
+        `⚠️ [CapabilityRouter] Spanner AST Graph query failed: ${e.message}`,
+      );
+    }
+
+    // #4: Gemini File Search — Indexed Document Context for Workflow Planning
+    let fileSearchContext = '';
+    try {
+      const { fileSearchService } =
+        await import('../fileSearch/fileSearch.service.js');
+      const stores = await fileSearchService.listStores();
+      if (stores && stores.length > 0) {
+        const storeNames = stores.slice(0, 5).map(s => s.name);
+        const fsResult = await Promise.race([
+          fileSearchService.query(sanitizedQuery, storeNames),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('timeout')), 8000),
+          ),
+        ]);
+        if (fsResult && fsResult.text) {
+          fileSearchContext = fsResult.text.substring(0, 3000);
+          if (fsResult.citations && fsResult.citations.length > 0) {
+            fileSearchContext += '\n\nDocument Citations:\n';
+            for (const c of fsResult.citations.slice(0, 10)) {
+              fileSearchContext += `• ${c.title || 'Unknown'}${c.pageNumber ? ` (p.${c.pageNumber})` : ''}\n`;
             }
-        } catch(e) {
-             logger.warn(`⚠️ [CapabilityRouter] DLP Redaction failed, proceeding with caution: ${e.message}`);
+          }
+          logger.info(
+            `📚 [CapabilityRouter] File Search injected ${fileSearchContext.length} chars of document context into workflow planning.`,
+          );
         }
+      }
+    } catch (e) {
+      logger.warn(
+        `⚠️ [CapabilityRouter] File Search workflow context failed (non-blocking): ${e.message}`,
+      );
+    }
 
-        logger.info(`🗺️ [CapabilityRouter] Executing Agentic RAG search for WORKFLOW query: "${sanitizedQuery}"`);
-        
-        // Retrieve Top 15 candidates for a complex workflow
-        const searchResults = await vectorStoreService.search(sanitizedQuery, 15);
-        let candidateAgents = [];
-        
-        if (searchResults.documents && searchResults.documents[0] && searchResults.documents[0].length > 0) {
-            candidateAgents = searchResults.documents[0];
-        } else {
-            candidateAgents = agentRegistry.list().slice(0, 15).map(a => `Agent Name: ${a.name}\nDescription: ${a.description}`);
-        }
-
-        logger.info(`🔍 [CapabilityRouter] Grounding architectural query in real-time Azure search...`);
-        let searchContext = "";
-        try {
-            searchContext = await AzureSearchService.getSearchContext(`software architecture best practices for: ${sanitizedQuery}`);
-        } catch (e) {
-            logger.warn(`⚠️ [CapabilityRouter] Search grounding failed, proceeding with base model weights: ${e.message}`);
-        }
-
-        logger.info(`🕸️ [CapabilityRouter] Calculating AST blast radius via Azure Cosmos Graph...`);
-        let astContext = "";
-        try {
-            // Extract a naive core entity from the query (in a production system, an NLP parser would isolate the exact domain)
-            const coreEntityMatch = sanitizedQuery.match(/(?:update|refactor|build|create) ([\w]+)/i);
-            const startNodeId = coreEntityMatch ? coreEntityMatch[1].toLowerCase() : 'core_system';
-            
-            const astHops = await spannerGraphService.executeAstGraphTraversal(startNodeId, 3);
-            if (astHops && astHops.length > 0) {
-                 astContext = astHops.map(hop => `- ${hop.file_path}: [${hop.name}] -> DEPENDS ON [${startNodeId}]`).join('\n');
-            }
-        } catch (e) {
-            logger.warn(`⚠️ [CapabilityRouter] Spanner AST Graph query failed: ${e.message}`);
-        }
-
-        // #4: Gemini File Search — Indexed Document Context for Workflow Planning
-        let fileSearchContext = "";
-        try {
-            const { fileSearchService } = await import('../fileSearch/fileSearch.service.js');
-            const stores = await fileSearchService.listStores();
-            if (stores && stores.length > 0) {
-                const storeNames = stores.slice(0, 5).map(s => s.name);
-                const fsResult = await Promise.race([
-                    fileSearchService.query(sanitizedQuery, storeNames),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 8000))
-                ]);
-                if (fsResult && fsResult.text) {
-                    fileSearchContext = fsResult.text.substring(0, 3000);
-                    if (fsResult.citations && fsResult.citations.length > 0) {
-                        fileSearchContext += '\n\nDocument Citations:\n';
-                        for (const c of fsResult.citations.slice(0, 10)) {
-                            fileSearchContext += `• ${c.title || 'Unknown'}${c.pageNumber ? ` (p.${c.pageNumber})` : ''}\n`;
-                        }
-                    }
-                    logger.info(`📚 [CapabilityRouter] File Search injected ${fileSearchContext.length} chars of document context into workflow planning.`);
-                }
-            }
-        } catch (e) {
-            logger.warn(`⚠️ [CapabilityRouter] File Search workflow context failed (non-blocking): ${e.message}`);
-        }
-
-        const prompt = `
+    const prompt = `
             You are the Capability Router for Inso Code's autonomous swarm.
             The user wants an end-to-end development task completed.
             
@@ -322,181 +431,234 @@ class CapabilityRouter {
             }
         `;
 
-        try {
-            const parts = [{ text: prompt }];
-            if (visualContext && visualContext.data && visualContext.mimeType) {
-                parts.push({
-                    inlineData: {
-                        data: visualContext.data,
-                        mimeType: visualContext.mimeType
-                    }
-                });
-                logger.info(`👁️ [CapabilityRouter] Injected multi-modal visual payload into DAG routing sequence.`);
-            }
-
-            const result = await this.model.generateContent({ contents: [{ role: 'user', parts }] });
-            const text = result.response.text();
-            const jsonMatch = text.match(/\{[\s\S]*\}/);
-            
-            if (jsonMatch) {
-                const decision = JSON.parse(jsonMatch[0]);
-                const workflow = decision.workflow || { nodes: [], edges: [] };
-                logger.info(`🗺️ [CapabilityRouter] Generated NON-LINEAR workflow with ${workflow.nodes.length} nodes and ${workflow.edges.length} edges.`);
-                
-                // Hybrid Orchestration Shift
-                if (workflow.nodes.length > 5) {
-                    logger.warn(`🚀 [CapabilityRouter] Workflow exceeds local safety threshold (>5 nodes). Shifting orchestration to Google Cloud Workflows...`);
-                    await workflowService.executeSwarm(workflow);
-                    return { ...workflow, orchestrationMode: 'CLOUD_WORKFLOWS' };
-                }
-                
-                return { ...workflow, orchestrationMode: 'LOCAL_SEMAPHORE' };
-            }
-        } catch (error) {
-            logger.error('CapabilityRouter workflow evaluation failed.', error);
-        }
-        
-        // Fallback to a single generic agent node
-        return { 
-            nodes: [{ id: "fallback_1", agentId: 'jules', task: sanitizedQuery }],
-            edges: [],
-            orchestrationMode: 'LOCAL_SEMAPHORE'
-        };
-    }
-
-    /**
-     * Scans tracked federated ARD catalogs for uninstalled tools matching the query.
-     * If found, installs them locally on-the-fly and returns the dynamic agent ID.
-     */
-    async findAndProvisionCapability(query) {
-        logger.info(`🗺️ [CapabilityRouter] Attempting dynamic ARD self-provisioning for query: "${query}"`);
-        const federatedFilePath = path.join(process.cwd(), '.alti/federated_catalogs.json');
-        if (!fs.existsSync(federatedFilePath)) {
-            logger.info(`🗺️ [CapabilityRouter] No federated catalogs tracked yet.`);
-            return null;
-        }
-
-        let catalogs = [];
-        try {
-            const fileData = fs.readFileSync(federatedFilePath, 'utf8');
-            catalogs = JSON.parse(fileData);
-        } catch (err) {
-            logger.error(`❌ [CapabilityRouter] Failed to parse federated catalogs: ${err.message}`);
-            return null;
-        }
-
-        const queryLower = query.toLowerCase();
-
-        for (const entry of catalogs) {
-            const catalog = entry.catalog;
-            if (!catalog || !Array.isArray(catalog.entries)) continue;
-
-            for (const item of catalog.entries) {
-                const isMcp = item.type === "application/mcp-server-card+json" || item.type === "application/mcp-server+json";
-                if (!isMcp) continue;
-
-                const name = item.identifier.split(':').pop();
-                const displayName = item.displayName || '';
-                const desc = item.description || '';
-                const caps = Array.isArray(item.capabilities) ? item.capabilities : [];
-                const queries = Array.isArray(item.representativeQueries) ? item.representativeQueries : [];
-
-                const matches = 
-                    queryLower.includes(name.toLowerCase()) ||
-                    displayName.toLowerCase().includes(queryLower) ||
-                    caps.some(c => queryLower.includes(c.toLowerCase())) ||
-                    queries.some(q => queryLower.includes(q.toLowerCase()) || q.toLowerCase().includes(queryLower));
-
-                if (matches) {
-                    logger.info(`✨ [CapabilityRouter] Discovered matching capability [${name}] in catalog from ${entry.domain}!`);
-
-                    const customServersFilePath = path.join(process.cwd(), '.alti/custom_mcp_servers.json');
-                    let customServers = [];
-                    if (fs.existsSync(customServersFilePath)) {
-                        try {
-                            customServers = JSON.parse(fs.readFileSync(customServersFilePath, 'utf8'));
-                        } catch (e) {
-                            logger.error(`❌ [CapabilityRouter] Failed to parse custom mcp servers: ${e.message}`);
-                        }
-                    }
-
-                    if (customServers.some(s => s.name === name)) {
-                        logger.info(`🔌 [CapabilityRouter] Capability [${name}] is already registered in custom_mcp_servers.json.`);
-                        return `${name}_agent`;
-                    }
-
-                    const { PRESETS } = await import('../mcp/mcp.client.js');
-                    const preset = PRESETS.find(p => p.name === name);
-                    
-                    const command = preset ? preset.command : 'npx';
-                    const args = preset ? preset.args : ['-y', `@modelcontextprotocol/server-${name}`];
-
-                    const newServer = {
-                        name,
-                        title: displayName || name,
-                        description: desc || `ARD Self-provisioned Model Context Protocol server`,
-                        command,
-                        args,
-                        env: {},
-                        installedVia: "ard-self-provisioning",
-                        installedAt: new Date().toISOString()
-                    };
-
-                    customServers.push(newServer);
-                    fs.writeFileSync(customServersFilePath, JSON.stringify(customServers, null, 2), 'utf8');
-
-                    try {
-                        const { mcpGateway } = await import('../mcp/mcp_gateway.service.js');
-                        const mountRes = await mcpGateway.mountServer(name, { command, args, env: {} });
-                        if (mountRes && mountRes.success) {
-                            logger.info(`✅ [CapabilityRouter] Dynamic self-provisioning succeeded! Server [${name}] mounted as Swarm Agent [${mountRes.agentId}].`);
-                            return mountRes.agentId;
-                        }
-                    } catch (mountErr) {
-                        logger.error(`❌ [CapabilityRouter] Dynamic mounting failed for self-provisioned server ${name}: ${mountErr.message}`);
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Dynamically registers a specialist agent in the central registry.
-     * Keeps backwards compatibility with Phase 10 dynamic synthetics.
-     * 
-     * @param {BaseSpecialistAgent} agent The specialist agent instance.
-     * @param {string[]} keywords Query keywords for semantic routing.
-     */
-    registerAgent(agent, keywords = []) {
-        logger.info(`🗺️ [CapabilityRouter] Dynamically registering agent [${agent.name}] with ${keywords.length} keywords.`);
-        agentRegistry.register({
-            name: agent.name,
-            displayName: agent.displayName || agent.name,
-            description: agent.description || `Dynamic Specialist Agent: ${agent.name}`,
-            preamble: agent.preamble,
-            capabilities: keywords,
-            instance: agent,
-            version: '1.0.0'
+    try {
+      const parts = [{ text: prompt }];
+      if (visualContext && visualContext.data && visualContext.mimeType) {
+        parts.push({
+          inlineData: {
+            data: visualContext.data,
+            mimeType: visualContext.mimeType,
+          },
         });
+        logger.info(
+          `👁️ [CapabilityRouter] Injected multi-modal visual payload into DAG routing sequence.`,
+        );
+      }
+
+      const result = await this.model.generateContent({
+        contents: [{ role: 'user', parts }],
+      });
+      const text = result.response.text();
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+
+      if (jsonMatch) {
+        const decision = JSON.parse(jsonMatch[0]);
+        const workflow = decision.workflow || { nodes: [], edges: [] };
+        logger.info(
+          `🗺️ [CapabilityRouter] Generated NON-LINEAR workflow with ${workflow.nodes.length} nodes and ${workflow.edges.length} edges.`,
+        );
+
+        // Hybrid Orchestration Shift
+        if (workflow.nodes.length > 5) {
+          logger.warn(
+            `🚀 [CapabilityRouter] Workflow exceeds local safety threshold (>5 nodes). Shifting orchestration to Google Cloud Workflows...`,
+          );
+          await workflowService.executeSwarm(workflow);
+          return { ...workflow, orchestrationMode: 'CLOUD_WORKFLOWS' };
+        }
+
+        return { ...workflow, orchestrationMode: 'LOCAL_SEMAPHORE' };
+      }
+    } catch (error) {
+      logger.error('CapabilityRouter workflow evaluation failed.', error);
     }
+
+    // Fallback to a single generic agent node
+    return {
+      nodes: [{ id: 'fallback_1', agentId: 'jules', task: sanitizedQuery }],
+      edges: [],
+      orchestrationMode: 'LOCAL_SEMAPHORE',
+    };
+  }
+
+  /**
+   * Scans tracked federated ARD catalogs for uninstalled tools matching the query.
+   * If found, installs them locally on-the-fly and returns the dynamic agent ID.
+   */
+  async findAndProvisionCapability(query) {
+    logger.info(
+      `🗺️ [CapabilityRouter] Attempting dynamic ARD self-provisioning for query: "${query}"`,
+    );
+    const federatedFilePath = path.join(
+      process.cwd(),
+      '.alti/federated_catalogs.json',
+    );
+    if (!fs.existsSync(federatedFilePath)) {
+      logger.info(`🗺️ [CapabilityRouter] No federated catalogs tracked yet.`);
+      return null;
+    }
+
+    let catalogs = [];
+    try {
+      const fileData = fs.readFileSync(federatedFilePath, 'utf8');
+      catalogs = JSON.parse(fileData);
+    } catch (err) {
+      logger.error(
+        `❌ [CapabilityRouter] Failed to parse federated catalogs: ${err.message}`,
+      );
+      return null;
+    }
+
+    const queryLower = query.toLowerCase();
+
+    for (const entry of catalogs) {
+      const catalog = entry.catalog;
+      if (!catalog || !Array.isArray(catalog.entries)) continue;
+
+      for (const item of catalog.entries) {
+        const isMcp =
+          item.type === 'application/mcp-server-card+json' ||
+          item.type === 'application/mcp-server+json';
+        if (!isMcp) continue;
+
+        const name = item.identifier.split(':').pop();
+        const displayName = item.displayName || '';
+        const desc = item.description || '';
+        const caps = Array.isArray(item.capabilities) ? item.capabilities : [];
+        const queries = Array.isArray(item.representativeQueries)
+          ? item.representativeQueries
+          : [];
+
+        const matches =
+          queryLower.includes(name.toLowerCase()) ||
+          displayName.toLowerCase().includes(queryLower) ||
+          caps.some(c => queryLower.includes(c.toLowerCase())) ||
+          queries.some(
+            q =>
+              queryLower.includes(q.toLowerCase()) ||
+              q.toLowerCase().includes(queryLower),
+          );
+
+        if (matches) {
+          logger.info(
+            `✨ [CapabilityRouter] Discovered matching capability [${name}] in catalog from ${entry.domain}!`,
+          );
+
+          const customServersFilePath = path.join(
+            process.cwd(),
+            '.alti/custom_mcp_servers.json',
+          );
+          let customServers = [];
+          if (fs.existsSync(customServersFilePath)) {
+            try {
+              customServers = JSON.parse(
+                fs.readFileSync(customServersFilePath, 'utf8'),
+              );
+            } catch (e) {
+              logger.error(
+                `❌ [CapabilityRouter] Failed to parse custom mcp servers: ${e.message}`,
+              );
+            }
+          }
+
+          if (customServers.some(s => s.name === name)) {
+            logger.info(
+              `🔌 [CapabilityRouter] Capability [${name}] is already registered in custom_mcp_servers.json.`,
+            );
+            return `${name}_agent`;
+          }
+
+          const { PRESETS } = await import('../mcp/mcp.client.js');
+          const preset = PRESETS.find(p => p.name === name);
+
+          const command = preset ? preset.command : 'npx';
+          const args = preset
+            ? preset.args
+            : ['-y', `@modelcontextprotocol/server-${name}`];
+
+          const newServer = {
+            name,
+            title: displayName || name,
+            description:
+              desc || `ARD Self-provisioned Model Context Protocol server`,
+            command,
+            args,
+            env: {},
+            installedVia: 'ard-self-provisioning',
+            installedAt: new Date().toISOString(),
+          };
+
+          customServers.push(newServer);
+          fs.writeFileSync(
+            customServersFilePath,
+            JSON.stringify(customServers, null, 2),
+            'utf8',
+          );
+
+          try {
+            const { mcpGateway } =
+              await import('../mcp/mcp_gateway.service.js');
+            const mountRes = await mcpGateway.mountServer(name, {
+              command,
+              args,
+              env: {},
+            });
+            if (mountRes && mountRes.success) {
+              logger.info(
+                `✅ [CapabilityRouter] Dynamic self-provisioning succeeded! Server [${name}] mounted as Swarm Agent [${mountRes.agentId}].`,
+              );
+              return mountRes.agentId;
+            }
+          } catch (mountErr) {
+            logger.error(
+              `❌ [CapabilityRouter] Dynamic mounting failed for self-provisioned server ${name}: ${mountErr.message}`,
+            );
+          }
+        }
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Dynamically registers a specialist agent in the central registry.
+   * Keeps backwards compatibility with Phase 10 dynamic synthetics.
+   *
+   * @param {BaseSpecialistAgent} agent The specialist agent instance.
+   * @param {string[]} keywords Query keywords for semantic routing.
+   */
+  registerAgent(agent, keywords = []) {
+    logger.info(
+      `🗺️ [CapabilityRouter] Dynamically registering agent [${agent.name}] with ${keywords.length} keywords.`,
+    );
+    agentRegistry.register({
+      name: agent.name,
+      displayName: agent.displayName || agent.name,
+      description:
+        agent.description || `Dynamic Specialist Agent: ${agent.name}`,
+      preamble: agent.preamble,
+      capabilities: keywords,
+      instance: agent,
+      version: '1.0.0',
+    });
+  }
 }
 
 export const capabilityRouter = new CapabilityRouter();
 export const CAPABILITY_TABLE = new Proxy([], {
-    get(target, prop) {
-        const list = agentRegistry.list().map(a => ({
-            agent: a.instance || a,
-            keywords: a.capabilities || [],
-            id: a.name
-        }));
-        if (prop === 'length') {
-            return list.length;
-        }
-        if (typeof list[prop] === 'function') {
-            return list[prop].bind(list);
-        }
-        return list[prop];
+  get(target, prop) {
+    const list = agentRegistry.list().map(a => ({
+      agent: a.instance || a,
+      keywords: a.capabilities || [],
+      id: a.name,
+    }));
+    if (prop === 'length') {
+      return list.length;
     }
+    if (typeof list[prop] === 'function') {
+      return list[prop].bind(list);
+    }
+    return list[prop];
+  },
 });

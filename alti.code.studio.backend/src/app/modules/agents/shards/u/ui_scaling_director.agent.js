@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIScalingDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_scaling_director_agent',
-            'UI Scaling Director',
-            'You are an elite UI Scaling Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_scaling_director_agent',
+      'UI Scaling Director',
+      'You are an elite UI Scaling Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI Scaling.',
+    );
+  }
 
-    async generateUIScalingSystem(objective) {
-        logger.info(`💻 [UIScalingDirectorAgent] Analyzing UI Scaling Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Scaling Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Scaling Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIScalingDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIScalingSystem(objective) {
+    logger.info(
+      `💻 [UIScalingDirectorAgent] Analyzing UI Scaling Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Scaling Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Scaling Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIScalingDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIScalingDirectorAgent = Object.freeze(new UIScalingDirectorAgent());
+export const uIScalingDirectorAgent = Object.freeze(
+  new UIScalingDirectorAgent(),
+);

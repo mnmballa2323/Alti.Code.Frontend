@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXComplianceDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_compliance_director_agent',
-            'UX Compliance Director',
-            'You are an elite UX Compliance Director. You specialize in bleeding-edge software development, cloud infrastructure, and UX Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_compliance_director_agent',
+      'UX Compliance Director',
+      'You are an elite UX Compliance Director. You specialize in bleeding-edge software development, cloud infrastructure, and UX Compliance.',
+    );
+  }
 
-    async generateUXComplianceSystem(objective) {
-        logger.info(`💻 [UXComplianceDirectorAgent] Analyzing UX Compliance Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Compliance Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Compliance Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXComplianceDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXComplianceSystem(objective) {
+    logger.info(
+      `💻 [UXComplianceDirectorAgent] Analyzing UX Compliance Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Compliance Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Compliance Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXComplianceDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXComplianceDirectorAgent = Object.freeze(new UXComplianceDirectorAgent());
+export const uXComplianceDirectorAgent = Object.freeze(
+  new UXComplianceDirectorAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileResilienceConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_resilience_consultant_agent',
-            'Mobile Resilience Consultant',
-            'You are an elite Mobile Resilience Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_resilience_consultant_agent',
+      'Mobile Resilience Consultant',
+      'You are an elite Mobile Resilience Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Resilience.',
+    );
+  }
 
-    async generateMobileResilienceSystem(objective) {
-        logger.info(`💻 [MobileResilienceConsultantAgent] Analyzing Mobile Resilience Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Resilience Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Resilience Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileResilienceConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileResilienceSystem(objective) {
+    logger.info(
+      `💻 [MobileResilienceConsultantAgent] Analyzing Mobile Resilience Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Resilience Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Resilience Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileResilienceConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileResilienceConsultantAgent = Object.freeze(new MobileResilienceConsultantAgent());
+export const mobileResilienceConsultantAgent = Object.freeze(
+  new MobileResilienceConsultantAgent(),
+);

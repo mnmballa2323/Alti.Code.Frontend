@@ -3,5 +3,5 @@ export const engineController = {
   ingestFile: (req, res) => res.json({}),
   analyzeGraph: (req, res) => res.json({}),
   indexDocs: (req, res) => res.json({}),
-  askOracle: (req, res) => res.json({})
+  askOracle: (req, res) => res.json({}),
 };

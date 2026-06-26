@@ -36,7 +36,9 @@ const streamCommand = (req, res) => {
   const { command, args } = req.body;
 
   if (!command) {
-    res.status(httpStatus.BAD_REQUEST).json({ success: false, message: 'Command is required.' });
+    res
+      .status(httpStatus.BAD_REQUEST)
+      .json({ success: false, message: 'Command is required.' });
     return;
   }
 

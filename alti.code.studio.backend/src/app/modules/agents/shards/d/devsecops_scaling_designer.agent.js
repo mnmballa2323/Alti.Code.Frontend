@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsScalingDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_scaling_designer_agent',
-            'DevSecOps Scaling Designer',
-            'You are an elite DevSecOps Scaling Designer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_scaling_designer_agent',
+      'DevSecOps Scaling Designer',
+      'You are an elite DevSecOps Scaling Designer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Scaling.',
+    );
+  }
 
-    async generateDevSecOpsScalingSystem(objective) {
-        logger.info(`💻 [DevSecOpsScalingDesignerAgent] Analyzing DevSecOps Scaling Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Scaling Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Scaling Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsScalingDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsScalingSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsScalingDesignerAgent] Analyzing DevSecOps Scaling Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Scaling Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Scaling Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevSecOpsScalingDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devSecOpsScalingDesignerAgent = Object.freeze(new DevSecOpsScalingDesignerAgent());
+export const devSecOpsScalingDesignerAgent = Object.freeze(
+  new DevSecOpsScalingDesignerAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseMicroservicesStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_microservices_strategist_agent',
-            'Release Microservices Strategist',
-            'You are an elite Release Microservices Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Release Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'release_microservices_strategist_agent',
+      'Release Microservices Strategist',
+      'You are an elite Release Microservices Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Release Microservices.',
+    );
+  }
 
-    async generateReleaseMicroservicesSystem(objective) {
-        logger.info(`💻 [ReleaseMicroservicesStrategistAgent] Analyzing Release Microservices Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Microservices Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Microservices Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseMicroservicesStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [ReleaseMicroservicesStrategistAgent] Analyzing Release Microservices Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Microservices Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Microservices Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseMicroservicesStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseMicroservicesStrategistAgent = Object.freeze(new ReleaseMicroservicesStrategistAgent());
+export const releaseMicroservicesStrategistAgent = Object.freeze(
+  new ReleaseMicroservicesStrategistAgent(),
+);

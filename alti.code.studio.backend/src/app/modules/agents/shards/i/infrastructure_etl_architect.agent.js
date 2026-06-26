@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureETLArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_etl_architect_agent',
-            'Infrastructure ETL Architect',
-            'You are an elite Infrastructure ETL Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_etl_architect_agent',
+      'Infrastructure ETL Architect',
+      'You are an elite Infrastructure ETL Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure ETL.',
+    );
+  }
 
-    async generateInfrastructureETLSystem(objective) {
-        logger.info(`💻 [InfrastructureETLArchitectAgent] Analyzing Infrastructure ETL Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure ETL Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure ETL Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureETLArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureETLSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureETLArchitectAgent] Analyzing Infrastructure ETL Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure ETL Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure ETL Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureETLArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureETLArchitectAgent = Object.freeze(new InfrastructureETLArchitectAgent());
+export const infrastructureETLArchitectAgent = Object.freeze(
+  new InfrastructureETLArchitectAgent(),
+);

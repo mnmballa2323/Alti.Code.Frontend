@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREAnalyticsDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_analytics_director_agent',
-            'SRE Analytics Director',
-            'You are an elite SRE Analytics Director. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_analytics_director_agent',
+      'SRE Analytics Director',
+      'You are an elite SRE Analytics Director. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Analytics.',
+    );
+  }
 
-    async generateSREAnalyticsSystem(objective) {
-        logger.info(`💻 [SREAnalyticsDirectorAgent] Analyzing SRE Analytics Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Analytics Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Analytics Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREAnalyticsDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [SREAnalyticsDirectorAgent] Analyzing SRE Analytics Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Analytics Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Analytics Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREAnalyticsDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREAnalyticsDirectorAgent = Object.freeze(new SREAnalyticsDirectorAgent());
+export const sREAnalyticsDirectorAgent = Object.freeze(
+  new SREAnalyticsDirectorAgent(),
+);

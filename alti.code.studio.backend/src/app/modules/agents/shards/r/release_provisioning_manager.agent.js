@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseProvisioningManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_provisioning_manager_agent',
-            'Release Provisioning Manager',
-            'You are an elite Release Provisioning Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'release_provisioning_manager_agent',
+      'Release Provisioning Manager',
+      'You are an elite Release Provisioning Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release Provisioning.',
+    );
+  }
 
-    async generateReleaseProvisioningSystem(objective) {
-        logger.info(`💻 [ReleaseProvisioningManagerAgent] Analyzing Release Provisioning Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Provisioning Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Provisioning Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseProvisioningManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseProvisioningSystem(objective) {
+    logger.info(
+      `💻 [ReleaseProvisioningManagerAgent] Analyzing Release Provisioning Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Provisioning Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Provisioning Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseProvisioningManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseProvisioningManagerAgent = Object.freeze(new ReleaseProvisioningManagerAgent());
+export const releaseProvisioningManagerAgent = Object.freeze(
+  new ReleaseProvisioningManagerAgent(),
+);

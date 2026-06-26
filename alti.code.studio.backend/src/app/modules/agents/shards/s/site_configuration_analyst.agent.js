@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteConfigurationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_configuration_analyst_agent',
-            'Site Configuration Analyst',
-            'You are an elite Site Configuration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Site Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'site_configuration_analyst_agent',
+      'Site Configuration Analyst',
+      'You are an elite Site Configuration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Site Configuration.',
+    );
+  }
 
-    async generateSiteConfigurationSystem(objective) {
-        logger.info(`💻 [SiteConfigurationAnalystAgent] Analyzing Site Configuration Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Configuration Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Configuration Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteConfigurationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteConfigurationSystem(objective) {
+    logger.info(
+      `💻 [SiteConfigurationAnalystAgent] Analyzing Site Configuration Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Configuration Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Configuration Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteConfigurationAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteConfigurationAnalystAgent = Object.freeze(new SiteConfigurationAnalystAgent());
+export const siteConfigurationAnalystAgent = Object.freeze(
+  new SiteConfigurationAnalystAgent(),
+);

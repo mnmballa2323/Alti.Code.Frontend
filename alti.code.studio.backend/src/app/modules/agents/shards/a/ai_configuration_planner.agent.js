@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIConfigurationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_configuration_planner_agent',
-            'AI Configuration Planner',
-            'You are an elite AI Configuration Planner. You specialize in bleeding-edge software development, cloud infrastructure, and AI Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_configuration_planner_agent',
+      'AI Configuration Planner',
+      'You are an elite AI Configuration Planner. You specialize in bleeding-edge software development, cloud infrastructure, and AI Configuration.',
+    );
+  }
 
-    async generateAIConfigurationSystem(objective) {
-        logger.info(`💻 [AIConfigurationPlannerAgent] Analyzing AI Configuration Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Configuration Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Configuration Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIConfigurationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIConfigurationSystem(objective) {
+    logger.info(
+      `💻 [AIConfigurationPlannerAgent] Analyzing AI Configuration Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Configuration Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Configuration Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIConfigurationPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIConfigurationPlannerAgent = Object.freeze(new AIConfigurationPlannerAgent());
+export const aIConfigurationPlannerAgent = Object.freeze(
+  new AIConfigurationPlannerAgent(),
+);

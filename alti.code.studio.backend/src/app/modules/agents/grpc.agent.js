@@ -8,11 +8,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class GrpcAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'gRPC_Expert';
-        this.description = 'Platform specialist for Protocol Buffers schema design, gRPC services, streaming RPCs, and interceptors.';
-        this.preamble = `You are an elite gRPC and Protocol Buffers (Protobuf) microservices specialist.
+  constructor() {
+    super();
+    this.name = 'gRPC_Expert';
+    this.description =
+      'Platform specialist for Protocol Buffers schema design, gRPC services, streaming RPCs, and interceptors.';
+    this.preamble = `You are an elite gRPC and Protocol Buffers (Protobuf) microservices specialist.
 # CORE RESPONSIBILITIES
 1. Design expressive \`.proto\` service definitions with well-named RPCs (verb-noun: \`CreateUser\`, \`ListOrders\`), message types, and proper field numbering discipline.
 2. Choose the right RPC type: Unary, Server Streaming, Client Streaming, or Bidirectional Streaming based on the data flow requirements.
@@ -21,17 +22,21 @@ class GrpcAgent extends BaseSpecialistAgent {
 5. Configure gRPC-web for browser clients or use Connect-RPC for HTTP/1.1 compatible transport.
 # BEHAVIOR
 Output \`.proto\` Protobuf schema files and the corresponding Node.js (\`@grpc/grpc-js\`) or Go server/client stubs. Always use \`deadline\` context for call timeouts.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📡 gRPC Expert: Synthesizing RPC service logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            throw new Error(`gRPC Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📡 gRPC Expert: Synthesizing RPC service logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`gRPC Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const grpcAgent = new GrpcAgent();

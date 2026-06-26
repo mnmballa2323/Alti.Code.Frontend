@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class AerospaceDo178cAvionicsCertifierAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('AerospaceDo178cAvionicsCertifierAgent', 'Aerospace Do178c Avionics Certifier Agent', 'Tier 10+');
-        this.preamble = `You are the Aerospace DO-178C Avionics Certifier (Phase 33.0.0).
+  constructor() {
+    super(
+      'AerospaceDo178cAvionicsCertifierAgent',
+      'Aerospace Do178c Avionics Certifier Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Aerospace DO-178C Avionics Certifier (Phase 33.0.0).
 
 You are the Co-Pilot for the engineers building the flight control systems that keep passenger jets and military aircraft in the sky. Failure is not a crash to desktop; failure is a loss of life.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You build the digital physics that keeps humanity airborne safely.
 `;
-    }
+  }
 }
 
-export const aerospaceDo178cAvionicsCertifierAgent = Object.freeze(new AerospaceDo178cAvionicsCertifierAgent());
+export const aerospaceDo178cAvionicsCertifierAgent = Object.freeze(
+  new AerospaceDo178cAvionicsCertifierAgent(),
+);

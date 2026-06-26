@@ -25,7 +25,7 @@ class GcpVertexAIAdapter {
     try {
       const vertexAI = new VertexAI({
         project: config.azure.tenant_id || 'alti-code-studio',
-        location: 'eastus'
+        location: 'eastus',
       });
       const model = vertexAI.getGenerativeModel({ model: this.modelName });
 
@@ -40,33 +40,34 @@ class GcpVertexAIAdapter {
         if (m.role === 'assistant') {
           role = 'model';
         }
-        
+
         let parts = [];
         if (m.content) {
           parts.push({ text: m.content });
         }
-        
+
         if (m.function_call) {
           parts.push({
             functionCall: {
               name: m.function_call.name,
-              args: typeof m.function_call.arguments === 'string' 
-                ? JSON.parse(m.function_call.arguments)
-                : m.function_call.arguments
-            }
+              args:
+                typeof m.function_call.arguments === 'string'
+                  ? JSON.parse(m.function_call.arguments)
+                  : m.function_call.arguments,
+            },
           });
         }
-        
+
         if (m.role === 'function') {
           role = 'function';
           parts.push({
             functionResponse: {
               name: m.name,
-              response: { name: m.name, content: m.content }
-            }
+              response: { name: m.name, content: m.content },
+            },
           });
         }
-        
+
         return { role, parts };
       });
 
@@ -74,10 +75,14 @@ class GcpVertexAIAdapter {
       let tools = [];
       if (forwardedProps.tools && forwardedProps.tools.length > 0) {
         const functionDeclarations = forwardedProps.tools.map(t => {
-          const parameters = JSON.parse(JSON.stringify(t.function.parameters || { type: 'object', properties: {} }));
-          
+          const parameters = JSON.parse(
+            JSON.stringify(
+              t.function.parameters || { type: 'object', properties: {} },
+            ),
+          );
+
           // Uppercase parameter types for Gemini compatibility
-          const uppercaseTypes = (obj) => {
+          const uppercaseTypes = obj => {
             if (obj.type && typeof obj.type === 'string') {
               obj.type = obj.type.toUpperCase();
             }
@@ -92,7 +97,7 @@ class GcpVertexAIAdapter {
           return {
             name: t.function.name,
             description: t.function.description || '',
-            parameters
+            parameters,
           };
         });
         tools = [{ functionDeclarations }];
@@ -106,7 +111,7 @@ class GcpVertexAIAdapter {
       if (systemMessage) {
         reqObj.systemInstruction = {
           role: 'system',
-          parts: [{ text: systemMessage }]
+          parts: [{ text: systemMessage }],
         };
       }
 
@@ -116,19 +121,25 @@ class GcpVertexAIAdapter {
         async start(controller) {
           try {
             for await (const chunk of responseStream.stream) {
-              const chunkText = chunk.candidates?.[0]?.content?.parts?.[0]?.text || '';
+              const chunkText =
+                chunk.candidates?.[0]?.content?.parts?.[0]?.text || '';
               if (chunkText) {
                 const ccChunk = {
-                  choices: [{ delta: { role: 'assistant', content: chunkText } }]
+                  choices: [
+                    { delta: { role: 'assistant', content: chunkText } },
+                  ],
                 };
-                const payload = new TextEncoder().encode("data: " + JSON.stringify(ccChunk) + "\n\n");
+                const payload = new TextEncoder().encode(
+                  'data: ' + JSON.stringify(ccChunk) + '\n\n',
+                );
                 controller.enqueue(payload);
               }
             }
 
             // Check for function calls
             const response = await responseStream.response;
-            const functionCalls = response.candidates?.[0]?.content?.parts?.[0]?.functionCalls;
+            const functionCalls =
+              response.candidates?.[0]?.content?.parts?.[0]?.functionCalls;
             if (functionCalls && functionCalls.length > 0) {
               const ccChunk = {
                 choices: [
@@ -141,28 +152,29 @@ class GcpVertexAIAdapter {
                         id: String(ix),
                         function: {
                           name: call.name,
-                          arguments: JSON.stringify(call.args)
-                        }
-                      }))
-                    }
-                  }
-                ]
+                          arguments: JSON.stringify(call.args),
+                        },
+                      })),
+                    },
+                  },
+                ],
               };
-              const payload = new TextEncoder().encode("data: " + JSON.stringify(ccChunk) + "\n\n");
+              const payload = new TextEncoder().encode(
+                'data: ' + JSON.stringify(ccChunk) + '\n\n',
+              );
               controller.enqueue(payload);
             }
 
-            const donePayload = new TextEncoder().encode("data: [DONE]\n\n");
+            const donePayload = new TextEncoder().encode('data: [DONE]\n\n');
             controller.enqueue(donePayload);
             controller.close();
           } catch (streamErr) {
             controller.error(streamErr);
           }
-        }
+        },
       });
 
       return { stream };
-
     } catch (err) {
       console.error('Error in GcpVertexAIAdapter:', err);
       return this.getMockResponse(forwardedProps);
@@ -171,22 +183,26 @@ class GcpVertexAIAdapter {
 
   getMockResponse(forwardedProps) {
     const messages = forwardedProps.messages || [];
-    const lastUserMessage = [...messages].reverse().find(m => m.role === 'user');
+    const lastUserMessage = [...messages]
+      .reverse()
+      .find(m => m.role === 'user');
     const userPrompt = lastUserMessage ? lastUserMessage.content : 'hello';
 
     // Mock stream response
     const stream = new ReadableStream({
       start(controller) {
         const replyText = `[MOCK GEMINI COPILOT] I received your request: "${userPrompt.substring(0, 40)}". Copilot integration is live and running under mock mode.`;
-        
+
         const ccChunk = {
-          choices: [{ delta: { role: 'assistant', content: replyText } }]
+          choices: [{ delta: { role: 'assistant', content: replyText } }],
         };
-        controller.enqueue(new TextEncoder().encode("data: " + JSON.stringify(ccChunk) + "\n\n"));
-        
-        controller.enqueue(new TextEncoder().encode("data: [DONE]\n\n"));
+        controller.enqueue(
+          new TextEncoder().encode('data: ' + JSON.stringify(ccChunk) + '\n\n'),
+        );
+
+        controller.enqueue(new TextEncoder().encode('data: [DONE]\n\n'));
         controller.close();
-      }
+      },
     });
 
     return { stream };
@@ -197,8 +213,11 @@ const router = express.Router();
 const copilotBackend = new CopilotBackend();
 const adapter = new GcpVertexAIAdapter();
 
-router.post('/', catchAsync(async (req, res) => {
-  await copilotBackend.streamHttpServerResponse(req, res, adapter);
-}));
+router.post(
+  '/',
+  catchAsync(async (req, res) => {
+    await copilotBackend.streamHttpServerResponse(req, res, adapter);
+  }),
+);
 
 export const copilotRoutes = router;

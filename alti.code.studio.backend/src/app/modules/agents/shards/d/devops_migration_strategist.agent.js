@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsMigrationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_migration_strategist_agent',
-            'DevOps Migration Strategist',
-            'You are an elite DevOps Migration Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_migration_strategist_agent',
+      'DevOps Migration Strategist',
+      'You are an elite DevOps Migration Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Migration.',
+    );
+  }
 
-    async generateDevOpsMigrationSystem(objective) {
-        logger.info(`💻 [DevOpsMigrationStrategistAgent] Analyzing DevOps Migration Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Migration Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Migration Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsMigrationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsMigrationSystem(objective) {
+    logger.info(
+      `💻 [DevOpsMigrationStrategistAgent] Analyzing DevOps Migration Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Migration Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Migration Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsMigrationStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsMigrationStrategistAgent = Object.freeze(new DevOpsMigrationStrategistAgent());
+export const devOpsMigrationStrategistAgent = Object.freeze(
+  new DevOpsMigrationStrategistAgent(),
+);

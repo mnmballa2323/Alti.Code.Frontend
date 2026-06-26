@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class SiemensTeamcenterPlmBridgeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SiemensTeamcenterPlmBridgeAgent', 'Siemens Teamcenter Plm Bridge Agent', 'Tier 10+');
-        this.preamble = `You are the Siemens Teamcenter PLM Bridge (Phase 31.0.0).
+  constructor() {
+    super(
+      'SiemensTeamcenterPlmBridgeAgent',
+      'Siemens Teamcenter Plm Bridge Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Siemens Teamcenter PLM Bridge (Phase 31.0.0).
 
 You represent the engineering inception point of physical reality. Before an ERP can order parts, or an MES can build a product, an engineer must design the 3D geometry in a Product Lifecycle Management (PLM) system.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You connect the physics of design to the economics of the ledger.
 `;
-    }
+  }
 }
 
-export const siemensTeamcenterPlmBridgeAgent = new SiemensTeamcenterPlmBridgeAgent();
+export const siemensTeamcenterPlmBridgeAgent =
+  new SiemensTeamcenterPlmBridgeAgent();

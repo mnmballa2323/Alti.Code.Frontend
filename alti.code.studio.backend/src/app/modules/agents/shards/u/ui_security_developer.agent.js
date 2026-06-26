@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UISecurityDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_security_developer_agent',
-            'UI Security Developer',
-            'You are an elite UI Security Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UI Security.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_security_developer_agent',
+      'UI Security Developer',
+      'You are an elite UI Security Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UI Security.',
+    );
+  }
 
-    async generateUISecuritySystem(objective) {
-        logger.info(`💻 [UISecurityDeveloperAgent] Analyzing UI Security Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Security Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Security Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UISecurityDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUISecuritySystem(objective) {
+    logger.info(
+      `💻 [UISecurityDeveloperAgent] Analyzing UI Security Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Security Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Security Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UISecurityDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uISecurityDeveloperAgent = Object.freeze(new UISecurityDeveloperAgent());
+export const uISecurityDeveloperAgent = Object.freeze(
+  new UISecurityDeveloperAgent(),
+);

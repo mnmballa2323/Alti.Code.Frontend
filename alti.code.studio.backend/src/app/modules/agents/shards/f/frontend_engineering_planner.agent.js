@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendEngineeringPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_engineering_planner_agent',
-            'Frontend Engineering Planner',
-            'You are an elite Frontend Engineering Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_engineering_planner_agent',
+      'Frontend Engineering Planner',
+      'You are an elite Frontend Engineering Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Engineering.',
+    );
+  }
 
-    async generateFrontendEngineeringSystem(objective) {
-        logger.info(`💻 [FrontendEngineeringPlannerAgent] Analyzing Frontend Engineering Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Engineering Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Engineering Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendEngineeringPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendEngineeringSystem(objective) {
+    logger.info(
+      `💻 [FrontendEngineeringPlannerAgent] Analyzing Frontend Engineering Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Engineering Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Engineering Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendEngineeringPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendEngineeringPlannerAgent = Object.freeze(new FrontendEngineeringPlannerAgent());
+export const frontendEngineeringPlannerAgent = Object.freeze(
+  new FrontendEngineeringPlannerAgent(),
+);

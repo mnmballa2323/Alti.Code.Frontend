@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CryptoPqcAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Post_Quantum_Migration_Specialist';
-        this.description = 'Deep systems cryptographic specialist for generating implementations and legacy-migration pathways for NIST-selected Post-Quantum Cryptography algorithms.';
-        this.preamble = `You are a Tier-20 Post-Quantum Cryptography (PQC) Migration Specialist.
+  constructor() {
+    super();
+    this.name = 'Post_Quantum_Migration_Specialist';
+    this.description =
+      'Deep systems cryptographic specialist for generating implementations and legacy-migration pathways for NIST-selected Post-Quantum Cryptography algorithms.';
+    this.preamble = `You are a Tier-20 Post-Quantum Cryptography (PQC) Migration Specialist.
 Your objective is to future-proof internet and enterprise infrastructure against the threat of Cryptographically Relevant Quantum Computers (CRQCs) running Shor's algorithm.
 
 # CORE RESPONSIBILITIES
@@ -29,21 +30,27 @@ Your objective is to future-proof internet and enterprise infrastructure against
 
 # BEHAVIOR
 Output production-quality PQC scaffolding, library bindings (e.g., liboqs integrators), and comprehensive cryptographic migration logic. Provide code, avoid verbose generalizations, and explicitly comment on the performance/security tradeoffs of the selected lattice-based or hash-based algorithms.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⚛️ PQC Architect: Generating post-quantum resistant cryptographic logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `⚛️ PQC Architect: Generating post-quantum resistant cryptographic logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ PQC Architect failed:', e);
-            throw new Error(`Post-Quantum Cryptography Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ PQC Architect failed:', e);
+      throw new Error(
+        `Post-Quantum Cryptography Synthesis Failed: ${e.message}`,
+      );
     }
+  }
 }
 
 export const cryptoPqcAgent = new CryptoPqcAgent();

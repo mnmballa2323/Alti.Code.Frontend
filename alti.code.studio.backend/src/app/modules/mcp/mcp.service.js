@@ -24,62 +24,93 @@ const connections = new Map();
  * @returns {Promise<{ connectionId: string, status: string, tools: number }>}
  */
 const connect = async (serverUrl, apiKey) => {
-    if (!serverUrl || typeof serverUrl !== 'string') {
-        throw new Error('McpService: serverUrl must be a non-empty string.');
-    }
+  if (!serverUrl || typeof serverUrl !== 'string') {
+    throw new Error('McpService: serverUrl must be a non-empty string.');
+  }
 
-    logger.info(`🔌 MCP: Connecting to ${serverUrl}`);
+  logger.info(`🔌 MCP: Connecting to ${serverUrl}`);
 
-    // UUID-based connectionId — Date.now() would collide under concurrent connections
-    const connectionId = `conn-${crypto.randomUUID()}`;
+  // UUID-based connectionId — Date.now() would collide under concurrent connections
+  const connectionId = `conn-${crypto.randomUUID()}`;
 
-    if (serverUrl.includes('mock') || serverUrl.includes('localhost')) {
-        const mockTools = [
-            { name: 'query_database', description: 'Execute SQL query', inputSchema: {} },
-            { name: 'fetch_linear_issues', description: 'Get issues from Linear', inputSchema: {} },
-        ];
+  if (serverUrl.includes('mock') || serverUrl.includes('localhost')) {
+    const mockTools = [
+      {
+        name: 'query_database',
+        description: 'Execute SQL query',
+        inputSchema: {},
+      },
+      {
+        name: 'fetch_linear_issues',
+        description: 'Get issues from Linear',
+        inputSchema: {},
+      },
+    ];
 
-        connections.set(connectionId, { url: serverUrl, status: 'connected', tools: mockTools, client: null });
-        logger.info(`🔌 MCP: Mock connection established [${connectionId}]`);
-        return { connectionId, status: 'connected', tools: mockTools.length };
-    }
+    connections.set(connectionId, {
+      url: serverUrl,
+      status: 'connected',
+      tools: mockTools,
+      client: null,
+    });
+    logger.info(`🔌 MCP: Mock connection established [${connectionId}]`);
+    return { connectionId, status: 'connected', tools: mockTools.length };
+  }
 
-    try {
-        const transport = new SSEClientTransport(new URL(serverUrl), {
-            eventSourceInit: { headers: { Authorization: `Bearer ${apiKey}` } },
-        });
-        const client = new Client({ name: 'InsoCode', version: '1.0.0' }, { capabilities: {} });
-        await client.connect(transport);
+  try {
+    const transport = new SSEClientTransport(new URL(serverUrl), {
+      eventSourceInit: { headers: { Authorization: `Bearer ${apiKey}` } },
+    });
+    const client = new Client(
+      { name: 'InsoCode', version: '1.0.0' },
+      { capabilities: {} },
+    );
+    await client.connect(transport);
 
-        const capabilities = await client.getServerCapabilities();
-        const { tools } = await client.listTools();
+    const capabilities = await client.getServerCapabilities();
+    const { tools } = await client.listTools();
 
-        connections.set(connectionId, { url: serverUrl, status: 'connected', client, tools });
-        logger.info(`🔌 MCP: Connected [${connectionId}] — ${tools.length} tools available.`);
+    connections.set(connectionId, {
+      url: serverUrl,
+      status: 'connected',
+      client,
+      tools,
+    });
+    logger.info(
+      `🔌 MCP: Connected [${connectionId}] — ${tools.length} tools available.`,
+    );
 
-        return { connectionId, status: 'connected', server: capabilities, tools: tools.length };
-
-    } catch (error) {
-        logger.error(`❌ MCP: Connection to ${serverUrl} failed — ${error.message}`);
-        throw new Error(`Failed to connect to MCP server: ${error.message}`);
-    }
+    return {
+      connectionId,
+      status: 'connected',
+      server: capabilities,
+      tools: tools.length,
+    };
+  } catch (error) {
+    logger.error(
+      `❌ MCP: Connection to ${serverUrl} failed — ${error.message}`,
+    );
+    throw new Error(`Failed to connect to MCP server: ${error.message}`);
+  }
 };
 
 /**
  * Disconnect from an active MCP connection.
  * @param {string} connectionId
  */
-const disconnect = async (connectionId) => {
-    const conn = connections.get(connectionId);
-    if (!conn) {
-        logger.warn(`🔌 MCP: disconnect() called on unknown connectionId "${connectionId}"`);
-        return;
-    }
-    if (conn.client?.close) {
-        await conn.client.close().catch(() => { }); // best-effort
-    }
-    connections.delete(connectionId);
-    logger.info(`🔌 MCP: Disconnected [${connectionId}]`);
+const disconnect = async connectionId => {
+  const conn = connections.get(connectionId);
+  if (!conn) {
+    logger.warn(
+      `🔌 MCP: disconnect() called on unknown connectionId "${connectionId}"`,
+    );
+    return;
+  }
+  if (conn.client?.close) {
+    await conn.client.close().catch(() => {}); // best-effort
+  }
+  connections.delete(connectionId);
+  logger.info(`🔌 MCP: Disconnected [${connectionId}]`);
 };
 
 /**
@@ -87,17 +118,18 @@ const disconnect = async (connectionId) => {
  * @param {string} connectionId
  * @returns {Promise<object[]>}
  */
-const listTools = async (connectionId) => {
-    const conn = connections.get(connectionId);
-    if (!conn) throw new Error(`McpService: Connection "${connectionId}" not found.`);
+const listTools = async connectionId => {
+  const conn = connections.get(connectionId);
+  if (!conn)
+    throw new Error(`McpService: Connection "${connectionId}" not found.`);
 
-    if (conn.client) {
-        const { tools } = await conn.client.listTools();
-        // Refresh cache immutably — replace, don't mutate
-        connections.set(connectionId, { ...conn, tools });
-        return tools;
-    }
-    return conn.tools ?? [];
+  if (conn.client) {
+    const { tools } = await conn.client.listTools();
+    // Refresh cache immutably — replace, don't mutate
+    connections.set(connectionId, { ...conn, tools });
+    return tools;
+  }
+  return conn.tools ?? [];
 };
 
 /**
@@ -107,26 +139,30 @@ const listTools = async (connectionId) => {
  * @param {object} [args={}]
  */
 const executeTool = async (connectionId, toolName, args = {}) => {
-    if (!toolName || typeof toolName !== 'string') {
-        throw new Error('McpService: toolName must be a non-empty string.');
-    }
-    if (typeof args !== 'object' || args === null) {
-        throw new Error('McpService: args must be a non-null object.');
-    }
+  if (!toolName || typeof toolName !== 'string') {
+    throw new Error('McpService: toolName must be a non-empty string.');
+  }
+  if (typeof args !== 'object' || args === null) {
+    throw new Error('McpService: args must be a non-null object.');
+  }
 
-    const conn = connections.get(connectionId);
-    if (!conn) throw new Error(`McpService: Connection "${connectionId}" not found.`);
+  const conn = connections.get(connectionId);
+  if (!conn)
+    throw new Error(`McpService: Connection "${connectionId}" not found.`);
 
-    logger.info(`🔧 MCP: Executing tool "${toolName}" on [${connectionId}]`, args);
+  logger.info(
+    `🔧 MCP: Executing tool "${toolName}" on [${connectionId}]`,
+    args,
+  );
 
-    if (conn.client) {
-        return await conn.client.callTool({ name: toolName, arguments: args });
-    }
+  if (conn.client) {
+    return await conn.client.callTool({ name: toolName, arguments: args });
+  }
 
-    // Mock execution
-    return {
-        content: [{ type: 'text', text: `Mock result for ${toolName}: Success` }],
-    };
+  // Mock execution
+  return {
+    content: [{ type: 'text', text: `Mock result for ${toolName}: Success` }],
+  };
 };
 
 /**
@@ -134,19 +170,19 @@ const executeTool = async (connectionId, toolName, args = {}) => {
  * @returns {{ total: number, connections: object[] }}
  */
 const getStatus = () => {
-    const all = [...connections.entries()].map(([id, c]) => ({
-        connectionId: id,
-        url: c.url,
-        status: c.status,
-        toolCount: c.tools?.length ?? 0,
-    }));
-    return { total: all.length, connections: all };
+  const all = [...connections.entries()].map(([id, c]) => ({
+    connectionId: id,
+    url: c.url,
+    status: c.status,
+    toolCount: c.tools?.length ?? 0,
+  }));
+  return { total: all.length, connections: all };
 };
 
 export const McpService = {
-    connect,
-    disconnect,
-    listTools,
-    executeTool,
-    getStatus,
+  connect,
+  disconnect,
+  listTools,
+  executeTool,
+  getStatus,
 };

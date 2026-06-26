@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Alti.Code.Studio
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -21,10 +21,10 @@ class TSDocParserService {
   _extractText(node) {
     if (!node) return '';
     if (node.text) return node.text;
-    
+
     // Some nodes (like DocSoftBreak) represent spacing
     if (node.kind === 'SoftBreak') return '\n';
-    
+
     if (node.nodes && node.nodes.length > 0) {
       return node.nodes.map(n => this._extractText(n)).join('');
     }
@@ -59,10 +59,12 @@ class TSDocParserService {
       if (docComment.params && docComment.params.blocks) {
         for (const param of docComment.params.blocks) {
           const paramName = param.parameterName || '';
-          const paramDesc = param.content ? this._extractText(param.content).trim() : '';
+          const paramDesc = param.content
+            ? this._extractText(param.content).trim()
+            : '';
           params.push({
             name: paramName,
-            description: paramDesc
+            description: paramDesc,
           });
         }
       }
@@ -85,11 +87,20 @@ class TSDocParserService {
         summary,
         params,
         returns,
-        tags
+        tags,
       };
     } catch (error) {
-      logger.error('❌ [TSDocParserService] Comment parsing failed:', error.message);
-      return { summary: '', params: [], returns: '', tags: [], error: error.message };
+      logger.error(
+        '❌ [TSDocParserService] Comment parsing failed:',
+        error.message,
+      );
+      return {
+        summary: '',
+        params: [],
+        returns: '',
+        tags: [],
+        error: error.message,
+      };
     }
   }
 }

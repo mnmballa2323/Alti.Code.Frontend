@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIConfigurationSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_configuration_specialist_agent',
-            'UI Configuration Specialist',
-            'You are an elite UI Configuration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and UI Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_configuration_specialist_agent',
+      'UI Configuration Specialist',
+      'You are an elite UI Configuration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and UI Configuration.',
+    );
+  }
 
-    async generateUIConfigurationSystem(objective) {
-        logger.info(`💻 [UIConfigurationSpecialistAgent] Analyzing UI Configuration Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Configuration Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Configuration Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIConfigurationSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIConfigurationSystem(objective) {
+    logger.info(
+      `💻 [UIConfigurationSpecialistAgent] Analyzing UI Configuration Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Configuration Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Configuration Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UIConfigurationSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uIConfigurationSpecialistAgent = Object.freeze(new UIConfigurationSpecialistAgent());
+export const uIConfigurationSpecialistAgent = Object.freeze(
+  new UIConfigurationSpecialistAgent(),
+);

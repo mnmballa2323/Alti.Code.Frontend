@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendStreamingManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_streaming_manager_agent',
-            'Frontend Streaming Manager',
-            'You are an elite Frontend Streaming Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_streaming_manager_agent',
+      'Frontend Streaming Manager',
+      'You are an elite Frontend Streaming Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Streaming.',
+    );
+  }
 
-    async generateFrontendStreamingSystem(objective) {
-        logger.info(`💻 [FrontendStreamingManagerAgent] Analyzing Frontend Streaming Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Streaming Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Streaming Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendStreamingManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendStreamingSystem(objective) {
+    logger.info(
+      `💻 [FrontendStreamingManagerAgent] Analyzing Frontend Streaming Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Streaming Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Streaming Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendStreamingManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendStreamingManagerAgent = Object.freeze(new FrontendStreamingManagerAgent());
+export const frontendStreamingManagerAgent = Object.freeze(
+  new FrontendStreamingManagerAgent(),
+);

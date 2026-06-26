@@ -18,12 +18,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class OWASPZAPAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OWASP_ZAP_DAST_Engineer';
-        this.description = 'Elite OWASP ZAP DAST engineer: active/passive scanning, ZAP API, OpenAPI import, CI integration, alert triage and remediation.';
+  constructor() {
+    super();
+    this.name = 'OWASP_ZAP_DAST_Engineer';
+    this.description =
+      'Elite OWASP ZAP DAST engineer: active/passive scanning, ZAP API, OpenAPI import, CI integration, alert triage and remediation.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite dynamic application security testing (DAST) engineer specializing in OWASP ZAP (Zed Attack Proxy).
 
 ZAP SCAN TYPES:
@@ -143,16 +144,22 @@ CI/CD (GitHub Actions):
       cmd_options: -I                   # Warning-level issues don't fail CI
 
 OUTPUT: ZAP API integration code (Python/Node.js), alert remediation guidance, CI workflow configs. Always specify risk level and OWASP Top 10 category for each finding.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DAST ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DAST ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 
-    async generateZAPIntegration(opts = {}, contextData = []) {
-        const { targetUrl = '', apiSpec = '', language = 'Node.js', scanType = 'api' } = opts;
-        return this.consult(`
+  async generateZAPIntegration(opts = {}, contextData = []) {
+    const {
+      targetUrl = '',
+      apiSpec = '',
+      language = 'Node.js',
+      scanType = 'api',
+    } = opts;
+    return this.consult(
+      `
 Generate a complete OWASP ZAP ${scanType} scan integration for target: ${targetUrl}
 ${apiSpec ? 'OpenAPI spec: ' + apiSpec : ''}
 Language: ${language}
@@ -165,8 +172,10 @@ Include:
 - HTML + JSON report generation
 - Alert suppression config for known false positives
 - Remediation suggestions for top 5 common alerts
-        `, contextData);
-    }
+        `,
+      contextData,
+    );
+  }
 }
 
 export const owaspZapAgent = new OWASPZAPAgent();

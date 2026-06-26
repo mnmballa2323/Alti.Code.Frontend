@@ -1,17 +1,19 @@
 /**
  * Copyright (c) 2024 Inso Code — TIER 3: COMPLIANCE & QUALITY
- * 
+ *
  * Accessibility Agent — "The Equalizer"
  * WCAG 2.1 / ADA compliance checking for UI code.
  */
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 
-export const accessibilityWorkerProcessor = async (job) => {
-    const { html, component, standard } = job.data;
-    logger.info(`♿ Accessibility [${job.id}]: Checking ${standard || 'WCAG 2.1 AA'}...`);
+export const accessibilityWorkerProcessor = async job => {
+  const { html, component, standard } = job.data;
+  logger.info(
+    `♿ Accessibility [${job.id}]: Checking ${standard || 'WCAG 2.1 AA'}...`,
+  );
 
-    const result = await aiProvider.reason(`
+  const result = await aiProvider.reason(`
 You are an accessibility expert (WCAG 2.1 AA/AAA, ADA, Section 508).
 
 Standard: ${standard || 'WCAG 2.1 AA'}
@@ -30,5 +32,7 @@ Check for:
 Respond in JSON: { "standard": string, "score": number, "issues": [], "fixes": [], "compliant": boolean }
     `);
 
-    return { accessibility: JSON.parse(result.match(/\{[\s\S]*\}/)?.[0] || '{}') };
+  return {
+    accessibility: JSON.parse(result.match(/\{[\s\S]*\}/)?.[0] || '{}'),
+  };
 };

@@ -10,7 +10,8 @@ class ExpressOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Express_Oss_Expert';
-    this.description = 'Deep expert in Express — fast, unopinionated web framework for Node.js.';
+    this.description =
+      'Deep expert in Express — fast, unopinionated web framework for Node.js.';
     this.preamble = `You are a world-class backend engineer with expert-level mastery of Express.js.
 
 CORE CONCEPTS:
@@ -40,7 +41,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== EXPRESS QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== EXPRESS QUESTION ===\n${prompt}`,
+    );
   }
 }
 

@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CoinbaseCdpAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'CoinbaseCDP_Expert';
-        this.description = 'Coinbase Developer Platform specialist: CDP SDK (wallets/MPC/ERC-4337), AgentKit (AI agents with crypto wallets), Base chain, Coinbase Onramp, Commerce API, and Paymaster for gasless transactions.';
-        this.preamble = `You are an elite Coinbase Developer Platform (CDP) & AgentKit Architect.
+  constructor() {
+    super();
+    this.name = 'CoinbaseCDP_Expert';
+    this.description =
+      'Coinbase Developer Platform specialist: CDP SDK (wallets/MPC/ERC-4337), AgentKit (AI agents with crypto wallets), Base chain, Coinbase Onramp, Commerce API, and Paymaster for gasless transactions.';
+    this.preamble = `You are an elite Coinbase Developer Platform (CDP) & AgentKit Architect.
 Your core expertise revolves around exploiting the deep \`@coinbase/cdp-sdk\` MPC wallet topologies elegantly mapping robust autonomous \`@coinbase/agentkit\` integrations securely bridging natively onto the explicit Base L2 ecosystem successfully accurately effortlessly dynamically.
 
 # CORE COINBASE CDP EXPERTISE
@@ -30,20 +31,22 @@ Your core expertise revolves around exploiting the deep \`@coinbase/cdp-sdk\` MP
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript embedding \`@coinbase/cdp-sdk\` safely natively securely abstracting \`CDP_API_KEY_ID\` accurately properly gracefully dynamically correctly elegantly inherently dependably safely cleanly successfully.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🪙 Coinbase CDP Expert: Synthesizing Web3 platform logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Coinbase CDP Expert failed:', e);
-            throw new Error(`CoinbaseCDP Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🪙 Coinbase CDP Expert: Synthesizing Web3 platform logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Coinbase CDP Expert failed:', e);
+      throw new Error(`CoinbaseCDP Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const coinbaseCdpAgent = Object.freeze(new CoinbaseCdpAgent());

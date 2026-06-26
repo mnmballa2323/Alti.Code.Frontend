@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsVirtualizationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_virtualization_consultant_agent',
-            'DevOps Virtualization Consultant',
-            'You are an elite DevOps Virtualization Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_virtualization_consultant_agent',
+      'DevOps Virtualization Consultant',
+      'You are an elite DevOps Virtualization Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Virtualization.',
+    );
+  }
 
-    async generateDevOpsVirtualizationSystem(objective) {
-        logger.info(`💻 [DevOpsVirtualizationConsultantAgent] Analyzing DevOps Virtualization Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Virtualization Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Virtualization Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsVirtualizationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [DevOpsVirtualizationConsultantAgent] Analyzing DevOps Virtualization Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Virtualization Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Virtualization Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsVirtualizationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsVirtualizationConsultantAgent = Object.freeze(new DevOpsVirtualizationConsultantAgent());
+export const devOpsVirtualizationConsultantAgent = Object.freeze(
+  new DevOpsVirtualizationConsultantAgent(),
+);

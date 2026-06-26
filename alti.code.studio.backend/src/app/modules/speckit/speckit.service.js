@@ -17,24 +17,24 @@ import { logger } from '../../../shared/logger.js';
 import { hooksService } from '../hooks/hooks.service.js';
 
 class SpecKitService {
-    constructor() {
-        this.rootDir = path.join(process.cwd(), '.speckit');
-        this.specsDir = path.join(this.rootDir, 'specs');
-        this.plansDir = path.join(this.rootDir, 'plans');
-        this.bugfixDir = path.join(this.rootDir, 'bugfixes');
-        this.constitutionPath = path.join(this.rootDir, 'constitution.md');
-    }
+  constructor() {
+    this.rootDir = path.join(process.cwd(), '.speckit');
+    this.specsDir = path.join(this.rootDir, 'specs');
+    this.plansDir = path.join(this.rootDir, 'plans');
+    this.bugfixDir = path.join(this.rootDir, 'bugfixes');
+    this.constitutionPath = path.join(this.rootDir, 'constitution.md');
+  }
 
-    async init() {
-        await fs.mkdir(this.specsDir, { recursive: true });
-        await fs.mkdir(this.plansDir, { recursive: true });
-        await fs.mkdir(this.bugfixDir, { recursive: true });
+  async init() {
+    await fs.mkdir(this.specsDir, { recursive: true });
+    await fs.mkdir(this.plansDir, { recursive: true });
+    await fs.mkdir(this.bugfixDir, { recursive: true });
 
-        try {
-            await fs.access(this.constitutionPath);
-        } catch {
-            logger.info('📜 SpecKit: Creating default constitution...');
-            const defaultConstitution = `# Project Constitution
+    try {
+      await fs.access(this.constitutionPath);
+    } catch {
+      logger.info('📜 SpecKit: Creating default constitution...');
+      const defaultConstitution = `# Project Constitution
 
 ## Core Principles
 1. **Simplicity**: Code should be easy to understand and maintain.
@@ -52,87 +52,104 @@ class SpecKitService {
 - Async/await for all async operations
 - Prefix log messages with agent name in brackets: [AgentName]
 `.trim();
-            await fs.writeFile(this.constitutionPath, defaultConstitution);
-        }
+      await fs.writeFile(this.constitutionPath, defaultConstitution);
     }
+  }
 
-    // ─── HELPERS ─────────────────────────────────────────────────────────────
+  // ─── HELPERS ─────────────────────────────────────────────────────────────
 
-    async _readConstitution() {
-        try {
-            return await fs.readFile(this.constitutionPath, 'utf-8');
-        } catch {
-            return '# No constitution defined';
-        }
+  async _readConstitution() {
+    try {
+      return await fs.readFile(this.constitutionPath, 'utf-8');
+    } catch {
+      return '# No constitution defined';
     }
+  }
 
-    _specDir(specId) {
-        return path.join(this.specsDir, specId);
+  _specDir(specId) {
+    return path.join(this.specsDir, specId);
+  }
+
+  async _readPhaseFile(specId, filename) {
+    try {
+      return await fs.readFile(
+        path.join(this._specDir(specId), filename),
+        'utf-8',
+      );
+    } catch {
+      return null;
     }
+  }
 
-    async _readPhaseFile(specId, filename) {
-        try {
-            return await fs.readFile(path.join(this._specDir(specId), filename), 'utf-8');
-        } catch {
-            return null;
-        }
+  async _writePhaseFile(specId, filename, content) {
+    const dir = this._specDir(specId);
+    await fs.mkdir(dir, { recursive: true });
+    await fs.writeFile(path.join(dir, filename), content);
+  }
+
+  async _readMeta(specId) {
+    try {
+      const raw = await fs.readFile(
+        path.join(this._specDir(specId), 'meta.json'),
+        'utf-8',
+      );
+      return JSON.parse(raw);
+    } catch {
+      return null;
     }
+  }
 
-    async _writePhaseFile(specId, filename, content) {
-        const dir = this._specDir(specId);
-        await fs.mkdir(dir, { recursive: true });
-        await fs.writeFile(path.join(dir, filename), content);
-    }
+  async _writeMeta(specId, meta) {
+    await this._writePhaseFile(
+      specId,
+      'meta.json',
+      JSON.stringify(meta, null, 2),
+    );
+  }
 
-    async _readMeta(specId) {
-        try {
-            const raw = await fs.readFile(path.join(this._specDir(specId), 'meta.json'), 'utf-8');
-            return JSON.parse(raw);
-        } catch {
-            return null;
-        }
-    }
+  _generateId(slug = '') {
+    const safe = slug
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .slice(0, 40);
+    return `${safe}-${crypto.randomUUID().slice(0, 8)}`;
+  }
 
-    async _writeMeta(specId, meta) {
-        await this._writePhaseFile(specId, 'meta.json', JSON.stringify(meta, null, 2));
-    }
+  _stripCodeFence(str) {
+    return str
+      .replace(/^```[a-z]*\n?/m, '')
+      .replace(/\n?```$/m, '')
+      .trim();
+  }
 
-    _generateId(slug = '') {
-        const safe = slug.toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 40);
-        return `${safe}-${crypto.randomUUID().slice(0, 8)}`;
-    }
+  // ─── PHASE 1: REQUIREMENTS ────────────────────────────────────────────────
 
-    _stripCodeFence(str) {
-        return str
-            .replace(/^```[a-z]*\n?/m, '')
-            .replace(/\n?```$/m, '')
-            .trim();
-    }
+  /**
+   * Create a new spec and generate requirements.md (EARS notation).
+   * @param {string} request - Natural language description of the feature
+   * @returns {Promise<{ specId, requirements }>}
+   */
+  async createSpec(request, regions = []) {
+    if (!request?.trim())
+      throw new Error('request must be a non-empty string.');
+    await this.init();
 
-    // ─── PHASE 1: REQUIREMENTS ────────────────────────────────────────────────
+    const specId = this._generateId(request.split(' ').slice(0, 4).join('-'));
+    const constitution = await this._readConstitution();
 
-    /**
-     * Create a new spec and generate requirements.md (EARS notation).
-     * @param {string} request - Natural language description of the feature
-     * @returns {Promise<{ specId, requirements }>}
-     */
-    async createSpec(request, regions = []) {
-        if (!request?.trim()) throw new Error('request must be a non-empty string.');
-        await this.init();
-
-        const specId = this._generateId(request.split(' ').slice(0, 4).join('-'));
-        const constitution = await this._readConstitution();
-
-        const compliancePromptSection = (Array.isArray(regions) && regions.length > 0) ? `
+    const compliancePromptSection =
+      Array.isArray(regions) && regions.length > 0
+        ? `
 REGIONAL COMPLIANCE RULES:
 You MUST design this feature to comply with the regulations of the specified regions: ${regions.join(', ')}.
 - **EU**: Enforce EU GDPR (Data residency in EU, explicit user consent, Right to Erasure, right to download data).
 - **US**: Enforce US HIPAA (PHI protection, no plaintext medical logging, encryption-at-rest, secure audit vaults) and SOC2.
 - **UK**: Enforce UK GDPR.
 - **APAC**: Enforce APEC CBPR data protection principles.
-` : '';
+`
+        : '';
 
-        const prompt = `
+    const prompt = `
 You are SpecKit — a Spec-Driven Development engine for a senior engineering team.
 
 PROJECT CONSTITUTION:
@@ -164,7 +181,7 @@ Include at least 3 user stories with 2-3 acceptance criteria each.
 - Performance: ...
 - Security: ...
 - Accessibility: ...
-${(Array.isArray(regions) && regions.length > 0) ? '- Regional Compliance: Explicitly list how the feature complies with: ' + regions.join(', ') : ''}
+${Array.isArray(regions) && regions.length > 0 ? '- Regional Compliance: Explicitly list how the feature complies with: ' + regions.join(', ') : ''}
 
 ## Out of Scope
 - List 2-3 explicit exclusions to prevent scope creep.
@@ -172,50 +189,63 @@ ${(Array.isArray(regions) && regions.length > 0) ? '- Regional Compliance: Expli
 Return ONLY the markdown content, no JSON or code fences.
         `.trim();
 
-        const requirements = this._stripCodeFence(await GeminiAiService.generateContent(prompt));
+    const requirements = this._stripCodeFence(
+      await GeminiAiService.generateContent(prompt),
+    );
 
-        await this._writePhaseFile(specId, 'requirements.md', requirements);
-        const meta = {
-            specId,
-            title: request.slice(0, 80),
-            type: 'feature',
-            regions: regions || [],
-            phases: { requirements: 'done', design: 'pending', tasks: 'pending' },
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        };
-        await this._writeMeta(specId, meta);
+    await this._writePhaseFile(specId, 'requirements.md', requirements);
+    const meta = {
+      specId,
+      title: request.slice(0, 80),
+      type: 'feature',
+      regions: regions || [],
+      phases: { requirements: 'done', design: 'pending', tasks: 'pending' },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    await this._writeMeta(specId, meta);
 
-        logger.info(`📝 SpecKit [Phase 1]: requirements.md created for spec ${specId}`);
-        return { specId, requirements };
-    }
+    logger.info(
+      `📝 SpecKit [Phase 1]: requirements.md created for spec ${specId}`,
+    );
+    return { specId, requirements };
+  }
 
-    // ─── PHASE 2: DESIGN ─────────────────────────────────────────────────────
+  // ─── PHASE 2: DESIGN ─────────────────────────────────────────────────────
 
-    /**
-     * Generate design.md from requirements.md.
-     * @param {string} specId
-     * @returns {Promise<{ specId, design }>}
-     */
-    async createDesign(specId, regions = []) {
-        await this.init();
-        const requirements = await this._readPhaseFile(specId, 'requirements.md');
-        if (!requirements) throw new Error(`Spec "${specId}" has no requirements.md. Run Phase 1 first.`);
+  /**
+   * Generate design.md from requirements.md.
+   * @param {string} specId
+   * @returns {Promise<{ specId, design }>}
+   */
+  async createDesign(specId, regions = []) {
+    await this.init();
+    const requirements = await this._readPhaseFile(specId, 'requirements.md');
+    if (!requirements)
+      throw new Error(
+        `Spec "${specId}" has no requirements.md. Run Phase 1 first.`,
+      );
 
-        const constitution = await this._readConstitution();
-        const meta = await this._readMeta(specId) || {};
-        const specRegions = (Array.isArray(regions) && regions.length > 0) ? regions : (meta.regions || []);
+    const constitution = await this._readConstitution();
+    const meta = (await this._readMeta(specId)) || {};
+    const specRegions =
+      Array.isArray(regions) && regions.length > 0
+        ? regions
+        : meta.regions || [];
 
-        const complianceDesignSection = specRegions.length > 0 ? `
+    const complianceDesignSection =
+      specRegions.length > 0
+        ? `
 REGIONAL COMPLIANCE ARCHITECTURE:
 The technical architecture MUST explicitly address compliance for: ${specRegions.join(', ')}.
 - **EU**: Specify data residency topology (e.g. European database regions), encryption-in-transit, and data purge cascades.
 - **US**: Specify KMS CMEK key configurations, encryption-at-rest, and immutable log routing structures for HIPAA.
 - **UK**: Specify data sovereignty boundaries.
 - **APAC**: Specify cross-border privacy boundaries.
-` : '';
+`
+        : '';
 
-        const prompt = `
+    const prompt = `
 You are SpecKit — a senior software architect.
 
 PROJECT CONSTITUTION:
@@ -268,34 +298,40 @@ Authentication, authorization, input validation, etc.
 Return ONLY the markdown content, no JSON or outer code fences.
         `.trim();
 
-        const design = this._stripCodeFence(await GeminiAiService.generateContent(prompt));
+    const design = this._stripCodeFence(
+      await GeminiAiService.generateContent(prompt),
+    );
 
-        await this._writePhaseFile(specId, 'design.md', design);
+    await this._writePhaseFile(specId, 'design.md', design);
 
-        const updatedMeta = await this._readMeta(specId) || {};
-        updatedMeta.phases = { ...updatedMeta.phases, design: 'done' };
-        updatedMeta.updatedAt = new Date().toISOString();
-        await this._writeMeta(specId, updatedMeta);
+    const updatedMeta = (await this._readMeta(specId)) || {};
+    updatedMeta.phases = { ...updatedMeta.phases, design: 'done' };
+    updatedMeta.updatedAt = new Date().toISOString();
+    await this._writeMeta(specId, updatedMeta);
 
-        logger.info(`🏗️ SpecKit [Phase 2]: design.md created for spec ${specId}`);
-        return { specId, design };
-    }
+    logger.info(`🏗️ SpecKit [Phase 2]: design.md created for spec ${specId}`);
+    return { specId, design };
+  }
 
-    // ─── PHASE 3: TASKS ───────────────────────────────────────────────────────
+  // ─── PHASE 3: TASKS ───────────────────────────────────────────────────────
 
-    /**
-     * Generate tasks.md from requirements.md + design.md.
-     * @param {string} specId
-     * @returns {Promise<{ specId, tasks }>}
-     */
-    async createTasks(specId) {
-        await this.init();
-        const requirements = await this._readPhaseFile(specId, 'requirements.md');
-        const design = await this._readPhaseFile(specId, 'design.md');
-        if (!requirements) throw new Error(`Spec "${specId}" has no requirements.md. Run Phase 1 first.`);
-        if (!design) throw new Error(`Spec "${specId}" has no design.md. Run Phase 2 first.`);
+  /**
+   * Generate tasks.md from requirements.md + design.md.
+   * @param {string} specId
+   * @returns {Promise<{ specId, tasks }>}
+   */
+  async createTasks(specId) {
+    await this.init();
+    const requirements = await this._readPhaseFile(specId, 'requirements.md');
+    const design = await this._readPhaseFile(specId, 'design.md');
+    if (!requirements)
+      throw new Error(
+        `Spec "${specId}" has no requirements.md. Run Phase 1 first.`,
+      );
+    if (!design)
+      throw new Error(`Spec "${specId}" has no design.md. Run Phase 2 first.`);
 
-        const prompt = `
+    const prompt = `
 You are SpecKit — a technical project manager.
 
 REQUIREMENTS:
@@ -325,109 +361,155 @@ Format for each task:
 Return ONLY the markdown content.
         `.trim();
 
-        const tasks = this._stripCodeFence(await GeminiAiService.generateContent(prompt));
+    const tasks = this._stripCodeFence(
+      await GeminiAiService.generateContent(prompt),
+    );
 
-        await this._writePhaseFile(specId, 'tasks.md', tasks);
+    await this._writePhaseFile(specId, 'tasks.md', tasks);
 
-        const meta = await this._readMeta(specId) || {};
-        meta.phases = { ...meta.phases, tasks: 'done' };
-        meta.updatedAt = new Date().toISOString();
-        await this._writeMeta(specId, meta);
+    const meta = (await this._readMeta(specId)) || {};
+    meta.phases = { ...meta.phases, tasks: 'done' };
+    meta.updatedAt = new Date().toISOString();
+    await this._writeMeta(specId, meta);
 
-        logger.info(`📋 SpecKit [Phase 3]: tasks.md created for spec ${specId}`);
-        return { specId, tasks };
+    logger.info(`📋 SpecKit [Phase 3]: tasks.md created for spec ${specId}`);
+    return { specId, tasks };
+  }
+
+  // ─── TASK EXECUTION ───────────────────────────────────────────────────────
+
+  /**
+   * Execute a single task from tasks.md via the orchestrator.
+   * @param {string} specId
+   * @param {number} taskIndex - 0-based task index
+   * @returns {Promise<{ specId, taskIndex, status, result }>}
+   */
+  async executeTask(specId, taskIndex) {
+    await this.init();
+    const tasksContent = await this._readPhaseFile(specId, 'tasks.md');
+    if (!tasksContent) throw new Error(`Spec "${specId}" has no tasks.md.`);
+
+    // Parse tasks (## Task N: sections)
+    const taskBlocks = tasksContent.split(/^## Task \d+:/m).filter(Boolean);
+    if (taskIndex >= taskBlocks.length) {
+      throw new Error(
+        `Task index ${taskIndex} out of range (${taskBlocks.length} tasks total).`,
+      );
     }
 
-    // ─── TASK EXECUTION ───────────────────────────────────────────────────────
+    const taskText = taskBlocks[taskIndex];
 
-    /**
-     * Execute a single task from tasks.md via the orchestrator.
-     * @param {string} specId
-     * @param {number} taskIndex - 0-based task index
-     * @returns {Promise<{ specId, taskIndex, status, result }>}
-     */
-    async executeTask(specId, taskIndex) {
-        await this.init();
-        const tasksContent = await this._readPhaseFile(specId, 'tasks.md');
-        if (!tasksContent) throw new Error(`Spec "${specId}" has no tasks.md.`);
+    // Update status to in-progress in tasks.md
+    const updatedTasks = this._setTaskStatus(
+      tasksContent,
+      taskIndex,
+      'in-progress',
+    );
+    await this._writePhaseFile(specId, 'tasks.md', updatedTasks);
 
-        // Parse tasks (## Task N: sections)
-        const taskBlocks = tasksContent.split(/^## Task \d+:/m).filter(Boolean);
-        if (taskIndex >= taskBlocks.length) {
-            throw new Error(`Task index ${taskIndex} out of range (${taskBlocks.length} tasks total).`);
+    const goal = `[SpecKit Task Execution] Spec: ${specId}, Task ${taskIndex + 1}:\n${taskText.slice(0, 2000)}`;
+
+    // Fire before-spec-task hook
+    hooksService
+      .triggerEvent('before-spec-task', {
+        specId,
+        taskIndex: String(taskIndex + 1),
+      })
+      .catch(() => {});
+
+    try {
+      const { graphOrchestrator } =
+        await import('../agents/graph.orchestrator.js');
+      const result = await graphOrchestrator.run(goal);
+
+      const completedTasks = this._setTaskStatus(
+        updatedTasks,
+        taskIndex,
+        'done',
+      );
+      await this._writePhaseFile(specId, 'tasks.md', completedTasks);
+
+      // Fire after-spec-task hook
+      hooksService
+        .triggerEvent('after-spec-task', {
+          specId,
+          taskIndex: String(taskIndex + 1),
+          status: 'done',
+        })
+        .catch(() => {});
+
+      logger.info(
+        `✅ SpecKit: Task ${taskIndex + 1} of spec ${specId} executed.`,
+      );
+      return { specId, taskIndex, status: 'done', result };
+    } catch (err) {
+      const failedTasks = this._setTaskStatus(
+        updatedTasks,
+        taskIndex,
+        'failed',
+      );
+      await this._writePhaseFile(specId, 'tasks.md', failedTasks);
+      hooksService
+        .triggerEvent('after-spec-task', {
+          specId,
+          taskIndex: String(taskIndex + 1),
+          status: 'failed',
+        })
+        .catch(() => {});
+      throw err;
+    }
+  }
+
+  _setTaskStatus(tasksContent, taskIndex, status) {
+    const statusEmoji = {
+      'in-progress': '🔄',
+      done: '✅',
+      failed: '❌',
+      pending: '⬜',
+    };
+
+    // Safer block splitting logic — splits on "## Task 1:", "## Task 2:", etc.
+    const taskRegex = /^(?=## Task \d+:)/m;
+    const taskBlocks = tasksContent.split(taskRegex);
+
+    let count = -1;
+
+    return taskBlocks
+      .map(block => {
+        if (/^## Task \d+:/.test(block)) {
+          count++;
         }
-
-        const taskText = taskBlocks[taskIndex];
-
-        // Update status to in-progress in tasks.md
-        const updatedTasks = this._setTaskStatus(tasksContent, taskIndex, 'in-progress');
-        await this._writePhaseFile(specId, 'tasks.md', updatedTasks);
-
-        const goal = `[SpecKit Task Execution] Spec: ${specId}, Task ${taskIndex + 1}:\n${taskText.slice(0, 2000)}`;
-
-        // Fire before-spec-task hook
-        hooksService.triggerEvent('before-spec-task', { specId, taskIndex: String(taskIndex + 1) }).catch(() => { });
-
-        try {
-            const { graphOrchestrator } = await import('../agents/graph.orchestrator.js');
-            const result = await graphOrchestrator.run(goal);
-
-            const completedTasks = this._setTaskStatus(updatedTasks, taskIndex, 'done');
-            await this._writePhaseFile(specId, 'tasks.md', completedTasks);
-
-            // Fire after-spec-task hook
-            hooksService.triggerEvent('after-spec-task', { specId, taskIndex: String(taskIndex + 1), status: 'done' }).catch(() => { });
-
-            logger.info(`✅ SpecKit: Task ${taskIndex + 1} of spec ${specId} executed.`);
-            return { specId, taskIndex, status: 'done', result };
-        } catch (err) {
-            const failedTasks = this._setTaskStatus(updatedTasks, taskIndex, 'failed');
-            await this._writePhaseFile(specId, 'tasks.md', failedTasks);
-            hooksService.triggerEvent('after-spec-task', { specId, taskIndex: String(taskIndex + 1), status: 'failed' }).catch(() => { });
-            throw err;
+        if (count === taskIndex) {
+          // More precise regex targeting ONLY the **Status** line and nothing else
+          return block.replace(
+            /^(\s*\*\*Status\*\*:\s*).*$/m,
+            `$1${statusEmoji[status] || ''} ${status}`,
+          );
         }
-    }
+        return block;
+      })
+      .join('');
+  }
 
-    _setTaskStatus(tasksContent, taskIndex, status) {
-        const statusEmoji = { 'in-progress': '🔄', done: '✅', failed: '❌', pending: '⬜' };
+  // ─── BUGFIX SPECS ────────────────────────────────────────────────────────
 
-        // Safer block splitting logic — splits on "## Task 1:", "## Task 2:", etc.
-        const taskRegex = /^(?=## Task \d+:)/m;
-        const taskBlocks = tasksContent.split(taskRegex);
+  /**
+   * Create a bugfix spec with root-cause analysis.
+   * @param {string} bugDescription - Natural language description of the bug
+   * @param {object} options - { currentBehavior, expectedBehavior, stepsToReproduce }
+   * @returns {Promise<{ specId, bugfix }>}
+   */
+  async createBugfixSpec(bugDescription, options = {}) {
+    if (!bugDescription?.trim())
+      throw new Error('bugDescription must be a non-empty string.');
+    await this.init();
 
-        let count = -1;
+    const specId =
+      'bugfix-' +
+      this._generateId(bugDescription.split(' ').slice(0, 3).join('-'));
+    const constitution = await this._readConstitution();
 
-        return taskBlocks.map(block => {
-            if (/^## Task \d+:/.test(block)) {
-                count++;
-            }
-            if (count === taskIndex) {
-                // More precise regex targeting ONLY the **Status** line and nothing else
-                return block.replace(
-                    /^(\s*\*\*Status\*\*:\s*).*$/m,
-                    `$1${statusEmoji[status] || ''} ${status}`
-                );
-            }
-            return block;
-        }).join('');
-    }
-
-    // ─── BUGFIX SPECS ────────────────────────────────────────────────────────
-
-    /**
-     * Create a bugfix spec with root-cause analysis.
-     * @param {string} bugDescription - Natural language description of the bug
-     * @param {object} options - { currentBehavior, expectedBehavior, stepsToReproduce }
-     * @returns {Promise<{ specId, bugfix }>}
-     */
-    async createBugfixSpec(bugDescription, options = {}) {
-        if (!bugDescription?.trim()) throw new Error('bugDescription must be a non-empty string.');
-        await this.init();
-
-        const specId = 'bugfix-' + this._generateId(bugDescription.split(' ').slice(0, 3).join('-'));
-        const constitution = await this._readConstitution();
-
-        const prompt = `
+    const prompt = `
 You are SpecKit — a senior debugging specialist.
 
 PROJECT CONSTITUTION:
@@ -483,89 +565,100 @@ What tests to add to prevent this from happening again.
 Return ONLY the markdown content.
         `.trim();
 
-        const bugfix = this._stripCodeFence(await GeminiAiService.generateContent(prompt));
+    const bugfix = this._stripCodeFence(
+      await GeminiAiService.generateContent(prompt),
+    );
 
-        const bugfixPath = path.join(this.bugfixDir, `${specId}.md`);
-        await fs.writeFile(bugfixPath, bugfix);
+    const bugfixPath = path.join(this.bugfixDir, `${specId}.md`);
+    await fs.writeFile(bugfixPath, bugfix);
 
-        const meta = {
-            specId,
-            title: bugDescription.slice(0, 80),
-            type: 'bugfix',
-            phases: { bugfix: 'done', design: 'pending', tasks: 'pending' },
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        };
-        await fs.mkdir(this._specDir(specId), { recursive: true });
-        await this._writeMeta(specId, meta);
-        await this._writePhaseFile(specId, 'bugfix.md', bugfix);
+    const meta = {
+      specId,
+      title: bugDescription.slice(0, 80),
+      type: 'bugfix',
+      phases: { bugfix: 'done', design: 'pending', tasks: 'pending' },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    await fs.mkdir(this._specDir(specId), { recursive: true });
+    await this._writeMeta(specId, meta);
+    await this._writePhaseFile(specId, 'bugfix.md', bugfix);
 
-        logger.info(`🐛 SpecKit [Bugfix]: bugfix.md created for spec ${specId}`);
-        return { specId, bugfix };
-    }
+    logger.info(`🐛 SpecKit [Bugfix]: bugfix.md created for spec ${specId}`);
+    return { specId, bugfix };
+  }
 
-    // ─── READ & LIST ─────────────────────────────────────────────────────────
+  // ─── READ & LIST ─────────────────────────────────────────────────────────
 
-    /**
-     * Get a spec's full state (all phases + metadata).
-     * @param {string} specId
-     */
-    async getSpec(specId) {
-        await this.init();
-        const meta = await this._readMeta(specId);
-        if (!meta) throw new Error(`Spec "${specId}" not found.`);
+  /**
+   * Get a spec's full state (all phases + metadata).
+   * @param {string} specId
+   */
+  async getSpec(specId) {
+    await this.init();
+    const meta = await this._readMeta(specId);
+    if (!meta) throw new Error(`Spec "${specId}" not found.`);
 
-        const [requirements, design, tasks, bugfix] = await Promise.all([
-            this._readPhaseFile(specId, 'requirements.md'),
-            this._readPhaseFile(specId, 'design.md'),
-            this._readPhaseFile(specId, 'tasks.md'),
-            this._readPhaseFile(specId, 'bugfix.md'),
-        ]);
+    const [requirements, design, tasks, bugfix] = await Promise.all([
+      this._readPhaseFile(specId, 'requirements.md'),
+      this._readPhaseFile(specId, 'design.md'),
+      this._readPhaseFile(specId, 'tasks.md'),
+      this._readPhaseFile(specId, 'bugfix.md'),
+    ]);
 
-        return { ...meta, requirements, design, tasks, bugfix };
-    }
+    return { ...meta, requirements, design, tasks, bugfix };
+  }
 
-    /**
-     * List all specs (feature + bugfix) with metadata.
-     */
-    async listSpecs() {
-        await this.init();
-        try {
-            const entries = await fs.readdir(this.specsDir, { withFileTypes: true });
-            const metas = await Promise.all(
-                entries
-                    .filter(e => e.isDirectory())
-                    .map(async e => {
-                        const meta = await this._readMeta(e.name);
-                        return meta || { specId: e.name, title: e.name, type: 'unknown', phases: {} };
-                    })
+  /**
+   * List all specs (feature + bugfix) with metadata.
+   */
+  async listSpecs() {
+    await this.init();
+    try {
+      const entries = await fs.readdir(this.specsDir, { withFileTypes: true });
+      const metas = await Promise.all(
+        entries
+          .filter(e => e.isDirectory())
+          .map(async e => {
+            const meta = await this._readMeta(e.name);
+            return (
+              meta || {
+                specId: e.name,
+                title: e.name,
+                type: 'unknown',
+                phases: {},
+              }
             );
-            return metas.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
-        } catch {
-            return [];
-        }
+          }),
+      );
+      return metas.sort((a, b) =>
+        (b.createdAt || '').localeCompare(a.createdAt || ''),
+      );
+    } catch {
+      return [];
     }
+  }
 
-    /**
-     * Delete a spec and all its files.
-     * @param {string} specId
-     */
-    async deleteSpec(specId) {
-        await this.init();
-        const dir = this._specDir(specId);
-        await fs.rm(dir, { recursive: true, force: true });
-        logger.info(`🗑️ SpecKit: Spec ${specId} deleted.`);
-    }
+  /**
+   * Delete a spec and all its files.
+   * @param {string} specId
+   */
+  async deleteSpec(specId) {
+    await this.init();
+    const dir = this._specDir(specId);
+    await fs.rm(dir, { recursive: true, force: true });
+    logger.info(`🗑️ SpecKit: Spec ${specId} deleted.`);
+  }
 
-    // ─── LEGACY COMPAT ───────────────────────────────────────────────────────
+  // ─── LEGACY COMPAT ───────────────────────────────────────────────────────
 
-    /** @deprecated Use createSpec() + createDesign() + createTasks() instead */
-    async createPlan(specFilename) {
-        const specPath = path.join(this.specsDir, specFilename);
-        const specContent = await fs.readFile(specPath, 'utf-8');
-        const constitution = await this._readConstitution();
+  /** @deprecated Use createSpec() + createDesign() + createTasks() instead */
+  async createPlan(specFilename) {
+    const specPath = path.join(this.specsDir, specFilename);
+    const specContent = await fs.readFile(specPath, 'utf-8');
+    const constitution = await this._readConstitution();
 
-        const prompt = `
+    const prompt = `
 You are SpecKit Plan Generator.
 PROJECT CONSTITUTION:
 ${constitution}
@@ -574,33 +667,39 @@ ${specContent}
 Generate a detailed, ordered implementation plan as a Markdown document.
         `.trim();
 
-        const planContent = await GeminiAiService.generateContent(prompt);
-        const planFilename = specFilename.replace(/\.md$/, '') + '-plan.md';
-        const planPath = path.join(this.plansDir, planFilename);
-        await fs.writeFile(planPath, this._stripCodeFence(planContent));
-        return { path: planPath, content: planContent };
-    }
+    const planContent = await GeminiAiService.generateContent(prompt);
+    const planFilename = specFilename.replace(/\.md$/, '') + '-plan.md';
+    const planPath = path.join(this.plansDir, planFilename);
+    await fs.writeFile(planPath, this._stripCodeFence(planContent));
+    return { path: planPath, content: planContent };
+  }
 
-    /** @deprecated Use listSpecs() instead */
-    async listPlans() {
-        await this.init();
-        return this._listFlatDir(this.plansDir);
-    }
+  /** @deprecated Use listSpecs() instead */
+  async listPlans() {
+    await this.init();
+    return this._listFlatDir(this.plansDir);
+  }
 
-    async _listFlatDir(dir) {
-        try {
-            const entries = await fs.readdir(dir, { withFileTypes: true });
-            const files = await Promise.all(
-                entries.filter(e => e.isFile() && e.name.endsWith('.md')).map(async e => {
-                    const stat = await fs.stat(path.join(dir, e.name));
-                    return { filename: e.name, createdAt: stat.birthtime, sizeBytes: stat.size };
-                })
-            );
-            return files.sort((a, b) => b.createdAt - a.createdAt);
-        } catch {
-            return [];
-        }
+  async _listFlatDir(dir) {
+    try {
+      const entries = await fs.readdir(dir, { withFileTypes: true });
+      const files = await Promise.all(
+        entries
+          .filter(e => e.isFile() && e.name.endsWith('.md'))
+          .map(async e => {
+            const stat = await fs.stat(path.join(dir, e.name));
+            return {
+              filename: e.name,
+              createdAt: stat.birthtime,
+              sizeBytes: stat.size,
+            };
+          }),
+      );
+      return files.sort((a, b) => b.createdAt - a.createdAt);
+    } catch {
+      return [];
     }
+  }
 }
 
 export const specKitService = new SpecKitService();

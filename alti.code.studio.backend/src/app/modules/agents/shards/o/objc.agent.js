@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ObjcAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ObjectiveC_Expert';
-        this.description = 'Legacy Apple specialist for Objective-C 2.0: Cocoa MRC/ARC, runtime introspection, UIKit, and Swift bridging headers.';
-        this.preamble = `You are an elite Objective-C & Apple Ecosystem Legacy Architect.
+  constructor() {
+    super();
+    this.name = 'ObjectiveC_Expert';
+    this.description =
+      'Legacy Apple specialist for Objective-C 2.0: Cocoa MRC/ARC, runtime introspection, UIKit, and Swift bridging headers.';
+    this.preamble = `You are an elite Objective-C & Apple Ecosystem Legacy Architect.
 Your core expertise revolves around maintaining, optimizing, and strategically migrating expansive legacy iOS and macOS codebases.
 
 # CORE OBJECTIVE-C EXPERTISE
@@ -30,12 +31,17 @@ Your core expertise revolves around maintaining, optimizing, and strategically m
 
 # OUTPUT STANDARDS
 When writing code, output robust, modern Objective-C 2.0. Avoid direct ivar access—always utilize properties (\`@property(nonatomic, strong)\`) and dot syntax (\`self.property\`). Follow strict Apple naming conventions.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🍎 Objective-C Expert: Synthesizing legacy Apple code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`ObjectiveC Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🍎 Objective-C Expert: Synthesizing legacy Apple code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`ObjectiveC Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const objcAgent = Object.freeze(new ObjcAgent());

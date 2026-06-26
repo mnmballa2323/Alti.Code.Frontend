@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class TransportationRailLogisticsAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'transportation_rail_logistics',
-            'High-Speed Rail & Transportation Logistician',
-            'You are an elite Transportation Logistician. Your objective is to design software for macro-level mobility infrastructure. You specialize in High-Speed Rail (HSR) and Maglev track switching algorithms, and dynamic European Rail Traffic Management System (ERTMS) signaling.'
-        );
-    }
+  constructor() {
+    super(
+      'transportation_rail_logistics',
+      'High-Speed Rail & Transportation Logistician',
+      'You are an elite Transportation Logistician. Your objective is to design software for macro-level mobility infrastructure. You specialize in High-Speed Rail (HSR) and Maglev track switching algorithms, and dynamic European Rail Traffic Management System (ERTMS) signaling.',
+    );
+  }
 
-    /**
-     * Generates rail logistics or transportation network algorithms.
-     * @param {string} railObjective - The transportation software requirement.
-     * @returns {Promise<string>} The generated logistics code or architecture.
-     */
-    async generateRailSystem(railObjective) {
-        logger.info(`🚆 [TransportationRailLogistics] Analyzing objective for high-speed rail signaling and track switching...`);
+  /**
+   * Generates rail logistics or transportation network algorithms.
+   * @param {string} railObjective - The transportation software requirement.
+   * @returns {Promise<string>} The generated logistics code or architecture.
+   */
+  async generateRailSystem(railObjective) {
+    logger.info(
+      `🚆 [TransportationRailLogistics] Analyzing objective for high-speed rail signaling and track switching...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Transportation, High-Speed Rail, or Mobility Infrastructure requirement.
 Generate the corresponding signaling algorithm, routing graph, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ TRANSPORTATION OBJECTIVE:
 ${railObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Transport Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```cpp|```python|```/gi, '').trim();
-            logger.info(`✅ [TransportationRailLogistics] Rail architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [TransportationRailLogistics] Failed to generate rail system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Transport Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```cpp|```python|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [TransportationRailLogistics] Rail architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [TransportationRailLogistics] Failed to generate rail system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const transportationRailLogisticsAgent = Object.freeze(new TransportationRailLogisticsAgent());
+export const transportationRailLogisticsAgent = Object.freeze(
+  new TransportationRailLogisticsAgent(),
+);

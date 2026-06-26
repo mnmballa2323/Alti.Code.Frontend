@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsScalingTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_scaling_tester_agent',
-            'DevSecOps Scaling Tester',
-            'You are an elite DevSecOps Scaling Tester. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_scaling_tester_agent',
+      'DevSecOps Scaling Tester',
+      'You are an elite DevSecOps Scaling Tester. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Scaling.',
+    );
+  }
 
-    async generateDevSecOpsScalingSystem(objective) {
-        logger.info(`💻 [DevSecOpsScalingTesterAgent] Analyzing DevSecOps Scaling Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Scaling Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Scaling Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsScalingTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsScalingSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsScalingTesterAgent] Analyzing DevSecOps Scaling Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Scaling Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Scaling Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevSecOpsScalingTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devSecOpsScalingTesterAgent = Object.freeze(new DevSecOpsScalingTesterAgent());
+export const devSecOpsScalingTesterAgent = Object.freeze(
+  new DevSecOpsScalingTesterAgent(),
+);

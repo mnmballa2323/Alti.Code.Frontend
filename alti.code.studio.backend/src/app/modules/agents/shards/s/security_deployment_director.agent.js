@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityDeploymentDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_deployment_director_agent',
-            'Security Deployment Director',
-            'You are an elite Security Deployment Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'security_deployment_director_agent',
+      'Security Deployment Director',
+      'You are an elite Security Deployment Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Deployment.',
+    );
+  }
 
-    async generateSecurityDeploymentSystem(objective) {
-        logger.info(`💻 [SecurityDeploymentDirectorAgent] Analyzing Security Deployment Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Deployment Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Deployment Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityDeploymentDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityDeploymentSystem(objective) {
+    logger.info(
+      `💻 [SecurityDeploymentDirectorAgent] Analyzing Security Deployment Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Deployment Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Deployment Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityDeploymentDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityDeploymentDirectorAgent = Object.freeze(new SecurityDeploymentDirectorAgent());
+export const securityDeploymentDirectorAgent = Object.freeze(
+  new SecurityDeploymentDirectorAgent(),
+);

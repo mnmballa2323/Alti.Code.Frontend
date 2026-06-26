@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureResilienceDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_resilience_developer_agent',
-            'Infrastructure Resilience Developer',
-            'You are an elite Infrastructure Resilience Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_resilience_developer_agent',
+      'Infrastructure Resilience Developer',
+      'You are an elite Infrastructure Resilience Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Resilience.',
+    );
+  }
 
-    async generateInfrastructureResilienceSystem(objective) {
-        logger.info(`💻 [InfrastructureResilienceDeveloperAgent] Analyzing Infrastructure Resilience Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Resilience Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Resilience Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureResilienceDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureResilienceSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureResilienceDeveloperAgent] Analyzing Infrastructure Resilience Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Resilience Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Resilience Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureResilienceDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureResilienceDeveloperAgent = Object.freeze(new InfrastructureResilienceDeveloperAgent());
+export const infrastructureResilienceDeveloperAgent = Object.freeze(
+  new InfrastructureResilienceDeveloperAgent(),
+);

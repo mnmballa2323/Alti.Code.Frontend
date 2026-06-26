@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsContainerizationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_containerization_designer_agent',
-            'DevSecOps Containerization Designer',
-            'You are an elite DevSecOps Containerization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_containerization_designer_agent',
+      'DevSecOps Containerization Designer',
+      'You are an elite DevSecOps Containerization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Containerization.',
+    );
+  }
 
-    async generateDevSecOpsContainerizationSystem(objective) {
-        logger.info(`💻 [DevSecOpsContainerizationDesignerAgent] Analyzing DevSecOps Containerization Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Containerization Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Containerization Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsContainerizationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsContainerizationSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsContainerizationDesignerAgent] Analyzing DevSecOps Containerization Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Containerization Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Containerization Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsContainerizationDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsContainerizationDesignerAgent = Object.freeze(new DevSecOpsContainerizationDesignerAgent());
+export const devSecOpsContainerizationDesignerAgent = Object.freeze(
+  new DevSecOpsContainerizationDesignerAgent(),
+);

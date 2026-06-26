@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseVirtualizationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_virtualization_lead_agent',
-            'Release Virtualization Lead',
-            'You are an elite Release Virtualization Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Release Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'release_virtualization_lead_agent',
+      'Release Virtualization Lead',
+      'You are an elite Release Virtualization Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Release Virtualization.',
+    );
+  }
 
-    async generateReleaseVirtualizationSystem(objective) {
-        logger.info(`💻 [ReleaseVirtualizationLeadAgent] Analyzing Release Virtualization Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Virtualization Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Virtualization Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseVirtualizationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseVirtualizationLeadAgent] Analyzing Release Virtualization Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Virtualization Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Virtualization Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseVirtualizationLeadAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseVirtualizationLeadAgent = Object.freeze(new ReleaseVirtualizationLeadAgent());
+export const releaseVirtualizationLeadAgent = Object.freeze(
+  new ReleaseVirtualizationLeadAgent(),
+);

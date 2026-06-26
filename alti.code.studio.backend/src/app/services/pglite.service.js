@@ -17,13 +17,15 @@ class PGLiteService {
   /**
    * Get or create a PGLite instance.
    * If tenantId is omitted, returns the default global in-memory instance.
-   * @param {string} [tenantId] 
+   * @param {string} [tenantId]
    * @returns {Promise<PGlite>}
    */
   async getInstance(tenantId = 'default') {
     if (tenantId === 'default') {
       if (!this.defaultDb) {
-        logger.info('⚡ Initializing default in-memory PGLite WASM database...');
+        logger.info(
+          '⚡ Initializing default in-memory PGLite WASM database...',
+        );
         this.defaultDb = new PGlite();
         // Run some basic schema initialization for sandbox environment
         await this.defaultDb.query(`
@@ -34,16 +36,22 @@ class PGLiteService {
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
           );
         `);
-        logger.info('✅ Default PGLite instance initialized with user sandbox schema.');
+        logger.info(
+          '✅ Default PGLite instance initialized with user sandbox schema.',
+        );
       }
       return this.defaultDb;
     }
 
     if (!this.instances.has(tenantId)) {
-      logger.info(`⚡ Initializing isolated PGLite WASM instance for tenant: ${tenantId}...`);
+      logger.info(
+        `⚡ Initializing isolated PGLite WASM instance for tenant: ${tenantId}...`,
+      );
       const instance = new PGlite();
       this.instances.set(tenantId, instance);
-      logger.info(`✅ Isolated PGLite instance created for tenant: ${tenantId}`);
+      logger.info(
+        `✅ Isolated PGLite instance created for tenant: ${tenantId}`,
+      );
     }
 
     return this.instances.get(tenantId);
@@ -51,14 +59,16 @@ class PGLiteService {
 
   /**
    * Execute a query against a PGLite instance.
-   * @param {string} sql 
-   * @param {Array} [params] 
-   * @param {string} [tenantId] 
+   * @param {string} sql
+   * @param {Array} [params]
+   * @param {string} [tenantId]
    */
   async query(sql, params = [], tenantId = 'default') {
     const db = await this.getInstance(tenantId);
     try {
-      logger.info(`💾 PGLite [${tenantId}] executing query: ${sql.substring(0, 120)}`);
+      logger.info(
+        `💾 PGLite [${tenantId}] executing query: ${sql.substring(0, 120)}`,
+      );
       const result = await db.query(sql, params);
       return result;
     } catch (err) {
@@ -69,7 +79,7 @@ class PGLiteService {
 
   /**
    * Close a specific instance or all instances.
-   * @param {string} [tenantId] 
+   * @param {string} [tenantId]
    */
   async shutdown(tenantId) {
     if (tenantId) {

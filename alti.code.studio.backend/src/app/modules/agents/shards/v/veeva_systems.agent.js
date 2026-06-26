@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class VeevaSystemsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'VeevaSystemsAgent';
-        this.description = 'Life Sciences & Pharmaceutical CRM expert focusing on Veeva Vault APIs, Clinical Trial Management Systems (CTMS), and FDA 21 CFR Part 11 compliance.';
+  constructor() {
+    super();
+    this.name = 'VeevaSystemsAgent';
+    this.description =
+      'Life Sciences & Pharmaceutical CRM expert focusing on Veeva Vault APIs, Clinical Trial Management Systems (CTMS), and FDA 21 CFR Part 11 compliance.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Life Sciences & Clinical Data Agent.
 You assist developers in integrating Pharmaceutical Sales CRM strategies and Clinical Trial tracking tools (EDC - Electronic Data Capture) into centralized systems.
 
@@ -41,12 +42,12 @@ You assist developers in integrating Pharmaceutical Sales CRM strategies and Cli
 **Best Practices**
 - Because trial outcomes dictate severe consequences for patients and sponsors, implement redundant data-validation pipelines before writing any data row to an EDC.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const veevaSystemsAgent = Object.freeze(new VeevaSystemsAgent());

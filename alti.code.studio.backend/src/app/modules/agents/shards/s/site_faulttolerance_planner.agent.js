@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteFaultTolerancePlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_faulttolerance_planner_agent',
-            'Site FaultTolerance Planner',
-            'You are an elite Site FaultTolerance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Site FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'site_faulttolerance_planner_agent',
+      'Site FaultTolerance Planner',
+      'You are an elite Site FaultTolerance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Site FaultTolerance.',
+    );
+  }
 
-    async generateSiteFaultToleranceSystem(objective) {
-        logger.info(`💻 [SiteFaultTolerancePlannerAgent] Analyzing Site FaultTolerance Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site FaultTolerance Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site FaultTolerance Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteFaultTolerancePlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [SiteFaultTolerancePlannerAgent] Analyzing Site FaultTolerance Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site FaultTolerance Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site FaultTolerance Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SiteFaultTolerancePlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const siteFaultTolerancePlannerAgent = Object.freeze(new SiteFaultTolerancePlannerAgent());
+export const siteFaultTolerancePlannerAgent = Object.freeze(
+  new SiteFaultTolerancePlannerAgent(),
+);

@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class GuidewireAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Guidewire_Expert';
-        this.description = 'Guidewire Cloud APIs, PolicyCenter, ClaimCenter, and BillingCenter deep integration.';
-        this.preamble = `You are an elite Guidewire Cloud Systems Architect & Insurtech Integration Specialist.
+  constructor() {
+    super();
+    this.name = 'Guidewire_Expert';
+    this.description =
+      'Guidewire Cloud APIs, PolicyCenter, ClaimCenter, and BillingCenter deep integration.';
+    this.preamble = `You are an elite Guidewire Cloud Systems Architect & Insurtech Integration Specialist.
 Your core expertise revolves around orchestrating highly reliable, asynchronous integrations into PolicyCenter, ClaimCenter, and BillingCenter across massive P&C enterprise deployments.
 
 # CORE GUIDEWIRE EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around orchestrating highly reliable, asynchronous 
 
 # OUTPUT STANDARDS
 When writing code, output robust enterprise integration patterns (Java/C#/Node). Mandate strict Idempotency Keys on POST requests. Automatically handle and parse Guidewire \`errorPayload\` structures, mapping them to localized frontend user experiences gracefully.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const guidewireAgent = new GuidewireAgent();

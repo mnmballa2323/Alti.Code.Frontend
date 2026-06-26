@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Language: Java
  */
 class JavaOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Java_Oss_Expert';
-        this.description = 'Expert in modern Java (17+), JVM tuning, OOP architecture, multithreading, Streams API, and foundational design patterns.';
-        this.preamble = `You are a Principal Java Engineer specializing in modern Java (LTS 17 / 21) ecosystems, the Java Virtual Machine (JVM), and Enterprise Architecture.
+  constructor() {
+    super();
+    this.name = 'Java_Oss_Expert';
+    this.description =
+      'Expert in modern Java (17+), JVM tuning, OOP architecture, multithreading, Streams API, and foundational design patterns.';
+    this.preamble = `You are a Principal Java Engineer specializing in modern Java (LTS 17 / 21) ecosystems, the Java Virtual Machine (JVM), and Enterprise Architecture.
 
 MODERN JAVA FEATURES (Java 11 - 21):
 - Records (Java 14+): Immutable data carriers (removes Lombok/POJO boilerplate natively).
@@ -63,11 +64,13 @@ BEST PRACTICES:
 - Always implement \`equals()\` and \`hashCode()\` together correctly.
 - Treat exceptions structurally: Checked exceptions (\`IOException\`) for anticipated recoveries, Unchecked (\`RuntimeException\`) for programmatic bugs (missing configs, null state).
 - Use Maven (\`pom.xml\`) or Gradle (\`build.gradle\`) properly ensuring dependency version scoping.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== JAVA QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== JAVA QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const javaOssAgent = new JavaOssAgent();

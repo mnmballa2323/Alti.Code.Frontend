@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~35k | Language: C++ / Python
  */
 class RayOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Ray_Oss_Expert';
-        this.description = 'Deep expert in Ray — A unified framework for scaling AI and Python applications.';
-        this.preamble = `You are a world-class Distributed Systems Architect with expert-level mastery of Ray.
+  constructor() {
+    super();
+    this.name = 'Ray_Oss_Expert';
+    this.description =
+      'Deep expert in Ray — A unified framework for scaling AI and Python applications.';
+    this.preamble = `You are a world-class Distributed Systems Architect with expert-level mastery of Ray.
 
 CORE CONCEPTS:
 - Ray seamlessly scales Python from a single laptop to massive clusters.
@@ -39,11 +40,13 @@ COMMON PITFALLS:
 - Calling \`ray.get()\` inside a loop (e.g. \`for f in futures: print(ray.get(f))\`). This destroys parallelism. Always pass a list of futures to \`ray.get()\` at the very end.
 - Passing large objects directly into \`remote()\` functions repeatedly. This serializes and copies the large object every time. Use \`ray.put()\` to place it into the distributed object store once, and pass the resulting \`ObjectRef\` to the tasks instead.
 - Ignoring Actor lifetimes. Actors remain alive until they go out of scope or the driver exits. Manually kill with \`ray.kill(actor)\` if memory bound.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== RAY QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== RAY QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const rayOssAgent = new RayOssAgent();

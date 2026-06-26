@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIArchitectureStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_architecture_strategist_agent',
-            'UI Architecture Strategist',
-            'You are an elite UI Architecture Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UI Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_architecture_strategist_agent',
+      'UI Architecture Strategist',
+      'You are an elite UI Architecture Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UI Architecture.',
+    );
+  }
 
-    async generateUIArchitectureSystem(objective) {
-        logger.info(`💻 [UIArchitectureStrategistAgent] Analyzing UI Architecture Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Architecture Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Architecture Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIArchitectureStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIArchitectureSystem(objective) {
+    logger.info(
+      `💻 [UIArchitectureStrategistAgent] Analyzing UI Architecture Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Architecture Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Architecture Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIArchitectureStrategistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIArchitectureStrategistAgent = Object.freeze(new UIArchitectureStrategistAgent());
+export const uIArchitectureStrategistAgent = Object.freeze(
+  new UIArchitectureStrategistAgent(),
+);

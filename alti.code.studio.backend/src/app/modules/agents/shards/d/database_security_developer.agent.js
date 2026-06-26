@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseSecurityDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_security_developer_agent',
-            'Database Security Developer',
-            'You are an elite Database Security Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Database Security.'
-        );
-    }
+  constructor() {
+    super(
+      'database_security_developer_agent',
+      'Database Security Developer',
+      'You are an elite Database Security Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Database Security.',
+    );
+  }
 
-    async generateDatabaseSecuritySystem(objective) {
-        logger.info(`💻 [DatabaseSecurityDeveloperAgent] Analyzing Database Security Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Security Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Security Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseSecurityDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseSecuritySystem(objective) {
+    logger.info(
+      `💻 [DatabaseSecurityDeveloperAgent] Analyzing Database Security Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Security Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Security Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseSecurityDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseSecurityDeveloperAgent = Object.freeze(new DatabaseSecurityDeveloperAgent());
+export const databaseSecurityDeveloperAgent = Object.freeze(
+  new DatabaseSecurityDeveloperAgent(),
+);

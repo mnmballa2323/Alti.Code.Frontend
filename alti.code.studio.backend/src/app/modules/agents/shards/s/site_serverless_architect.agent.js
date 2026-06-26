@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteServerlessArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_serverless_architect_agent',
-            'Site Serverless Architect',
-            'You are an elite Site Serverless Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Site Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'site_serverless_architect_agent',
+      'Site Serverless Architect',
+      'You are an elite Site Serverless Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Site Serverless.',
+    );
+  }
 
-    async generateSiteServerlessSystem(objective) {
-        logger.info(`💻 [SiteServerlessArchitectAgent] Analyzing Site Serverless Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Serverless Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Serverless Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteServerlessArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteServerlessSystem(objective) {
+    logger.info(
+      `💻 [SiteServerlessArchitectAgent] Analyzing Site Serverless Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Serverless Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Serverless Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteServerlessArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteServerlessArchitectAgent = Object.freeze(new SiteServerlessArchitectAgent());
+export const siteServerlessArchitectAgent = Object.freeze(
+  new SiteServerlessArchitectAgent(),
+);

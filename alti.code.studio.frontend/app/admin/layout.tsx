@@ -17,7 +17,7 @@ import {
 
 import { useAppSelector } from "@/store";
 import {
-  AzureIcon,
+  GoogleIcon,
   LibertyIcon,
 } from "@/components/CloudIcons";
 
@@ -47,9 +47,9 @@ const managerItems: SidebarItem[] = [
 ];
 
 const cloudItems: SidebarItem[] = [
-  { label: "Azure Cloud", href: "/admin/azure?env=cloud", icon: AzureIcon },
-  { label: "Azure Dedicated", href: "/admin/azure?env=dedicated", icon: AzureIcon },
-  { label: "Azure Government", href: "/admin/azure?env=government", icon: AzureIcon },
+  { label: "GCP Cloud", href: "/admin/gcp?env=cloud", icon: GoogleIcon },
+  { label: "GCP Dedicated", href: "/admin/gcp?env=dedicated", icon: GoogleIcon },
+  { label: "GCP Government", href: "/admin/gcp?env=government", icon: GoogleIcon },
 ];
 
 export default function AdminLayout({
@@ -139,7 +139,7 @@ export default function AdminLayout({
     }
 
     if (
-      pathname.startsWith("/admin/azure")
+      pathname.startsWith("/admin/gcp")
     ) {
       return "Cloud Providers";
     }
@@ -161,7 +161,7 @@ export default function AdminLayout({
     if (pathname.startsWith("/admin/usage")) return "Model Usage";
     if (pathname.startsWith("/admin/audit")) return "Audit Logs";
 
-    if (pathname.startsWith("/admin/azure")) return "Microsoft Azure";
+    if (pathname.startsWith("/admin/gcp")) return "Google Cloud Platform";
 
     return "Platform Admin";
   };

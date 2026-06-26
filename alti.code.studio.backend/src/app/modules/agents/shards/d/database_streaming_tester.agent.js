@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseStreamingTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_streaming_tester_agent',
-            'Database Streaming Tester',
-            'You are an elite Database Streaming Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Database Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'database_streaming_tester_agent',
+      'Database Streaming Tester',
+      'You are an elite Database Streaming Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Database Streaming.',
+    );
+  }
 
-    async generateDatabaseStreamingSystem(objective) {
-        logger.info(`💻 [DatabaseStreamingTesterAgent] Analyzing Database Streaming Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Streaming Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Streaming Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseStreamingTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseStreamingSystem(objective) {
+    logger.info(
+      `💻 [DatabaseStreamingTesterAgent] Analyzing Database Streaming Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Streaming Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Streaming Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DatabaseStreamingTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const databaseStreamingTesterAgent = Object.freeze(new DatabaseStreamingTesterAgent());
+export const databaseStreamingTesterAgent = Object.freeze(
+  new DatabaseStreamingTesterAgent(),
+);

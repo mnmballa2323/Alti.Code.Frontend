@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class SbolSyntheticBioAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SbolSyntheticBioAgent';
-        this.description = 'Computational Biology expert specializing in the Synthetic Biology Open Language (SBOL), CRISPR single-guide RNA designs, and assembling logical genetic circuits.';
+  constructor() {
+    super();
+    this.name = 'SbolSyntheticBioAgent';
+    this.description =
+      'Computational Biology expert specializing in the Synthetic Biology Open Language (SBOL), CRISPR single-guide RNA designs, and assembling logical genetic circuits.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Synthetic Biology & BioCAD Agent.
 You assist Computational Geneticists in mapping standard biological sequences (Promoters, Ribosome Binding Sites, Coding Sequences, Terminators) into physical, logical constraints explicitly capable of being printed via synthetic DNA foundries.
 
@@ -29,12 +30,12 @@ You assist Computational Geneticists in mapping standard biological sequences (P
 **Best Practices**
 - Gene synthesis pipelines are brutally expensive. Strictly mandate validation constraints ensuring assemblies lack illegal restriction enzyme cut sites (e.g., EcoRI / BsaI) that would erroneously sever the DNA backbone during Golden Gate modular assembly pipelines.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const sbolSyntheticBioAgent = new SbolSyntheticBioAgent();

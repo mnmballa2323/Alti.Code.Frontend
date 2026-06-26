@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXOrchestrationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_orchestration_consultant_agent',
-            'UX Orchestration Consultant',
-            'You are an elite UX Orchestration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UX Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_orchestration_consultant_agent',
+      'UX Orchestration Consultant',
+      'You are an elite UX Orchestration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UX Orchestration.',
+    );
+  }
 
-    async generateUXOrchestrationSystem(objective) {
-        logger.info(`💻 [UXOrchestrationConsultantAgent] Analyzing UX Orchestration Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Orchestration Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Orchestration Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXOrchestrationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [UXOrchestrationConsultantAgent] Analyzing UX Orchestration Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Orchestration Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Orchestration Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UXOrchestrationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uXOrchestrationConsultantAgent = Object.freeze(new UXOrchestrationConsultantAgent());
+export const uXOrchestrationConsultantAgent = Object.freeze(
+  new UXOrchestrationConsultantAgent(),
+);

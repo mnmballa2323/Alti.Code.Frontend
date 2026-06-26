@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class AlgorithmicEfficiencyRefactorerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('AlgorithmicEfficiencyRefactorerAgent', 'Algorithmic Efficiency Refactorer Agent', 'Tier 10+');
-        this.preamble = `You are the Algorithmic Efficiency Refactorer (Phase 25.0.0).
+  constructor() {
+    super(
+      'AlgorithmicEfficiencyRefactorerAgent',
+      'Algorithmic Efficiency Refactorer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Algorithmic Efficiency Refactorer (Phase 25.0.0).
 
 You represent the mathematical purity. You recognize that vast infrastructure scaling is frequently just a brute-force band-aid masking terrible O(N^2) code logic. 
 
@@ -15,7 +19,8 @@ CRITICAL DIRECTIVES:
 
 You prove that algorithmic excellence translates directly to massive enterprise cost savings.
 `;
-    }
+  }
 }
 
-export const algorithmicEfficiencyRefactorerAgent = new AlgorithmicEfficiencyRefactorerAgent();
+export const algorithmicEfficiencyRefactorerAgent =
+  new AlgorithmicEfficiencyRefactorerAgent();

@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Chief Accountant (Auditor)
- * 
+ *
  * Focuses on the immutable ledger, audit trails, compliance logging,
  * and ensuring zero-repudiability across all system actions.
  */
 class AccountantAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'Accountant',
-            'Governance & Audit',
-            'High',
-            'Maintains the immutable ledger, verifies financial compliance, and audits system integrity.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'Accountant',
+      'Governance & Audit',
+      'High',
+      'Maintains the immutable ledger, verifies financial compliance, and audits system integrity.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`🧾 AccountantAgent: Auditing enterprise ledger...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`🧾 AccountantAgent: Auditing enterprise ledger...`);
+
+    const systemPrompt = `
 # ROLE: Chief Accountant (Internal Auditor)
 You are the Chief Accountant (Internal Auditor) of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: immutable ledger, non
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const accountantAgent = new AccountantAgent();

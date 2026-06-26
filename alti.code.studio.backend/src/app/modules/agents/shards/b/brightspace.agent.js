@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BrightspaceAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Brightspace_Expert';
-        this.description = 'Enterprise LMS specialist for D2L Brightspace: REST API (LE/LP), OAuth2, course/enrollment management, content topics/modules, grades (GradeBook), quizzes, discussions, SCORM package upload, Brightspace Data Platform (BDP) analytics, and Intelligent Agents.';
-        this.preamble = `You are an elite D2L Brightspace LMS API and enterprise eLearning specialist.
+  constructor() {
+    super();
+    this.name = 'Brightspace_Expert';
+    this.description =
+      'Enterprise LMS specialist for D2L Brightspace: REST API (LE/LP), OAuth2, course/enrollment management, content topics/modules, grades (GradeBook), quizzes, discussions, SCORM package upload, Brightspace Data Platform (BDP) analytics, and Intelligent Agents.';
+    this.preamble = `You are an elite D2L Brightspace LMS API and enterprise eLearning specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: OAuth2 authorization code flow (OAuth2 via Brightspace API Auth SPA). Base URL: \`https://{yourBrightspaceDomain}/d2l/api\`. API versions: LE (Learning Environment) = \`/le/1.51/\`, LP (Learning Platform/users) = \`/lp/1.28/\`. All requests: \`Authorization: Bearer {TOKEN}\`.
 2. **Users & Enrollment**: Get user: \`GET /lp/1.28/users/{userId}\`. Find by username: \`GET /lp/1.28/users/?userName={userName}\`. Enroll in course: \`POST /le/1.51/{orgUnitId}/enrollments/\` — \`{ UserId: userId, RoleId: 110 }\` (110=Student, 109=Instructor). Get course enrollments: \`GET /le/1.51/enrollments/orgunit/{orgUnitId}/users/?roleId=110\`.
@@ -29,20 +30,22 @@ class BrightspaceAgent extends BaseSpecialistAgent {
 7. **Brightspace Data Platform (BDP)**: Full data warehouse of all LMS events. Export: \`GET /lp/1.28/dataExport/bds/list\` → available data sets. Download: \`GET /lp/1.28/dataExport/bds/download/{bdsType}\` → CSV download link. Types: \`CourseAccess\`, \`GradeResults\`, \`UserLogins\`, \`ContentUserProgress\`. Use for LMS analytics dashboards.
 # BEHAVIOR
 Output production TypeScript. Base URL and OAuth2 credentials are institution-specific. Store \`BRIGHTSPACE_CLIENT_ID\`, \`BRIGHTSPACE_CLIENT_SECRET\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📘 Brightspace Expert: Synthesizing enterprise LMS logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Brightspace Expert failed:', e);
-            throw new Error(`Brightspace Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📘 Brightspace Expert: Synthesizing enterprise LMS logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Brightspace Expert failed:', e);
+      throw new Error(`Brightspace Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const brightspaceAgent = Object.freeze(new BrightspaceAgent());

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureLoadBalancingDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_loadbalancing_designer_agent',
-            'Infrastructure LoadBalancing Designer',
-            'You are an elite Infrastructure LoadBalancing Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_loadbalancing_designer_agent',
+      'Infrastructure LoadBalancing Designer',
+      'You are an elite Infrastructure LoadBalancing Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure LoadBalancing.',
+    );
+  }
 
-    async generateInfrastructureLoadBalancingSystem(objective) {
-        logger.info(`💻 [InfrastructureLoadBalancingDesignerAgent] Analyzing Infrastructure LoadBalancing Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure LoadBalancing Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure LoadBalancing Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureLoadBalancingDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureLoadBalancingDesignerAgent] Analyzing Infrastructure LoadBalancing Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure LoadBalancing Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure LoadBalancing Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureLoadBalancingDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureLoadBalancingDesignerAgent = Object.freeze(new InfrastructureLoadBalancingDesignerAgent());
+export const infrastructureLoadBalancingDesignerAgent = Object.freeze(
+  new InfrastructureLoadBalancingDesignerAgent(),
+);

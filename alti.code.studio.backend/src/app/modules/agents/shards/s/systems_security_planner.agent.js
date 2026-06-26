@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsSecurityPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_security_planner_agent',
-            'Systems Security Planner',
-            'You are an elite Systems Security Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Security.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_security_planner_agent',
+      'Systems Security Planner',
+      'You are an elite Systems Security Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Security.',
+    );
+  }
 
-    async generateSystemsSecuritySystem(objective) {
-        logger.info(`💻 [SystemsSecurityPlannerAgent] Analyzing Systems Security Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Security Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Security Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsSecurityPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsSecuritySystem(objective) {
+    logger.info(
+      `💻 [SystemsSecurityPlannerAgent] Analyzing Systems Security Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Security Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Security Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsSecurityPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsSecurityPlannerAgent = Object.freeze(new SystemsSecurityPlannerAgent());
+export const systemsSecurityPlannerAgent = Object.freeze(
+  new SystemsSecurityPlannerAgent(),
+);

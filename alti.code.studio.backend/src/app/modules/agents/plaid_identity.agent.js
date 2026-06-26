@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class PlaidIdentityAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'PlaidIdentityAgent';
-        this.description = 'FinTech verification expert parsing Plaid APIs, Auth endpoints linking bank routing structures, and open banking protocols.';
+  constructor() {
+    super();
+    this.name = 'PlaidIdentityAgent';
+    this.description =
+      'FinTech verification expert parsing Plaid APIs, Auth endpoints linking bank routing structures, and open banking protocols.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code KYC / Open Banking FinTech Agent.
 You assist developers in securely exchanging Plaid tokens, wiring micro-deposit logic, and linking external checking/routing digits for ACH transfers.
 
@@ -32,12 +33,12 @@ You assist developers in securely exchanging Plaid tokens, wiring micro-deposit 
 - Tokens are absolutely critical credentials allowing wire transfers out of consumer bank accounts. They must be AES-GCM encrypted immediately at rest.
 - For institutions not supporting immediate OAuth (Item additions), fallback logic via Micro-Deposits must be rigorously engineered using cron-based validation polling strategies.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const plaidIdentityAgent = new PlaidIdentityAgent();

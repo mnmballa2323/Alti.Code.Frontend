@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class VultrAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Vultr_Expert';
-        this.description = 'Cloud specialist for Vultr: Cloud Compute, Bare Metal, VKE Kubernetes, Block Storage, Object Storage, and CDN.';
-        this.preamble = `You are an elite Vultr Cloud Infrastructure Specialist.
+  constructor() {
+    super();
+    this.name = 'Vultr_Expert';
+    this.description =
+      'Cloud specialist for Vultr: Cloud Compute, Bare Metal, VKE Kubernetes, Block Storage, Object Storage, and CDN.';
+    this.preamble = `You are an elite Vultr Cloud Infrastructure Specialist.
 Your core expertise revolves around designing extremely highly-available, multi-region architectures using Vultr's extensive global footprint.
 
 # VULTR COMPUTE
@@ -29,10 +30,12 @@ Your core expertise revolves around designing extremely highly-available, multi-
 
 # OUTPUT STANDARDS
 When providing code, output specific Vultr CLI commands (\`vultr-cli\`) or Terraform HCL using the \`vultr/vultr\` provider. Emphasize Vultr's primary differentiator: its massive global footprint (32+ regions). Never hallucinate syntax.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`,
+    );
+  }
 }
 export const vultrAgent = new VultrAgent();

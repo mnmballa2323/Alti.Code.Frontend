@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfuraAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Infura_Expert';
-        this.description = 'Blockchain RPC infrastructure specialist for Infura: multi-chain HTTP/WSS endpoints, IPFS API gateway, MetaMask SDK, gas API, archive node queries, API key management, and Web3 API suite (transactions/blocks/tokens/NFTs).';
-        this.preamble = `You are an elite Infura Blockchain Infrastructure & RPC Connectivity Specialist.
+  constructor() {
+    super();
+    this.name = 'Infura_Expert';
+    this.description =
+      'Blockchain RPC infrastructure specialist for Infura: multi-chain HTTP/WSS endpoints, IPFS API gateway, MetaMask SDK, gas API, archive node queries, API key management, and Web3 API suite (transactions/blocks/tokens/NFTs).';
+    this.preamble = `You are an elite Infura Blockchain Infrastructure & RPC Connectivity Specialist.
 Your core expertise revolves around architecting massive-scale Ethereum ecosystem connections, orchestrating robust IPFS distributed storage clusters, and securely brokering Web3 application layers directly into MetaMask ecosystem abstractions.
 
 # CORE INFURA EXPERTISE
@@ -30,20 +31,24 @@ Your core expertise revolves around architecting massive-scale Ethereum ecosyste
 
 # OUTPUT STANDARDS
 When writing code, output robust Node/TypeScript environments natively cleanly segregating sensitive \`INFURA_PROJECT_ID\` environments explicitly away from browser boundaries. Utilize performant WebSocket (\`wss://\`) subscriptions structurally over short-polling.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⚙️ Infura Expert: Synthesizing blockchain infrastructure logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Infura Expert failed:', e);
-            throw new Error(`Infura Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `⚙️ Infura Expert: Synthesizing blockchain infrastructure logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Infura Expert failed:', e);
+      throw new Error(`Infura Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const infuraAgent = Object.freeze(new InfuraAgent());

@@ -20,7 +20,8 @@ class SemgrepAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Semgrep_SAST_Engineer';
-    this.description = 'Elite Semgrep SAST engineer: custom rule authoring, registry packs, taint analysis, CI integration, Semgrep App API.';
+    this.description =
+      'Elite Semgrep SAST engineer: custom rule authoring, registry packs, taint analysis, CI integration, Semgrep App API.';
 
     this.preamble = `
 You are an elite static application security testing engineer specializing in Semgrep — the lightweight, semantic code analysis tool.
@@ -142,8 +143,14 @@ OUTPUT: Production Semgrep YAML rules and CI integration. Rules must include id,
   }
 
   async generateCustomRule(opts = {}, contextData = []) {
-    const { pattern = '', language = 'javascript', severity = 'ERROR', cwe = '' } = opts;
-    return this.consult(`
+    const {
+      pattern = '',
+      language = 'javascript',
+      severity = 'ERROR',
+      cwe = '',
+    } = opts;
+    return this.consult(
+      `
 Write a production Semgrep YAML rule for detecting: ${pattern}
 Language: ${language}, Severity: ${severity}
 ${cwe ? 'CWE: ' + cwe : ''}
@@ -155,7 +162,9 @@ Include:
 - At least one non-match test case (safe pattern to exclude)
 - Full metadata: cwe, owasp, category, references
 - autofix if applicable
-        `, contextData);
+        `,
+      contextData,
+    );
   }
 }
 

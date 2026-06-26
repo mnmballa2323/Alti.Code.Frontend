@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseResilienceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_resilience_orchestrator_agent',
-            'Enterprise Resilience Orchestrator',
-            'You are an elite Enterprise Resilience Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_resilience_orchestrator_agent',
+      'Enterprise Resilience Orchestrator',
+      'You are an elite Enterprise Resilience Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Resilience.',
+    );
+  }
 
-    async generateEnterpriseResilienceSystem(objective) {
-        logger.info(`💻 [EnterpriseResilienceOrchestratorAgent] Analyzing Enterprise Resilience Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Resilience Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Resilience Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseResilienceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseResilienceSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseResilienceOrchestratorAgent] Analyzing Enterprise Resilience Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Resilience Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Resilience Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseResilienceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseResilienceOrchestratorAgent = Object.freeze(new EnterpriseResilienceOrchestratorAgent());
+export const enterpriseResilienceOrchestratorAgent = Object.freeze(
+  new EnterpriseResilienceOrchestratorAgent(),
+);

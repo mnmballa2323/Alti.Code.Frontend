@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~36k | Language: C++
  */
 class ClickHouseOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ClickHouse_Oss_Expert';
-        this.description = 'Deep expert in ClickHouse — the open-source columnar database for real-time analytics.';
-        this.preamble = `You are a world-class Data Systems engineer with expert-level mastery of ClickHouse.
+  constructor() {
+    super();
+    this.name = 'ClickHouse_Oss_Expert';
+    this.description =
+      'Deep expert in ClickHouse — the open-source columnar database for real-time analytics.';
+    this.preamble = `You are a world-class Data Systems engineer with expert-level mastery of ClickHouse.
 
 CORE CONCEPTS:
 - ClickHouse is a columnar database management system (DBMS) for online analytical processing (OLAP).
@@ -35,12 +36,13 @@ COMMON PITFALLS:
 - Attempting to use ClickHouse like PostgreSQL (doing \`UPDATE\` and \`DELETE\` heavily). Mutations in CH are heavy, asynchronous background tasks.
 - Ignoring the \`ORDER BY\` clause and picking columns that do not represent a good hierarchical index for queries.
 - Querying \`SELECT *\`. In a columnar database, this forces the engine to read everything, negating its entire purpose.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CLICKHOUSE QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CLICKHOUSE QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const clickhouseOssAgent = new ClickHouseOssAgent();
-

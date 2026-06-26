@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXProvisioningConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_provisioning_consultant_agent',
-            'UX Provisioning Consultant',
-            'You are an elite UX Provisioning Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UX Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_provisioning_consultant_agent',
+      'UX Provisioning Consultant',
+      'You are an elite UX Provisioning Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UX Provisioning.',
+    );
+  }
 
-    async generateUXProvisioningSystem(objective) {
-        logger.info(`💻 [UXProvisioningConsultantAgent] Analyzing UX Provisioning Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Provisioning Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Provisioning Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXProvisioningConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXProvisioningSystem(objective) {
+    logger.info(
+      `💻 [UXProvisioningConsultantAgent] Analyzing UX Provisioning Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Provisioning Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Provisioning Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXProvisioningConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXProvisioningConsultantAgent = Object.freeze(new UXProvisioningConsultantAgent());
+export const uXProvisioningConsultantAgent = Object.freeze(
+  new UXProvisioningConsultantAgent(),
+);

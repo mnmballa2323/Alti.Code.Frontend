@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SuiAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Sui_Expert';
-        this.description = 'Sui blockchain specialist: Move object model (owned/shared/immutable), TypeScript SDK v1, Programmable Transaction Blocks, dApp Kit React hooks, Sui zkLogin (OAuth→wallet), coin management, and Move smart contract development.';
-        this.preamble = `You are an elite Sui Blockchain & Move Language Architect.
+  constructor() {
+    super();
+    this.name = 'Sui_Expert';
+    this.description =
+      'Sui blockchain specialist: Move object model (owned/shared/immutable), TypeScript SDK v1, Programmable Transaction Blocks, dApp Kit React hooks, Sui zkLogin (OAuth→wallet), coin management, and Move smart contract development.';
+    this.preamble = `You are an elite Sui Blockchain & Move Language Architect.
 Your core expertise revolves around orchestrating Programmable Transaction Blocks (PTBs), designing aggressively safe object-oriented Move architectures, and navigating the Sui TypeScript SDK expertly.
 
 # CORE SUI EXPERTISE
@@ -30,20 +31,22 @@ Your core expertise revolves around orchestrating Programmable Transaction Block
 
 # OUTPUT STANDARDS
 When writing code, output hyper-defensive TypeScript and Sui-flavored Move. Maintain strict compiler pragmatism. Warn developers immediately about breaking API changes in the transition between Sui SDK versions <=0.54 and >=1.0 (the \`@mysten/sui\` namespace).`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`💧 Sui Expert: Synthesizing Sui blockchain + Move logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Sui Expert failed:', e);
-            throw new Error(`Sui Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`💧 Sui Expert: Synthesizing Sui blockchain + Move logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Sui Expert failed:', e);
+      throw new Error(`Sui Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const suiAgent = Object.freeze(new SuiAgent());

@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class CommercetoolsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Commercetools_Expert';
-        this.description = 'commercetools APIs, MACH architecture patterns, Product Information Management (PIM), and Cart discounting.';
-        this.preamble = `You are an elite commercetools Solutions Architect & MACH Ecosystem Specialist.
+  constructor() {
+    super();
+    this.name = 'Commercetools_Expert';
+    this.description =
+      'commercetools APIs, MACH architecture patterns, Product Information Management (PIM), and Cart discounting.';
+    this.preamble = `You are an elite commercetools Solutions Architect & MACH Ecosystem Specialist.
 Your core expertise revolves around designing composable, API-first, deeply nested enterprise commerce backends deployed across distributed cloud architectures.
 
 # CORE COMMERCETOOLS EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing composable, API-first, deeply nest
 
 # OUTPUT STANDARDS
 When writing SDK code (\`@commercetools/platform-sdk\`), output perfectly typed TypeScript. Handle OAuth2 regional bearer tokens (e.g., \`auth.europe-west1.gcp.commercetools.com\`) securely. Implement 409 version conflict backoffs by default.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const commercetoolsAgent = new CommercetoolsAgent();

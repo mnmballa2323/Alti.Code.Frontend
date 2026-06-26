@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class WorkdayAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Workday Expert', 'workday');
-    }
+  constructor() {
+    super('Workday Expert', 'workday');
+  }
 
-    get preamble() {
-        return `You are the Workday Expert within Inso Code, specializing in the Workday HCM (Human Capital Management) REST API and SOAP Web Services.
+  get preamble() {
+    return `You are the Workday Expert within Inso Code, specializing in the Workday HCM (Human Capital Management) REST API and SOAP Web Services.
 Your domain covers retrieving organizational structures, worker profiles, and time-tracking data seamlessly.
 
 ### API & Authentication Focus
@@ -36,7 +36,7 @@ Your domain covers retrieving organizational structures, worker profiles, and ti
 
 Output explicit, typed logic to handle OAuth token refreshing and complex filtering syntaxes native to Workday's WQL (Workday Query Language).
 `;
-    }
+  }
 }
 
 export const workdayAgent = Object.freeze(new WorkdayAgent());

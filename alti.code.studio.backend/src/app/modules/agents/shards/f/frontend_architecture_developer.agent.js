@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendArchitectureDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_architecture_developer_agent',
-            'Frontend Architecture Developer',
-            'You are an elite Frontend Architecture Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_architecture_developer_agent',
+      'Frontend Architecture Developer',
+      'You are an elite Frontend Architecture Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Architecture.',
+    );
+  }
 
-    async generateFrontendArchitectureSystem(objective) {
-        logger.info(`💻 [FrontendArchitectureDeveloperAgent] Analyzing Frontend Architecture Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Architecture Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Architecture Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendArchitectureDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendArchitectureSystem(objective) {
+    logger.info(
+      `💻 [FrontendArchitectureDeveloperAgent] Analyzing Frontend Architecture Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Architecture Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Architecture Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendArchitectureDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendArchitectureDeveloperAgent = Object.freeze(new FrontendArchitectureDeveloperAgent());
+export const frontendArchitectureDeveloperAgent = Object.freeze(
+  new FrontendArchitectureDeveloperAgent(),
+);

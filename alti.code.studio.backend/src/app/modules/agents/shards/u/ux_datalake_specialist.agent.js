@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXDataLakeSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_datalake_specialist_agent',
-            'UX DataLake Specialist',
-            'You are an elite UX DataLake Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and UX DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_datalake_specialist_agent',
+      'UX DataLake Specialist',
+      'You are an elite UX DataLake Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and UX DataLake.',
+    );
+  }
 
-    async generateUXDataLakeSystem(objective) {
-        logger.info(`💻 [UXDataLakeSpecialistAgent] Analyzing UX DataLake Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX DataLake Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX DataLake Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXDataLakeSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXDataLakeSystem(objective) {
+    logger.info(
+      `💻 [UXDataLakeSpecialistAgent] Analyzing UX DataLake Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX DataLake Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX DataLake Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXDataLakeSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXDataLakeSpecialistAgent = Object.freeze(new UXDataLakeSpecialistAgent());
+export const uXDataLakeSpecialistAgent = Object.freeze(
+  new UXDataLakeSpecialistAgent(),
+);

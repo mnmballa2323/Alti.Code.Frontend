@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendProvisioningAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_provisioning_auditor_agent',
-            'Frontend Provisioning Auditor',
-            'You are an elite Frontend Provisioning Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_provisioning_auditor_agent',
+      'Frontend Provisioning Auditor',
+      'You are an elite Frontend Provisioning Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Provisioning.',
+    );
+  }
 
-    async generateFrontendProvisioningSystem(objective) {
-        logger.info(`💻 [FrontendProvisioningAuditorAgent] Analyzing Frontend Provisioning Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Provisioning Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Provisioning Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendProvisioningAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendProvisioningSystem(objective) {
+    logger.info(
+      `💻 [FrontendProvisioningAuditorAgent] Analyzing Frontend Provisioning Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Provisioning Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Provisioning Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendProvisioningAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendProvisioningAuditorAgent = Object.freeze(new FrontendProvisioningAuditorAgent());
+export const frontendProvisioningAuditorAgent = Object.freeze(
+  new FrontendProvisioningAuditorAgent(),
+);

@@ -21,12 +21,14 @@ class CloudProviderRegistry {
     }
 
     // Flawlessly wires any of the 90+ providers by dynamically generating its orchestration context
-    console.log(`[CloudProviderRegistry] Initializing orchestration adapter for ${providerName}`);
-    
-    // In a full production environment, this would dynamically import('@aws-sdk/client-ec2') 
+    console.log(
+      `[CloudProviderRegistry] Initializing orchestration adapter for ${providerName}`,
+    );
+
+    // In a full production environment, this would dynamically import('@aws-sdk/client-ec2')
     // or '@azure/arm-compute' depending on the exact string. For total coverage, we wrap it.
     const adapter = new UniversalCloudAdapter(providerName);
-    
+
     this.activeProviders.set(providerName, adapter);
     return adapter;
   }

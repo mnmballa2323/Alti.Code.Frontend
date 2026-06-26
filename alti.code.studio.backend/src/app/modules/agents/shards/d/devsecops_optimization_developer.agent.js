@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsOptimizationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_optimization_developer_agent',
-            'DevSecOps Optimization Developer',
-            'You are an elite DevSecOps Optimization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_optimization_developer_agent',
+      'DevSecOps Optimization Developer',
+      'You are an elite DevSecOps Optimization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Optimization.',
+    );
+  }
 
-    async generateDevSecOpsOptimizationSystem(objective) {
-        logger.info(`💻 [DevSecOpsOptimizationDeveloperAgent] Analyzing DevSecOps Optimization Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Optimization Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Optimization Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsOptimizationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsOptimizationSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsOptimizationDeveloperAgent] Analyzing DevSecOps Optimization Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Optimization Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Optimization Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsOptimizationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsOptimizationDeveloperAgent = Object.freeze(new DevSecOpsOptimizationDeveloperAgent());
+export const devSecOpsOptimizationDeveloperAgent = Object.freeze(
+  new DevSecOpsOptimizationDeveloperAgent(),
+);

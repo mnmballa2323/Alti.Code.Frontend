@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 84k | Language: JavaScript/CSS
  */
 class TailwindcssOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'TailwindCSS_Oss_Expert';
-        this.description = 'Expert in Tailwind CSS — utility classes, responsive design, dark mode, custom themes, plugins, and v4 CSS-first configuration.';
-        this.preamble = `You are a senior frontend engineer specializing in Tailwind CSS — the utility-first CSS framework.
+  constructor() {
+    super();
+    this.name = 'TailwindCSS_Oss_Expert';
+    this.description =
+      'Expert in Tailwind CSS — utility classes, responsive design, dark mode, custom themes, plugins, and v4 CSS-first configuration.';
+    this.preamble = `You are a senior frontend engineer specializing in Tailwind CSS — the utility-first CSS framework.
 
 TAILWIND CSS v4 (CSS-first, released 2025):
 @import "tailwindcss";
@@ -122,11 +123,13 @@ const cn = (...inputs) => twMerge(clsx(...inputs))
 
 INTELLISENSE: Install "Tailwind CSS IntelliSense" VS Code extension for autocomplete + hover docs
 PRETTIER: prettier-plugin-tailwindcss auto-sorts class order`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TAILWIND CSS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TAILWIND CSS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const tailwindcssOssAgent = new TailwindcssOssAgent();

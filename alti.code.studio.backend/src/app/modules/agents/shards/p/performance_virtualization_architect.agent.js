@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceVirtualizationArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_virtualization_architect_agent',
-            'Performance Virtualization Architect',
-            'You are an elite Performance Virtualization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_virtualization_architect_agent',
+      'Performance Virtualization Architect',
+      'You are an elite Performance Virtualization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Virtualization.',
+    );
+  }
 
-    async generatePerformanceVirtualizationSystem(objective) {
-        logger.info(`💻 [PerformanceVirtualizationArchitectAgent] Analyzing Performance Virtualization Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Virtualization Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Virtualization Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceVirtualizationArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [PerformanceVirtualizationArchitectAgent] Analyzing Performance Virtualization Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Virtualization Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Virtualization Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceVirtualizationArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceVirtualizationArchitectAgent = Object.freeze(new PerformanceVirtualizationArchitectAgent());
+export const performanceVirtualizationArchitectAgent = Object.freeze(
+  new PerformanceVirtualizationArchitectAgent(),
+);

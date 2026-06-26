@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXGovernanceTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_governance_tester_agent',
-            'UX Governance Tester',
-            'You are an elite UX Governance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and UX Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_governance_tester_agent',
+      'UX Governance Tester',
+      'You are an elite UX Governance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and UX Governance.',
+    );
+  }
 
-    async generateUXGovernanceSystem(objective) {
-        logger.info(`💻 [UXGovernanceTesterAgent] Analyzing UX Governance Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Governance Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Governance Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXGovernanceTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXGovernanceSystem(objective) {
+    logger.info(
+      `💻 [UXGovernanceTesterAgent] Analyzing UX Governance Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Governance Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Governance Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXGovernanceTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXGovernanceTesterAgent = Object.freeze(new UXGovernanceTesterAgent());
+export const uXGovernanceTesterAgent = Object.freeze(
+  new UXGovernanceTesterAgent(),
+);

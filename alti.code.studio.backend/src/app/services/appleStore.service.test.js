@@ -4,14 +4,14 @@ vi.mock('@apple/app-store-server-library', () => {
   return {
     Environment: {
       SANDBOX: 'SANDBOX',
-      PRODUCTION: 'PRODUCTION'
+      PRODUCTION: 'PRODUCTION',
     },
     AppStoreServerAPIClient: class {
       constructor() {}
     },
     SignedDataVerifier: class {
       constructor() {}
-    }
+    },
   };
 });
 

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseOptimizationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_optimization_consultant_agent',
-            'Release Optimization Consultant',
-            'You are an elite Release Optimization Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Release Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'release_optimization_consultant_agent',
+      'Release Optimization Consultant',
+      'You are an elite Release Optimization Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Release Optimization.',
+    );
+  }
 
-    async generateReleaseOptimizationSystem(objective) {
-        logger.info(`💻 [ReleaseOptimizationConsultantAgent] Analyzing Release Optimization Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Optimization Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Optimization Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseOptimizationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseOptimizationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseOptimizationConsultantAgent] Analyzing Release Optimization Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Optimization Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Optimization Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseOptimizationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseOptimizationConsultantAgent = Object.freeze(new ReleaseOptimizationConsultantAgent());
+export const releaseOptimizationConsultantAgent = Object.freeze(
+  new ReleaseOptimizationConsultantAgent(),
+);

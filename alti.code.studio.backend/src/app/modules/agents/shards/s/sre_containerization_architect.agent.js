@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREContainerizationArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_containerization_architect_agent',
-            'SRE Containerization Architect',
-            'You are an elite SRE Containerization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_containerization_architect_agent',
+      'SRE Containerization Architect',
+      'You are an elite SRE Containerization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Containerization.',
+    );
+  }
 
-    async generateSREContainerizationSystem(objective) {
-        logger.info(`💻 [SREContainerizationArchitectAgent] Analyzing SRE Containerization Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Containerization Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Containerization Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREContainerizationArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREContainerizationSystem(objective) {
+    logger.info(
+      `💻 [SREContainerizationArchitectAgent] Analyzing SRE Containerization Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Containerization Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Containerization Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREContainerizationArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREContainerizationArchitectAgent = Object.freeze(new SREContainerizationArchitectAgent());
+export const sREContainerizationArchitectAgent = Object.freeze(
+  new SREContainerizationArchitectAgent(),
+);

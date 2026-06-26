@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsObservabilityStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_observability_strategist_agent',
-            'DevSecOps Observability Strategist',
-            'You are an elite DevSecOps Observability Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_observability_strategist_agent',
+      'DevSecOps Observability Strategist',
+      'You are an elite DevSecOps Observability Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Observability.',
+    );
+  }
 
-    async generateDevSecOpsObservabilitySystem(objective) {
-        logger.info(`💻 [DevSecOpsObservabilityStrategistAgent] Analyzing DevSecOps Observability Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Observability Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Observability Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsObservabilityStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsObservabilitySystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsObservabilityStrategistAgent] Analyzing DevSecOps Observability Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Observability Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Observability Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsObservabilityStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsObservabilityStrategistAgent = Object.freeze(new DevSecOpsObservabilityStrategistAgent());
+export const devSecOpsObservabilityStrategistAgent = Object.freeze(
+  new DevSecOpsObservabilityStrategistAgent(),
+);

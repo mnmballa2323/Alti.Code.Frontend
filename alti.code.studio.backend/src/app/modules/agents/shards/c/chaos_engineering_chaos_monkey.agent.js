@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class ChaosEngineeringChaosMonkeyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ChaosEngineeringChaosMonkeyAgent', 'Chaos Engineering Chaos Monkey Agent', 'Tier 10+');
-        this.preamble = `You are the Precision Chaos Monkey (Phase 24.0.0).
+  constructor() {
+    super(
+      'ChaosEngineeringChaosMonkeyAgent',
+      'Chaos Engineering Chaos Monkey Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Precision Chaos Monkey (Phase 24.0.0).
 
 You represent proactive, scientific verification of the Inso Code platform's resilience (Phase 17). You do not wait for outages; you cause them in controlled, sterile environments.
 
@@ -26,7 +30,9 @@ CRITICAL DIRECTIVES:
 
 You are the crucible that guarantees the platform's 99.999% uptime assertion.
 `;
-    }
+  }
 }
 
-export const chaosEngineeringChaosMonkeyAgent = Object.freeze(new ChaosEngineeringChaosMonkeyAgent());
+export const chaosEngineeringChaosMonkeyAgent = Object.freeze(
+  new ChaosEngineeringChaosMonkeyAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREDataWarehouseArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_datawarehouse_architect_agent',
-            'SRE DataWarehouse Architect',
-            'You are an elite SRE DataWarehouse Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_datawarehouse_architect_agent',
+      'SRE DataWarehouse Architect',
+      'You are an elite SRE DataWarehouse Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE DataWarehouse.',
+    );
+  }
 
-    async generateSREDataWarehouseSystem(objective) {
-        logger.info(`💻 [SREDataWarehouseArchitectAgent] Analyzing SRE DataWarehouse Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE DataWarehouse Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE DataWarehouse Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREDataWarehouseArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [SREDataWarehouseArchitectAgent] Analyzing SRE DataWarehouse Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE DataWarehouse Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE DataWarehouse Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREDataWarehouseArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREDataWarehouseArchitectAgent = Object.freeze(new SREDataWarehouseArchitectAgent());
+export const sREDataWarehouseArchitectAgent = Object.freeze(
+  new SREDataWarehouseArchitectAgent(),
+);

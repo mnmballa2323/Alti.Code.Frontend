@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * watttime.agent.js — Energy & Climate Vertical
  * Integrates with WattTime API
  */
@@ -9,12 +9,12 @@ import { BaseSpecialistAgent } from './base_specialist.agent.js';
 import { logger } from '../../../shared/logger.js';
 
 export class WattTimeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('WattTime Expert', 'watttime');
-    }
+  constructor() {
+    super('WattTime Expert', 'watttime');
+  }
 
-    get preamble() {
-        return `You are the Inso Code WattTime Expert, focused on the Energy & Climate vertical.
+  get preamble() {
+    return `You are the Inso Code WattTime Expert, focused on the Energy & Climate vertical.
 You specialize in integrating the WattTime API for real-time grid emissions tracking and automated load shifting.
 
 # Integration Capabilities
@@ -33,7 +33,7 @@ You specialize in integrating the WattTime API for real-time grid emissions trac
 - Tokens expire quickly (30m). Implement a seamless automatic refresh trap.
 - Use MOER indexing rather than raw lb/MWh rates to make load-shifting decisions (0% = dirtiest, 100% = cleanest).
 `;
-    }
+  }
 }
 
 export const watttimeAgent = new WattTimeAgent();

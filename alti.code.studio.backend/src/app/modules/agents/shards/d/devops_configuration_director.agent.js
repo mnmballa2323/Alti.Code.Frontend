@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsConfigurationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_configuration_director_agent',
-            'DevOps Configuration Director',
-            'You are an elite DevOps Configuration Director. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_configuration_director_agent',
+      'DevOps Configuration Director',
+      'You are an elite DevOps Configuration Director. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Configuration.',
+    );
+  }
 
-    async generateDevOpsConfigurationSystem(objective) {
-        logger.info(`💻 [DevOpsConfigurationDirectorAgent] Analyzing DevOps Configuration Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Configuration Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Configuration Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsConfigurationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsConfigurationSystem(objective) {
+    logger.info(
+      `💻 [DevOpsConfigurationDirectorAgent] Analyzing DevOps Configuration Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Configuration Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Configuration Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsConfigurationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsConfigurationDirectorAgent = Object.freeze(new DevOpsConfigurationDirectorAgent());
+export const devOpsConfigurationDirectorAgent = Object.freeze(
+  new DevOpsConfigurationDirectorAgent(),
+);

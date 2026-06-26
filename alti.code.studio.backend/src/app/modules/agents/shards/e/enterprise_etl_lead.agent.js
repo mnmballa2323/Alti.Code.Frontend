@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseETLLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_etl_lead_agent',
-            'Enterprise ETL Lead',
-            'You are an elite Enterprise ETL Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_etl_lead_agent',
+      'Enterprise ETL Lead',
+      'You are an elite Enterprise ETL Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise ETL.',
+    );
+  }
 
-    async generateEnterpriseETLSystem(objective) {
-        logger.info(`💻 [EnterpriseETLLeadAgent] Analyzing Enterprise ETL Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise ETL Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise ETL Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseETLLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseETLSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseETLLeadAgent] Analyzing Enterprise ETL Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise ETL Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise ETL Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [EnterpriseETLLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const enterpriseETLLeadAgent = Object.freeze(new EnterpriseETLLeadAgent());
+export const enterpriseETLLeadAgent = Object.freeze(
+  new EnterpriseETLLeadAgent(),
+);

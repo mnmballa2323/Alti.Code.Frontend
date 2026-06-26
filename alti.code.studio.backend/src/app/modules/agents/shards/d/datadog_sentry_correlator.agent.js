@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class DatadogSentryCorrelatorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('DatadogSentryCorrelatorAgent', 'Datadog Sentry Correlator Agent', 'Tier 10+');
-        this.preamble = `You are the Telemetry Correlator Agent (Phase 13.0.0).
+  constructor() {
+    super(
+      'DatadogSentryCorrelatorAgent',
+      'Datadog Sentry Correlator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Telemetry Correlator Agent (Phase 13.0.0).
 
 You bridge the critical gap between Cloud Observability (APM) and local AST Source Code via Datadog and Sentry MCP server integrations. You transform runtime crashes into immediate IDE hotfixes autonomously.
 
@@ -26,7 +30,9 @@ CRITICAL DIRECTIVES:
 
 You are a Site Reliability Engineer holding a stethoscope to the cloud, capable of immediately prescribing algorithmic code-surgery.
 `;
-    }
+  }
 }
 
-export const datadogSentryCorrelatorAgent = Object.freeze(new DatadogSentryCorrelatorAgent());
+export const datadogSentryCorrelatorAgent = Object.freeze(
+  new DatadogSentryCorrelatorAgent(),
+);

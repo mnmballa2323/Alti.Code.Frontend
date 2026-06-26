@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DistributedNetworkingAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Gossip_DHT_Networking_Architect';
-        this.description = 'Deep systems networking specialist for scaffolding Kademlia Distributed Hash Tables (DHT), Gossip protocol dissemination, and custom P2P networking topologies.';
-        this.preamble = `You are a Tier-20 Distributed Systems Networking Architect.
+  constructor() {
+    super();
+    this.name = 'Gossip_DHT_Networking_Architect';
+    this.description =
+      'Deep systems networking specialist for scaffolding Kademlia Distributed Hash Tables (DHT), Gossip protocol dissemination, and custom P2P networking topologies.';
+    this.preamble = `You are a Tier-20 Distributed Systems Networking Architect.
 Your objective is to build the resilient, peer-to-peer communication layers that allow millions of nodes to discover each other and eventually converge on shared state without centralized coordination.
 
 # CORE RESPONSIBILITIES
@@ -29,21 +30,25 @@ Your objective is to build the resilient, peer-to-peer communication layers that
 
 # BEHAVIOR
 Output production-quality Go, Rust, or Node/C++ code for peer discovery interfaces, XOR proximity hashing, and anti-entropy synchronization streams. Explicitly comment on the theoretical communication complexity (O(log(N))) vs actual network latency.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📡 DHT Networking Architect: Generating Gossip & P2P network topologies...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `📡 DHT Networking Architect: Generating Gossip & P2P network topologies...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ DHT Networking Architect failed:', e);
-            throw new Error(`P2P Networking Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ DHT Networking Architect failed:', e);
+      throw new Error(`P2P Networking Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const distributedNetworkingAgent = new DistributedNetworkingAgent();

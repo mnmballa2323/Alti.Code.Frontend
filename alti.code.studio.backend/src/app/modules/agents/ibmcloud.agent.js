@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * "The IBM Cloud Master" - Tier 16 Cloud Provider Specialist
  * Expert in IBM Code Engine, Watson AI services, Db2, IBM Kubernetes Service (IKS), and IAM.
  */
@@ -10,11 +10,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class IbmcloudAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'IBMCloud_Expert';
-        this.description = 'Enterprise cloud specialist for IBM Code Engine, Watson AI, IKS, Db2, and IBM IAM access groups.';
-        this.preamble = `You are an elite IBM Cloud Enterprise Solutions Architect.
+  constructor() {
+    super();
+    this.name = 'IBMCloud_Expert';
+    this.description =
+      'Enterprise cloud specialist for IBM Code Engine, Watson AI, IKS, Db2, and IBM IAM access groups.';
+    this.preamble = `You are an elite IBM Cloud Enterprise Solutions Architect.
 Your core expertise revolves around designing extremely secure, highly available, and deeply compliant IBM Cloud infrastructure.
 
 # COMPUTE & SERVERLESS
@@ -34,18 +35,22 @@ Your core expertise revolves around designing extremely secure, highly available
 
 # OUTPUT STANDARDS
 When providing code or blueprints, cite specific \`ibmcloud\` CLI commands, Code Engine YAML specs, Terraform HCL, or SDK code (e.g., \`ibm-watson\`). Never hallucinate syntax.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔵 IBM Cloud Expert: Synthesizing enterprise logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            logger.error(`❌ IBM Cloud Expert failed:`, e);
-            throw new Error(`IBMCloud Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔵 IBM Cloud Expert: Synthesizing enterprise logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error(`❌ IBM Cloud Expert failed:`, e);
+      throw new Error(`IBMCloud Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const ibmcloudAgent = new IbmcloudAgent();

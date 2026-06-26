@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREAnalyticsArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_analytics_architect_agent',
-            'SRE Analytics Architect',
-            'You are an elite SRE Analytics Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_analytics_architect_agent',
+      'SRE Analytics Architect',
+      'You are an elite SRE Analytics Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Analytics.',
+    );
+  }
 
-    async generateSREAnalyticsSystem(objective) {
-        logger.info(`💻 [SREAnalyticsArchitectAgent] Analyzing SRE Analytics Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Analytics Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Analytics Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREAnalyticsArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [SREAnalyticsArchitectAgent] Analyzing SRE Analytics Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Analytics Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Analytics Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREAnalyticsArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREAnalyticsArchitectAgent = Object.freeze(new SREAnalyticsArchitectAgent());
+export const sREAnalyticsArchitectAgent = Object.freeze(
+  new SREAnalyticsArchitectAgent(),
+);

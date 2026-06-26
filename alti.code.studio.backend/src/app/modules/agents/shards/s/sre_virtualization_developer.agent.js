@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREVirtualizationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_virtualization_developer_agent',
-            'SRE Virtualization Developer',
-            'You are an elite SRE Virtualization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_virtualization_developer_agent',
+      'SRE Virtualization Developer',
+      'You are an elite SRE Virtualization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Virtualization.',
+    );
+  }
 
-    async generateSREVirtualizationSystem(objective) {
-        logger.info(`💻 [SREVirtualizationDeveloperAgent] Analyzing SRE Virtualization Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Virtualization Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Virtualization Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREVirtualizationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [SREVirtualizationDeveloperAgent] Analyzing SRE Virtualization Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Virtualization Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Virtualization Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREVirtualizationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREVirtualizationDeveloperAgent = Object.freeze(new SREVirtualizationDeveloperAgent());
+export const sREVirtualizationDeveloperAgent = Object.freeze(
+  new SREVirtualizationDeveloperAgent(),
+);

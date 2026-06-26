@@ -6,7 +6,7 @@ import { UserRepository } from './prisma.user.repository.js';
 import { totp } from '@inso/platform';
 import config from '../../../../config/index.js';
 import bcrypt from 'bcryptjs';
-import { authenticateAzureAD } from './azureAd.service.js';
+import { authenticateAzureAD } from './gcpIap.service.js';
 import { prisma } from '../../platform/db/prismaClient.js';
 
 vi.mock('../../platform/db/prismaClient.js', () => ({
@@ -17,7 +17,7 @@ vi.mock('../../platform/db/prismaClient.js', () => ({
   },
 }));
 
-vi.mock('./azureAd.service.js', () => ({
+vi.mock('./gcpIap.service.js', () => ({
   authenticateAzureAD: vi.fn(),
 }));
 
@@ -29,8 +29,8 @@ vi.mock('./prisma.user.repository.js', () => ({
   },
 }));
 
-vi.mock('../../middlewares/sendEmail/sendMailWithAzureSMTP.js', () => ({
-  sendMailWithAzureSMTP: vi.fn(),
+vi.mock('../../middlewares/sendEmail/sendMailWithGcpSMTP.js', () => ({
+  sendMailWithGcpSMTP: vi.fn(),
 }));
 
 describe('Multi-Factor Authentication (MFA) Integration', () => {
@@ -74,13 +74,16 @@ describe('Multi-Factor Authentication (MFA) Integration', () => {
       UserRepository.findByEmail.mockResolvedValueOnce(activeMfaUser);
       vi.spyOn(bcrypt, 'compare').mockResolvedValueOnce(true);
 
-      const result = await authService.loginService('mfa.user@example.com', 'password123');
+      const result = await authService.loginService(
+        'mfa.user@example.com',
+        'password123',
+      );
 
       expect(result).toEqual(
         expect.objectContaining({
           mfaRequired: true,
           mfaToken: expect.any(String),
-        })
+        }),
       );
 
       // Verify the temp MFA token payload
@@ -89,7 +92,7 @@ describe('Multi-Factor Authentication (MFA) Integration', () => {
         expect.objectContaining({
           userId: 'user-123',
           tempMfa: true,
-        })
+        }),
       );
     });
   });
@@ -108,7 +111,7 @@ describe('Multi-Factor Authentication (MFA) Integration', () => {
         expect.objectContaining({
           secret: expect.any(String),
           otpauthUri: expect.stringContaining('otpauth://totp/'),
-        })
+        }),
       );
       expect(UserRepository.updateUser).toHaveBeenCalledWith('user-123', {
         tempMfaSecret: result.secret,
@@ -131,7 +134,10 @@ describe('Multi-Factor Authentication (MFA) Integration', () => {
         tempMfaSecret: null,
       });
 
-      const code = totp.getTotpCode('JBSWY3DPEHPK3PXP', Math.floor(Date.now() / 1000 / 30));
+      const code = totp.getTotpCode(
+        'JBSWY3DPEHPK3PXP',
+        Math.floor(Date.now() / 1000 / 30),
+      );
       const result = await authService.verifyMfaService('user-123', code);
 
       expect(result).toEqual({ success: true });
@@ -151,7 +157,7 @@ describe('Multi-Factor Authentication (MFA) Integration', () => {
       UserRepository.findById.mockResolvedValueOnce(pendingUser);
 
       await expect(
-        authService.verifyMfaService('user-123', '000000')
+        authService.verifyMfaService('user-123', '000000'),
       ).rejects.toThrow('Invalid verification code.');
     });
   });
@@ -169,25 +175,31 @@ describe('Multi-Factor Authentication (MFA) Integration', () => {
       const mfaToken = jwt.sign(
         { userId: 'user-123', tempMfa: true },
         mockSecret,
-        { expiresIn: '5m' }
+        { expiresIn: '5m' },
       );
 
-      const code = totp.getTotpCode('JBSWY3DPEHPK3PXP', Math.floor(Date.now() / 1000 / 30));
-      const result = await authService.validateMfaChallengeService(mfaToken, code);
+      const code = totp.getTotpCode(
+        'JBSWY3DPEHPK3PXP',
+        Math.floor(Date.now() / 1000 / 30),
+      );
+      const result = await authService.validateMfaChallengeService(
+        mfaToken,
+        code,
+      );
 
       expect(result).toEqual(
         expect.objectContaining({
           _id: 'user-123',
           accessToken: expect.any(String),
           refreshToken: expect.any(String),
-        })
+        }),
       );
     });
 
     it('should throw UNAUTHORIZED on expired or invalid tokens in challenge', async () => {
       const invalidMfaToken = 'invalid-mfa-token-jwt';
       await expect(
-        authService.validateMfaChallengeService(invalidMfaToken, '123456')
+        authService.validateMfaChallengeService(invalidMfaToken, '123456'),
       ).rejects.toThrow('Invalid or expired MFA token.');
     });
   });
@@ -196,36 +208,46 @@ describe('Multi-Factor Authentication (MFA) Integration', () => {
     it('should verify product access successfully', async () => {
       const activeUser = {
         ...mockUser,
-        subscriptionPlan: 'build'
+        subscriptionPlan: 'build',
       };
 
       UserRepository.findById.mockResolvedValueOnce(activeUser);
-      prisma.user.findUnique.mockResolvedValueOnce({ subscriptionPlan: 'build' });
+      prisma.user.findUnique.mockResolvedValueOnce({
+        subscriptionPlan: 'build',
+      });
 
-      const result = await authService.verifyProductAccessService('user-123', 'inso-ai');
+      const result = await authService.verifyProductAccessService(
+        'user-123',
+        'inso-ai',
+      );
 
       expect(result).toEqual({
         authorized: true,
         productId: 'inso-ai',
-        plan: 'build'
+        plan: 'build',
       });
     });
 
     it('should deny product access if plan is insufficient', async () => {
       const activeUser = {
         ...mockUser,
-        subscriptionPlan: 'launch'
+        subscriptionPlan: 'launch',
       };
 
       UserRepository.findById.mockResolvedValueOnce(activeUser);
-      prisma.user.findUnique.mockResolvedValueOnce({ subscriptionPlan: 'launch' });
+      prisma.user.findUnique.mockResolvedValueOnce({
+        subscriptionPlan: 'launch',
+      });
 
-      const result = await authService.verifyProductAccessService('user-123', 'inso-ai');
+      const result = await authService.verifyProductAccessService(
+        'user-123',
+        'inso-ai',
+      );
 
       expect(result).toEqual({
         authorized: false,
         productId: 'inso-ai',
-        plan: 'launch'
+        plan: 'launch',
       });
     });
   });

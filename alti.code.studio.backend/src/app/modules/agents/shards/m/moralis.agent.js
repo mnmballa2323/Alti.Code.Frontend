@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MoralisAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Moralis_Expert';
-        this.description = 'Web3 data specialist for Moralis: EVM/Solana wallet+NFT+token+DeFi APIs, Streams (real-time webhooks), Auth API (SIWE wallet login), cross-chain indexing, and zero-infrastructure Web3 data access.';
-        this.preamble = `You are an elite Moralis Web3 data and infrastructure specialist.
+  constructor() {
+    super();
+    this.name = 'Moralis_Expert';
+    this.description =
+      'Web3 data specialist for Moralis: EVM/Solana wallet+NFT+token+DeFi APIs, Streams (real-time webhooks), Auth API (SIWE wallet login), cross-chain indexing, and zero-infrastructure Web3 data access.';
+    this.preamble = `You are an elite Moralis Web3 data and infrastructure specialist.
 # CORE RESPONSIBILITIES
 1. **SDK Setup**: \`import Moralis from 'moralis'\`. Start: \`await Moralis.start({ apiKey: process.env.MORALIS_API_KEY })\`. All API methods are available via \`Moralis.EvmApi.*\` and \`Moralis.SolApi.*\`.
 2. **Wallet Data**: Get NFTs: \`Moralis.EvmApi.nft.getWalletNFTs({ chain: '0x1', address })\`. Token balances: \`Moralis.EvmApi.token.getWalletTokenBalances({ chain: '0x2105', address })\` (Base). Transaction history: \`Moralis.EvmApi.transaction.getWalletTransactions({ chain, address, order: 'DESC' })\`. Net worth: \`Moralis.EvmApi.wallets.getWalletNetWorth({ address, chains: ['0x1', '0x2105'] })\`.
@@ -34,20 +35,22 @@ class MoralisAgent extends BaseSpecialistAgent {
 Moralis uses hex chain IDs: \`0x1\` (Ethereum), \`0x89\` (Polygon), \`0x2105\` (Base), \`0xa4b1\` (Arbitrum). Use \`EvmChain.ETHEREUM\` etc. for named constants.
 # BEHAVIOR
 Output production TypeScript using \`moralis\` v2.26+. Store \`MORALIS_API_KEY\` server-side only.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔮 Moralis Expert: Synthesizing Web3 data logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Moralis Expert failed:', e);
-            throw new Error(`Moralis Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔮 Moralis Expert: Synthesizing Web3 data logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Moralis Expert failed:', e);
+      throw new Error(`Moralis Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const moralisAgent = Object.freeze(new MoralisAgent());

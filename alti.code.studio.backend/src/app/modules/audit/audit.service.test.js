@@ -71,7 +71,10 @@ describe('AuditService', () => {
         status: 'SUCCESS',
         productId: 'inso-code',
       };
-      const expectedHash = AuditService._hashPayload(payload, 'previous-hash-123');
+      const expectedHash = AuditService._hashPayload(
+        payload,
+        'previous-hash-123',
+      );
       expect(calledData.hash).toBe(expectedHash);
       expect(result.id).toBe('new-log-uuid');
     });
@@ -94,7 +97,9 @@ describe('AuditService', () => {
       const calledData = mockCreate.mock.calls[0][0].data;
       expect(calledData.tenantId).toBeUndefined();
       expect(calledData.productId).toBeUndefined();
-      expect(calledData.previousHash).toBe('0000000000000000000000000000000000000000000000000000000000000000');
+      expect(calledData.previousHash).toBe(
+        '0000000000000000000000000000000000000000000000000000000000000000',
+      );
 
       const payload = {
         tenantId: null,
@@ -103,7 +108,10 @@ describe('AuditService', () => {
         metadata: {},
         status: 'SUCCESS',
       };
-      const expectedHash = AuditService._hashPayload(payload, '0000000000000000000000000000000000000000000000000000000000000000');
+      const expectedHash = AuditService._hashPayload(
+        payload,
+        '0000000000000000000000000000000000000000000000000000000000000000',
+      );
       expect(calledData.hash).toBe(expectedHash);
     });
   });
@@ -118,7 +126,8 @@ describe('AuditService', () => {
           action: 'LOGIN',
           metadata: {},
           status: 'SUCCESS',
-          previousHash: '0000000000000000000000000000000000000000000000000000000000000000',
+          previousHash:
+            '0000000000000000000000000000000000000000000000000000000000000000',
         },
         {
           id: 'log-2',
@@ -143,7 +152,8 @@ describe('AuditService', () => {
       ];
 
       // Calculate correct hashes sequentially
-      let prevHash = '0000000000000000000000000000000000000000000000000000000000000000';
+      let prevHash =
+        '0000000000000000000000000000000000000000000000000000000000000000';
       for (const log of logs) {
         log.previousHash = prevHash;
         const payload = {
@@ -175,7 +185,8 @@ describe('AuditService', () => {
           action: 'LOGIN',
           metadata: {},
           status: 'SUCCESS',
-          previousHash: '0000000000000000000000000000000000000000000000000000000000000000',
+          previousHash:
+            '0000000000000000000000000000000000000000000000000000000000000000',
         },
       ];
       logs[0].hash = 'fake-tampered-hash';
@@ -197,7 +208,8 @@ describe('AuditService', () => {
           action: 'LOGIN',
           metadata: {},
           status: 'SUCCESS',
-          previousHash: '0000000000000000000000000000000000000000000000000000000000000000',
+          previousHash:
+            '0000000000000000000000000000000000000000000000000000000000000000',
         },
         {
           id: 'log-2',
@@ -231,7 +243,9 @@ describe('AuditService', () => {
 
   describe('logAction backwards compatibility wrapper', () => {
     it('should route logAction arguments to log method correctly', async () => {
-      const spyLog = vi.spyOn(AuditService, 'log').mockResolvedValueOnce({ id: 'log-123' });
+      const spyLog = vi
+        .spyOn(AuditService, 'log')
+        .mockResolvedValueOnce({ id: 'log-123' });
 
       await AuditService.logAction(
         'system-user',
@@ -239,7 +253,7 @@ describe('AuditService', () => {
         { detail: 'test' },
         'SUCCESS',
         'tenant-id-123',
-        'inso-cloud'
+        'inso-cloud',
       );
 
       expect(spyLog).toHaveBeenCalledWith({
@@ -255,8 +269,8 @@ describe('AuditService', () => {
 
   describe('canonicalize key sorting', () => {
     it('should recursively sort object keys alphabetically', () => {
-      const objA = { b: 2, a: { d: 4, c: 3 }, e: [ { g: 7, f: 6 } ] };
-      const objB = { a: { c: 3, d: 4 }, b: 2, e: [ { f: 6, g: 7 } ] };
+      const objA = { b: 2, a: { d: 4, c: 3 }, e: [{ g: 7, f: 6 }] };
+      const objB = { a: { c: 3, d: 4 }, b: 2, e: [{ f: 6, g: 7 }] };
 
       const canonicalA = canonicalize(objA);
       const canonicalB = canonicalize(objB);
@@ -264,9 +278,11 @@ describe('AuditService', () => {
       // They should be deeply equal and have identical JSON.stringify outputs
       expect(canonicalA).toEqual(canonicalB);
       expect(JSON.stringify(canonicalA)).toBe(JSON.stringify(canonicalB));
-      
+
       // Check exact sorted string structure
-      expect(JSON.stringify(canonicalA)).toBe('{"a":{"c":3,"d":4},"b":2,"e":[{"f":6,"g":7}]}');
+      expect(JSON.stringify(canonicalA)).toBe(
+        '{"a":{"c":3,"d":4},"b":2,"e":[{"f":6,"g":7}]}',
+      );
     });
 
     it('should produce identical SHA-256 hashes regardless of payload key order', () => {
@@ -274,14 +290,14 @@ describe('AuditService', () => {
         tenantId: 'tenant-123',
         actor: 'user-xyz',
         metadata: { z: 1, x: 2, y: { b: 2, a: 1 } },
-        action: 'MUTATE_CONFIG'
+        action: 'MUTATE_CONFIG',
       };
 
       const payloadB = {
         action: 'MUTATE_CONFIG',
         actor: 'user-xyz',
         tenantId: 'tenant-123',
-        metadata: { x: 2, y: { a: 1, b: 2 }, z: 1 }
+        metadata: { x: 2, y: { a: 1, b: 2 }, z: 1 },
       };
 
       const hashA = AuditService._hashPayload(payloadA, 'prev-hash-val');

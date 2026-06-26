@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureDataWarehouseDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_datawarehouse_developer_agent',
-            'Infrastructure DataWarehouse Developer',
-            'You are an elite Infrastructure DataWarehouse Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_datawarehouse_developer_agent',
+      'Infrastructure DataWarehouse Developer',
+      'You are an elite Infrastructure DataWarehouse Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure DataWarehouse.',
+    );
+  }
 
-    async generateInfrastructureDataWarehouseSystem(objective) {
-        logger.info(`💻 [InfrastructureDataWarehouseDeveloperAgent] Analyzing Infrastructure DataWarehouse Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure DataWarehouse Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure DataWarehouse Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureDataWarehouseDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureDataWarehouseDeveloperAgent] Analyzing Infrastructure DataWarehouse Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure DataWarehouse Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure DataWarehouse Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureDataWarehouseDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureDataWarehouseDeveloperAgent = Object.freeze(new InfrastructureDataWarehouseDeveloperAgent());
+export const infrastructureDataWarehouseDeveloperAgent = Object.freeze(
+  new InfrastructureDataWarehouseDeveloperAgent(),
+);

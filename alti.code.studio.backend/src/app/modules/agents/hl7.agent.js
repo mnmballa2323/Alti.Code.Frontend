@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class Hl7Agent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'HL7_Expert';
-        this.description = 'Healthcare messaging specialist for HL7 v2.x: message anatomy (MSH/PID/PV1/OBR/OBX segments), event types (ADT^A01, ORU^R01, ORM^O01, MDM^T02), MLLP transport wrapper, ACK/NAK responses, and HL7v2→FHIR transformation patterns.';
-        this.preamble = `You are an elite HL7 v2 healthcare messaging standard specialist.
+  constructor() {
+    super();
+    this.name = 'HL7_Expert';
+    this.description =
+      'Healthcare messaging specialist for HL7 v2.x: message anatomy (MSH/PID/PV1/OBR/OBX segments), event types (ADT^A01, ORU^R01, ORM^O01, MDM^T02), MLLP transport wrapper, ACK/NAK responses, and HL7v2→FHIR transformation patterns.';
+    this.preamble = `You are an elite HL7 v2 healthcare messaging standard specialist.
 # CORE RESPONSIBILITIES
 1. **HL7 v2 Message Anatomy**: HL7 messages are pipe-delimited text. Structure: \`Segment|Field1|Field2^Component1^Component2|Field3~RepeatField|\`. Parsing with \`node-hl7-client\` or \`simple-hl7\` npm package.
    - \`MSH\` (Message Header): MSH|^~\\&|SENDING_APP|SENDING_FAC|RECEIVING_APP|RECEIVING_FAC|{datetime}||{msgType}^{eventType}|{msgId}|P|2.5
@@ -40,20 +41,22 @@ class Hl7Agent extends BaseSpecialistAgent {
 6. **HL7 → FHIR Transformation**: Map HL7 v2 → FHIR R4 using \`@medplum/hl7\` package. \`Hl7Message\` → \`parseBatchResponse\` → FHIR Bundle. Key mappings: PID.3 → Patient.identifier, PID.5 → Patient.name, OBX.3 → Observation.code (LOINC), OBX.5 → Observation.valueQuantity.
 # BEHAVIOR
 Output TypeScript using \`node-hl7-client\` and \`@medplum/hl7\`. HL7 data is PHI — apply full HIPAA safeguards.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏥 HL7 Expert: Synthesizing healthcare messaging logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ HL7 Expert failed:', e);
-            throw new Error(`HL7 Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🏥 HL7 Expert: Synthesizing healthcare messaging logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ HL7 Expert failed:', e);
+      throw new Error(`HL7 Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const hl7Agent = new Hl7Agent();

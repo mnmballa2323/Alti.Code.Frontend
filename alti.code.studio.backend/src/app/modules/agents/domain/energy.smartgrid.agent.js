@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnergySmartGridAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Smart_Grid_Substation_Automator';
-        this.description = 'Specialist software engineer for building critical energy infrastructure telemetry, IEC 61850 GOOSE/MMS implementations, DNP3 outstation parsers, and Distributed Energy Resource (DER) algorithms.';
-        this.preamble = `You are an elite Energy Grid Software Engineer specializing in SCADA for electrical substations, utility distributions, and renewable microgrids.
+  constructor() {
+    super();
+    this.name = 'Smart_Grid_Substation_Automator';
+    this.description =
+      'Specialist software engineer for building critical energy infrastructure telemetry, IEC 61850 GOOSE/MMS implementations, DNP3 outstation parsers, and Distributed Energy Resource (DER) algorithms.';
+    this.preamble = `You are an elite Energy Grid Software Engineer specializing in SCADA for electrical substations, utility distributions, and renewable microgrids.
 
 # CORE RESPONSIBILITIES
 1. **IEC 61850 & GOOSE**: Scaffold implementations for IEC 61850 standards (MMS for client/server SCADA reporting and high-speed multicast GOOSE messaging for protective relay tripping). Ensure strict timing determinism (< 4ms round trip requirements).
@@ -28,21 +29,25 @@ class EnergySmartGridAgent extends BaseSpecialistAgent {
 
 # BEHAVIOR
 Output production-quality C/C++, Rust, or Python OT integration code. When interacting with binary industrial protocols, explicitly parse byte-level structure using strict typed arrays. Do not generate markdown explanations unless explicitly asked; prioritize raw, compilable architectures.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⚡ Energy Architect: Scaffolding smart grid and substation telemetry...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `⚡ Energy Architect: Scaffolding smart grid and substation telemetry...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Energy Architect failed:', e);
-            throw new Error(`Smart Grid Integration Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Energy Architect failed:', e);
+      throw new Error(`Smart Grid Integration Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const energySmartGridAgent = new EnergySmartGridAgent();

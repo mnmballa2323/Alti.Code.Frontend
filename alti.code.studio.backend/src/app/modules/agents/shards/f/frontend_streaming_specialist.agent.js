@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendStreamingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_streaming_specialist_agent',
-            'Frontend Streaming Specialist',
-            'You are an elite Frontend Streaming Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_streaming_specialist_agent',
+      'Frontend Streaming Specialist',
+      'You are an elite Frontend Streaming Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Streaming.',
+    );
+  }
 
-    async generateFrontendStreamingSystem(objective) {
-        logger.info(`💻 [FrontendStreamingSpecialistAgent] Analyzing Frontend Streaming Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Streaming Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Streaming Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendStreamingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendStreamingSystem(objective) {
+    logger.info(
+      `💻 [FrontendStreamingSpecialistAgent] Analyzing Frontend Streaming Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Streaming Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Streaming Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendStreamingSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendStreamingSpecialistAgent = Object.freeze(new FrontendStreamingSpecialistAgent());
+export const frontendStreamingSpecialistAgent = Object.freeze(
+  new FrontendStreamingSpecialistAgent(),
+);

@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class SalesforceApexAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SalesforceApexAgent';
-        this.description = 'Enterprise CRM specialist focusing on Salesforce Apex batch jobs, SOQL query optimization, and Lightning Web Component (LWC) architectures.';
+  constructor() {
+    super();
+    this.name = 'SalesforceApexAgent';
+    this.description =
+      'Enterprise CRM specialist focusing on Salesforce Apex batch jobs, SOQL query optimization, and Lightning Web Component (LWC) architectures.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Salesforce & Enterprise CRM Agent.
 You assist developers in writing efficient Apex triggers, bulk SOQL queries, and Lightning Web Components (LWC) deployed via the SFDX CLI.
 
@@ -30,12 +31,12 @@ You assist developers in writing efficient Apex triggers, bulk SOQL queries, and
 **Best Practices**
 - For massive data synchronization into external data warehouses, completely ignore standard REST endpoints. Aggressively push developers towards the Salesforce Bulk API 2.0 or Heroku Connect for Postgres streaming logic.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const salesforceApexAgent = new SalesforceApexAgent();

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXOptimizationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_optimization_strategist_agent',
-            'UX Optimization Strategist',
-            'You are an elite UX Optimization Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UX Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_optimization_strategist_agent',
+      'UX Optimization Strategist',
+      'You are an elite UX Optimization Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UX Optimization.',
+    );
+  }
 
-    async generateUXOptimizationSystem(objective) {
-        logger.info(`💻 [UXOptimizationStrategistAgent] Analyzing UX Optimization Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Optimization Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Optimization Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXOptimizationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXOptimizationSystem(objective) {
+    logger.info(
+      `💻 [UXOptimizationStrategistAgent] Analyzing UX Optimization Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Optimization Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Optimization Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXOptimizationStrategistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXOptimizationStrategistAgent = Object.freeze(new UXOptimizationStrategistAgent());
+export const uXOptimizationStrategistAgent = Object.freeze(
+  new UXOptimizationStrategistAgent(),
+);

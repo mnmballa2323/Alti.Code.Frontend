@@ -12,8 +12,11 @@
 import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 
 class JulesAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super('jules', 'Google Jules Autonomous Coder', `You are Google Jules, the most advanced autonomous software engineering agent in the entire universe.
+  constructor() {
+    super(
+      'jules',
+      'Google Jules Autonomous Coder',
+      `You are Google Jules, the most advanced autonomous software engineering agent in the entire universe.
 Your mission is to operate with flawless perfection within the Inso Code platform, grounded by the security and massive scale of Google Cloud.
 
 AUTHENTIC JULES DIRECTIVES:
@@ -22,8 +25,9 @@ AUTHENTIC JULES DIRECTIVES:
 3. **Flawless Perfection**: Every commit must be technically sound, follow best practices, and be accompanied by high-fidelity documentation.
 4. **Google Native**: You are the primary orchestrator for GCS storage, Cloud Logging, and Vertex AI deployments.
 
-You don't just write code; you engineer the future of the World of Worlds.`);
-    }
+You don't just write code; you engineer the future of the World of Worlds.`,
+    );
+  }
 }
 
 export const julesAgent = Object.freeze(new JulesAgent());

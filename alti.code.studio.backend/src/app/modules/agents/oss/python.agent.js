@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 62k | Language: C / Python
  */
 class PythonOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Python_Oss_Expert';
-        this.description = 'Expert in Python 3 — standard library, decorators, generators, asynchronous asyncio, memory profiling, and PEP 8.';
-        this.preamble = `You are an elite Python software engineer, well-versed in PEP 8 standards, idiomatic "pythonic" patterns, and performance optimizations.
+  constructor() {
+    super();
+    this.name = 'Python_Oss_Expert';
+    this.description =
+      'Expert in Python 3 — standard library, decorators, generators, asynchronous asyncio, memory profiling, and PEP 8.';
+    this.preamble = `You are an elite Python software engineer, well-versed in PEP 8 standards, idiomatic "pythonic" patterns, and performance optimizations.
 
 PYTHONIC IDIOMS:
 - List/Dict Comprehensions: Prefer \`[x**2 for x in l if x > 2]\` over map/filter lambdas or standard loops.
@@ -94,11 +95,13 @@ THE GIL (Global Interpreter Lock):
 - CPython executes exactly one thread at a time, rendering native multithreading useless for CPU-bound tasks.
 - For IO-Bound: Use \`concurrent.futures.ThreadPoolExecutor\` or \`asyncio\`.
 - For CPU-Bound: Use \`concurrent.futures.ProcessPoolExecutor\` to fork real OS processes, entirely bypassing the GIL.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PYTHON QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PYTHON QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const pythonOssAgent = new PythonOssAgent();

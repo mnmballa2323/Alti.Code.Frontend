@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendAnalyticsSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_analytics_specialist_agent',
-            'Frontend Analytics Specialist',
-            'You are an elite Frontend Analytics Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_analytics_specialist_agent',
+      'Frontend Analytics Specialist',
+      'You are an elite Frontend Analytics Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Analytics.',
+    );
+  }
 
-    async generateFrontendAnalyticsSystem(objective) {
-        logger.info(`💻 [FrontendAnalyticsSpecialistAgent] Analyzing Frontend Analytics Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Analytics Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Analytics Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendAnalyticsSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [FrontendAnalyticsSpecialistAgent] Analyzing Frontend Analytics Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Analytics Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Analytics Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendAnalyticsSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendAnalyticsSpecialistAgent = Object.freeze(new FrontendAnalyticsSpecialistAgent());
+export const frontendAnalyticsSpecialistAgent = Object.freeze(
+  new FrontendAnalyticsSpecialistAgent(),
+);

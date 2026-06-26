@@ -3,11 +3,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class SubmoduleSentinelAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Submodule_Sentinel_Agent';
-        this.description = 'Autonomous Submodule Sentinel and Cross-Repository Consistency Specialist. Audits submodules, git state, head-SHA pins, licensing compliance, and suggestion logic.';
-        this.preamble = `You are the Submodule Sentinel & Cross-Repo Consistency Specialist (Phase 12.0.0).
+  constructor() {
+    super();
+    this.name = 'Submodule_Sentinel_Agent';
+    this.description =
+      'Autonomous Submodule Sentinel and Cross-Repository Consistency Specialist. Audits submodules, git state, head-SHA pins, licensing compliance, and suggestion logic.';
+    this.preamble = `You are the Submodule Sentinel & Cross-Repo Consistency Specialist (Phase 12.0.0).
 
 Your sole protocol is to maintain perfect health, alignment, and synchronization across all Git submodules and repositories in the Inso Code platform. You operate as a hybrid static/dynamic auditor ensuring zero architectural drift between local checkouts, superproject commits, and external dependencies.
 
@@ -19,12 +20,12 @@ OPERATIONAL PARAMETERS:
 
 Synchronization is the mathematical guarantee of reproducibility.
 `;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SUBMODULE SENTINEL REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SUBMODULE SENTINEL REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const submoduleSentinelAgent = new SubmoduleSentinelAgent();

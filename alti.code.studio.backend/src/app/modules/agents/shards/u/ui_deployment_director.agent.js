@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIDeploymentDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_deployment_director_agent',
-            'UI Deployment Director',
-            'You are an elite UI Deployment Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_deployment_director_agent',
+      'UI Deployment Director',
+      'You are an elite UI Deployment Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI Deployment.',
+    );
+  }
 
-    async generateUIDeploymentSystem(objective) {
-        logger.info(`💻 [UIDeploymentDirectorAgent] Analyzing UI Deployment Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Deployment Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Deployment Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIDeploymentDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIDeploymentSystem(objective) {
+    logger.info(
+      `💻 [UIDeploymentDirectorAgent] Analyzing UI Deployment Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Deployment Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Deployment Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIDeploymentDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIDeploymentDirectorAgent = Object.freeze(new UIDeploymentDirectorAgent());
+export const uIDeploymentDirectorAgent = Object.freeze(
+  new UIDeploymentDirectorAgent(),
+);

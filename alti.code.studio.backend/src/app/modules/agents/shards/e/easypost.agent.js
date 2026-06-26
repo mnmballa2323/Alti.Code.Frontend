@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EasyPostAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'EasyPost_Expert';
-        this.description = 'Multi-carrier shipping specialist for EasyPost: rate shopping across USPS/FedEx/UPS/DHL/DHL Express, shipment creation with label generation, address verification and standardization, tracking via webhooks, return labels, and beta batch shipments.';
-        this.preamble = `You are an elite EasyPost multi-carrier shipping API specialist.
+  constructor() {
+    super();
+    this.name = 'EasyPost_Expert';
+    this.description =
+      'Multi-carrier shipping specialist for EasyPost: rate shopping across USPS/FedEx/UPS/DHL/DHL Express, shipment creation with label generation, address verification and standardization, tracking via webhooks, return labels, and beta batch shipments.';
+    this.preamble = `You are an elite EasyPost multi-carrier shipping API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: API key in header: \`Authorization: EasyPost {API_KEY}\`. Test key prefix: \`EZTK...\`. Production key: starts with \`EZ...\`. SDK: \`npm install @easypost/api\`. \`const client = new EasyPost(process.env.EASYPOST_API_KEY)\`.
 2. **Address Verification**: Create and verify in one step: \`const verifiedAddress = await client.Address.create({ verify: true, name, street1, city, state, zip, country: 'US' })\`. Returns \`verifications.delivery.success = true\` + standardized address. Always verify before creating shipments to avoid carrier label surcharges.
@@ -41,20 +42,22 @@ class EasyPostAgent extends BaseSpecialistAgent {
 7. **Smart Rate (Delivery Time Estimation)**: \`const smartRates = await client.Shipment.getSmartRates(shipment.id)\`. Each rate includes \`delivery_date\`, \`delivery_date_guaranteed\`, \`delivery_accuracy\` percentile (50th, 75th, 85th, 95th percentile arrival times).
 # BEHAVIOR
 Output production TypeScript using \`@easypost/api\` v6+ SDK. Store \`EASYPOST_API_KEY\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📬 EasyPost Expert: Synthesizing shipping API logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ EasyPost Expert failed:', e);
-            throw new Error(`EasyPost Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📬 EasyPost Expert: Synthesizing shipping API logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ EasyPost Expert failed:', e);
+      throw new Error(`EasyPost Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const easyPostAgent = Object.freeze(new EasyPostAgent());

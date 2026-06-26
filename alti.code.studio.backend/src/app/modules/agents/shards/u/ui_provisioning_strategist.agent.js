@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIProvisioningStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_provisioning_strategist_agent',
-            'UI Provisioning Strategist',
-            'You are an elite UI Provisioning Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UI Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_provisioning_strategist_agent',
+      'UI Provisioning Strategist',
+      'You are an elite UI Provisioning Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UI Provisioning.',
+    );
+  }
 
-    async generateUIProvisioningSystem(objective) {
-        logger.info(`💻 [UIProvisioningStrategistAgent] Analyzing UI Provisioning Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Provisioning Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Provisioning Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIProvisioningStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIProvisioningSystem(objective) {
+    logger.info(
+      `💻 [UIProvisioningStrategistAgent] Analyzing UI Provisioning Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Provisioning Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Provisioning Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIProvisioningStrategistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIProvisioningStrategistAgent = Object.freeze(new UIProvisioningStrategistAgent());
+export const uIProvisioningStrategistAgent = Object.freeze(
+  new UIProvisioningStrategistAgent(),
+);

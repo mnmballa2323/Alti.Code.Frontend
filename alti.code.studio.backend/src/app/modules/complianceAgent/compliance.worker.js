@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code — TIER 3: COMPLIANCE & QUALITY
- * 
+ *
  * Compliance Agent — "The Regulator"
  * GDPR, SOC2, HIPAA, FedRAMP compliance checking.
  */
@@ -8,16 +8,20 @@ import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 import { ciceroLawEnforcementService } from '../compliance/cicero_law_enforcement.service.js';
 
-export const complianceWorkerProcessor = async (job) => {
-    if (job.data && job.data.type === 'cicero_sla_check') {
-        logger.info(`⚖️ Compliance Worker [${job.id}]: Running Cicero SLA Compliance enforcement...`);
-        return await ciceroLawEnforcementService.processSlaEnforcementJob(job.data);
-    }
+export const complianceWorkerProcessor = async job => {
+  if (job.data && job.data.type === 'cicero_sla_check') {
+    logger.info(
+      `⚖️ Compliance Worker [${job.id}]: Running Cicero SLA Compliance enforcement...`,
+    );
+    return await ciceroLawEnforcementService.processSlaEnforcementJob(job.data);
+  }
 
-    const { code, framework, dataTypes } = job.data;
-    logger.info(`⚖️ Compliance [${job.id}]: Checking ${framework || 'all frameworks'}...`);
+  const { code, framework, dataTypes } = job.data;
+  logger.info(
+    `⚖️ Compliance [${job.id}]: Checking ${framework || 'all frameworks'}...`,
+  );
 
-    const result = await aiProvider.reason(`
+  const result = await aiProvider.reason(`
 You are a regulatory compliance expert (GDPR, SOC2, HIPAA, FedRAMP, PCI-DSS).
 
 Framework: ${framework || 'All applicable'}
@@ -38,5 +42,5 @@ Audit for:
 Respond in JSON: { "framework": string, "score": number, "violations": [], "recommendations": [], "compliant": boolean }
     `);
 
-    return { compliance: JSON.parse(result.match(/\{[\s\S]*\}/)?.[0] || '{}') };
+  return { compliance: JSON.parse(result.match(/\{[\s\S]*\}/)?.[0] || '{}') };
 };

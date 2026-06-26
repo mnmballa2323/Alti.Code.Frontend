@@ -8,7 +8,7 @@ const SWARM_STEPS = [
   { text: '❯ inso swarm start --goal "deploy_auth_module"', type: "command" },
   { text: "ℹ [SYSTEM] Initializing Inso Swarm (v2.0.0)...", type: "info" },
   {
-    text: "✓ [SYSTEM] Swarm registry connected to Azure Sovereign.",
+    text: "✓ [SYSTEM] Swarm registry connected to Google Artifact Registry.",
     type: "success",
   },
   { text: "● [SYSTEM] Spawning specialized agent swarms...", type: "info" },
@@ -37,7 +37,7 @@ const SWARM_STEPS = [
   { text: "  [2/2] compiling /components/login-card ...", type: "detail" },
   { text: "✓ Compiled successfully in 842ms", type: "success" },
   {
-    text: "🚀 [SYSTEM] Deploying sandbox to Azure Virtual Network (us-east-2)...",
+    text: "🚀 [SYSTEM] Deploying sandbox to Google Cloud VPC (us-central1)...",
     type: "info",
   },
   {
@@ -246,7 +246,7 @@ function CodeTerminal() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E5A3] opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00E5A3]" />
                 </span>
-                Azure Sovereign
+                GCP Sovereign
               </div>
             </div>
             <div>

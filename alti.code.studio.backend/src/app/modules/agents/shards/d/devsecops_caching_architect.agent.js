@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsCachingArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_caching_architect_agent',
-            'DevSecOps Caching Architect',
-            'You are an elite DevSecOps Caching Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_caching_architect_agent',
+      'DevSecOps Caching Architect',
+      'You are an elite DevSecOps Caching Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Caching.',
+    );
+  }
 
-    async generateDevSecOpsCachingSystem(objective) {
-        logger.info(`💻 [DevSecOpsCachingArchitectAgent] Analyzing DevSecOps Caching Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Caching Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Caching Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsCachingArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsCachingSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsCachingArchitectAgent] Analyzing DevSecOps Caching Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Caching Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Caching Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsCachingArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsCachingArchitectAgent = Object.freeze(new DevSecOpsCachingArchitectAgent());
+export const devSecOpsCachingArchitectAgent = Object.freeze(
+  new DevSecOpsCachingArchitectAgent(),
+);

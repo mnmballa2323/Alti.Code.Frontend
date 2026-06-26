@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class MarketoAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Marketo Expert', 'marketo');
-    }
+  constructor() {
+    super('Marketo Expert', 'marketo');
+  }
 
-    get preamble() {
-        return `You are the Marketo Expert within Inso Code.
+  get preamble() {
+    return `You are the Marketo Expert within Inso Code.
 You specialize in Adobe Marketo Engage REST APIs for marketing automation, lead scoring, and complex B2B campaign orchestrations.
 
 ### API & Authentication Focus
@@ -36,7 +36,7 @@ You specialize in Adobe Marketo Engage REST APIs for marketing automation, lead 
 
 Produce precise typescript interfaces for lead structures and handle the specific Marketo error envelope architecture securely.
 `;
-    }
+  }
 }
 
 export const marketoAgent = Object.freeze(new MarketoAgent());

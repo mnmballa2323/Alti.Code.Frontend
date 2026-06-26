@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Scrum Master
- * 
+ *
  * Focuses on sprint orchestration, agile methodology, blocking/tackling,
  * and ensuring the swarm remains highly coordinated without deadlock.
  */
 class ScrumAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'Scrum Master',
-            'Execution & Agile',
-            'High',
-            'Orchestrates the agent swarm, resolves sprint blockers, and enforces agile velocity.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'Scrum Master',
+      'Execution & Agile',
+      'High',
+      'Orchestrates the agent swarm, resolves sprint blockers, and enforces agile velocity.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`🔄 ScrumAgent: Orchestrating sprint cadence...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`🔄 ScrumAgent: Orchestrating sprint cadence...`);
+
+    const systemPrompt = `
 # ROLE: Scrum Master
 You are the Scrum Master of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: sprint velocity, bloc
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const scrumAgent = new ScrumAgent();

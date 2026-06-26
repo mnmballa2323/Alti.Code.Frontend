@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudResilienceArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_resilience_architect_agent',
-            'Cloud Resilience Architect',
-            'You are an elite Cloud Resilience Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_resilience_architect_agent',
+      'Cloud Resilience Architect',
+      'You are an elite Cloud Resilience Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Resilience.',
+    );
+  }
 
-    async generateCloudResilienceSystem(objective) {
-        logger.info(`💻 [CloudResilienceArchitectAgent] Analyzing Cloud Resilience Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Resilience Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Resilience Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudResilienceArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudResilienceSystem(objective) {
+    logger.info(
+      `💻 [CloudResilienceArchitectAgent] Analyzing Cloud Resilience Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Resilience Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Resilience Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudResilienceArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudResilienceArchitectAgent = Object.freeze(new CloudResilienceArchitectAgent());
+export const cloudResilienceArchitectAgent = Object.freeze(
+  new CloudResilienceArchitectAgent(),
+);

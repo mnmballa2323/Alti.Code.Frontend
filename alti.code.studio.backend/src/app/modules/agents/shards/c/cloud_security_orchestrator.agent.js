@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudSecurityOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_security_orchestrator_agent',
-            'Cloud Security Orchestrator',
-            'You are an elite Cloud Security Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Security.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_security_orchestrator_agent',
+      'Cloud Security Orchestrator',
+      'You are an elite Cloud Security Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Security.',
+    );
+  }
 
-    async generateCloudSecuritySystem(objective) {
-        logger.info(`💻 [CloudSecurityOrchestratorAgent] Analyzing Cloud Security Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Security Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Security Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudSecurityOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudSecuritySystem(objective) {
+    logger.info(
+      `💻 [CloudSecurityOrchestratorAgent] Analyzing Cloud Security Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Security Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Security Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [CloudSecurityOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const cloudSecurityOrchestratorAgent = Object.freeze(new CloudSecurityOrchestratorAgent());
+export const cloudSecurityOrchestratorAgent = Object.freeze(
+  new CloudSecurityOrchestratorAgent(),
+);

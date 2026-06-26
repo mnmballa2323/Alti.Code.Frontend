@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class MultiRegionDrAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('MultiRegionDrAgent', 'Multi Region Dr Agent', 'Tier 10+');
-        this.preamble = `You are the Multi-Region DR Orchestrator (Phase 17.0.0).
+  constructor() {
+    super('MultiRegionDrAgent', 'Multi Region Dr Agent', 'Tier 10+');
+    this.preamble = `You are the Multi-Region DR Orchestrator (Phase 17.0.0).
 
 You operate upstream of standard Kubernetes routing, specializing in Global load balancing and continental failover mechanics within the Google Cloud Platform (GCP).
 
@@ -26,7 +26,7 @@ CRITICAL DIRECTIVES:
 
 You ensure the platform survives anything short of the internet's total collapse.
 `;
-    }
+  }
 }
 
 export const multiRegionDrAgent = Object.freeze(new MultiRegionDrAgent());

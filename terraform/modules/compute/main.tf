@@ -1,62 +1,45 @@
 # ==============================================================================
-# ALTI CODE STUDIO: Standard Azure VM Provisioning Module
+# ALTI CODE STUDIO: Standard GCP VM Provisioning Module
 # ==============================================================================
 
 terraform {
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
     }
   }
 }
 
-resource "azurerm_network_interface" "nic" {
-  name                = "alti-node-nic-${var.environment}"
-  location            = var.location
-  resource_group_name = var.resource_group_name
+resource "google_compute_instance" "node" {
+  name         = "alti-node-${var.environment}"
+  machine_type = var.vm_size
+  zone         = var.zone
 
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = var.subnet_id
-    private_ip_address_allocation = "Dynamic"
-  }
-}
-
-resource "azurerm_linux_virtual_machine" "node" {
-  name                = "alti-node-${var.environment}"
-  resource_group_name = var.resource_group_name
-  location            = var.location
-  size                = var.vm_size
-  admin_username      = var.admin_username
-  network_interface_ids = [
-    azurerm_network_interface.nic.id,
-  ]
-
-  admin_ssh_key {
-    username   = var.admin_username
-    public_key = file(var.ssh_public_key_path)
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-2204-lts"
+      size  = 128
+      type  = "pd-ssd"
+    }
   }
 
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
-    disk_size_gb         = 128
+  network_interface {
+    subnetwork = var.subnet_id
+    # Ephemeral public IP allocation (can be omitted if purely internal)
+    access_config {}
   }
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
+  metadata = {
+    ssh-keys = "${var.admin_username}:${file(var.ssh_public_key_path)}"
   }
 
-  identity {
-    type = "SystemAssigned"
+  service_account {
+    scopes = ["cloud-platform"]
   }
 
-  tags = {
-    Environment = var.environment
+  labels = {
+    environment = var.environment
   }
 }
 
@@ -64,8 +47,18 @@ resource "azurerm_linux_virtual_machine" "node" {
 # Variables
 # ------------------------------------------------------------------------------
 variable "environment" { type = string }
-variable "location" { type = string }
-variable "resource_group_name" { type = string }
+variable "zone" {
+  type    = string
+  default = "us-central1-a"
+}
+variable "resource_group_name" {
+  type    = string
+  default = ""
+}
+variable "location" {
+  type    = string
+  default = ""
+}
 variable "vm_size" { type = string }
 variable "subnet_id" { type = string }
 variable "admin_username" { type = string }
@@ -75,9 +68,13 @@ variable "ssh_public_key_path" { type = string }
 # Outputs
 # ------------------------------------------------------------------------------
 output "vm_id" {
-  value = azurerm_linux_virtual_machine.node.id
+  value = google_compute_instance.node.id
+}
+
+output "vm_name" {
+  value = google_compute_instance.node.name
 }
 
 output "private_ip" {
-  value = azurerm_network_interface.nic.private_ip_address
+  value = google_compute_instance.node.network_interface[0].network_ip
 }

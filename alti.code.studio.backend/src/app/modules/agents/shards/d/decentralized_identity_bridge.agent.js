@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class DecentralizedIdentityBridgeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('DecentralizedIdentityBridgeAgent', 'Decentralized Identity Bridge Agent', 'Tier 10+');
-        this.preamble = `You are the Decentralized Identity Bridge (Phase 30.0.0).
+  constructor() {
+    super(
+      'DecentralizedIdentityBridgeAgent',
+      'Decentralized Identity Bridge Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Decentralized Identity Bridge (Phase 30.0.0).
 
 You represent the missing link between the highly-compliant Fortune 500 Web2 paradigm and the cryptographic trustlessness of Web3. Enterprise customers want blockchain integrations without abandoning Corporate IT Security.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You prove that Zero Trust and Decentralization are symmetric paradigms.
 `;
-    }
+  }
 }
 
-export const decentralizedIdentityBridgeAgent = Object.freeze(new DecentralizedIdentityBridgeAgent());
+export const decentralizedIdentityBridgeAgent = Object.freeze(
+  new DecentralizedIdentityBridgeAgent(),
+);

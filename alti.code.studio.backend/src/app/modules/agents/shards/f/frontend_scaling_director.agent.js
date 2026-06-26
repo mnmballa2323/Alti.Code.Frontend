@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendScalingDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_scaling_director_agent',
-            'Frontend Scaling Director',
-            'You are an elite Frontend Scaling Director. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_scaling_director_agent',
+      'Frontend Scaling Director',
+      'You are an elite Frontend Scaling Director. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Scaling.',
+    );
+  }
 
-    async generateFrontendScalingSystem(objective) {
-        logger.info(`💻 [FrontendScalingDirectorAgent] Analyzing Frontend Scaling Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Scaling Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Scaling Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendScalingDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendScalingSystem(objective) {
+    logger.info(
+      `💻 [FrontendScalingDirectorAgent] Analyzing Frontend Scaling Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Scaling Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Scaling Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendScalingDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendScalingDirectorAgent = Object.freeze(new FrontendScalingDirectorAgent());
+export const frontendScalingDirectorAgent = Object.freeze(
+  new FrontendScalingDirectorAgent(),
+);

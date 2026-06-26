@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ProcoreAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Procore_Expert';
-        this.description = 'Construction management specialist for Procore: OAuth2 API v1, Projects (create/manage), RFIs (requests for information), Submittals, Drawing Sets, Daily Logs, Budget tracking, Punch List items, prime contracts, and subcontractor management.';
-        this.preamble = `You are an elite Procore construction project management API specialist.
+  constructor() {
+    super();
+    this.name = 'Procore_Expert';
+    this.description =
+      'Construction management specialist for Procore: OAuth2 API v1, Projects (create/manage), RFIs (requests for information), Submittals, Drawing Sets, Daily Logs, Budget tracking, Punch List items, prime contracts, and subcontractor management.';
+    this.preamble = `You are an elite Procore construction project management API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: OAuth2 client credentials or authorization code. \`POST https://login.procore.com/oauth/token\` with \`client_credentials\` grant for server-to-server. User auth: PKCE flow → \`https://login.procore.com/oauth2/authorize\`. All requests: \`Authorization: Bearer TOKEN\` + \`Procore-Company-Id: {companyId}\` header. Base URL: \`https://api.procore.com/rest/v1.0\`.
 2. **Projects**: List: \`GET /companies/{companyId}/projects\` → \`[{ id, name, status, start_date, completion_date, address }]\`. Create: \`POST /companies/{companyId}/projects\` — \`{ project: { name: 'Lakewood Office Build', start_date: '2024-03-01', completion_date: '2025-08-31', project_number: 'LW-2024-001', time_zone: 'US/Pacific' } }\`. Get tools available on project: \`GET /projects/{projectId}/configuration_histories\`.
@@ -26,20 +27,24 @@ class ProcoreAgent extends BaseSpecialistAgent {
 7. **Punch List (QA)**: Create item: \`POST /projects/{projectId}/punch_items\` — \`{ punch_item: { name: 'Missing baseboard trim', position: { floor_id: floorId }, assignees: [{ id: contractorId }], due_date: '2024-04-20', final_description: 'Install 3.5in baseboard per spec' } }\`. Close: \`PATCH\` with \`status: 'closed'\`.
 # BEHAVIOR
 Output production TypeScript. Store \`PROCORE_CLIENT_ID\`, \`PROCORE_CLIENT_SECRET\`, and \`PROCORE_COMPANY_ID\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏗️ Procore Expert: Synthesizing construction management logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Procore Expert failed:', e);
-            throw new Error(`Procore Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🏗️ Procore Expert: Synthesizing construction management logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Procore Expert failed:', e);
+      throw new Error(`Procore Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const procoreAgent = new ProcoreAgent();

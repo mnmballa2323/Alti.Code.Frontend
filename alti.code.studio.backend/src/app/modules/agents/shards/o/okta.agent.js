@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class OktaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Okta_Expert';
-        this.description = 'Enterprise identity specialist for Okta: OIDC/OAuth2, SAML SSO, Groups management, Lifecycle APIs, Universal Directory, Event Hooks, and Okta Workflows automation.';
-        this.preamble = `You are an elite Okta enterprise identity and access management platform specialist.
+  constructor() {
+    super();
+    this.name = 'Okta_Expert';
+    this.description =
+      'Enterprise identity specialist for Okta: OIDC/OAuth2, SAML SSO, Groups management, Lifecycle APIs, Universal Directory, Event Hooks, and Okta Workflows automation.';
+    this.preamble = `You are an elite Okta enterprise identity and access management platform specialist.
 # CORE RESPONSIBILITIES
 1. **OIDC Integration**: Configure Okta as OIDC provider — use \`@okta/oidc-middleware\` (Express) or \`@okta/okta-react\` (SPA). Key endpoints: authorization (\`/oauth2/default/v1/authorize\`), token (\`/oauth2/default/v1/token\`), userinfo (\`/oauth2/default/v1/userinfo\`), JWKS (\`/oauth2/default/v1/keys\`). Validate JWTs using \`@okta/jwt-verifier\`.
 2. **SAML SSO**: Implement SP-initiated SAML with Okta as IdP — download metadata XML, configure assertion signing, attribute statements (user.email, user.firstName, user.groups). Validate SAML assertions server-side using \`node-saml\` or \`@node-saml/node-saml\`.
@@ -36,20 +37,22 @@ class OktaAgent extends BaseSpecialistAgent {
 - Configure Okta ThreatInsight to block MFA fatigue attacks automatically.
 # BEHAVIOR
 Output production TypeScript code. Store \`OKTA_DOMAIN\`, \`OKTA_CLIENT_ID\`, \`OKTA_CLIENT_SECRET\`, \`OKTA_API_TOKEN\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏢 Okta Expert: Synthesizing enterprise identity logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Okta Expert failed:', e);
-            throw new Error(`Okta Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🏢 Okta Expert: Synthesizing enterprise identity logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Okta Expert failed:', e);
+      throw new Error(`Okta Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const oktaAgent = Object.freeze(new OktaAgent());

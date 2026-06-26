@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendGovernanceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_governance_orchestrator_agent',
-            'Frontend Governance Orchestrator',
-            'You are an elite Frontend Governance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_governance_orchestrator_agent',
+      'Frontend Governance Orchestrator',
+      'You are an elite Frontend Governance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Governance.',
+    );
+  }
 
-    async generateFrontendGovernanceSystem(objective) {
-        logger.info(`💻 [FrontendGovernanceOrchestratorAgent] Analyzing Frontend Governance Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Governance Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Governance Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendGovernanceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendGovernanceSystem(objective) {
+    logger.info(
+      `💻 [FrontendGovernanceOrchestratorAgent] Analyzing Frontend Governance Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Governance Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Governance Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendGovernanceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendGovernanceOrchestratorAgent = Object.freeze(new FrontendGovernanceOrchestratorAgent());
+export const frontendGovernanceOrchestratorAgent = Object.freeze(
+  new FrontendGovernanceOrchestratorAgent(),
+);

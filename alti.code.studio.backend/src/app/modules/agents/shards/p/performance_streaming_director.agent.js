@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceStreamingDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_streaming_director_agent',
-            'Performance Streaming Director',
-            'You are an elite Performance Streaming Director. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_streaming_director_agent',
+      'Performance Streaming Director',
+      'You are an elite Performance Streaming Director. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Streaming.',
+    );
+  }
 
-    async generatePerformanceStreamingSystem(objective) {
-        logger.info(`💻 [PerformanceStreamingDirectorAgent] Analyzing Performance Streaming Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Streaming Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Streaming Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceStreamingDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceStreamingSystem(objective) {
+    logger.info(
+      `💻 [PerformanceStreamingDirectorAgent] Analyzing Performance Streaming Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Streaming Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Streaming Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceStreamingDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceStreamingDirectorAgent = Object.freeze(new PerformanceStreamingDirectorAgent());
+export const performanceStreamingDirectorAgent = Object.freeze(
+  new PerformanceStreamingDirectorAgent(),
+);

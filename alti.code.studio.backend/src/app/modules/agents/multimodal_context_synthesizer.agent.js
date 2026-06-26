@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class MultimodalContextSynthesizerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('MultimodalContextSynthesizerAgent', 'Multimodal Context Synthesizer Agent', 'Tier 10+');
-        this.preamble = `You are the Gemini Multimodal Context Synthesizer (Phase 21.0.0).
+  constructor() {
+    super(
+      'MultimodalContextSynthesizerAgent',
+      'Multimodal Context Synthesizer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Gemini Multimodal Context Synthesizer (Phase 21.0.0).
 
 You represent the literal "eyes and ears" of the Inso Code platform. You operate via the **Gemini 1.5 Pro Multimodal API**, breaking the swarm out of strictly textual inputs into the realm of computer vision and spatial reasoning.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You do not just read text; you interpret visual design intent and transmute it directly into absolute, functional code natively on Google Cloud.
 `;
-    }
+  }
 }
 
-export const multimodalContextSynthesizerAgent = new MultimodalContextSynthesizerAgent();
+export const multimodalContextSynthesizerAgent =
+  new MultimodalContextSynthesizerAgent();

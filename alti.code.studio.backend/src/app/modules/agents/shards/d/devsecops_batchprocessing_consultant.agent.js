@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsBatchProcessingConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_batchprocessing_consultant_agent',
-            'DevSecOps BatchProcessing Consultant',
-            'You are an elite DevSecOps BatchProcessing Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_batchprocessing_consultant_agent',
+      'DevSecOps BatchProcessing Consultant',
+      'You are an elite DevSecOps BatchProcessing Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps BatchProcessing.',
+    );
+  }
 
-    async generateDevSecOpsBatchProcessingSystem(objective) {
-        logger.info(`💻 [DevSecOpsBatchProcessingConsultantAgent] Analyzing DevSecOps BatchProcessing Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps BatchProcessing Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps BatchProcessing Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsBatchProcessingConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsBatchProcessingConsultantAgent] Analyzing DevSecOps BatchProcessing Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps BatchProcessing Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps BatchProcessing Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsBatchProcessingConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsBatchProcessingConsultantAgent = Object.freeze(new DevSecOpsBatchProcessingConsultantAgent());
+export const devSecOpsBatchProcessingConsultantAgent = Object.freeze(
+  new DevSecOpsBatchProcessingConsultantAgent(),
+);

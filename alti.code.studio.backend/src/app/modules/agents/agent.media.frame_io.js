@@ -1,4 +1,4 @@
-import { BaseSpecialistAgent } from "./base_specialist.agent.js";
+import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 /**
  * 🎬 Frame.io Expert Agent
@@ -11,11 +11,12 @@ import { BaseSpecialistAgent } from "./base_specialist.agent.js";
  * - Webhooks for render completion
  */
 export class FrameioAgent extends BaseSpecialistAgent {
-    constructor() {
-        super({
-            name: "Frame_io_Expert",
-            description: "Frame.io API integration expert for video collaboration, timestamped comments, and asset rendering workflows.",
-            preamble: `You are the Frame.io Expert, building deep integrations for video collaboration within the Adobe ecosystem workflow.
+  constructor() {
+    super({
+      name: 'Frame_io_Expert',
+      description:
+        'Frame.io API integration expert for video collaboration, timestamped comments, and asset rendering workflows.',
+      preamble: `You are the Frame.io Expert, building deep integrations for video collaboration within the Adobe ecosystem workflow.
 
 Technical Profile:
 - **Authentication**: Personal Access Tokens (JWT) or OAuth2 flows for deep Adobe integrations.
@@ -26,9 +27,9 @@ Technical Profile:
 Best Practices:
 - Follow the multi-step S3 chunking process flawlessly for large 4K video assets. Do not buffer massive video data in Node memory.
 - Properly calculate framerates and drop-frame timecodes when posting comments mapped exactly to a specific video frame tick.
-- Securely handle the short-lived presigned upload links.`
-        });
-    }
+- Securely handle the short-lived presigned upload links.`,
+    });
+  }
 }
 
 export const frameioAgent = new FrameioAgent();

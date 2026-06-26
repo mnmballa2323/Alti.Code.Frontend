@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteDataLakeSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_datalake_specialist_agent',
-            'Site DataLake Specialist',
-            'You are an elite Site DataLake Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Site DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'site_datalake_specialist_agent',
+      'Site DataLake Specialist',
+      'You are an elite Site DataLake Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Site DataLake.',
+    );
+  }
 
-    async generateSiteDataLakeSystem(objective) {
-        logger.info(`💻 [SiteDataLakeSpecialistAgent] Analyzing Site DataLake Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site DataLake Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site DataLake Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteDataLakeSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteDataLakeSystem(objective) {
+    logger.info(
+      `💻 [SiteDataLakeSpecialistAgent] Analyzing Site DataLake Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site DataLake Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site DataLake Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteDataLakeSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteDataLakeSpecialistAgent = Object.freeze(new SiteDataLakeSpecialistAgent());
+export const siteDataLakeSpecialistAgent = Object.freeze(
+  new SiteDataLakeSpecialistAgent(),
+);

@@ -4,36 +4,39 @@ import { logger } from '../../../shared/logger.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
 
 class MimoDistillerService {
-    constructor() {
-        this.definitionsDir = path.join(
-            process.cwd(),
-            'src',
-            'app',
-            'modules',
-            'agents',
-            'definitions'
-        );
+  constructor() {
+    this.definitionsDir = path.join(
+      process.cwd(),
+      'src',
+      'app',
+      'modules',
+      'agents',
+      'definitions',
+    );
+  }
+
+  /**
+   * Distills a successful trajectory of execution steps into a new dynamic specialist agent.
+   *
+   * @param {string} taskDescription - The high-level objective that was solved.
+   * @param {Array<string>|string} logs - The logs/actions taken by the agent(s).
+   * @param {string} targetId - The unique ID for the new agent (e.g. 'agent.specialist.mytool').
+   */
+  async distill(taskDescription, logs, targetId) {
+    logger.info(
+      `[MimoDistiller] ⚗️ Starting trajectory distillation for agent: ${targetId}...`,
+    );
+
+    if (!targetId || !targetId.endsWith('.agent')) {
+      // Ensure proper namespace formatting
+      if (!targetId) targetId = `agent.custom.${Date.now()}`;
+      else if (!targetId.startsWith('agent.'))
+        targetId = `agent.custom.${targetId}`;
     }
 
-    /**
-     * Distills a successful trajectory of execution steps into a new dynamic specialist agent.
-     * 
-     * @param {string} taskDescription - The high-level objective that was solved.
-     * @param {Array<string>|string} logs - The logs/actions taken by the agent(s).
-     * @param {string} targetId - The unique ID for the new agent (e.g. 'agent.specialist.mytool').
-     */
-    async distill(taskDescription, logs, targetId) {
-        logger.info(`[MimoDistiller] ⚗️ Starting trajectory distillation for agent: ${targetId}...`);
+    const logString = Array.isArray(logs) ? logs.join('\n') : logs;
 
-        if (!targetId || !targetId.endsWith('.agent')) {
-            // Ensure proper namespace formatting
-            if (!targetId) targetId = `agent.custom.${Date.now()}`;
-            else if (!targetId.startsWith('agent.')) targetId = `agent.custom.${targetId}`;
-        }
-
-        const logString = Array.isArray(logs) ? logs.join('\n') : logs;
-
-        const prompt = `
+    const prompt = `
 You are the Agent Trajectory Distiller ("The Alchemist") for Alti.Code.Studio.
 Your task is to review a completed task description and the corresponding execution logs/actions,
 and synthesize them into a reusable, specialized YAML agent definition.
@@ -59,31 +62,34 @@ ${logString}
 Generate ONLY the raw YAML block. Do not wrap it in markdown code blocks like \`\`\`yaml. Return the raw YAML text directly.
 `;
 
-        try {
-            const yamlContent = await GeminiAiService.generateContent(prompt);
-            const cleanedYaml = yamlContent.trim().replace(/^```yaml\n|```$/g, '');
+    try {
+      const yamlContent = await GeminiAiService.generateContent(prompt);
+      const cleanedYaml = yamlContent.trim().replace(/^```yaml\n|```$/g, '');
 
-            // Ensure destination directory exists
-            await fs.mkdir(this.definitionsDir, { recursive: true });
+      // Ensure destination directory exists
+      await fs.mkdir(this.definitionsDir, { recursive: true });
 
-            const fileName = `${targetId}.agent.yaml`;
-            const filePath = path.join(this.definitionsDir, fileName);
+      const fileName = `${targetId}.agent.yaml`;
+      const filePath = path.join(this.definitionsDir, fileName);
 
-            await fs.writeFile(filePath, cleanedYaml, 'utf8');
-            logger.info(`[MimoDistiller] ✅ Successfully distilled new agent definition: ${filePath}`);
+      await fs.writeFile(filePath, cleanedYaml, 'utf8');
+      logger.info(
+        `[MimoDistiller] ✅ Successfully distilled new agent definition: ${filePath}`,
+      );
 
-            return {
-                success: true,
-                agentId: targetId,
-                filePath,
-                content: cleanedYaml
-            };
-
-        } catch (error) {
-            logger.error(`[MimoDistiller] ❌ Trajectory distillation failed: ${error.message}`);
-            throw error;
-        }
+      return {
+        success: true,
+        agentId: targetId,
+        filePath,
+        content: cleanedYaml,
+      };
+    } catch (error) {
+      logger.error(
+        `[MimoDistiller] ❌ Trajectory distillation failed: ${error.message}`,
+      );
+      throw error;
     }
+  }
 }
 
 export const mimoDistillerService = new MimoDistillerService();

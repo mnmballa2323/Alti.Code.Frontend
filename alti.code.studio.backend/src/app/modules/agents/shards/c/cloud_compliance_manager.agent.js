@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudComplianceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_compliance_manager_agent',
-            'Cloud Compliance Manager',
-            'You are an elite Cloud Compliance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_compliance_manager_agent',
+      'Cloud Compliance Manager',
+      'You are an elite Cloud Compliance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Compliance.',
+    );
+  }
 
-    async generateCloudComplianceSystem(objective) {
-        logger.info(`💻 [CloudComplianceManagerAgent] Analyzing Cloud Compliance Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Compliance Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Compliance Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudComplianceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudComplianceSystem(objective) {
+    logger.info(
+      `💻 [CloudComplianceManagerAgent] Analyzing Cloud Compliance Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Compliance Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Compliance Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudComplianceManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudComplianceManagerAgent = Object.freeze(new CloudComplianceManagerAgent());
+export const cloudComplianceManagerAgent = Object.freeze(
+  new CloudComplianceManagerAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIMigrationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_migration_consultant_agent',
-            'AI Migration Consultant',
-            'You are an elite AI Migration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and AI Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_migration_consultant_agent',
+      'AI Migration Consultant',
+      'You are an elite AI Migration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and AI Migration.',
+    );
+  }
 
-    async generateAIMigrationSystem(objective) {
-        logger.info(`💻 [AIMigrationConsultantAgent] Analyzing AI Migration Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Migration Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Migration Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIMigrationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIMigrationSystem(objective) {
+    logger.info(
+      `💻 [AIMigrationConsultantAgent] Analyzing AI Migration Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Migration Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Migration Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIMigrationConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIMigrationConsultantAgent = Object.freeze(new AIMigrationConsultantAgent());
+export const aIMigrationConsultantAgent = Object.freeze(
+  new AIMigrationConsultantAgent(),
+);

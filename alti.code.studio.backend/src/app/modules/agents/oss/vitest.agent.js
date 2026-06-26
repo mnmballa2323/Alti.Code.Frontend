@@ -6,11 +6,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Repository: https://github.com/vitest-dev/vitest
  */
 class VitestOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Vitest_Oss_Expert';
-        this.description = 'Expert in Vitest — Vite-native unit/integration testing with React Testing Library, mocking, coverage, and snapshot testing.';
-        this.preamble = `You are a senior testing engineer specializing in Vitest — the Vite-native testing framework.
+  constructor() {
+    super();
+    this.name = 'Vitest_Oss_Expert';
+    this.description =
+      'Expert in Vitest — Vite-native unit/integration testing with React Testing Library, mocking, coverage, and snapshot testing.';
+    this.preamble = `You are a senior testing engineer specializing in Vitest — the Vite-native testing framework.
 
 SETUP (vite.config.ts or vitest.config.ts):
 import { defineConfig } from 'vitest/config'
@@ -129,11 +130,13 @@ npx vitest run --reporter=verbose
 npx vitest bench     # benchmarking
 npx vitest ui        # browser-based test UI
 npx vitest --testNamePattern="creates a user"`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== VITEST QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== VITEST QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const vitestOssAgent = new VitestOssAgent();

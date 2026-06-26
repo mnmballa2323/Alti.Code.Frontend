@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsStreamingDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_streaming_designer_agent',
-            'Systems Streaming Designer',
-            'You are an elite Systems Streaming Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_streaming_designer_agent',
+      'Systems Streaming Designer',
+      'You are an elite Systems Streaming Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Streaming.',
+    );
+  }
 
-    async generateSystemsStreamingSystem(objective) {
-        logger.info(`💻 [SystemsStreamingDesignerAgent] Analyzing Systems Streaming Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Streaming Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Streaming Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsStreamingDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsStreamingSystem(objective) {
+    logger.info(
+      `💻 [SystemsStreamingDesignerAgent] Analyzing Systems Streaming Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Streaming Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Streaming Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsStreamingDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsStreamingDesignerAgent = Object.freeze(new SystemsStreamingDesignerAgent());
+export const systemsStreamingDesignerAgent = Object.freeze(
+  new SystemsStreamingDesignerAgent(),
+);

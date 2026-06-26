@@ -5,15 +5,14 @@ import { GeminiAiService } from '../app/modules/gemini/gemini.service.js';
 vi.mock('../app/modules/gemini/gemini.service.js');
 
 describe('Absolute Binary Decompilation (Phase 31 - The Reverser)', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
 
-    beforeEach(() => {
-        vi.clearAllMocks();
-    });
-
-    it('should translate a raw x86 Buffer Overflow core dump into a plain English explanation', async () => {
-        // A mock x86_64 assembly block representing a classic `strcpy` buffer overflow
-        // where a large string is copied into a small stack buffer.
-        const mockCoreDumpAssembly = `
+  it('should translate a raw x86 Buffer Overflow core dump into a plain English explanation', async () => {
+    // A mock x86_64 assembly block representing a classic `strcpy` buffer overflow
+    // where a large string is copied into a small stack buffer.
+    const mockCoreDumpAssembly = `
            0x4005c2:  push   rbp
            0x4005c3:  mov    rbp, rsp
            0x4005c6:  sub    rsp, 0x10         ; Allocate 16 bytes for buffer
@@ -28,20 +27,23 @@ describe('Absolute Binary Decompilation (Phase 31 - The Reverser)', () => {
            0x4005e2:  ret
         `;
 
-        // We mock Gemini generating the translation
-        const mockedTranslation = "The native code crashed due to a classic Buffer Overflow. It allocated only 16 bytes on the stack but used `strcpy` to copy a user-provided string that was significantly larger, overwriting critical return execution memory.";
-        GeminiAiService.generateContent.mockResolvedValueOnce(mockedTranslation);
+    // We mock Gemini generating the translation
+    const mockedTranslation =
+      'The native code crashed due to a classic Buffer Overflow. It allocated only 16 bytes on the stack but used `strcpy` to copy a user-provided string that was significantly larger, overwriting critical return execution memory.';
+    GeminiAiService.generateContent.mockResolvedValueOnce(mockedTranslation);
 
-        const result = await reverserAgent.decompileNativeCrash('image-processor.node', mockCoreDumpAssembly);
+    const result = await reverserAgent.decompileNativeCrash(
+      'image-processor.node',
+      mockCoreDumpAssembly,
+    );
 
-        // ASSERTIONS
+    // ASSERTIONS
 
-        // 1. Ensure Gemini was called to decompile
-        expect(GeminiAiService.generateContent).toHaveBeenCalledTimes(1);
+    // 1. Ensure Gemini was called to decompile
+    expect(GeminiAiService.generateContent).toHaveBeenCalledTimes(1);
 
-        // 2. Ensure the returned object contains the successful plain-text translation
-        expect(result.status).toBe('success');
-        expect(result.plainTextExplanation).toBe(mockedTranslation);
-    });
-
+    // 2. Ensure the returned object contains the successful plain-text translation
+    expect(result.status).toBe('success');
+    expect(result.plainTextExplanation).toBe(mockedTranslation);
+  });
 });

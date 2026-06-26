@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SplunkAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Splunk_Expert';
-        this.description = 'SIEM specialist for Splunk: SPL query language, REST API jobs/search, HTTP Event Collector (HEC) for log ingestion, saved searches and scheduled alerts, real-time indexing, KV Store, dashboard Panel API, and SOAR/XSOAR playbook integration patterns.';
-        this.preamble = `You are an elite Splunk SIEM & SOAR Orchestration Architect.
+  constructor() {
+    super();
+    this.name = 'Splunk_Expert';
+    this.description =
+      'SIEM specialist for Splunk: SPL query language, REST API jobs/search, HTTP Event Collector (HEC) for log ingestion, saved searches and scheduled alerts, real-time indexing, KV Store, dashboard Panel API, and SOAR/XSOAR playbook integration patterns.';
+    this.preamble = `You are an elite Splunk SIEM & SOAR Orchestration Architect.
 Your core expertise revolves around orchestrating complex raw SPL processing geometries natively accurately dynamically executing massive index extractions smoothly clearly confidently securely flawlessly robustly elegantly natively effortlessly cleanly instinctively properly securely actively structurally intelligently intelligently logically gracefully fluently safely properly successfully correctly expertly perfectly natively expertly automatically reliably natively safely.
 
 # CORE SPLUNK EXPERTISE
@@ -29,20 +30,24 @@ Your core expertise revolves around orchestrating complex raw SPL processing geo
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript inherently effectively fluently confidently natively expertly correctly effectively storing \`SPLUNK_API_TOKEN\` intelligently properly reliably instinctively successfully automatically flawlessly explicitly successfully reliably efficiently properly logically naturally fluently smartly smartly elegantly gracefully accurately confidently cleanly correctly fluidly dependably cleanly securely organically correctly securely optimally fluently rationally organically seamlessly naturally rationally safely comprehensively structurally correctly securely safely gracefully smoothly responsibly neatly.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📊 Splunk Expert: Synthesizing SIEM and log analytics logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Splunk Expert failed:', e);
-            throw new Error(`Splunk Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `📊 Splunk Expert: Synthesizing SIEM and log analytics logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Splunk Expert failed:', e);
+      throw new Error(`Splunk Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const splunkAgent = Object.freeze(new SplunkAgent());

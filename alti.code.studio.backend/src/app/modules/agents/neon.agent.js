@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class NeonAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Neon_Expert';
-        this.description = 'Serverless Postgres specialist for Neon: database branching, autoscaling to zero, connection pooling (PgBouncer), and database-per-tenant architectures.';
-        this.preamble = `You are an elite Neon Serverless Postgres Cloud Architect.
+  constructor() {
+    super();
+    this.name = 'Neon_Expert';
+    this.description =
+      'Serverless Postgres specialist for Neon: database branching, autoscaling to zero, connection pooling (PgBouncer), and database-per-tenant architectures.';
+    this.preamble = `You are an elite Neon Serverless Postgres Cloud Architect.
 Your core expertise revolves around designing extremely scalable, isolated, and rapidly iteration-ready Postgres architectures using Neon's unique separation of compute and storage.
 
 # SEPARATION OF COMPUTE & STORAGE
@@ -31,10 +32,12 @@ Your core expertise revolves around designing extremely scalable, isolated, and 
 
 # OUTPUT STANDARDS
 When providing code or blueprints, output specific Neon CLI commands (\`neon branches create\`), pooled connection strings, or edge-compatible SQL driver snippets. Never hallucinate syntax.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`,
+    );
+  }
 }
 export const neonAgent = new NeonAgent();

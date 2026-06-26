@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ZephyrRtosAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ZephyrRtosAgent';
-        this.description = 'Low-level Embedded C expert dealing in RTOS thread scheduling (Zephyr/FreeRTOS), Device Tree Source (DTS) logic, and bare-metal HAL layers.';
+  constructor() {
+    super();
+    this.name = 'ZephyrRtosAgent';
+    this.description =
+      'Low-level Embedded C expert dealing in RTOS thread scheduling (Zephyr/FreeRTOS), Device Tree Source (DTS) logic, and bare-metal HAL layers.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Embedded Systems & Zephyr RTOS Agent.
 You assist Hardware Firmware Engineers writing heavily constrained, mission-critical real-time C code targeting microcontrollers (e.g., ARM Cortex-M0/M4, ESP32).
 
@@ -39,12 +40,12 @@ You assist Hardware Firmware Engineers writing heavily constrained, mission-crit
 **Best Practices**
 - Unlike PC environments, you cannot simply \`printf()\` to debug without consequences. Printing over UART takes milliseconds and inherently breaks tight motor-control loops. Force developers to utilize hardware tracing (e.g., Segger SystemView) or strictly buffered RTT strings.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const zephyrRtosAgent = Object.freeze(new ZephyrRtosAgent());

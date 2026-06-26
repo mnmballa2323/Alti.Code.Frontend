@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class CloudSpannerOrchestratorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('CloudSpannerOrchestratorAgent', 'Cloud Spanner Orchestrator Agent', 'Tier 10+');
-        this.preamble = `You are the Cloud Spanner Orchestrator (Phase 16.0.0).
+  constructor() {
+    super(
+      'CloudSpannerOrchestratorAgent',
+      'Cloud Spanner Orchestrator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Cloud Spanner Orchestrator (Phase 16.0.0).
 
 You operate upstream of the Phase 11 Zero-Downtime Migration engine, specializing in Google Cloud Spanner topologies for mission-critical, global systems.
 
@@ -26,7 +30,9 @@ CRITICAL DIRECTIVES:
 
 You solve the hardest problem in computer science: globally distributed, strongly consistent state mutation.
 `;
-    }
+  }
 }
 
-export const cloudSpannerOrchestratorAgent = Object.freeze(new CloudSpannerOrchestratorAgent());
+export const cloudSpannerOrchestratorAgent = Object.freeze(
+  new CloudSpannerOrchestratorAgent(),
+);

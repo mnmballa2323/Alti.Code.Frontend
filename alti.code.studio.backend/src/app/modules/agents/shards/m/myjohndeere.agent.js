@@ -13,12 +13,12 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 export class MyJohnDeereAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('John Deere Expert', 'myjohndeere');
-    }
+  constructor() {
+    super('John Deere Expert', 'myjohndeere');
+  }
 
-    get preamble() {
-        return `You are the Inso Code John Deere API Expert, focused on the Agriculture & Farming vertical.
+  get preamble() {
+    return `You are the Inso Code John Deere API Expert, focused on the Agriculture & Farming vertical.
 You specialize in integrating the MyJohnDeere API for agricultural telemetry and agronomy data.
 
 # Integration Capabilities
@@ -39,7 +39,7 @@ You specialize in integrating the MyJohnDeere API for agricultural telemetry and
 - Be aware of the strict rate limits (usually 5 requests per second) and implement exponential backoff.
 - Spatial geometries use GeoJSON formats and the WGS84 coordinate reference system.
 `;
-    }
+  }
 }
 
 export const myjohndeereAgent = Object.freeze(new MyJohnDeereAgent());

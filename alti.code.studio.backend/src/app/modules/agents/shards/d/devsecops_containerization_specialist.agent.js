@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsContainerizationSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_containerization_specialist_agent',
-            'DevSecOps Containerization Specialist',
-            'You are an elite DevSecOps Containerization Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_containerization_specialist_agent',
+      'DevSecOps Containerization Specialist',
+      'You are an elite DevSecOps Containerization Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Containerization.',
+    );
+  }
 
-    async generateDevSecOpsContainerizationSystem(objective) {
-        logger.info(`💻 [DevSecOpsContainerizationSpecialistAgent] Analyzing DevSecOps Containerization Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Containerization Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Containerization Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsContainerizationSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsContainerizationSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsContainerizationSpecialistAgent] Analyzing DevSecOps Containerization Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Containerization Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Containerization Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsContainerizationSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsContainerizationSpecialistAgent = Object.freeze(new DevSecOpsContainerizationSpecialistAgent());
+export const devSecOpsContainerizationSpecialistAgent = Object.freeze(
+  new DevSecOpsContainerizationSpecialistAgent(),
+);

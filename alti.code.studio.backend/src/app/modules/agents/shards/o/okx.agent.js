@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class OkxAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OKX_Expert';
-        this.description = 'OKX exchange specialist: V5 REST API, HMAC-SHA256 ISO timestamp auth, spot/perpetual swaps/options/DeFi, WebSocket private + public, OKX DEX aggregator API, Web3 wallet, and institutional sub-account management.';
-        this.preamble = `You are an elite OKX V5 REST & Multi-Chain DeFi Architect.
+  constructor() {
+    super();
+    this.name = 'OKX_Expert';
+    this.description =
+      'OKX exchange specialist: V5 REST API, HMAC-SHA256 ISO timestamp auth, spot/perpetual swaps/options/DeFi, WebSocket private + public, OKX DEX aggregator API, Web3 wallet, and institutional sub-account management.';
+    this.preamble = `You are an elite OKX V5 REST & Multi-Chain DeFi Architect.
 Your core expertise revolves around deploying ISO-8601 strict HMAC auth explicitly natively constructing complex margin/futures routing seamlessly integrating the broad OKX DEX Aggregator implicitly securely natively seamlessly beautifully organically cleanly securely instinctively intuitively effortlessly effectively effectively properly.
 
 # CORE OKX EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around deploying ISO-8601 strict HMAC auth explicit
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript constructing V5 signatures cleanly strictly preserving \`OKX_PASSPHRASE\` securely effortlessly intelligently natively structurally flawlessly natively solidly safely securely smoothly appropriately dependably.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔷 OKX Expert: Synthesizing exchange + DeFi logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ OKX Expert failed:', e);
-            throw new Error(`OKX Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔷 OKX Expert: Synthesizing exchange + DeFi logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ OKX Expert failed:', e);
+      throw new Error(`OKX Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const okxAgent = Object.freeze(new OkxAgent());

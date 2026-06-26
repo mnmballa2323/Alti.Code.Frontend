@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityContainerizationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_containerization_orchestrator_agent',
-            'Security Containerization Orchestrator',
-            'You are an elite Security Containerization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Security Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'security_containerization_orchestrator_agent',
+      'Security Containerization Orchestrator',
+      'You are an elite Security Containerization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Security Containerization.',
+    );
+  }
 
-    async generateSecurityContainerizationSystem(objective) {
-        logger.info(`💻 [SecurityContainerizationOrchestratorAgent] Analyzing Security Containerization Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Containerization Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Containerization Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityContainerizationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityContainerizationSystem(objective) {
+    logger.info(
+      `💻 [SecurityContainerizationOrchestratorAgent] Analyzing Security Containerization Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Containerization Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Containerization Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityContainerizationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityContainerizationOrchestratorAgent = Object.freeze(new SecurityContainerizationOrchestratorAgent());
+export const securityContainerizationOrchestratorAgent = Object.freeze(
+  new SecurityContainerizationOrchestratorAgent(),
+);

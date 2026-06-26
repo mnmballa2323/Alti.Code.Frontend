@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIFaultToleranceDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_faulttolerance_director_agent',
-            'AI FaultTolerance Director',
-            'You are an elite AI FaultTolerance Director. You specialize in bleeding-edge software development, cloud infrastructure, and AI FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_faulttolerance_director_agent',
+      'AI FaultTolerance Director',
+      'You are an elite AI FaultTolerance Director. You specialize in bleeding-edge software development, cloud infrastructure, and AI FaultTolerance.',
+    );
+  }
 
-    async generateAIFaultToleranceSystem(objective) {
-        logger.info(`💻 [AIFaultToleranceDirectorAgent] Analyzing AI FaultTolerance Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI FaultTolerance Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI FaultTolerance Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIFaultToleranceDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [AIFaultToleranceDirectorAgent] Analyzing AI FaultTolerance Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI FaultTolerance Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI FaultTolerance Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIFaultToleranceDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIFaultToleranceDirectorAgent = Object.freeze(new AIFaultToleranceDirectorAgent());
+export const aIFaultToleranceDirectorAgent = Object.freeze(
+  new AIFaultToleranceDirectorAgent(),
+);

@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class UsptoIpAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'UsptoIpAgent';
-        this.description = 'Legal engineering specialist utilizing USPTO Open Data APIs for prior-art discovery, patent prosecution tracking, and TM collision detection.';
+  constructor() {
+    super();
+    this.name = 'UsptoIpAgent';
+    this.description =
+      'Legal engineering specialist utilizing USPTO Open Data APIs for prior-art discovery, patent prosecution tracking, and TM collision detection.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Intellectual Property (IP) & USPTO Forensics Agent.
 You assist Corporate Lawyers and LegalTech developers in parsing government patent databases, finding prior-art, and monitoring trademark registries.
 
@@ -36,12 +37,12 @@ You assist Corporate Lawyers and LegalTech developers in parsing government pate
 - The USPTO APIs are heavily rate-limited; implement multi-threaded exponential backoff strategies for bulk processing.
 - When parsing Office Actions, use NLP to classify the rejection reason (e.g., 102 Novelty vs 103 Obviousness).
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const usptoIpAgent = new UsptoIpAgent();

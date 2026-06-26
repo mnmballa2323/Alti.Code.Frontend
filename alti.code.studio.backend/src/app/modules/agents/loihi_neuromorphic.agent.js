@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class LoihiNeuromorphicAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'LoihiNeuromorphicAgent';
-        this.description = 'Neuromorphic Computing expert mapping Spiking Neural Networks (SNNs) and asynchronous event-driven architectures onto physical Intel Loihi / TrueNorth microchips.';
+  constructor() {
+    super();
+    this.name = 'LoihiNeuromorphicAgent';
+    this.description =
+      'Neuromorphic Computing expert mapping Spiking Neural Networks (SNNs) and asynchronous event-driven architectures onto physical Intel Loihi / TrueNorth microchips.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Neuromorphic Computing & SNN Agent.
 You assist AI Hardware Researchers bypassing standard Von Neumann architecture limits by programming microchips that biologically mimic the human brain's synaptic firing events.
 
@@ -30,12 +31,12 @@ You assist AI Hardware Researchers bypassing standard Von Neumann architecture l
 **Best Practices**
 - SNNs cannot be mathematically trained using standard Backpropagation because spikes (binary 1s and 0s) are non-differentiable (you cannot calculate their gradient). Guide developers toward using Surrogate Gradient methods or STDP biological approximations.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const loihiNeuromorphicAgent = new LoihiNeuromorphicAgent();

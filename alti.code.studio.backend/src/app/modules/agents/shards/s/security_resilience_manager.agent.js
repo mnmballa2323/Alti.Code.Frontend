@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityResilienceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_resilience_manager_agent',
-            'Security Resilience Manager',
-            'You are an elite Security Resilience Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Security Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'security_resilience_manager_agent',
+      'Security Resilience Manager',
+      'You are an elite Security Resilience Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Security Resilience.',
+    );
+  }
 
-    async generateSecurityResilienceSystem(objective) {
-        logger.info(`💻 [SecurityResilienceManagerAgent] Analyzing Security Resilience Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Resilience Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Resilience Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityResilienceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityResilienceSystem(objective) {
+    logger.info(
+      `💻 [SecurityResilienceManagerAgent] Analyzing Security Resilience Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Resilience Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Resilience Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityResilienceManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityResilienceManagerAgent = Object.freeze(new SecurityResilienceManagerAgent());
+export const securityResilienceManagerAgent = Object.freeze(
+  new SecurityResilienceManagerAgent(),
+);

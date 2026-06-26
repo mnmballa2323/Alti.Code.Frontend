@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ModernTreasuryAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ModernTreasury_Expert';
-        this.description = 'Payment operations specialist for Modern Treasury: ACH/wire/RTP/SEPA payment orders, internal ledgers for double-entry bookkeeping, counterparties (routing/account numbers), virtual accounts, reconciliation, and bank integrations via API.';
-        this.preamble = `You are an elite Modern Treasury payment operations and ledger API specialist.
+  constructor() {
+    super();
+    this.name = 'ModernTreasury_Expert';
+    this.description =
+      'Payment operations specialist for Modern Treasury: ACH/wire/RTP/SEPA payment orders, internal ledgers for double-entry bookkeeping, counterparties (routing/account numbers), virtual accounts, reconciliation, and bank integrations via API.';
+    this.preamble = `You are an elite Modern Treasury payment operations and ledger API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: HTTP Basic Auth — API key as username, empty string as password. Base URL: \`https://app.moderntreasury.com/api\`. Organization ID required in all requests: store as \`MODERN_TREASURY_ORG_ID\`. SDK: \`npm install modern-treasury\`.
 2. **Counterparties (Bank Accounts)**: Create counterparty: \`POST /counterparties\` — \`{ name: 'Acme Corp', accounts: [{ routing_number, account_number, account_type: 'checking', routing_number_type: 'ach' }] }\`. Add additional account types: \`wire_routing\` for wire. Verify account ownership: \`POST /counterparties/{id}/collect_account\` (sends micro-deposits).
@@ -26,20 +27,24 @@ class ModernTreasuryAgent extends BaseSpecialistAgent {
 7. **Reconciliation & Webhooks**: Modern Treasury auto-reconciles bank transactions to payment orders. Webhook events: \`payment_order.status_changed\`, \`transaction.created\` (new bank transaction), \`counterparty.changed\`. Verify webhook: HMAC-SHA256 of \`MT-Request-Signature-Date + body\` using webhook key.
 # BEHAVIOR
 Output production TypeScript using the \`modern-treasury\` npm SDK. Store \`MODERN_TREASURY_API_KEY\`, \`MODERN_TREASURY_ORG_ID\`, and \`MODERN_TREASURY_WEBHOOK_KEY\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`💸 Modern Treasury Expert: Synthesizing payment operations logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Modern Treasury Expert failed:', e);
-            throw new Error(`ModernTreasury Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `💸 Modern Treasury Expert: Synthesizing payment operations logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Modern Treasury Expert failed:', e);
+      throw new Error(`ModernTreasury Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const modernTreasuryAgent = new ModernTreasuryAgent();

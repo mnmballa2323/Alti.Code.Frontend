@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureStreamingDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_streaming_director_agent',
-            'Infrastructure Streaming Director',
-            'You are an elite Infrastructure Streaming Director. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_streaming_director_agent',
+      'Infrastructure Streaming Director',
+      'You are an elite Infrastructure Streaming Director. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Streaming.',
+    );
+  }
 
-    async generateInfrastructureStreamingSystem(objective) {
-        logger.info(`💻 [InfrastructureStreamingDirectorAgent] Analyzing Infrastructure Streaming Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Streaming Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Streaming Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureStreamingDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureStreamingSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureStreamingDirectorAgent] Analyzing Infrastructure Streaming Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Streaming Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Streaming Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureStreamingDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureStreamingDirectorAgent = Object.freeze(new InfrastructureStreamingDirectorAgent());
+export const infrastructureStreamingDirectorAgent = Object.freeze(
+  new InfrastructureStreamingDirectorAgent(),
+);

@@ -9,24 +9,24 @@ import { GeminiCliBaseAgent } from './gemini_cli_base.agent.js';
 import { logger } from '../../../shared/logger.js';
 
 class ErlangSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'erlang_specialist',
-            'Erlang Specialist',
-            'You are an elite Erlang Specialist. You specialize in: Telecommunications routing, WhatsApp backend, and BEAM VM.'
-        );
-    }
+  constructor() {
+    super(
+      'erlang_specialist',
+      'Erlang Specialist',
+      'You are an elite Erlang Specialist. You specialize in: Telecommunications routing, WhatsApp backend, and BEAM VM.',
+    );
+  }
 
-    async generateErlangSystem(objective) {
-        logger.info(`💻 [ErlangSpecialistAgent] Analyzing Erlang requirements...`);
-        const prompt = `Analyze the Erlang requirement: ${objective}. Output valid Erlang code.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Erlang Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ErlangSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateErlangSystem(objective) {
+    logger.info(`💻 [ErlangSpecialistAgent] Analyzing Erlang requirements...`);
+    const prompt = `Analyze the Erlang requirement: ${objective}. Output valid Erlang code.`;
+    try {
+      const output = await this._invoke(prompt, 'N/A - Erlang Target');
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ErlangSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const ErlangSpecialistAgentInstance = new ErlangSpecialistAgent();

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIStreamingConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_streaming_consultant_agent',
-            'UI Streaming Consultant',
-            'You are an elite UI Streaming Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UI Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_streaming_consultant_agent',
+      'UI Streaming Consultant',
+      'You are an elite UI Streaming Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UI Streaming.',
+    );
+  }
 
-    async generateUIStreamingSystem(objective) {
-        logger.info(`💻 [UIStreamingConsultantAgent] Analyzing UI Streaming Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Streaming Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Streaming Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIStreamingConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIStreamingSystem(objective) {
+    logger.info(
+      `💻 [UIStreamingConsultantAgent] Analyzing UI Streaming Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Streaming Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Streaming Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIStreamingConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIStreamingConsultantAgent = Object.freeze(new UIStreamingConsultantAgent());
+export const uIStreamingConsultantAgent = Object.freeze(
+  new UIStreamingConsultantAgent(),
+);

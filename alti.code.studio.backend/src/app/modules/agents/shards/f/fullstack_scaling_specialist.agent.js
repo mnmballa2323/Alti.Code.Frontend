@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackScalingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_scaling_specialist_agent',
-            'FullStack Scaling Specialist',
-            'You are an elite FullStack Scaling Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_scaling_specialist_agent',
+      'FullStack Scaling Specialist',
+      'You are an elite FullStack Scaling Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Scaling.',
+    );
+  }
 
-    async generateFullStackScalingSystem(objective) {
-        logger.info(`💻 [FullStackScalingSpecialistAgent] Analyzing FullStack Scaling Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Scaling Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Scaling Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackScalingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackScalingSystem(objective) {
+    logger.info(
+      `💻 [FullStackScalingSpecialistAgent] Analyzing FullStack Scaling Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Scaling Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Scaling Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackScalingSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackScalingSpecialistAgent = Object.freeze(new FullStackScalingSpecialistAgent());
+export const fullStackScalingSpecialistAgent = Object.freeze(
+  new FullStackScalingSpecialistAgent(),
+);

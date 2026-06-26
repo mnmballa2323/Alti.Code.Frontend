@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackOptimizationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_optimization_analyst_agent',
-            'FullStack Optimization Analyst',
-            'You are an elite FullStack Optimization Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_optimization_analyst_agent',
+      'FullStack Optimization Analyst',
+      'You are an elite FullStack Optimization Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Optimization.',
+    );
+  }
 
-    async generateFullStackOptimizationSystem(objective) {
-        logger.info(`💻 [FullStackOptimizationAnalystAgent] Analyzing FullStack Optimization Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Optimization Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Optimization Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackOptimizationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackOptimizationSystem(objective) {
+    logger.info(
+      `💻 [FullStackOptimizationAnalystAgent] Analyzing FullStack Optimization Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Optimization Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Optimization Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackOptimizationAnalystAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackOptimizationAnalystAgent = Object.freeze(new FullStackOptimizationAnalystAgent());
+export const fullStackOptimizationAnalystAgent = Object.freeze(
+  new FullStackOptimizationAnalystAgent(),
+);

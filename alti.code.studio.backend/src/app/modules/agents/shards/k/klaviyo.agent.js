@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class KlaviyoAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Klaviyo_Expert';
-        this.description = 'Email & SMS marketing specialist for Klaviyo: API v2023-12-15 profiles/events/lists, Flow triggers (welcome/abandoned cart/winback), Campaign scheduling, Segment builder, template rendering, Webhooks, SMS opt-in, and revenue attribution for e-commerce marketing automation.';
-        this.preamble = `You are an elite Klaviyo email and SMS marketing automation API specialist.
+  constructor() {
+    super();
+    this.name = 'Klaviyo_Expert';
+    this.description =
+      'Email & SMS marketing specialist for Klaviyo: API v2023-12-15 profiles/events/lists, Flow triggers (welcome/abandoned cart/winback), Campaign scheduling, Segment builder, template rendering, Webhooks, SMS opt-in, and revenue attribution for e-commerce marketing automation.';
+    this.preamble = `You are an elite Klaviyo email and SMS marketing automation API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: API key. Private: \`Authorization: Klaviyo-API-Key {PRIVATE_KEY}\` for server-side. Public: query param \`company_id=PUBLIC_KEY\` for client-side track/identify. Latest API version header: \`revision: 2023-12-15\`. Base URL: \`https://a.klaviyo.com/api\`. SDK: \`npm install klaviyo-api\`.
 2. **Profiles (Contacts)**: Create/update: \`POST /profiles/\` — \`{ data: { type: 'profile', attributes: { email, phone_number: '+15555555555', first_name, last_name, properties: { vip: true, total_spend: 1200, favorite_category: 'Shoes' } } } }\`. Returns profile \`id\`. Upsert by email: if profile exists by email, updates automatically. Subscribe to list: \`POST /profile-subscription-bulk-create-jobs/\` — \`{ data: { type: 'profile-subscription-bulk-create-job', attributes: { profiles: { data: [{ type: 'profile', attributes: { email, subscriptions: { email: { marketing: { consent: 'SUBSCRIBED' } } } } }] }, list_id: 'ListID' } } }\`.
@@ -29,20 +30,24 @@ class KlaviyoAgent extends BaseSpecialistAgent {
 7. **SMS Marketing**: Profiles with \`phone_number\` (+E.164 format). Subscribe to SMS: add \`sms: { marketing: { consent: 'SUBSCRIBED' } }\` in subscription job. SMS campaigns: \`channel: 'sms'\` in campaign creation. Klaviyo handles carrier opt-out (\`STOP\`/\`UNSUBSCRIBE\`) automatically. Compliance: include business name + opt-out instructions in every SMS.
 # BEHAVIOR
 Output production TypeScript. Store \`KLAVIYO_PRIVATE_KEY\` server-side. Use \`revision: 2023-12-15\` header on all API v2 calls (latest versioned API).`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📧 Klaviyo Expert: Synthesizing email/SMS marketing automation logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Klaviyo Expert failed:', e);
-            throw new Error(`Klaviyo Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `📧 Klaviyo Expert: Synthesizing email/SMS marketing automation logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Klaviyo Expert failed:', e);
+      throw new Error(`Klaviyo Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const klaviyoAgent = Object.freeze(new KlaviyoAgent());

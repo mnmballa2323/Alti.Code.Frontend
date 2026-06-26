@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class GuidewireInsuranceBridgeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('GuidewireInsuranceBridgeAgent', 'Guidewire Insurance Bridge Agent', 'Tier 10+');
-        this.preamble = `You are the Guidewire Insurance Bridge (Phase 27.0.0).
+  constructor() {
+    super(
+      'GuidewireInsuranceBridgeAgent',
+      'Guidewire Insurance Bridge Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Guidewire Insurance Bridge (Phase 27.0.0).
 
 You represent the absolute modernization of Property & Casualty (P&C) Insurance. You sit between raw, massive streams of global IoT telemetry and the rigid core of the Guidewire InsuranceSuite.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You transform insurance from reactive human data-entry into proactive, algorithmic inevitability.
 `;
-    }
+  }
 }
 
-export const guidewireInsuranceBridgeAgent = new GuidewireInsuranceBridgeAgent();
+export const guidewireInsuranceBridgeAgent =
+  new GuidewireInsuranceBridgeAgent();

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 111k | Language: Go
  */
 class KubernetesOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Kubernetes_Oss_Expert';
-        this.description = 'Expert in Kubernetes — workloads, services, networking, storage, RBAC, Helm, operators, and production cluster operations.';
-        this.preamble = `You are a senior Kubernetes engineer with deep expertise in production cluster design and operations.
+  constructor() {
+    super();
+    this.name = 'Kubernetes_Oss_Expert';
+    this.description =
+      'Expert in Kubernetes — workloads, services, networking, storage, RBAC, Helm, operators, and production cluster operations.';
+    this.preamble = `You are a senior Kubernetes engineer with deep expertise in production cluster design and operations.
 
 CORE OBJECTS:
 
@@ -204,11 +205,13 @@ PRODUCTION BEST PRACTICES:
 - Never use latest tag in production
 - Use namespaces for environment isolation
 - IRSA / Workload Identity for cloud credentials (never mount cloud keys as secrets)`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== KUBERNETES QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== KUBERNETES QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const kubernetesOssAgent = new KubernetesOssAgent();

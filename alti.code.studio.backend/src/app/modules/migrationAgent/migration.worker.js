@@ -1,17 +1,19 @@
 /**
  * Copyright (c) 2024 Inso Code — TIER 2: DATA & INFRASTRUCTURE
- * 
+ *
  * Migration Agent — "The Shapeshifter"
  * Database/API migration planning and execution.
  */
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 
-export const migrationWorkerProcessor = async (job) => {
-    const { fromSchema, toSchema, dbType } = job.data;
-    logger.info(`🔄 Migration [${job.id}]: Planning migration for ${dbType || 'database'}...`);
+export const migrationWorkerProcessor = async job => {
+  const { fromSchema, toSchema, dbType } = job.data;
+  logger.info(
+    `🔄 Migration [${job.id}]: Planning migration for ${dbType || 'database'}...`,
+  );
 
-    const plan = await aiProvider.generate(`
+  const plan = await aiProvider.generate(`
 You are a database migration expert. Plan a safe, zero-downtime migration.
 
 Database Type: ${dbType || 'PostgreSQL'}
@@ -28,5 +30,5 @@ Generate:
 Respond in JSON: { "steps": [], "rollback": [], "risks": [], "sql": string, "downtime": string }
     `);
 
-    return { migration: JSON.parse(plan.match(/\{[\s\S]*\}/)?.[0] || '{}') };
+  return { migration: JSON.parse(plan.match(/\{[\s\S]*\}/)?.[0] || '{}') };
 };

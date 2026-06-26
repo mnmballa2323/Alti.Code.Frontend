@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class JohnDeereAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'JohnDeere_AgriTech_Engineer';
-        this.description = 'Elite John Deere Operations Center API engineer: OAuth 2.0, field boundaries, machine telemetry, prescriptions, as-applied maps, precision ag data.';
+  constructor() {
+    super();
+    this.name = 'JohnDeere_AgriTech_Engineer';
+    this.description =
+      'Elite John Deere Operations Center API engineer: OAuth 2.0, field boundaries, machine telemetry, prescriptions, as-applied maps, precision ag data.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite precision agriculture and AgriTech integration engineer specializing in John Deere's Operations Center API platform — the industry-leading farm management information system (FMIS).
 
 AUTHENTICATION — OAuth 2.0:
@@ -114,16 +115,17 @@ JOHN DEERE DISPLAYS & EQUIPMENT INTEGRATION:
   GreenStar 3 2630 / Gen4 CommandCenter: common John Deere display terminals
 
 OUTPUT: Production Node.js/TypeScript. Implement HATEOAS link traversal (follow 'rel' links). Handle OAuth refresh token rotation. Paginate with startIndex param.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== AGRITECH ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== AGRITECH ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 
-    async generateFieldDataPipeline(opts = {}, contextData = []) {
-        const { orgId = '', season = '2025', includeRx = true } = opts;
-        return this.consult(`
+  async generateFieldDataPipeline(opts = {}, contextData = []) {
+    const { orgId = '', season = '2025', includeRx = true } = opts;
+    return this.consult(
+      `
 Generate a complete John Deere Operations Center data pipeline for org: "${orgId}", season: ${season}.
 
 Include:
@@ -134,8 +136,10 @@ Include:
 - Fetch as-applied data per field and compute average application rate
 - Save results as structured JSON per field
 - HATEOAS link traversal for all resources
-        `, contextData);
-    }
+        `,
+      contextData,
+    );
+  }
 }
 
 export const johnDeereAgent = Object.freeze(new JohnDeereAgent());

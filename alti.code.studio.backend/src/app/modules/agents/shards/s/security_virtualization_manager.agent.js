@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityVirtualizationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_virtualization_manager_agent',
-            'Security Virtualization Manager',
-            'You are an elite Security Virtualization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Security Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'security_virtualization_manager_agent',
+      'Security Virtualization Manager',
+      'You are an elite Security Virtualization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Security Virtualization.',
+    );
+  }
 
-    async generateSecurityVirtualizationSystem(objective) {
-        logger.info(`💻 [SecurityVirtualizationManagerAgent] Analyzing Security Virtualization Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Virtualization Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Virtualization Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityVirtualizationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [SecurityVirtualizationManagerAgent] Analyzing Security Virtualization Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Virtualization Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Virtualization Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityVirtualizationManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityVirtualizationManagerAgent = Object.freeze(new SecurityVirtualizationManagerAgent());
+export const securityVirtualizationManagerAgent = Object.freeze(
+  new SecurityVirtualizationManagerAgent(),
+);

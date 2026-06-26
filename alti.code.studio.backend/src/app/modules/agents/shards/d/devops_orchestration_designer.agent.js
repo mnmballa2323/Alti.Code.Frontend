@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsOrchestrationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_orchestration_designer_agent',
-            'DevOps Orchestration Designer',
-            'You are an elite DevOps Orchestration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_orchestration_designer_agent',
+      'DevOps Orchestration Designer',
+      'You are an elite DevOps Orchestration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Orchestration.',
+    );
+  }
 
-    async generateDevOpsOrchestrationSystem(objective) {
-        logger.info(`💻 [DevOpsOrchestrationDesignerAgent] Analyzing DevOps Orchestration Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Orchestration Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Orchestration Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsOrchestrationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [DevOpsOrchestrationDesignerAgent] Analyzing DevOps Orchestration Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Orchestration Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Orchestration Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsOrchestrationDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsOrchestrationDesignerAgent = Object.freeze(new DevOpsOrchestrationDesignerAgent());
+export const devOpsOrchestrationDesignerAgent = Object.freeze(
+  new DevOpsOrchestrationDesignerAgent(),
+);

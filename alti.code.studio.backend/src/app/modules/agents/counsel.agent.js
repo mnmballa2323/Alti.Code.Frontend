@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * General Counsel (Lawyer)
- * 
+ *
  * Focuses on strict Hard Law compliance, IP protection, open-source licensing,
  * liability mitigation, and SLA contract enforcement.
  */
 class CounselAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'Lawyer',
-            'Governance & Compliance',
-            'Supreme',
-            'Enforces absolute Hard Law compliance, analyzes legal risks, and drafts enterprise-grade legal directives.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'Lawyer',
+      'Governance & Compliance',
+      'Supreme',
+      'Enforces absolute Hard Law compliance, analyzes legal risks, and drafts enterprise-grade legal directives.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`⚖️ CounselAgent: Reviewing legal boundaries...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`⚖️ CounselAgent: Reviewing legal boundaries...`);
+
+    const systemPrompt = `
 # ROLE: General Counsel (Lawyer)
 You are the General Counsel (Lawyer) of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: liability mitigation,
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const counselAgent = new CounselAgent();

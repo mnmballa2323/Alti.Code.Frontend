@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsOrchestrationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_orchestration_director_agent',
-            'DevSecOps Orchestration Director',
-            'You are an elite DevSecOps Orchestration Director. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_orchestration_director_agent',
+      'DevSecOps Orchestration Director',
+      'You are an elite DevSecOps Orchestration Director. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Orchestration.',
+    );
+  }
 
-    async generateDevSecOpsOrchestrationSystem(objective) {
-        logger.info(`💻 [DevSecOpsOrchestrationDirectorAgent] Analyzing DevSecOps Orchestration Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Orchestration Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Orchestration Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsOrchestrationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsOrchestrationDirectorAgent] Analyzing DevSecOps Orchestration Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Orchestration Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Orchestration Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsOrchestrationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsOrchestrationDirectorAgent = Object.freeze(new DevSecOpsOrchestrationDirectorAgent());
+export const devSecOpsOrchestrationDirectorAgent = Object.freeze(
+  new DevSecOpsOrchestrationDirectorAgent(),
+);

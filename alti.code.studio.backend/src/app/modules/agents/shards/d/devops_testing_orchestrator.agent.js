@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsTestingOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_testing_orchestrator_agent',
-            'DevOps Testing Orchestrator',
-            'You are an elite DevOps Testing Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_testing_orchestrator_agent',
+      'DevOps Testing Orchestrator',
+      'You are an elite DevOps Testing Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Testing.',
+    );
+  }
 
-    async generateDevOpsTestingSystem(objective) {
-        logger.info(`💻 [DevOpsTestingOrchestratorAgent] Analyzing DevOps Testing Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Testing Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Testing Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsTestingOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsTestingSystem(objective) {
+    logger.info(
+      `💻 [DevOpsTestingOrchestratorAgent] Analyzing DevOps Testing Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Testing Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Testing Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsTestingOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsTestingOrchestratorAgent = Object.freeze(new DevOpsTestingOrchestratorAgent());
+export const devOpsTestingOrchestratorAgent = Object.freeze(
+  new DevOpsTestingOrchestratorAgent(),
+);

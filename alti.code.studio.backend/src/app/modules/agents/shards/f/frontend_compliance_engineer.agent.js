@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendComplianceEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_compliance_engineer_agent',
-            'Frontend Compliance Engineer',
-            'You are an elite Frontend Compliance Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_compliance_engineer_agent',
+      'Frontend Compliance Engineer',
+      'You are an elite Frontend Compliance Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Compliance.',
+    );
+  }
 
-    async generateFrontendComplianceSystem(objective) {
-        logger.info(`💻 [FrontendComplianceEngineerAgent] Analyzing Frontend Compliance Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Compliance Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Compliance Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendComplianceEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendComplianceSystem(objective) {
+    logger.info(
+      `💻 [FrontendComplianceEngineerAgent] Analyzing Frontend Compliance Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Compliance Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Compliance Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendComplianceEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendComplianceEngineerAgent = Object.freeze(new FrontendComplianceEngineerAgent());
+export const frontendComplianceEngineerAgent = Object.freeze(
+  new FrontendComplianceEngineerAgent(),
+);

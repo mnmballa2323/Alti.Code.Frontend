@@ -35,7 +35,7 @@ describe('Secure Vault & LLM Gateway Integration Tests', () => {
 
     afterAll(async () => {
         // Disconnect clients to prevent process hanging
-        const { memorystoreService } = await import('../../src/app/modules/azureCloud/azureCache.service.js');
+        const { memorystoreService } = await import('../../src/app/modules/gcpCloud/gcpCache.service.js');
         if (memorystoreService.publisher) {
             try { memorystoreService.publisher.disconnect(); } catch(e) {}
         }

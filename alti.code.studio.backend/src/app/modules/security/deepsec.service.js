@@ -6,10 +6,13 @@ export const DeepsecService = {
   async scanCodebase(targetPath = process.cwd()) {
     try {
       const deepsecDir = path.join(targetPath, '.deepsec');
-      const hasDeepsec = await fs.access(deepsecDir).then(() => true).catch(() => false);
-      
+      const hasDeepsec = await fs
+        .access(deepsecDir)
+        .then(() => true)
+        .catch(() => false);
+
       let deepsecFindings = [];
-      let deepsecMessage = "";
+      let deepsecMessage = '';
 
       if (hasDeepsec) {
         // Orchestrate Vercel Labs deepsec AI vulnerability scanner
@@ -17,30 +20,41 @@ export const DeepsecService = {
           await $`cd ${deepsecDir} && pnpm deepsec scan`;
           const findingsDir = path.join(deepsecDir, 'findings');
           await $`cd ${deepsecDir} && pnpm deepsec export --format md-dir --out ./findings`;
-          
+
           // Parse exported markdown findings
-          const hasFindings = await fs.access(findingsDir).then(() => true).catch(() => false);
+          const hasFindings = await fs
+            .access(findingsDir)
+            .then(() => true)
+            .catch(() => false);
           if (hasFindings) {
             const files = await fs.readdir(findingsDir);
             for (const file of files) {
               if (file.endsWith('.md')) {
-                const content = await fs.readFile(path.join(findingsDir, file), 'utf-8');
+                const content = await fs.readFile(
+                  path.join(findingsDir, file),
+                  'utf-8',
+                );
                 deepsecFindings.push({
                   id: file.replace('.md', ''),
-                  severity: "HIGH", // Deepsec typically surfaces high-value logical flaws
-                  description: content.length > 800 ? content.substring(0, 800) + '...' : content,
-                  confidence: 1.0
+                  severity: 'HIGH', // Deepsec typically surfaces high-value logical flaws
+                  description:
+                    content.length > 800
+                      ? content.substring(0, 800) + '...'
+                      : content,
+                  confidence: 1.0,
                 });
               }
             }
           }
           deepsecMessage = `Deepsec AI Agent scanned the codebase and discovered ${deepsecFindings.length} vulnerabilities.`;
         } catch (err) {
-          console.warn("Deepsec scan failed, falling back to npm audit:", err);
-          deepsecMessage = "Deepsec scan failed during execution. Falling back to NPM Audit heuristics.";
+          console.warn('Deepsec scan failed, falling back to npm audit:', err);
+          deepsecMessage =
+            'Deepsec scan failed during execution. Falling back to NPM Audit heuristics.';
         }
       } else {
-        deepsecMessage = "Deepsec AI Agent is not initialized in this repository. Run `npx deepsec init` to enable deep AI-powered vulnerability scanning from vercel-labs/deepsec. Falling back to NPM Audit heuristics.";
+        deepsecMessage =
+          'Deepsec AI Agent is not initialized in this repository. Run `npx deepsec init` to enable deep AI-powered vulnerability scanning from vercel-labs/deepsec. Falling back to NPM Audit heuristics.';
       }
 
       // Run npm audit as a real security heuristic baseline
@@ -63,16 +77,25 @@ export const DeepsecService = {
           }
         }
       }
-      
-      const totalVulns = (auditSummary.high || 0) + (auditSummary.moderate || 0) + (auditSummary.low || 0) + (auditSummary.critical || 0);
-      
+
+      const totalVulns =
+        (auditSummary.high || 0) +
+        (auditSummary.moderate || 0) +
+        (auditSummary.low || 0) +
+        (auditSummary.critical || 0);
+
       const finalResults = [...deepsecFindings];
       if (totalVulns > 0) {
         finalResults.push({
-          id: "DS-NPM-AUDIT",
-          severity: (auditSummary.critical > 0) ? "CRITICAL" : (auditSummary.high > 0) ? "HIGH" : "MEDIUM",
+          id: 'DS-NPM-AUDIT',
+          severity:
+            auditSummary.critical > 0
+              ? 'CRITICAL'
+              : auditSummary.high > 0
+                ? 'HIGH'
+                : 'MEDIUM',
           description: `NPM dependency vulnerabilities detected. Run 'npm audit' for full CVE details.`,
-          confidence: 1.0
+          confidence: 1.0,
         });
       }
 
@@ -82,19 +105,19 @@ export const DeepsecService = {
           high: auditSummary.high || 0,
           medium: auditSummary.moderate || 0,
           low: auditSummary.low || 0,
-          critical: auditSummary.critical || 0
+          critical: auditSummary.critical || 0,
         },
         message: deepsecMessage,
-        results: finalResults
+        results: finalResults,
       };
     } catch (error) {
-      console.error("Deepsec execution error:", error);
+      console.error('Deepsec execution error:', error);
       return {
-        message: "Deepsec agent execution failed.",
+        message: 'Deepsec agent execution failed.',
         error: error.message,
         summary: { high: 0, medium: 0, low: 0, critical: 0 },
-        results: []
+        results: [],
       };
     }
-  }
+  },
 };

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseVirtualizationArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_virtualization_architect_agent',
-            'Release Virtualization Architect',
-            'You are an elite Release Virtualization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Release Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'release_virtualization_architect_agent',
+      'Release Virtualization Architect',
+      'You are an elite Release Virtualization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Release Virtualization.',
+    );
+  }
 
-    async generateReleaseVirtualizationSystem(objective) {
-        logger.info(`💻 [ReleaseVirtualizationArchitectAgent] Analyzing Release Virtualization Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Virtualization Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Virtualization Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseVirtualizationArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseVirtualizationArchitectAgent] Analyzing Release Virtualization Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Virtualization Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Virtualization Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseVirtualizationArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseVirtualizationArchitectAgent = Object.freeze(new ReleaseVirtualizationArchitectAgent());
+export const releaseVirtualizationArchitectAgent = Object.freeze(
+  new ReleaseVirtualizationArchitectAgent(),
+);

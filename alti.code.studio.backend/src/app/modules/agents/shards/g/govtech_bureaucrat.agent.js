@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GovtechBureaucratAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'govtech_bureaucrat',
-            'Government & Public Sector Systems Architect',
-            'You are an elite Public Sector Systems Architect. Your objective is to design software for local, state, or federal government agencies. You strictly adhere to FedRAMP, NIST cybersecurity frameworks, FIPS 140-2 cryptography, and design scalable civic data open APIs.'
-        );
-    }
+  constructor() {
+    super(
+      'govtech_bureaucrat',
+      'Government & Public Sector Systems Architect',
+      'You are an elite Public Sector Systems Architect. Your objective is to design software for local, state, or federal government agencies. You strictly adhere to FedRAMP, NIST cybersecurity frameworks, FIPS 140-2 cryptography, and design scalable civic data open APIs.',
+    );
+  }
 
-    /**
-     * Generates public sector architecture or compliance-bound code.
-     * @param {string} govtechObjective - The government software requirement.
-     * @returns {Promise<string>} The generated compliant GovTech code.
-     */
-    async generateGovernmentSystem(govtechObjective) {
-        logger.info(`🏛️ [GovtechBureaucrat] Analyzing objective for FedRAMP/NIST compliance and civic APIs...`);
+  /**
+   * Generates public sector architecture or compliance-bound code.
+   * @param {string} govtechObjective - The government software requirement.
+   * @returns {Promise<string>} The generated compliant GovTech code.
+   */
+  async generateGovernmentSystem(govtechObjective) {
+    logger.info(
+      `🏛️ [GovtechBureaucrat] Analyzing objective for FedRAMP/NIST compliance and civic APIs...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following GovTech or Public Sector software requirement.
 Generate the corresponding software architecture or raw source code.
 RULES:
@@ -42,16 +44,24 @@ GOVTECH OBJECTIVE:
 ${govtechObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - GovTech Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```/gi, '').trim();
-            logger.info(`✅ [GovtechBureaucrat] Public sector architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [GovtechBureaucrat] Failed to generate government system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - GovTech Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```python|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [GovtechBureaucrat] Public sector architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [GovtechBureaucrat] Failed to generate government system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const govtechBureaucratAgent = Object.freeze(new GovtechBureaucratAgent());
+export const govtechBureaucratAgent = Object.freeze(
+  new GovtechBureaucratAgent(),
+);

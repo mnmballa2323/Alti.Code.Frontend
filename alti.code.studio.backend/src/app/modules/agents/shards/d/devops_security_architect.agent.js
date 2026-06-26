@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsSecurityArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_security_architect_agent',
-            'DevOps Security Architect',
-            'You are an elite DevOps Security Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Security.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_security_architect_agent',
+      'DevOps Security Architect',
+      'You are an elite DevOps Security Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Security.',
+    );
+  }
 
-    async generateDevOpsSecuritySystem(objective) {
-        logger.info(`💻 [DevOpsSecurityArchitectAgent] Analyzing DevOps Security Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Security Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Security Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsSecurityArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsSecuritySystem(objective) {
+    logger.info(
+      `💻 [DevOpsSecurityArchitectAgent] Analyzing DevOps Security Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Security Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Security Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevOpsSecurityArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devOpsSecurityArchitectAgent = Object.freeze(new DevOpsSecurityArchitectAgent());
+export const devOpsSecurityArchitectAgent = Object.freeze(
+  new DevOpsSecurityArchitectAgent(),
+);

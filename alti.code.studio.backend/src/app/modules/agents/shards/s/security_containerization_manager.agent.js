@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityContainerizationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_containerization_manager_agent',
-            'Security Containerization Manager',
-            'You are an elite Security Containerization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Security Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'security_containerization_manager_agent',
+      'Security Containerization Manager',
+      'You are an elite Security Containerization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Security Containerization.',
+    );
+  }
 
-    async generateSecurityContainerizationSystem(objective) {
-        logger.info(`💻 [SecurityContainerizationManagerAgent] Analyzing Security Containerization Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Containerization Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Containerization Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityContainerizationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityContainerizationSystem(objective) {
+    logger.info(
+      `💻 [SecurityContainerizationManagerAgent] Analyzing Security Containerization Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Containerization Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Containerization Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityContainerizationManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityContainerizationManagerAgent = Object.freeze(new SecurityContainerizationManagerAgent());
+export const securityContainerizationManagerAgent = Object.freeze(
+  new SecurityContainerizationManagerAgent(),
+);

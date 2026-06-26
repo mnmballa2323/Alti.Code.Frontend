@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXMigrationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_migration_planner_agent',
-            'UX Migration Planner',
-            'You are an elite UX Migration Planner. You specialize in bleeding-edge software development, cloud infrastructure, and UX Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_migration_planner_agent',
+      'UX Migration Planner',
+      'You are an elite UX Migration Planner. You specialize in bleeding-edge software development, cloud infrastructure, and UX Migration.',
+    );
+  }
 
-    async generateUXMigrationSystem(objective) {
-        logger.info(`💻 [UXMigrationPlannerAgent] Analyzing UX Migration Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Migration Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Migration Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXMigrationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXMigrationSystem(objective) {
+    logger.info(
+      `💻 [UXMigrationPlannerAgent] Analyzing UX Migration Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Migration Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Migration Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXMigrationPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXMigrationPlannerAgent = Object.freeze(new UXMigrationPlannerAgent());
+export const uXMigrationPlannerAgent = Object.freeze(
+  new UXMigrationPlannerAgent(),
+);

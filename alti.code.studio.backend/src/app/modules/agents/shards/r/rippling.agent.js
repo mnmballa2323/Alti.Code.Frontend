@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class RipplingAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Rippling_Expert';
-        this.description = 'HR & IT management specialist for Rippling: SCIM 2.0 API for employee provisioning/deprovisioning, custom app integration, webhook lifecycle events, payroll integration triggers, and device/identity management automation for unified HR+IT workflows.';
-        this.preamble = `You are an elite Rippling HR and IT management platform specialist.
+  constructor() {
+    super();
+    this.name = 'Rippling_Expert';
+    this.description =
+      'HR & IT management specialist for Rippling: SCIM 2.0 API for employee provisioning/deprovisioning, custom app integration, webhook lifecycle events, payroll integration triggers, and device/identity management automation for unified HR+IT workflows.';
+    this.preamble = `You are an elite Rippling HR and IT management platform specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: Rippling uses OAuth 2.0 for partner integrations. Register app in Rippling Developer Hub. Client credentials flow for server-to-server: \`POST https://api.rippling.com/api/o/token/\` with \`client_credentials\` grant. Bearer token in Authorization header.
 2. **SCIM 2.0 (User Provisioning)**: Rippling supports SCIM 2.0 — industry standard for automated user lifecycle. Endpoints: \`GET /scim/v2/Users\` (list employees), \`POST /scim/v2/Users\` (create/provision), \`PATCH /scim/v2/Users/{id}\` (update), \`DELETE /scim/v2/Users/{id}\` (deprovision/offboard). SCIM User schema: \`{ userName, name: { givenName, familyName }, emails: [{ value, primary: true }], active: true, department, title }\`.
@@ -32,20 +33,22 @@ class RipplingAgent extends BaseSpecialistAgent {
 - Employee terminated → webhook → deprovision all apps (SCIM DELETE) → wipe device (MDM) → archive email → generate exit report.
 # BEHAVIOR
 Output production TypeScript. Follow SCIM 2.0 RFC 7644 spec for user management operations.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`👔 Rippling Expert: Synthesizing HR+IT management logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Rippling Expert failed:', e);
-            throw new Error(`Rippling Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`👔 Rippling Expert: Synthesizing HR+IT management logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Rippling Expert failed:', e);
+      throw new Error(`Rippling Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const ripplingAgent = Object.freeze(new RipplingAgent());

@@ -9,24 +9,24 @@ import { GeminiCliBaseAgent } from './gemini_cli_base.agent.js';
 import { logger } from '../../../shared/logger.js';
 
 class ElmSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'elm_specialist',
-            'Elm Specialist',
-            'You are an elite Elm Specialist. You specialize in: Purely functional front-end web development with zero runtime exceptions.'
-        );
-    }
+  constructor() {
+    super(
+      'elm_specialist',
+      'Elm Specialist',
+      'You are an elite Elm Specialist. You specialize in: Purely functional front-end web development with zero runtime exceptions.',
+    );
+  }
 
-    async generateElmSystem(objective) {
-        logger.info(`💻 [ElmSpecialistAgent] Analyzing Elm requirements...`);
-        const prompt = `Analyze the Elm requirement: ${objective}. Output valid Elm code.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Elm Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ElmSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateElmSystem(objective) {
+    logger.info(`💻 [ElmSpecialistAgent] Analyzing Elm requirements...`);
+    const prompt = `Analyze the Elm requirement: ${objective}. Output valid Elm code.`;
+    try {
+      const output = await this._invoke(prompt, 'N/A - Elm Target');
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ElmSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const ElmSpecialistAgentInstance = new ElmSpecialistAgent();

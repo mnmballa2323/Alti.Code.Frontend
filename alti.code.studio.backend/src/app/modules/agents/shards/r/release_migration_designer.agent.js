@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseMigrationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_migration_designer_agent',
-            'Release Migration Designer',
-            'You are an elite Release Migration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'release_migration_designer_agent',
+      'Release Migration Designer',
+      'You are an elite Release Migration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Migration.',
+    );
+  }
 
-    async generateReleaseMigrationSystem(objective) {
-        logger.info(`💻 [ReleaseMigrationDesignerAgent] Analyzing Release Migration Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Migration Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Migration Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseMigrationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseMigrationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseMigrationDesignerAgent] Analyzing Release Migration Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Migration Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Migration Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseMigrationDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseMigrationDesignerAgent = Object.freeze(new ReleaseMigrationDesignerAgent());
+export const releaseMigrationDesignerAgent = Object.freeze(
+  new ReleaseMigrationDesignerAgent(),
+);

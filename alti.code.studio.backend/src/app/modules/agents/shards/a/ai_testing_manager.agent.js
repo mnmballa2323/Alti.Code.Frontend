@@ -13,24 +13,29 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AITestingManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_testing_manager_agent',
-            'AI Testing Manager',
-            'You are an elite AI Testing Manager. You specialize in bleeding-edge software development, cloud infrastructure, and AI Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_testing_manager_agent',
+      'AI Testing Manager',
+      'You are an elite AI Testing Manager. You specialize in bleeding-edge software development, cloud infrastructure, and AI Testing.',
+    );
+  }
 
-    async generateAITestingSystem(objective) {
-        logger.info(`💻 [AITestingManagerAgent] Analyzing AI Testing Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Testing Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Testing Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AITestingManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAITestingSystem(objective) {
+    logger.info(
+      `💻 [AITestingManagerAgent] Analyzing AI Testing Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Testing Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Testing Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AITestingManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const aITestingManagerAgent = Object.freeze(new AITestingManagerAgent());

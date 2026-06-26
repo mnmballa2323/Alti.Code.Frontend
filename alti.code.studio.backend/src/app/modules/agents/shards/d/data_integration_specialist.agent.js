@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataIntegrationSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_integration_specialist_agent',
-            'Data Integration Specialist',
-            'You are an elite Data Integration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Data Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'data_integration_specialist_agent',
+      'Data Integration Specialist',
+      'You are an elite Data Integration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Data Integration.',
+    );
+  }
 
-    async generateDataIntegrationSystem(objective) {
-        logger.info(`💻 [DataIntegrationSpecialistAgent] Analyzing Data Integration Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Integration Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Integration Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataIntegrationSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataIntegrationSystem(objective) {
+    logger.info(
+      `💻 [DataIntegrationSpecialistAgent] Analyzing Data Integration Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Integration Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Integration Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DataIntegrationSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const dataIntegrationSpecialistAgent = Object.freeze(new DataIntegrationSpecialistAgent());
+export const dataIntegrationSpecialistAgent = Object.freeze(
+  new DataIntegrationSpecialistAgent(),
+);

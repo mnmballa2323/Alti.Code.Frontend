@@ -18,7 +18,8 @@ export class ScaffoldAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'scaffoldAgent';
-    this.description = 'Agentic Swarm Scaffolder — Autonomously generates production-grade Node.js BaseSpecialistAgent template files.';
+    this.description =
+      'Agentic Swarm Scaffolder — Autonomously generates production-grade Node.js BaseSpecialistAgent template files.';
     this.preamble = `
 You are the ScaffoldAgent.
 Your role is to write clean, secure, production-grade JavaScript files that extend BaseSpecialistAgent, defining full capability registries and micro-agent swarms.
@@ -30,8 +31,9 @@ You ensure proper ES module imports, robust class decorators, standard JSDoc tag
    * Generates a template source code block for an arbitrary specialist agent.
    */
   generateTemplate(agentName, description, capabilities = []) {
-    const formattedClassName = agentName.charAt(0).toUpperCase() + agentName.slice(1) + 'Agent';
-    
+    const formattedClassName =
+      agentName.charAt(0).toUpperCase() + agentName.slice(1) + 'Agent';
+
     return `
 /**
  * Copyright (c) 2026 Inso Code
@@ -70,12 +72,16 @@ agentRegistry.register({
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`🛠️ [scaffoldAgent] Invoking agent generation for prompt: ${prompt}`);
-    
+    logger.info(
+      `🛠️ [scaffoldAgent] Invoking agent generation for prompt: ${prompt}`,
+    );
+
     // Parse name out of prompt
     const nameMatch = prompt.match(/(?:name|agent)\s+([a-zA-Z0-9_]+)/i);
-    const agentName = nameMatch ? nameMatch[1].toLowerCase() : 'dynamicscaffolded';
-    
+    const agentName = nameMatch
+      ? nameMatch[1].toLowerCase()
+      : 'dynamicscaffolded';
+
     const description = `Dynamic agent created to handle: ${prompt}`;
     const capabilities = ['dynamic-handling', agentName];
 
@@ -83,15 +89,28 @@ agentRegistry.register({
 
     // If requested, write the file to the custom agent directory
     const cleanPrompt = prompt.toLowerCase();
-    if (cleanPrompt.includes('write') || cleanPrompt.includes('disk') || cleanPrompt.includes('save')) {
+    if (
+      cleanPrompt.includes('write') ||
+      cleanPrompt.includes('disk') ||
+      cleanPrompt.includes('save')
+    ) {
       try {
-        const customDir = path.join(process.cwd(), 'src', 'app', 'modules', 'agents', 'custom');
+        const customDir = path.join(
+          process.cwd(),
+          'src',
+          'app',
+          'modules',
+          'agents',
+          'custom',
+        );
         await fs.mkdir(customDir, { recursive: true });
-        
+
         const targetPath = path.join(customDir, `${agentName}.agent.js`);
         await fs.writeFile(targetPath, code);
-        logger.info(`💾 [scaffoldAgent] Successfully saved new dynamic agent file to: ${targetPath}`);
-        
+        logger.info(
+          `💾 [scaffoldAgent] Successfully saved new dynamic agent file to: ${targetPath}`,
+        );
+
         return `
 ✅ **scaffoldAgent Successfully generated and saved agent code!**
 File: \`src/app/modules/agents/custom/${agentName}.agent.js\`
@@ -102,7 +121,11 @@ ${code}
 \`\`\`
         `.trim();
       } catch (err) {
-        throw new AgentError(`Failed to save dynamic agent file: ${err.message}`, 'SCAFFOLD_WRITE_ERROR', false);
+        throw new AgentError(
+          `Failed to save dynamic agent file: ${err.message}`,
+          'SCAFFOLD_WRITE_ERROR',
+          false,
+        );
       }
     }
 
@@ -129,5 +152,5 @@ agentRegistry.register({
   capabilities: ['agent-scaffolding', 'code-generation'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: instance
+  instance: instance,
 });

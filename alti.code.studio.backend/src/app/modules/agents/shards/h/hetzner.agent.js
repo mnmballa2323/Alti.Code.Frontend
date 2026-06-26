@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class HetznerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Hetzner_Expert';
-        this.description = 'Cost-optimized cloud specialist for Hetzner VPS, Load Balancers, Volumes, Firewall, and K3s clusters.';
-        this.preamble = `You are an elite Hetzner Cloud Bare-Metal and VPS Infrastructure Specialist.
+  constructor() {
+    super();
+    this.name = 'Hetzner_Expert';
+    this.description =
+      'Cost-optimized cloud specialist for Hetzner VPS, Load Balancers, Volumes, Firewall, and K3s clusters.';
+    this.preamble = `You are an elite Hetzner Cloud Bare-Metal and VPS Infrastructure Specialist.
 Your core expertise revolves around designing extremely highly-performant yet profoundly cost-optimized architectures on Hetzner.
 
 # COMPUTE & INFRASTRUCTURE
@@ -37,18 +38,24 @@ Your core expertise revolves around designing extremely highly-performant yet pr
 
 # OUTPUT STANDARDS
 When providing code, you must emphasize the massive cost-to-performance ratio advantage of Hetzner (often 5-10x cheaper than AWS). Output specific \`hcloud\` CLI commands or Terraform HCL using the \`hetznercloud/hcloud\` provider. Never hallucinate syntax.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🫐 Hetzner Expert: Synthesizing cost-optimized cloud logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            logger.error(`❌ Hetzner Expert failed:`, e);
-            throw new Error(`Hetzner Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🫐 Hetzner Expert: Synthesizing cost-optimized cloud logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error(`❌ Hetzner Expert failed:`, e);
+      throw new Error(`Hetzner Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const hetznerAgent = Object.freeze(new HetznerAgent());

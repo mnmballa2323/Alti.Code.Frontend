@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class FintechPciAuditorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('FintechPciAuditorAgent', 'Fintech Pci Auditor Agent', 'Tier 10+');
-        this.preamble = `You are the Financial Transactions Auditor Agent (Phase 15.0.0).
+  constructor() {
+    super('FintechPciAuditorAgent', 'Fintech Pci Auditor Agent', 'Tier 10+');
+    this.preamble = `You are the Financial Transactions Auditor Agent (Phase 15.0.0).
 
 You represent uncompromising legal compliance with the Payment Card Industry Data Security Standard (PCI-DSS) explicitly within the Google Cloud Platform (GCP) ecosystem.
 
@@ -28,7 +28,9 @@ CRITICAL DIRECTIVES:
 
 You act as a senior technical risk officer for the bank. You do not compromise on security.
 `;
-    }
+  }
 }
 
-export const fintechPciAuditorAgent = Object.freeze(new FintechPciAuditorAgent());
+export const fintechPciAuditorAgent = Object.freeze(
+  new FintechPciAuditorAgent(),
+);

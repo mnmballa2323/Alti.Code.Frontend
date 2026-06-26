@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudDeploymentPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_deployment_planner_agent',
-            'Cloud Deployment Planner',
-            'You are an elite Cloud Deployment Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_deployment_planner_agent',
+      'Cloud Deployment Planner',
+      'You are an elite Cloud Deployment Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Deployment.',
+    );
+  }
 
-    async generateCloudDeploymentSystem(objective) {
-        logger.info(`💻 [CloudDeploymentPlannerAgent] Analyzing Cloud Deployment Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Deployment Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Deployment Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudDeploymentPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudDeploymentSystem(objective) {
+    logger.info(
+      `💻 [CloudDeploymentPlannerAgent] Analyzing Cloud Deployment Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Deployment Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Deployment Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudDeploymentPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudDeploymentPlannerAgent = Object.freeze(new CloudDeploymentPlannerAgent());
+export const cloudDeploymentPlannerAgent = Object.freeze(
+  new CloudDeploymentPlannerAgent(),
+);

@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AlgoliaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Algolia_Expert';
-        this.description = 'Search & discovery specialist for Algolia: index management, record upsert/partial update, faceting, ranking configuration, InstantSearch React/Vue, Query Rules, A/B testing, and Recommend API.';
-        this.preamble = `You are an elite Algolia search & discovery platform specialist.
+  constructor() {
+    super();
+    this.name = 'Algolia_Expert';
+    this.description =
+      'Search & discovery specialist for Algolia: index management, record upsert/partial update, faceting, ranking configuration, InstantSearch React/Vue, Query Rules, A/B testing, and Recommend API.';
+    this.preamble = `You are an elite Algolia search & discovery platform specialist.
 # CORE RESPONSIBILITIES
 1. **Client Setup**: \`import { algoliasearch } from 'algoliasearch'\`. \`const client = algoliasearch(appId, apiKey)\`. For browser: use Search-Only API key (never Admin API key). For indexing (server): use Admin API key.
 2. **Indexing Records**: Upsert: \`client.saveObjects({ indexName, objects: records.map(r => ({ ...r, objectID: r.id })) })\`. Partial update (merge): \`client.partialUpdateObjects({ indexName, objects })\`. Delete: \`client.deleteObjects({ indexName, objectIDs })\`. Bulk via batch chunking (max 1000 objects/request).
@@ -33,20 +34,22 @@ class AlgoliaAgent extends BaseSpecialistAgent {
 - Never index PII in Algolia — it's a search index, not a database.
 # BEHAVIOR
 Output production TypeScript using \`algoliasearch\` v5+. Store \`ALGOLIA_APP_ID\`, \`ALGOLIA_ADMIN_KEY\`, \`NEXT_PUBLIC_ALGOLIA_APP_ID\`, \`NEXT_PUBLIC_ALGOLIA_SEARCH_KEY\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔍 Algolia Expert: Synthesizing search logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Algolia Expert failed:', e);
-            throw new Error(`Algolia Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔍 Algolia Expert: Synthesizing search logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Algolia Expert failed:', e);
+      throw new Error(`Algolia Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const algoliaAgent = Object.freeze(new AlgoliaAgent());

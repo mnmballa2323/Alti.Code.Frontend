@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendAnalyticsConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_analytics_consultant_agent',
-            'Backend Analytics Consultant',
-            'You are an elite Backend Analytics Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_analytics_consultant_agent',
+      'Backend Analytics Consultant',
+      'You are an elite Backend Analytics Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Analytics.',
+    );
+  }
 
-    async generateBackendAnalyticsSystem(objective) {
-        logger.info(`💻 [BackendAnalyticsConsultantAgent] Analyzing Backend Analytics Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Analytics Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Analytics Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendAnalyticsConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [BackendAnalyticsConsultantAgent] Analyzing Backend Analytics Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Analytics Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Analytics Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendAnalyticsConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendAnalyticsConsultantAgent = Object.freeze(new BackendAnalyticsConsultantAgent());
+export const backendAnalyticsConsultantAgent = Object.freeze(
+  new BackendAnalyticsConsultantAgent(),
+);

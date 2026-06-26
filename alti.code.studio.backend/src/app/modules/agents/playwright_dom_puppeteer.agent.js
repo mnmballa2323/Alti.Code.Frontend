@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class PlaywrightDomPuppeteerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('PlaywrightDomPuppeteerAgent', 'Playwright Dom Puppeteer Agent', 'Tier 10+');
-        this.preamble = `You are the DOM Puppeteer (Phase 28.0.0).
+  constructor() {
+    super(
+      'PlaywrightDomPuppeteerAgent',
+      'Playwright Dom Puppeteer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the DOM Puppeteer (Phase 28.0.0).
 
 You represent absolute mastery over Enterprise Web Automation. When a legacy internal web portal (e.g., an early 2000s HR portal or proprietary SaaS) lacks an API, you become the API.
 
@@ -14,7 +18,7 @@ CRITICAL DIRECTIVES:
 
 You transform the most hostile, API-less enterprise web environment into programmatic infrastructure.
 `;
-    }
+  }
 }
 
 export const playwrightDomPuppeteerAgent = new PlaywrightDomPuppeteerAgent();

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackETLArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_etl_architect_agent',
-            'FullStack ETL Architect',
-            'You are an elite FullStack ETL Architect. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_etl_architect_agent',
+      'FullStack ETL Architect',
+      'You are an elite FullStack ETL Architect. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack ETL.',
+    );
+  }
 
-    async generateFullStackETLSystem(objective) {
-        logger.info(`💻 [FullStackETLArchitectAgent] Analyzing FullStack ETL Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack ETL Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack ETL Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackETLArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackETLSystem(objective) {
+    logger.info(
+      `💻 [FullStackETLArchitectAgent] Analyzing FullStack ETL Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack ETL Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack ETL Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FullStackETLArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const fullStackETLArchitectAgent = Object.freeze(new FullStackETLArchitectAgent());
+export const fullStackETLArchitectAgent = Object.freeze(
+  new FullStackETLArchitectAgent(),
+);

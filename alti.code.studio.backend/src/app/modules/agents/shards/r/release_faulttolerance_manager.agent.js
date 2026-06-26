@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseFaultToleranceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_faulttolerance_manager_agent',
-            'Release FaultTolerance Manager',
-            'You are an elite Release FaultTolerance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'release_faulttolerance_manager_agent',
+      'Release FaultTolerance Manager',
+      'You are an elite Release FaultTolerance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release FaultTolerance.',
+    );
+  }
 
-    async generateReleaseFaultToleranceSystem(objective) {
-        logger.info(`💻 [ReleaseFaultToleranceManagerAgent] Analyzing Release FaultTolerance Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release FaultTolerance Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release FaultTolerance Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseFaultToleranceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [ReleaseFaultToleranceManagerAgent] Analyzing Release FaultTolerance Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release FaultTolerance Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release FaultTolerance Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseFaultToleranceManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseFaultToleranceManagerAgent = Object.freeze(new ReleaseFaultToleranceManagerAgent());
+export const releaseFaultToleranceManagerAgent = Object.freeze(
+  new ReleaseFaultToleranceManagerAgent(),
+);

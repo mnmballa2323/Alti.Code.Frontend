@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Chief Technology Officer (CTO)
- * 
+ *
  * Focuses on high-level system architecture, technology stack selection,
  * cross-service communication, and ensuring technical debt is minimized.
  */
 class CTOAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'CTO',
-            'Architecture & Strategy',
-            'Supreme',
-            'Dictates high-level system architecture, technology stack choices, and engineering standards.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'CTO',
+      'Architecture & Strategy',
+      'Supreme',
+      'Dictates high-level system architecture, technology stack choices, and engineering standards.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`🏗️ CTOAgent: Designing high-level system architecture...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`🏗️ CTOAgent: Designing high-level system architecture...`);
+
+    const systemPrompt = `
 # ROLE: Chief Technology Officer (CTO)
 You are the Chief Technology Officer (CTO) of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: technical debt, monol
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const ctoAgent = new CTOAgent();

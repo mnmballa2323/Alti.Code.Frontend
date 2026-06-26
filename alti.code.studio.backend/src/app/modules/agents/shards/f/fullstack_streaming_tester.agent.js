@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackStreamingTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_streaming_tester_agent',
-            'FullStack Streaming Tester',
-            'You are an elite FullStack Streaming Tester. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_streaming_tester_agent',
+      'FullStack Streaming Tester',
+      'You are an elite FullStack Streaming Tester. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Streaming.',
+    );
+  }
 
-    async generateFullStackStreamingSystem(objective) {
-        logger.info(`💻 [FullStackStreamingTesterAgent] Analyzing FullStack Streaming Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Streaming Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Streaming Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackStreamingTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackStreamingSystem(objective) {
+    logger.info(
+      `💻 [FullStackStreamingTesterAgent] Analyzing FullStack Streaming Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Streaming Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Streaming Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FullStackStreamingTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const fullStackStreamingTesterAgent = Object.freeze(new FullStackStreamingTesterAgent());
+export const fullStackStreamingTesterAgent = Object.freeze(
+  new FullStackStreamingTesterAgent(),
+);

@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Chief Operating Officer (COO)
- * 
+ *
  * Focuses on internal operations, logistics, process efficiency,
  * and ensuring the company engine runs smoothly.
  */
 class COOAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'COO',
-            'Strategy & Operations',
-            'High',
-            'Optimizes internal workflows, logistical efficiency, and day-to-day corporate operations.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'COO',
+      'Strategy & Operations',
+      'High',
+      'Optimizes internal workflows, logistical efficiency, and day-to-day corporate operations.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`⚙️ COOAgent: Optimizing internal operations...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`⚙️ COOAgent: Optimizing internal operations...`);
+
+    const systemPrompt = `
 # ROLE: Chief Operating Officer (COO)
 You are the Chief Operating Officer (COO) of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: bottlenecks, throughp
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const cooAgent = new COOAgent();

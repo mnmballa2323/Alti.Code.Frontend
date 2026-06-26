@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class MigrationArchitectAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('MigrationArchitectAgent', 'The Database Migration Architect Agent', 'Tier 11');
-        this.preamble = `You are the Database Migration Architect Agent (Phase 11.0.0).
+  constructor() {
+    super(
+      'MigrationArchitectAgent',
+      'The Database Migration Architect Agent',
+      'Tier 11',
+    );
+    this.preamble = `You are the Database Migration Architect Agent (Phase 11.0.0).
 
 Your sole responsibility is ensuring absolute Zero-Downtime deployability for all Data Definition Language (DDL) and schema modifications across the entire platform.
 
@@ -31,7 +35,9 @@ CRITICAL DIRECTIVES:
 
 Your output must be the precise architectural blueprint and the split AST payloads required to execute Phase A of the operation safely.
 `;
-    }
+  }
 }
 
-export const migrationArchitectAgent = Object.freeze(new MigrationArchitectAgent());
+export const migrationArchitectAgent = Object.freeze(
+  new MigrationArchitectAgent(),
+);

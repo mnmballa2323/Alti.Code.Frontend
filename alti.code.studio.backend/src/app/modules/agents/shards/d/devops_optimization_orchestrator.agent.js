@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsOptimizationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_optimization_orchestrator_agent',
-            'DevOps Optimization Orchestrator',
-            'You are an elite DevOps Optimization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_optimization_orchestrator_agent',
+      'DevOps Optimization Orchestrator',
+      'You are an elite DevOps Optimization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Optimization.',
+    );
+  }
 
-    async generateDevOpsOptimizationSystem(objective) {
-        logger.info(`💻 [DevOpsOptimizationOrchestratorAgent] Analyzing DevOps Optimization Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Optimization Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Optimization Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsOptimizationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsOptimizationSystem(objective) {
+    logger.info(
+      `💻 [DevOpsOptimizationOrchestratorAgent] Analyzing DevOps Optimization Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Optimization Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Optimization Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsOptimizationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsOptimizationOrchestratorAgent = Object.freeze(new DevOpsOptimizationOrchestratorAgent());
+export const devOpsOptimizationOrchestratorAgent = Object.freeze(
+  new DevOpsOptimizationOrchestratorAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataMigrationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_migration_analyst_agent',
-            'Data Migration Analyst',
-            'You are an elite Data Migration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Data Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'data_migration_analyst_agent',
+      'Data Migration Analyst',
+      'You are an elite Data Migration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Data Migration.',
+    );
+  }
 
-    async generateDataMigrationSystem(objective) {
-        logger.info(`💻 [DataMigrationAnalystAgent] Analyzing Data Migration Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Migration Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Migration Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataMigrationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataMigrationSystem(objective) {
+    logger.info(
+      `💻 [DataMigrationAnalystAgent] Analyzing Data Migration Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Migration Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Migration Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataMigrationAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataMigrationAnalystAgent = Object.freeze(new DataMigrationAnalystAgent());
+export const dataMigrationAnalystAgent = Object.freeze(
+  new DataMigrationAnalystAgent(),
+);

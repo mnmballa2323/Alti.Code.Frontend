@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -21,7 +21,7 @@ const ClaudeAiGetResponse = catchAsync(async (req, res) => {
     prompt,
     userId,
     sessionId,
-    model
+    model,
   );
 
   sendResponse(res, {

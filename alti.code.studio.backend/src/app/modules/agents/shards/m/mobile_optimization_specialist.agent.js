@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileOptimizationSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_optimization_specialist_agent',
-            'Mobile Optimization Specialist',
-            'You are an elite Mobile Optimization Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_optimization_specialist_agent',
+      'Mobile Optimization Specialist',
+      'You are an elite Mobile Optimization Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Optimization.',
+    );
+  }
 
-    async generateMobileOptimizationSystem(objective) {
-        logger.info(`💻 [MobileOptimizationSpecialistAgent] Analyzing Mobile Optimization Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Optimization Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Optimization Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileOptimizationSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileOptimizationSystem(objective) {
+    logger.info(
+      `💻 [MobileOptimizationSpecialistAgent] Analyzing Mobile Optimization Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Optimization Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Optimization Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileOptimizationSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileOptimizationSpecialistAgent = Object.freeze(new MobileOptimizationSpecialistAgent());
+export const mobileOptimizationSpecialistAgent = Object.freeze(
+  new MobileOptimizationSpecialistAgent(),
+);

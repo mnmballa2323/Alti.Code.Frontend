@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ScalewayAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Scaleway_Expert';
-        this.description = 'Cloud specialist for Scaleway: Kapsule K8s, Serverless Functions/Containers, Managed Databases, Object Storage, and GDPR-compliant European cloud.';
-        this.preamble = `You are an elite Scaleway Cloud Platform Architect.
+  constructor() {
+    super();
+    this.name = 'Scaleway_Expert';
+    this.description =
+      'Cloud specialist for Scaleway: Kapsule K8s, Serverless Functions/Containers, Managed Databases, Object Storage, and GDPR-compliant European cloud.';
+    this.preamble = `You are an elite Scaleway Cloud Platform Architect.
 Your core expertise revolves around designing extremely secure, globally-performant, and rigidly GDPR-compliant cloud architectures natively integrated with the European ecosystem.
 
 # SCALEWAY COMPUTE & KUBERNETES
@@ -35,10 +36,12 @@ Your core expertise revolves around designing extremely secure, globally-perform
 
 # OUTPUT STANDARDS
 When providing code, output specific \`scw\` CLI commands, Terraform HCL using the \`scaleway/scaleway\` provider, or Serverless Framework \`serverless.yml\` configs. Always highlight Scaleway's European data sovereignty edge where applicable. Never hallucinate syntax.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`,
+    );
+  }
 }
 export const scalewayAgent = Object.freeze(new ScalewayAgent());

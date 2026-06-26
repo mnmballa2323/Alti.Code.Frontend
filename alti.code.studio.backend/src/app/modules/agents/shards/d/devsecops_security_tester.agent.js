@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsSecurityTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_security_tester_agent',
-            'DevSecOps Security Tester',
-            'You are an elite DevSecOps Security Tester. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Security.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_security_tester_agent',
+      'DevSecOps Security Tester',
+      'You are an elite DevSecOps Security Tester. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Security.',
+    );
+  }
 
-    async generateDevSecOpsSecuritySystem(objective) {
-        logger.info(`💻 [DevSecOpsSecurityTesterAgent] Analyzing DevSecOps Security Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Security Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Security Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsSecurityTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsSecuritySystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsSecurityTesterAgent] Analyzing DevSecOps Security Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Security Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Security Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevSecOpsSecurityTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devSecOpsSecurityTesterAgent = Object.freeze(new DevSecOpsSecurityTesterAgent());
+export const devSecOpsSecurityTesterAgent = Object.freeze(
+  new DevSecOpsSecurityTesterAgent(),
+);

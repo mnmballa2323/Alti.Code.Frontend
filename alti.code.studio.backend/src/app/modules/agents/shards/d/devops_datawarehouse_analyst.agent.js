@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsDataWarehouseAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_datawarehouse_analyst_agent',
-            'DevOps DataWarehouse Analyst',
-            'You are an elite DevOps DataWarehouse Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_datawarehouse_analyst_agent',
+      'DevOps DataWarehouse Analyst',
+      'You are an elite DevOps DataWarehouse Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps DataWarehouse.',
+    );
+  }
 
-    async generateDevOpsDataWarehouseSystem(objective) {
-        logger.info(`💻 [DevOpsDataWarehouseAnalystAgent] Analyzing DevOps DataWarehouse Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps DataWarehouse Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps DataWarehouse Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsDataWarehouseAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [DevOpsDataWarehouseAnalystAgent] Analyzing DevOps DataWarehouse Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps DataWarehouse Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps DataWarehouse Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsDataWarehouseAnalystAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsDataWarehouseAnalystAgent = Object.freeze(new DevOpsDataWarehouseAnalystAgent());
+export const devOpsDataWarehouseAnalystAgent = Object.freeze(
+  new DevOpsDataWarehouseAnalystAgent(),
+);

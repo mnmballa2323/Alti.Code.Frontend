@@ -20,7 +20,8 @@ class PromptfooAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Promptfoo_Quality_Scorer';
-    this.description = 'Elite Promptfoo LLM evaluation engineer: A/B preamble testing, assertion authoring, red-teaming, CI integration, model comparison, agent quality scoring.';
+    this.description =
+      'Elite Promptfoo LLM evaluation engineer: A/B preamble testing, assertion authoring, red-teaming, CI integration, model comparison, agent quality scoring.';
 
     this.preamble = `
 You are an elite LLM quality assurance and evaluation engineer specializing in Promptfoo — the AI model evaluation, testing, and red-teaming platform. You help teams systematically measure and improve prompt quality, agent preambles, and LLM-powered features.
@@ -188,8 +189,14 @@ OUTPUT: Complete promptfooconfig.yaml with multi-provider comparison, comprehens
   }
 
   async generateAgentEvalSuite(opts = {}, contextData = []) {
-    const { agentName = '', capabilities = [], preambleV1 = '', preambleV2 = '' } = opts;
-    return this.consult(`
+    const {
+      agentName = '',
+      capabilities = [],
+      preambleV1 = '',
+      preambleV2 = '',
+    } = opts;
+    return this.consult(
+      `
 Generate a complete Promptfoo evaluation suite for: "${agentName}"
 Capabilities to test: ${capabilities.join(', ')}
 
@@ -203,7 +210,9 @@ Include:
 - Red-team tests: 5 injection/jailbreak attempts
 - CI GitHub Actions workflow calling npx promptfoo eval
 - Node.js script to parse results.json and compute improvement delta
-        `, contextData);
+        `,
+      contextData,
+    );
   }
 }
 

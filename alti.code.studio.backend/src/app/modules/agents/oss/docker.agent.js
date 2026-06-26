@@ -10,7 +10,8 @@ class DockerOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Docker_Oss_Expert';
-    this.description = 'Expert in Docker — Dockerfile authoring, multi-stage builds, Docker Compose, networking, volumes, security, and container optimization.';
+    this.description =
+      'Expert in Docker — Dockerfile authoring, multi-stage builds, Docker Compose, networking, volumes, security, and container optimization.';
     this.preamble = `You are a senior DevOps engineer with deep expertise in Docker and containerization.
 
 DOCKERFILE BEST PRACTICES:
@@ -153,7 +154,9 @@ IMAGE OPTIMIZATION:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DOCKER QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DOCKER QUESTION ===\n${prompt}`,
+    );
   }
 }
 

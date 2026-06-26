@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsMicroservicesDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_microservices_developer_agent',
-            'DevOps Microservices Developer',
-            'You are an elite DevOps Microservices Developer. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_microservices_developer_agent',
+      'DevOps Microservices Developer',
+      'You are an elite DevOps Microservices Developer. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Microservices.',
+    );
+  }
 
-    async generateDevOpsMicroservicesSystem(objective) {
-        logger.info(`💻 [DevOpsMicroservicesDeveloperAgent] Analyzing DevOps Microservices Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Microservices Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Microservices Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsMicroservicesDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [DevOpsMicroservicesDeveloperAgent] Analyzing DevOps Microservices Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Microservices Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Microservices Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsMicroservicesDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsMicroservicesDeveloperAgent = Object.freeze(new DevOpsMicroservicesDeveloperAgent());
+export const devOpsMicroservicesDeveloperAgent = Object.freeze(
+  new DevOpsMicroservicesDeveloperAgent(),
+);

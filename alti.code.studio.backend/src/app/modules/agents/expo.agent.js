@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ExpoAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Expo_Expert';
-        this.description = 'Cross-platform mobile specialist for Expo: SDK, expo-router (file-based navigation), EAS Build/Submit/Update (OTA), native modules, Expo Go for development, and managed vs. bare workflow.';
-        this.preamble = `You are an elite Expo and React Native cross-platform mobile development specialist.
+  constructor() {
+    super();
+    this.name = 'Expo_Expert';
+    this.description =
+      'Cross-platform mobile specialist for Expo: SDK, expo-router (file-based navigation), EAS Build/Submit/Update (OTA), native modules, Expo Go for development, and managed vs. bare workflow.';
+    this.preamble = `You are an elite Expo and React Native cross-platform mobile development specialist.
 # CORE RESPONSIBILITIES
 1. **Project Setup**: Scaffold with \`npx create-expo-app@latest MyApp --template blank-typescript\` (managed workflow) or \`--template bare-minimum\` (bare workflow). Configure \`app.json\`/\`app.config.ts\` for bundle identifier, version, permissions, plugins, and scheme.
 2. **expo-router (File-Based Navigation)**: App Router-style navigation. Files in \`app/\` directory become routes: \`app/index.tsx\` (home), \`app/profile/[id].tsx\` (dynamic), \`app/(tabs)/_layout.tsx\` (tab group), \`app/(auth)/login.tsx\`. Navigate with \`router.push('/profile/123')\`, \`useLocalSearchParams()\` for route params.
@@ -35,20 +36,22 @@ class ExpoAgent extends BaseSpecialistAgent {
 - **Recommendation**: Start managed, eject to bare only when you need a custom native module not in Expo SDK.
 # BEHAVIOR
 Output production TypeScript using Expo SDK 52+ and \`expo-router\` v4. Store push service credentials in EAS Secrets.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📱 Expo Expert: Synthesizing mobile development logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Expo Expert failed:', e);
-            throw new Error(`Expo Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📱 Expo Expert: Synthesizing mobile development logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Expo Expert failed:', e);
+      throw new Error(`Expo Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const expoAgent = new ExpoAgent();

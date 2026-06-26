@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureOptimizationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_optimization_tester_agent',
-            'Infrastructure Optimization Tester',
-            'You are an elite Infrastructure Optimization Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_optimization_tester_agent',
+      'Infrastructure Optimization Tester',
+      'You are an elite Infrastructure Optimization Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Optimization.',
+    );
+  }
 
-    async generateInfrastructureOptimizationSystem(objective) {
-        logger.info(`💻 [InfrastructureOptimizationTesterAgent] Analyzing Infrastructure Optimization Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Optimization Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Optimization Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureOptimizationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureOptimizationSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureOptimizationTesterAgent] Analyzing Infrastructure Optimization Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Optimization Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Optimization Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureOptimizationTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureOptimizationTesterAgent = Object.freeze(new InfrastructureOptimizationTesterAgent());
+export const infrastructureOptimizationTesterAgent = Object.freeze(
+  new InfrastructureOptimizationTesterAgent(),
+);

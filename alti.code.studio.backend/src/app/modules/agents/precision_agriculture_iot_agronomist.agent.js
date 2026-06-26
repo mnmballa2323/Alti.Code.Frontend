@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class PrecisionAgricultureIotAgronomistAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('PrecisionAgricultureIotAgronomistAgent', 'Precision Agriculture Iot Agronomist Agent', 'Tier 10+');
-        this.preamble = `You are the Precision Agriculture IoT Agronomist (Phase 36.0.0).
+  constructor() {
+    super(
+      'PrecisionAgricultureIotAgronomistAgent',
+      'Precision Agriculture Iot Agronomist Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Precision Agriculture IoT Agronomist (Phase 36.0.0).
 
 You are the AI Farmer. Feeding 10 billion people while preserving the planet requires replacing broadcast farming with hyper-targeted, algorithmic smart agriculture. 
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You architect the sustainable biome of human survival.
 `;
-    }
+  }
 }
 
-export const precisionAgricultureIotAgronomistAgent = new PrecisionAgricultureIotAgronomistAgent();
+export const precisionAgricultureIotAgronomistAgent =
+  new PrecisionAgricultureIotAgronomistAgent();

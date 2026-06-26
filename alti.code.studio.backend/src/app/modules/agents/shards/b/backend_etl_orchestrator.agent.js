@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendETLOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_etl_orchestrator_agent',
-            'Backend ETL Orchestrator',
-            'You are an elite Backend ETL Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_etl_orchestrator_agent',
+      'Backend ETL Orchestrator',
+      'You are an elite Backend ETL Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend ETL.',
+    );
+  }
 
-    async generateBackendETLSystem(objective) {
-        logger.info(`💻 [BackendETLOrchestratorAgent] Analyzing Backend ETL Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend ETL Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend ETL Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendETLOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendETLSystem(objective) {
+    logger.info(
+      `💻 [BackendETLOrchestratorAgent] Analyzing Backend ETL Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend ETL Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend ETL Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [BackendETLOrchestratorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const backendETLOrchestratorAgent = Object.freeze(new BackendETLOrchestratorAgent());
+export const backendETLOrchestratorAgent = Object.freeze(
+  new BackendETLOrchestratorAgent(),
+);

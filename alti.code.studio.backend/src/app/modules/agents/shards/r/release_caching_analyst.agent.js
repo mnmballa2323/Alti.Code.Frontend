@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseCachingAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_caching_analyst_agent',
-            'Release Caching Analyst',
-            'You are an elite Release Caching Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Release Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'release_caching_analyst_agent',
+      'Release Caching Analyst',
+      'You are an elite Release Caching Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Release Caching.',
+    );
+  }
 
-    async generateReleaseCachingSystem(objective) {
-        logger.info(`💻 [ReleaseCachingAnalystAgent] Analyzing Release Caching Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Caching Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Caching Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseCachingAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseCachingSystem(objective) {
+    logger.info(
+      `💻 [ReleaseCachingAnalystAgent] Analyzing Release Caching Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Caching Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Caching Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseCachingAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseCachingAnalystAgent = Object.freeze(new ReleaseCachingAnalystAgent());
+export const releaseCachingAnalystAgent = Object.freeze(
+  new ReleaseCachingAnalystAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteMicroservicesStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_microservices_strategist_agent',
-            'Site Microservices Strategist',
-            'You are an elite Site Microservices Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Site Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'site_microservices_strategist_agent',
+      'Site Microservices Strategist',
+      'You are an elite Site Microservices Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Site Microservices.',
+    );
+  }
 
-    async generateSiteMicroservicesSystem(objective) {
-        logger.info(`💻 [SiteMicroservicesStrategistAgent] Analyzing Site Microservices Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Microservices Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Microservices Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteMicroservicesStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [SiteMicroservicesStrategistAgent] Analyzing Site Microservices Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Microservices Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Microservices Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SiteMicroservicesStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const siteMicroservicesStrategistAgent = Object.freeze(new SiteMicroservicesStrategistAgent());
+export const siteMicroservicesStrategistAgent = Object.freeze(
+  new SiteMicroservicesStrategistAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendAutomationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_automation_planner_agent',
-            'Backend Automation Planner',
-            'You are an elite Backend Automation Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_automation_planner_agent',
+      'Backend Automation Planner',
+      'You are an elite Backend Automation Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Automation.',
+    );
+  }
 
-    async generateBackendAutomationSystem(objective) {
-        logger.info(`💻 [BackendAutomationPlannerAgent] Analyzing Backend Automation Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Automation Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Automation Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendAutomationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendAutomationSystem(objective) {
+    logger.info(
+      `💻 [BackendAutomationPlannerAgent] Analyzing Backend Automation Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Automation Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Automation Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [BackendAutomationPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const backendAutomationPlannerAgent = Object.freeze(new BackendAutomationPlannerAgent());
+export const backendAutomationPlannerAgent = Object.freeze(
+  new BackendAutomationPlannerAgent(),
+);

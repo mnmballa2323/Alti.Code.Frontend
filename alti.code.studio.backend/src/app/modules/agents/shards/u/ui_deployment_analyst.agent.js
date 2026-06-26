@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIDeploymentAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_deployment_analyst_agent',
-            'UI Deployment Analyst',
-            'You are an elite UI Deployment Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and UI Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_deployment_analyst_agent',
+      'UI Deployment Analyst',
+      'You are an elite UI Deployment Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and UI Deployment.',
+    );
+  }
 
-    async generateUIDeploymentSystem(objective) {
-        logger.info(`💻 [UIDeploymentAnalystAgent] Analyzing UI Deployment Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Deployment Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Deployment Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIDeploymentAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIDeploymentSystem(objective) {
+    logger.info(
+      `💻 [UIDeploymentAnalystAgent] Analyzing UI Deployment Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Deployment Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Deployment Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIDeploymentAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIDeploymentAnalystAgent = Object.freeze(new UIDeploymentAnalystAgent());
+export const uIDeploymentAnalystAgent = Object.freeze(
+  new UIDeploymentAnalystAgent(),
+);

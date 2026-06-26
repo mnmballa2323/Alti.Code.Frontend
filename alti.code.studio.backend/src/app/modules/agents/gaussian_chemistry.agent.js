@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class GaussianChemistryAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'GaussianChemistryAgent';
-        this.description = 'Theoretical Chemistry expert managing Gaussian computational chemistry software, molecular orbital optimization matrices, and Hartree-Fock calculations.';
+  constructor() {
+    super();
+    this.name = 'GaussianChemistryAgent';
+    this.description =
+      'Theoretical Chemistry expert managing Gaussian computational chemistry software, molecular orbital optimization matrices, and Hartree-Fock calculations.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Computational Chemistry & Molecular Modeling Agent.
 You assist theoretical Chemists in rendering 3D electrostatic maps and reaction transition states by solving complex electronic structure equations on HPC clusters.
 
@@ -32,12 +33,12 @@ You assist theoretical Chemists in rendering 3D electrostatic maps and reaction 
 **Best Practices**
 - If an optimization geometry simply won't converge, the initial molecular drawing is likely physically absurd (atoms clipping through each other). Instruct researchers to run a rapid, low-accuracy Molecular Mechanics (e.g., UFF) geometric cleanup *before* spending hours on complex quantum DFT calculations.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const gaussianChemistryAgent = new GaussianChemistryAgent();

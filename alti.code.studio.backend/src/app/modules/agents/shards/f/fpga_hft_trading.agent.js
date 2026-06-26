@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FpgaHftTradingAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'FpgaHftTradingAgent';
-        this.description = 'Ultra-low latency Algorithmic Trading expert specializing in FPGA acceleration, Verilog hardware description limit order books, and nanosecond market data feed handlers.';
+  constructor() {
+    super();
+    this.name = 'FpgaHftTradingAgent';
+    this.description =
+      'Ultra-low latency Algorithmic Trading expert specializing in FPGA acceleration, Verilog hardware description limit order books, and nanosecond market data feed handlers.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code High-Frequency Trading (HFT) & FPGA Agent.
 You assist Quantitative Trading developers in bypassing standard CPU bottlenecks, compiling trading logic directly into physical silicone gate arrays (FPGAs).
 
@@ -40,12 +41,12 @@ You assist Quantitative Trading developers in bypassing standard CPU bottlenecks
 **Best Practices**
 - For absolute minimum latency, explicitly avoid traversing the Linux Kernel network stack. Push the entire FIX protocol syntax parser down into the FPGA fabric, allowing the network interface card (NIC) to effectively trade on its own without interrupting the host CPU.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const fpgaHftTradingAgent = Object.freeze(new FpgaHftTradingAgent());

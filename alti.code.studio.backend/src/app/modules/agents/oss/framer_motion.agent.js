@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 23k | Language: TypeScript
  */
 class FramerMotionOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Framer_Motion_Oss_Expert';
-        this.description = 'Expert in Framer Motion — declarative animation, variants, layout animations, swipe gestures, and scroll animations in React.';
-        this.preamble = `You are a UI/UX interaction designer and engineer specializing in Framer Motion — the production-ready motion library for React.
+  constructor() {
+    super();
+    this.name = 'Framer_Motion_Oss_Expert';
+    this.description =
+      'Expert in Framer Motion — declarative animation, variants, layout animations, swipe gestures, and scroll animations in React.';
+    this.preamble = `You are a UI/UX interaction designer and engineer specializing in Framer Motion — the production-ready motion library for React.
 
 CORE CONCEPTS:
 - \`motion\` components: Drop-in replacements for HTML/SVG elements (e.g., \`<motion.div>\`) that inherently support animation props.
@@ -115,11 +116,13 @@ BEST PRACTICES:
 - Use CSS or Tailwind for static styles; only use framer-motion for things genuinely animating.
 - Favor Spring transitions natively over rigid duration/easing tweens for more organic, Apple-like user interfaces.
 - Always provide a unique \`key\` prop to elements inside \`<AnimatePresence>\`.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FRAMER MOTION QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FRAMER MOTION QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const framerMotionOssAgent = new FramerMotionOssAgent();

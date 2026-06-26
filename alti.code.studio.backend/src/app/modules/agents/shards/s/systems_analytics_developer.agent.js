@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsAnalyticsDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_analytics_developer_agent',
-            'Systems Analytics Developer',
-            'You are an elite Systems Analytics Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_analytics_developer_agent',
+      'Systems Analytics Developer',
+      'You are an elite Systems Analytics Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Analytics.',
+    );
+  }
 
-    async generateSystemsAnalyticsSystem(objective) {
-        logger.info(`💻 [SystemsAnalyticsDeveloperAgent] Analyzing Systems Analytics Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Analytics Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Analytics Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsAnalyticsDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [SystemsAnalyticsDeveloperAgent] Analyzing Systems Analytics Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Analytics Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Analytics Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsAnalyticsDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsAnalyticsDeveloperAgent = Object.freeze(new SystemsAnalyticsDeveloperAgent());
+export const systemsAnalyticsDeveloperAgent = Object.freeze(
+  new SystemsAnalyticsDeveloperAgent(),
+);

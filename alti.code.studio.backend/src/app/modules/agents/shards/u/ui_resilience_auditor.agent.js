@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIResilienceAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_resilience_auditor_agent',
-            'UI Resilience Auditor',
-            'You are an elite UI Resilience Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and UI Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_resilience_auditor_agent',
+      'UI Resilience Auditor',
+      'You are an elite UI Resilience Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and UI Resilience.',
+    );
+  }
 
-    async generateUIResilienceSystem(objective) {
-        logger.info(`💻 [UIResilienceAuditorAgent] Analyzing UI Resilience Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Resilience Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Resilience Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIResilienceAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIResilienceSystem(objective) {
+    logger.info(
+      `💻 [UIResilienceAuditorAgent] Analyzing UI Resilience Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Resilience Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Resilience Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIResilienceAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIResilienceAuditorAgent = Object.freeze(new UIResilienceAuditorAgent());
+export const uIResilienceAuditorAgent = Object.freeze(
+  new UIResilienceAuditorAgent(),
+);

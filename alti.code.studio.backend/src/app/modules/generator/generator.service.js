@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -20,12 +20,12 @@ import { patchService } from './patch.service.js';
 import { wireitService } from './wireit.service.js';
 import { sentinelService } from '../security/sentinel.service.js';
 import { EventBus } from '../../shared/eventBus.js';
-import { discoveryEngineService } from '../azureCloud/azureSearch.service.js';
-import { spannerGraphService } from '../azureCloud/azureCosmosGraph.service.js';
+import { discoveryEngineService } from '../gcpCloud/gcpSearch.service.js';
+import { spannerGraphService } from '../gcpCloud/gcpSpannerGraph.service.js';
 import { GeminiCliService } from '../geminiCli/geminiCli.service.js';
 import { modelGateway } from '../../platform/gateway/modelGateway.js';
 
-const generateApp = async (prompt) => {
+const generateApp = async prompt => {
   if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
     throw new Error('GeneratorService: prompt must be a non-empty string.');
   }
@@ -65,7 +65,7 @@ const generateApp = async (prompt) => {
       provider: 'azure',
       model: 'azure/gpt-5.5-pro',
       prompt: `${systemPrompt}\n\n${prompt}`,
-      temperature: 0.1
+      temperature: 0.1,
     });
 
     const result = JSON.parse(responseText);
@@ -73,11 +73,16 @@ const generateApp = async (prompt) => {
     // 🛡️ Guardian Angel Audit 🛡️
     logger.info('👼 Guardian Angel is auditing the generated code...');
     const codeForAudit = JSON.stringify(result, null, 2);
-    const auditResult = await GuardianService.auditCode(codeForAudit, 'Genesis App Generation');
+    const auditResult = await GuardianService.auditCode(
+      codeForAudit,
+      'Genesis App Generation',
+    );
 
     if (!auditResult.safe) {
       logger.error(`👼 Guardian Internal Block: ${auditResult.reasoning}`);
-      throw new Error(`Guardian Angel Blocked Generation: ${auditResult.reasoning}`);
+      throw new Error(
+        `Guardian Angel Blocked Generation: ${auditResult.reasoning}`,
+      );
     }
 
     logger.info(`👼 Guardian Approved (Score: ${auditResult.score})`);
@@ -86,13 +91,20 @@ const generateApp = async (prompt) => {
   } catch (error) {
     logger.error('App generation failed', error);
     // Fallback for testing/dev without valid API key
-    if (error.code === 'invalid_api_key' || !apiKey || apiKey === 'sk-placeholder') {
+    if (
+      error.code === 'invalid_api_key' ||
+      !apiKey ||
+      apiKey === 'sk-placeholder'
+    ) {
       logger.warn('Using fallback generator due to missing API key');
       return {
         files: [
-          { path: 'index.html', content: '<h1>Generated App (Fallback)</h1><p>API Key missing</p>' },
-          { path: 'style.css', content: 'body { font-family: sans-serif; }' }
-        ]
+          {
+            path: 'index.html',
+            content: '<h1>Generated App (Fallback)</h1><p>API Key missing</p>',
+          },
+          { path: 'style.css', content: 'body { font-family: sans-serif; }' },
+        ],
       };
     }
     throw error;
@@ -103,7 +115,9 @@ const generateProject = async (prompt, type = 'react') => {
   if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
     throw new Error('GeneratorService: prompt must be a non-empty string.');
   }
-  logger.info(`💻 Generator: Generating ${type} project from prompt: ${prompt}`);
+  logger.info(
+    `💻 Generator: Generating ${type} project from prompt: ${prompt}`,
+  );
 
   const systemPrompt = `
     You are an elite software architect and full-stack developer.
@@ -137,51 +151,66 @@ const generateProject = async (prompt, type = 'react') => {
   try {
     // 🧠 The Ultimate Azure RAG: Azure AI Search + Cosmos DB Graph
     logger.info(`🔍 [RAG] Querying Azure AI Search...`);
-    const discoveryResults = await discoveryEngineService.searchCodebase(prompt);
-    
-    logger.info(`🕸️ [RAG] Querying Azure Cosmos DB Graph for architectural topology...`);
-    const graphResults = await spannerGraphService.queryArchitectureDependencies(type);
+    const discoveryResults =
+      await discoveryEngineService.searchCodebase(prompt);
+
+    logger.info(
+      `🕸️ [RAG] Querying Azure Cosmos DB Graph for architectural topology...`,
+    );
+    const graphResults =
+      await spannerGraphService.queryArchitectureDependencies(type);
 
     let ragContext = '';
     if (discoveryResults.length > 0) {
-        ragContext += `\n\n### Azure AI Search Context (Highly Relevant Proprietary Code):\n`;
-        discoveryResults.slice(0, 3).forEach((res) => {
-           const snippet = res.document?.derivedStructData?.snippets?.[0]?.snippet || '';
-           if (snippet) ragContext += `\n${snippet}\n`;
-        });
+      ragContext += `\n\n### Azure AI Search Context (Highly Relevant Proprietary Code):\n`;
+      discoveryResults.slice(0, 3).forEach(res => {
+        const snippet =
+          res.document?.derivedStructData?.snippets?.[0]?.snippet || '';
+        if (snippet) ragContext += `\n${snippet}\n`;
+      });
     }
 
     if (graphResults.length > 0) {
-        ragContext += `\n\n### Azure Cosmos DB Graph Context (Architectural Topology):\n`;
-        ragContext += JSON.stringify(graphResults, null, 2);
+      ragContext += `\n\n### Azure Cosmos DB Graph Context (Architectural Topology):\n`;
+      ragContext += JSON.stringify(graphResults, null, 2);
     }
 
     logger.info(`💻 [RAG] Querying Google Gemini CLI for best practices...`);
     try {
-        const cliQuery = `What are the absolute universe-best practices for architecting this system: ${prompt}`;
-        const cliResult = await GeminiCliService.runGeminiCLI('ask', [`"${cliQuery}"`]);
-        if (cliResult) {
-            ragContext += `\n\n### Google Gemini CLI Context (Autonomous Best Practices):\n${cliResult}`;
-        }
+      const cliQuery = `What are the absolute universe-best practices for architecting this system: ${prompt}`;
+      const cliResult = await GeminiCliService.runGeminiCLI('ask', [
+        `"${cliQuery}"`,
+      ]);
+      if (cliResult) {
+        ragContext += `\n\n### Google Gemini CLI Context (Autonomous Best Practices):\n${cliResult}`;
+      }
     } catch (cliErr) {
-        logger.warn(`⚠️ [RAG] Gemini CLI query failed (is the CLI installed?): ${cliErr.message}`);
+      logger.warn(
+        `⚠️ [RAG] Gemini CLI query failed (is the CLI installed?): ${cliErr.message}`,
+      );
     }
 
     // Inject the Ultimate Google RAG context into the prompt
     let finalPrompt = prompt;
     if (ragContext) {
-        finalPrompt = `${prompt}\n\nUSE THE FOLLOWING RAG CONTEXT STRICTLY TO IMPLEMENT BEST PRACTICES:\n${ragContext}`;
+      finalPrompt = `${prompt}\n\nUSE THE FOLLOWING RAG CONTEXT STRICTLY TO IMPLEMENT BEST PRACTICES:\n${ragContext}`;
     }
 
     // Execute the generation using Google Vertex AI (Gemini) instead of OpenAI
     const geminiPrompt = `${systemPrompt}\n\n${finalPrompt}\n\nOUTPUT ONLY VALID JSON.`;
-    const response = await AzureGenAiService.generateContent(geminiPrompt, 'gemini-3.1-pro', 0.2);
+    const response = await AzureGenAiService.generateContent(
+      geminiPrompt,
+      'gemini-3.1-pro',
+      0.2,
+    );
 
     let contentToParse = response.content;
-    
+
     // Clean up markdown formatting if Gemini returns it
     if (contentToParse.startsWith('\`\`\`json')) {
-        contentToParse = contentToParse.replace(/^\`\`\`json/, '').replace(/\`\`\`$/, '');
+      contentToParse = contentToParse
+        .replace(/^\`\`\`json/, '')
+        .replace(/\`\`\`$/, '');
     }
 
     const result = JSON.parse(contentToParse);
@@ -189,30 +218,34 @@ const generateProject = async (prompt, type = 'react') => {
     // 🛡️ Guardian Angel Audit 🛡️
     logger.info('👼 Guardian Angel is auditing the generated project...');
     const codeForAudit = JSON.stringify(result, null, 2);
-    const auditResult = await GuardianService.auditCode(codeForAudit, `Genesis Project Generation (${type})`);
+    const auditResult = await GuardianService.auditCode(
+      codeForAudit,
+      `Genesis Project Generation (${type})`,
+    );
 
     if (!auditResult.safe) {
       logger.error(`👼 Guardian Internal Block: ${auditResult.reasoning}`);
-      throw new Error(`Guardian Angel Blocked Generation: ${auditResult.reasoning}`);
+      throw new Error(
+        `Guardian Angel Blocked Generation: ${auditResult.reasoning}`,
+      );
     }
 
     logger.info(`👼 Guardian Approved (Score: ${auditResult.score})`);
 
     // ⚡ Google Wireit: Auto-Inject Caching Engine into Generated package.json
     for (const file of result.files) {
-        if (file.path === 'package.json') {
-            file.content = wireitService.injectWireitConfig(file.content);
-        }
+      if (file.path === 'package.json') {
+        file.content = wireitService.injectWireitConfig(file.content);
+      }
     }
 
     await EventBus.publish('generator.project.created', {
       type,
       prompt,
-      fileCount: result.files.length
+      fileCount: result.files.length,
     });
 
     return result;
-
   } catch (error) {
     logger.error('Project generation failed', error);
     throw error;
@@ -232,7 +265,9 @@ const readProjectFiles = async (dir, fileList = [], rootDir = dir) => {
       // Only read text files
       if (/\.(js|jsx|ts|tsx|json|css|html|md|txt|yml)$/.test(file)) {
         const content = await fs.readFile(filePath, 'utf-8');
-        const relativePath = path.relative(rootDir, filePath).replace(/\\/g, '/');
+        const relativePath = path
+          .relative(rootDir, filePath)
+          .replace(/\\/g, '/');
         fileList.push({ path: relativePath, content });
       }
     }
@@ -247,7 +282,9 @@ const refineProject = async (targetDir, prompt) => {
   if (!prompt || typeof prompt !== 'string' || prompt.trim().length === 0) {
     throw new Error('GeneratorService: prompt must be a non-empty string.');
   }
-  logger.info(`💻 Generator: Refining project at ${targetDir} with prompt: ${prompt}`);
+  logger.info(
+    `💻 Generator: Refining project at ${targetDir} with prompt: ${prompt}`,
+  );
 
   // 1. Read current project state
   const currentFiles = await readProjectFiles(targetDir);
@@ -282,7 +319,7 @@ const refineProject = async (targetDir, prompt) => {
       provider: 'azure',
       model: 'azure/gpt-5.5-pro',
       prompt: systemPrompt,
-      temperature: 0.1
+      temperature: 0.1,
     });
 
     const result = JSON.parse(responseText);
@@ -290,26 +327,38 @@ const refineProject = async (targetDir, prompt) => {
     // 🛡️ Guardian Angel Audit 🛡️
     logger.info('👼 Guardian Angel is auditing the refinements...');
     const codeForAudit = JSON.stringify(result, null, 2);
-    const auditResult = await GuardianService.auditCode(codeForAudit, 'Genesis Iterative Refinement');
+    const auditResult = await GuardianService.auditCode(
+      codeForAudit,
+      'Genesis Iterative Refinement',
+    );
 
     if (!auditResult.safe) {
       logger.error(`👼 Guardian Internal Block: ${auditResult.reasoning}`);
-      throw new Error(`Guardian Angel Blocked Refinement: ${auditResult.reasoning}`);
+      throw new Error(
+        `Guardian Angel Blocked Refinement: ${auditResult.reasoning}`,
+      );
     }
 
-    logger.info(`👼 Guardian Approved Refinement (Score: ${auditResult.score})`);
+    logger.info(
+      `👼 Guardian Approved Refinement (Score: ${auditResult.score})`,
+    );
 
     // 🔍 Google Diff-Match-Patch: Granular Audit Trailing
     for (const newFile of result.files) {
       const oldFile = currentFiles.find(f => f.path === newFile.path);
       if (oldFile) {
-        const diffPatch = patchService.computePatch(oldFile.content, newFile.content);
+        const diffPatch = patchService.computePatch(
+          oldFile.content,
+          newFile.content,
+        );
         if (diffPatch) {
-          logger.info(`🔍 [DiffMatchPatch] Computed semantic patch for ${newFile.path}. Logging to Sentinel.`);
+          logger.info(
+            `🔍 [DiffMatchPatch] Computed semantic patch for ${newFile.path}. Logging to Sentinel.`,
+          );
           sentinelService.reportEvent('SWARM_CODE_MUTATION', 'LOW', {
             file: newFile.path,
             patchLength: diffPatch.length,
-            patchContent: diffPatch
+            patchContent: diffPatch,
           });
         }
       }
@@ -319,7 +368,6 @@ const refineProject = async (targetDir, prompt) => {
     await writeApp(result, targetDir);
 
     return result;
-
   } catch (error) {
     logger.error('Project refinement failed', error);
     throw error;
@@ -350,11 +398,14 @@ const writeApp = async (fileTree, targetDir) => {
   return { status: 'written', count: fileTree.files.length, path: targetDir };
 };
 
-const installDependencies = async (targetDir) => {
+const installDependencies = async targetDir => {
   logger.info(`Installing dependencies in ${targetDir}...`);
   try {
     // limit timeout to 5 minutes to prevent hanging
-    const { stdout, stderr } = await execAsync('npm install', { cwd: targetDir, timeout: 300000 });
+    const { stdout, stderr } = await execAsync('npm install', {
+      cwd: targetDir,
+      timeout: 300000,
+    });
     logger.info('npm install completed');
     return { success: true, output: stdout };
   } catch (error) {

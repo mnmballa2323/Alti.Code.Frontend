@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataGovernanceTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_governance_tester_agent',
-            'Data Governance Tester',
-            'You are an elite Data Governance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Data Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'data_governance_tester_agent',
+      'Data Governance Tester',
+      'You are an elite Data Governance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Data Governance.',
+    );
+  }
 
-    async generateDataGovernanceSystem(objective) {
-        logger.info(`💻 [DataGovernanceTesterAgent] Analyzing Data Governance Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Governance Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Governance Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataGovernanceTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataGovernanceSystem(objective) {
+    logger.info(
+      `💻 [DataGovernanceTesterAgent] Analyzing Data Governance Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Governance Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Governance Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataGovernanceTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataGovernanceTesterAgent = Object.freeze(new DataGovernanceTesterAgent());
+export const dataGovernanceTesterAgent = Object.freeze(
+  new DataGovernanceTesterAgent(),
+);

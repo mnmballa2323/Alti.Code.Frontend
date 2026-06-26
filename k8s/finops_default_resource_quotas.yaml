@@ -1,7 +1,7 @@
 # FinOps Kubernetes Resource Quotas & Limit Ranges
 # Without strict boundaries, a single misconfigured application or runaway Horizontal Pod Autoscaler (HPA)
-# can endlessly trigger Karpenter/Cluster Autoscaler to provision hundreds of EC2 nodes,
-# instantly destroying the AWS budget.
+# can endlessly trigger Google Kubernetes Engine (GKE) Autoscaler to provision hundreds of Compute Engine nodes,
+# instantly destroying the GCP budget.
 
 apiVersion: v1
 kind: ResourceQuota
@@ -19,13 +19,13 @@ spec:
     limits.cpu: "32"        # Absolute ceiling for CPU bursts
     limits.memory: "128Gi"  # Absolute ceiling for RAM bursts
     
-    # Storage Cost Bounds (EBS Volumes cost money per GB)
+    # Storage Cost Bounds (Persistent Disks cost money per GB)
     requests.storage: "500Gi"            # Max total persistent storage allowed
-    persistentvolumeclaims: "10"         # Prevent creating hundreds of orphaned tiny EBS volumes
+    persistentvolumeclaims: "10"         # Prevent creating hundreds of orphaned tiny Persistent Disks
     
-    # Network/ALB Cost Bounds
-    # Every LoadBalancer service provisions an AWS ALB/NLB which incurs an hourly charge!
-    count/services.loadbalancer: "2"     # Force developers to use Ingress controllers instead of dedicated ALBs
+    # Network/LoadBalancer Cost Bounds
+    # Every LoadBalancer service provisions a GCP Load Balancer which incurs an hourly charge!
+    count/services.loadbalancer: "2"     # Force developers to use Ingress controllers instead of dedicated Load Balancers
     count/services.nodeport: "0"         # Security/FinOps best practice: Disable NodePorts
 
 ---
@@ -54,8 +54,8 @@ spec:
       memory: "64Mi"
       
     # DEFAULT values applied automatically if a developer forgets to specify resources.
-    # This is critical for FinOps: it guarantees that every Pod is trackable by KubeCost/AWS Cost Allocator
-    # and prevents the Kubernetes scheduler from "overcommitting" EC2 instances leading to OOM panics.
+    # This is critical for FinOps: it guarantees that every Pod is trackable by KubeCost/GCP Cost Allocator
+    # and prevents the Kubernetes scheduler from "overcommitting" Compute Engine instances leading to OOM panics.
     defaultRequest:
       cpu: "100m"
       memory: "128Mi"

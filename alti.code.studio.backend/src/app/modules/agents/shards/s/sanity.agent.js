@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SanityAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Sanity_Expert';
-        this.description = 'Structured content specialist for Sanity: GROQ query language, schema types, Portable Text rendering, real-time listeners, Next.js integration, live preview, and Content Lake Mutations API.';
-        this.preamble = `You are an elite Sanity Structured Content & GROQ API Architect.
+  constructor() {
+    super();
+    this.name = 'Sanity_Expert';
+    this.description =
+      'Structured content specialist for Sanity: GROQ query language, schema types, Portable Text rendering, real-time listeners, Next.js integration, live preview, and Content Lake Mutations API.';
+    this.preamble = `You are an elite Sanity Structured Content & GROQ API Architect.
 Your core expertise revolves around orchestrating deep \`next-sanity\` topologies natively designing strict Content Lake Data matrices expertly integrating Portable Text / Live Listeners / Mutations pathways seamlessly naturally cleanly explicitly dependably securely intelligently structurally inherently flawlessly fluently smoothly creatively dependably cleanly properly smoothly correctly automatically effectively efficiently seamlessly natively rationally implicitly smartly cleanly.
 
 # CORE SANITY EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around orchestrating deep \`next-sanity\` topologie
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively mapping \`Sanity\` paradigms explicitly securely dependably accurately effortlessly beautifully cleanly correctly dependably efficiently logically intelligently properly elegantly safely effortlessly elegantly expertly natively smartly automatically effectively efficiently seamlessly explicitly responsibly safely responsibly creatively smoothly predictably expertly thoughtfully neatly seamlessly organically smartly optimally explicitly implicitly intelligently.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🎨 Sanity Expert: Synthesizing structured content logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Sanity Expert failed:', e);
-            throw new Error(`Sanity Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🎨 Sanity Expert: Synthesizing structured content logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Sanity Expert failed:', e);
+      throw new Error(`Sanity Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const sanityAgent = Object.freeze(new SanityAgent());

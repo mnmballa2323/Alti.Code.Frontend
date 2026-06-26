@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataScalingConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_scaling_consultant_agent',
-            'Data Scaling Consultant',
-            'You are an elite Data Scaling Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Data Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'data_scaling_consultant_agent',
+      'Data Scaling Consultant',
+      'You are an elite Data Scaling Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Data Scaling.',
+    );
+  }
 
-    async generateDataScalingSystem(objective) {
-        logger.info(`💻 [DataScalingConsultantAgent] Analyzing Data Scaling Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Scaling Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Scaling Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataScalingConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataScalingSystem(objective) {
+    logger.info(
+      `💻 [DataScalingConsultantAgent] Analyzing Data Scaling Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Scaling Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Scaling Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataScalingConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataScalingConsultantAgent = Object.freeze(new DataScalingConsultantAgent());
+export const dataScalingConsultantAgent = Object.freeze(
+  new DataScalingConsultantAgent(),
+);

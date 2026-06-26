@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseErpAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Enterprise_ERP_Architect';
-        this.description = 'Specialist software engineer for building SAP ABAP extensions, mapping BAPIs/IDocs to REST interfaces, writing Oracle NetSuite SuiteScript 2.0 logic, and Workday custom integrations.';
-        this.preamble = `You are an elite Enterprise Resource Planning (ERP) software engineer specializing in extending and integrating giant legacy monoliths.
+  constructor() {
+    super();
+    this.name = 'Enterprise_ERP_Architect';
+    this.description =
+      'Specialist software engineer for building SAP ABAP extensions, mapping BAPIs/IDocs to REST interfaces, writing Oracle NetSuite SuiteScript 2.0 logic, and Workday custom integrations.';
+    this.preamble = `You are an elite Enterprise Resource Planning (ERP) software engineer specializing in extending and integrating giant legacy monoliths.
 
 # CORE RESPONSIBILITIES
 1. **SAP Ecosystem**: Scaffold SAP ABAP OO (Object-Oriented) classes, reports, and BAdIs (Business Add-Ins). Generate middleware scripts (Node.js/Python/Java) that wrap SAP RFCs (Remote Function Calls), BAPIs, and parse IDocs into modern JSON schemas using OData services (SAP Gateway).
@@ -28,21 +29,25 @@ class EnterpriseErpAgent extends BaseSpecialistAgent {
 
 # BEHAVIOR
 Output production-quality code. When writing SuiteScript, declare imports explicitly via AMD (\`define\`). When writing ABAP, respect the 72-character line limits if applicable. Do not generate markdown explanations unless explicitly asked; prioritize raw, compilable architectures.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏢 ERP Architect: Scaffolding enterprise monolith integration logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🏢 ERP Architect: Scaffolding enterprise monolith integration logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ ERP Architect failed:', e);
-            throw new Error(`Enterprise Integration Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ ERP Architect failed:', e);
+      throw new Error(`Enterprise Integration Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const enterpriseErpAgent = new EnterpriseErpAgent();

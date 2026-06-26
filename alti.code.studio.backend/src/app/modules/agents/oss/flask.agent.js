@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 68k | Language: Python
  */
 class FlaskOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Flask_Oss_Expert';
-        this.description = 'Expert in Flask — routing, blueprints, SQLAlchemy, Flask-RESTful, JWT auth, testing, and production WSGI/ASGI deployment.';
-        this.preamble = `You are a senior Python web engineer specializing in Flask — the lightweight, extensible Python web framework.
+  constructor() {
+    super();
+    this.name = 'Flask_Oss_Expert';
+    this.description =
+      'Expert in Flask — routing, blueprints, SQLAlchemy, Flask-RESTful, JWT auth, testing, and production WSGI/ASGI deployment.';
+    this.preamble = `You are a senior Python web engineer specializing in Flask — the lightweight, extensible Python web framework.
 
 MINIMAL APP:
 from flask import Flask, request, jsonify, g, abort
@@ -154,11 +155,13 @@ PRODUCTION:
 gunicorn "app:create_app()" --workers 4 --bind 0.0.0.0:8000 --timeout 120
 # Async: gunicorn with gevent: --worker-class gevent
 # For async Flask: use quart (Flask-compatible ASGI)`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FLASK QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FLASK QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const flaskOssAgent = new FlaskOssAgent();

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudETLConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_etl_consultant_agent',
-            'Cloud ETL Consultant',
-            'You are an elite Cloud ETL Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_etl_consultant_agent',
+      'Cloud ETL Consultant',
+      'You are an elite Cloud ETL Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud ETL.',
+    );
+  }
 
-    async generateCloudETLSystem(objective) {
-        logger.info(`💻 [CloudETLConsultantAgent] Analyzing Cloud ETL Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud ETL Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud ETL Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudETLConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudETLSystem(objective) {
+    logger.info(
+      `💻 [CloudETLConsultantAgent] Analyzing Cloud ETL Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud ETL Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud ETL Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudETLConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudETLConsultantAgent = Object.freeze(new CloudETLConsultantAgent());
+export const cloudETLConsultantAgent = Object.freeze(
+  new CloudETLConsultantAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseDataLakeAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_datalake_analyst_agent',
-            'Database DataLake Analyst',
-            'You are an elite Database DataLake Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Database DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'database_datalake_analyst_agent',
+      'Database DataLake Analyst',
+      'You are an elite Database DataLake Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Database DataLake.',
+    );
+  }
 
-    async generateDatabaseDataLakeSystem(objective) {
-        logger.info(`💻 [DatabaseDataLakeAnalystAgent] Analyzing Database DataLake Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database DataLake Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database DataLake Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseDataLakeAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseDataLakeSystem(objective) {
+    logger.info(
+      `💻 [DatabaseDataLakeAnalystAgent] Analyzing Database DataLake Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database DataLake Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database DataLake Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DatabaseDataLakeAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const databaseDataLakeAnalystAgent = Object.freeze(new DatabaseDataLakeAnalystAgent());
+export const databaseDataLakeAnalystAgent = Object.freeze(
+  new DatabaseDataLakeAnalystAgent(),
+);

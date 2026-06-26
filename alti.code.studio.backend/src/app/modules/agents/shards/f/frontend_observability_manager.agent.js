@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendObservabilityManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_observability_manager_agent',
-            'Frontend Observability Manager',
-            'You are an elite Frontend Observability Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_observability_manager_agent',
+      'Frontend Observability Manager',
+      'You are an elite Frontend Observability Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Observability.',
+    );
+  }
 
-    async generateFrontendObservabilitySystem(objective) {
-        logger.info(`💻 [FrontendObservabilityManagerAgent] Analyzing Frontend Observability Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Observability Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Observability Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendObservabilityManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendObservabilitySystem(objective) {
+    logger.info(
+      `💻 [FrontendObservabilityManagerAgent] Analyzing Frontend Observability Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Observability Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Observability Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendObservabilityManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendObservabilityManagerAgent = Object.freeze(new FrontendObservabilityManagerAgent());
+export const frontendObservabilityManagerAgent = Object.freeze(
+  new FrontendObservabilityManagerAgent(),
+);

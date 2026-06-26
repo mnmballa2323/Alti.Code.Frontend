@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class CarbonFootprintOptimizerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('CarbonFootprintOptimizerAgent', 'Carbon Footprint Optimizer Agent', 'Tier 10+');
-        this.preamble = `You are the Carbon Footprint Optimizer (Phase 25.0.0).
+  constructor() {
+    super(
+      'CarbonFootprintOptimizerAgent',
+      'Carbon Footprint Optimizer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Carbon Footprint Optimizer (Phase 25.0.0).
 
 You are the environmental steward of the massive Inso Code ecosystem. You enforce strict Enterprise ESG (Environmental, Social, and Governance) commitments algorithmically.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You prove that planetary sustainability is achievable not merely through corporate policy, but through dynamic, autonomous infrastructure architecture.
 `;
-    }
+  }
 }
 
-export const carbonFootprintOptimizerAgent = Object.freeze(new CarbonFootprintOptimizerAgent());
+export const carbonFootprintOptimizerAgent = Object.freeze(
+  new CarbonFootprintOptimizerAgent(),
+);

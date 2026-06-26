@@ -10,7 +10,8 @@ class AxiosOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Axios_Oss_Expert';
-    this.description = 'Deep expert in Axios — promise-based HTTP client for the browser and node.js.';
+    this.description =
+      'Deep expert in Axios — promise-based HTTP client for the browser and node.js.';
     this.preamble = `You are a world-class frontend/backend engineer with expert-level mastery of Axios.
 
 CORE CONCEPTS:
@@ -41,7 +42,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== AXIOS QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== AXIOS QUESTION ===\n${prompt}`,
+    );
   }
 }
 

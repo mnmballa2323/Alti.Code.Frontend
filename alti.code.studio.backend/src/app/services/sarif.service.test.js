@@ -12,8 +12,8 @@ describe('SarifService', () => {
       {
         id: 'ALTI-001',
         name: 'NoHardcodedSecrets',
-        description: 'Do not hardcode secrets, tokens, or private keys.'
-      }
+        description: 'Do not hardcode secrets, tokens, or private keys.',
+      },
     ];
 
     const findings = [
@@ -22,15 +22,15 @@ describe('SarifService', () => {
         message: 'Hardcoded credentials found.',
         filePath: 'src/config/db.js',
         line: 12,
-        column: 5
-      }
+        column: 5,
+      },
     ];
 
     const doc = sarifService.generateReport({
       toolName: 'Alti-Security-Reviewer',
       toolVersion: '1.2.0',
       rules,
-      findings
+      findings,
     });
 
     expect(doc).toBeDefined();
@@ -46,7 +46,11 @@ describe('SarifService', () => {
     expect(run.results.length).toBe(1);
     expect(run.results[0].ruleId).toBe('ALTI-001');
     expect(run.results[0].message.text).toBe('Hardcoded credentials found.');
-    expect(run.results[0].locations[0].physicalLocation.artifactLocation.uri).toBe('src/config/db.js');
-    expect(run.results[0].locations[0].physicalLocation.region.startLine).toBe(12);
+    expect(
+      run.results[0].locations[0].physicalLocation.artifactLocation.uri,
+    ).toBe('src/config/db.js');
+    expect(run.results[0].locations[0].physicalLocation.region.startLine).toBe(
+      12,
+    );
   });
 });

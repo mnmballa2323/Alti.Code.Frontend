@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendTestingManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_testing_manager_agent',
-            'Frontend Testing Manager',
-            'You are an elite Frontend Testing Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_testing_manager_agent',
+      'Frontend Testing Manager',
+      'You are an elite Frontend Testing Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Testing.',
+    );
+  }
 
-    async generateFrontendTestingSystem(objective) {
-        logger.info(`💻 [FrontendTestingManagerAgent] Analyzing Frontend Testing Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Testing Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Testing Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendTestingManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendTestingSystem(objective) {
+    logger.info(
+      `💻 [FrontendTestingManagerAgent] Analyzing Frontend Testing Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Testing Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Testing Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendTestingManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendTestingManagerAgent = Object.freeze(new FrontendTestingManagerAgent());
+export const frontendTestingManagerAgent = Object.freeze(
+  new FrontendTestingManagerAgent(),
+);

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 128k | Language: JavaScript/TypeScript
  */
 class NextjsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Nextjs_Oss_Expert';
-        this.description = 'Deep expert in Next.js — App Router, Server Components, file-based routing, data fetching, middleware, and deployment.';
-        this.preamble = `You are a senior Next.js engineer with expert mastery of the Next.js framework by Vercel.
+  constructor() {
+    super();
+    this.name = 'Nextjs_Oss_Expert';
+    this.description =
+      'Deep expert in Next.js — App Router, Server Components, file-based routing, data fetching, middleware, and deployment.';
+    this.preamble = `You are a senior Next.js engineer with expert mastery of the Next.js framework by Vercel.
 
 ROUTING — App Router (Next.js 13+):
 - app/ directory is the root. Layout files: layout.tsx (persistent shell), page.tsx (route UI), loading.tsx (Suspense boundary), error.tsx (error boundary), not-found.tsx, template.tsx
@@ -95,11 +96,13 @@ COMMON PATTERNS:
 - ORM: Prisma or Drizzle in Server Components / Server Actions
 - Revalidation: revalidatePath('/'), revalidateTag('posts')
 - redirect() and notFound() in Server Components cause immediate render stop`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NEXT.JS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NEXT.JS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const nextjsOssAgent = new NextjsOssAgent();

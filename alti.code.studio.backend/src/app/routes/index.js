@@ -8,8 +8,14 @@ const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-router.get('/health', (req, res) => res.status(200).json({ status: 'UP', timestamp: new Date().toISOString() }));
-router.get('/ready', (req, res) => res.status(200).json({ ready: true, subsystems: ['postgres', 'redis', 'gemini'] }));
+router.get('/health', (req, res) =>
+  res.status(200).json({ status: 'UP', timestamp: new Date().toISOString() }),
+);
+router.get('/ready', (req, res) =>
+  res
+    .status(200)
+    .json({ ready: true, subsystems: ['postgres', 'redis', 'gemini'] }),
+);
 
 const modulesPath = path.join(__dirname, '../modules');
 
@@ -17,7 +23,7 @@ const modulesPath = path.join(__dirname, '../modules');
 import { authRoutes } from '../modules/auth/auth.route.js';
 import { mcpRoutes } from '../modules/mcp/mcp.route.js';
 import { aiRoutes } from '../modules/ai/ai.route.js';
-import { verifyAzureToken } from '../modules/auth/azureAd.service.js';
+import { verifyAzureToken } from '../modules/auth/gcpIap.service.js';
 import { ResearchRoutes } from '../modules/research/research.route.js';
 import { enterpriseWAF } from '../modules/security/enterprise_waf.middleware.js';
 import { rbacService } from '../modules/security/rbac.middleware.js';
@@ -70,47 +76,66 @@ try {
       for (const file of files) {
         if (file.endsWith('.route.js') || file.endsWith('.routes.js')) {
           // Skip the ones we explicitly imported above
-          if (file === 'auth.route.js' || file === 'mcp.route.js' || file === 'ai.route.js' || file === 'sandyaa.route.js') continue;
+          if (
+            file === 'auth.route.js' ||
+            file === 'mcp.route.js' ||
+            file === 'ai.route.js' ||
+            file === 'sandyaa.route.js'
+          )
+            continue;
 
           try {
             const routeModule = await import(`../modules/${moduleDir}/${file}`);
-            const routerKey = Object.keys(routeModule).find(key => key.toLowerCase().includes('route'));
-            
+            const routerKey = Object.keys(routeModule).find(key =>
+              key.toLowerCase().includes('route'),
+            );
+
             if (routerKey && routeModule[routerKey]) {
               let basePath = `/${moduleDir}`;
-              
+
               // Custom path overrides matching frontend configurations
-              if (file === 'cloud_marketplace.route.js') basePath = '/marketplace/cloud';
+              if (file === 'cloud_marketplace.route.js')
+                basePath = '/marketplace/cloud';
               if (file === 'gitAgent.route.js') basePath = '/git-agent';
               if (file === 'dyad.route.js') basePath = '/dyad/claude';
               if (file === 'gemini.route.js') basePath = '/gemini';
               if (file === 'codeEditor.route.js') basePath = '/code-editor';
               if (file === 'shadowWorkspace.route.js') basePath = '/shadow';
-              if (file === 'securityAgent.route.js') basePath = '/security-agent';
-              if (file === 'refactorAgent.route.js') basePath = '/refactor-agent';
+              if (file === 'securityAgent.route.js')
+                basePath = '/security-agent';
+              if (file === 'refactorAgent.route.js')
+                basePath = '/refactor-agent';
               if (file === 'debugAgent.route.js') basePath = '/debug-agent';
               if (file === 'compliance.route.js') basePath = '/governance';
-              if (file === 'observability.route.js') basePath = '/observability';
-              if (file === 'sentry.route.js') basePath = '/observability/sentry';
+              if (file === 'observability.route.js')
+                basePath = '/observability';
+              if (file === 'sentry.route.js')
+                basePath = '/observability/sentry';
               if (file === 'diagnostics.route.js') basePath = '/diagnostics';
               if (file === 'metrics.route.js') basePath = '/metrics';
               if (file === 'agent.route.js') basePath = '/agents';
-              if (file === 'omni_polyglot.route.js') basePath = '/agents/polyglot';
+              if (file === 'omni_polyglot.route.js')
+                basePath = '/agents/polyglot';
               if (file === 'openclaw.config.route.js') basePath = '/openclaw';
               if (file === 'geminiCli.route.js') basePath = '/gemini-cli';
               if (file === 'cliAnything.route.js') basePath = '/cli-anything';
-              if (file === 'geminiExtension.route.js') basePath = '/gemini-extensions';
-              if (file === 'geminiOpenMemo.route.js') basePath = '/gemini-open-memory';
+              if (file === 'geminiExtension.route.js')
+                basePath = '/gemini-extensions';
+              if (file === 'geminiOpenMemo.route.js')
+                basePath = '/gemini-open-memory';
               if (file === 'azureGenAi.route.js') basePath = '/azure-gen-ai';
-              if (file === 'azureSearch.route.js') basePath = '/azure-search';
-              if (file === 'azureAdkAgent.route.js') basePath = '/azure-adk';
+              if (file === 'gcpSearch.route.js') basePath = '/gcp-search';
               if (file === 'borg.route.js') basePath = '/borg';
               if (file === 'oss.agents.route.js') basePath = '/oss-agents';
-              if (file === 'openHandsAgent.route.js') basePath = '/oss-swarm/openhands';
-              if (file === 'browserUseAgent.route.js') basePath = '/oss-swarm/browser-use';
+              if (file === 'openHandsAgent.route.js')
+                basePath = '/oss-swarm/openhands';
+              if (file === 'browserUseAgent.route.js')
+                basePath = '/oss-swarm/browser-use';
               if (file === 'fazmAgent.route.js') basePath = '/oss-swarm/fazm';
-              if (file === 'crewAiAgent.route.js') basePath = '/oss-swarm/crew-ai';
-              if (file === 'langGraphAgent.route.js') basePath = '/oss-swarm/langgraph';
+              if (file === 'crewAiAgent.route.js')
+                basePath = '/oss-swarm/crew-ai';
+              if (file === 'langGraphAgent.route.js')
+                basePath = '/oss-swarm/langgraph';
               if (file === 'dspyAgent.route.js') basePath = '/oss-swarm/dspy';
               if (file === 'engine.route.js') basePath = '/engine';
               if (file === 'integration.route.js') basePath = '/integrations';
@@ -119,7 +144,8 @@ try {
               if (file === 'asset.route.js') basePath = '/assets';
               if (file === 'translation.route.js') basePath = '/translate';
               if (file === 'tpu.route.js') basePath = '/tpu';
-              if (file === 'confidentialVm.route.js') basePath = '/confidential-vms';
+              if (file === 'confidentialVm.route.js')
+                basePath = '/confidential-vms';
               if (file === 'batch.route.js') basePath = '/batch';
               if (file === 'tasks.route.js') basePath = '/tasks';
               if (file === 'spanner.route.js') basePath = '/spanner';
@@ -164,25 +190,31 @@ try {
               if (file === 'ragEvaluator.route.js') basePath = '/rag-evaluator';
               if (file === 'uDeployment.route.js') basePath = '/u-deployment';
               if (file === 'dataCatalog.route.js') basePath = '/data-catalog';
-              if (file === 'knowledgeCatalog.route.js') basePath = '/knowledge-catalog';
+              if (file === 'knowledgeCatalog.route.js')
+                basePath = '/knowledge-catalog';
               if (file === 'featureStore.route.js') basePath = '/feature-store';
               if (file === 'eval.route.js') basePath = '/eval';
               if (file === 'scc.route.js') basePath = '/scc';
-              if (file === 'secretManager.route.js') basePath = '/secret-manager';
+              if (file === 'secretManager.route.js')
+                basePath = '/secret-manager';
               if (file === 'speech.route.js') basePath = '/speech';
               if (file === 'voice.route.js') basePath = '/voice';
-              if (file === 'workspaceAdmin.route.js') basePath = '/workspace-admin';
-              if (file === 'cloudWorkstations.route.js') basePath = '/workstations';
+              if (file === 'workspaceAdmin.route.js')
+                basePath = '/workspace-admin';
+              if (file === 'cloudWorkstations.route.js')
+                basePath = '/workstations';
               if (file === 'smartRouter.route.js') basePath = '/smart-router';
               if (file === 'agentmemory.route.js') basePath = '/agent-memory';
               if (file === 'fileSearch.route.js') basePath = '/file-search';
               if (file === 'qa.route.js') basePath = '/qa';
-              
+
               router.use(basePath, routeModule[routerKey]);
               console.log(`[Router] Successfully mounted ${basePath}`);
             }
           } catch (err) {
-            console.warn(`[Router] Skipping broken route ${file}: ${err.message}`);
+            console.warn(
+              `[Router] Skipping broken route ${file}: ${err.message}`,
+            );
           }
         }
       }

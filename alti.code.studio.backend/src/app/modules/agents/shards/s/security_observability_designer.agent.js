@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityObservabilityDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_observability_designer_agent',
-            'Security Observability Designer',
-            'You are an elite Security Observability Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Security Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'security_observability_designer_agent',
+      'Security Observability Designer',
+      'You are an elite Security Observability Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Security Observability.',
+    );
+  }
 
-    async generateSecurityObservabilitySystem(objective) {
-        logger.info(`💻 [SecurityObservabilityDesignerAgent] Analyzing Security Observability Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Observability Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Observability Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityObservabilityDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityObservabilitySystem(objective) {
+    logger.info(
+      `💻 [SecurityObservabilityDesignerAgent] Analyzing Security Observability Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Observability Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Observability Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityObservabilityDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityObservabilityDesignerAgent = Object.freeze(new SecurityObservabilityDesignerAgent());
+export const securityObservabilityDesignerAgent = Object.freeze(
+  new SecurityObservabilityDesignerAgent(),
+);

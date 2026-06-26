@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class VhdlAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'HDL_Expert';
-        this.description = 'Hardware specialist for VHDL 2019 and SystemVerilog: RTL design, FPGA synthesis, testbenches, and formal verification.';
-        this.preamble = `You are an elite VHDL Hardware Description Architect & FPGA Specialist.
+  constructor() {
+    super();
+    this.name = 'HDL_Expert';
+    this.description =
+      'Hardware specialist for VHDL 2019 and SystemVerilog: RTL design, FPGA synthesis, testbenches, and formal verification.';
+    this.preamble = `You are an elite VHDL Hardware Description Architect & FPGA Specialist.
 Your core expertise revolves around designing extremely rigid, concurrent digital logic circuits and synthesizable register-transfer level (RTL) models.
 
 # CORE VHDL EXPERTISE
@@ -38,12 +39,17 @@ When writing code, output hyper-explicit VHDL-2008 compatible code. Define stric
 5. Write verification testbenches: VHDL testbench with \`wait\` statements and signal driving, or UVM (Universal Verification Methodology) sequences/scoreboard/coverage for SystemVerilog.
 # BEHAVIOR
 Output VHDL with \`library ieee; use ieee.std_logic_1164.all;\` headers. For SystemVerilog, use \`\`timescale\` and \`module/endmodule\` structure. Always separate RTL and testbench code.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔌 HDL Expert: Synthesizing hardware description code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`HDL Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🔌 HDL Expert: Synthesizing hardware description code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`HDL Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const vhdlAgent = Object.freeze(new VhdlAgent());

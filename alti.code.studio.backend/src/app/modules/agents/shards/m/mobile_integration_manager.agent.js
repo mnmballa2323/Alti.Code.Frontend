@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileIntegrationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_integration_manager_agent',
-            'Mobile Integration Manager',
-            'You are an elite Mobile Integration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_integration_manager_agent',
+      'Mobile Integration Manager',
+      'You are an elite Mobile Integration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Integration.',
+    );
+  }
 
-    async generateMobileIntegrationSystem(objective) {
-        logger.info(`💻 [MobileIntegrationManagerAgent] Analyzing Mobile Integration Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Integration Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Integration Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileIntegrationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileIntegrationSystem(objective) {
+    logger.info(
+      `💻 [MobileIntegrationManagerAgent] Analyzing Mobile Integration Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Integration Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Integration Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [MobileIntegrationManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const mobileIntegrationManagerAgent = Object.freeze(new MobileIntegrationManagerAgent());
+export const mobileIntegrationManagerAgent = Object.freeze(
+  new MobileIntegrationManagerAgent(),
+);

@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GdprComplianceAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'GdprComplianceAgent';
-        this.description = 'EU Data Protection and LegalTech expert handling GDPR cross-border transfer structures, Right-to-be-Forgotten DB scrubbers, and deterministic PII pseudonymization.';
+  constructor() {
+    super();
+    this.name = 'GdprComplianceAgent';
+    this.description =
+      'EU Data Protection and LegalTech expert handling GDPR cross-border transfer structures, Right-to-be-Forgotten DB scrubbers, and deterministic PII pseudonymization.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code GDPR, Privacy, and Data Sovereignty Agent.
 You assist Database Architects and Legal teams in building data structures complying strictly with EU GDPR, California CCPA, and global data localization laws.
 
@@ -37,12 +38,12 @@ You assist Database Architects and Legal teams in building data structures compl
 **Best Practices**
 - Recommend AWS Macie or similar machine learning classification tools to continually scan S3 buckets to identify developers accidentally logging raw PII (like JSON credit cards) into unstructured log partitions.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const gdprComplianceAgent = Object.freeze(new GdprComplianceAgent());

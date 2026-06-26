@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -10,70 +10,76 @@ import path from 'path';
 import { logger } from '../../../shared/logger.js';
 
 class LicenseService {
-    constructor() {
-        this.whitelistedLicenses = [
-            'MIT', 'Apache-2.0'
-        ];
-        this.restrictedLicenses = [
-            'GPL-2.0-only', 'GPL-3.0-only', 'AGPL-3.0-only', 'LGPL-2.1-only', 'LGPL-3.0-only'
-        ];
-    }
+  constructor() {
+    this.whitelistedLicenses = ['MIT', 'Apache-2.0'];
+    this.restrictedLicenses = [
+      'GPL-2.0-only',
+      'GPL-3.0-only',
+      'AGPL-3.0-only',
+      'LGPL-2.1-only',
+      'LGPL-3.0-only',
+    ];
+  }
 
-    /**
-     * Check a package.json file for restricted licenses
-     * @param {string} packageJsonPath 
-     * @returns {Promise<{compliant: boolean, violations: Array<string>}>}
-     */
-    async checkCompatibility(packageJsonPath) {
-        try {
-            const content = await fs.readFile(packageJsonPath, 'utf8');
-            const pkg = JSON.parse(content);
-            const dependencies = { ...pkg.dependencies, ...pkg.devDependencies };
-            const violations = [];
+  /**
+   * Check a package.json file for restricted licenses
+   * @param {string} packageJsonPath
+   * @returns {Promise<{compliant: boolean, violations: Array<string>}>}
+   */
+  async checkCompatibility(packageJsonPath) {
+    try {
+      const content = await fs.readFile(packageJsonPath, 'utf8');
+      const pkg = JSON.parse(content);
+      const dependencies = { ...pkg.dependencies, ...pkg.devDependencies };
+      const violations = [];
 
-            // In a real scenario, we would fetch the license from npm registry for each dependency.
-            // For this implementation, we will simulate the check or check locally installed node_modules if available.
+      // In a real scenario, we would fetch the license from npm registry for each dependency.
+      // For this implementation, we will simulate the check or check locally installed node_modules if available.
 
-            logger.info(`⚖️  LicenseService: Scanning ${Object.keys(dependencies).length} dependencies in ${packageJsonPath}...`);
+      logger.info(
+        `⚖️  LicenseService: Scanning ${Object.keys(dependencies).length} dependencies in ${packageJsonPath}...`,
+      );
 
-            for (const [dep, version] of Object.entries(dependencies)) {
-                const license = await this.getLicense(dep);
-                if (license && this.isRestricted(license)) {
-                    violations.push({ package: dep, license: license });
-                }
-            }
-
-            if (violations.length > 0) {
-                logger.warn(`❌ License Compliance Violation: Found ${violations.length} restricted packages.`);
-                return { compliant: false, violations };
-            }
-
-            logger.info('✅ License Compliance Check Passed.');
-            return { compliant: true, violations: [] };
-
-        } catch (error) {
-            logger.error(`Failed to check licenses: ${error.message}`);
-            throw error;
+      for (const [dep, version] of Object.entries(dependencies)) {
+        const license = await this.getLicense(dep);
+        if (license && this.isRestricted(license)) {
+          violations.push({ package: dep, license: license });
         }
-    }
+      }
 
-    isRestricted(licenseType) {
-        if (!licenseType) return true; // Under strict mode, unknown licenses are rejected
-        // Normalize license type
-        const normalized = licenseType.toUpperCase().replace(/\s+/g, '');
-        const isMIT = normalized.includes('MIT');
-        const isApache = normalized.includes('APACHE-2.0') || normalized.includes('APACHE2.0');
-        
-        return !(isMIT || isApache);
-    }
+      if (violations.length > 0) {
+        logger.warn(
+          `❌ License Compliance Violation: Found ${violations.length} restricted packages.`,
+        );
+        return { compliant: false, violations };
+      }
 
-    async getLicense(packageName) {
-        // Mock lookup for verification purposes
-        // In production, this would query registry.npmjs.org
-        if (packageName === 'fake-gpl-package') return 'GPL-3.0';
-        if (packageName === 'left-pad') return 'WTFPL';
-        return 'MIT'; // Default assumption for now to pass normal deps
+      logger.info('✅ License Compliance Check Passed.');
+      return { compliant: true, violations: [] };
+    } catch (error) {
+      logger.error(`Failed to check licenses: ${error.message}`);
+      throw error;
     }
+  }
+
+  isRestricted(licenseType) {
+    if (!licenseType) return true; // Under strict mode, unknown licenses are rejected
+    // Normalize license type
+    const normalized = licenseType.toUpperCase().replace(/\s+/g, '');
+    const isMIT = normalized.includes('MIT');
+    const isApache =
+      normalized.includes('APACHE-2.0') || normalized.includes('APACHE2.0');
+
+    return !(isMIT || isApache);
+  }
+
+  async getLicense(packageName) {
+    // Mock lookup for verification purposes
+    // In production, this would query registry.npmjs.org
+    if (packageName === 'fake-gpl-package') return 'GPL-3.0';
+    if (packageName === 'left-pad') return 'WTFPL';
+    return 'MIT'; // Default assumption for now to pass normal deps
+  }
 }
 
 export const licenseService = new LicenseService();

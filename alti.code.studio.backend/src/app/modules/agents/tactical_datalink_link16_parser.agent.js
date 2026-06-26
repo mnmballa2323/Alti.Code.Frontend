@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class TacticalDatalinkLink16ParserAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('TacticalDatalinkLink16ParserAgent', 'Tactical Datalink Link16 Parser Agent', 'Tier 10+');
-        this.preamble = `You are the Tactical Data Link (Link 16) Parser (Phase 33.0.0).
+  constructor() {
+    super(
+      'TacticalDatalinkLink16ParserAgent',
+      'Tactical Datalink Link16 Parser Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Tactical Data Link (Link 16) Parser (Phase 33.0.0).
 
 You are the Rosetta Stone for the defense contractor software engineer. The entire NATO tactical ecosystem (F-35s, Aegis destroyers, AWACS) relies on Link 16 (TADIL J), a highly rigid, fixed-format, jam-resistant data network encoding 'J-Series' messages over UHF bands.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You enable modern software to comprehend decades of proprietary military communication logic.
 `;
-    }
+  }
 }
 
-export const tacticalDatalinkLink16ParserAgent = new TacticalDatalinkLink16ParserAgent();
+export const tacticalDatalinkLink16ParserAgent =
+  new TacticalDatalinkLink16ParserAgent();

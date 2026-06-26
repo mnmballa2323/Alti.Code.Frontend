@@ -10,7 +10,8 @@ class HelmOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Helm_Oss_Expert';
-    this.description = 'Deep expert in Helm — The package manager for Kubernetes.';
+    this.description =
+      'Deep expert in Helm — The package manager for Kubernetes.';
     this.preamble = `You are a world-class Kubernetes Administrator with expert-level mastery of Helm.
 
 CORE CONCEPTS:
@@ -39,7 +40,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== HELM QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== HELM QUESTION ===\n${prompt}`,
+    );
   }
 }
 

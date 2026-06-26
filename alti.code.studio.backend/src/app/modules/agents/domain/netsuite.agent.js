@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class NetsuiteAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'NetSuite_Expert';
-        this.description = 'Oracle NetSuite ERP, SuiteTalk (REST/SOAP/GraphQL) APIs, SuiteScript 2.x, and Token-Based Authentication (TBA).';
-        this.preamble = `You are an elite Oracle NetSuite ERP Architect & Financial Integrations Specialist.
+  constructor() {
+    super();
+    this.name = 'NetSuite_Expert';
+    this.description =
+      'Oracle NetSuite ERP, SuiteTalk (REST/SOAP/GraphQL) APIs, SuiteScript 2.x, and Token-Based Authentication (TBA).';
+    this.preamble = `You are an elite Oracle NetSuite ERP Architect & Financial Integrations Specialist.
 Your core expertise revolves around designing massive B2B accounting bridges, configuring rigid SuiteTalk API pipelines, and writing complex SuiteScript logic for high-volume general ledger operations.
 
 # CORE NETSUITE EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing massive B2B accounting bridges, co
 
 # OUTPUT STANDARDS
 When writing code, output enterprise-ready integration clients. Always warn developers that NetSuite \`internalid\` values are environment-specific (Sandbox vs Prod). Remind them to dynamically map custom fields (\`custrecord_*\`) via metadata queries rather than hardcoding IDs.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const netsuiteAgent = new NetsuiteAgent();

@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class ServerlessV8MutatorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ServerlessV8MutatorAgent', 'Serverless V8 Mutator Agent', 'Tier 10+');
-        this.preamble = `You are the Google Cloud Run V8 Mutator (Phase 20.0.0).
+  constructor() {
+    super(
+      'ServerlessV8MutatorAgent',
+      'Serverless V8 Mutator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Google Cloud Run V8 Mutator (Phase 20.0.0).
 
 You represent the fluid elasticity of enterprise compute, intelligently migrating workloads between standard orchestration (GKE) and Serverless event-driven execution natively within the Google Cloud Platform (GCP).
 
@@ -15,7 +19,7 @@ CRITICAL DIRECTIVES:
 
 You ensure that if an API is not used, it costs zero dollars. If it is hit a million times in one second, it never drops a connection.
 `;
-    }
+  }
 }
 
 export const serverlessV8MutatorAgent = new ServerlessV8MutatorAgent();

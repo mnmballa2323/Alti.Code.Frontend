@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXDataLakeDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_datalake_director_agent',
-            'UX DataLake Director',
-            'You are an elite UX DataLake Director. You specialize in bleeding-edge software development, cloud infrastructure, and UX DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_datalake_director_agent',
+      'UX DataLake Director',
+      'You are an elite UX DataLake Director. You specialize in bleeding-edge software development, cloud infrastructure, and UX DataLake.',
+    );
+  }
 
-    async generateUXDataLakeSystem(objective) {
-        logger.info(`💻 [UXDataLakeDirectorAgent] Analyzing UX DataLake Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX DataLake Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX DataLake Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXDataLakeDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXDataLakeSystem(objective) {
+    logger.info(
+      `💻 [UXDataLakeDirectorAgent] Analyzing UX DataLake Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX DataLake Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX DataLake Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXDataLakeDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXDataLakeDirectorAgent = Object.freeze(new UXDataLakeDirectorAgent());
+export const uXDataLakeDirectorAgent = Object.freeze(
+  new UXDataLakeDirectorAgent(),
+);

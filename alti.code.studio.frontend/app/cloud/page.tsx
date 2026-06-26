@@ -51,85 +51,85 @@ interface CloudFunctionAgent {
 const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
   return [
     {
-      name: "Azure Virtual Machines",
+      name: "Google Compute Engine",
       functionName: "Compute & Virtual Servers",
-      agentName: "Azure VM Specialist (Tier 14)",
-      agentId: "azure_vm_specialist",
+      agentName: "GCP GCE Specialist (Tier 14)",
+      agentId: "gcp_gce_specialist",
       status: "ACTIVE",
-      capabilities: ["vm-scaling", "hybrid-benefit", "disk-encryption"],
+      capabilities: ["instance-scaling", "sole-tenant", "shielded-vms"],
       description:
-        "Optimizes Azure Hybrid Benefit licenses, VM scale sets, and premium disk configurations.",
+        "Optimizes Google Compute Engine instance templates, autoscaling policies, and sole-tenant node groups.",
       icon: "Server",
     },
     {
-      name: "Blob Storage",
+      name: "Google Cloud Storage",
       functionName: "Object & Cold Storage",
-      agentName: "Azure Blob Specialist (Tier 14)",
-      agentId: "azure_blob_specialist",
+      agentName: "GCP GCS Specialist (Tier 14)",
+      agentId: "gcp_gcs_specialist",
       status: "ACTIVE",
-      capabilities: ["lifecycle-management", "immutable-blobs", "sas-tokens"],
+      capabilities: ["lifecycle-management", "retention-policies", "signed-urls"],
       description:
-        "Configures Shared Access Signatures, access tiers (Hot/Cool/Archive), and blob triggers.",
+        "Configures Signed URLs, storage classes (Standard/Nearline/Coldline/Archive), and object lifecycle policies.",
       icon: "Database",
     },
     {
-      name: "Azure Functions",
+      name: "Google Cloud Functions",
       functionName: "Serverless Operations",
-      agentName: "Azure Functions Specialist (Tier 14)",
-      agentId: "azure_functions_specialist",
+      agentName: "GCP Cloud Functions Specialist (Tier 14)",
+      agentId: "gcp_functions_specialist",
       status: "OPTIMIZING",
       capabilities: [
-        "premium-plan-scaling",
-        "trigger-bindings",
-        "durable-workflows",
+        "event-triggering",
+        "concurrency-tuning",
+        "min-instances",
       ],
       description:
-        "Tunes Durable Functions orchestration, serverless bindings, and startup execution times.",
+        "Tunes 2nd gen Cloud Functions, event-driven triggers via Eventarc, and runtime execution scaling.",
       icon: "Cpu",
     },
     {
-      name: "Cosmos DB",
-      functionName: "Global NoSQL Database",
-      agentName: "Azure Cosmos Specialist (Tier 14)",
-      agentId: "azure_cosmos_specialist",
+      name: "Cloud Spanner",
+      functionName: "Global Relational Database",
+      agentName: "GCP Spanner Specialist (Tier 14)",
+      agentId: "gcp_spanner_specialist",
       status: "ACTIVE",
       capabilities: [
-        "multi-region-writes",
-        "ru-allocation",
-        "consistency-levels",
+        "multi-region-replication",
+        "spanner-graph",
+        "ddl-migrations",
       ],
       description:
-        "Tunes Request Units (RUs), consistency parameters, and multi-region read/write replication.",
+        "Tunes database split-points, query optimization, and Spanner Graph schemas.",
       icon: "Database",
     },
     {
-      name: "Entra ID (Active Directory)",
+      name: "Google Cloud IAM",
       functionName: "Identity & Access Control",
-      agentName: "Azure Entra Guardian (Tier 14)",
-      agentId: "azure_entra_guardian",
+      agentName: "GCP IAM Guardian (Tier 14)",
+      agentId: "gcp_iam_guardian",
       status: "SWARMING",
       capabilities: [
-        "conditional-access",
-        "managed-identities",
-        "app-registrations",
+        "workload-identity",
+        "vpc-service-controls",
+        "iam-roles",
       ],
       description:
-        "Audits conditional access policies, configures system-assigned managed identities, and registers APIs.",
+        "Audits VPC Service Controls boundaries, workload identity pools, and custom least-privilege IAM roles.",
       icon: "Lock",
     },
     {
-      name: "ARM Templates & Bicep",
+      name: "Deployment Manager & Terraform",
       functionName: "Infrastructure as Code",
-      agentName: "Azure IaC Specialist (Tier 14)",
-      agentId: "azure_iac_specialist",
+      agentName: "GCP IaC Specialist (Tier 14)",
+      agentId: "gcp_iac_specialist",
       status: "IDLE",
       capabilities: [
-        "bicep-compilation",
-        "arm-deployments",
-        "blueprint-compliance",
+        "terraform-compilation",
+        "gcloud-deployments",
+        "compliance-guardrails",
       ],
       description:
-        "Compiles declarative Bicep files, manages Azure Blueprints compliance, and runs validation gates.",
+        "Compiles declarative Terraform files, manages GCP Organization Policy compliance, and runs validation gates.",
       icon: "Activity",
     },
   ];
@@ -205,49 +205,49 @@ export default function CloudPage() {
       } else {
         let workloads = [];
 
-        if (selectedProvider === "Azure Government") {
+        if (selectedProvider === "GCP Government") {
           workloads = [
             {
               id: `vmss-${Math.floor(Math.random() * 10000)}`,
-              name: "AKS Workload Nodes (Gov)",
+              name: "GKE Workload Nodes (Gov)",
               status: "Running",
               region: "usgovarizona",
               cpu: "45%",
             },
             {
               id: `openai-${Math.floor(Math.random() * 1000)}`,
-              name: "Azure OpenAI Government (IL5)",
+              name: "Sovereign AI Gateway (Azure OpenAI Gov IL5)",
               status: "Running",
               region: "usgovvirginia",
               cpu: "68%",
             },
             {
               id: `cosmos-${Math.floor(Math.random() * 1000)}`,
-              name: "CosmosDB Failover (IL5)",
+              name: "Cloud Spanner Failover (IL5)",
               status: "Running",
               region: "usgovtexas",
               cpu: "15%",
             },
           ];
-        } else if (selectedProvider === "Azure Dedicated") {
+        } else if (selectedProvider === "GCP Dedicated") {
           workloads = [
             {
               id: `vmss-${Math.floor(Math.random() * 10000)}`,
-              name: "AKS Dedicated Nodes",
+              name: "GKE Dedicated Nodes",
               status: "Running",
               region: "eastus2",
               cpu: "38%",
             },
             {
               id: `openai-${Math.floor(Math.random() * 1000)}`,
-              name: "Azure OpenAI Dedicated",
+              name: "Sovereign AI Gateway (Azure OpenAI Dedicated IL2)",
               status: "Running",
               region: "eastus2",
               cpu: "25%",
             },
             {
               id: `cosmos-${Math.floor(Math.random() * 1000)}`,
-              name: "CosmosDB Private Cluster",
+              name: "Cloud Spanner Private Cluster",
               status: "Running",
               region: "eastus2",
               cpu: "14%",
@@ -292,7 +292,7 @@ export default function CloudPage() {
       setIsAuthenticated(true);
       let workloads = [];
 
-      if (selectedProvider === "Azure Government") {
+      if (selectedProvider === "GCP Government") {
         workloads = [
           {
             id: `vmss-${Math.floor(Math.random() * 10000)}`,
@@ -316,7 +316,7 @@ export default function CloudPage() {
             cpu: "15%",
           },
         ];
-      } else if (selectedProvider === "Azure Dedicated") {
+      } else if (selectedProvider === "GCP Dedicated") {
         workloads = [
           {
             id: `vmss-${Math.floor(Math.random() * 10000)}`,
@@ -387,7 +387,7 @@ export default function CloudPage() {
 
     const stages = [
       `[${timestamp()}] 🚀 Spawning sovereign docker-agent container for ${agent.agentName}...`,
-      `[${timestamp()}] 🔐 Establishing secure tunnel using Azure Workload Identity / Federated Credentials...`,
+      `[${timestamp()}] 🔐 Establishing secure tunnel using GCP Workload Identity / Federated Credentials...`,
       `[${timestamp()}] 🔍 Injecting Dynamic DLP Scrubber & regex validation filters...`,
       `[${timestamp()}] 🩺 Conducting sandbox telemetry checklist & pre-flight compile diagnostics...`,
       `[${timestamp()}] 🎯 Dedicated specialist bound! Status promoted to ACTIVE & SWARMING.`,
@@ -508,7 +508,7 @@ export default function CloudPage() {
                     </div>
 
                     {/* Azure Sovereign AI Gateway Endpoint Section */}
-                    {["Azure"].some((x) =>
+                    {["GCP", "Azure"].some((x) =>
                       selectedProvider?.includes(x),
                     ) && (
                       <div className="mb-8 bg-default-50 dark:bg-black/40 border border-default-100 rounded-2xl p-5 relative overflow-hidden">
@@ -519,7 +519,7 @@ export default function CloudPage() {
                           </div>
                           <div>
                             <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                              Azure Sovereign AI Gateway Routing
+                              GCP Sovereign AI Gateway Routing (Sovereign Azure Inference)
                             </h4>
                             <p className="text-[10px] text-gray-400">
                               Sovereign proxy path enforced for foundational
@@ -534,11 +534,11 @@ export default function CloudPage() {
                               Active Gateway
                             </span>
                             <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
-                              {selectedProvider === "Azure Government"
-                                ? "Azure OpenAI Government (IL5)"
-                                : selectedProvider === "Azure Dedicated"
-                                  ? "Azure OpenAI Dedicated (IL2)"
-                                  : "Azure OpenAI Foundry"}
+                              {selectedProvider === "GCP Government"
+                                ? "Azure OpenAI Government (IL5 Proxy)"
+                                : selectedProvider === "GCP Dedicated"
+                                  ? "Azure OpenAI Dedicated (IL2 Proxy)"
+                                  : "Azure OpenAI Foundry Proxy"}
                             </div>
                           </div>
 
@@ -547,9 +547,9 @@ export default function CloudPage() {
                               Active Model
                             </span>
                             <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
-                              {selectedProvider === "Azure Government"
+                              {selectedProvider === "GCP Government"
                                 ? "GPT-4o (Gov/IL5)"
-                                : selectedProvider === "Azure Dedicated"
+                                : selectedProvider === "GCP Dedicated"
                                   ? "GPT-4o (Dedicated/IL2)"
                                   : "GPT-4o (Commercial)"}
                             </div>

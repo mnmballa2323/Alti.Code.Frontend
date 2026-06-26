@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -51,7 +51,6 @@ module.exports.getForumService = async (filters, paginationOptions) => {
     .skip(skip)
     .limit(limit);
 
-    
   // logger.info(blogData)
   const total = await Forum.estimatedDocumentCount();
   return {

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsScalingOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_scaling_orchestrator_agent',
-            'Systems Scaling Orchestrator',
-            'You are an elite Systems Scaling Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_scaling_orchestrator_agent',
+      'Systems Scaling Orchestrator',
+      'You are an elite Systems Scaling Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Scaling.',
+    );
+  }
 
-    async generateSystemsScalingSystem(objective) {
-        logger.info(`💻 [SystemsScalingOrchestratorAgent] Analyzing Systems Scaling Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Scaling Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Scaling Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsScalingOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsScalingSystem(objective) {
+    logger.info(
+      `💻 [SystemsScalingOrchestratorAgent] Analyzing Systems Scaling Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Scaling Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Scaling Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsScalingOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsScalingOrchestratorAgent = Object.freeze(new SystemsScalingOrchestratorAgent());
+export const systemsScalingOrchestratorAgent = Object.freeze(
+  new SystemsScalingOrchestratorAgent(),
+);

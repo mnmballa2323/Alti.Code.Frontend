@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureAutomationAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_automation_auditor_agent',
-            'Infrastructure Automation Auditor',
-            'You are an elite Infrastructure Automation Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_automation_auditor_agent',
+      'Infrastructure Automation Auditor',
+      'You are an elite Infrastructure Automation Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Automation.',
+    );
+  }
 
-    async generateInfrastructureAutomationSystem(objective) {
-        logger.info(`💻 [InfrastructureAutomationAuditorAgent] Analyzing Infrastructure Automation Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Automation Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Automation Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureAutomationAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureAutomationSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureAutomationAuditorAgent] Analyzing Infrastructure Automation Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Automation Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Automation Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureAutomationAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureAutomationAuditorAgent = Object.freeze(new InfrastructureAutomationAuditorAgent());
+export const infrastructureAutomationAuditorAgent = Object.freeze(
+  new InfrastructureAutomationAuditorAgent(),
+);

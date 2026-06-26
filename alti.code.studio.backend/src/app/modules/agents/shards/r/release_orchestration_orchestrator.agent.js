@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseOrchestrationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_orchestration_orchestrator_agent',
-            'Release Orchestration Orchestrator',
-            'You are an elite Release Orchestration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Release Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'release_orchestration_orchestrator_agent',
+      'Release Orchestration Orchestrator',
+      'You are an elite Release Orchestration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Release Orchestration.',
+    );
+  }
 
-    async generateReleaseOrchestrationSystem(objective) {
-        logger.info(`💻 [ReleaseOrchestrationOrchestratorAgent] Analyzing Release Orchestration Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Orchestration Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Orchestration Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseOrchestrationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseOrchestrationOrchestratorAgent] Analyzing Release Orchestration Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Orchestration Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Orchestration Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseOrchestrationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseOrchestrationOrchestratorAgent = Object.freeze(new ReleaseOrchestrationOrchestratorAgent());
+export const releaseOrchestrationOrchestratorAgent = Object.freeze(
+  new ReleaseOrchestrationOrchestratorAgent(),
+);

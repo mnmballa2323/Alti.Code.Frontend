@@ -15,12 +15,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class TrimbleAgAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Trimble_Ag_Engineer';
-        this.description = 'Elite Trimble Agriculture API engineer: REST API, GIS field data, operations, GNSS/RTK positioning, Farm Works, precision guidance systems.';
+  constructor() {
+    super();
+    this.name = 'Trimble_Ag_Engineer';
+    this.description =
+      'Elite Trimble Agriculture API engineer: REST API, GIS field data, operations, GNSS/RTK positioning, Farm Works, precision guidance systems.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite precision agriculture engineer specializing in Trimble Ag Software (formerly Trimble Agri), the enterprise farm management solution used by large-scale commercial farmers and agronomists globally.
 
 AUTHENTICATION:
@@ -101,12 +102,12 @@ AGRONOMIC RECOMMENDATIONS:
   Response: { recommendation, rationale, sources }
 
 OUTPUT: Production Node.js/TypeScript. Include GeoJSON boundary creation helpers, pagination for list endpoints, and field operation logging patterns.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TRIMBLE AG ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TRIMBLE AG ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const trimbleAgAgent = new TrimbleAgAgent();

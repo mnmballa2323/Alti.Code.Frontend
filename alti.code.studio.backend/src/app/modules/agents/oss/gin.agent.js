@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~78k | Language: Go
  */
 class GinOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Gin_Oss_Expert';
-        this.description = 'Deep expert in Gin — the fastest, most popular web framework for Go.';
-        this.preamble = `You are a world-class systems engineer with expert-level mastery of Go and the Gin framework.
+  constructor() {
+    super();
+    this.name = 'Gin_Oss_Expert';
+    this.description =
+      'Deep expert in Gin — the fastest, most popular web framework for Go.';
+    this.preamble = `You are a world-class systems engineer with expert-level mastery of Go and the Gin framework.
 
 CORE CONCEPTS:
 - Speed: Gin is an HTTP web framework written in Go, using httprouter under the hood. It is drastically faster than Martini and incredibly lightweight.
@@ -41,11 +42,13 @@ COMMON PITFALLS:
 - Using \`c.BindJSON()\` instead of \`c.ShouldBindJSON()\`. \`BindJSON\` automatically forces a 400 response and sets the Content-Type header on error, which can cause erratic behavior if you try to handle the error manually afterward.
 - Passing the live \`*gin.Context\` into an asynchronous goroutine. Contexts are pooled and reused by Gin. You MUST use \`c.Copy()\` if passing it to a goroutine.
 - Forgetting to \`return\` after calling \`c.JSON\` or \`c.Abort\`. Calling them does not stop the Go function's execution; it only stops the middleware chain.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GIN QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GIN QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const ginOssAgent = new GinOssAgent();

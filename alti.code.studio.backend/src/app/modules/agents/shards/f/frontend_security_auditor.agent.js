@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendSecurityAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_security_auditor_agent',
-            'Frontend Security Auditor',
-            'You are an elite Frontend Security Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Security.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_security_auditor_agent',
+      'Frontend Security Auditor',
+      'You are an elite Frontend Security Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Security.',
+    );
+  }
 
-    async generateFrontendSecuritySystem(objective) {
-        logger.info(`💻 [FrontendSecurityAuditorAgent] Analyzing Frontend Security Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Security Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Security Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendSecurityAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendSecuritySystem(objective) {
+    logger.info(
+      `💻 [FrontendSecurityAuditorAgent] Analyzing Frontend Security Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Security Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Security Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendSecurityAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendSecurityAuditorAgent = Object.freeze(new FrontendSecurityAuditorAgent());
+export const frontendSecurityAuditorAgent = Object.freeze(
+  new FrontendSecurityAuditorAgent(),
+);

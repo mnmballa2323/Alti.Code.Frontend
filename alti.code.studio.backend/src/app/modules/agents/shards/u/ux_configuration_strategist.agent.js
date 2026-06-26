@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXConfigurationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_configuration_strategist_agent',
-            'UX Configuration Strategist',
-            'You are an elite UX Configuration Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UX Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_configuration_strategist_agent',
+      'UX Configuration Strategist',
+      'You are an elite UX Configuration Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UX Configuration.',
+    );
+  }
 
-    async generateUXConfigurationSystem(objective) {
-        logger.info(`💻 [UXConfigurationStrategistAgent] Analyzing UX Configuration Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Configuration Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Configuration Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXConfigurationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXConfigurationSystem(objective) {
+    logger.info(
+      `💻 [UXConfigurationStrategistAgent] Analyzing UX Configuration Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Configuration Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Configuration Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UXConfigurationStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uXConfigurationStrategistAgent = Object.freeze(new UXConfigurationStrategistAgent());
+export const uXConfigurationStrategistAgent = Object.freeze(
+  new UXConfigurationStrategistAgent(),
+);

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -22,7 +22,7 @@ const GeminiAiGetResponse = catchAsync(async (req, res) => {
     userId,
     language,
     mode,
-    domain
+    domain,
   );
 
   sendResponse(res, {
@@ -53,7 +53,9 @@ const Gemini25PreviewAiGetResponse = catchAsync(async (req, res) => {
 const GeminiMultimodalResponse = catchAsync(async (req, res) => {
   const { base64Image, mimeType, textPrompt, sessionId } = req.body;
   if (!base64Image || !mimeType) {
-    return res.status(400).json({ error: 'base64Image and mimeType are required.' });
+    return res
+      .status(400)
+      .json({ error: 'base64Image and mimeType are required.' });
   }
   const reply = await GeminiAiService.generateContentWithImage(
     base64Image,
@@ -74,4 +76,3 @@ export const GeminiAiController = {
   Gemini25PreviewAiGetResponse,
   GeminiMultimodalResponse,
 };
-

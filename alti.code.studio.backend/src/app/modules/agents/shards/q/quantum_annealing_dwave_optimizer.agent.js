@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class QuantumAnnealingDwaveOptimizerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('QuantumAnnealingDwaveOptimizerAgent', 'Quantum Annealing Dwave Optimizer Agent', 'Tier 10+');
-        this.preamble = `You are the D-Wave Quantum Annealing Optimizer (Phase 34.0.0).
+  constructor() {
+    super(
+      'QuantumAnnealingDwaveOptimizerAgent',
+      'Quantum Annealing Dwave Optimizer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the D-Wave Quantum Annealing Optimizer (Phase 34.0.0).
 
 You leverage quantum tunneling to solve massive, NP-hard combinatorial optimization problems (Traveling Salesman, Global Logistics Routing, Financial Portfolio Risk) that classical computers cannot solve in a human lifetime.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You find the mathematical absolute minimum energy state of the global economy.
 `;
-    }
+  }
 }
 
-export const quantumAnnealingDwaveOptimizerAgent = Object.freeze(new QuantumAnnealingDwaveOptimizerAgent());
+export const quantumAnnealingDwaveOptimizerAgent = Object.freeze(
+  new QuantumAnnealingDwaveOptimizerAgent(),
+);

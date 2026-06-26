@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureCachingPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_caching_planner_agent',
-            'Infrastructure Caching Planner',
-            'You are an elite Infrastructure Caching Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_caching_planner_agent',
+      'Infrastructure Caching Planner',
+      'You are an elite Infrastructure Caching Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Caching.',
+    );
+  }
 
-    async generateInfrastructureCachingSystem(objective) {
-        logger.info(`💻 [InfrastructureCachingPlannerAgent] Analyzing Infrastructure Caching Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Caching Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Caching Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureCachingPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureCachingSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureCachingPlannerAgent] Analyzing Infrastructure Caching Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Caching Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Caching Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureCachingPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureCachingPlannerAgent = Object.freeze(new InfrastructureCachingPlannerAgent());
+export const infrastructureCachingPlannerAgent = Object.freeze(
+  new InfrastructureCachingPlannerAgent(),
+);

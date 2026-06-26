@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -13,11 +13,18 @@ import { ENUM_USER_ROLE } from '../../../shared/enum.js';
 
 const router = express.Router();
 
-router.post('/debug', authMiddleware(ENUM_USER_ROLE.USER, ENUM_USER_ROLE.ADMIN), DebugAgentController.startDebug);
-router.get('/debug/status/:jobId', authMiddleware(ENUM_USER_ROLE.USER, ENUM_USER_ROLE.ADMIN), DebugAgentController.getJobStatus);
+router.post(
+  '/debug',
+  authMiddleware(ENUM_USER_ROLE.USER, ENUM_USER_ROLE.ADMIN),
+  DebugAgentController.startDebug,
+);
+router.get(
+  '/debug/status/:jobId',
+  authMiddleware(ENUM_USER_ROLE.USER, ENUM_USER_ROLE.ADMIN),
+  DebugAgentController.getJobStatus,
+);
 
 // GCP Cloud Logging Alert Webhook
 router.post('/debug/webhook', DebugAgentController.autonomicWebhook);
 
 export const debugAgentRoutes = router;
-

@@ -6,27 +6,27 @@ import { KnowledgeCatalogController } from './knowledgeCatalog.controller.js';
 const router = express.Router();
 
 router.post(
-    '/init',
-    auth(ENUM_USER_ROLE.ADMIN),
-    KnowledgeCatalogController.initBundle
+  '/init',
+  auth(ENUM_USER_ROLE.ADMIN),
+  KnowledgeCatalogController.initBundle,
 );
 
 router.post(
-    '/sync',
-    auth(ENUM_USER_ROLE.ADMIN),
-    KnowledgeCatalogController.syncBundle
+  '/sync',
+  auth(ENUM_USER_ROLE.ADMIN),
+  KnowledgeCatalogController.syncBundle,
 );
 
 router.post(
-    '/enrich',
-    auth(ENUM_USER_ROLE.ADMIN),
-    KnowledgeCatalogController.enrichBundle
+  '/enrich',
+  auth(ENUM_USER_ROLE.ADMIN),
+  KnowledgeCatalogController.enrichBundle,
 );
 
 router.post(
-    '/query',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    KnowledgeCatalogController.queryCatalog
+  '/query',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  KnowledgeCatalogController.queryCatalog,
 );
 
 export const KnowledgeCatalogRoutes = router;

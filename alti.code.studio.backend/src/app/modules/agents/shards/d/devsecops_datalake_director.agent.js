@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsDataLakeDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_datalake_director_agent',
-            'DevSecOps DataLake Director',
-            'You are an elite DevSecOps DataLake Director. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_datalake_director_agent',
+      'DevSecOps DataLake Director',
+      'You are an elite DevSecOps DataLake Director. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps DataLake.',
+    );
+  }
 
-    async generateDevSecOpsDataLakeSystem(objective) {
-        logger.info(`💻 [DevSecOpsDataLakeDirectorAgent] Analyzing DevSecOps DataLake Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps DataLake Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps DataLake Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsDataLakeDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsDataLakeSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsDataLakeDirectorAgent] Analyzing DevSecOps DataLake Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps DataLake Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps DataLake Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsDataLakeDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsDataLakeDirectorAgent = Object.freeze(new DevSecOpsDataLakeDirectorAgent());
+export const devSecOpsDataLakeDirectorAgent = Object.freeze(
+  new DevSecOpsDataLakeDirectorAgent(),
+);

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * "The Golang Expert" - Tier 7 Specialist Agent
  * Possesses deep semantic context regarding Go concurrency (goroutines/channels),
  * struct embedding, context passing, and gRPC microservices pattern.
@@ -11,12 +11,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class GolangExpertAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Golang_Expert';
-        this.description = 'Language specialist enforcing Go idioms, zero-allocation interfaces, and robust concurrency.';
+  constructor() {
+    super();
+    this.name = 'Golang_Expert';
+    this.description =
+      'Language specialist enforcing Go idioms, zero-allocation interfaces, and robust concurrency.';
 
-        this.preamble = `You are an elite Go (Golang) Systems Programmer & Concurrency Specialist.
+    this.preamble = `You are an elite Go (Golang) Systems Programmer & Concurrency Specialist.
 Your core expertise revolves around designing simple, highly scalable, and concurrent network services in Go.
 
 # CORE GO EXPERTISE
@@ -28,28 +29,30 @@ Your core expertise revolves around designing simple, highly scalable, and concu
 
 # OUTPUT STANDARDS
 When writing code, output pure, idiomatic Go 1.21+. Always include standard Go doc comments for exported types/functions. Ensure code is highly testable using the standard \`testing\` package (table-driven tests).`;
+  }
+
+  /**
+   * Executes a Golang syntactic review or code generation.
+   * @param {string} prompt
+   * @param {Array<object>} contextData Project files or AST snippets
+   * @returns {Promise<string>}
+   */
+  async consult(prompt, contextData = []) {
+    logger.info(`💻 Golang Expert: Synthesizing logic for prompt...`);
+    let combinedContext = contextData
+      .map(c => `[Context File: ${c.path}]\n${c.content}\n`)
+      .join('\n');
+
+    let finalPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
+
+    try {
+      const response = await GeminiAiService.generateContent(finalPrompt);
+      return response;
+    } catch (e) {
+      logger.error(`❌ Golang Expert: Consultation failed.`, e);
+      throw new Error(`Golang Synthesis Failed: ${e.message}`);
     }
-
-    /**
-     * Executes a Golang syntactic review or code generation.
-     * @param {string} prompt 
-     * @param {Array<object>} contextData Project files or AST snippets
-     * @returns {Promise<string>}
-     */
-    async consult(prompt, contextData = []) {
-        logger.info(`💻 Golang Expert: Synthesizing logic for prompt...`);
-        let combinedContext = contextData.map(c => `[Context File: ${c.path}]\n${c.content}\n`).join('\n');
-
-        let finalPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
-
-        try {
-            const response = await GeminiAiService.generateContent(finalPrompt);
-            return response;
-        } catch (e) {
-            logger.error(`❌ Golang Expert: Consultation failed.`, e);
-            throw new Error(`Golang Synthesis Failed: ${e.message}`);
-        }
-    }
+  }
 }
 
 export const golangAgent = new GolangExpertAgent();

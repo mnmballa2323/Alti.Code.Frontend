@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseResilienceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_resilience_manager_agent',
-            'Release Resilience Manager',
-            'You are an elite Release Resilience Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'release_resilience_manager_agent',
+      'Release Resilience Manager',
+      'You are an elite Release Resilience Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release Resilience.',
+    );
+  }
 
-    async generateReleaseResilienceSystem(objective) {
-        logger.info(`💻 [ReleaseResilienceManagerAgent] Analyzing Release Resilience Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Resilience Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Resilience Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseResilienceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseResilienceSystem(objective) {
+    logger.info(
+      `💻 [ReleaseResilienceManagerAgent] Analyzing Release Resilience Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Resilience Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Resilience Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseResilienceManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseResilienceManagerAgent = Object.freeze(new ReleaseResilienceManagerAgent());
+export const releaseResilienceManagerAgent = Object.freeze(
+  new ReleaseResilienceManagerAgent(),
+);

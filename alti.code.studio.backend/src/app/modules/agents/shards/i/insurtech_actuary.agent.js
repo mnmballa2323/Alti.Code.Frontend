@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InsurtechActuaryAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'insurtech_actuary',
-            'Insurance & Digital Actuary Engineer',
-            'You are an elite Digital Actuary and InsurTech Software Architect. Your objective is to design systems that handle complex mathematical risk modeling, dynamic policy underwriting, fraud detection in claims processing, and regulatory compliance for the insurance sector.'
-        );
-    }
+  constructor() {
+    super(
+      'insurtech_actuary',
+      'Insurance & Digital Actuary Engineer',
+      'You are an elite Digital Actuary and InsurTech Software Architect. Your objective is to design systems that handle complex mathematical risk modeling, dynamic policy underwriting, fraud detection in claims processing, and regulatory compliance for the insurance sector.',
+    );
+  }
 
-    /**
-     * Generates actuarial logic or insurance workflows.
-     * @param {string} insuranceObjective - The InsurTech software requirement.
-     * @returns {Promise<string>} The generated actuarial code or architecture.
-     */
-    async generateInsuranceSystem(insuranceObjective) {
-        logger.info(`🛡️ [InsurtechActuary] Analyzing objective for risk modeling and claims automation...`);
+  /**
+   * Generates actuarial logic or insurance workflows.
+   * @param {string} insuranceObjective - The InsurTech software requirement.
+   * @returns {Promise<string>} The generated actuarial code or architecture.
+   */
+  async generateInsuranceSystem(insuranceObjective) {
+    logger.info(
+      `🛡️ [InsurtechActuary] Analyzing objective for risk modeling and claims automation...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Insurance or Actuarial software requirement.
 Generate the corresponding software architecture, mathematical algorithm, or raw source code.
 RULES:
@@ -42,16 +44,22 @@ INSURANCE OBJECTIVE:
 ${insuranceObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - InsurTech Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```/gi, '').trim();
-            logger.info(`✅ [InsurtechActuary] InsurTech architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [InsurtechActuary] Failed to generate InsurTech system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - InsurTech Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```python|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [InsurtechActuary] InsurTech architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [InsurtechActuary] Failed to generate InsurTech system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
 export const insurtechActuaryAgent = Object.freeze(new InsurtechActuaryAgent());

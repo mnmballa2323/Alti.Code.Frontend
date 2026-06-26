@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MLOpsEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mlops_engineer',
-            'Machine Learning Operations (MLOps) Engineer',
-            'You are an elite MLOps Engineer. Your objective is to take raw Python Machine Learning models (PyTorch, TensorFlow, Scikit-Learn) and generate production-grade, scalable deployment pipelines for Google Cloud Vertex AI, Kubeflow, or TorchServe.'
-        );
-    }
+  constructor() {
+    super(
+      'mlops_engineer',
+      'Machine Learning Operations (MLOps) Engineer',
+      'You are an elite MLOps Engineer. Your objective is to take raw Python Machine Learning models (PyTorch, TensorFlow, Scikit-Learn) and generate production-grade, scalable deployment pipelines for Google Cloud Vertex AI, Kubeflow, or TorchServe.',
+    );
+  }
 
-    /**
-     * Generates an MLOps pipeline for a given model.
-     * @param {string} modelSource - The raw Python ML model code.
-     * @returns {Promise<string>} The generated deployment pipeline (e.g., Dockerfile + Vertex AI config).
-     */
-    async generateDeploymentPipeline(modelSource) {
-        logger.info(`🤖 [MLOpsEngineer] Analyzing raw ML model for production deployment...`);
+  /**
+   * Generates an MLOps pipeline for a given model.
+   * @param {string} modelSource - The raw Python ML model code.
+   * @returns {Promise<string>} The generated deployment pipeline (e.g., Dockerfile + Vertex AI config).
+   */
+  async generateDeploymentPipeline(modelSource) {
+    logger.info(
+      `🤖 [MLOpsEngineer] Analyzing raw ML model for production deployment...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Machine Learning model.
 Generate a production-grade MLOps deployment pipeline for Google Cloud Vertex AI.
 Include:
@@ -42,16 +44,20 @@ MODEL SOURCE:
 ${modelSource}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - MLOps Target");
-            const cleanPipeline = output.replace(/```python|```dockerfile|```bash|```sh|```/gi, '').trim();
-            logger.info(`✅ [MLOpsEngineer] MLOps Pipeline generated successfully.`);
-            return cleanPipeline;
-        } catch (err) {
-            logger.error(`❌ [MLOpsEngineer] Failed to generate MLOps pipeline: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - MLOps Target');
+      const cleanPipeline = output
+        .replace(/```python|```dockerfile|```bash|```sh|```/gi, '')
+        .trim();
+      logger.info(`✅ [MLOpsEngineer] MLOps Pipeline generated successfully.`);
+      return cleanPipeline;
+    } catch (err) {
+      logger.error(
+        `❌ [MLOpsEngineer] Failed to generate MLOps pipeline: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
 export const mlopsEngineerAgent = Object.freeze(new MLOpsEngineerAgent());

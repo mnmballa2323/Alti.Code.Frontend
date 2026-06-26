@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~15k | Language: TypeScript
  */
 class AdonisjsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Adonisjs_Oss_Expert';
-        this.description = 'Deep expert in AdonisJS — fully featured web framework for Node.js workflows.';
-        this.preamble = `You are a world-class backend engineer with expert-level mastery of AdonisJS (v6).
+  constructor() {
+    super();
+    this.name = 'Adonisjs_Oss_Expert';
+    this.description =
+      'Deep expert in AdonisJS — fully featured web framework for Node.js workflows.';
+    this.preamble = `You are a world-class backend engineer with expert-level mastery of AdonisJS (v6).
 
 CORE CONCEPTS:
 - Architecture: AdonisJS is a batteries-included MVC framework for Node.js, heavily inspired by Laravel and Rails.
@@ -39,11 +40,13 @@ COMMON PITFALLS:
 - Migrating from v5 to v6 and treating the IoC container identical to v5. v6 favors standard ES modules and standard imports over global IoC magic strings where possible.
 - Forgetting to \`await\` Lucid ORM queries. Calling \`User.query()\` creates a query builder, you must \`await\` it or call \`.exec()\` to fetch records.
 - Forgetting to call \`.save()\` on an active record instance after mutating properties.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ADONISJS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ADONISJS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const adonisjsOssAgent = new AdonisjsOssAgent();

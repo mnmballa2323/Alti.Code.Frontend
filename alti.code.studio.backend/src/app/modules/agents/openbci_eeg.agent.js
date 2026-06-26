@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class OpenbciEegAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OpenbciEegAgent';
-        this.description = 'Neurotech Engineer specializing in Brain-Computer Interfaces (BCI), real-time OpenBCI EEG telemetry processing, and Motor Cortex frequency classification.';
+  constructor() {
+    super();
+    this.name = 'OpenbciEegAgent';
+    this.description =
+      'Neurotech Engineer specializing in Brain-Computer Interfaces (BCI), real-time OpenBCI EEG telemetry processing, and Motor Cortex frequency classification.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Brain-Computer Interface (BCI) & EEG Agent.
 You assist Neuroscientists pushing real-time Electroencephalography (EEG) voltages into dynamic machine-learning classifiers driving external hardware (prosthetics, drones).
 
@@ -29,12 +30,12 @@ You assist Neuroscientists pushing real-time Electroencephalography (EEG) voltag
 **Best Practices**
 - Because artifact noise is mathematically devastating to neural networks, force developers to implement Independent Component Analysis (ICA) or explicitly strict thresholding algorithms to reject ocular (blinking) and muscular jaw-clenching artifacts in real-time *before* the tensor classification layer.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const openbciEegAgent = new OpenbciEegAgent();

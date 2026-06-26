@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackIntegrationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_integration_developer_agent',
-            'FullStack Integration Developer',
-            'You are an elite FullStack Integration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_integration_developer_agent',
+      'FullStack Integration Developer',
+      'You are an elite FullStack Integration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Integration.',
+    );
+  }
 
-    async generateFullStackIntegrationSystem(objective) {
-        logger.info(`💻 [FullStackIntegrationDeveloperAgent] Analyzing FullStack Integration Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Integration Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Integration Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackIntegrationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackIntegrationSystem(objective) {
+    logger.info(
+      `💻 [FullStackIntegrationDeveloperAgent] Analyzing FullStack Integration Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Integration Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Integration Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackIntegrationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackIntegrationDeveloperAgent = Object.freeze(new FullStackIntegrationDeveloperAgent());
+export const fullStackIntegrationDeveloperAgent = Object.freeze(
+  new FullStackIntegrationDeveloperAgent(),
+);

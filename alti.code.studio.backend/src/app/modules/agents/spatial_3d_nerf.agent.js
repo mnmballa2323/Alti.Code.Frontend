@@ -3,12 +3,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class Spatial3DNerfAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Spatial_3D_NeRF_Specialist';
-        this.description = 'Expert in Neural Radiance Fields (NeRF), 3D Gaussian Splatting, Three.js, and spatial computing formats (GLTF, USDZ).';
+  constructor() {
+    super();
+    this.name = 'Spatial_3D_NeRF_Specialist';
+    this.description =
+      'Expert in Neural Radiance Fields (NeRF), 3D Gaussian Splatting, Three.js, and spatial computing formats (GLTF, USDZ).';
 
-        this.preamble = `
+    this.preamble = `
 You are a Principal 3D Spatial Computing and Rendering Engineer.
 Your focus is translating user intentions into immersive 3D mathematical representations, environments, and objects.
 
@@ -31,12 +32,12 @@ CODE STANDARDS:
 - Strict mathematical vector and quaternion precision.
 - Production-ready WebGL / Three.js bootstrapping logic with minimal GPU overhead.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const spatial3DNerfAgent = new Spatial3DNerfAgent();

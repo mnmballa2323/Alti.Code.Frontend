@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureVirtualizationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_virtualization_developer_agent',
-            'Infrastructure Virtualization Developer',
-            'You are an elite Infrastructure Virtualization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_virtualization_developer_agent',
+      'Infrastructure Virtualization Developer',
+      'You are an elite Infrastructure Virtualization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Virtualization.',
+    );
+  }
 
-    async generateInfrastructureVirtualizationSystem(objective) {
-        logger.info(`💻 [InfrastructureVirtualizationDeveloperAgent] Analyzing Infrastructure Virtualization Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Virtualization Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Virtualization Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureVirtualizationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureVirtualizationDeveloperAgent] Analyzing Infrastructure Virtualization Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Virtualization Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Virtualization Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureVirtualizationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureVirtualizationDeveloperAgent = Object.freeze(new InfrastructureVirtualizationDeveloperAgent());
+export const infrastructureVirtualizationDeveloperAgent = Object.freeze(
+  new InfrastructureVirtualizationDeveloperAgent(),
+);

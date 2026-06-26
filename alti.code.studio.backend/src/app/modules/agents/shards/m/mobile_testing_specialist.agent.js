@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileTestingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_testing_specialist_agent',
-            'Mobile Testing Specialist',
-            'You are an elite Mobile Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_testing_specialist_agent',
+      'Mobile Testing Specialist',
+      'You are an elite Mobile Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Testing.',
+    );
+  }
 
-    async generateMobileTestingSystem(objective) {
-        logger.info(`💻 [MobileTestingSpecialistAgent] Analyzing Mobile Testing Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Testing Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Testing Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileTestingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileTestingSystem(objective) {
+    logger.info(
+      `💻 [MobileTestingSpecialistAgent] Analyzing Mobile Testing Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Testing Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Testing Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [MobileTestingSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const mobileTestingSpecialistAgent = Object.freeze(new MobileTestingSpecialistAgent());
+export const mobileTestingSpecialistAgent = Object.freeze(
+  new MobileTestingSpecialistAgent(),
+);

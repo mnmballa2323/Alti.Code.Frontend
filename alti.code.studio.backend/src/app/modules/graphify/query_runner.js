@@ -12,7 +12,10 @@ function run() {
   const limitArg = parseInt(args[1], 10) || 150;
 
   try {
-    const dbPath = path.resolve(__dirname, '../../../../../.codegraph/codegraph.db');
+    const dbPath = path.resolve(
+      __dirname,
+      '../../../../../.codegraph/codegraph.db',
+    );
     const db = new DatabaseSync(dbPath);
 
     // 1. Fetch files under the target directory
@@ -23,9 +26,9 @@ function run() {
       ORDER BY length(file_path) ASC, name ASC 
       LIMIT ?
     `);
-    
+
     const files = filesQuery.all(`${targetRelPath}%`, limitArg);
-    
+
     if (files.length === 0) {
       console.log(JSON.stringify({ nodes: [], links: [] }));
       return;
@@ -43,7 +46,7 @@ function run() {
       WHERE file_path IN (${placeholders}) AND kind IN ('class', 'function', 'method', 'route')
       LIMIT 250
     `);
-    
+
     const children = childrenQuery.all(...fileIds);
     const allNodes = [...files, ...children];
     const allNodeIds = allNodes.map(n => n.id);
@@ -57,7 +60,7 @@ function run() {
       FROM edges 
       WHERE source IN (${allPlaceholders}) AND target IN (${allPlaceholders})
     `);
-    
+
     // SQLite query takes source list first, target list second
     const edges = edgesQuery.all(...allNodeIds, ...allNodeIds);
 
@@ -68,11 +71,11 @@ function run() {
     // Functions: 4 (Purple)
     // Routes: 5 (Orange)
     const kindToGroup = {
-      'file': 2,
-      'class': 3,
-      'function': 4,
-      'method': 4,
-      'route': 5
+      file: 2,
+      class: 3,
+      function: 4,
+      method: 4,
+      route: 5,
     };
 
     const formattedNodes = allNodes.map(node => {
@@ -100,7 +103,7 @@ function run() {
         kind: node.kind,
         filePath: node.file_path,
         language: node.language,
-        signature: node.signature || undefined
+        signature: node.signature || undefined,
       };
     });
 
@@ -114,15 +117,16 @@ function run() {
         source: edge.source,
         target: edge.target,
         value,
-        kind: edge.kind
+        kind: edge.kind,
       };
     });
 
-    console.log(JSON.stringify({
-      nodes: formattedNodes,
-      links: formattedLinks
-    }));
-
+    console.log(
+      JSON.stringify({
+        nodes: formattedNodes,
+        links: formattedLinks,
+      }),
+    );
   } catch (error) {
     console.error('Error executing query runner:', error.message);
     process.exit(1);

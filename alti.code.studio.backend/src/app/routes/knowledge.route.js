@@ -8,18 +8,23 @@ const router = express.Router();
  * Ingests a new document via Azure OpenAI (GPT-5.5 + Text Embedding)
  */
 router.post('/ingest', async (req, res) => {
-    try {
-        const { documentText, documentName } = req.body;
-        if (!documentText || !documentName) {
-            return res.status(400).json({ success: false, error: "Missing document content or name." });
-        }
-        
-        const result = await knowledgeRagService.ingestDocument(documentText, documentName);
-        res.status(200).json(result);
-    } catch (error) {
-        logger.error(`[KnowledgeRoute] Ingestion Error:`, error);
-        res.status(500).json({ success: false, error: error.message });
+  try {
+    const { documentText, documentName } = req.body;
+    if (!documentText || !documentName) {
+      return res
+        .status(400)
+        .json({ success: false, error: 'Missing document content or name.' });
     }
+
+    const result = await knowledgeRagService.ingestDocument(
+      documentText,
+      documentName,
+    );
+    res.status(200).json(result);
+  } catch (error) {
+    logger.error(`[KnowledgeRoute] Ingestion Error:`, error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 // ============================================================================
@@ -27,54 +32,62 @@ router.post('/ingest', async (req, res) => {
 // ============================================================================
 
 router.post('/webhook/pr-review', async (req, res) => {
-    try {
-        const { gitDiff } = req.body;
-        if (!gitDiff) return res.status(400).json({ error: "gitDiff is required" });
-        const review = await knowledgeRagService.autonomousCodeReview(gitDiff);
-        res.status(200).json({ success: true, review });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
+  try {
+    const { gitDiff } = req.body;
+    if (!gitDiff) return res.status(400).json({ error: 'gitDiff is required' });
+    const review = await knowledgeRagService.autonomousCodeReview(gitDiff);
+    res.status(200).json({ success: true, review });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 router.post('/webhook/crash-runbook', async (req, res) => {
-    try {
-        const { crashLog } = req.body;
-        if (!crashLog) return res.status(400).json({ error: "crashLog is required" });
-        const runbook = await knowledgeRagService.generateIntelligentRunbook(crashLog);
-        res.status(200).json(runbook);
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
+  try {
+    const { crashLog } = req.body;
+    if (!crashLog)
+      return res.status(400).json({ error: 'crashLog is required' });
+    const runbook =
+      await knowledgeRagService.generateIntelligentRunbook(crashLog);
+    res.status(200).json(runbook);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 router.post('/webhook/self-heal', async (req, res) => {
-    try {
-        const { mergeDiff } = req.body;
-        if (!mergeDiff) return res.status(400).json({ error: "mergeDiff is required" });
-        const healingResult = await knowledgeRagService.selfHealDocumentation(mergeDiff);
-        res.status(200).json(healingResult);
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
+  try {
+    const { mergeDiff } = req.body;
+    if (!mergeDiff)
+      return res.status(400).json({ error: 'mergeDiff is required' });
+    const healingResult =
+      await knowledgeRagService.selfHealDocumentation(mergeDiff);
+    res.status(200).json(healingResult);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 /**
  * Queries the Sovereign Azure RAG
  */
 router.post('/query', async (req, res) => {
-    try {
-        const { prompt } = req.body;
-        if (!prompt) {
-            return res.status(400).json({ success: false, error: "Prompt is required." });
-        }
-
-        const answer = await knowledgeRagService.queryKnowledgeBase(prompt);
-        res.status(200).json({ success: true, answer });
-    } catch (error) {
-        logger.error(`[KnowledgeRoute] Query Error:`, error);
-        res.status(500).json({ success: false, error: 'Failed to query Knowledge Base.' });
+  try {
+    const { prompt } = req.body;
+    if (!prompt) {
+      return res
+        .status(400)
+        .json({ success: false, error: 'Prompt is required.' });
     }
+
+    const answer = await knowledgeRagService.queryKnowledgeBase(prompt);
+    res.status(200).json({ success: true, answer });
+  } catch (error) {
+    logger.error(`[KnowledgeRoute] Query Error:`, error);
+    res
+      .status(500)
+      .json({ success: false, error: 'Failed to query Knowledge Base.' });
+  }
 });
 
 // ============================================================================
@@ -82,35 +95,51 @@ router.post('/query', async (req, res) => {
 // ============================================================================
 
 router.post('/ide-sync', async (req, res) => {
-    try {
-        // Simulating the WebSocket logic via HTTP for the demo
-        const { codeContext } = req.body;
-        if (!codeContext) return res.status(400).json({ error: "codeContext is required from IDE plugin" });
-        logger.info(`🔌 [Sovereign Azure RAG] IDE Plugin connection detected. Syncing live code context...`);
-        
-        // Simulating immediate autocomplete context resolution
-        const review = await knowledgeRagService.queryKnowledgeBase(`Based on my live code: ${codeContext.slice(0, 50)}, what should I type next?`);
-        res.status(200).json({ success: true, autocompleteSuggestion: review.answer });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
+  try {
+    // Simulating the WebSocket logic via HTTP for the demo
+    const { codeContext } = req.body;
+    if (!codeContext)
+      return res
+        .status(400)
+        .json({ error: 'codeContext is required from IDE plugin' });
+    logger.info(
+      `🔌 [Sovereign Azure RAG] IDE Plugin connection detected. Syncing live code context...`,
+    );
+
+    // Simulating immediate autocomplete context resolution
+    const review = await knowledgeRagService.queryKnowledgeBase(
+      `Based on my live code: ${codeContext.slice(0, 50)}, what should I type next?`,
+    );
+    res
+      .status(200)
+      .json({ success: true, autocompleteSuggestion: review.answer });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 router.post('/voice-query', async (req, res) => {
-    try {
-        const { base64Audio } = req.body;
-        if (!base64Audio) return res.status(400).json({ error: "base64Audio is required" });
-        logger.info(`🎙️ [Sovereign Azure RAG] Voice-to-Knowledge payload received. Passing to Azure Speech-to-Text...`);
-        
-        // Simulating Azure Speech transcription
-        const transcribedText = "How do I scale the Azure Kubernetes Service cluster?";
-        logger.info(`   [Azure Speech] Transcribed: "${transcribedText}"`);
-        
-        const result = await knowledgeRagService.queryKnowledgeBase(transcribedText);
-        res.status(200).json({ success: true, transcription: transcribedText, answer: result });
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
+  try {
+    const { base64Audio } = req.body;
+    if (!base64Audio)
+      return res.status(400).json({ error: 'base64Audio is required' });
+    logger.info(
+      `🎙️ [Sovereign Azure RAG] Voice-to-Knowledge payload received. Passing to Azure Speech-to-Text...`,
+    );
+
+    // Simulating Azure Speech transcription
+    const transcribedText =
+      'How do I scale the Azure Kubernetes Service cluster?';
+    logger.info(`   [Azure Speech] Transcribed: "${transcribedText}"`);
+
+    const result =
+      await knowledgeRagService.queryKnowledgeBase(transcribedText);
+    res
+      .status(200)
+      .json({ success: true, transcription: transcribedText, answer: result });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 export default router;

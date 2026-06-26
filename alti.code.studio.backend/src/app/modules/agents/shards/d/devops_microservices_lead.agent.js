@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsMicroservicesLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_microservices_lead_agent',
-            'DevOps Microservices Lead',
-            'You are an elite DevOps Microservices Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_microservices_lead_agent',
+      'DevOps Microservices Lead',
+      'You are an elite DevOps Microservices Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Microservices.',
+    );
+  }
 
-    async generateDevOpsMicroservicesSystem(objective) {
-        logger.info(`💻 [DevOpsMicroservicesLeadAgent] Analyzing DevOps Microservices Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Microservices Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Microservices Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsMicroservicesLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [DevOpsMicroservicesLeadAgent] Analyzing DevOps Microservices Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Microservices Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Microservices Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevOpsMicroservicesLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devOpsMicroservicesLeadAgent = Object.freeze(new DevOpsMicroservicesLeadAgent());
+export const devOpsMicroservicesLeadAgent = Object.freeze(
+  new DevOpsMicroservicesLeadAgent(),
+);

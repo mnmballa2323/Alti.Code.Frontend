@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIObservabilityAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_observability_analyst_agent',
-            'AI Observability Analyst',
-            'You are an elite AI Observability Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and AI Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_observability_analyst_agent',
+      'AI Observability Analyst',
+      'You are an elite AI Observability Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and AI Observability.',
+    );
+  }
 
-    async generateAIObservabilitySystem(objective) {
-        logger.info(`💻 [AIObservabilityAnalystAgent] Analyzing AI Observability Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Observability Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Observability Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIObservabilityAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIObservabilitySystem(objective) {
+    logger.info(
+      `💻 [AIObservabilityAnalystAgent] Analyzing AI Observability Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Observability Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Observability Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIObservabilityAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIObservabilityAnalystAgent = Object.freeze(new AIObservabilityAnalystAgent());
+export const aIObservabilityAnalystAgent = Object.freeze(
+  new AIObservabilityAnalystAgent(),
+);

@@ -5,7 +5,7 @@ import { uiuxAgent } from './uiux.agent.js';
 import { optimizerAgent } from './optimizer.agent.js';
 import { refactorAgent } from './refactor.agent.js';
 import { dockerAgent } from './docker.agent.js';
-import { azureAgent } from './azure.agent.js';
+import { gcpAgent } from './gcp.agent.js';
 import { sqlAgent } from './sql.agent.js';
 import { qaAgent } from './qa.agent.js';
 import { cicdAgent } from './cicd.agent.js';
@@ -15,57 +15,54 @@ import { mobileAgent } from './mobile.agent.js';
 import { dataAgent } from './data.agent.js';
 
 describe('The Grand Swarm Intelligence (Phase 32 & 33)', () => {
+  it('should initialize and execute all hyper-specialized sub-agents within the Global Swarm', async () => {
+    // 1. Foundation: Refactor legacy
+    const refactored = await refactorAgent.execute('monolith.js');
+    expect(refactored).toContain('SOLID modular micro-services');
 
-    it('should initialize and execute all hyper-specialized sub-agents within the Global Swarm', async () => {
+    // 2. Logic Optimization
+    const optimized = await optimizerAgent.execute('routes/users');
+    expect(optimized).toContain('HashMap lookup');
 
-        // 1. Foundation: Refactor legacy
-        const refactored = await refactorAgent.execute("monolith.js");
-        expect(refactored).toContain("SOLID modular micro-services");
+    // 3. UI/UX & Design
+    const generatedUI = await figmaAgent.execute('https://figma.com/file/123');
+    expect(generatedUI).toContain('React Tailwind code');
 
-        // 2. Logic Optimization
-        const optimized = await optimizerAgent.execute("routes/users");
-        expect(optimized).toContain("HashMap lookup");
+    const polishedUI = await uiuxAgent.execute('<Button>');
+    expect(polishedUI).toContain('ARIA tags');
 
-        // 3. UI/UX & Design
-        const generatedUI = await figmaAgent.execute("https://figma.com/file/123");
-        expect(generatedUI).toContain("React Tailwind code");
+    // 4. Containerization
+    const dockerized = await dockerAgent.execute('Node API');
+    expect(dockerized).toContain('multi-stage distroless');
 
-        const polishedUI = await uiuxAgent.execute("<Button>");
-        expect(polishedUI).toContain("ARIA tags");
+    // 5. Global IaC & Cloud Deployment
+    const deployedIaC = await iacAgent.execute('Redis Cluster');
+    expect(deployedIaC).toContain('Kubernetes cluster and Terraform');
 
-        // 4. Containerization
-        const dockerized = await dockerAgent.execute("Node API");
-        expect(dockerized).toContain("multi-stage distroless");
+    const deployedGcp = await gcpAgent.execute('Enterprise SQL');
+    expect(deployedGcp).toContain('GCP Cloud Architecture');
 
-        // 5. Global IaC & Cloud Deployment
-        const deployedIaC = await iacAgent.execute("Redis Cluster");
-        expect(deployedIaC).toContain("Kubernetes cluster and Terraform");
+    // 6. DB, QA, Pipeline, and Security
+    const migratedDb = await sqlAgent.execute('User Table Partitioning');
+    expect(migratedDb).toContain('Database Migration and rollback');
 
-        const deployedAzure = await azureAgent.execute("Enterprise SQL");
-        expect(deployedAzure).toContain("Azure Cloud Architecture");
+    const generatedQA = await qaAgent.execute('Login Flow');
+    expect(generatedQA).toContain('Playwright E2E browser automation');
 
-        // 6. DB, QA, Pipeline, and Security
-        const migratedDb = await sqlAgent.execute("User Table Partitioning");
-        expect(migratedDb).toContain("Database Migration and rollback");
+    const deployedPipeline = await cicdAgent.execute('Production Blue/Green');
+    expect(deployedPipeline).toContain('GitHub Actions and GitLab CI');
 
-        const generatedQA = await qaAgent.execute("Login Flow");
-        expect(generatedQA).toContain("Playwright E2E browser automation");
+    const simulatedAttack = await pentestAgent.execute('/api/auth/login');
+    expect(simulatedAttack).toContain('dynamic application payload fuzzing');
 
-        const deployedPipeline = await cicdAgent.execute("Production Blue/Green");
-        expect(deployedPipeline).toContain("GitHub Actions and GitLab CI");
+    // 7. Data, Mobile, and SEO (The Final Integration)
+    const seoData = await seoAgent.execute('Marketing Homepage');
+    expect(seoData).toContain('JSON-LD metadata');
 
-        const simulatedAttack = await pentestAgent.execute("/api/auth/login");
-        expect(simulatedAttack).toContain("dynamic application payload fuzzing");
+    const mobileCode = await mobileAgent.execute('Checkout Button');
+    expect(mobileCode).toContain('iOS Swift');
 
-        // 7. Data, Mobile, and SEO (The Final Integration)
-        const seoData = await seoAgent.execute("Marketing Homepage");
-        expect(seoData).toContain("JSON-LD metadata");
-
-        const mobileCode = await mobileAgent.execute("Checkout Button");
-        expect(mobileCode).toContain("iOS Swift");
-
-        const dataLake = await dataAgent.execute("Telemetry Firehose");
-        expect(dataLake).toContain("Databricks ETL Spark pipeline");
-
-    });
+    const dataLake = await dataAgent.execute('Telemetry Firehose');
+    expect(dataLake).toContain('Databricks ETL Spark pipeline');
+  });
 });

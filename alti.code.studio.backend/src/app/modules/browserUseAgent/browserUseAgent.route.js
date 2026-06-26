@@ -6,15 +6,15 @@ import { BrowserUseAgentController } from './browserUseAgent.controller.js';
 const router = express.Router();
 
 router.post(
-    '/navigate',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    BrowserUseAgentController.runAutomation
+  '/navigate',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  BrowserUseAgentController.runAutomation,
 );
 
 router.get(
-    '/:taskId',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    BrowserUseAgentController.getStatus
+  '/:taskId',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  BrowserUseAgentController.getStatus,
 );
 
 export const BrowserUseAgentRoutes = router;

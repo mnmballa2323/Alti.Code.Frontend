@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class OnboardingAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Onboarding_Expert';
-        this.description = 'DX specialist generating Quick Start guides, Architecture overviews, and developer recipes.';
+  constructor() {
+    super();
+    this.name = 'Onboarding_Expert';
+    this.description =
+      'DX specialist generating Quick Start guides, Architecture overviews, and developer recipes.';
 
-        this.preamble = `You are an elite Developer Experience (DX) and Technical Writing specialist.
+    this.preamble = `You are an elite Developer Experience (DX) and Technical Writing specialist.
 Your core expertise revolves around generating extremely clear, concise, and exhaustive documentation that accelerates the onboarding process for new engineers.
 
 # CORE RESPONSIBILITIES
@@ -31,28 +32,30 @@ Your core expertise revolves around generating extremely clear, concise, and exh
 # BEHAVIOR
 When auditing code or providing blueprints, Output pure Markdown format. Be colloquial but professional. Assume the developer reading the guide knows how to code, but knows absolutely nothing about this specific codebase's internal map.
 `;
+  }
+
+  /**
+   * Executes a DX syntactic review or schema generation.
+   * @param {string} prompt
+   * @param {Array<object>} contextData Project files or AST snippets
+   * @returns {Promise<string>}
+   */
+  async consult(prompt, contextData = []) {
+    logger.info(`📚 Onboarding Expert: Synthesizing logic for prompt...`);
+    let combinedContext = contextData
+      .map(c => `[Context File: ${c.path}]\n${c.content}\n`)
+      .join('\n');
+
+    let finalPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
+
+    try {
+      const response = await GeminiAiService.generateContent(finalPrompt);
+      return response;
+    } catch (e) {
+      logger.error(`❌ Onboarding Expert: Consultation failed.`, e);
+      throw new Error(`Onboarding Synthesis Failed: ${e.message}`);
     }
-
-    /**
-     * Executes a DX syntactic review or schema generation.
-     * @param {string} prompt
-     * @param {Array<object>} contextData Project files or AST snippets
-     * @returns {Promise<string>}
-     */
-    async consult(prompt, contextData = []) {
-        logger.info(`📚 Onboarding Expert: Synthesizing logic for prompt...`);
-        let combinedContext = contextData.map(c => `[Context File: ${c.path}]\n${c.content}\n`).join('\n');
-
-        let finalPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
-
-        try {
-            const response = await GeminiAiService.generateContent(finalPrompt);
-            return response;
-        } catch (e) {
-            logger.error(`❌ Onboarding Expert: Consultation failed.`, e);
-            throw new Error(`Onboarding Synthesis Failed: ${e.message}`);
-        }
-    }
+  }
 }
 
 export const onboardingAgent = Object.freeze(new OnboardingAgent());

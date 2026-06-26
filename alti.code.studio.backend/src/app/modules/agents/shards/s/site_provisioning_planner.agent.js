@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteProvisioningPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_provisioning_planner_agent',
-            'Site Provisioning Planner',
-            'You are an elite Site Provisioning Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Site Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'site_provisioning_planner_agent',
+      'Site Provisioning Planner',
+      'You are an elite Site Provisioning Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Site Provisioning.',
+    );
+  }
 
-    async generateSiteProvisioningSystem(objective) {
-        logger.info(`💻 [SiteProvisioningPlannerAgent] Analyzing Site Provisioning Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Provisioning Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Provisioning Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteProvisioningPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteProvisioningSystem(objective) {
+    logger.info(
+      `💻 [SiteProvisioningPlannerAgent] Analyzing Site Provisioning Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Provisioning Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Provisioning Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteProvisioningPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteProvisioningPlannerAgent = Object.freeze(new SiteProvisioningPlannerAgent());
+export const siteProvisioningPlannerAgent = Object.freeze(
+  new SiteProvisioningPlannerAgent(),
+);

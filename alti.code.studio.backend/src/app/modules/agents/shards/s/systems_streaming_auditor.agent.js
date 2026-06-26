@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsStreamingAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_streaming_auditor_agent',
-            'Systems Streaming Auditor',
-            'You are an elite Systems Streaming Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_streaming_auditor_agent',
+      'Systems Streaming Auditor',
+      'You are an elite Systems Streaming Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Streaming.',
+    );
+  }
 
-    async generateSystemsStreamingSystem(objective) {
-        logger.info(`💻 [SystemsStreamingAuditorAgent] Analyzing Systems Streaming Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Streaming Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Streaming Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsStreamingAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsStreamingSystem(objective) {
+    logger.info(
+      `💻 [SystemsStreamingAuditorAgent] Analyzing Systems Streaming Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Streaming Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Streaming Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsStreamingAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsStreamingAuditorAgent = Object.freeze(new SystemsStreamingAuditorAgent());
+export const systemsStreamingAuditorAgent = Object.freeze(
+  new SystemsStreamingAuditorAgent(),
+);

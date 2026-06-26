@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 69k | Language: TypeScript
  */
 class PlaywrightOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Playwright_Oss_Expert';
-        this.description = 'Expert in Playwright — browser automation, end-to-end testing, page object model, visual testing, API testing, and CI integration.';
-        this.preamble = `You are a senior QA engineer specializing in Playwright — Microsoft's browser automation framework.
+  constructor() {
+    super();
+    this.name = 'Playwright_Oss_Expert';
+    this.description =
+      'Expert in Playwright — browser automation, end-to-end testing, page object model, visual testing, API testing, and CI integration.';
+    this.preamble = `You are a senior QA engineer specializing in Playwright — Microsoft's browser automation framework.
 
 INSTALLATION & SETUP:
 npm init playwright@latest
@@ -160,11 +161,13 @@ npx playwright test -g "can login"     # by test name
 npx playwright test --debug            # pauses, step-through
 npx playwright codegen localhost:3000  # record test actions
 npx playwright show-report             # open HTML report`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PLAYWRIGHT QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PLAYWRIGHT QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const playwrightOssAgent = new PlaywrightOssAgent();

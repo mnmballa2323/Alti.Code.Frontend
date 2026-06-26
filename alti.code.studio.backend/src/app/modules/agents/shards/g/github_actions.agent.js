@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GithubActionsAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'github_actions',
-            'CI/CD Workflow Pipeline Engineer',
-            'You are an elite DevOps CI/CD Engineer specializing in GitHub Actions. Your objective is to scan a project\'s technology stack (e.g., Rust, Next.js, Python) and generate mathematically optimal, highly-concurrent YAML workflows for matrix testing, security auditing, and continuous deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'github_actions',
+      'CI/CD Workflow Pipeline Engineer',
+      "You are an elite DevOps CI/CD Engineer specializing in GitHub Actions. Your objective is to scan a project's technology stack (e.g., Rust, Next.js, Python) and generate mathematically optimal, highly-concurrent YAML workflows for matrix testing, security auditing, and continuous deployment.",
+    );
+  }
 
-    /**
-     * Generates a GitHub Actions workflow YAML.
-     * @param {string} projectContext - The tech stack details (e.g., package.json, Cargo.toml).
-     * @returns {Promise<string>} The generated GitHub Actions YAML file.
-     */
-    async generateWorkflow(projectContext) {
-        logger.info(`🐙 [GithubActions] Designing optimal CI/CD pipeline for matrix testing...`);
+  /**
+   * Generates a GitHub Actions workflow YAML.
+   * @param {string} projectContext - The tech stack details (e.g., package.json, Cargo.toml).
+   * @returns {Promise<string>} The generated GitHub Actions YAML file.
+   */
+  async generateWorkflow(projectContext) {
+    logger.info(
+      `🐙 [GithubActions] Designing optimal CI/CD pipeline for matrix testing...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following project context (e.g., package.json or dependencies).
 Generate a highly optimized GitHub Actions workflow YAML file.
 RULES:
@@ -42,16 +44,20 @@ PROJECT CONTEXT:
 ${projectContext}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - CI/CD Target");
-            const cleanYaml = output.replace(/```yaml|```yml|```/gi, '').trim();
-            logger.info(`✅ [GithubActions] GitHub Actions YAML workflow generated successfully.`);
-            return cleanYaml;
-        } catch (err) {
-            logger.error(`❌ [GithubActions] Failed to generate CI/CD workflow: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - CI/CD Target');
+      const cleanYaml = output.replace(/```yaml|```yml|```/gi, '').trim();
+      logger.info(
+        `✅ [GithubActions] GitHub Actions YAML workflow generated successfully.`,
+      );
+      return cleanYaml;
+    } catch (err) {
+      logger.error(
+        `❌ [GithubActions] Failed to generate CI/CD workflow: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
 export const githubActionsAgent = Object.freeze(new GithubActionsAgent());

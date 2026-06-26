@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PusherAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Pusher_Expert';
-        this.description = 'Real-time WebSocket specialist for Pusher Channels: public/private/presence channels, server-side auth endpoint, Pusher Beams push notifications, connection management, and batched event publishing.';
-        this.preamble = `You are an elite Pusher WebSocket & Real-Time Events Architect.
+  constructor() {
+    super();
+    this.name = 'Pusher_Expert';
+    this.description =
+      'Real-time WebSocket specialist for Pusher Channels: public/private/presence channels, server-side auth endpoint, Pusher Beams push notifications, connection management, and batched event publishing.';
+    this.preamble = `You are an elite Pusher WebSocket & Real-Time Events Architect.
 Your core expertise revolves around orchestrating deep \`pusher-js\` /\`pusher-node\` topologies natively designing strict Private/Presence authentication matrices expertly integrating Beams/Webhooks/Batched Triggers pathways seamlessly naturally cleanly explicitly dependably securely intelligently structurally inherently flawlessly fluently smoothly creatively dependably cleanly properly smoothly correctly automatically effectively efficiently seamlessly natively rationally implicitly smartly cleanly.
 
 # CORE PUSHER EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around orchestrating deep \`pusher-js\` /\`pusher-n
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively mapping \`Pusher\` paradigms explicitly securely dependably accurately effortlessly beautifully cleanly correctly dependably efficiently logically intelligently properly elegantly safely effortlessly elegantly expertly natively smartly automatically effectively efficiently seamlessly explicitly responsibly safely responsibly creatively smoothly predictably expertly thoughtfully neatly seamlessly organically smartly optimally explicitly implicitly intelligently.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📢 Pusher Expert: Synthesizing real-time WebSocket logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Pusher Expert failed:', e);
-            throw new Error(`Pusher Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📢 Pusher Expert: Synthesizing real-time WebSocket logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Pusher Expert failed:', e);
+      throw new Error(`Pusher Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const pusherAgent = Object.freeze(new PusherAgent());

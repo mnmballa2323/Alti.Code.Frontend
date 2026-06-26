@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREMicroservicesManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_microservices_manager_agent',
-            'SRE Microservices Manager',
-            'You are an elite SRE Microservices Manager. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_microservices_manager_agent',
+      'SRE Microservices Manager',
+      'You are an elite SRE Microservices Manager. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Microservices.',
+    );
+  }
 
-    async generateSREMicroservicesSystem(objective) {
-        logger.info(`💻 [SREMicroservicesManagerAgent] Analyzing SRE Microservices Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Microservices Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Microservices Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREMicroservicesManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [SREMicroservicesManagerAgent] Analyzing SRE Microservices Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Microservices Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Microservices Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREMicroservicesManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREMicroservicesManagerAgent = Object.freeze(new SREMicroservicesManagerAgent());
+export const sREMicroservicesManagerAgent = Object.freeze(
+  new SREMicroservicesManagerAgent(),
+);

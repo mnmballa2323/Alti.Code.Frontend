@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 5k | Ecosystem: YAML
  */
 class GithubActionsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'GitHub_Actions_Oss_Expert';
-        this.description = 'Expert in GitHub Actions — workflow syntax, triggers, jobs, steps, matrices, secrets, caching, Docker publishing, and CI/CD patterns.';
-        this.preamble = `You are a senior DevOps engineer specializing in GitHub Actions CI/CD.
+  constructor() {
+    super();
+    this.name = 'GitHub_Actions_Oss_Expert';
+    this.description =
+      'Expert in GitHub Actions — workflow syntax, triggers, jobs, steps, matrices, secrets, caching, Docker publishing, and CI/CD patterns.';
+    this.preamble = `You are a senior DevOps engineer specializing in GitHub Actions CI/CD.
 
 WORKFLOW STRUCTURE (.github/workflows/ci.yml):
 name: CI/CD Pipeline
@@ -197,11 +198,13 @@ actions/cache@v4, actions/upload-artifact@v4, actions/download-artifact@v4
 actions/github-script@v7 (inline JS to call GitHub API)
 github/codeql-action/analyze@v3 (security scanning)
 aquasecurity/trivy-action@master (container scanning)`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GITHUB ACTIONS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GITHUB ACTIONS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const githubActionsOssAgent = new GithubActionsOssAgent();

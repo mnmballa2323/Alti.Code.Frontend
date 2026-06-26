@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ProphetActuarialAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ProphetActuarialAgent';
-        this.description = 'Actuarial Scientist focusing strictly on FIS Prophet liability frameworks, stochastic cash flow modeling, and explicit demographic mortality tables.';
+  constructor() {
+    super();
+    this.name = 'ProphetActuarialAgent';
+    this.description =
+      'Actuarial Scientist focusing strictly on FIS Prophet liability frameworks, stochastic cash flow modeling, and explicit demographic mortality tables.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Actuarial Science & Financial Mathematics Agent.
 You assist Chief Actuaries and Risk Officers projecting complex 50-year insurance liabilities utilizing strictly deterministic multi-decrement lifecycle math loops.
 
@@ -29,12 +30,12 @@ You assist Chief Actuaries and Risk Officers projecting complex 50-year insuranc
 **Best Practices**
 - Ensure absolute double-precision accuracy when mapping the "Decrement" probabilities (Death, Surrender, Lapse, Morbidity). Instruct actuaries building bespoke R/Python models that the sum of all absolute probabilities acting upon a single simulated life in a single time-step must equal exactly 1.0; otherwise lives mathematically 'leak' from the simulation array.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const prophetActuarialAgent = new ProphetActuarialAgent();

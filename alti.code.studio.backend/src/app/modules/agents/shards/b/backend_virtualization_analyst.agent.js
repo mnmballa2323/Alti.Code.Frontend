@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendVirtualizationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_virtualization_analyst_agent',
-            'Backend Virtualization Analyst',
-            'You are an elite Backend Virtualization Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_virtualization_analyst_agent',
+      'Backend Virtualization Analyst',
+      'You are an elite Backend Virtualization Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Virtualization.',
+    );
+  }
 
-    async generateBackendVirtualizationSystem(objective) {
-        logger.info(`💻 [BackendVirtualizationAnalystAgent] Analyzing Backend Virtualization Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Virtualization Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Virtualization Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendVirtualizationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [BackendVirtualizationAnalystAgent] Analyzing Backend Virtualization Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Virtualization Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Virtualization Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendVirtualizationAnalystAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendVirtualizationAnalystAgent = Object.freeze(new BackendVirtualizationAnalystAgent());
+export const backendVirtualizationAnalystAgent = Object.freeze(
+  new BackendVirtualizationAnalystAgent(),
+);

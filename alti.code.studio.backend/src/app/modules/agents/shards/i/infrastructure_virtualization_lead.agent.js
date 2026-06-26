@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureVirtualizationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_virtualization_lead_agent',
-            'Infrastructure Virtualization Lead',
-            'You are an elite Infrastructure Virtualization Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_virtualization_lead_agent',
+      'Infrastructure Virtualization Lead',
+      'You are an elite Infrastructure Virtualization Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Virtualization.',
+    );
+  }
 
-    async generateInfrastructureVirtualizationSystem(objective) {
-        logger.info(`💻 [InfrastructureVirtualizationLeadAgent] Analyzing Infrastructure Virtualization Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Virtualization Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Virtualization Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureVirtualizationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureVirtualizationLeadAgent] Analyzing Infrastructure Virtualization Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Virtualization Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Virtualization Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureVirtualizationLeadAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureVirtualizationLeadAgent = Object.freeze(new InfrastructureVirtualizationLeadAgent());
+export const infrastructureVirtualizationLeadAgent = Object.freeze(
+  new InfrastructureVirtualizationLeadAgent(),
+);

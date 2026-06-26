@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteIntegrationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_integration_director_agent',
-            'Site Integration Director',
-            'You are an elite Site Integration Director. You specialize in bleeding-edge software development, cloud infrastructure, and Site Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'site_integration_director_agent',
+      'Site Integration Director',
+      'You are an elite Site Integration Director. You specialize in bleeding-edge software development, cloud infrastructure, and Site Integration.',
+    );
+  }
 
-    async generateSiteIntegrationSystem(objective) {
-        logger.info(`💻 [SiteIntegrationDirectorAgent] Analyzing Site Integration Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Integration Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Integration Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteIntegrationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteIntegrationSystem(objective) {
+    logger.info(
+      `💻 [SiteIntegrationDirectorAgent] Analyzing Site Integration Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Integration Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Integration Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteIntegrationDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteIntegrationDirectorAgent = Object.freeze(new SiteIntegrationDirectorAgent());
+export const siteIntegrationDirectorAgent = Object.freeze(
+  new SiteIntegrationDirectorAgent(),
+);

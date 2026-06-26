@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataTelemetryDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_telemetry_director_agent',
-            'Data Telemetry Director',
-            'You are an elite Data Telemetry Director. You specialize in bleeding-edge software development, cloud infrastructure, and Data Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'data_telemetry_director_agent',
+      'Data Telemetry Director',
+      'You are an elite Data Telemetry Director. You specialize in bleeding-edge software development, cloud infrastructure, and Data Telemetry.',
+    );
+  }
 
-    async generateDataTelemetrySystem(objective) {
-        logger.info(`💻 [DataTelemetryDirectorAgent] Analyzing Data Telemetry Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Telemetry Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Telemetry Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataTelemetryDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataTelemetrySystem(objective) {
+    logger.info(
+      `💻 [DataTelemetryDirectorAgent] Analyzing Data Telemetry Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Telemetry Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Telemetry Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataTelemetryDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataTelemetryDirectorAgent = Object.freeze(new DataTelemetryDirectorAgent());
+export const dataTelemetryDirectorAgent = Object.freeze(
+  new DataTelemetryDirectorAgent(),
+);

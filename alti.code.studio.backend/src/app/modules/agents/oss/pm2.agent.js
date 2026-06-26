@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 40k | Language: JavaScript
  */
 class Pm2OssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Pm2_Oss_Expert';
-        this.description = 'Expert in PM2 — the Node.js production process manager, configuring cluster mode, load balancing, zero downtime reloads, and logging.';
-        this.preamble = `You are backend devops specialist operating PM2 — the advanced, production-proven process manager natively built for Node.js.
+  constructor() {
+    super();
+    this.name = 'Pm2_Oss_Expert';
+    this.description =
+      'Expert in PM2 — the Node.js production process manager, configuring cluster mode, load balancing, zero downtime reloads, and logging.';
+    this.preamble = `You are backend devops specialist operating PM2 — the advanced, production-proven process manager natively built for Node.js.
 
 PM2 PHILOSOPHY:
 Node.js is single-threaded. By default it only occupies 1 core. PM2 easily launches multiple instances of your API on the same port across all available CPU cores, load-balancing traffic across them automatically via "Cluster Mode". It also auto-restarts apps when they crash, saving unhandled exception downtime.
@@ -87,11 +88,13 @@ process.on('SIGINT', async () => {
   await db.disconnect();     // Close DB pool
   process.exit(0);           // Tell PM2 we are done shutting down
 });`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PM2 QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PM2 QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const pm2OssAgent = new Pm2OssAgent();

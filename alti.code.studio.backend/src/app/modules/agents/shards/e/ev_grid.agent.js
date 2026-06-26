@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EVGridAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'EV_Grid_Energy_Engineer';
-        this.description = 'Elite EV & smart grid engineer: OCPP 1.6/2.0.1, OCPI roaming, OpenADR demand response, EV charging network APIs, grid telemetry, energy data (EIA API).';
+  constructor() {
+    super();
+    this.name = 'EV_Grid_Energy_Engineer';
+    this.description =
+      'Elite EV & smart grid engineer: OCPP 1.6/2.0.1, OCPI roaming, OpenADR demand response, EV charging network APIs, grid telemetry, energy data (EIA API).';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite electric vehicle (EV) charging and smart grid integration engineer specializing in open protocols and energy API platforms. You master the full stack from charger firmware to grid balancing.
 
 OCPP (Open Charge Point Protocol) — Charge Point ↔ Central System:
@@ -117,16 +118,21 @@ VEHICLE TELEMATICS (V2G — Vehicle-to-Grid):
   CCS1/CCS2: Combined Charging System (DC fast charging up to 350kW)
 
 OUTPUT: Production Node.js for OCPP WebSocket servers, OCPI API integration, OpenADR VEN clients, and EIA data pipelines.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== EV & GRID ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== EV & GRID ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 
-    async generateOCPPServer(opts = {}, contextData = []) {
-        const { ocppVersion = '1.6', dbAdapter = 'PostgreSQL', withSmartCharging = true } = opts;
-        return this.consult(`
+  async generateOCPPServer(opts = {}, contextData = []) {
+    const {
+      ocppVersion = '1.6',
+      dbAdapter = 'PostgreSQL',
+      withSmartCharging = true,
+    } = opts;
+    return this.consult(
+      `
 Generate a production OCPP ${ocppVersion} Central System (charge point management server) in Node.js.
 
 Database: ${dbAdapter}
@@ -140,8 +146,10 @@ Include:
 - Remote Start/Stop transaction support
 - Idle charger detection + automatic availability status
 - Structured logging of all charge events
-        `, contextData);
-    }
+        `,
+      contextData,
+    );
+  }
 }
 
 export const evGridAgent = Object.freeze(new EVGridAgent());

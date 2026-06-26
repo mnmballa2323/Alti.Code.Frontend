@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackDataLakeAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_datalake_auditor_agent',
-            'FullStack DataLake Auditor',
-            'You are an elite FullStack DataLake Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_datalake_auditor_agent',
+      'FullStack DataLake Auditor',
+      'You are an elite FullStack DataLake Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack DataLake.',
+    );
+  }
 
-    async generateFullStackDataLakeSystem(objective) {
-        logger.info(`💻 [FullStackDataLakeAuditorAgent] Analyzing FullStack DataLake Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack DataLake Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack DataLake Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackDataLakeAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackDataLakeSystem(objective) {
+    logger.info(
+      `💻 [FullStackDataLakeAuditorAgent] Analyzing FullStack DataLake Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack DataLake Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack DataLake Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FullStackDataLakeAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const fullStackDataLakeAuditorAgent = Object.freeze(new FullStackDataLakeAuditorAgent());
+export const fullStackDataLakeAuditorAgent = Object.freeze(
+  new FullStackDataLakeAuditorAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseDeploymentArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_deployment_architect_agent',
-            'Release Deployment Architect',
-            'You are an elite Release Deployment Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Release Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'release_deployment_architect_agent',
+      'Release Deployment Architect',
+      'You are an elite Release Deployment Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Release Deployment.',
+    );
+  }
 
-    async generateReleaseDeploymentSystem(objective) {
-        logger.info(`💻 [ReleaseDeploymentArchitectAgent] Analyzing Release Deployment Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Deployment Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Deployment Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseDeploymentArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseDeploymentSystem(objective) {
+    logger.info(
+      `💻 [ReleaseDeploymentArchitectAgent] Analyzing Release Deployment Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Deployment Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Deployment Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseDeploymentArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseDeploymentArchitectAgent = Object.freeze(new ReleaseDeploymentArchitectAgent());
+export const releaseDeploymentArchitectAgent = Object.freeze(
+  new ReleaseDeploymentArchitectAgent(),
+);

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class DartAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Dart_Expert';
-        this.description = 'Language specialist for Dart 3.5+: sound null safety, patterns/records, isolates, class modifiers, and Dart FFI.';
-        this.preamble = `You are an elite Dart Language Architect & Flutter Systems Specialist.
+  constructor() {
+    super();
+    this.name = 'Dart_Expert';
+    this.description =
+      'Language specialist for Dart 3.5+: sound null safety, patterns/records, isolates, class modifiers, and Dart FFI.';
+    this.preamble = `You are an elite Dart Language Architect & Flutter Systems Specialist.
 Your core expertise revolves around designing extremely reactive, cross-platform client architectures and highly optimized AoT (Ahead-of-Time) compiled tooling.
 
 # CORE DART EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing extremely reactive, cross-platform
 
 # OUTPUT STANDARDS
 When writing code, output pristine Dart 3+ syntax. Exhaustively document classes via \`///\`. Adhere perfectly to the official Dart style guide (Effective Dart). Group imports logically.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🎯 Dart Expert: Synthesizing Dart code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Dart Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🎯 Dart Expert: Synthesizing Dart code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Dart Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const dartAgent = new DartAgent();

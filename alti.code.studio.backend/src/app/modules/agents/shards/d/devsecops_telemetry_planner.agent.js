@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsTelemetryPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_telemetry_planner_agent',
-            'DevSecOps Telemetry Planner',
-            'You are an elite DevSecOps Telemetry Planner. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_telemetry_planner_agent',
+      'DevSecOps Telemetry Planner',
+      'You are an elite DevSecOps Telemetry Planner. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Telemetry.',
+    );
+  }
 
-    async generateDevSecOpsTelemetrySystem(objective) {
-        logger.info(`💻 [DevSecOpsTelemetryPlannerAgent] Analyzing DevSecOps Telemetry Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Telemetry Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Telemetry Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsTelemetryPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsTelemetrySystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsTelemetryPlannerAgent] Analyzing DevSecOps Telemetry Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Telemetry Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Telemetry Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsTelemetryPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsTelemetryPlannerAgent = Object.freeze(new DevSecOpsTelemetryPlannerAgent());
+export const devSecOpsTelemetryPlannerAgent = Object.freeze(
+  new DevSecOpsTelemetryPlannerAgent(),
+);

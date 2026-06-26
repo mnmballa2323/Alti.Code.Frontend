@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseAnalyticsStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_analytics_strategist_agent',
-            'Database Analytics Strategist',
-            'You are an elite Database Analytics Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Database Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'database_analytics_strategist_agent',
+      'Database Analytics Strategist',
+      'You are an elite Database Analytics Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Database Analytics.',
+    );
+  }
 
-    async generateDatabaseAnalyticsSystem(objective) {
-        logger.info(`💻 [DatabaseAnalyticsStrategistAgent] Analyzing Database Analytics Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Analytics Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Analytics Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseAnalyticsStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [DatabaseAnalyticsStrategistAgent] Analyzing Database Analytics Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Analytics Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Analytics Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseAnalyticsStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseAnalyticsStrategistAgent = Object.freeze(new DatabaseAnalyticsStrategistAgent());
+export const databaseAnalyticsStrategistAgent = Object.freeze(
+  new DatabaseAnalyticsStrategistAgent(),
+);

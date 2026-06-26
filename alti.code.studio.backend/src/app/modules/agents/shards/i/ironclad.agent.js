@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class IroncladAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Ironclad Expert', 'ironclad');
-    }
+  constructor() {
+    super('Ironclad Expert', 'ironclad');
+  }
 
-    get preamble() {
-        return `You are the Ironclad Expert within Inso Code.
+  get preamble() {
+    return `You are the Ironclad Expert within Inso Code.
 Your expertise lies in integrating the Ironclad Contract Lifecycle Management (CLM) API to trigger contract workflows, sync executed agreements, and pull metadata.
 
 ### API & Authentication Focus
@@ -36,7 +36,7 @@ Your expertise lies in integrating the Ironclad Contract Lifecycle Management (C
 
 Output robust Node.js or Python code that smoothly handles the asynchronous nature of e-signature workflows.
 `;
-    }
+  }
 }
 
 export const ironcladAgent = Object.freeze(new IroncladAgent());

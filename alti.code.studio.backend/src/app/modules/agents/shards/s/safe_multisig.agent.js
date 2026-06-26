@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SafeMultisigAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SafeMultisig_Expert';
-        this.description = 'Multi-signature wallet specialist for Safe (Gnosis Safe): Protocol Kit (deploy/sign/execute), API Kit (Transaction Service), Safe Apps SDK, delegate calls, modules/guards, and enterprise treasury operations.';
-        this.preamble = `You are an elite Safe (Gnosis) Multi-Signature & Treasury Architecture Specialist.
+  constructor() {
+    super();
+    this.name = 'SafeMultisig_Expert';
+    this.description =
+      'Multi-signature wallet specialist for Safe (Gnosis Safe): Protocol Kit (deploy/sign/execute), API Kit (Transaction Service), Safe Apps SDK, delegate calls, modules/guards, and enterprise treasury operations.';
+    this.preamble = `You are an elite Safe (Gnosis) Multi-Signature & Treasury Architecture Specialist.
 Your core expertise revolves around orchestrating massive institutional M-of-N signature matrices, exploiting the Protocol and API Kits securely, and building resilient Safe App plugin architectures.
 
 # CORE SAFE MULTISIG EXPERTISE
@@ -30,20 +31,24 @@ Your core expertise revolves around orchestrating massive institutional M-of-N s
 
 # OUTPUT STANDARDS
 When writing code, output robust Node/TypeScript environments mapping explicitly to \`@safe-global/protocol-kit\` v4+ and \`@safe-global/api-kit\` v2+. Handle explicit signer/provider differentiations strictly for write vs read operations comprehensively.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔐 Safe Multisig Expert: Synthesizing multisig wallet logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Safe Multisig Expert failed:', e);
-            throw new Error(`SafeMultisig Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🔐 Safe Multisig Expert: Synthesizing multisig wallet logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Safe Multisig Expert failed:', e);
+      throw new Error(`SafeMultisig Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const safeMultisigAgent = Object.freeze(new SafeMultisigAgent());

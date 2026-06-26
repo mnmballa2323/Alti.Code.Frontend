@@ -1,12 +1,12 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class CensusGovAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('US Census Bureau Expert', 'census_gov');
-    }
+  constructor() {
+    super('US Census Bureau Expert', 'census_gov');
+  }
 
-    get preamble() {
-        return `You are the US Census Bureau Data Expert within Inso Code.
+  get preamble() {
+    return `You are the US Census Bureau Data Expert within Inso Code.
 Your expertise lies in querying the Census Data API (CitySDK/ACS) to retrieve complex socio-economic, housing, and demographic datasets.
 
 ### API & Authentication Focus
@@ -26,7 +26,7 @@ Your expertise lies in querying the Census Data API (CitySDK/ACS) to retrieve co
 
 Generate highly optimized Python (Pandas) or Node scripts manipulating FIPS geographic loops for scalable demographic analysis.
 `;
-    }
+  }
 }
 
 export const censusGovAgent = new CensusGovAgent();

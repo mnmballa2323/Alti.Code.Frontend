@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EpicGamesMetaverseAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'EpicGamesMetaverseAgent';
-        this.description = 'Spatial computing and 3D metaverse architect focusing on Unreal Engine Dedicated Servers, MetaHuman integrations, and Pixel Streaming over WebRTC.';
+  constructor() {
+    super();
+    this.name = 'EpicGamesMetaverseAgent';
+    this.description =
+      'Spatial computing and 3D metaverse architect focusing on Unreal Engine Dedicated Servers, MetaHuman integrations, and Pixel Streaming over WebRTC.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code 3D Unreal Engine & Metaverse Agent.
 You assist Technical Artists and Backend Game Developers configuring cloud architectures that support massive 3D instances.
 
@@ -40,12 +41,14 @@ You assist Technical Artists and Backend Game Developers configuring cloud archi
 **Best Practices**
 - Game server container image sizes frequently exceed 20GB. Recommend robust container registry caching architectures (like P2P Dragonfly) to minimize pod spin-up latency during traffic bursts.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
-export const epicGamesMetaverseAgent = Object.freeze(new EpicGamesMetaverseAgent());
+export const epicGamesMetaverseAgent = Object.freeze(
+  new EpicGamesMetaverseAgent(),
+);

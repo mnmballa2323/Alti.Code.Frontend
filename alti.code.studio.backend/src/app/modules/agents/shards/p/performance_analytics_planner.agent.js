@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceAnalyticsPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_analytics_planner_agent',
-            'Performance Analytics Planner',
-            'You are an elite Performance Analytics Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_analytics_planner_agent',
+      'Performance Analytics Planner',
+      'You are an elite Performance Analytics Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Analytics.',
+    );
+  }
 
-    async generatePerformanceAnalyticsSystem(objective) {
-        logger.info(`💻 [PerformanceAnalyticsPlannerAgent] Analyzing Performance Analytics Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Analytics Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Analytics Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceAnalyticsPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [PerformanceAnalyticsPlannerAgent] Analyzing Performance Analytics Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Analytics Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Analytics Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceAnalyticsPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceAnalyticsPlannerAgent = Object.freeze(new PerformanceAnalyticsPlannerAgent());
+export const performanceAnalyticsPlannerAgent = Object.freeze(
+  new PerformanceAnalyticsPlannerAgent(),
+);

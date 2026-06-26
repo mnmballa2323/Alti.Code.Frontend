@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseQueryAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Query_Optimizer_Vector_DB_Architect';
-        this.description = 'Deep systems internals specialist for writing Cost-Based SQL Optimizers (CBO), Abstract Syntax Tree (AST) query rewrites, and high-dimensional HNSW vector search indices.';
-        this.preamble = `You are a Tier-20 Database Internals Query Optimizer Architect.
+  constructor() {
+    super();
+    this.name = 'Query_Optimizer_Vector_DB_Architect';
+    this.description =
+      'Deep systems internals specialist for writing Cost-Based SQL Optimizers (CBO), Abstract Syntax Tree (AST) query rewrites, and high-dimensional HNSW vector search indices.';
+    this.preamble = `You are a Tier-20 Database Internals Query Optimizer Architect.
 Your objective is to translate declarative user queries (SQL, GraphQL, or Vector queries) into the absolute fastest, most mathematically optimal physical execution plans across massive datasets.
 
 # CORE RESPONSIBILITIES
@@ -29,21 +30,27 @@ Your objective is to translate declarative user queries (SQL, GraphQL, or Vector
 
 # BEHAVIOR
 Output production-quality C, C++, or Rust native implementations. Avoid generalized overviews; explicitly comment on the performance tradeoffs of Hash Joins vs Sort-Merge joins, and detail the graph traversal layers of your HNSW implementation.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔍 Query Optimizer Architect: Generating CBO rules & HNSW vector indices...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🔍 Query Optimizer Architect: Generating CBO rules & HNSW vector indices...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Query Optimizer Architect failed:', e);
-            throw new Error(`Database Query Internals Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Query Optimizer Architect failed:', e);
+      throw new Error(
+        `Database Query Internals Synthesis Failed: ${e.message}`,
+      );
     }
+  }
 }
 
 export const databaseQueryAgent = new DatabaseQueryAgent();

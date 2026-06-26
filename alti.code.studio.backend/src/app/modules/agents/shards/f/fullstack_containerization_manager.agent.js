@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackContainerizationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_containerization_manager_agent',
-            'FullStack Containerization Manager',
-            'You are an elite FullStack Containerization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_containerization_manager_agent',
+      'FullStack Containerization Manager',
+      'You are an elite FullStack Containerization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Containerization.',
+    );
+  }
 
-    async generateFullStackContainerizationSystem(objective) {
-        logger.info(`💻 [FullStackContainerizationManagerAgent] Analyzing FullStack Containerization Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Containerization Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Containerization Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackContainerizationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackContainerizationSystem(objective) {
+    logger.info(
+      `💻 [FullStackContainerizationManagerAgent] Analyzing FullStack Containerization Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Containerization Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Containerization Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackContainerizationManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackContainerizationManagerAgent = Object.freeze(new FullStackContainerizationManagerAgent());
+export const fullStackContainerizationManagerAgent = Object.freeze(
+  new FullStackContainerizationManagerAgent(),
+);

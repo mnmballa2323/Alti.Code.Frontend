@@ -1,8 +1,8 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * Deep Integration: simular-ai/Agent-S
- * This service creates a Node.js-to-Python bridge to natively instantiate 
+ * This service creates a Node.js-to-Python bridge to natively instantiate
  * the powerful `gui-agents` (Agent S3) AI framework for autonomous Physical GUI control.
  */
 
@@ -18,30 +18,40 @@ const writeFileAsync = promisify(fs.writeFile);
 const unlinkAsync = promisify(fs.unlink);
 
 export class AgentSService {
-    constructor() {
-        this.apiKey = process.env.GEMINI_API_KEY || process.env.ALTI_API_KEY; // Requires Gemini 2.0 Flash or OpenAI ideally
-        this.pythonPath = config.agent_s_python_path || 'python';
-        this.activeSubprocesses = new Map();
+  constructor() {
+    this.apiKey = process.env.GEMINI_API_KEY || process.env.ALTI_API_KEY; // Requires Gemini 2.0 Flash or OpenAI ideally
+    this.pythonPath = config.agent_s_python_path || 'python';
+    this.activeSubprocesses = new Map();
+  }
+
+  /**
+   * Executes a physical GUI task via the Simular AI `gui-agents` Python SDK.
+   * @param {string} taskInstruction - Natural language objective (e.g. "Close VS Code", "Open calculator and type 5 + 5")
+   * @returns {Promise<string>} The output of the action execution
+   */
+  async executeGUITask(taskInstruction, options = {}) {
+    if (!this.apiKey) {
+      throw new Error(
+        'Agent S: GEMINI_API_KEY or ALTI_API_KEY is missing from environment.',
+      );
     }
 
-    /**
-     * Executes a physical GUI task via the Simular AI `gui-agents` Python SDK.
-     * @param {string} taskInstruction - Natural language objective (e.g. "Close VS Code", "Open calculator and type 5 + 5")
-     * @returns {Promise<string>} The output of the action execution
-     */
-    async executeGUITask(taskInstruction, options = {}) {
-        if (!this.apiKey) {
-            throw new Error('Agent S: GEMINI_API_KEY or ALTI_API_KEY is missing from environment.');
-        }
+    const taskId = options.taskId || options.task_id || `task_${Date.now()}`;
+    const logsDir = path.resolve(
+      process.cwd(),
+      'logs',
+      'agent_s',
+      'tasks',
+      taskId,
+    );
+    const logsDirEscaped = logsDir.replace(/\\/g, '/');
 
-        const taskId = options.taskId || options.task_id || `task_${Date.now()}`;
-        const logsDir = path.resolve(process.cwd(), 'logs', 'agent_s', 'tasks', taskId);
-        const logsDirEscaped = logsDir.replace(/\\/g, '/');
+    logger.info(
+      `🖥️ Agent S (GUI Operator): Booting Python Bridge for task [${taskId}] [${taskInstruction.substring(0, 50)}...]`,
+    );
 
-        logger.info(`🖥️ Agent S (GUI Operator): Booting Python Bridge for task [${taskId}] [${taskInstruction.substring(0, 50)}...]`);
-
-        // Generate a transient Python script to define and run the Agent S3 instance.
-        const pythonScriptContent = `
+    // Generate a transient Python script to define and run the Agent S3 instance.
+    const pythonScriptContent = `
 import asyncio
 import sys
 import json
@@ -171,128 +181,147 @@ if __name__ === '__main__':
     asyncio.run(main())
 `;
 
-        const scriptPath = path.join(os.tmpdir(), `agent_s_task_${Date.now()}.py`);
+    const scriptPath = path.join(os.tmpdir(), `agent_s_task_${Date.now()}.py`);
 
-        try {
-            await writeFileAsync(scriptPath, pythonScriptContent, 'utf-8');
+    try {
+      await writeFileAsync(scriptPath, pythonScriptContent, 'utf-8');
 
-            return await new Promise((resolve, reject) => {
-                const pyProc = spawn(this.pythonPath, [scriptPath], {
-                    env: { ...process.env, PYTHONIOENCODING: 'utf-8' }
-                });
-
-                this.activeSubprocesses.set(taskId, pyProc);
-
-                let stdoutData = '';
-                let stderrData = '';
-
-                pyProc.stdout.on('data', (data) => {
-                    stdoutData += data.toString();
-                });
-
-                pyProc.stderr.on('data', (data) => {
-                    stderrData += data.toString();
-                });
-
-                pyProc.on('close', (code) => {
-                    this.activeSubprocesses.delete(taskId);
-                    try {
-                        const lines = stdoutData.trim().split('\n');
-                        let resultJson = null;
-
-                        for (let i = lines.length - 1; i >= 0; i--) {
-                            if (lines[i].startsWith('{') && lines[i].endsWith('}')) {
-                                resultJson = JSON.parse(lines[i]);
-                                break;
-                            }
-                        }
-
-                        if (resultJson && resultJson.status === 'success') {
-                            logger.info(`✅ Agent S: Task inference completed successfully.`);
-                            resolve({
-                                result: resultJson.result,
-                                trajectory: resultJson.trajectory || []
-                            });
-                        } else if (resultJson && resultJson.status === 'error') {
-                            reject(new Error(`Agent S Python Error: ${resultJson.message}\n${resultJson.trace}`));
-                        } else {
-                            if (code !== 0) {
-                                reject(new Error(`Python script exited with code ${code}. \nSTDERR: ${stderrData}`));
-                            } else {
-                                resolve({
-                                    result: "Task completed without standard JSON output. " + stdoutData,
-                                    trajectory: []
-                                });
-                            }
-                        }
-
-                    } catch (err) {
-                        logger.error(`Failed to parse Agent S output: ${err.message}`);
-                        logger.debug(`Raw STDOUT: ${stdoutData}`);
-                        logger.debug(`Raw STDERR: ${stderrData}`);
-                        reject(new Error('Failed to parse Python bridge output.'));
-                    }
-                });
-            });
-
-        } catch (error) {
-            logger.error(`❌ Agent S Service Error: ${error.message}`);
-            throw error;
-        } finally {
-            if (fs.existsSync(scriptPath)) {
-                await unlinkAsync(scriptPath).catch(e => logger.error("Failed to delete temp python script", e));
-            }
-        }
-    }
-
-    /**
-     * Cancels an active GUI task execution process.
-     * @param {string} taskId - The ID of the task to cancel.
-     */
-    async cancelGUITask(taskId) {
-        const proc = this.activeSubprocesses.get(taskId);
-        if (proc) {
-            proc.kill('SIGINT');
-            this.activeSubprocesses.delete(taskId);
-            return { success: true, message: `GUI task ${taskId} cancelled.` };
-        }
-        return { success: false, message: `No active GUI task found with ID ${taskId}.` };
-    }
-
-    /**
-     * Runs python dependency checks and environment diagnostics.
-     */
-    async checkSystemDiagnostics() {
-        return new Promise((resolve) => {
-            const pyProc = spawn(this.pythonPath, [
-                '-c',
-                "import sys, os, json, ctypes; dependencies = ['pyautogui', 'gui_agents', 'paddleocr', 'cv2']; missing = [];\nfor d in dependencies:\n    try: __import__(d)\n    except ImportError: missing.append(d)\nis_trusted = True\nif sys.platform === 'darwin':\n    try:\n        app_services = ctypes.CDLL('/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices')\n        is_trusted = bool(app_services.AXIsProcessTrusted())\n    except Exception:\n        is_trusted = False\nprint(json.dumps({'platform': sys.platform, 'python': sys.version, 'missing': missing, 'accessibility_trusted': is_trusted}))"
-            ]);
-            let stdout = '';
-            pyProc.stdout.on('data', d => stdout += d.toString());
-            pyProc.on('close', () => {
-                try {
-                    const parsed = JSON.parse(stdout.trim());
-                    const ok = parsed.missing.length === 0;
-                    const accessibilityTrusted = parsed.accessibility_trusted !== undefined ? parsed.accessibility_trusted : true;
-                    resolve({
-                        ok: ok && accessibilityTrusted,
-                        platform: parsed.platform,
-                        python: parsed.python,
-                        missingDependencies: parsed.missing,
-                        accessibilityPermissions: parsed.platform === 'darwin'
-                            ? (accessibilityTrusted ? 'Granted' : 'Denied - Please enable in macOS System Settings -> Privacy & Security -> Accessibility')
-                            : 'OK'
-                    });
-                } catch (err) {
-                    resolve({
-                        ok: false,
-                        error: `Failed to run python diagnostics: ${stdout || err.message}`
-                    });
-                }
-            });
+      return await new Promise((resolve, reject) => {
+        const pyProc = spawn(this.pythonPath, [scriptPath], {
+          env: { ...process.env, PYTHONIOENCODING: 'utf-8' },
         });
+
+        this.activeSubprocesses.set(taskId, pyProc);
+
+        let stdoutData = '';
+        let stderrData = '';
+
+        pyProc.stdout.on('data', data => {
+          stdoutData += data.toString();
+        });
+
+        pyProc.stderr.on('data', data => {
+          stderrData += data.toString();
+        });
+
+        pyProc.on('close', code => {
+          this.activeSubprocesses.delete(taskId);
+          try {
+            const lines = stdoutData.trim().split('\n');
+            let resultJson = null;
+
+            for (let i = lines.length - 1; i >= 0; i--) {
+              if (lines[i].startsWith('{') && lines[i].endsWith('}')) {
+                resultJson = JSON.parse(lines[i]);
+                break;
+              }
+            }
+
+            if (resultJson && resultJson.status === 'success') {
+              logger.info(`✅ Agent S: Task inference completed successfully.`);
+              resolve({
+                result: resultJson.result,
+                trajectory: resultJson.trajectory || [],
+              });
+            } else if (resultJson && resultJson.status === 'error') {
+              reject(
+                new Error(
+                  `Agent S Python Error: ${resultJson.message}\n${resultJson.trace}`,
+                ),
+              );
+            } else {
+              if (code !== 0) {
+                reject(
+                  new Error(
+                    `Python script exited with code ${code}. \nSTDERR: ${stderrData}`,
+                  ),
+                );
+              } else {
+                resolve({
+                  result:
+                    'Task completed without standard JSON output. ' +
+                    stdoutData,
+                  trajectory: [],
+                });
+              }
+            }
+          } catch (err) {
+            logger.error(`Failed to parse Agent S output: ${err.message}`);
+            logger.debug(`Raw STDOUT: ${stdoutData}`);
+            logger.debug(`Raw STDERR: ${stderrData}`);
+            reject(new Error('Failed to parse Python bridge output.'));
+          }
+        });
+      });
+    } catch (error) {
+      logger.error(`❌ Agent S Service Error: ${error.message}`);
+      throw error;
+    } finally {
+      if (fs.existsSync(scriptPath)) {
+        await unlinkAsync(scriptPath).catch(e =>
+          logger.error('Failed to delete temp python script', e),
+        );
+      }
     }
+  }
+
+  /**
+   * Cancels an active GUI task execution process.
+   * @param {string} taskId - The ID of the task to cancel.
+   */
+  async cancelGUITask(taskId) {
+    const proc = this.activeSubprocesses.get(taskId);
+    if (proc) {
+      proc.kill('SIGINT');
+      this.activeSubprocesses.delete(taskId);
+      return { success: true, message: `GUI task ${taskId} cancelled.` };
+    }
+    return {
+      success: false,
+      message: `No active GUI task found with ID ${taskId}.`,
+    };
+  }
+
+  /**
+   * Runs python dependency checks and environment diagnostics.
+   */
+  async checkSystemDiagnostics() {
+    return new Promise(resolve => {
+      const pyProc = spawn(this.pythonPath, [
+        '-c',
+        "import sys, os, json, ctypes; dependencies = ['pyautogui', 'gui_agents', 'paddleocr', 'cv2']; missing = [];\nfor d in dependencies:\n    try: __import__(d)\n    except ImportError: missing.append(d)\nis_trusted = True\nif sys.platform === 'darwin':\n    try:\n        app_services = ctypes.CDLL('/System/Library/Frameworks/ApplicationServices.framework/ApplicationServices')\n        is_trusted = bool(app_services.AXIsProcessTrusted())\n    except Exception:\n        is_trusted = False\nprint(json.dumps({'platform': sys.platform, 'python': sys.version, 'missing': missing, 'accessibility_trusted': is_trusted}))",
+      ]);
+      let stdout = '';
+      pyProc.stdout.on('data', d => (stdout += d.toString()));
+      pyProc.on('close', () => {
+        try {
+          const parsed = JSON.parse(stdout.trim());
+          const ok = parsed.missing.length === 0;
+          const accessibilityTrusted =
+            parsed.accessibility_trusted !== undefined
+              ? parsed.accessibility_trusted
+              : true;
+          resolve({
+            ok: ok && accessibilityTrusted,
+            platform: parsed.platform,
+            python: parsed.python,
+            missingDependencies: parsed.missing,
+            accessibilityPermissions:
+              parsed.platform === 'darwin'
+                ? accessibilityTrusted
+                  ? 'Granted'
+                  : 'Denied - Please enable in macOS System Settings -> Privacy & Security -> Accessibility'
+                : 'OK',
+          });
+        } catch (err) {
+          resolve({
+            ok: false,
+            error: `Failed to run python diagnostics: ${stdout || err.message}`,
+          });
+        }
+      });
+    });
+  }
 }
 
 export const agentSService = new AgentSService();

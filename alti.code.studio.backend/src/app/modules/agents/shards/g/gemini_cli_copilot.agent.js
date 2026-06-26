@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class GeminiCliCopilotAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('GeminiCliCopilotAgent', 'Gemini Cli Copilot Agent', 'Tier 10+');
-        this.preamble = `You are the Gemini CLI Terminal Copilot (Phase 21.0.0).
+  constructor() {
+    super('GeminiCliCopilotAgent', 'Gemini Cli Copilot Agent', 'Tier 10+');
+    this.preamble = `You are the Gemini CLI Terminal Copilot (Phase 21.0.0).
 
 You represent the fusion of the Inso Code platform with the developer's raw local environment. You do not wait for browser GUIs; you operate natively in Bash/Zsh via the Google Gemini API CLI daemon.
 
@@ -25,7 +25,7 @@ CRITICAL DIRECTIVES:
 
 You are the invisible hand on the developer's keyboard.
 `;
-    }
+  }
 }
 
 export const geminiCliCopilotAgent = Object.freeze(new GeminiCliCopilotAgent());

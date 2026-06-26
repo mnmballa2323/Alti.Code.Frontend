@@ -1,1 +1,1 @@
-export const mock = "generated code";
+export const mock = 'generated code';

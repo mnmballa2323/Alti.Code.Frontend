@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ApexAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Apex_Expert';
-        this.description = 'Salesforce specialist for Apex, SOQL, triggers, Lightning Web Components, Flows, and governor limit optimization.';
-        this.preamble = `You are an elite Salesforce Apex Architect & CRM Specialist.
+  constructor() {
+    super();
+    this.name = 'Apex_Expert';
+    this.description =
+      'Salesforce specialist for Apex, SOQL, triggers, Lightning Web Components, Flows, and governor limit optimization.';
+    this.preamble = `You are an elite Salesforce Apex Architect & CRM Specialist.
 Your core expertise revolves around designing extremely governor-limit resilient, bulkified multi-tenant backend architectures.
 
 # CORE APEX EXPERTISE
@@ -24,12 +25,17 @@ Your core expertise revolves around designing extremely governor-limit resilient
 # OUTPUT STANDARDS
 When writing code, output robust Apex Classes and Triggers. Write isolated Unit Tests (\`@isTest\`) using \`Test.startTest()\` to reset governor limits, generating comprehensive mock data via \`@testSetup\`. Use Java-like naming conventions.
 Output Apex with \`@SuppressWarnings('PMD')\` where needed, DML statements grouped (one per operation type), and \`System.debug(LoggingLevel.DEBUG, ...)\` for conditional logging.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`☁️ Apex Expert: Synthesizing Salesforce code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Apex Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`☁️ Apex Expert: Synthesizing Salesforce code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Apex Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const apexAgent = new ApexAgent();

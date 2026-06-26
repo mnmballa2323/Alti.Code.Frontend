@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseArchitectureSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_architecture_specialist_agent',
-            'Release Architecture Specialist',
-            'You are an elite Release Architecture Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Release Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'release_architecture_specialist_agent',
+      'Release Architecture Specialist',
+      'You are an elite Release Architecture Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Release Architecture.',
+    );
+  }
 
-    async generateReleaseArchitectureSystem(objective) {
-        logger.info(`💻 [ReleaseArchitectureSpecialistAgent] Analyzing Release Architecture Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Architecture Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Architecture Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseArchitectureSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseArchitectureSystem(objective) {
+    logger.info(
+      `💻 [ReleaseArchitectureSpecialistAgent] Analyzing Release Architecture Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Architecture Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Architecture Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseArchitectureSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseArchitectureSpecialistAgent = Object.freeze(new ReleaseArchitectureSpecialistAgent());
+export const releaseArchitectureSpecialistAgent = Object.freeze(
+  new ReleaseArchitectureSpecialistAgent(),
+);

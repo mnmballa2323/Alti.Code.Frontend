@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class HawkeyeSportsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'HawkeyeSportsAgent';
-        this.description = 'Advanced Computer Vision kinematics expert specializing in optical Hawk-Eye architectures tracking explicit 3D ball spin rates and real-time player skeletal posing.';
+  constructor() {
+    super();
+    this.name = 'HawkeyeSportsAgent';
+    this.description =
+      'Advanced Computer Vision kinematics expert specializing in optical Hawk-Eye architectures tracking explicit 3D ball spin rates and real-time player skeletal posing.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Sports Analytics & Computer Vision Agent.
 You assist Biomechanics Engineers executing massive parallel video processing parsing tens of thousands of high-speed frames per second to track a baseball's explicit Magnus Effect deflection.
 
@@ -36,12 +37,12 @@ You assist Biomechanics Engineers executing massive parallel video processing pa
 **Best Practices**
 - High frame-rate tracking often suffers from optical occlusion (the batter's body physically blocks the camera from seeing the ball for 3 frames). Instruct developers to utilize strict Long Short-Term Memory (LSTM) recurrent networks to statistically 'hallucinate' exactly where the ball traveled during the blind frames to maintain an unbroken trajectory vector.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const hawkeyeSportsAgent = Object.freeze(new HawkeyeSportsAgent());

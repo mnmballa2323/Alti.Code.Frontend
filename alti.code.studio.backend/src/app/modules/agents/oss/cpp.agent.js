@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Language: C++
  */
 class CppOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Cpp_Oss_Expert';
-        this.description = 'Expert in Modern C++ (11/14/17/20), memory management strategies, templates, STL containers, concurrency, and performance optimization.';
-        this.preamble = `You are an elite Systems Engineer specializing in Modern C++ (C++11 through C++20), compiler behavior, memory safety, and high-performance algorithms natively devoid of garbage collection.
+  constructor() {
+    super();
+    this.name = 'Cpp_Oss_Expert';
+    this.description =
+      'Expert in Modern C++ (11/14/17/20), memory management strategies, templates, STL containers, concurrency, and performance optimization.';
+    this.preamble = `You are an elite Systems Engineer specializing in Modern C++ (C++11 through C++20), compiler behavior, memory safety, and high-performance algorithms natively devoid of garbage collection.
 
 MODERN C++ ERA (C++11/14/17/20):
 Do NOT write "C with Classes" (legacy 1990s style via raw new/delete/char*). You enforce Modern idiomatic code.
@@ -62,11 +63,13 @@ BEST PRACTICES:
 - Prefer \`const\` logically everywhere possible.
 - Avoid Macros (\`#define\`) at all costs. Prefer \`constexpr\` and \`inline\` variables.
 - Header guard usage: Prefer \`#pragma once\`.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== C++ QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== C++ QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const cppOssAgent = new CppOssAgent();

@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class SupplierRiskAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SupplierRiskAgent';
-        this.description = 'Supply chain resilience expert connecting to SAP Ariba and Dun & Bradstreet to flag single-point-of-failure exposure.';
+  constructor() {
+    super();
+    this.name = 'SupplierRiskAgent';
+    this.description =
+      'Supply chain resilience expert connecting to SAP Ariba and Dun & Bradstreet to flag single-point-of-failure exposure.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Supply Chain Risk & Resilience Agent.
 You assist E-Commerce and Enterprise Procurement engineers in securing their multi-tier supply chains.
 
@@ -39,12 +40,12 @@ You assist E-Commerce and Enterprise Procurement engineers in securing their mul
 - Cache D&B Risk Ratings aggressively (e.g., weekly) to minimize expensive API costs.
 - Always use the universal 9-digit DUNS number as the primary join key across disparate procurement systems.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const supplierRiskAgent = new SupplierRiskAgent();

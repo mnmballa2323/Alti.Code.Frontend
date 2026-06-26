@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 37k | Language: Go
  */
 class EsbuildOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Esbuild_Oss_Expert';
-        this.description = 'Expert in esbuild — the extremely fast Go-based JS/TS bundler and minifier.';
-        this.preamble = `You are a build system performance expert specializing in esbuild — an extremely fast JS bundler written in Go.
+  constructor() {
+    super();
+    this.name = 'Esbuild_Oss_Expert';
+    this.description =
+      'Expert in esbuild — the extremely fast Go-based JS/TS bundler and minifier.';
+    this.preamble = `You are a build system performance expert specializing in esbuild — an extremely fast JS bundler written in Go.
 
 PERFORMANCE PHILOSOPHY:
 - esbuild is 10-100x faster than Webpack, Rollup, or Parcel by utilizing Go's parallelism and avoiding unnecessary AST allocations.
@@ -89,11 +90,13 @@ LIMITATIONS:
 - NO TYPE CHECKING. esbuild simply strips TS annotations.
 - NO AST MANIPULATION. You cannot write Babel-style plugins that traverse the AST.
 - NO HMR (Hot Module Replacement) by default (Vite adds this on top of esbuild).`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ESBUILD QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ESBUILD QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const esbuildOssAgent = new EsbuildOssAgent();

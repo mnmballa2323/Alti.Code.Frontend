@@ -1,17 +1,17 @@
 /**
  * Copyright (c) 2024 Inso Code — TIER 5: GROWTH
- * 
+ *
  * Onboarding Agent — "The Guide"
  * Developer onboarding, codebase explanation, getting-started generation.
  */
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 
-export const onboardingWorkerProcessor = async (job) => {
-    const { fileTree, readme, techStack, question } = job.data;
-    logger.info(`🗺️ Onboarding [${job.id}]: Generating guide...`);
+export const onboardingWorkerProcessor = async job => {
+  const { fileTree, readme, techStack, question } = job.data;
+  logger.info(`🗺️ Onboarding [${job.id}]: Generating guide...`);
 
-    const guide = await aiProvider.generate(`
+  const guide = await aiProvider.generate(`
 You are a developer experience expert creating onboarding materials.
 
 Tech Stack: ${JSON.stringify(techStack || [])}
@@ -29,5 +29,5 @@ Generate:
 Respond in JSON: { "quickStart": string, "architecture": string, "keyFiles": [], "workflow": string, "recipes": [] }
     `);
 
-    return { guide: JSON.parse(guide.match(/\{[\s\S]*\}/)?.[0] || '{}') };
+  return { guide: JSON.parse(guide.match(/\{[\s\S]*\}/)?.[0] || '{}') };
 };

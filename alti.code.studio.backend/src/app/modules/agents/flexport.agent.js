@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * flexport.agent.js — Logistics & Supply Chain Vertical
  * Integrates with Flexport API
  */

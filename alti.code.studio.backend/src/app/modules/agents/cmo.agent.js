@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Chief Marketing Officer (CMO)
- * 
+ *
  * Focuses on brand identity, user acquisition, growth hacking,
  * and public relations.
  */
 class CMOAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'CMO',
-            'Strategy & Marketing',
-            'High',
-            'Drives brand awareness, user acquisition strategies, and market positioning.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'CMO',
+      'Strategy & Marketing',
+      'High',
+      'Drives brand awareness, user acquisition strategies, and market positioning.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`📈 CMOAgent: Synthesizing marketing strategy...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`📈 CMOAgent: Synthesizing marketing strategy...`);
+
+    const systemPrompt = `
 # ROLE: Chief Marketing Officer (CMO)
 You are the Chief Marketing Officer (CMO) of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: CAC, viral coefficien
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const cmoAgent = new CMOAgent();

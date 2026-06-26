@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * Shared Product Capability & Access Control Middleware
  */
 
@@ -13,7 +13,7 @@ import { prisma } from '../db/prismaClient.js';
 export const PRODUCT_PLAN_MATRIX = {
   'inso-code': ['launch', 'build', 'scale', 'command'],
   'inso-ai': ['build', 'scale', 'command'],
-  'inso-cloud': ['scale', 'command']
+  'inso-cloud': ['scale', 'command'],
 };
 
 /**
@@ -30,14 +30,16 @@ export const checkProductAccess = async (user, productId) => {
 
   const allowedPlans = PRODUCT_PLAN_MATRIX[productId];
   if (!allowedPlans) {
-    logger.warn(`⚠️ [Product Auth] Requested unknown product ID: "${productId}"`);
+    logger.warn(
+      `⚠️ [Product Auth] Requested unknown product ID: "${productId}"`,
+    );
     return false;
   }
 
   try {
     const userRecord = await prisma.user.findUnique({
       where: { id: user.id },
-      select: { subscriptionPlan: true }
+      select: { subscriptionPlan: true },
     });
     if (!userRecord) {
       return false;
@@ -45,7 +47,9 @@ export const checkProductAccess = async (user, productId) => {
     const currentPlan = (userRecord.subscriptionPlan || 'launch').toLowerCase();
     return allowedPlans.includes(currentPlan);
   } catch (error) {
-    logger.warn(`⚠️ [Product Auth] Database access failed checking subscription plan: ${error.message}`);
+    logger.warn(
+      `⚠️ [Product Auth] Database access failed checking subscription plan: ${error.message}`,
+    );
     // Under mock/offline environments without database seeding, fallback to config
     if (process.env.PRIVATE_CLOUD_MODE === 'true') {
       return true;
@@ -60,7 +64,7 @@ export const checkProductAccess = async (user, productId) => {
  * @param {string} productId - Target product identifier
  * @returns {Function} Express middleware callback
  */
-export const requireProductAccess = (productId) => {
+export const requireProductAccess = productId => {
   return async (req, res, next) => {
     try {
       const user = req.user;
@@ -70,10 +74,12 @@ export const requireProductAccess = (productId) => {
 
       const hasAccess = await checkProductAccess(user, productId);
       if (!hasAccess) {
-        logger.warn(`🚫 [Product Auth] User ${user.id} denied access to ${productId}.`);
+        logger.warn(
+          `🚫 [Product Auth] User ${user.id} denied access to ${productId}.`,
+        );
         throw new ApiError(
           httpStatus.FORBIDDEN,
-          `Access to ${productId} is not included in your current plan. Please upgrade to support this capability.`
+          `Access to ${productId} is not included in your current plan. Please upgrade to support this capability.`,
         );
       }
 
@@ -87,6 +93,6 @@ export const requireProductAccess = (productId) => {
 export const productValidator = {
   PRODUCT_PLAN_MATRIX,
   checkProductAccess,
-  requireProductAccess
+  requireProductAccess,
 };
 export default productValidator;

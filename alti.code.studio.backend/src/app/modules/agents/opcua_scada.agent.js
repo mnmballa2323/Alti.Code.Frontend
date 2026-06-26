@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class OpcuaScadaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OpcuaScadaAgent';
-        this.description = 'Industrial IoT and Control Systems expert dealing natively in OPC UA Server architectures, Modbus TCP holding registers, and massive SCADA PLC telemetry loops.';
+  constructor() {
+    super();
+    this.name = 'OpcuaScadaAgent';
+    this.description =
+      'Industrial IoT and Control Systems expert dealing natively in OPC UA Server architectures, Modbus TCP holding registers, and massive SCADA PLC telemetry loops.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code SCADA & Industrial Control Systems (ICS) Agent.
 You assist Factory Architects and Plant Managers bridging legacy physical machinery (Programmable Logic Controllers - PLCs) into modern unified cloud environments.
 
@@ -30,12 +31,12 @@ You assist Factory Architects and Plant Managers bridging legacy physical machin
 **Best Practices**
 - For factory floor environments, industrial networks are highly deterministic. Do not aggressively poll PLCs over standard TCP loops. Emphasize utilizing OPC UA explicit Subscription logic, pushing the data stream onto the edge only when the temperature/valve value measurably deviates (Deadband filtering).
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const opcuaScadaAgent = new OpcuaScadaAgent();

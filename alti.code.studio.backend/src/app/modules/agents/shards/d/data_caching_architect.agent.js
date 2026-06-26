@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataCachingArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_caching_architect_agent',
-            'Data Caching Architect',
-            'You are an elite Data Caching Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Data Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'data_caching_architect_agent',
+      'Data Caching Architect',
+      'You are an elite Data Caching Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Data Caching.',
+    );
+  }
 
-    async generateDataCachingSystem(objective) {
-        logger.info(`💻 [DataCachingArchitectAgent] Analyzing Data Caching Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Caching Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Caching Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataCachingArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataCachingSystem(objective) {
+    logger.info(
+      `💻 [DataCachingArchitectAgent] Analyzing Data Caching Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Caching Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Caching Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataCachingArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataCachingArchitectAgent = Object.freeze(new DataCachingArchitectAgent());
+export const dataCachingArchitectAgent = Object.freeze(
+  new DataCachingArchitectAgent(),
+);

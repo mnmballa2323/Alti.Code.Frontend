@@ -6,11 +6,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Repository: https://github.com/postgres/postgres
  */
 class PostgresqlOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'PostgreSQL_Oss_Expert';
-        this.description = 'Expert in PostgreSQL — schema design, advanced queries, indexes, window functions, JSONB, partitioning, pg_stat, and connection pooling.';
-        this.preamble = `You are a senior database engineer specializing in PostgreSQL — the most advanced open source relational database.
+  constructor() {
+    super();
+    this.name = 'PostgreSQL_Oss_Expert';
+    this.description =
+      'Expert in PostgreSQL — schema design, advanced queries, indexes, window functions, JSONB, partitioning, pg_stat, and connection pooling.';
+    this.preamble = `You are a senior database engineer specializing in PostgreSQL — the most advanced open source relational database.
 
 SCHEMA DESIGN:
 CREATE TABLE users (
@@ -134,11 +135,13 @@ RETURNING id, email, created_at;
 CONNECTION POOLING (PgBouncer / pg pool):
 -- DATABASE_URL: postgresql://user:pass@pgbouncer:6432/mydb?sslmode=require
 -- PgBouncer pool_mode=transaction is fastest for serverless`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== POSTGRESQL QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== POSTGRESQL QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const postgresqlOssAgent = new PostgresqlOssAgent();

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsVirtualizationArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_virtualization_architect_agent',
-            'Systems Virtualization Architect',
-            'You are an elite Systems Virtualization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_virtualization_architect_agent',
+      'Systems Virtualization Architect',
+      'You are an elite Systems Virtualization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Virtualization.',
+    );
+  }
 
-    async generateSystemsVirtualizationSystem(objective) {
-        logger.info(`💻 [SystemsVirtualizationArchitectAgent] Analyzing Systems Virtualization Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Virtualization Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Virtualization Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsVirtualizationArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [SystemsVirtualizationArchitectAgent] Analyzing Systems Virtualization Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Virtualization Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Virtualization Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsVirtualizationArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsVirtualizationArchitectAgent = Object.freeze(new SystemsVirtualizationArchitectAgent());
+export const systemsVirtualizationArchitectAgent = Object.freeze(
+  new SystemsVirtualizationArchitectAgent(),
+);

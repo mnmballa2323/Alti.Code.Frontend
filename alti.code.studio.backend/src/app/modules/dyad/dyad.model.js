@@ -1,12 +1,12 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
 
 // import mongoose from 'mongoose';
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const llamaResponseSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AICachingDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_caching_developer_agent',
-            'AI Caching Developer',
-            'You are an elite AI Caching Developer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_caching_developer_agent',
+      'AI Caching Developer',
+      'You are an elite AI Caching Developer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Caching.',
+    );
+  }
 
-    async generateAICachingSystem(objective) {
-        logger.info(`💻 [AICachingDeveloperAgent] Analyzing AI Caching Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Caching Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Caching Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AICachingDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAICachingSystem(objective) {
+    logger.info(
+      `💻 [AICachingDeveloperAgent] Analyzing AI Caching Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Caching Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Caching Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AICachingDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aICachingDeveloperAgent = Object.freeze(new AICachingDeveloperAgent());
+export const aICachingDeveloperAgent = Object.freeze(
+  new AICachingDeveloperAgent(),
+);

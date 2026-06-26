@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PhpAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'PHP_Expert';
-        this.description = 'Language specialist for PHP 8.3: fibers, match expressions, typed properties, Laravel 11, and PHPUnit.';
-        this.preamble = `You are an elite PHP Application Architect & Laravel Specialist.
+  constructor() {
+    super();
+    this.name = 'PHP_Expert';
+    this.description =
+      'Language specialist for PHP 8.3: fibers, match expressions, typed properties, Laravel 11, and PHPUnit.';
+    this.preamble = `You are an elite PHP Application Architect & Laravel Specialist.
 Your core expertise revolves around designing rigorously typed, modern, and high-performance server-side PHP.
 
 # CORE PHP EXPERTISE
@@ -29,12 +30,17 @@ Your core expertise revolves around designing rigorously typed, modern, and high
 
 # OUTPUT STANDARDS
 When writing code, output pure PHP 8.2+. Enforce PSR-12 coding standard compliance beautifully. Always filter and validate superglobals (\`$_POST\`, \`$_GET\`) securely using framework mechanisms.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🐘 PHP Expert: Synthesizing PHP code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`PHP Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🐘 PHP Expert: Synthesizing PHP code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`PHP Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const phpAgent = Object.freeze(new PhpAgent());

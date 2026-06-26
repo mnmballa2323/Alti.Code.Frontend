@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendOptimizationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_optimization_orchestrator_agent',
-            'Backend Optimization Orchestrator',
-            'You are an elite Backend Optimization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_optimization_orchestrator_agent',
+      'Backend Optimization Orchestrator',
+      'You are an elite Backend Optimization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Optimization.',
+    );
+  }
 
-    async generateBackendOptimizationSystem(objective) {
-        logger.info(`💻 [BackendOptimizationOrchestratorAgent] Analyzing Backend Optimization Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Optimization Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Optimization Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendOptimizationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendOptimizationSystem(objective) {
+    logger.info(
+      `💻 [BackendOptimizationOrchestratorAgent] Analyzing Backend Optimization Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Optimization Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Optimization Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendOptimizationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendOptimizationOrchestratorAgent = Object.freeze(new BackendOptimizationOrchestratorAgent());
+export const backendOptimizationOrchestratorAgent = Object.freeze(
+  new BackendOptimizationOrchestratorAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsComplianceArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_compliance_architect_agent',
-            'DevSecOps Compliance Architect',
-            'You are an elite DevSecOps Compliance Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_compliance_architect_agent',
+      'DevSecOps Compliance Architect',
+      'You are an elite DevSecOps Compliance Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Compliance.',
+    );
+  }
 
-    async generateDevSecOpsComplianceSystem(objective) {
-        logger.info(`💻 [DevSecOpsComplianceArchitectAgent] Analyzing DevSecOps Compliance Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Compliance Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Compliance Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsComplianceArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsComplianceSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsComplianceArchitectAgent] Analyzing DevSecOps Compliance Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Compliance Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Compliance Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsComplianceArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsComplianceArchitectAgent = Object.freeze(new DevSecOpsComplianceArchitectAgent());
+export const devSecOpsComplianceArchitectAgent = Object.freeze(
+  new DevSecOpsComplianceArchitectAgent(),
+);

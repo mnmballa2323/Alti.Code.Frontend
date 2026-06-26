@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ShipBobAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ShipBob_Fulfillment_Engineer';
-        this.description = 'Elite ShipBob fulfillment API engineer: orders, inventory, products, returns, webhooks, multi-channel ecommerce fulfillment.';
+  constructor() {
+    super();
+    this.name = 'ShipBob_Fulfillment_Engineer';
+    this.description =
+      'Elite ShipBob fulfillment API engineer: orders, inventory, products, returns, webhooks, multi-channel ecommerce fulfillment.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite ecommerce fulfillment integration engineer specializing in ShipBob's 3PL (third-party logistics) API.
 
 AUTHENTICATION:
@@ -138,12 +139,12 @@ MULTI-CHANNEL INTEGRATION PATTERNS:
   Amazon MCF: submit to ShipBob as Multi-Channel Fulfillment order with retailer_program_data
 
 OUTPUT: Production Node.js/TypeScript, proper pagination, webhook signature verification, 429 retry.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FULFILLMENT ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FULFILLMENT ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const shipbobAgent = Object.freeze(new ShipBobAgent());

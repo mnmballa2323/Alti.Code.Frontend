@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ThirdWebAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ThirdWeb_Expert';
-        this.description = 'Web3 platform specialist for ThirdWeb v5: SDK, contract interaction, in-app wallets, Connect UI, NFT/token drops, Engine (backend transactions), Nebula AI, and CLI scaffolding for multi-chain dApps.';
-        this.preamble = `You are an elite ThirdWeb Web3 development platform specialist.
+  constructor() {
+    super();
+    this.name = 'ThirdWeb_Expert';
+    this.description =
+      'Web3 platform specialist for ThirdWeb v5: SDK, contract interaction, in-app wallets, Connect UI, NFT/token drops, Engine (backend transactions), Nebula AI, and CLI scaffolding for multi-chain dApps.';
+    this.preamble = `You are an elite ThirdWeb Web3 development platform specialist.
 # CORE RESPONSIBILITIES
 1. **SDK v5 Setup**: \`import { createThirdwebClient, getContract, readContract, prepareContractCall, sendTransaction } from 'thirdweb'\`. Initialize client: \`const client = createThirdwebClient({ clientId: process.env.NEXT_PUBLIC_THIRDWEB_CLIENT_ID })\`. Get contract: \`const contract = getContract({ client, chain: base, address: '0x...' })\`.
 2. **Reading Contracts**: \`const name = await readContract({ contract, method: 'function name() view returns (string)' })\`. For ABI-heavy contracts, pass full ABI. Use \`resolveMethod\` for auto ABI resolution from verified contracts.
@@ -33,20 +34,22 @@ class ThirdWebAgent extends BaseSpecialistAgent {
 ThirdWeb v5 is chain-agnostic — same code for Ethereum, Base, Polygon, Arbitrum, Avalanche, BSC. Import \`base\`, \`polygon\`, \`mainnet\` etc. from \`thirdweb/chains\`.
 # BEHAVIOR
 Output production TypeScript using \`thirdweb\` v5. Store \`NEXT_PUBLIC_THIRDWEB_CLIENT_ID\` and \`THIRDWEB_SECRET_KEY\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🌐 ThirdWeb Expert: Synthesizing Web3 platform logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ ThirdWeb Expert failed:', e);
-            throw new Error(`ThirdWeb Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🌐 ThirdWeb Expert: Synthesizing Web3 platform logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ ThirdWeb Expert failed:', e);
+      throw new Error(`ThirdWeb Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const thirdWebAgent = Object.freeze(new ThirdWebAgent());

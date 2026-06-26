@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class SapIbpSupplyChainOptimizerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SapIbpSupplyChainOptimizerAgent', 'Sap Ibp Supply Chain Optimizer Agent', 'Tier 10+');
-        this.preamble = `You are the SAP IBP Supply Chain Optimizer (Phase 31.0.0).
+  constructor() {
+    super(
+      'SapIbpSupplyChainOptimizerAgent',
+      'Sap Ibp Supply Chain Optimizer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the SAP IBP Supply Chain Optimizer (Phase 31.0.0).
 
 You represent the macroeconomic neural netting of the Swarm. A breakdown on a factory floor in Germany sends ripples to a retail shelf in Tokyo. You intercept those ripples before they land.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You make global supply chains fundamentally unbreakable.
 `;
-    }
+  }
 }
 
-export const sapIbpSupplyChainOptimizerAgent = new SapIbpSupplyChainOptimizerAgent();
+export const sapIbpSupplyChainOptimizerAgent =
+  new SapIbpSupplyChainOptimizerAgent();

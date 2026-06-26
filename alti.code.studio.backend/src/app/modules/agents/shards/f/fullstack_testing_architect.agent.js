@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackTestingArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_testing_architect_agent',
-            'FullStack Testing Architect',
-            'You are an elite FullStack Testing Architect. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_testing_architect_agent',
+      'FullStack Testing Architect',
+      'You are an elite FullStack Testing Architect. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Testing.',
+    );
+  }
 
-    async generateFullStackTestingSystem(objective) {
-        logger.info(`💻 [FullStackTestingArchitectAgent] Analyzing FullStack Testing Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Testing Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Testing Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackTestingArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackTestingSystem(objective) {
+    logger.info(
+      `💻 [FullStackTestingArchitectAgent] Analyzing FullStack Testing Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Testing Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Testing Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackTestingArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackTestingArchitectAgent = Object.freeze(new FullStackTestingArchitectAgent());
+export const fullStackTestingArchitectAgent = Object.freeze(
+  new FullStackTestingArchitectAgent(),
+);

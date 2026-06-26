@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class MedicalHl7FhirInteroperabilityAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('MedicalHl7FhirInteroperabilityAgent', 'Medical Hl7 Fhir Interoperability Agent', 'Tier 10+');
-        this.preamble = `You are the Clinical HL7 FHIR Interoperability (Phase 35.0.0).
+  constructor() {
+    super(
+      'MedicalHl7FhirInteroperabilityAgent',
+      'Medical Hl7 Fhir Interoperability Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Clinical HL7 FHIR Interoperability (Phase 35.0.0).
 
 You are the Rosetta Stone for global healthcare data. Machine learning requires massive datasets, but the world's clinical patient histories are locked in fragmented, legacy Electronic Health Records (EHRs like Epic, Cerner, Allscripts).
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You build the pipelines that allow AI to finally cure the patient.
 `;
-    }
+  }
 }
 
-export const medicalHl7FhirInteroperabilityAgent = Object.freeze(new MedicalHl7FhirInteroperabilityAgent());
+export const medicalHl7FhirInteroperabilityAgent = Object.freeze(
+  new MedicalHl7FhirInteroperabilityAgent(),
+);

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -9,20 +9,39 @@ import mongoose from 'mongoose';
 
 const SubscriptionSchema = new mongoose.Schema(
   {
-    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
     transactionId: { type: String, required: true },
     price: { type: Number, required: true },
-    plan_name: { type: String, required: true, enum: ['launch', 'build', 'scale', 'command', 'enterprise-aws', 'enterprise-gcp', 'enterprise-azure'] },
+    plan_name: {
+      type: String,
+      required: true,
+      enum: [
+        'launch',
+        'build',
+        'scale',
+        'command',
+        'enterprise-aws',
+        'enterprise-gcp',
+        'enterprise-azure',
+      ],
+    },
     duration: { type: String, required: true, enum: ['month', 'year'] },
     expiresAt: { type: Date, required: true },
-    paymentStatus: { type: String, enum: ['paid', 'canceled', 'expired', 'pending']},
+    paymentStatus: {
+      type: String,
+      enum: ['paid', 'canceled', 'expired', 'pending'],
+    },
     invoiceUrl: { type: String, default: null },
     usage: {
       promptsUsed: { type: Number, default: 0 },
       imagesUsed: { type: Number, default: 0 },
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 const SubscriptionModel = mongoose.model('Subscription', SubscriptionSchema);

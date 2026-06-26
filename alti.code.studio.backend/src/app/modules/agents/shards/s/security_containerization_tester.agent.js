@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityContainerizationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_containerization_tester_agent',
-            'Security Containerization Tester',
-            'You are an elite Security Containerization Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Security Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'security_containerization_tester_agent',
+      'Security Containerization Tester',
+      'You are an elite Security Containerization Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Security Containerization.',
+    );
+  }
 
-    async generateSecurityContainerizationSystem(objective) {
-        logger.info(`💻 [SecurityContainerizationTesterAgent] Analyzing Security Containerization Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Containerization Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Containerization Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityContainerizationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityContainerizationSystem(objective) {
+    logger.info(
+      `💻 [SecurityContainerizationTesterAgent] Analyzing Security Containerization Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Containerization Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Containerization Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityContainerizationTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityContainerizationTesterAgent = Object.freeze(new SecurityContainerizationTesterAgent());
+export const securityContainerizationTesterAgent = Object.freeze(
+  new SecurityContainerizationTesterAgent(),
+);

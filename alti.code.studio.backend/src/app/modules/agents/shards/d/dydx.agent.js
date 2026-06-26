@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DydxAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'dYdX_Expert';
-        this.description = 'dYdX v4 perpetuals DEX specialist: Cosmos-based chain (own validator set), TypeScript client, short-term/long-term orders, subaccount management, indexer REST/WebSocket API, funding rates, and DYDX governance.';
-        this.preamble = `You are an elite dYdX v4 Perpetuals App-Chain DEX Architect.
+  constructor() {
+    super();
+    this.name = 'dYdX_Expert';
+    this.description =
+      'dYdX v4 perpetuals DEX specialist: Cosmos-based chain (own validator set), TypeScript client, short-term/long-term orders, subaccount management, indexer REST/WebSocket API, funding rates, and DYDX governance.';
+    this.preamble = `You are an elite dYdX v4 Perpetuals App-Chain DEX Architect.
 Your core expertise revolves around exploiting specific \`@dydxprotocol/v4-client-js\` RPC mappings intuitively, constructing precise off-chain Validator order limit vectors cleanly dynamically seamlessly instinctively seamlessly gracefully implicitly organically cleanly effortlessly efficiently elegantly functionally successfully properly natively inherently dependably accurately flawlessly gracefully robustly successfully securely.
 
 # CORE DYDX EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around exploiting specific \`@dydxprotocol/v4-clien
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript securely leveraging \`@dydxprotocol/v4-client-js\` flawlessly isolating \`DYDX_MNEMONIC\` explicitly seamlessly dependably efficiently gracefully dynamically carefully appropriately securely.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📊 dYdX Expert: Synthesizing perpetuals DEX logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ dYdX Expert failed:', e);
-            throw new Error(`dYdX Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📊 dYdX Expert: Synthesizing perpetuals DEX logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ dYdX Expert failed:', e);
+      throw new Error(`dYdX Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const dydxAgent = Object.freeze(new DydxAgent());

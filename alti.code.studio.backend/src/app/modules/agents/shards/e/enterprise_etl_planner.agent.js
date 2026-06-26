@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseETLPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_etl_planner_agent',
-            'Enterprise ETL Planner',
-            'You are an elite Enterprise ETL Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_etl_planner_agent',
+      'Enterprise ETL Planner',
+      'You are an elite Enterprise ETL Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise ETL.',
+    );
+  }
 
-    async generateEnterpriseETLSystem(objective) {
-        logger.info(`💻 [EnterpriseETLPlannerAgent] Analyzing Enterprise ETL Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise ETL Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise ETL Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseETLPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseETLSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseETLPlannerAgent] Analyzing Enterprise ETL Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise ETL Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise ETL Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [EnterpriseETLPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const enterpriseETLPlannerAgent = Object.freeze(new EnterpriseETLPlannerAgent());
+export const enterpriseETLPlannerAgent = Object.freeze(
+  new EnterpriseETLPlannerAgent(),
+);

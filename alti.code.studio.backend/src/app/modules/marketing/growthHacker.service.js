@@ -5,12 +5,18 @@ import { logger } from '../../../shared/logger.js';
  * Growth Hacker (Marketing Engine)
  * Reads the codebase to understand the product, then generates SEO copy and viral launch threads.
  */
-const generateMarketingCampaign = async (userId, sessionId, targetAppCodebase) => {
-    logger.info(`📈 [Growth Hacker] Ingesting codebase to build the autonomous marketing campaign...`);
+const generateMarketingCampaign = async (
+  userId,
+  sessionId,
+  targetAppCodebase,
+) => {
+  logger.info(
+    `📈 [Growth Hacker] Ingesting codebase to build the autonomous marketing campaign...`,
+  );
 
-    try {
-        // Step 1: Claude 3.5 Sonnet acts as the Copywriter and SEO Expert
-        const marketingPrompt = `You are a Silicon Valley Chief Marketing Officer (CMO) and elite Growth Hacker.
+  try {
+    // Step 1: Claude 3.5 Sonnet acts as the Copywriter and SEO Expert
+    const marketingPrompt = `You are a Silicon Valley Chief Marketing Officer (CMO) and elite Growth Hacker.
 Analyze the following core codebase of our newly built application. Deduced what the app does, its target audience, and its unique value proposition.
 
 Codebase Core:
@@ -28,31 +34,42 @@ Return the campaign as raw JSON matching this schema:
   "linkedInPost": ""
 }`;
 
-        const campaignResult = await LlmGatewayService.routeCompletion(
-            userId, sessionId, marketingPrompt, 'claude-3-5-sonnet', 'Growth-Hacker'
-        );
+    const campaignResult = await LlmGatewayService.routeCompletion(
+      userId,
+      sessionId,
+      marketingPrompt,
+      'claude-3-5-sonnet',
+      'Growth-Hacker',
+    );
 
-        // Sanitize the JSON output natively
-        const jsonMatch = campaignResult.reply.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) throw new Error('Failed to parse Growth Hacker JSON output.');
-        const campaign = JSON.parse(jsonMatch[0]);
+    // Sanitize the JSON output natively
+    const jsonMatch = campaignResult.reply.match(/\{[\s\S]*\}/);
+    if (!jsonMatch)
+      throw new Error('Failed to parse Growth Hacker JSON output.');
+    const campaign = JSON.parse(jsonMatch[0]);
 
-        logger.info(`✅ [Growth Hacker] Marketing campaign generated successfully.`);
-        
-        // In a real implementation, this agent would natively call the Twitter/LinkedIn APIs to schedule these posts.
-        logger.info(`[Growth Hacker] Ready to queue social media posts for autonomous distribution.`);
+    logger.info(
+      `✅ [Growth Hacker] Marketing campaign generated successfully.`,
+    );
 
-        return {
-            status: 'campaign_generated',
-            campaign
-        };
+    // In a real implementation, this agent would natively call the Twitter/LinkedIn APIs to schedule these posts.
+    logger.info(
+      `[Growth Hacker] Ready to queue social media posts for autonomous distribution.`,
+    );
 
-    } catch (error) {
-        logger.error(`❌ [Growth Hacker] Campaign generation critically failed:`, error);
-        throw error;
-    }
+    return {
+      status: 'campaign_generated',
+      campaign,
+    };
+  } catch (error) {
+    logger.error(
+      `❌ [Growth Hacker] Campaign generation critically failed:`,
+      error,
+    );
+    throw error;
+  }
 };
 
 export const GrowthHackerService = {
-    generateMarketingCampaign
+  generateMarketingCampaign,
 };

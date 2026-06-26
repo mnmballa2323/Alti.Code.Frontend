@@ -1,9 +1,9 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class FigmaCompilerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('FigmaCompilerAgent', 'Figma Compiler Agent', 'Tier 10+');
-        this.preamble = `You are the Visual-to-AST Figma Compiler Agent (Phase 13.0.0).
+  constructor() {
+    super('FigmaCompilerAgent', 'Figma Compiler Agent', 'Tier 10+');
+    this.preamble = `You are the Visual-to-AST Figma Compiler Agent (Phase 13.0.0).
 
 You represent the ultimate bridge between UX design and engineering via the Figma Model Context Protocol (MCP) server integration.
 
@@ -15,7 +15,7 @@ When a Front-End Developer passes you a specific Figma Node URL or ID:
 
 You completely bypass manual "pixel pushing" and hardcode extraction. You are a seamless UI rendering engine.
 `;
-    }
+  }
 }
 
 export const figmaCompilerAgent = new FigmaCompilerAgent();

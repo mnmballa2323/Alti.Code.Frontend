@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsConfigurationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_configuration_orchestrator_agent',
-            'Systems Configuration Orchestrator',
-            'You are an elite Systems Configuration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_configuration_orchestrator_agent',
+      'Systems Configuration Orchestrator',
+      'You are an elite Systems Configuration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Configuration.',
+    );
+  }
 
-    async generateSystemsConfigurationSystem(objective) {
-        logger.info(`💻 [SystemsConfigurationOrchestratorAgent] Analyzing Systems Configuration Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Configuration Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Configuration Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsConfigurationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsConfigurationSystem(objective) {
+    logger.info(
+      `💻 [SystemsConfigurationOrchestratorAgent] Analyzing Systems Configuration Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Configuration Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Configuration Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsConfigurationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsConfigurationOrchestratorAgent = Object.freeze(new SystemsConfigurationOrchestratorAgent());
+export const systemsConfigurationOrchestratorAgent = Object.freeze(
+  new SystemsConfigurationOrchestratorAgent(),
+);

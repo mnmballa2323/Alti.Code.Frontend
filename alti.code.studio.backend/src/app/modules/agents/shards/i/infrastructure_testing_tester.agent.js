@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureTestingTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_testing_tester_agent',
-            'Infrastructure Testing Tester',
-            'You are an elite Infrastructure Testing Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_testing_tester_agent',
+      'Infrastructure Testing Tester',
+      'You are an elite Infrastructure Testing Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Testing.',
+    );
+  }
 
-    async generateInfrastructureTestingSystem(objective) {
-        logger.info(`💻 [InfrastructureTestingTesterAgent] Analyzing Infrastructure Testing Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Testing Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Testing Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureTestingTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureTestingSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureTestingTesterAgent] Analyzing Infrastructure Testing Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Testing Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Testing Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureTestingTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureTestingTesterAgent = Object.freeze(new InfrastructureTestingTesterAgent());
+export const infrastructureTestingTesterAgent = Object.freeze(
+  new InfrastructureTestingTesterAgent(),
+);

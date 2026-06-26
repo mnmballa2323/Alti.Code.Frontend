@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIGovernanceEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_governance_engineer_agent',
-            'AI Governance Engineer',
-            'You are an elite AI Governance Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_governance_engineer_agent',
+      'AI Governance Engineer',
+      'You are an elite AI Governance Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and AI Governance.',
+    );
+  }
 
-    async generateAIGovernanceSystem(objective) {
-        logger.info(`💻 [AIGovernanceEngineerAgent] Analyzing AI Governance Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Governance Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Governance Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIGovernanceEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIGovernanceSystem(objective) {
+    logger.info(
+      `💻 [AIGovernanceEngineerAgent] Analyzing AI Governance Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Governance Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Governance Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIGovernanceEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIGovernanceEngineerAgent = Object.freeze(new AIGovernanceEngineerAgent());
+export const aIGovernanceEngineerAgent = Object.freeze(
+  new AIGovernanceEngineerAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseTestingDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_testing_designer_agent',
-            'Database Testing Designer',
-            'You are an elite Database Testing Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Database Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'database_testing_designer_agent',
+      'Database Testing Designer',
+      'You are an elite Database Testing Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Database Testing.',
+    );
+  }
 
-    async generateDatabaseTestingSystem(objective) {
-        logger.info(`💻 [DatabaseTestingDesignerAgent] Analyzing Database Testing Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Testing Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Testing Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseTestingDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseTestingSystem(objective) {
+    logger.info(
+      `💻 [DatabaseTestingDesignerAgent] Analyzing Database Testing Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Testing Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Testing Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DatabaseTestingDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const databaseTestingDesignerAgent = Object.freeze(new DatabaseTestingDesignerAgent());
+export const databaseTestingDesignerAgent = Object.freeze(
+  new DatabaseTestingDesignerAgent(),
+);

@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EbayAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'eBay_Expert';
-        this.description = 'eBay marketplace specialist: OAuth 2.0 user/application tokens, Inventory API (items/offers), Orders API (order fulfillment, shipping tracking), Marketing API (Promoted Listings campaigns), Browse API (product search), Notifications for real-time events.';
-        this.preamble = `You are an elite eBay marketplace and Sell API specialist.
+  constructor() {
+    super();
+    this.name = 'eBay_Expert';
+    this.description =
+      'eBay marketplace specialist: OAuth 2.0 user/application tokens, Inventory API (items/offers), Orders API (order fulfillment, shipping tracking), Marketing API (Promoted Listings campaigns), Browse API (product search), Notifications for real-time events.';
+    this.preamble = `You are an elite eBay marketplace and Sell API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication (OAuth 2.0)**: Two token types:
    - Application token (no user consent): \`POST https://api.ebay.com/identity/v1/oauth2/token\` with \`client_credentials\` grant. For Browse catalog lookups.
@@ -33,20 +34,22 @@ class EbayAgent extends BaseSpecialistAgent {
 6. **Notifications**: \`POST /commerce/notification/v1/subscription\` — subscribe to topics: \`MARKETPLACE_ACCOUNT_DELETION\`, \`ITEM_SOLD\`, \`ITEM_LISTED\`. Verify: payload contains \`notificationId\` — call \`GET /commerce/notification/v1/public_key/{keyId}\` to get verification key.
 # BEHAVIOR
 Output production TypeScript. Store \`EBAY_CLIENT_ID\`, \`EBAY_CLIENT_SECRET\`, and \`EBAY_USER_TOKEN\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🛍️ eBay Expert: Synthesizing marketplace logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ eBay Expert failed:', e);
-            throw new Error(`eBay Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🛍️ eBay Expert: Synthesizing marketplace logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ eBay Expert failed:', e);
+      throw new Error(`eBay Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const ebayAgent = Object.freeze(new EbayAgent());

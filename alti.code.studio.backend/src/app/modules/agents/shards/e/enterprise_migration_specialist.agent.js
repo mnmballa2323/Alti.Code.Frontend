@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseMigrationSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_migration_specialist_agent',
-            'Enterprise Migration Specialist',
-            'You are an elite Enterprise Migration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_migration_specialist_agent',
+      'Enterprise Migration Specialist',
+      'You are an elite Enterprise Migration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Migration.',
+    );
+  }
 
-    async generateEnterpriseMigrationSystem(objective) {
-        logger.info(`💻 [EnterpriseMigrationSpecialistAgent] Analyzing Enterprise Migration Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Migration Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Migration Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseMigrationSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseMigrationSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseMigrationSpecialistAgent] Analyzing Enterprise Migration Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Migration Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Migration Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseMigrationSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseMigrationSpecialistAgent = Object.freeze(new EnterpriseMigrationSpecialistAgent());
+export const enterpriseMigrationSpecialistAgent = Object.freeze(
+  new EnterpriseMigrationSpecialistAgent(),
+);

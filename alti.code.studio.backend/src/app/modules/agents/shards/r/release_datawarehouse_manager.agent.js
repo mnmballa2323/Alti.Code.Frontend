@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseDataWarehouseManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_datawarehouse_manager_agent',
-            'Release DataWarehouse Manager',
-            'You are an elite Release DataWarehouse Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'release_datawarehouse_manager_agent',
+      'Release DataWarehouse Manager',
+      'You are an elite Release DataWarehouse Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release DataWarehouse.',
+    );
+  }
 
-    async generateReleaseDataWarehouseSystem(objective) {
-        logger.info(`💻 [ReleaseDataWarehouseManagerAgent] Analyzing Release DataWarehouse Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release DataWarehouse Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release DataWarehouse Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseDataWarehouseManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [ReleaseDataWarehouseManagerAgent] Analyzing Release DataWarehouse Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release DataWarehouse Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release DataWarehouse Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseDataWarehouseManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseDataWarehouseManagerAgent = Object.freeze(new ReleaseDataWarehouseManagerAgent());
+export const releaseDataWarehouseManagerAgent = Object.freeze(
+  new ReleaseDataWarehouseManagerAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureResilienceDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_resilience_director_agent',
-            'Infrastructure Resilience Director',
-            'You are an elite Infrastructure Resilience Director. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_resilience_director_agent',
+      'Infrastructure Resilience Director',
+      'You are an elite Infrastructure Resilience Director. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Resilience.',
+    );
+  }
 
-    async generateInfrastructureResilienceSystem(objective) {
-        logger.info(`💻 [InfrastructureResilienceDirectorAgent] Analyzing Infrastructure Resilience Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Resilience Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Resilience Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureResilienceDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureResilienceSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureResilienceDirectorAgent] Analyzing Infrastructure Resilience Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Resilience Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Resilience Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureResilienceDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureResilienceDirectorAgent = Object.freeze(new InfrastructureResilienceDirectorAgent());
+export const infrastructureResilienceDirectorAgent = Object.freeze(
+  new InfrastructureResilienceDirectorAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataMigrationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_migration_orchestrator_agent',
-            'Data Migration Orchestrator',
-            'You are an elite Data Migration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Data Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'data_migration_orchestrator_agent',
+      'Data Migration Orchestrator',
+      'You are an elite Data Migration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Data Migration.',
+    );
+  }
 
-    async generateDataMigrationSystem(objective) {
-        logger.info(`💻 [DataMigrationOrchestratorAgent] Analyzing Data Migration Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Migration Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Migration Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataMigrationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataMigrationSystem(objective) {
+    logger.info(
+      `💻 [DataMigrationOrchestratorAgent] Analyzing Data Migration Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Migration Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Migration Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DataMigrationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const dataMigrationOrchestratorAgent = Object.freeze(new DataMigrationOrchestratorAgent());
+export const dataMigrationOrchestratorAgent = Object.freeze(
+  new DataMigrationOrchestratorAgent(),
+);

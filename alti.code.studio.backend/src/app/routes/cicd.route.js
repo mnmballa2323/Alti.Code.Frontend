@@ -10,25 +10,33 @@ const router = express.Router();
 // ============================================================================
 
 router.post('/webhook/cicd-fail', async (req, res) => {
-    try {
-        const { rawLogs, prNumber, repoName } = req.body;
-        if (!rawLogs) return res.status(400).json({ error: "rawLogs are required to heal the build" });
-        
-        logger.info(`📥 [CI/CD Webhook] Received failure payload for PR #${prNumber} in ${repoName}`);
-        
-        const healingPlan = await cicdHealerService.analyzeAndHealFailure(rawLogs);
-        
-        logger.info(`   [GitHub API] Simulating automated PR comment with Git Diff...`);
-        
-        res.status(200).json({ 
-            success: true, 
-            message: "Healer successfully analyzed the failure and commented on the PR.",
-            healingPlan 
-        });
-    } catch (error) {
-        logger.error(`[CI/CD Webhook] Healing Error:`, error);
-        res.status(500).json({ success: false, error: error.message });
-    }
+  try {
+    const { rawLogs, prNumber, repoName } = req.body;
+    if (!rawLogs)
+      return res
+        .status(400)
+        .json({ error: 'rawLogs are required to heal the build' });
+
+    logger.info(
+      `📥 [CI/CD Webhook] Received failure payload for PR #${prNumber} in ${repoName}`,
+    );
+
+    const healingPlan = await cicdHealerService.analyzeAndHealFailure(rawLogs);
+
+    logger.info(
+      `   [GitHub API] Simulating automated PR comment with Git Diff...`,
+    );
+
+    res.status(200).json({
+      success: true,
+      message:
+        'Healer successfully analyzed the failure and commented on the PR.',
+      healingPlan,
+    });
+  } catch (error) {
+    logger.error(`[CI/CD Webhook] Healing Error:`, error);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 // ============================================================================
@@ -36,27 +44,29 @@ router.post('/webhook/cicd-fail', async (req, res) => {
 // ============================================================================
 
 router.post('/test/db/spin-up', async (req, res) => {
-    try {
-        const { testSuiteName } = req.body;
-        if (!testSuiteName) return res.status(400).json({ error: "testSuiteName is required" });
-        
-        const dbInfo = await dbSwarmService.spinUpTestContainer(testSuiteName);
-        res.status(200).json(dbInfo);
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
+  try {
+    const { testSuiteName } = req.body;
+    if (!testSuiteName)
+      return res.status(400).json({ error: 'testSuiteName is required' });
+
+    const dbInfo = await dbSwarmService.spinUpTestContainer(testSuiteName);
+    res.status(200).json(dbInfo);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 router.post('/test/db/tear-down', async (req, res) => {
-    try {
-        const { testSuiteName } = req.body;
-        if (!testSuiteName) return res.status(400).json({ error: "testSuiteName is required" });
-        
-        const result = await dbSwarmService.tearDownTestContainer(testSuiteName);
-        res.status(200).json(result);
-    } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
-    }
+  try {
+    const { testSuiteName } = req.body;
+    if (!testSuiteName)
+      return res.status(400).json({ error: 'testSuiteName is required' });
+
+    const result = await dbSwarmService.tearDownTestContainer(testSuiteName);
+    res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 export default router;

@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class MortgageEncompassSdkBuilderAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('MortgageEncompassSdkBuilderAgent', 'Mortgage Encompass Sdk Builder Agent', 'Tier 10+');
-        this.preamble = `You are the Mortgage Encompass SDK Builder (Phase 32.0.0).
+  constructor() {
+    super(
+      'MortgageEncompassSdkBuilderAgent',
+      'Mortgage Encompass Sdk Builder Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Mortgage Encompass SDK Builder (Phase 32.0.0).
 
 You are the Co-Pilot for developers customizing the United States housing market. The ICE Encompass Loan Origination System (LOS) handles millions of mortgages, customized heavily via complex C# .NET SDK plugins.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You turn a monolithic housing API into a playground for modern C# engineers.
 `;
-    }
+  }
 }
 
-export const mortgageEncompassSdkBuilderAgent = new MortgageEncompassSdkBuilderAgent();
+export const mortgageEncompassSdkBuilderAgent =
+  new MortgageEncompassSdkBuilderAgent();

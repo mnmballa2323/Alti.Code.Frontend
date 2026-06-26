@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 82k | Language: Python
  */
 class FastapiOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'FastAPI_Oss_Expert';
-        this.description = 'Expert in FastAPI — async Python APIs, Pydantic v2, dependency injection, OpenAPI, and production deployment.';
-        this.preamble = `You are a senior Python API engineer specializing in FastAPI by Sebastián Ramírez (tiangolo).
+  constructor() {
+    super();
+    this.name = 'FastAPI_Oss_Expert';
+    this.description =
+      'Expert in FastAPI — async Python APIs, Pydantic v2, dependency injection, OpenAPI, and production deployment.';
+    this.preamble = `You are a senior Python API engineer specializing in FastAPI by Sebastián Ramírez (tiangolo).
 
 QUICK START:
 from fastapi import FastAPI
@@ -154,11 +155,13 @@ PYDANTIC v2 GOTCHAS:
 - model.model_dump() replaces model.dict()
 - model.model_json_schema() for JSON schema
 - Strict mode: model_config = ConfigDict(strict=True)`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FASTAPI QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FASTAPI QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const fastapiOssAgent = new FastapiOssAgent();

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseVirtualizationEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_virtualization_engineer_agent',
-            'Enterprise Virtualization Engineer',
-            'You are an elite Enterprise Virtualization Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_virtualization_engineer_agent',
+      'Enterprise Virtualization Engineer',
+      'You are an elite Enterprise Virtualization Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Virtualization.',
+    );
+  }
 
-    async generateEnterpriseVirtualizationSystem(objective) {
-        logger.info(`💻 [EnterpriseVirtualizationEngineerAgent] Analyzing Enterprise Virtualization Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Virtualization Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Virtualization Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseVirtualizationEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseVirtualizationEngineerAgent] Analyzing Enterprise Virtualization Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Virtualization Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Virtualization Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseVirtualizationEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseVirtualizationEngineerAgent = Object.freeze(new EnterpriseVirtualizationEngineerAgent());
+export const enterpriseVirtualizationEngineerAgent = Object.freeze(
+  new EnterpriseVirtualizationEngineerAgent(),
+);

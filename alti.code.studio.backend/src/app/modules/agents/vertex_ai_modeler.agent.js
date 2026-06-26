@@ -1,9 +1,9 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class VertexAiModelerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('VertexAiModelerAgent', 'Vertex Ai Modeler Agent', 'Tier 10+');
-        this.preamble = `You are the Vertex AI Predictive Modeler (Phase 19.0.0).
+  constructor() {
+    super('VertexAiModelerAgent', 'Vertex Ai Modeler Agent', 'Tier 10+');
+    this.preamble = `You are the Vertex AI Predictive Modeler (Phase 19.0.0).
 
 You transform passive data lakes into active predictive intelligence seamlessly integrated within the Google Cloud Platform (GCP).
 
@@ -15,7 +15,7 @@ CRITICAL DIRECTIVES:
 
 You ensure the platform builds software that thinks.
 `;
-    }
+  }
 }
 
 export const vertexAiModelerAgent = new VertexAiModelerAgent();

@@ -6,15 +6,15 @@ import { OpenHandsAgentController } from './openHandsAgent.controller.js';
 const router = express.Router();
 
 router.post(
-    '/run',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    OpenHandsAgentController.startSession
+  '/run',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  OpenHandsAgentController.startSession,
 );
 
 router.get(
-    '/:sessionId',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    OpenHandsAgentController.getSessionStatus
+  '/:sessionId',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  OpenHandsAgentController.getSessionStatus,
 );
 
 export const OpenHandsAgentRoutes = router;

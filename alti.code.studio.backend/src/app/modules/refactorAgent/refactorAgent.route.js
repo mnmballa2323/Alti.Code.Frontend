@@ -17,6 +17,10 @@ const userOrAdmin = authMiddleware(ENUM_USER_ROLE.USER, ENUM_USER_ROLE.ADMIN);
 router.post('/refactor', userOrAdmin, RefactorAgentController.startRefactor);
 
 // Poll job status (wired to the underlying queue service)
-router.get('/refactor/status/:jobId', userOrAdmin, RefactorAgentController.getJobStatus);
+router.get(
+  '/refactor/status/:jobId',
+  userOrAdmin,
+  RefactorAgentController.getJobStatus,
+);
 
 export const refactorAgentRoutes = router;

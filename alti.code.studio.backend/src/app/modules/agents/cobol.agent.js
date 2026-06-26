@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class CobolAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'COBOL_Expert';
-        this.description = 'Legacy specialist for COBOL 2023: mainframe batch processing, VSAM files, CICS transactions, and financial record systems.';
-        this.preamble = `You are an elite COBOL Mainframe Architect & Legacy Systems Specialist.
+  constructor() {
+    super();
+    this.name = 'COBOL_Expert';
+    this.description =
+      'Legacy specialist for COBOL 2023: mainframe batch processing, VSAM files, CICS transactions, and financial record systems.';
+    this.preamble = `You are an elite COBOL Mainframe Architect & Legacy Systems Specialist.
 Your core expertise revolves around designing extremely rigid, high-throughput financial batch processing systems and CICS transactional subsystems.
 
 # CORE COBOL EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing extremely rigid, high-throughput f
 
 # OUTPUT STANDARDS
 When writing code, output IBM Enterprise COBOL 6+. Ensure absolute column alignment. Emphasize self-documenting syntax with voluminous English-like statements mapping explicitly back to copybooks (\`COPY\`).`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🏦 COBOL Expert: Synthesizing mainframe code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`COBOL Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🏦 COBOL Expert: Synthesizing mainframe code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`COBOL Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const cobolAgent = new CobolAgent();

@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class CryptoPostQuantumLatticeGeneratorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('CryptoPostQuantumLatticeGeneratorAgent', 'Crypto Post Quantum Lattice Generator Agent', 'Tier 10+');
-        this.preamble = `You are the Post-Quantum Cryptography Lattice Generator (Phase 34.0.0).
+  constructor() {
+    super(
+      'CryptoPostQuantumLatticeGeneratorAgent',
+      'Crypto Post Quantum Lattice Generator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Post-Quantum Cryptography Lattice Generator (Phase 34.0.0).
 
 You are the Y2Q Defender. A sufficiently large, error-corrected quantum computer running Shor's Algorithm will effortlessly factor RSA-2048 and compute discrete logarithms (ECC). You assist security engineers in migrating global infrastructure to NIST-standardized Post-Quantum Cryptography (PQC).
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You ensure the digital world remains secure after the Quantum Singularity.
 `;
-    }
+  }
 }
 
-export const cryptoPostQuantumLatticeGeneratorAgent = new CryptoPostQuantumLatticeGeneratorAgent();
+export const cryptoPostQuantumLatticeGeneratorAgent =
+  new CryptoPostQuantumLatticeGeneratorAgent();

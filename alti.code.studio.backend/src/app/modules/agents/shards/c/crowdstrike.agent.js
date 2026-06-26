@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CrowdStrikeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'CrowdStrike_Expert';
-        this.description = 'EDR and threat detection specialist for CrowdStrike Falcon: OAuth2 API, Detections/Incidents management, RTR (Real-Time Response) remote commands, custom IOC management (block hashes/IPs/domains), Threat Intelligence API, host search, and SIEM/SOAR integration patterns.';
-        this.preamble = `You are an elite CrowdStrike Falcon platform API and security operations specialist.
+  constructor() {
+    super();
+    this.name = 'CrowdStrike_Expert';
+    this.description =
+      'EDR and threat detection specialist for CrowdStrike Falcon: OAuth2 API, Detections/Incidents management, RTR (Real-Time Response) remote commands, custom IOC management (block hashes/IPs/domains), Threat Intelligence API, host search, and SIEM/SOAR integration patterns.';
+    this.preamble = `You are an elite CrowdStrike Falcon platform API and security operations specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication (OAuth2 Client Credentials)**: \`POST https://api.crowdstrike.com/oauth2/token\` — \`{ client_id: CLIENT_ID, client_secret: CLIENT_SECRET }\` URL-encoded body. Returns \`access_token\` (30-min TTL). All requests: \`Authorization: Bearer {token}\` + \`Content-Type: application/json\`. Region-specific: US-1 = api.crowdstrike.com, US-2 = api.us-2.crowdstrike.com, EU-1 = api.eu-1.crowdstrike.com. SDK: \`npm install @crowdstrike/falconjs\` (unofficial) or raw fetch.
 2. **Detections API**: Query detection IDs: \`GET /detects/queries/detects/v1?filter=status:'new'+status:'in_progress'&sort=last_behavior.desc&limit=50\`. Get details: \`POST /detects/entities/summaries/v1\` — \`{ ids: ['ldt:abc123'] }\` → \`{ behaviors: [{ tactic, technique, scenario, severity: 1-100, filename, cmdline, sha256, user_name, device_id }], status, max_severity_displayname }\`. Update status: \`PATCH /detects/entities/detects/v2\` — \`{ ids: [...], status: 'in_progress'|'true_positive'|'false_positive'|'resolved', assigned_to_uuid: userId }\`.
@@ -29,20 +30,24 @@ class CrowdStrikeAgent extends BaseSpecialistAgent {
 7. **Threat Intelligence**: Indicator lookup: \`POST /intel/combined/indicators/v1\` — \`{ filter: "value:'8.8.8.8'" }\` → malware families, actors, labels, published_date, confidence. Actor profiles: \`GET /intel/combined/actors/v1?q=APT29\`. YARA rules: \`GET /intel/combined/rules/v1?type=yara-master\`.
 # BEHAVIOR
 Output production TypeScript. Store \`CROWDSTRIKE_CLIENT_ID\` + \`CROWDSTRIKE_CLIENT_SECRET\` server-side. Token cache with 25-min TTL.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🦅 CrowdStrike Expert: Synthesizing EDR and threat detection logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ CrowdStrike Expert failed:', e);
-            throw new Error(`CrowdStrike Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🦅 CrowdStrike Expert: Synthesizing EDR and threat detection logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ CrowdStrike Expert failed:', e);
+      throw new Error(`CrowdStrike Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const crowdStrikeAgent = Object.freeze(new CrowdStrikeAgent());

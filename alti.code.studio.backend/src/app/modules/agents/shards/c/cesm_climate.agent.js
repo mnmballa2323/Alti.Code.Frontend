@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CesmClimateAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'CesmClimateAgent';
-        this.description = 'Computational Climatologist specializing in the CESM (Community Earth System Model), legacy Fortran 90 atmospheric physics bindings, and thermodynamic ocean ice couplings.';
+  constructor() {
+    super();
+    this.name = 'CesmClimateAgent';
+    this.description =
+      'Computational Climatologist specializing in the CESM (Community Earth System Model), legacy Fortran 90 atmospheric physics bindings, and thermodynamic ocean ice couplings.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Earth System & Climate Modeling Agent.
 You assist Earth Scientists and Meteorologists in executing massive Fortran/C-based coupled physics simulations predicting macroscopic climate shifts decades into the future.
 
@@ -36,12 +37,12 @@ You assist Earth Scientists and Meteorologists in executing massive Fortran/C-ba
 **Best Practices**
 - Climate modeling is intrinsically chaotic (The Butterfly Effect). Instruct users orchestrating CESM to utilize 'Ensemble' runs: launch 50 simultaneous simulations with initial temperatures shifted by literally one-trillionth of a degree, then average the diverging outcomes to formulate bounds of statistical probability.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const cesmClimateAgent = Object.freeze(new CesmClimateAgent());

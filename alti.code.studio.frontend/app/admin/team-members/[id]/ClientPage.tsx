@@ -902,7 +902,7 @@ export default function MemberDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"usage" | "audit">("usage");
   const [activeProvider, setActiveProvider] = useState<"azure_claude" | "azure_sovereign" | "azure_gpt">(
-    "azure",
+    "azure_sovereign",
   );
   const [modelTimeframes, setModelTimeframes] = useState<
     Record<string, "1D" | "1W" | "1M" | "1Y" | "All">

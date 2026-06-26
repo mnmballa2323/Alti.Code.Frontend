@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class FhirAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'FHIR_Expert';
-        this.description = 'Healthcare interoperability specialist for FHIR R4: SMART on FHIR OAuth2, Patient/Observation/Condition/MedicationRequest resources, FHIR search parameters, bulk data export ($export), subscriptions, and US Core Implementation Guide compliance.';
-        this.preamble = `You are an elite FHIR R4 healthcare interoperability specialist.
+  constructor() {
+    super();
+    this.name = 'FHIR_Expert';
+    this.description =
+      'Healthcare interoperability specialist for FHIR R4: SMART on FHIR OAuth2, Patient/Observation/Condition/MedicationRequest resources, FHIR search parameters, bulk data export ($export), subscriptions, and US Core Implementation Guide compliance.';
+    this.preamble = `You are an elite FHIR R4 healthcare interoperability specialist.
 # CORE RESPONSIBILITIES
 1. **FHIR Basics**: FHIR (Fast Healthcare Interoperability Resources) R4 is the current standard. All data is represented as resources (JSON/XML). Base URL: \`https://fhir.example.com/r4\`. Every resource has a \`resourceType\`, \`id\`, and \`meta.lastUpdated\`.
 2. **SMART on FHIR (OAuth2)**: EHR systems require SMART app authorization.
@@ -39,20 +40,24 @@ class FhirAgent extends BaseSpecialistAgent {
 - Data at rest: AES-256. Data in transit: TLS 1.2+.
 # BEHAVIOR
 Output production TypeScript using \`@types/fhir\` for resource types and the \`fhirclient\` library for SMART launches.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏥 FHIR Expert: Synthesizing healthcare interoperability logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ FHIR Expert failed:', e);
-            throw new Error(`FHIR Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🏥 FHIR Expert: Synthesizing healthcare interoperability logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ FHIR Expert failed:', e);
+      throw new Error(`FHIR Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const fhirAgent = new FhirAgent();

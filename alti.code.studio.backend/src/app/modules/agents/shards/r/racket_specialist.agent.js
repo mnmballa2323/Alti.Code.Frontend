@@ -13,24 +13,26 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class RacketSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'racket_specialist',
-            'Racket Specialist',
-            'You are an elite Racket Specialist. You specialize in: Language-oriented programming and dialect creation.'
-        );
-    }
+  constructor() {
+    super(
+      'racket_specialist',
+      'Racket Specialist',
+      'You are an elite Racket Specialist. You specialize in: Language-oriented programming and dialect creation.',
+    );
+  }
 
-    async generateRacketSystem(objective) {
-        logger.info(`💻 [RacketSpecialistAgent] Analyzing Racket requirements...`);
-        const prompt = `Analyze the Racket requirement: ${objective}. Output valid Racket code.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Racket Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [RacketSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateRacketSystem(objective) {
+    logger.info(`💻 [RacketSpecialistAgent] Analyzing Racket requirements...`);
+    const prompt = `Analyze the Racket requirement: ${objective}. Output valid Racket code.`;
+    try {
+      const output = await this._invoke(prompt, 'N/A - Racket Target');
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [RacketSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const RacketSpecialistAgentInstance = Object.freeze(new RacketSpecialistAgent());
+export const RacketSpecialistAgentInstance = Object.freeze(
+  new RacketSpecialistAgent(),
+);

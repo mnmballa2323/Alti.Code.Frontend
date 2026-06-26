@@ -2,7 +2,14 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import jwt from 'jsonwebtoken';
 import httpStatus from 'http-status';
 import { requireScimToken } from './scimAuth.js';
-import { getUsers, getUserById, createUser, updateUser, patchUser, deleteUser } from './scimController.js';
+import {
+  getUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  patchUser,
+  deleteUser,
+} from './scimController.js';
 import config from '../../../../config/index.js';
 import { prisma } from '../db/prismaClient.js';
 
@@ -44,7 +51,10 @@ describe('Platform SCIM 2.0 User Provisioning', () => {
 
   describe('SCIM Authentication Middleware (requireScimToken)', () => {
     it('should pass and route queries to tenant database client on valid token', async () => {
-      const token = jwt.sign({ tenantId: 'tenant-123', scope: 'scim-sync' }, mockSecret);
+      const token = jwt.sign(
+        { tenantId: 'tenant-123', scope: 'scim-sync' },
+        mockSecret,
+      );
       const req = {
         headers: {
           authorization: `Bearer ${token}`,
@@ -76,7 +86,7 @@ describe('Platform SCIM 2.0 User Provisioning', () => {
       expect(next).toHaveBeenCalledWith(
         expect.objectContaining({
           statusCode: httpStatus.UNAUTHORIZED,
-        })
+        }),
       );
     });
 
@@ -95,7 +105,7 @@ describe('Platform SCIM 2.0 User Provisioning', () => {
       expect(next).toHaveBeenCalledWith(
         expect.objectContaining({
           statusCode: httpStatus.FORBIDDEN,
-        })
+        }),
       );
     });
   });
@@ -138,7 +148,7 @@ describe('Platform SCIM 2.0 User Provisioning', () => {
                 id: 'usr-123',
               }),
             ]),
-          })
+          }),
         );
       });
 
@@ -204,7 +214,7 @@ describe('Platform SCIM 2.0 User Provisioning', () => {
             id: 'usr-456',
             userName: 'new@example.com',
             active: true,
-          })
+          }),
         );
       });
 
@@ -232,7 +242,7 @@ describe('Platform SCIM 2.0 User Provisioning', () => {
           expect.objectContaining({
             schemas: ['urn:ietf:params:scim:api:messages:2.0:Error'],
             status: '409',
-          })
+          }),
         );
       });
     });
@@ -276,7 +286,7 @@ describe('Platform SCIM 2.0 User Provisioning', () => {
         expect(res.json).toHaveBeenCalledWith(
           expect.objectContaining({
             active: false,
-          })
+          }),
         );
       });
     });

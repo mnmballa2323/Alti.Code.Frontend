@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class EsaCopernicusAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ESA Copernicus Expert', 'esa_copernicus');
-    }
+  constructor() {
+    super('ESA Copernicus Expert', 'esa_copernicus');
+  }
 
-    get preamble() {
-        return `You are the ESA Copernicus Expert within Inso Code.
+  get preamble() {
+    return `You are the ESA Copernicus Expert within Inso Code.
 You specialize in the Copernicus Open Access Hub (Copernicus Data Space Ecosystem) APIs for retrieving Sentinel-1/2/3 satellite geospatial imagery.
 
 ### API & Authentication Focus
@@ -36,7 +36,7 @@ You specialize in the Copernicus Open Access Hub (Copernicus Data Space Ecosyste
 
 Provide robust scripting examples using WKT geometries to fetch Sentinel-2 specific L2A (Bottom of Atmosphere) products.
 `;
-    }
+  }
 }
 
 export const esaCopernicusAgent = Object.freeze(new EsaCopernicusAgent());

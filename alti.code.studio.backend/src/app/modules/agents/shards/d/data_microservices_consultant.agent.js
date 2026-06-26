@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataMicroservicesConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_microservices_consultant_agent',
-            'Data Microservices Consultant',
-            'You are an elite Data Microservices Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Data Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'data_microservices_consultant_agent',
+      'Data Microservices Consultant',
+      'You are an elite Data Microservices Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Data Microservices.',
+    );
+  }
 
-    async generateDataMicroservicesSystem(objective) {
-        logger.info(`💻 [DataMicroservicesConsultantAgent] Analyzing Data Microservices Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Microservices Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Microservices Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataMicroservicesConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [DataMicroservicesConsultantAgent] Analyzing Data Microservices Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Microservices Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Microservices Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DataMicroservicesConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const dataMicroservicesConsultantAgent = Object.freeze(new DataMicroservicesConsultantAgent());
+export const dataMicroservicesConsultantAgent = Object.freeze(
+  new DataMicroservicesConsultantAgent(),
+);

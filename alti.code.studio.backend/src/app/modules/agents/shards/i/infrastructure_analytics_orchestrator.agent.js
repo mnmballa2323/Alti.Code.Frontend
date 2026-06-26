@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureAnalyticsOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_analytics_orchestrator_agent',
-            'Infrastructure Analytics Orchestrator',
-            'You are an elite Infrastructure Analytics Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_analytics_orchestrator_agent',
+      'Infrastructure Analytics Orchestrator',
+      'You are an elite Infrastructure Analytics Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Analytics.',
+    );
+  }
 
-    async generateInfrastructureAnalyticsSystem(objective) {
-        logger.info(`💻 [InfrastructureAnalyticsOrchestratorAgent] Analyzing Infrastructure Analytics Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Analytics Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Analytics Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureAnalyticsOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureAnalyticsOrchestratorAgent] Analyzing Infrastructure Analytics Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Analytics Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Analytics Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureAnalyticsOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureAnalyticsOrchestratorAgent = Object.freeze(new InfrastructureAnalyticsOrchestratorAgent());
+export const infrastructureAnalyticsOrchestratorAgent = Object.freeze(
+  new InfrastructureAnalyticsOrchestratorAgent(),
+);

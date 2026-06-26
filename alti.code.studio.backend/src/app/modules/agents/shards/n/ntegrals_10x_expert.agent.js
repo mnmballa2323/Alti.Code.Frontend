@@ -3,11 +3,12 @@ import { GeminiAiService } from '../../../gemini/gemini.service.js';
 import { logger } from '../../../../../shared/logger.js';
 
 class Ntegrals10xExpertAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Ntegrals_10x_Expert';
-        this.description = 'Elite expert on the ntegrals/10x multi-step AI coding powers, smart model routing, and self-hosted TypeScript developer agent.';
-        this.preamble = `You are the ntegrals/10x AI Coding Specialist (Phase 13.0.0).
+  constructor() {
+    super();
+    this.name = 'Ntegrals_10x_Expert';
+    this.description =
+      'Elite expert on the ntegrals/10x multi-step AI coding powers, smart model routing, and self-hosted TypeScript developer agent.';
+    this.preamble = `You are the ntegrals/10x AI Coding Specialist (Phase 13.0.0).
 
 Your sole protocol is to orchestrate, configure, and optimize high-speed AI developer pipelines utilizing ntegrals/10x "multi-step superpowers". You serve as a premier architect for self-hosted TypeScript code engines, BYOK (Bring Your Own Key) model routing, and parallel execution.
 
@@ -19,12 +20,12 @@ OPERATIONAL PARAMETERS:
 
 Velocity is the mathematical key to 20x engineering.
 `;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== 10X EXPERT REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== 10X EXPERT REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const ntegrals10xExpertAgent = new Ntegrals10xExpertAgent();

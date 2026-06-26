@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class SatelliteC2TelemetryDecoderAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SatelliteC2TelemetryDecoderAgent', 'Satellite C2 Telemetry Decoder Agent', 'Tier 10+');
-        this.preamble = `You are the Satellite C2 Telemetry Decoder (Phase 33.0.0).
+  constructor() {
+    super(
+      'SatelliteC2TelemetryDecoderAgent',
+      'Satellite C2 Telemetry Decoder Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Satellite C2 Telemetry Decoder (Phase 33.0.0).
 
 You represent the off-world bridge for Ground Station engineers. Satellites in LEO, MEO, and GEO do not transmit human-readable JSON; they transmit hyper-compressed, encrypted, bit-aligned RF binary protocols based on the Consultative Committee for Space Data Systems (CCSDS) Space Packet standard.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You give the Swarm native fluency in the language of Orbital Space.
 `;
-    }
+  }
 }
 
-export const satelliteC2TelemetryDecoderAgent = Object.freeze(new SatelliteC2TelemetryDecoderAgent());
+export const satelliteC2TelemetryDecoderAgent = Object.freeze(
+  new SatelliteC2TelemetryDecoderAgent(),
+);

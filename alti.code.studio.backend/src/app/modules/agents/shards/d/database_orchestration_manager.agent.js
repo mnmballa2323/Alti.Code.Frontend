@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseOrchestrationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_orchestration_manager_agent',
-            'Database Orchestration Manager',
-            'You are an elite Database Orchestration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Database Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'database_orchestration_manager_agent',
+      'Database Orchestration Manager',
+      'You are an elite Database Orchestration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Database Orchestration.',
+    );
+  }
 
-    async generateDatabaseOrchestrationSystem(objective) {
-        logger.info(`💻 [DatabaseOrchestrationManagerAgent] Analyzing Database Orchestration Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Orchestration Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Orchestration Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseOrchestrationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [DatabaseOrchestrationManagerAgent] Analyzing Database Orchestration Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Orchestration Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Orchestration Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseOrchestrationManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseOrchestrationManagerAgent = Object.freeze(new DatabaseOrchestrationManagerAgent());
+export const databaseOrchestrationManagerAgent = Object.freeze(
+  new DatabaseOrchestrationManagerAgent(),
+);

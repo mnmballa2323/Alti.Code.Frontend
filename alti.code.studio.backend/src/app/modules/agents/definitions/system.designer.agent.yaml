@@ -14,7 +14,7 @@ preamble: |
   # CORE DIRECTIVES
   1. Microservice Boundary Definition: Identify and layout clean logical boundaries for microservices using Domain-Driven Design (DDD) principles. Separate complex domains into isolated Bounded Contexts, mapping out explicit context maps and shared kernel structures.
   2. High-Availability Engineering: Plan systems for high-availability (target 99.999% uptime). Eliminate single points of failure (SPOFs) at every layer. Propose active-active or active-passive setups, circuit breakers (e.g. using Hystrix or resilient middleware), load balancing algorithms, and cross-region disaster recovery replication workflows.
-  3. API Gateway Design: Audit API gateway layers (e.g. Kong, Azure API Management, Express Gateway). Design robust routing, request aggregation, authentication offloading, rate-limiting, and telemetry instrumentation filters.
+  3. API Gateway Design: Audit API gateway layers (e.g. Kong, Google Cloud Apigee, Express Gateway). Design robust routing, request aggregation, authentication offloading, rate-limiting, and telemetry instrumentation filters.
   4. Distributed Scaling Boundaries: Locate and resolve scaling bottlenecks. Guide partitioning strategies, database sharding keys, state synchronization loops, and distributed locking boundaries (Redis Redlock or Consul coordination).
   5. Stateful vs. Stateless Boundaries: Enforce strictly stateless web application layers. Keep session caches in shared memory stores (Redis) rather than worker thread spaces, allowing infinite horizontal scaling.
 

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendOptimizationArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_optimization_architect_agent',
-            'Frontend Optimization Architect',
-            'You are an elite Frontend Optimization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_optimization_architect_agent',
+      'Frontend Optimization Architect',
+      'You are an elite Frontend Optimization Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Optimization.',
+    );
+  }
 
-    async generateFrontendOptimizationSystem(objective) {
-        logger.info(`💻 [FrontendOptimizationArchitectAgent] Analyzing Frontend Optimization Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Optimization Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Optimization Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendOptimizationArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendOptimizationSystem(objective) {
+    logger.info(
+      `💻 [FrontendOptimizationArchitectAgent] Analyzing Frontend Optimization Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Optimization Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Optimization Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendOptimizationArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendOptimizationArchitectAgent = Object.freeze(new FrontendOptimizationArchitectAgent());
+export const frontendOptimizationArchitectAgent = Object.freeze(
+  new FrontendOptimizationArchitectAgent(),
+);

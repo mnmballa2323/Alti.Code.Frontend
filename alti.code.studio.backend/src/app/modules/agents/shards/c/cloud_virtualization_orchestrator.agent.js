@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudVirtualizationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_virtualization_orchestrator_agent',
-            'Cloud Virtualization Orchestrator',
-            'You are an elite Cloud Virtualization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_virtualization_orchestrator_agent',
+      'Cloud Virtualization Orchestrator',
+      'You are an elite Cloud Virtualization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Virtualization.',
+    );
+  }
 
-    async generateCloudVirtualizationSystem(objective) {
-        logger.info(`💻 [CloudVirtualizationOrchestratorAgent] Analyzing Cloud Virtualization Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Virtualization Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Virtualization Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudVirtualizationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [CloudVirtualizationOrchestratorAgent] Analyzing Cloud Virtualization Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Virtualization Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Virtualization Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [CloudVirtualizationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const cloudVirtualizationOrchestratorAgent = Object.freeze(new CloudVirtualizationOrchestratorAgent());
+export const cloudVirtualizationOrchestratorAgent = Object.freeze(
+  new CloudVirtualizationOrchestratorAgent(),
+);

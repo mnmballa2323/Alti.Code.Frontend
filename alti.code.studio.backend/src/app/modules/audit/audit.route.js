@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -54,7 +54,11 @@ const router = express.Router();
  *       403:
  *         description: Forbidden (Non-Admins)
  */
-router.get('/', authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), AuditController.getLogs);
+router.get(
+  '/',
+  authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  AuditController.getLogs,
+);
 
 /**
  * @swagger
@@ -65,9 +69,25 @@ router.get('/', authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN)
  *     security:
  *       - bearerAuth: []
  */
-router.post('/export/gcs', authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), AuditController.exportLogsToGCS);
-router.post('/analyze', authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), AuditController.analyzeLogs);
-router.post('/lighthouse', authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), AuditController.runLighthouseAudit);
-router.post('/genkit', authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN), AuditController.runGenkitAudit);
+router.post(
+  '/export/gcs',
+  authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  AuditController.exportLogsToGCS,
+);
+router.post(
+  '/analyze',
+  authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  AuditController.analyzeLogs,
+);
+router.post(
+  '/lighthouse',
+  authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  AuditController.runLighthouseAudit,
+);
+router.post(
+  '/genkit',
+  authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  AuditController.runGenkitAudit,
+);
 
 export const AuditRoutes = router;

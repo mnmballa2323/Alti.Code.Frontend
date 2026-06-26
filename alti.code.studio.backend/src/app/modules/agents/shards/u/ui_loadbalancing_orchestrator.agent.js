@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UILoadBalancingOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_loadbalancing_orchestrator_agent',
-            'UI LoadBalancing Orchestrator',
-            'You are an elite UI LoadBalancing Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UI LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_loadbalancing_orchestrator_agent',
+      'UI LoadBalancing Orchestrator',
+      'You are an elite UI LoadBalancing Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UI LoadBalancing.',
+    );
+  }
 
-    async generateUILoadBalancingSystem(objective) {
-        logger.info(`💻 [UILoadBalancingOrchestratorAgent] Analyzing UI LoadBalancing Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI LoadBalancing Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI LoadBalancing Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UILoadBalancingOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUILoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [UILoadBalancingOrchestratorAgent] Analyzing UI LoadBalancing Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI LoadBalancing Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI LoadBalancing Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UILoadBalancingOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uILoadBalancingOrchestratorAgent = Object.freeze(new UILoadBalancingOrchestratorAgent());
+export const uILoadBalancingOrchestratorAgent = Object.freeze(
+  new UILoadBalancingOrchestratorAgent(),
+);

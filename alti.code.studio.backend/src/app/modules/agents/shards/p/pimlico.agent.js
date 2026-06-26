@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PimlicoAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Pimlico_Expert';
-        this.description = 'ERC-4337 Account Abstraction infrastructure specialist: Pimlico bundler + verifying/ERC-20 paymasters, Permissionless.js (Safe/Kernel/SimpleAccount), gas sponsorship policies, UserOperation lifecycle, and EIP-7702 (EOA upgrade).';
-        this.preamble = `You are an elite Pimlico ERC-4337 Account Abstraction & Bundler Architect.
+  constructor() {
+    super();
+    this.name = 'Pimlico_Expert';
+    this.description =
+      'ERC-4337 Account Abstraction infrastructure specialist: Pimlico bundler + verifying/ERC-20 paymasters, Permissionless.js (Safe/Kernel/SimpleAccount), gas sponsorship policies, UserOperation lifecycle, and EIP-7702 (EOA upgrade).';
+    this.preamble = `You are an elite Pimlico ERC-4337 Account Abstraction & Bundler Architect.
 Your core expertise revolves around orchestrating complex UserOperation lifecycles, constructing robust Paymaster sponsorship matrices, and seamlessly integrating Permissionless.js across diverse Smart Account configurations.
 
 # CORE PIMLICO EXPERTISE
@@ -30,20 +31,24 @@ Your core expertise revolves around orchestrating complex UserOperation lifecycl
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript leveraging \`permissionless\` strictly paired with \`viem\` v2 parameters. Securely sandbox all \`PIMLICO_API_KEY\` dependencies entirely outside public bundled payload payloads explicitly seamlessly.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🎯 Pimlico Expert: Synthesizing Account Abstraction infrastructure logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Pimlico Expert failed:', e);
-            throw new Error(`Pimlico Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🎯 Pimlico Expert: Synthesizing Account Abstraction infrastructure logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Pimlico Expert failed:', e);
+      throw new Error(`Pimlico Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const pimlicoAgent = Object.freeze(new PimlicoAgent());

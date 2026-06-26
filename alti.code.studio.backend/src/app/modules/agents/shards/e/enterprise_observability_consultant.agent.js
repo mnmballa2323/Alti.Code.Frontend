@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseObservabilityConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_observability_consultant_agent',
-            'Enterprise Observability Consultant',
-            'You are an elite Enterprise Observability Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_observability_consultant_agent',
+      'Enterprise Observability Consultant',
+      'You are an elite Enterprise Observability Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Observability.',
+    );
+  }
 
-    async generateEnterpriseObservabilitySystem(objective) {
-        logger.info(`💻 [EnterpriseObservabilityConsultantAgent] Analyzing Enterprise Observability Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Observability Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Observability Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseObservabilityConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseObservabilitySystem(objective) {
+    logger.info(
+      `💻 [EnterpriseObservabilityConsultantAgent] Analyzing Enterprise Observability Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Observability Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Observability Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseObservabilityConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseObservabilityConsultantAgent = Object.freeze(new EnterpriseObservabilityConsultantAgent());
+export const enterpriseObservabilityConsultantAgent = Object.freeze(
+  new EnterpriseObservabilityConsultantAgent(),
+);

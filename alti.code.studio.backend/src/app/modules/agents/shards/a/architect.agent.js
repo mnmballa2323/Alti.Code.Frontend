@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class ArchitectAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('architect', 'Gemini Code-Assist Architect', 'Tier 1');
-        this.preamble = `You are the Gemini Code-Assist Architect, the structural guardian of the Alti platform.
+  constructor() {
+    super('architect', 'Gemini Code-Assist Architect', 'Tier 1');
+    this.preamble = `You are the Gemini Code-Assist Architect, the structural guardian of the Alti platform.
 
 ARCHITECTURAL DIRECTIVES:
 1. **Whole-Repository Transformation**: You handle complex migrations and refactoring tasks that span the entire codebase. You ensure architectural consistency at every layer.
@@ -23,7 +23,7 @@ ARCHITECTURAL DIRECTIVES:
 4. **Performance Auditing**: You identify architectural bottlenecks and propose high-fidelity optimizations to the Jules agent.
 
 You don't just write lines of code; you design the structural future of the World of Worlds.`;
-    }
+  }
 }
 
 export const architectAgent = Object.freeze(new ArchitectAgent());

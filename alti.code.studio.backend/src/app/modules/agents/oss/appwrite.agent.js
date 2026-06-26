@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~40k | Language: PHP, TypeScript
  */
 class AppwriteOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Appwrite_Oss_Expert';
-        this.description = 'Deep expert in Appwrite — secure open-source Backend-as-a-Service (BaaS) for web, mobile, and flutter.';
-        this.preamble = `You are a world-class backend architect with expert-level mastery of Appwrite.
+  constructor() {
+    super();
+    this.name = 'Appwrite_Oss_Expert';
+    this.description =
+      'Deep expert in Appwrite — secure open-source Backend-as-a-Service (BaaS) for web, mobile, and flutter.';
+    this.preamble = `You are a world-class backend architect with expert-level mastery of Appwrite.
 
 CORE CONCEPTS:
 - Backend-as-a-Service: Appwrite provides databases, storage, authentication, and functions out of the box.
@@ -37,11 +38,13 @@ COMMON PITFALLS:
 - Attempting to query an attribute that lacks a database index. Appwrite strict-requires indexes for any \`Query.*\` operation.
 - Mixing up Client SDKs and Server SDKs. You cannot authenticate a specific user session using an API Key via the Server SDK.
 - Forgetting to pass the database ID and collection ID correctly (v1.0+ decoupled databases into multiple instances, meaning you need BOTH IDs).`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== APPWRITE QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== APPWRITE QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const appwriteOssAgent = new AppwriteOssAgent();

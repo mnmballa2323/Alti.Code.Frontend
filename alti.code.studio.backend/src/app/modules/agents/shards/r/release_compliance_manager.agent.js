@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseComplianceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_compliance_manager_agent',
-            'Release Compliance Manager',
-            'You are an elite Release Compliance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'release_compliance_manager_agent',
+      'Release Compliance Manager',
+      'You are an elite Release Compliance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release Compliance.',
+    );
+  }
 
-    async generateReleaseComplianceSystem(objective) {
-        logger.info(`💻 [ReleaseComplianceManagerAgent] Analyzing Release Compliance Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Compliance Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Compliance Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseComplianceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseComplianceSystem(objective) {
+    logger.info(
+      `💻 [ReleaseComplianceManagerAgent] Analyzing Release Compliance Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Compliance Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Compliance Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseComplianceManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseComplianceManagerAgent = Object.freeze(new ReleaseComplianceManagerAgent());
+export const releaseComplianceManagerAgent = Object.freeze(
+  new ReleaseComplianceManagerAgent(),
+);

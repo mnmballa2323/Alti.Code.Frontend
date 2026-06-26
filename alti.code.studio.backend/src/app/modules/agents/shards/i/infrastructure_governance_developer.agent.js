@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureGovernanceDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_governance_developer_agent',
-            'Infrastructure Governance Developer',
-            'You are an elite Infrastructure Governance Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_governance_developer_agent',
+      'Infrastructure Governance Developer',
+      'You are an elite Infrastructure Governance Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Governance.',
+    );
+  }
 
-    async generateInfrastructureGovernanceSystem(objective) {
-        logger.info(`💻 [InfrastructureGovernanceDeveloperAgent] Analyzing Infrastructure Governance Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Governance Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Governance Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureGovernanceDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureGovernanceSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureGovernanceDeveloperAgent] Analyzing Infrastructure Governance Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Governance Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Governance Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureGovernanceDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureGovernanceDeveloperAgent = Object.freeze(new InfrastructureGovernanceDeveloperAgent());
+export const infrastructureGovernanceDeveloperAgent = Object.freeze(
+  new InfrastructureGovernanceDeveloperAgent(),
+);

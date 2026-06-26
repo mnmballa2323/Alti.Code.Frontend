@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -22,31 +22,34 @@ const jobStore = new Map();
 const JOB_STORE_LIMIT = 200;
 
 function _createJob() {
-    const jobId = crypto.randomUUID();
-    if (jobStore.size >= JOB_STORE_LIMIT) {
-        // Evict the oldest entry
-        jobStore.delete(jobStore.keys().next().value);
-    }
-    jobStore.set(jobId, { status: 'pending', createdAt: new Date().toISOString() });
-    return jobId;
+  const jobId = crypto.randomUUID();
+  if (jobStore.size >= JOB_STORE_LIMIT) {
+    // Evict the oldest entry
+    jobStore.delete(jobStore.keys().next().value);
+  }
+  jobStore.set(jobId, {
+    status: 'pending',
+    createdAt: new Date().toISOString(),
+  });
+  return jobId;
 }
 
 function _completeJob(jobId, result) {
-    const job = jobStore.get(jobId);
-    if (job) {
-        job.status = 'completed';
-        job.result = result;
-        job.completedAt = new Date().toISOString();
-    }
+  const job = jobStore.get(jobId);
+  if (job) {
+    job.status = 'completed';
+    job.result = result;
+    job.completedAt = new Date().toISOString();
+  }
 }
 
 function _failJob(jobId, error) {
-    const job = jobStore.get(jobId);
-    if (job) {
-        job.status = 'failed';
-        job.error = error;
-        job.completedAt = new Date().toISOString();
-    }
+  const job = jobStore.get(jobId);
+  if (job) {
+    job.status = 'failed';
+    job.error = error;
+    job.completedAt = new Date().toISOString();
+  }
 }
 
 /**
@@ -55,35 +58,39 @@ function _failJob(jobId, error) {
  * analysis runs in the background and can be polled via GET /debug/status/:jobId.
  */
 const startDebug = catchAsync(async (req, res) => {
-    const userId = req.user.id;
-    const sessionId = req.body.sessionId || `debug-${Date.now()}`;
-    const { errorLog, stackTrace } = req.body;
+  const userId = req.user.id;
+  const sessionId = req.body.sessionId || `debug-${Date.now()}`;
+  const { errorLog, stackTrace } = req.body;
 
-    if (!errorLog || typeof errorLog !== 'string' || errorLog.trim().length === 0) {
-        return sendResponse(res, {
-            statusCode: httpStatus.BAD_REQUEST,
-            success: false,
-            message: 'Missing required field: errorLog (non-empty string)',
-            data: null,
-        });
-    }
-
-    const jobId = _createJob();
-
-    // Run async — respond immediately with jobId
-    DebugAgentService.analyzeError(errorLog, stackTrace ?? '', userId, sessionId)
-        .then(result => _completeJob(jobId, result))
-        .catch(err => {
-            logger.error(`DebugAgent job ${jobId} failed: ${err.message}`);
-            _failJob(jobId, err.message);
-        });
-
-    sendResponse(res, {
-        statusCode: httpStatus.ACCEPTED,
-        success: true,
-        message: 'Debug analysis started.',
-        data: { jobId },
+  if (
+    !errorLog ||
+    typeof errorLog !== 'string' ||
+    errorLog.trim().length === 0
+  ) {
+    return sendResponse(res, {
+      statusCode: httpStatus.BAD_REQUEST,
+      success: false,
+      message: 'Missing required field: errorLog (non-empty string)',
+      data: null,
     });
+  }
+
+  const jobId = _createJob();
+
+  // Run async — respond immediately with jobId
+  DebugAgentService.analyzeError(errorLog, stackTrace ?? '', userId, sessionId)
+    .then(result => _completeJob(jobId, result))
+    .catch(err => {
+      logger.error(`DebugAgent job ${jobId} failed: ${err.message}`);
+      _failJob(jobId, err.message);
+    });
+
+  sendResponse(res, {
+    statusCode: httpStatus.ACCEPTED,
+    success: true,
+    message: 'Debug analysis started.',
+    data: { jobId },
+  });
 });
 
 /**
@@ -91,24 +98,24 @@ const startDebug = catchAsync(async (req, res) => {
  * Returns the current status of a debug analysis job.
  */
 const getJobStatus = catchAsync(async (req, res) => {
-    const { jobId } = req.params;
-    const job = jobStore.get(jobId);
+  const { jobId } = req.params;
+  const job = jobStore.get(jobId);
 
-    if (!job) {
-        return sendResponse(res, {
-            statusCode: httpStatus.NOT_FOUND,
-            success: false,
-            message: `Job ${jobId} not found. It may have expired or never existed.`,
-            data: null,
-        });
-    }
-
-    sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: `Job status: ${job.status}`,
-        data: job,
+  if (!job) {
+    return sendResponse(res, {
+      statusCode: httpStatus.NOT_FOUND,
+      success: false,
+      message: `Job ${jobId} not found. It may have expired or never existed.`,
+      data: null,
     });
+  }
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: `Job status: ${job.status}`,
+    data: job,
+  });
 });
 
 /**
@@ -116,30 +123,33 @@ const getJobStatus = catchAsync(async (req, res) => {
  * Receives Azure Monitor alerts and triggers autonomic debugging.
  */
 const autonomicWebhook = catchAsync(async (req, res) => {
-    logger.info('Received Autonomic Debugging Webhook from Azure Monitor');
+  logger.info('Received Autonomic Debugging Webhook from Azure Monitor');
 
-    const alertData = observabilityService.ingestCloudAlert(req.body);
+  const alertData = observabilityService.ingestCloudAlert(req.body);
 
-    // Trigger async — do not block the webhook response
-    DebugAgentService.analyzeError(
-        alertData.errorLog,
-        alertData.stackTrace,
-        'system-azure-alert',
-        alertData.incidentId
-    ).catch(err => {
-        logger.error(`Autonomic Debugging Pipeline failed for incident ${alertData.incidentId}`, err);
-    });
+  // Trigger async — do not block the webhook response
+  DebugAgentService.analyzeError(
+    alertData.errorLog,
+    alertData.stackTrace,
+    'system-azure-alert',
+    alertData.incidentId,
+  ).catch(err => {
+    logger.error(
+      `Autonomic Debugging Pipeline failed for incident ${alertData.incidentId}`,
+      err,
+    );
+  });
 
-    sendResponse(res, {
-        statusCode: httpStatus.ACCEPTED,
-        success: true,
-        message: 'Alert ingested. Autonomic debugging initiated.',
-        data: { incidentId: alertData.incidentId },
-    });
+  sendResponse(res, {
+    statusCode: httpStatus.ACCEPTED,
+    success: true,
+    message: 'Alert ingested. Autonomic debugging initiated.',
+    data: { incidentId: alertData.incidentId },
+  });
 });
 
 export const DebugAgentController = {
-    startDebug,
-    getJobStatus,
-    autonomicWebhook,
+  startDebug,
+  getJobStatus,
+  autonomicWebhook,
 };

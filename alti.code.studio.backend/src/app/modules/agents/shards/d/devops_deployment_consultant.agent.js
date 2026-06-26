@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsDeploymentConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_deployment_consultant_agent',
-            'DevOps Deployment Consultant',
-            'You are an elite DevOps Deployment Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_deployment_consultant_agent',
+      'DevOps Deployment Consultant',
+      'You are an elite DevOps Deployment Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Deployment.',
+    );
+  }
 
-    async generateDevOpsDeploymentSystem(objective) {
-        logger.info(`💻 [DevOpsDeploymentConsultantAgent] Analyzing DevOps Deployment Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Deployment Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Deployment Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsDeploymentConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsDeploymentSystem(objective) {
+    logger.info(
+      `💻 [DevOpsDeploymentConsultantAgent] Analyzing DevOps Deployment Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Deployment Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Deployment Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsDeploymentConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsDeploymentConsultantAgent = Object.freeze(new DevOpsDeploymentConsultantAgent());
+export const devOpsDeploymentConsultantAgent = Object.freeze(
+  new DevOpsDeploymentConsultantAgent(),
+);

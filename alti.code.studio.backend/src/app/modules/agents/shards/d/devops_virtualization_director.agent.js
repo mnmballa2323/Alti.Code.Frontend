@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsVirtualizationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_virtualization_director_agent',
-            'DevOps Virtualization Director',
-            'You are an elite DevOps Virtualization Director. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_virtualization_director_agent',
+      'DevOps Virtualization Director',
+      'You are an elite DevOps Virtualization Director. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Virtualization.',
+    );
+  }
 
-    async generateDevOpsVirtualizationSystem(objective) {
-        logger.info(`💻 [DevOpsVirtualizationDirectorAgent] Analyzing DevOps Virtualization Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Virtualization Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Virtualization Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsVirtualizationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [DevOpsVirtualizationDirectorAgent] Analyzing DevOps Virtualization Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Virtualization Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Virtualization Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsVirtualizationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsVirtualizationDirectorAgent = Object.freeze(new DevOpsVirtualizationDirectorAgent());
+export const devOpsVirtualizationDirectorAgent = Object.freeze(
+  new DevOpsVirtualizationDirectorAgent(),
+);

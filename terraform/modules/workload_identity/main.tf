@@ -1,35 +1,59 @@
 # ==============================================================================
-# ALTI CODE STUDIO: Azure AD Federated Workload Identity Module
+# ALTI CODE STUDIO: GCP Workload Identity Federation Module
 # ==============================================================================
 
 terraform {
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
     }
   }
 }
 
 # ------------------------------------------------------------------------------
-# 1. User Assigned Managed Identity for GitHub Actions CI/CD
+# 1. Google Cloud Service Account for GitHub Actions CI/CD
 # ------------------------------------------------------------------------------
-resource "azurerm_user_assigned_identity" "cicd_identity" {
-  name                = "alti-git-${var.customer_id}-${var.environment}"
-  location            = var.location
-  resource_group_name = var.resource_group_name
+resource "google_service_account" "cicd_sa" {
+  account_id   = "alti-git-${var.customer_id}-${var.environment}"
+  display_name = "Alti GitHub CI/CD Service Account for ${var.environment}"
 }
 
 # ------------------------------------------------------------------------------
-# 2. Federated Identity Credentials mapping to GitHub Actions OIDC
+# 2. Workload Identity Pool
 # ------------------------------------------------------------------------------
-resource "azurerm_federated_identity_credential" "github_federation" {
-  name                = "alti-fed-${var.customer_id}-${var.environment}"
-  resource_group_name = var.resource_group_name
-  audience            = ["api://AzureADTokenExchange"]
-  issuer              = "https://token.actions.githubusercontent.com"
-  parent_id           = azurerm_user_assigned_identity.cicd_identity.id
-  subject             = "repo:${var.github_repository}:environment:${var.environment}"
+resource "google_iam_workload_identity_pool" "github_pool" {
+  workload_identity_pool_id = "alti-git-pool-${var.customer_id}-${var.environment}"
+  display_name              = "Alti GitHub CI/CD Pool"
+  description               = "Identity pool for GitHub Actions OIDC"
+}
+
+# ------------------------------------------------------------------------------
+# 3. Workload Identity Pool Provider
+# ------------------------------------------------------------------------------
+resource "google_iam_workload_identity_pool_provider" "github_provider" {
+  workload_identity_pool_id          = google_iam_workload_identity_pool.github_pool.workload_identity_pool_id
+  workload_identity_pool_provider_id = "github-actions-provider"
+  display_name                       = "GitHub Actions Provider"
+
+  attribute_mapping = {
+    "google.subject"       = "assertion.sub"
+    "attribute.actor"      = "assertion.actor"
+    "attribute.repository" = "assertion.repository"
+  }
+
+  oidc {
+    issuer_uri = "https://token.actions.githubusercontent.com"
+  }
+}
+
+# ------------------------------------------------------------------------------
+# 4. IAM Binding to allow GitHub Actions provider to impersonate the service account
+# ------------------------------------------------------------------------------
+resource "google_service_account_iam_member" "github_impersonation" {
+  service_account_id = google_service_account.cicd_sa.name
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github_repository}"
 }
 
 # ------------------------------------------------------------------------------
@@ -45,17 +69,6 @@ variable "environment" {
   description = "Deployment environment (e.g. prod, staging)"
 }
 
-
-variable "location" {
-  type        = string
-  description = "Azure region where resources will be created"
-}
-
-variable "resource_group_name" {
-  type        = string
-  description = "Name of the resource group"
-}
-
 variable "github_repository" {
   type        = string
   description = "The GitHub repository path in format ORG/REPO (e.g., mnmballa2323/alti.code.studio)"
@@ -64,12 +77,12 @@ variable "github_repository" {
 # ------------------------------------------------------------------------------
 # Outputs
 # ------------------------------------------------------------------------------
-output "client_id" {
-  value       = azurerm_user_assigned_identity.cicd_identity.client_id
-  description = "Client ID of the User Assigned Identity for authentication"
+output "service_account_email" {
+  value       = google_service_account.cicd_sa.email
+  description = "The email of the Google Service Account for CI/CD"
 }
 
-output "principal_id" {
-  value       = azurerm_user_assigned_identity.cicd_identity.principal_id
-  description = "Principal ID of the User Assigned Identity for role assignments"
+output "workload_identity_provider_name" {
+  value       = google_iam_workload_identity_pool_provider.github_provider.name
+  description = "The full identifier name of the Workload Identity Provider"
 }

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendResilienceLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_resilience_lead_agent',
-            'Backend Resilience Lead',
-            'You are an elite Backend Resilience Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_resilience_lead_agent',
+      'Backend Resilience Lead',
+      'You are an elite Backend Resilience Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Resilience.',
+    );
+  }
 
-    async generateBackendResilienceSystem(objective) {
-        logger.info(`💻 [BackendResilienceLeadAgent] Analyzing Backend Resilience Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Resilience Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Resilience Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendResilienceLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendResilienceSystem(objective) {
+    logger.info(
+      `💻 [BackendResilienceLeadAgent] Analyzing Backend Resilience Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Resilience Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Resilience Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [BackendResilienceLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const backendResilienceLeadAgent = Object.freeze(new BackendResilienceLeadAgent());
+export const backendResilienceLeadAgent = Object.freeze(
+  new BackendResilienceLeadAgent(),
+);

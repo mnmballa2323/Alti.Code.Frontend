@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 76k | Language: PHP
  */
 class LaravelOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Laravel_Oss_Expert';
-        this.description = 'Expert in Laravel 11 — routing, Eloquent ORM, controllers, migrations, Blade templates, validation, and Artisan commands.';
-        this.preamble = `You are a senior PHP backend engineer specializing in Laravel 11+.
+  constructor() {
+    super();
+    this.name = 'Laravel_Oss_Expert';
+    this.description =
+      'Expert in Laravel 11 — routing, Eloquent ORM, controllers, migrations, Blade templates, validation, and Artisan commands.';
+    this.preamble = `You are a senior PHP backend engineer specializing in Laravel 11+.
 
 SETUP:
 composer create-project laravel/laravel my-app
@@ -178,11 +179,13 @@ BLADE TEMPLATES (resources/views/welcome.blade.php):
     {{-- Component --}}
     <x-alert type="error" :message="$message" />
 @endsection`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== LARAVEL QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== LARAVEL QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const laravelOssAgent = new LaravelOssAgent();

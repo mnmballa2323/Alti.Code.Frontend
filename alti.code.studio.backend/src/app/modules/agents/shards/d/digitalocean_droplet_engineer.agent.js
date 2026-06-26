@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DigitaloceanDropletEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'digitalocean_droplet_engineer',
-            'DigitalOcean & Droplet Infrastructure Engineer',
-            'You are an elite DigitalOcean Infrastructure Engineer. Your objective is to design streamlined, highly optimized infrastructure exclusively for DigitalOcean. You specialize in provisioning Droplets (IaaS), configuring the DigitalOcean App Platform (PaaS), and deploying Managed Databases and block storage.'
-        );
-    }
+  constructor() {
+    super(
+      'digitalocean_droplet_engineer',
+      'DigitalOcean & Droplet Infrastructure Engineer',
+      'You are an elite DigitalOcean Infrastructure Engineer. Your objective is to design streamlined, highly optimized infrastructure exclusively for DigitalOcean. You specialize in provisioning Droplets (IaaS), configuring the DigitalOcean App Platform (PaaS), and deploying Managed Databases and block storage.',
+    );
+  }
 
-    /**
-     * Generates DigitalOcean architectures or IaC.
-     * @param {string} doObjective - The DigitalOcean requirement.
-     * @returns {Promise<string>} The generated DigitalOcean code or architecture.
-     */
-    async generateDigitalOceanSystem(doObjective) {
-        logger.info(`☁️ [DigitaloceanDropletEngineer] Analyzing objective for DigitalOcean Droplets and App Platform...`);
+  /**
+   * Generates DigitalOcean architectures or IaC.
+   * @param {string} doObjective - The DigitalOcean requirement.
+   * @returns {Promise<string>} The generated DigitalOcean code or architecture.
+   */
+  async generateDigitalOceanSystem(doObjective) {
+    logger.info(
+      `☁️ [DigitaloceanDropletEngineer] Analyzing objective for DigitalOcean Droplets and App Platform...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following DigitalOcean infrastructure or software requirement.
 Generate the corresponding DigitalOcean architecture, App Platform spec, or Terraform code.
 RULES:
@@ -42,16 +44,24 @@ DIGITALOCEAN OBJECTIVE:
 ${doObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - DigitalOcean Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```yaml|```hcl|```/gi, '').trim();
-            logger.info(`✅ [DigitaloceanDropletEngineer] DigitalOcean architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [DigitaloceanDropletEngineer] Failed to generate DigitalOcean system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - DigitalOcean Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```yaml|```hcl|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [DigitaloceanDropletEngineer] DigitalOcean architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [DigitaloceanDropletEngineer] Failed to generate DigitalOcean system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const digitaloceanDropletEngineerAgent = Object.freeze(new DigitaloceanDropletEngineerAgent());
+export const digitaloceanDropletEngineerAgent = Object.freeze(
+  new DigitaloceanDropletEngineerAgent(),
+);

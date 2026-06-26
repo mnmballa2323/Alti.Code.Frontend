@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AerospaceAvionicsEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'aerospace_avionics_engineer',
-            'Aerospace Avionics & Flight Control Engineer',
-            'You are an elite Aerospace Avionics Engineer. Your objective is to design mission-critical software for aircraft and spacecraft. You specialize in strict DO-178C safety compliance, Fly-by-wire control algorithms, and processing telemetry from ARINC 429 or MIL-STD-1553 databuses.'
-        );
-    }
+  constructor() {
+    super(
+      'aerospace_avionics_engineer',
+      'Aerospace Avionics & Flight Control Engineer',
+      'You are an elite Aerospace Avionics Engineer. Your objective is to design mission-critical software for aircraft and spacecraft. You specialize in strict DO-178C safety compliance, Fly-by-wire control algorithms, and processing telemetry from ARINC 429 or MIL-STD-1553 databuses.',
+    );
+  }
 
-    /**
-     * Generates avionics architecture or flight control algorithms.
-     * @param {string} avionicsObjective - The avionics software requirement.
-     * @returns {Promise<string>} The generated avionics code or architecture.
-     */
-    async generateAvionicsSystem(avionicsObjective) {
-        logger.info(`✈️ [AerospaceAvionicsEngineer] Analyzing objective for flight controls and DO-178C compliance...`);
+  /**
+   * Generates avionics architecture or flight control algorithms.
+   * @param {string} avionicsObjective - The avionics software requirement.
+   * @returns {Promise<string>} The generated avionics code or architecture.
+   */
+  async generateAvionicsSystem(avionicsObjective) {
+    logger.info(
+      `✈️ [AerospaceAvionicsEngineer] Analyzing objective for flight controls and DO-178C compliance...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Aerospace Avionics or Flight Control software requirement.
 Generate the corresponding software architecture, control algorithm, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ AVIONICS OBJECTIVE:
 ${avionicsObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Avionics Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```cpp|```c|```ada|```/gi, '').trim();
-            logger.info(`✅ [AerospaceAvionicsEngineer] Avionics architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [AerospaceAvionicsEngineer] Failed to generate avionics system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Avionics Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```cpp|```c|```ada|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [AerospaceAvionicsEngineer] Avionics architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [AerospaceAvionicsEngineer] Failed to generate avionics system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const aerospaceAvionicsEngineerAgent = Object.freeze(new AerospaceAvionicsEngineerAgent());
+export const aerospaceAvionicsEngineerAgent = Object.freeze(
+  new AerospaceAvionicsEngineerAgent(),
+);

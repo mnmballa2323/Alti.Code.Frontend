@@ -6,18 +6,18 @@ function base32Decode(base32Str) {
   const cleanStr = base32Str.toUpperCase().replace(/=+$/, '');
   const len = cleanStr.length;
   const buffer = Buffer.alloc(Math.floor((len * 5) / 8));
-  
+
   let bits = 0;
   let value = 0;
   let index = 0;
-  
+
   for (let i = 0; i < len; i++) {
     const val = base32Chars.indexOf(cleanStr[i]);
     if (val === -1) throw new Error('Invalid Base32 character');
-    
+
     value = (value << 5) | val;
     bits += 5;
-    
+
     if (bits >= 8) {
       buffer[index++] = (value >>> (bits - 8)) & 255;
       bits -= 8;
@@ -61,7 +61,7 @@ export function generateSecret() {
  */
 export function getTotpCode(secret, timeStepIndex) {
   const key = base32Decode(secret);
-  
+
   // Counter is an 8-byte big-endian integer
   const buffer = Buffer.alloc(8);
   let tmp = timeStepIndex;
@@ -69,9 +69,9 @@ export function getTotpCode(secret, timeStepIndex) {
     buffer[i] = tmp & 255;
     tmp = tmp >>> 8;
   }
-  
+
   const hmac = crypto.createHmac('sha1', key).update(buffer).digest();
-  
+
   // Dynamic truncation
   const offset = hmac[hmac.length - 1] & 15;
   const code =
@@ -79,7 +79,7 @@ export function getTotpCode(secret, timeStepIndex) {
     (hmac[offset + 1] << 16) |
     (hmac[offset + 2] << 8) |
     hmac[offset + 3];
-  
+
   const otp = code % 1000000;
   return String(otp).padStart(6, '0');
 }
@@ -93,9 +93,9 @@ export function getTotpCode(secret, timeStepIndex) {
  */
 export function verifyTotp(secret, token, window = 1) {
   if (!token || token.length !== 6) return false;
-  
+
   const currentTimeStep = Math.floor(Date.now() / 1000 / 30);
-  
+
   for (let i = -window; i <= window; i++) {
     const expectedToken = getTotpCode(secret, currentTimeStep + i);
     if (expectedToken === token) {

@@ -26,7 +26,7 @@ export class SwarmTraceService {
       this.langfuse = new Langfuse({
         publicKey: process.env.LANGFUSE_PUBLIC_KEY,
         secretKey: process.env.LANGFUSE_SECRET_KEY,
-        baseUrl: process.env.LANGFUSE_HOST || 'https://cloud.langfuse.com'
+        baseUrl: process.env.LANGFUSE_HOST || 'https://cloud.langfuse.com',
       });
       logger.info('📊 SwarmTrace: Langfuse telemetry client initialized.');
     }
@@ -96,7 +96,9 @@ export class SwarmTraceService {
           this.activeLangfuseObjects.set(spanId, spanObj);
         }
       } catch (lfError) {
-        logger.warn(`SwarmTrace: Langfuse startSpan failed: ${lfError.message}`);
+        logger.warn(
+          `SwarmTrace: Langfuse startSpan failed: ${lfError.message}`,
+        );
       }
     }
 
@@ -132,7 +134,7 @@ export class SwarmTraceService {
         const langfuseObj = this.activeLangfuseObjects.get(spanId);
         if (langfuseObj) {
           const outputVal = metadata.output || metadata.content || '';
-          
+
           if (typeof langfuseObj.update === 'function') {
             // It's a Trace
             langfuseObj.update({
@@ -141,8 +143,8 @@ export class SwarmTraceService {
                 ...metadata,
                 tokenCount: tokenCount || 0,
                 cost: cost || 0,
-                durationMs
-              }
+                durationMs,
+              },
             });
           } else if (typeof langfuseObj.end === 'function') {
             // It's a Span
@@ -152,8 +154,8 @@ export class SwarmTraceService {
                 ...metadata,
                 tokenCount: tokenCount || 0,
                 cost: cost || 0,
-                durationMs
-              }
+                durationMs,
+              },
             });
           }
           this.activeLangfuseObjects.delete(spanId);
@@ -164,7 +166,10 @@ export class SwarmTraceService {
     }
   }
 
-  recordGeneration(spanId, { name, model, input, output, provider, latencyMs, usage }) {
+  recordGeneration(
+    spanId,
+    { name, model, input, output, provider, latencyMs, usage },
+  ) {
     if (!this.langfuse) return;
     try {
       const parentObj = this.activeLangfuseObjects.get(spanId);
@@ -175,14 +180,18 @@ export class SwarmTraceService {
           input: input,
           output: output,
           metadata: { provider, latencyMs },
-          usage: usage ? {
-            promptTokens: usage.prompt || usage.promptTokens,
-            completionTokens: usage.completion || usage.completionTokens
-          } : undefined
+          usage: usage
+            ? {
+                promptTokens: usage.prompt || usage.promptTokens,
+                completionTokens: usage.completion || usage.completionTokens,
+              }
+            : undefined,
         });
       }
     } catch (lfError) {
-      logger.warn(`SwarmTrace: Langfuse recordGeneration failed: ${lfError.message}`);
+      logger.warn(
+        `SwarmTrace: Langfuse recordGeneration failed: ${lfError.message}`,
+      );
     }
   }
 

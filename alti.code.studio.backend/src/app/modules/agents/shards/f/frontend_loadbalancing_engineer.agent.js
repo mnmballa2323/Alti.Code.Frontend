@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendLoadBalancingEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_loadbalancing_engineer_agent',
-            'Frontend LoadBalancing Engineer',
-            'You are an elite Frontend LoadBalancing Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_loadbalancing_engineer_agent',
+      'Frontend LoadBalancing Engineer',
+      'You are an elite Frontend LoadBalancing Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend LoadBalancing.',
+    );
+  }
 
-    async generateFrontendLoadBalancingSystem(objective) {
-        logger.info(`💻 [FrontendLoadBalancingEngineerAgent] Analyzing Frontend LoadBalancing Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend LoadBalancing Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend LoadBalancing Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendLoadBalancingEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [FrontendLoadBalancingEngineerAgent] Analyzing Frontend LoadBalancing Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend LoadBalancing Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend LoadBalancing Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendLoadBalancingEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendLoadBalancingEngineerAgent = Object.freeze(new FrontendLoadBalancingEngineerAgent());
+export const frontendLoadBalancingEngineerAgent = Object.freeze(
+  new FrontendLoadBalancingEngineerAgent(),
+);

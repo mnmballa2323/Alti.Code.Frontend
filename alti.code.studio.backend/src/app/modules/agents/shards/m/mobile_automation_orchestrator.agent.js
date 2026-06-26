@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileAutomationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_automation_orchestrator_agent',
-            'Mobile Automation Orchestrator',
-            'You are an elite Mobile Automation Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_automation_orchestrator_agent',
+      'Mobile Automation Orchestrator',
+      'You are an elite Mobile Automation Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Automation.',
+    );
+  }
 
-    async generateMobileAutomationSystem(objective) {
-        logger.info(`💻 [MobileAutomationOrchestratorAgent] Analyzing Mobile Automation Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Automation Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Automation Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileAutomationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileAutomationSystem(objective) {
+    logger.info(
+      `💻 [MobileAutomationOrchestratorAgent] Analyzing Mobile Automation Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Automation Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Automation Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileAutomationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileAutomationOrchestratorAgent = Object.freeze(new MobileAutomationOrchestratorAgent());
+export const mobileAutomationOrchestratorAgent = Object.freeze(
+  new MobileAutomationOrchestratorAgent(),
+);

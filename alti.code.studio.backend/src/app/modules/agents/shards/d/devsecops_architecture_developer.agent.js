@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsArchitectureDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_architecture_developer_agent',
-            'DevSecOps Architecture Developer',
-            'You are an elite DevSecOps Architecture Developer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_architecture_developer_agent',
+      'DevSecOps Architecture Developer',
+      'You are an elite DevSecOps Architecture Developer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Architecture.',
+    );
+  }
 
-    async generateDevSecOpsArchitectureSystem(objective) {
-        logger.info(`💻 [DevSecOpsArchitectureDeveloperAgent] Analyzing DevSecOps Architecture Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Architecture Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Architecture Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsArchitectureDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsArchitectureSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsArchitectureDeveloperAgent] Analyzing DevSecOps Architecture Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Architecture Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Architecture Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsArchitectureDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsArchitectureDeveloperAgent = Object.freeze(new DevSecOpsArchitectureDeveloperAgent());
+export const devSecOpsArchitectureDeveloperAgent = Object.freeze(
+  new DevSecOpsArchitectureDeveloperAgent(),
+);

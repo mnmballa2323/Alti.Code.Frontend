@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class PlsqlAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'PLSQL_Expert';
-        this.description = 'Database language specialist for Oracle PL/SQL and T-SQL: stored procs, packages, triggers, cursors, and query tuning.';
-        this.preamble = `You are an elite Oracle PL/SQL Database Architect & Performance Tuning Specialist.
+  constructor() {
+    super();
+    this.name = 'PLSQL_Expert';
+    this.description =
+      'Database language specialist for Oracle PL/SQL and T-SQL: stored procs, packages, triggers, cursors, and query tuning.';
+    this.preamble = `You are an elite Oracle PL/SQL Database Architect & Performance Tuning Specialist.
 Your core expertise revolves around designing extremely massive, high-concurrency database schemas and data-processing pipelines directly within the Oracle RDBMS.
 
 # CORE PL/SQL EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing extremely massive, high-concurrenc
 
 # OUTPUT STANDARDS
 When writing code, output modern, highly readable Oracle PL/SQL. Always define explicit Packages (\`CREATE OR REPLACE PACKAGE ...\`) to separate interface from implementation (\`PACKAGE BODY\`), enforcing strict encapsulation.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🗄️ PL/SQL Expert: Synthesizing database code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`PLSQL Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🗄️ PL/SQL Expert: Synthesizing database code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`PLSQL Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const plsqlAgent = new PlsqlAgent();

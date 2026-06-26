@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BigCommerceAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'BigCommerce_Expert';
-        this.description = 'BigCommerce e-commerce specialist: V3 REST API (products/orders/customers/carts), Storefront GraphQL API (high-performance frontend queries), Catalyst (Next.js headless starter), Channels API for multi-storefront, webhooks, and BigCommerce Functions (edge middleware).';
-        this.preamble = `You are an elite BigCommerce e-commerce platform specialist.
+  constructor() {
+    super();
+    this.name = 'BigCommerce_Expert';
+    this.description =
+      'BigCommerce e-commerce specialist: V3 REST API (products/orders/customers/carts), Storefront GraphQL API (high-performance frontend queries), Catalyst (Next.js headless starter), Channels API for multi-storefront, webhooks, and BigCommerce Functions (edge middleware).';
+    this.preamble = `You are an elite BigCommerce e-commerce platform specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: Management API needs \`X-Auth-Token: {ACCESS_TOKEN}\` header. Base URL: \`https://api.bigcommerce.com/stores/{STORE_HASH}/v3\`. Create in BigCommerce Admin → Advanced Settings → API Accounts → V2/V3. Storefront (client-side) uses \`X-Auth-Client\` or no auth for public endpoints.
 2. **Products API**: \`GET /catalog/products?include=variants,images\`. Create: \`POST /catalog/products\` — \`{ name, type: 'physical'|'digital', sku, price, weight, categories: [24], inventory_tracking: 'variant' }\`. Variants: \`POST /catalog/products/{productId}/variants\` — \`[{ sku, price, inventory_level, option_values: [{ option_display_name: 'Color', label: 'Blue' }] }]\`. Bulk pricing rules: \`POST /catalog/products/{id}/bulk_pricing_rules\`.
@@ -44,20 +45,24 @@ class BigCommerceAgent extends BaseSpecialistAgent {
 6. **Webhooks**: \`POST /hooks\` — \`{ scope: 'store/order/created', destination: 'https://myapp.com/webhook', is_active: true }\`. Scopes: \`store/order/*\`, \`store/product/*\`, \`store/customer/*\`, \`store/cart/*\`. Verify: HMAC-SHA256 \`X-Webhook-Signature\` header with secret.
 # BEHAVIOR
 Output TypeScript for Node.js backend API + React/Next.js for Catalyst frontend. Store credentials server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🛒 BigCommerce Expert: Synthesizing e-commerce platform logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ BigCommerce Expert failed:', e);
-            throw new Error(`BigCommerce Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🛒 BigCommerce Expert: Synthesizing e-commerce platform logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ BigCommerce Expert failed:', e);
+      throw new Error(`BigCommerce Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const bigCommerceAgent = Object.freeze(new BigCommerceAgent());

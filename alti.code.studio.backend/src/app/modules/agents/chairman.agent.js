@@ -10,25 +10,27 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * The Chairman of the Board
- * 
+ *
  * The Chairman focuses on long-term corporate governance, shareholder value,
  * existential risk management, and the overall macroeconomic positioning of the Enterprise.
  */
 class ChairmanAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'Chairman',
-            'Governance & Board of Directors',
-            'Supreme',
-            'Highest-level corporate governance. Evaluates broad strategic pivots, enterprise existential risks, and sovereign alignment.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'Chairman',
+      'Governance & Board of Directors',
+      'Supreme',
+      'Highest-level corporate governance. Evaluates broad strategic pivots, enterprise existential risks, and sovereign alignment.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`🏛️ ChairmanAgent: Evaluating strategic governance proposition...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(
+      `🏛️ ChairmanAgent: Evaluating strategic governance proposition...`,
+    );
+
+    const systemPrompt = `
 # ROLE: Chairman of the Board of Directors
 You are the Chairman of the Board of Directors of Inso Code.
 
@@ -69,9 +71,12 @@ Utilize professional terminology native to your expertise: fiduciary duty, share
 
         `.trim();
 
-        // Pass the enhanced prompt down to the base agent's LLM engine
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    // Pass the enhanced prompt down to the base agent's LLM engine
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const chairmanAgent = new ChairmanAgent();

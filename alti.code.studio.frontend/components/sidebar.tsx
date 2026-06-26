@@ -2692,11 +2692,11 @@ export default function Sidebar() {
                 {(() => {
                   const groups = [
                     {
-                      category: "Azure Sovereign Cloud",
+                      category: "GCP Sovereign Cloud",
                       providers: [
-                        "Azure Cloud",
-                        "Azure Dedicated",
-                        "Azure Government",
+                        "GCP Commercial",
+                        "GCP Dedicated",
+                        "GCP Government",
                       ],
                     },
                     {
@@ -2749,7 +2749,7 @@ export default function Sidebar() {
                         "Cloudflare",
                         "Fastly",
                         "Akamai",
-                        "Azure Front Door",
+                        "GCP Cloud Armor",
                         "Edgio",
                         "Tailscale",
                         "Ngrok",
@@ -2760,17 +2760,17 @@ export default function Sidebar() {
                       providers: [
                         "Docker Hub",
                         "Kubernetes",
-                        "Azure Container Apps",
-                        "Azure Kubernetes Service (AKS)",
+                        "Google Cloud Run",
+                        "Google Kubernetes Engine (GKE)",
                         "HashiCorp Nomad",
                       ],
                     },
                     {
                       category: "Serverless & Compute",
                       providers: [
-                        "Azure Functions (Commercial)",
-                        "Azure Functions (Dedicated)",
-                        "Azure Functions (Government)",
+                        "Google Cloud Functions (Commercial)",
+                        "Google Cloud Functions (Dedicated)",
+                        "Google Cloud Functions (Government)",
                         "Cloudflare Workers",
                         "Deno Deploy",
                       ],
@@ -2783,7 +2783,7 @@ export default function Sidebar() {
                         "Bitbucket Pipelines",
                         "CircleCI",
                         "Travis CI",
-                        "Azure Pipelines",
+                        "Google Cloud Build",
                         "ArgoCD",
                         "Spinnaker",
                       ],
@@ -2793,8 +2793,8 @@ export default function Sidebar() {
                       providers: [
                         "Confluent",
                         "RabbitMQ Cloud",
-                        "Azure Service Bus",
-                        "Azure Event Grid",
+                        "Google Cloud Pub/Sub",
+                        "Google Cloud Eventarc",
                       ],
                     },
                   ];

@@ -1,17 +1,17 @@
 /**
  * Copyright (c) 2024 Inso Code — TIER 1: CODE INTELLIGENCE
- * 
+ *
  * Architecture Agent — "The Architect"
  * System design review, pattern detection, and architecture recommendations.
  */
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 
-export const architectureWorkerProcessor = async (job) => {
-    const { codebase, fileTree, question } = job.data;
-    logger.info(`🏗️ Architecture [${job.id}]: Analyzing system design...`);
+export const architectureWorkerProcessor = async job => {
+  const { codebase, fileTree, question } = job.data;
+  logger.info(`🏗️ Architecture [${job.id}]: Analyzing system design...`);
 
-    const analysis = await aiProvider.reason(`
+  const analysis = await aiProvider.reason(`
 You are a principal software architect reviewing system design.
 
 File Structure:
@@ -32,5 +32,5 @@ Provide:
 Respond in JSON: { "style": string, "strengths": [], "weaknesses": [], "recommendations": [], "mermaidDiagram": string }
     `);
 
-    return { analysis: JSON.parse(analysis.match(/\{[\s\S]*\}/)?.[0] || '{}') };
+  return { analysis: JSON.parse(analysis.match(/\{[\s\S]*\}/)?.[0] || '{}') };
 };

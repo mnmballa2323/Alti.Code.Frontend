@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Technical Writer
- * 
+ *
  * Focuses on writing public documentation, API specs (Swagger),
  * READMEs, and keeping the codebase highly legible.
  */
 class WriterAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'Technical Writer',
-            'Quality & Support',
-            'Medium',
-            'Translates complex system architecture into perfectly written, highly structured documentation.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'Technical Writer',
+      'Quality & Support',
+      'Medium',
+      'Translates complex system architecture into perfectly written, highly structured documentation.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`📖 WriterAgent: Drafting technical documentation...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`📖 WriterAgent: Drafting technical documentation...`);
+
+    const systemPrompt = `
 # ROLE: Lead Technical Writer
 You are the Lead Technical Writer of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: API reference, develo
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const writerAgent = new WriterAgent();

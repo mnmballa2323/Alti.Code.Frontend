@@ -17,8 +17,7 @@ import {
 
 import { useAppSelector } from "@/store";
 import {
-  AzureIcon,
-  LibertyIcon,
+  GoogleIcon,
 } from "@/components/CloudIcons";
 
 interface SidebarItem {
@@ -46,8 +45,7 @@ const managerItems: SidebarItem[] = [
 ];
 
 const cloudItems: SidebarItem[] = [
-  { label: "Liberty Center One", href: "/owner/liberty", icon: LibertyIcon },
-  { label: "Microsoft Azure", href: "/owner/azure", icon: AzureIcon },
+  { label: "Google Cloud Platform", href: "/owner/gcp", icon: GoogleIcon },
 ];
 
 export default function OwnerLayout({
@@ -143,8 +141,7 @@ export default function OwnerLayout({
     if (pathname.startsWith("/owner/usage")) return "Model Usage";
     if (pathname.startsWith("/owner/audit")) return "Audit Logs";
 
-    if (pathname.startsWith("/owner/liberty")) return "Liberty Center One";
-    if (pathname.startsWith("/owner/azure")) return "Microsoft Azure";
+    if (pathname.startsWith("/owner/gcp")) return "Google Cloud Platform";
 
     return "Platform Owner";
   };

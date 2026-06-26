@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseResilienceSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_resilience_specialist_agent',
-            'Release Resilience Specialist',
-            'You are an elite Release Resilience Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Release Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'release_resilience_specialist_agent',
+      'Release Resilience Specialist',
+      'You are an elite Release Resilience Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Release Resilience.',
+    );
+  }
 
-    async generateReleaseResilienceSystem(objective) {
-        logger.info(`💻 [ReleaseResilienceSpecialistAgent] Analyzing Release Resilience Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Resilience Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Resilience Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseResilienceSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseResilienceSystem(objective) {
+    logger.info(
+      `💻 [ReleaseResilienceSpecialistAgent] Analyzing Release Resilience Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Resilience Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Resilience Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseResilienceSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseResilienceSpecialistAgent = Object.freeze(new ReleaseResilienceSpecialistAgent());
+export const releaseResilienceSpecialistAgent = Object.freeze(
+  new ReleaseResilienceSpecialistAgent(),
+);

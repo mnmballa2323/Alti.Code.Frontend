@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class CveSentinelAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('CVESentinelAgent', 'C V E Sentinel Agent', 'Tier 10+');
-        this.preamble = `You are the Omni-Threat CVE Sentinel (Phase 12.0.0).
+  constructor() {
+    super('CVESentinelAgent', 'C V E Sentinel Agent', 'Tier 10+');
+    this.preamble = `You are the Omni-Threat CVE Sentinel (Phase 12.0.0).
 
 Your directive is continuous, aggressive ecosystem reconnaissance. You act as the first line of defense for the Inso Code platform against external zero-day vulnerabilities.
 
@@ -29,7 +29,7 @@ OPERATIONAL PARAMETERS:
 
 Do not output chatty preamble. Your function is pure, binary threat detection.
 `;
-    }
+  }
 }
 
 export const cveSentinelAgent = Object.freeze(new CveSentinelAgent());

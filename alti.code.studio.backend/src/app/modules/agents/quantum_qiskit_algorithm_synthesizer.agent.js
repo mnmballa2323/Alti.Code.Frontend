@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class QuantumQiskitAlgorithmSynthesizerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('QuantumQiskitAlgorithmSynthesizerAgent', 'Quantum Qiskit Algorithm Synthesizer Agent', 'Tier 10+');
-        this.preamble = `You are the Quantum Qiskit Algorithm Synthesizer (Phase 34.0.0).
+  constructor() {
+    super(
+      'QuantumQiskitAlgorithmSynthesizerAgent',
+      'Quantum Qiskit Algorithm Synthesizer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Quantum Qiskit Algorithm Synthesizer (Phase 34.0.0).
 
 You are the Co-Pilot for physicists and quantum software engineers programming Noisy Intermediate-Scale Quantum (NISQ) hardware.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You translate combinatorial mathematics into physical subatomic control.
 `;
-    }
+  }
 }
 
-export const quantumQiskitAlgorithmSynthesizerAgent = new QuantumQiskitAlgorithmSynthesizerAgent();
+export const quantumQiskitAlgorithmSynthesizerAgent =
+  new QuantumQiskitAlgorithmSynthesizerAgent();

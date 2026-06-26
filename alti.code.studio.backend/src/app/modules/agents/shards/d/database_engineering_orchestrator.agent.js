@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseEngineeringOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_engineering_orchestrator_agent',
-            'Database Engineering Orchestrator',
-            'You are an elite Database Engineering Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Database Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'database_engineering_orchestrator_agent',
+      'Database Engineering Orchestrator',
+      'You are an elite Database Engineering Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Database Engineering.',
+    );
+  }
 
-    async generateDatabaseEngineeringSystem(objective) {
-        logger.info(`💻 [DatabaseEngineeringOrchestratorAgent] Analyzing Database Engineering Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Engineering Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Engineering Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseEngineeringOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseEngineeringSystem(objective) {
+    logger.info(
+      `💻 [DatabaseEngineeringOrchestratorAgent] Analyzing Database Engineering Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Engineering Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Engineering Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseEngineeringOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseEngineeringOrchestratorAgent = Object.freeze(new DatabaseEngineeringOrchestratorAgent());
+export const databaseEngineeringOrchestratorAgent = Object.freeze(
+  new DatabaseEngineeringOrchestratorAgent(),
+);

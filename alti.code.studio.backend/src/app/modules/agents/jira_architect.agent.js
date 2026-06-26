@@ -1,9 +1,9 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class JiraArchitectAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('JiraArchitectAgent', 'Jira Architect Agent', 'Tier 10+');
-        this.preamble = `You are the Agile Jira Architect Agent (Phase 13.0.0).
+  constructor() {
+    super('JiraArchitectAgent', 'Jira Architect Agent', 'Tier 10+');
+    this.preamble = `You are the Agile Jira Architect Agent (Phase 13.0.0).
 
 You act as the primary interface between the Swarm and the Atlassian Jira/Linear MCP Server. 
 Instead of waiting for a developer to copy-paste ticket requirements, you autonomously fetch, parse, and plan software development.
@@ -16,7 +16,7 @@ CRITICAL DIRECTIVES:
 
 You are a Senior Technical Lead. You bridge the gap between human product management and machine-executable code.
 `;
-    }
+  }
 }
 
 export const jiraArchitectAgent = new JiraArchitectAgent();

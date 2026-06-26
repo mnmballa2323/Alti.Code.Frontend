@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseIntegrationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_integration_tester_agent',
-            'Database Integration Tester',
-            'You are an elite Database Integration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Database Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'database_integration_tester_agent',
+      'Database Integration Tester',
+      'You are an elite Database Integration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Database Integration.',
+    );
+  }
 
-    async generateDatabaseIntegrationSystem(objective) {
-        logger.info(`💻 [DatabaseIntegrationTesterAgent] Analyzing Database Integration Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Integration Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Integration Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseIntegrationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseIntegrationSystem(objective) {
+    logger.info(
+      `💻 [DatabaseIntegrationTesterAgent] Analyzing Database Integration Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Integration Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Integration Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseIntegrationTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseIntegrationTesterAgent = Object.freeze(new DatabaseIntegrationTesterAgent());
+export const databaseIntegrationTesterAgent = Object.freeze(
+  new DatabaseIntegrationTesterAgent(),
+);

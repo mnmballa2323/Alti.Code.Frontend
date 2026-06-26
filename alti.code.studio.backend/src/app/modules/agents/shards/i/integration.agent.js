@@ -13,26 +13,28 @@ import { logger } from '../../../../shared/logger.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
 
 export class IntegrationAgent {
-    constructor() {
-        this.name = 'integration';
-        this.description = 'Autonomous Swarm Diplomat and API Integrator';
-        this.capabilities = [
-            'Ingest raw OpenAPI/Swagger JSON document signatures',
-            'Map authentication methods, HTTP verbs, and payload schemas',
-            'Auto-generate robust Axios API wrappers with exponential backoff'
-        ];
-    }
+  constructor() {
+    this.name = 'integration';
+    this.description = 'Autonomous Swarm Diplomat and API Integrator';
+    this.capabilities = [
+      'Ingest raw OpenAPI/Swagger JSON document signatures',
+      'Map authentication methods, HTTP verbs, and payload schemas',
+      'Auto-generate robust Axios API wrappers with exponential backoff',
+    ];
+  }
 
-    /**
-     * Synthesizes an API client wrapper based on a provided Swagger snippet or textual API description.
-     * @param {string} apiSpec The JSON Swagger or textual documentation
-     * @param {string} targetSystem The name of the remote system (e.g. 'Stripe')
-     */
-    async generateApiClient(apiSpec, targetSystem = 'External API') {
-        logger.info(`🔌 Integration Agent: Mapping remote endpoints for [${targetSystem}] integration...`);
+  /**
+   * Synthesizes an API client wrapper based on a provided Swagger snippet or textual API description.
+   * @param {string} apiSpec The JSON Swagger or textual documentation
+   * @param {string} targetSystem The name of the remote system (e.g. 'Stripe')
+   */
+  async generateApiClient(apiSpec, targetSystem = 'External API') {
+    logger.info(
+      `🔌 Integration Agent: Mapping remote endpoints for [${targetSystem}] integration...`,
+    );
 
-        try {
-            const prompt = `
+    try {
+      const prompt = `
             You are a Senior Integration Engineer building a robust Node.js API client.
             Parse the following API description or Swagger metadata for the system "${targetSystem}".
 
@@ -55,33 +57,43 @@ export class IntegrationAgent {
             Do not wrap the JSON output in markdown formatting.
             `;
 
-            const rawResponse = await GeminiAiService.generateContent(prompt);
-            const reportJson = rawResponse.replace(/^```json/, '').replace(/^```/, '').replace(/```$/, '').trim();
-            const integrationReport = JSON.parse(reportJson);
+      const rawResponse = await GeminiAiService.generateContent(prompt);
+      const reportJson = rawResponse
+        .replace(/^```json/, '')
+        .replace(/^```/, '')
+        .replace(/```$/, '')
+        .trim();
+      const integrationReport = JSON.parse(reportJson);
 
-            logger.info(`🔌 Integration Agent Summary: ${integrationReport.integrationSummary}`);
-            logger.info(`   Mapped ${integrationReport.endpointsMapped} endpoint pathways.`);
+      logger.info(
+        `🔌 Integration Agent Summary: ${integrationReport.integrationSummary}`,
+      );
+      logger.info(
+        `   Mapped ${integrationReport.endpointsMapped} endpoint pathways.`,
+      );
 
-            return integrationReport;
-
-        } catch (err) {
-            logger.error(`❌ Integration Agent Binding Failed: ${err.message}`);
-            throw err;
-        }
+      return integrationReport;
+    } catch (err) {
+      logger.error(`❌ Integration Agent Binding Failed: ${err.message}`);
+      throw err;
     }
+  }
 
-    async process(state) {
-        const spec = state.data?.content || "{}";
-        const systemName = state.data?.context || state.goal || "Generic System";
+  async process(state) {
+    const spec = state.data?.content || '{}';
+    const systemName = state.data?.context || state.goal || 'Generic System';
 
-        const report = await this.generateApiClient(spec, systemName);
+    const report = await this.generateApiClient(spec, systemName);
 
-        return {
-            ...state,
-            status: 'success',
-            results: [...(state.results || []), `Integration Wrapper Generated for ${systemName}.`]
-        };
-    }
+    return {
+      ...state,
+      status: 'success',
+      results: [
+        ...(state.results || []),
+        `Integration Wrapper Generated for ${systemName}.`,
+      ],
+    };
+  }
 }
 
 export const integrationAgent = Object.freeze(new IntegrationAgent());

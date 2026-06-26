@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXProvisioningEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_provisioning_engineer_agent',
-            'UX Provisioning Engineer',
-            'You are an elite UX Provisioning Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_provisioning_engineer_agent',
+      'UX Provisioning Engineer',
+      'You are an elite UX Provisioning Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Provisioning.',
+    );
+  }
 
-    async generateUXProvisioningSystem(objective) {
-        logger.info(`💻 [UXProvisioningEngineerAgent] Analyzing UX Provisioning Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Provisioning Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Provisioning Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXProvisioningEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXProvisioningSystem(objective) {
+    logger.info(
+      `💻 [UXProvisioningEngineerAgent] Analyzing UX Provisioning Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Provisioning Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Provisioning Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXProvisioningEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXProvisioningEngineerAgent = Object.freeze(new UXProvisioningEngineerAgent());
+export const uXProvisioningEngineerAgent = Object.freeze(
+  new UXProvisioningEngineerAgent(),
+);

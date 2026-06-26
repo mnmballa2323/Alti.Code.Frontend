@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileOrchestrationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_orchestration_consultant_agent',
-            'Mobile Orchestration Consultant',
-            'You are an elite Mobile Orchestration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_orchestration_consultant_agent',
+      'Mobile Orchestration Consultant',
+      'You are an elite Mobile Orchestration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Orchestration.',
+    );
+  }
 
-    async generateMobileOrchestrationSystem(objective) {
-        logger.info(`💻 [MobileOrchestrationConsultantAgent] Analyzing Mobile Orchestration Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Orchestration Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Orchestration Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileOrchestrationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [MobileOrchestrationConsultantAgent] Analyzing Mobile Orchestration Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Orchestration Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Orchestration Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileOrchestrationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileOrchestrationConsultantAgent = Object.freeze(new MobileOrchestrationConsultantAgent());
+export const mobileOrchestrationConsultantAgent = Object.freeze(
+  new MobileOrchestrationConsultantAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudGovernanceDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_governance_developer_agent',
-            'Cloud Governance Developer',
-            'You are an elite Cloud Governance Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_governance_developer_agent',
+      'Cloud Governance Developer',
+      'You are an elite Cloud Governance Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Governance.',
+    );
+  }
 
-    async generateCloudGovernanceSystem(objective) {
-        logger.info(`💻 [CloudGovernanceDeveloperAgent] Analyzing Cloud Governance Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Governance Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Governance Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudGovernanceDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudGovernanceSystem(objective) {
+    logger.info(
+      `💻 [CloudGovernanceDeveloperAgent] Analyzing Cloud Governance Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Governance Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Governance Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudGovernanceDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudGovernanceDeveloperAgent = Object.freeze(new CloudGovernanceDeveloperAgent());
+export const cloudGovernanceDeveloperAgent = Object.freeze(
+  new CloudGovernanceDeveloperAgent(),
+);

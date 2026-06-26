@@ -1,17 +1,17 @@
 /**
  * Copyright (c) 2024 Inso Code — TIER 5: GROWTH
- * 
+ *
  * Translation Agent — "The Polyglot"
  * i18n/l10n — translates UI strings, docs, and content.
  */
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 
-export const translationWorkerProcessor = async (job) => {
-    const { content, from, to, context } = job.data;
-    logger.info(`🌐 Translation [${job.id}]: ${from || 'en'} → ${to}...`);
+export const translationWorkerProcessor = async job => {
+  const { content, from, to, context } = job.data;
+  logger.info(`🌐 Translation [${job.id}]: ${from || 'en'} → ${to}...`);
 
-    const result = await aiProvider.generate(`
+  const result = await aiProvider.generate(`
 You are a professional translator specializing in software localization.
 
 Source Language: ${from || 'English'}
@@ -30,5 +30,5 @@ Rules:
 Respond in JSON: { "translations": object, "notes": [] }
     `);
 
-    return { translation: JSON.parse(result.match(/\{[\s\S]*\}/)?.[0] || '{}') };
+  return { translation: JSON.parse(result.match(/\{[\s\S]*\}/)?.[0] || '{}') };
 };

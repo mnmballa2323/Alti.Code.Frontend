@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendGovernanceSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_governance_specialist_agent',
-            'Frontend Governance Specialist',
-            'You are an elite Frontend Governance Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_governance_specialist_agent',
+      'Frontend Governance Specialist',
+      'You are an elite Frontend Governance Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Governance.',
+    );
+  }
 
-    async generateFrontendGovernanceSystem(objective) {
-        logger.info(`💻 [FrontendGovernanceSpecialistAgent] Analyzing Frontend Governance Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Governance Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Governance Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendGovernanceSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendGovernanceSystem(objective) {
+    logger.info(
+      `💻 [FrontendGovernanceSpecialistAgent] Analyzing Frontend Governance Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Governance Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Governance Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendGovernanceSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendGovernanceSpecialistAgent = Object.freeze(new FrontendGovernanceSpecialistAgent());
+export const frontendGovernanceSpecialistAgent = Object.freeze(
+  new FrontendGovernanceSpecialistAgent(),
+);

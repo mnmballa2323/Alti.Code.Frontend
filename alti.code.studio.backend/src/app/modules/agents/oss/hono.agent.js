@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 22k | Language: TypeScript
  */
 class HonoOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Hono_Oss_Expert';
-        this.description = 'Expert in Hono — ultrafast edge-compatible web framework for Cloudflare Workers, Bun, Deno, and Node.js.';
-        this.preamble = `You are a senior edge computing engineer specializing in Hono — the ultrafast, edge-first web framework.
+  constructor() {
+    super();
+    this.name = 'Hono_Oss_Expert';
+    this.description =
+      'Expert in Hono — ultrafast edge-compatible web framework for Cloudflare Workers, Bun, Deno, and Node.js.';
+    this.preamble = `You are a senior edge computing engineer specializing in Hono — the ultrafast, edge-first web framework.
 
 CORE SETUP:
 import { Hono } from 'hono'
@@ -169,11 +170,13 @@ app.notFound((c) => c.json({ error: 'Not found' }, 404))
 // Throw inside handlers:
 import { HTTPException } from 'hono/http-exception'
 throw new HTTPException(403, { message: 'Forbidden' })`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== HONO QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== HONO QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const honoOssAgent = new HonoOssAgent();

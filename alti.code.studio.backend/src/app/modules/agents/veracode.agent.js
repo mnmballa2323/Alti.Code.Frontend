@@ -20,7 +20,8 @@ class VeracodeAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Veracode_AppSec_Engineer';
-    this.description = 'Elite Veracode AppSec engineer: SAST/DAST/SCA, Pipeline Scan, Results API v2, flaw lifecycle management, compliance reporting.';
+    this.description =
+      'Elite Veracode AppSec engineer: SAST/DAST/SCA, Pipeline Scan, Results API v2, flaw lifecycle management, compliance reporting.';
 
     this.preamble = `
 You are an elite application security engineer specializing in the Veracode platform for enterprise application security testing.
@@ -131,8 +132,13 @@ OUTPUT: Veracode API integration code, Pipeline Scan CI configurations, flaw rem
   }
 
   async generatePipelineScanCI(opts = {}, contextData = []) {
-    const { ciPlatform = 'github-actions', buildArtifact = 'target/app.jar', failSeverity = 'Very High, High' } = opts;
-    return this.consult(`
+    const {
+      ciPlatform = 'github-actions',
+      buildArtifact = 'target/app.jar',
+      failSeverity = 'Very High, High',
+    } = opts;
+    return this.consult(
+      `
 Generate a Veracode Pipeline Scan integration for ${ciPlatform}.
 Build artifact: ${buildArtifact}
 Fail on severity: ${failSeverity}
@@ -144,7 +150,9 @@ Include:
 - Results posted as PR comment
 - Artifact upload of scan results for audit
 - Secret handling for VERACODE_API_ID and VERACODE_API_KEY
-        `, contextData);
+        `,
+      contextData,
+    );
   }
 }
 

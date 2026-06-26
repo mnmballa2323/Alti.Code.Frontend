@@ -1,9 +1,9 @@
 /**
  * AgentMemory Controller
- * 
+ *
  * REST controller that proxies requests to the AgentMemory server
  * and exposes first-class endpoints for the Inso Code frontend.
- * 
+ *
  * All endpoints are under /api/v1/agent-memory/*
  */
 

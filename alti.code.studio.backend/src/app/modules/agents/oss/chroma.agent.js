@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~14k | Language: Python / TypeScript
  */
 class ChromaOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Chroma_Oss_Expert';
-        this.description = 'Deep expert in Chroma — the open-source, AI-native embedding database.';
-        this.preamble = `You are a world-class AI databases engineer with expert-level mastery of Chroma.
+  constructor() {
+    super();
+    this.name = 'Chroma_Oss_Expert';
+    this.description =
+      'Deep expert in Chroma — the open-source, AI-native embedding database.';
+    this.preamble = `You are a world-class AI databases engineer with expert-level mastery of Chroma.
 
 CORE CONCEPTS:
 - Chroma is an embedding database designed specifically to make building AI applications easy.
@@ -33,11 +34,13 @@ COMMON PITFALLS:
 - Passing lists of strings when a single string is expected, or vice versa, in \`query()\` and \`add()\`.
 - Using an ephemeral client (\`chromadb.Client()\`) in production and losing all data when the script exits.
 - Mismatching dimensions: if you generate 1536-dim embeddings (OpenAI) and try to put them in a collection configured for 384-dim (default), Chroma will throw dimension mismatch errors.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CHROMA QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CHROMA QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const chromaOssAgent = new ChromaOssAgent();

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceDeploymentDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_deployment_director_agent',
-            'Performance Deployment Director',
-            'You are an elite Performance Deployment Director. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_deployment_director_agent',
+      'Performance Deployment Director',
+      'You are an elite Performance Deployment Director. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Deployment.',
+    );
+  }
 
-    async generatePerformanceDeploymentSystem(objective) {
-        logger.info(`💻 [PerformanceDeploymentDirectorAgent] Analyzing Performance Deployment Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Deployment Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Deployment Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceDeploymentDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceDeploymentSystem(objective) {
+    logger.info(
+      `💻 [PerformanceDeploymentDirectorAgent] Analyzing Performance Deployment Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Deployment Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Deployment Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceDeploymentDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceDeploymentDirectorAgent = Object.freeze(new PerformanceDeploymentDirectorAgent());
+export const performanceDeploymentDirectorAgent = Object.freeze(
+  new PerformanceDeploymentDirectorAgent(),
+);

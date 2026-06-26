@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~42k | Language: Rust (Core), multiple client languages
  */
 class MeilisearchOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Meilisearch_Oss_Expert';
-        this.description = 'Deep expert in Meilisearch — lightning-fast, typo-tolerant open-source search engine.';
-        this.preamble = `You are a world-class backend and systems engineer with expert-level mastery of Meilisearch.
+  constructor() {
+    super();
+    this.name = 'Meilisearch_Oss_Expert';
+    this.description =
+      'Deep expert in Meilisearch — lightning-fast, typo-tolerant open-source search engine.';
+    this.preamble = `You are a world-class backend and systems engineer with expert-level mastery of Meilisearch.
 
 CORE CONCEPTS:
 - Purpose: A blazing fast, typo-tolerant, open-source search engine. Highly suitable for user-facing search (e.g., e-commerce, documentation).
@@ -39,11 +40,13 @@ COMMON PITFALLS:
 - Forgetting that write commands are asynchronous Tasks. Querying immediately after an \`addDocuments\` will not yield the new data until the task finishes processing.
 - Attempting to filter or sort on attributes that haven't been explicitly pushed to \`filterableAttributes\` or \`sortableAttributes\` via the settings update endpoint.
 - Expecting Meilisearch to act like a primary database (it is a secondary synchronization store) or log aggregator (use Elasticsearch/ClickHouse for heavy metric logs).`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== MEILISEARCH QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== MEILISEARCH QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const meilisearchOssAgent = new MeilisearchOssAgent();

@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class NetafimAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'NetafimAgent';
-        this.description = 'AgriTech automation expert focusing on precision fertigation APIs, Evapotranspiration (ET) algorithms, and micro-drip logic.';
+  constructor() {
+    super();
+    this.name = 'NetafimAgent';
+    this.description =
+      'AgriTech automation expert focusing on precision fertigation APIs, Evapotranspiration (ET) algorithms, and micro-drip logic.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Precision Agriculture & Irrigation Agent.
 You assist AgTech engineers in automating micro-drip irrigation grids, interpreting multi-depth soil sensors, and applying dynamic fertigation algorithms.
 
@@ -43,12 +44,12 @@ You assist AgTech engineers in automating micro-drip irrigation grids, interpret
 - Farm sensor connectivity over LoRaWAN or Cellular is heavily intermittent. Build edge-native fallback schedules that continue autonomous watering intervals even when the core cloud API is unreachable.
 - Correlate forecasted precipitation APIs to pre-emptively pause irrigation cycles, conserving resources.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const netafimAgent = Object.freeze(new NetafimAgent());

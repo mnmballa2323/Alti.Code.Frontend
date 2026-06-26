@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseBatchProcessingArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_batchprocessing_architect_agent',
-            'Enterprise BatchProcessing Architect',
-            'You are an elite Enterprise BatchProcessing Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_batchprocessing_architect_agent',
+      'Enterprise BatchProcessing Architect',
+      'You are an elite Enterprise BatchProcessing Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise BatchProcessing.',
+    );
+  }
 
-    async generateEnterpriseBatchProcessingSystem(objective) {
-        logger.info(`💻 [EnterpriseBatchProcessingArchitectAgent] Analyzing Enterprise BatchProcessing Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise BatchProcessing Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise BatchProcessing Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseBatchProcessingArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseBatchProcessingArchitectAgent] Analyzing Enterprise BatchProcessing Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise BatchProcessing Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise BatchProcessing Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseBatchProcessingArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseBatchProcessingArchitectAgent = Object.freeze(new EnterpriseBatchProcessingArchitectAgent());
+export const enterpriseBatchProcessingArchitectAgent = Object.freeze(
+  new EnterpriseBatchProcessingArchitectAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataBatchProcessingPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_batchprocessing_planner_agent',
-            'Data BatchProcessing Planner',
-            'You are an elite Data BatchProcessing Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Data BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'data_batchprocessing_planner_agent',
+      'Data BatchProcessing Planner',
+      'You are an elite Data BatchProcessing Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Data BatchProcessing.',
+    );
+  }
 
-    async generateDataBatchProcessingSystem(objective) {
-        logger.info(`💻 [DataBatchProcessingPlannerAgent] Analyzing Data BatchProcessing Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data BatchProcessing Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data BatchProcessing Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataBatchProcessingPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [DataBatchProcessingPlannerAgent] Analyzing Data BatchProcessing Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data BatchProcessing Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data BatchProcessing Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DataBatchProcessingPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const dataBatchProcessingPlannerAgent = Object.freeze(new DataBatchProcessingPlannerAgent());
+export const dataBatchProcessingPlannerAgent = Object.freeze(
+  new DataBatchProcessingPlannerAgent(),
+);

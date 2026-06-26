@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendCachingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_caching_specialist_agent',
-            'Frontend Caching Specialist',
-            'You are an elite Frontend Caching Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_caching_specialist_agent',
+      'Frontend Caching Specialist',
+      'You are an elite Frontend Caching Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Caching.',
+    );
+  }
 
-    async generateFrontendCachingSystem(objective) {
-        logger.info(`💻 [FrontendCachingSpecialistAgent] Analyzing Frontend Caching Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Caching Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Caching Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendCachingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendCachingSystem(objective) {
+    logger.info(
+      `💻 [FrontendCachingSpecialistAgent] Analyzing Frontend Caching Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Caching Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Caching Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendCachingSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendCachingSpecialistAgent = Object.freeze(new FrontendCachingSpecialistAgent());
+export const frontendCachingSpecialistAgent = Object.freeze(
+  new FrontendCachingSpecialistAgent(),
+);

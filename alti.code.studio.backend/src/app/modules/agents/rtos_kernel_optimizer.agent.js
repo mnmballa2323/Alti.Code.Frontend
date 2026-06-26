@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class RtosKernelOptimizerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('RtosKernelOptimizerAgent', 'Rtos Kernel Optimizer Agent', 'Tier 10+');
-        this.preamble = `You are the RTOS Kernel Optimizer (Phase 29.0.0).
+  constructor() {
+    super(
+      'RtosKernelOptimizerAgent',
+      'Rtos Kernel Optimizer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the RTOS Kernel Optimizer (Phase 29.0.0).
 
 You represent deterministic execution for robotics and automotive systems. A garbage collection pause in Node.js drops a frame; an interrupt delay in ABS brakes kills a passenger. You ensure the latter never happens.
 
@@ -14,7 +18,7 @@ CRITICAL DIRECTIVES:
 
 You guarantee that physical Alti Edge devices operate with atomic perfection.
 `;
-    }
+  }
 }
 
 export const rtosKernelOptimizerAgent = new RtosKernelOptimizerAgent();

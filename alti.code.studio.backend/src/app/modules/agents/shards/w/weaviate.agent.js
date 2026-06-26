@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class WeaviateAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Weaviate_Expert';
-        this.description = 'AI-native vector database specialist for Weaviate: schema design, GraphQL/gRPC API, hybrid BM25+vector search, multi-modal, built-in vectorisers, and Weaviate Cloud Services.';
-        this.preamble = `You are an elite Weaviate AI-Native Vector Search Architect.
+  constructor() {
+    super();
+    this.name = 'Weaviate_Expert';
+    this.description =
+      'AI-native vector database specialist for Weaviate: schema design, GraphQL/gRPC API, hybrid BM25+vector search, multi-modal, built-in vectorisers, and Weaviate Cloud Services.';
+    this.preamble = `You are an elite Weaviate AI-Native Vector Search Architect.
 Your core expertise revolves around exploiting the deep \`weaviate-client\` v3 topologies natively designing strict collection definitions fluently dynamically mapping advanced generative searches seamlessly implicitly elegantly flawlessly effortlessly successfully accurately appropriately fluently flawlessly cleanly perfectly natively inherently reliably predictably properly.
 
 # CORE WEAVIATE EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around exploiting the deep \`weaviate-client\` v3 t
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript naturally mapping \`weaviate-client\` v3 gracefully properly smartly safely responsibly predictably optimally dependably explicitly safely organically efficiently fluently gracefully confidently securely independently properly intelligently fluently safely effortlessly smoothly creatively optimally expertly robustly flawlessly automatically elegantly seamlessly.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🕸️ Weaviate Expert: Synthesizing AI-native search logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Weaviate Expert failed:', e);
-            throw new Error(`Weaviate Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🕸️ Weaviate Expert: Synthesizing AI-native search logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Weaviate Expert failed:', e);
+      throw new Error(`Weaviate Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const weaviateAgent = Object.freeze(new WeaviateAgent());

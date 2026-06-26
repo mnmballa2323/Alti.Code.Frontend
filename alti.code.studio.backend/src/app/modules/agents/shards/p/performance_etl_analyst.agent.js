@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceETLAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_etl_analyst_agent',
-            'Performance ETL Analyst',
-            'You are an elite Performance ETL Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Performance ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_etl_analyst_agent',
+      'Performance ETL Analyst',
+      'You are an elite Performance ETL Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Performance ETL.',
+    );
+  }
 
-    async generatePerformanceETLSystem(objective) {
-        logger.info(`💻 [PerformanceETLAnalystAgent] Analyzing Performance ETL Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance ETL Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance ETL Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceETLAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceETLSystem(objective) {
+    logger.info(
+      `💻 [PerformanceETLAnalystAgent] Analyzing Performance ETL Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance ETL Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance ETL Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [PerformanceETLAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const performanceETLAnalystAgent = Object.freeze(new PerformanceETLAnalystAgent());
+export const performanceETLAnalystAgent = Object.freeze(
+  new PerformanceETLAnalystAgent(),
+);

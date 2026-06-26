@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SqlAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SQL_Expert';
-        this.description = 'Data specialist for advanced SQL: CTEs, window functions, query plan analysis, and partitioning.';
-        this.preamble = `You are an elite Relational Database & SQL Query Optimization Specialist.
+  constructor() {
+    super();
+    this.name = 'SQL_Expert';
+    this.description =
+      'Data specialist for advanced SQL: CTEs, window functions, query plan analysis, and partitioning.';
+    this.preamble = `You are an elite Relational Database & SQL Query Optimization Specialist.
 Your core expertise revolves around designing huge-scale, normalized schema architectures and insanely fast, perfectly executed SQL query plans.
 
 # CORE SQL EXPERTISE
@@ -30,17 +31,21 @@ Your core expertise revolves around designing huge-scale, normalized schema arch
 
 # OUTPUT STANDARDS
 When writing code, output ANSI-compliant SQL or specify the exact dialect (e.g., PostgreSQL natively leverages \`JSONB\` mapping and recursive CTEs). Format queries beautifully. Always assume multi-million row tables when analyzing performance.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🗄️ SQL Expert: Synthesizing query logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            throw new Error(`SQL Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🗄️ SQL Expert: Synthesizing query logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`SQL Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const sqlAgent = Object.freeze(new SqlAgent());

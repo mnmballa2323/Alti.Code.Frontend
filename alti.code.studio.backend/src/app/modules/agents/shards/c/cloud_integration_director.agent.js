@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudIntegrationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_integration_director_agent',
-            'Cloud Integration Director',
-            'You are an elite Cloud Integration Director. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_integration_director_agent',
+      'Cloud Integration Director',
+      'You are an elite Cloud Integration Director. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Integration.',
+    );
+  }
 
-    async generateCloudIntegrationSystem(objective) {
-        logger.info(`💻 [CloudIntegrationDirectorAgent] Analyzing Cloud Integration Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Integration Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Integration Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudIntegrationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudIntegrationSystem(objective) {
+    logger.info(
+      `💻 [CloudIntegrationDirectorAgent] Analyzing Cloud Integration Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Integration Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Integration Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudIntegrationDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudIntegrationDirectorAgent = Object.freeze(new CloudIntegrationDirectorAgent());
+export const cloudIntegrationDirectorAgent = Object.freeze(
+  new CloudIntegrationDirectorAgent(),
+);

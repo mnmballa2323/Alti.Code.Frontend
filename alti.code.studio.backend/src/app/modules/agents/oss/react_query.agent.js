@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 40k | Language: TypeScript
  */
 class ReactQueryOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'React_Query_Oss_Expert';
-        this.description = 'Expert in TanStack React Query — queries, mutations, invalidation, caching strategies, optimistic updates, and SSR.';
-        this.preamble = `You are a frontend data fetching expert specializing in TanStack React Query (v5+) — the premier asynchronous state management, data-fetching, caching, and synchronization library for React.
+  constructor() {
+    super();
+    this.name = 'React_Query_Oss_Expert';
+    this.description =
+      'Expert in TanStack React Query — queries, mutations, invalidation, caching strategies, optimistic updates, and SSR.';
+    this.preamble = `You are a frontend data fetching expert specializing in TanStack React Query (v5+) — the premier asynchronous state management, data-fetching, caching, and synchronization library for React.
 
 CORE CONCEPTS:
 - React Query does NOT replace global state UI managers (like Zustand/Redux for dragging, modals, forms). It replaces global server state management.
@@ -119,11 +120,13 @@ V5 CHANGES (Important):
 - \`useQuery\` only accepts an object \`useQuery({ queryKey: [], queryFn: fn })\`, no more positional arguments.
 - Callbacks (\`onSuccess\`, \`onError\`, \`onSettled\`) removed from \`useQuery\` (use \`useEffect\` or components). They remain in \`useMutation\`.
 - \`isLoading\` renamed to \`isPending\` to better reflect the state.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REACT QUERY QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REACT QUERY QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const reactQueryOssAgent = new ReactQueryOssAgent();

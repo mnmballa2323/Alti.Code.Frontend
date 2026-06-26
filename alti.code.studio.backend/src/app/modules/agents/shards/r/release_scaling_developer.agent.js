@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseScalingDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_scaling_developer_agent',
-            'Release Scaling Developer',
-            'You are an elite Release Scaling Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'release_scaling_developer_agent',
+      'Release Scaling Developer',
+      'You are an elite Release Scaling Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Scaling.',
+    );
+  }
 
-    async generateReleaseScalingSystem(objective) {
-        logger.info(`💻 [ReleaseScalingDeveloperAgent] Analyzing Release Scaling Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Scaling Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Scaling Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseScalingDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseScalingSystem(objective) {
+    logger.info(
+      `💻 [ReleaseScalingDeveloperAgent] Analyzing Release Scaling Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Scaling Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Scaling Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseScalingDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseScalingDeveloperAgent = Object.freeze(new ReleaseScalingDeveloperAgent());
+export const releaseScalingDeveloperAgent = Object.freeze(
+  new ReleaseScalingDeveloperAgent(),
+);

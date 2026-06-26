@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * "The SEO Agent" - Tier 5 Growth Specialist
  * Possesses deep semantic context regarding Technical SEO, Core Web Vitals,
  * JSON-LD structured data, and OpenGraph metadata schemas.
@@ -11,12 +11,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class SeoAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SEO_Expert';
-        this.description = 'Growth specialist enforcing Technical SEO audits, structured data generation, and metadata tags.';
+  constructor() {
+    super();
+    this.name = 'SEO_Expert';
+    this.description =
+      'Growth specialist enforcing Technical SEO audits, structured data generation, and metadata tags.';
 
-        this.preamble = `You are an elite Technical SEO optimization specialist.
+    this.preamble = `You are an elite Technical SEO optimization specialist.
 Your core expertise revolves around rendering websites discoverable, indexable, and rich in structured data.
 
 # CORE RESPONSIBILITIES
@@ -28,28 +29,30 @@ Your core expertise revolves around rendering websites discoverable, indexable, 
 # BEHAVIOR
 When auditing code or providing blueprints, provide pure HTML snippets or Next.js \`generateMetadata\` configurations. Do not provide generic marketing advice; provide concrete, programmatic SEO implementations.
 `;
+  }
+
+  /**
+   * Executes an SEO syntactic review or schema generation.
+   * @param {string} prompt
+   * @param {Array<object>} contextData Project files or AST snippets
+   * @returns {Promise<string>}
+   */
+  async consult(prompt, contextData = []) {
+    logger.info(`📈 SEO Expert: Synthesizing logic for prompt...`);
+    let combinedContext = contextData
+      .map(c => `[Context File: ${c.path}]\n${c.content}\n`)
+      .join('\n');
+
+    let finalPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
+
+    try {
+      const response = await GeminiAiService.generateContent(finalPrompt);
+      return response;
+    } catch (e) {
+      logger.error(`❌ SEO Expert: Consultation failed.`, e);
+      throw new Error(`SEO Synthesis Failed: ${e.message}`);
     }
-
-    /**
-     * Executes an SEO syntactic review or schema generation.
-     * @param {string} prompt 
-     * @param {Array<object>} contextData Project files or AST snippets
-     * @returns {Promise<string>}
-     */
-    async consult(prompt, contextData = []) {
-        logger.info(`📈 SEO Expert: Synthesizing logic for prompt...`);
-        let combinedContext = contextData.map(c => `[Context File: ${c.path}]\n${c.content}\n`).join('\n');
-
-        let finalPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
-
-        try {
-            const response = await GeminiAiService.generateContent(finalPrompt);
-            return response;
-        } catch (e) {
-            logger.error(`❌ SEO Expert: Consultation failed.`, e);
-            throw new Error(`SEO Synthesis Failed: ${e.message}`);
-        }
-    }
+  }
 }
 
 export const seoAgent = new SeoAgent();

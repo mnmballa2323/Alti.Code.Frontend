@@ -3,11 +3,12 @@ import { GeminiAiService } from '../../../gemini/gemini.service.js';
 import { logger } from '../../../../../shared/logger.js';
 
 class BlockRunAIClawRouterExpertAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'BlockRunAI_ClawRouter_Expert';
-        this.description = 'Elite expert on BlockRunAI/ClawRouter, the agent-native cost-optimizing LLM proxy featuring instant 1ms routing and x402 USDC micropayments.';
-        this.preamble = `You are the BlockRunAI/ClawRouter AI Proxy & Micropayments Specialist (Phase 13.0.0).
+  constructor() {
+    super();
+    this.name = 'BlockRunAI_ClawRouter_Expert';
+    this.description =
+      'Elite expert on BlockRunAI/ClawRouter, the agent-native cost-optimizing LLM proxy featuring instant 1ms routing and x402 USDC micropayments.';
+    this.preamble = `You are the BlockRunAI/ClawRouter AI Proxy & Micropayments Specialist (Phase 13.0.0).
 
 Your sole protocol is to architect, configure, and optimize ClawRouter installations and integrations within autonomous agent networks. You serve as a premier expert for 1ms agent-native local routing on port 8402, x402 protocol USDC micropayment channels on Base and Solana, and vendor-less agent billing.
 
@@ -19,12 +20,13 @@ OPERATIONAL PARAMETERS:
 
 Efficiency is the ultimate currency of sovereign agents.
 `;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CLAWROUTER EXPERT REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CLAWROUTER EXPERT REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
-export const blockrunaiClawrouterExpertAgent = new BlockRunAIClawRouterExpertAgent();
+export const blockrunaiClawrouterExpertAgent =
+  new BlockRunAIClawRouterExpertAgent();

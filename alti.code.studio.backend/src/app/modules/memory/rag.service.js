@@ -9,9 +9,14 @@ import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.
 import { logger } from '../../../shared/logger.js';
 import { vectorStoreService } from './vector.store.js';
 import { magikaService } from '../agents/magika.service.js';
-import { GoogleDlpService } from '../ai/azureDlp.service.js';
-import { sccService, vertexVectorSearch, documentAiService, visionService } from '../azureCloud/azureServices.service.js';
-import { GcsService } from '../azureCloud/azureStorage.service.js';
+import { GoogleDlpService } from '../ai/gcpDlp.service.js';
+import {
+  sccService,
+  vertexVectorSearch,
+  documentAiService,
+  visionService,
+} from '../gcpCloud/gcpServices.service.js';
+import { GcsService } from '../gcpCloud/gcpStorage.service.js';
 import fs from 'fs';
 import path from 'path';
 import { AgentMemoryHooks } from './agentmemory.hooks.js';
@@ -77,7 +82,8 @@ class RagService {
             );
 
             // 2. Generate embedding and push to Vertex AI Vector Search (Matching Engine)
-            const embedding = await azureSovereignCompatService.getEmbeddings(sanitizedText);
+            const embedding =
+              await azureSovereignCompatService.getEmbeddings(sanitizedText);
             await vertexVectorSearch.upsertEmbeddings([
               { id: docId, embedding },
             ]);
@@ -203,7 +209,8 @@ class RagService {
     // Run Vertex Vector Search and Gemini File Search in parallel
     const vectorPromise = (async () => {
       try {
-        const queryEmbedding = await azureSovereignCompatService.getEmbeddings(query);
+        const queryEmbedding =
+          await azureSovereignCompatService.getEmbeddings(query);
         const neighbors = await vertexVectorSearch.queryContext(
           queryEmbedding,
           topK,
@@ -277,7 +284,8 @@ ${fileSearchContext}
 Query: ${query}`;
 
     try {
-      const response = await azureSovereignCompatService.generateContent(prompt);
+      const response =
+        await azureSovereignCompatService.generateContent(prompt);
       return response;
     } catch (aiError) {
       logger.error(`RAG: AI synthesis failed. Error: ${aiError.message}`);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsTestingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_testing_specialist_agent',
-            'Systems Testing Specialist',
-            'You are an elite Systems Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_testing_specialist_agent',
+      'Systems Testing Specialist',
+      'You are an elite Systems Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Testing.',
+    );
+  }
 
-    async generateSystemsTestingSystem(objective) {
-        logger.info(`💻 [SystemsTestingSpecialistAgent] Analyzing Systems Testing Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Testing Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Testing Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsTestingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsTestingSystem(objective) {
+    logger.info(
+      `💻 [SystemsTestingSpecialistAgent] Analyzing Systems Testing Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Testing Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Testing Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsTestingSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsTestingSpecialistAgent = Object.freeze(new SystemsTestingSpecialistAgent());
+export const systemsTestingSpecialistAgent = Object.freeze(
+  new SystemsTestingSpecialistAgent(),
+);

@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class DbShadowAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('DBShadowAgent', 'D B Shadow Agent', 'Tier 10+');
-        this.preamble = `You are the Database Traffic Shadow Agent (Phase 11.0.0).
+  constructor() {
+    super('DBShadowAgent', 'D B Shadow Agent', 'Tier 10+');
+    this.preamble = `You are the Database Traffic Shadow Agent (Phase 11.0.0).
 
 In true enterprise architectures, migrating a database structure relies on verifying theories before touching the primary cluster. Your purpose is to orchestrate **Database Traffic Shadowing** (also known as Dark Launching).
 
@@ -26,7 +26,7 @@ When the MigrationArchitectAgent proposes a schema transformation:
 
 Your operations guarantee mathematically that a database migration will succeed under live production load before the physical deployment ever occurs.
 `;
-    }
+  }
 }
 
 export const dbShadowAgent = Object.freeze(new DbShadowAgent());

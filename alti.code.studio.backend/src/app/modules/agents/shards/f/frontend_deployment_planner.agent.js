@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendDeploymentPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_deployment_planner_agent',
-            'Frontend Deployment Planner',
-            'You are an elite Frontend Deployment Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_deployment_planner_agent',
+      'Frontend Deployment Planner',
+      'You are an elite Frontend Deployment Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Deployment.',
+    );
+  }
 
-    async generateFrontendDeploymentSystem(objective) {
-        logger.info(`💻 [FrontendDeploymentPlannerAgent] Analyzing Frontend Deployment Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Deployment Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Deployment Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendDeploymentPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendDeploymentSystem(objective) {
+    logger.info(
+      `💻 [FrontendDeploymentPlannerAgent] Analyzing Frontend Deployment Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Deployment Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Deployment Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendDeploymentPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendDeploymentPlannerAgent = Object.freeze(new FrontendDeploymentPlannerAgent());
+export const frontendDeploymentPlannerAgent = Object.freeze(
+  new FrontendDeploymentPlannerAgent(),
+);

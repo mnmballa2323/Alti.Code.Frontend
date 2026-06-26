@@ -7,32 +7,44 @@ export const dispatchWorkflow = async (req, res) => {
     const { nodes, edges } = req.body;
 
     if (!nodes || !edges) {
-      return res.status(400).json({ success: false, message: 'Invalid workflow payload.' });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Invalid workflow payload.' });
     }
 
-    logger.info(`[Workflow Controller] Dispatching workflow with ${nodes.length} nodes and ${edges.length} edges.`);
+    logger.info(
+      `[Workflow Controller] Dispatching workflow with ${nodes.length} nodes and ${edges.length} edges.`,
+    );
 
     // Map each node type to a specific swarm queue
     const queueMap = {
-      'service_ai': 'refactor-queue',
-      'output_auth': 'security-queue',
-      'trigger_http': 'devops-queue',
+      service_ai: 'refactor-queue',
+      output_auth: 'security-queue',
+      trigger_http: 'devops-queue',
     };
 
     // Dispatch jobs to BullMQ
     const dispatchedJobs = [];
     for (const node of nodes) {
       const targetQueue = queueMap[node.type] || 'devops-queue'; // Fallback to devops
-      
-      const job = await jobQueueService.addJob(targetQueue, `workflow-step-${node.id}`, {
-        stepId: node.id,
-        type: node.type,
-        title: node.title,
-        instructions: node.instructions,
-        guardrails: node.guardrails
-      });
 
-      dispatchedJobs.push({ nodeId: node.id, jobId: job.id, queue: targetQueue });
+      const job = await jobQueueService.addJob(
+        targetQueue,
+        `workflow-step-${node.id}`,
+        {
+          stepId: node.id,
+          type: node.type,
+          title: node.title,
+          instructions: node.instructions,
+          guardrails: node.guardrails,
+        },
+      );
+
+      dispatchedJobs.push({
+        nodeId: node.id,
+        jobId: job.id,
+        queue: targetQueue,
+      });
     }
 
     return res.status(200).json({
@@ -40,7 +52,7 @@ export const dispatchWorkflow = async (req, res) => {
       message: 'Workflow dispatched successfully.',
       data: {
         dispatchedJobs,
-      }
+      },
     });
   } catch (error) {
     logger.error('[Workflow Controller] Failed to dispatch workflow:', error);
@@ -51,9 +63,12 @@ export const dispatchWorkflow = async (req, res) => {
 export const deployWorkflow = async (req, res) => {
   try {
     const payload = req.body;
-    
+
     if (!payload.name || !payload.prompt) {
-      return res.status(400).json({ success: false, message: 'Workflow name and prompt are required.' });
+      return res.status(400).json({
+        success: false,
+        message: 'Workflow name and prompt are required.',
+      });
     }
 
     const workflow = await workflowService.deployWorkflow(payload);
@@ -61,7 +76,7 @@ export const deployWorkflow = async (req, res) => {
     return res.status(200).json({
       success: true,
       message: 'Workflow deployed successfully.',
-      data: workflow
+      data: workflow,
     });
   } catch (error) {
     logger.error('[Workflow Controller] Failed to deploy workflow:', error);

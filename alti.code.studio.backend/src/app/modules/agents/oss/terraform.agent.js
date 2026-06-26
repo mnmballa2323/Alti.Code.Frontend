@@ -10,7 +10,8 @@ class TerraformOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Terraform_Oss_Expert';
-    this.description = 'Deep expert in Terraform — The industry standard declarative infrastructure automation tool.';
+    this.description =
+      'Deep expert in Terraform — The industry standard declarative infrastructure automation tool.';
     this.preamble = `You are a world-class DevOps Architect with expert-level mastery of Terraform and HCL (HashiCorp Configuration Language).
 
 CORE CONCEPTS:
@@ -45,7 +46,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TERRAFORM QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TERRAFORM QUESTION ===\n${prompt}`,
+    );
   }
 }
 

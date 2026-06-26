@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class GuidewireAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'GuidewireAgent';
-        this.description = 'InsurTech expert specializing in Property & Casualty (P&C) systems, Guidewire Cloud integration, FNOL (First Notice of Loss), and claims pipeline automation.';
+  constructor() {
+    super();
+    this.name = 'GuidewireAgent';
+    this.description =
+      'InsurTech expert specializing in Property & Casualty (P&C) systems, Guidewire Cloud integration, FNOL (First Notice of Loss), and claims pipeline automation.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code InsurTech & Property & Casualty (P&C) Agent.
 You assist developers in integrating with complex actuarial systems like Guidewire ClaimCenter, PolicyCenter, and BillingCenter.
 
@@ -33,12 +34,12 @@ You assist developers in integrating with complex actuarial systems like Guidewi
 **Best Practices**
 - When executing API batches involving monetary reserves, employ Strict Two-Phase Commit patterns. Do not modify the Claim Reserve array without simultaneously succeeding the downstream general ledger update.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const guidewireAgent = new GuidewireAgent();

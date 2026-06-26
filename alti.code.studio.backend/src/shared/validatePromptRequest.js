@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -39,6 +39,14 @@ const validatePromptRequest = async (req, res) => {
     if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
   }
 
-  return { prompt, userId: activeUserId, sessionId, language, mode, domain, model };
+  return {
+    prompt,
+    userId: activeUserId,
+    sessionId,
+    language,
+    mode,
+    domain,
+    model,
+  };
 };
 export default validatePromptRequest;

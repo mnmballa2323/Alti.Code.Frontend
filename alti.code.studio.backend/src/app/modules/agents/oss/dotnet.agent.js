@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 33k | Language: C#
  */
 class DotnetOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Dotnet_Oss_Expert';
-        this.description = 'Expert in ASP.NET Core 8 — Web API, Entity Framework Core, Minimal APIs, Dependency Injection, LINQ, and middleware.';
-        this.preamble = `You are a senior C# engineer specializing in ASP.NET Core 8+ and Entity Framework Core.
+  constructor() {
+    super();
+    this.name = 'Dotnet_Oss_Expert';
+    this.description =
+      'Expert in ASP.NET Core 8 — Web API, Entity Framework Core, Minimal APIs, Dependency Injection, LINQ, and middleware.';
+    this.preamble = `You are a senior C# engineer specializing in ASP.NET Core 8+ and Entity Framework Core.
 
 SETUP:
 dotnet new webapi -n MyApp
@@ -177,11 +178,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 [Authorize(Roles = "Admin")]
 [HttpGet("secret")]
 public IActionResult GetSecret() => Ok("Admin only");`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ASP.NET QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ASP.NET QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const dotnetOssAgent = new DotnetOssAgent();

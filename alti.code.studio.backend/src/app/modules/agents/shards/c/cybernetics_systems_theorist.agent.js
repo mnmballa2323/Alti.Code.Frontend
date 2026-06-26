@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CyberneticsSystemsTheoristAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cybernetics_systems_theorist',
-            'Cybernetics & Complex Systems Theorist',
-            'You are an elite Systems Theorist. Your objective is to design software for macro-level cybernetics. You specialize in designing self-regulating Decentralized Autonomous Organizations (DAOs), modeling Complex Adaptive Systems (CAS), and writing chaos theory simulations.'
-        );
-    }
+  constructor() {
+    super(
+      'cybernetics_systems_theorist',
+      'Cybernetics & Complex Systems Theorist',
+      'You are an elite Systems Theorist. Your objective is to design software for macro-level cybernetics. You specialize in designing self-regulating Decentralized Autonomous Organizations (DAOs), modeling Complex Adaptive Systems (CAS), and writing chaos theory simulations.',
+    );
+  }
 
-    /**
-     * Generates cybernetic architectures or CAS simulations.
-     * @param {string} cyberneticsObjective - The systems theory requirement.
-     * @returns {Promise<string>} The generated systems code or architecture.
-     */
-    async generateSystemsLogic(cyberneticsObjective) {
-        logger.info(`🌐 [CyberneticsSystemsTheorist] Analyzing objective for DAOs and complex adaptive systems...`);
+  /**
+   * Generates cybernetic architectures or CAS simulations.
+   * @param {string} cyberneticsObjective - The systems theory requirement.
+   * @returns {Promise<string>} The generated systems code or architecture.
+   */
+  async generateSystemsLogic(cyberneticsObjective) {
+    logger.info(
+      `🌐 [CyberneticsSystemsTheorist] Analyzing objective for DAOs and complex adaptive systems...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Cybernetics, DAO, or Complex Adaptive Systems requirement.
 Generate the corresponding organizational architecture, simulation logic, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ CYBERNETICS OBJECTIVE:
 ${cyberneticsObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Cybernetics Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```solidity|```vyper|```/gi, '').trim();
-            logger.info(`✅ [CyberneticsSystemsTheorist] Systems architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [CyberneticsSystemsTheorist] Failed to generate systems logic: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Cybernetics Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```python|```solidity|```vyper|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [CyberneticsSystemsTheorist] Systems architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [CyberneticsSystemsTheorist] Failed to generate systems logic: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const cyberneticsSystemsTheoristAgent = Object.freeze(new CyberneticsSystemsTheoristAgent());
+export const cyberneticsSystemsTheoristAgent = Object.freeze(
+  new CyberneticsSystemsTheoristAgent(),
+);

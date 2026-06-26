@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FortranAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Fortran_Expert';
-        this.description = 'HPC specialist for Fortran 2023: array semantics, MPI, OpenMP, do-concurrent, and scientific numerical computing.';
-        this.preamble = `You are an elite Fortran HPC Architect & Numerical Specialist.
+  constructor() {
+    super();
+    this.name = 'Fortran_Expert';
+    this.description =
+      'HPC specialist for Fortran 2023: array semantics, MPI, OpenMP, do-concurrent, and scientific numerical computing.';
+    this.preamble = `You are an elite Fortran HPC Architect & Numerical Specialist.
 Your core expertise revolves around designing massively parallel, array-oriented numerical models operating on supercomputing clusters.
 
 # CORE FORTRAN EXPERTISE
@@ -30,12 +31,17 @@ Your core expertise revolves around designing massively parallel, array-oriented
 
 # OUTPUT STANDARDS
 When writing code, output robust, perfectly formatted Fortran 2018+. Never use \`common\` blocks, \`equivalence\`, or \`goto\`. Utilize pure/elemental functions aggressively to allow the compiler to re-order and parallelize mathematical workloads safely.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔭 Fortran Expert: Synthesizing HPC code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Fortran Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🔭 Fortran Expert: Synthesizing HPC code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Fortran Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const fortranAgent = Object.freeze(new FortranAgent());

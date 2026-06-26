@@ -10,8 +10,11 @@ router.post('/authenticate', async (req, res) => {
     if (!providerName) {
       return res.status(400).json({ error: 'providerName is required' });
     }
-    
-    const result = await cloudProviderRegistry.authenticate(providerName, credentials);
+
+    const result = await cloudProviderRegistry.authenticate(
+      providerName,
+      credentials,
+    );
     res.json(result);
   } catch (error) {
     console.error(`[CloudRoutes] Authentication error:`, error);
@@ -23,11 +26,17 @@ router.post('/authenticate', async (req, res) => {
 router.get('/telemetry/:providerName', async (req, res) => {
   try {
     const { providerName } = req.params;
-    const telemetry = await cloudProviderRegistry.fetchGlobalTelemetry(providerName);
+    const telemetry =
+      await cloudProviderRegistry.fetchGlobalTelemetry(providerName);
     res.json(telemetry);
   } catch (error) {
-    console.error(`[CloudRoutes] Telemetry error for ${req.params.providerName}:`, error);
-    res.status(500).json({ error: error.message || 'Failed to fetch telemetry.' });
+    console.error(
+      `[CloudRoutes] Telemetry error for ${req.params.providerName}:`,
+      error,
+    );
+    res
+      .status(500)
+      .json({ error: error.message || 'Failed to fetch telemetry.' });
   }
 });
 
@@ -38,9 +47,11 @@ router.post('/route-workload', async (req, res) => {
   try {
     const { workloadProfile } = req.body;
     if (!workloadProfile) {
-      return res.status(400).json({ error: 'workloadProfile is required for smart routing' });
+      return res
+        .status(400)
+        .json({ error: 'workloadProfile is required for smart routing' });
     }
-    
+
     const result = await omniCloudRouter.deployWorkload(workloadProfile);
     res.json(result);
   } catch (error) {
@@ -51,7 +62,7 @@ router.post('/route-workload', async (req, res) => {
 
 // Get Global Citadel Topology
 router.get('/omni-topology', (req, res) => {
-    res.json(omniCloudRouter.getGlobalTopology());
+  res.json(omniCloudRouter.getGlobalTopology());
 });
 
 export const cloudAgentsRoutes = router;

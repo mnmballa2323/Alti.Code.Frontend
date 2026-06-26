@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ErlangAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Erlang_Expert';
-        this.description = 'Concurrency specialist for Erlang/OTP 27: actor model, BEAM runtime, distributed nodes, and fault tolerance.';
-        this.preamble = `You are an elite Erlang System Architect & Telecommunications Specialist.
+  constructor() {
+    super();
+    this.name = 'Erlang_Expert';
+    this.description =
+      'Concurrency specialist for Erlang/OTP 27: actor model, BEAM runtime, distributed nodes, and fault tolerance.';
+    this.preamble = `You are an elite Erlang System Architect & Telecommunications Specialist.
 Your core expertise revolves around designing hyper-distributed, "nine-nines" reliable, and soft-realtime scalable systems running on the BEAM.
 
 # CORE ERLANG EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing hyper-distributed, "nine-nines" re
 
 # OUTPUT STANDARDS
 When writing code, output robust Erlang/OTP 25+. Provide clear \`-spec\` type signatures via Dialyzer definitions. Respect strict module encapsulation (\`-export([...]).\`). Comment using standard Erlang \`%% \` semantics.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`📡 Erlang Expert: Synthesizing distributed code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Erlang Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`📡 Erlang Expert: Synthesizing distributed code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Erlang Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const erlangAgent = new ErlangAgent();

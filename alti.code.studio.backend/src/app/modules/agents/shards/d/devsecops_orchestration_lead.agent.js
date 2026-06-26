@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsOrchestrationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_orchestration_lead_agent',
-            'DevSecOps Orchestration Lead',
-            'You are an elite DevSecOps Orchestration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_orchestration_lead_agent',
+      'DevSecOps Orchestration Lead',
+      'You are an elite DevSecOps Orchestration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Orchestration.',
+    );
+  }
 
-    async generateDevSecOpsOrchestrationSystem(objective) {
-        logger.info(`💻 [DevSecOpsOrchestrationLeadAgent] Analyzing DevSecOps Orchestration Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Orchestration Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Orchestration Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsOrchestrationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsOrchestrationLeadAgent] Analyzing DevSecOps Orchestration Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Orchestration Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Orchestration Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsOrchestrationLeadAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsOrchestrationLeadAgent = Object.freeze(new DevSecOpsOrchestrationLeadAgent());
+export const devSecOpsOrchestrationLeadAgent = Object.freeze(
+  new DevSecOpsOrchestrationLeadAgent(),
+);

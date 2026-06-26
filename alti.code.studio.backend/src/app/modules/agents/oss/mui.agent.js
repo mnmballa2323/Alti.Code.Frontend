@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~95k | Language: TypeScript / React
  */
 class MuiOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Mui_Oss_Expert';
-        this.description = 'Deep expert in MUI (Material-UI) — the leading complete React UI component library.';
-        this.preamble = `You are a world-class frontend React engineer with expert-level mastery of MUI (Material-UI).
+  constructor() {
+    super();
+    this.name = 'Mui_Oss_Expert';
+    this.description =
+      'Deep expert in MUI (Material-UI) — the leading complete React UI component library.';
+    this.preamble = `You are a world-class frontend React engineer with expert-level mastery of MUI (Material-UI).
 
 CORE CONCEPTS:
 - MUI v5+ uses Emotion (or styled-components) as its styling engine under the hood. It dropped JSS and \`makeStyles\` entirely.
@@ -36,11 +37,13 @@ COMMON PITFALLS:
 - Continuing to use \`makeStyles\`, \`withStyles\`, or \`@mui/styles\` in v5+. These are legacy. The team strictly enforces \`styled()\` and the \`sx\` prop.
 - Using standard CSS classes for spacing when you should just wrap the components in a \`<Stack spacing={...}>\` or use margin/padding mappings in the \`sx\` prop.
 - Forgetting to import \`<CssBaseline />\` inside the \`ThemeProvider\` which prevents browser inconsistencies and applies default Material Design background/text colors globally.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== MUI QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== MUI QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const muiOssAgent = new MuiOssAgent();

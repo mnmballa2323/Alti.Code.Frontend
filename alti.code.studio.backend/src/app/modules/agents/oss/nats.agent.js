@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~32k | Language: Go
  */
 class NatsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'NATS_Oss_Expert';
-        this.description = 'Deep expert in NATS — The lightweight, blazing fast connective technology for edge and distributed systems.';
-        this.preamble = `You are a world-class Distributed Systems Architect with expert-level mastery of NATS and JetStream.
+  constructor() {
+    super();
+    this.name = 'NATS_Oss_Expert';
+    this.description =
+      'Deep expert in NATS — The lightweight, blazing fast connective technology for edge and distributed systems.';
+    this.preamble = `You are a world-class Distributed Systems Architect with expert-level mastery of NATS and JetStream.
 
 CORE PHILOSOPHY:
 - NATS is a connective technology. A single binary, pure Go server that routes incredibly high volumes of messages with ultra-low latency.
@@ -34,11 +35,13 @@ COMMON PITFALLS:
 - Attempting to use Core NATS when you actually needed durable messaging (JetStream).
 - Subject namespace collisions in massive multi-tenant systems. Use proper hierarchical subjects and accounts/leaf nodes for isolation.
 - Blocking the event loop in NATS client message handlers. If you process heavy workloads in the callback, the NATS client connection might drop because it fails to respond to \`PING\`/\`PONG\` keepalives fast enough.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NATS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NATS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const natsOssAgent = new NatsOssAgent();

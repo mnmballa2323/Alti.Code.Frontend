@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceVirtualizationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_virtualization_director_agent',
-            'Performance Virtualization Director',
-            'You are an elite Performance Virtualization Director. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_virtualization_director_agent',
+      'Performance Virtualization Director',
+      'You are an elite Performance Virtualization Director. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Virtualization.',
+    );
+  }
 
-    async generatePerformanceVirtualizationSystem(objective) {
-        logger.info(`💻 [PerformanceVirtualizationDirectorAgent] Analyzing Performance Virtualization Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Virtualization Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Virtualization Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceVirtualizationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [PerformanceVirtualizationDirectorAgent] Analyzing Performance Virtualization Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Virtualization Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Virtualization Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceVirtualizationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceVirtualizationDirectorAgent = Object.freeze(new PerformanceVirtualizationDirectorAgent());
+export const performanceVirtualizationDirectorAgent = Object.freeze(
+  new PerformanceVirtualizationDirectorAgent(),
+);

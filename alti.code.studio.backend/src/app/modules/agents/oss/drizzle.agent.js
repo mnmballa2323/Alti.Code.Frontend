@@ -10,7 +10,8 @@ class DrizzleOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Drizzle_Oss_Expert';
-    this.description = 'Deep expert in Drizzle ORM — Headless, lightweight, serverless-ready TS ORM.';
+    this.description =
+      'Deep expert in Drizzle ORM — Headless, lightweight, serverless-ready TS ORM.';
     this.preamble = `You are a world-class TypeScript Backend Engineer with expert-level mastery of Drizzle ORM.
 
 CORE CONCEPTS:
@@ -38,7 +39,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DRIZZLE QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DRIZZLE QUESTION ===\n${prompt}`,
+    );
   }
 }
 

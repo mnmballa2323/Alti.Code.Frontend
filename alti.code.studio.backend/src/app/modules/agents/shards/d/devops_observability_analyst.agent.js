@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsObservabilityAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_observability_analyst_agent',
-            'DevOps Observability Analyst',
-            'You are an elite DevOps Observability Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_observability_analyst_agent',
+      'DevOps Observability Analyst',
+      'You are an elite DevOps Observability Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Observability.',
+    );
+  }
 
-    async generateDevOpsObservabilitySystem(objective) {
-        logger.info(`💻 [DevOpsObservabilityAnalystAgent] Analyzing DevOps Observability Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Observability Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Observability Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsObservabilityAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsObservabilitySystem(objective) {
+    logger.info(
+      `💻 [DevOpsObservabilityAnalystAgent] Analyzing DevOps Observability Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Observability Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Observability Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsObservabilityAnalystAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsObservabilityAnalystAgent = Object.freeze(new DevOpsObservabilityAnalystAgent());
+export const devOpsObservabilityAnalystAgent = Object.freeze(
+  new DevOpsObservabilityAnalystAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIVirtualizationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_virtualization_manager_agent',
-            'AI Virtualization Manager',
-            'You are an elite AI Virtualization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and AI Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_virtualization_manager_agent',
+      'AI Virtualization Manager',
+      'You are an elite AI Virtualization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and AI Virtualization.',
+    );
+  }
 
-    async generateAIVirtualizationSystem(objective) {
-        logger.info(`💻 [AIVirtualizationManagerAgent] Analyzing AI Virtualization Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Virtualization Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Virtualization Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIVirtualizationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [AIVirtualizationManagerAgent] Analyzing AI Virtualization Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Virtualization Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Virtualization Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIVirtualizationManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIVirtualizationManagerAgent = Object.freeze(new AIVirtualizationManagerAgent());
+export const aIVirtualizationManagerAgent = Object.freeze(
+  new AIVirtualizationManagerAgent(),
+);

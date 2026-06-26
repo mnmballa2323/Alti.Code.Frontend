@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendAutomationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_automation_tester_agent',
-            'Frontend Automation Tester',
-            'You are an elite Frontend Automation Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_automation_tester_agent',
+      'Frontend Automation Tester',
+      'You are an elite Frontend Automation Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Automation.',
+    );
+  }
 
-    async generateFrontendAutomationSystem(objective) {
-        logger.info(`💻 [FrontendAutomationTesterAgent] Analyzing Frontend Automation Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Automation Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Automation Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendAutomationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendAutomationSystem(objective) {
+    logger.info(
+      `💻 [FrontendAutomationTesterAgent] Analyzing Frontend Automation Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Automation Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Automation Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendAutomationTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendAutomationTesterAgent = Object.freeze(new FrontendAutomationTesterAgent());
+export const frontendAutomationTesterAgent = Object.freeze(
+  new FrontendAutomationTesterAgent(),
+);

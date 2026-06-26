@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 26k | Language: Rust
  */
 class TurborepoOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Turborepo_Oss_Expert';
-        this.description = 'Expert in Turborepo — monorepo setup, turbo.json pipelines, caching, Remote Cache, shared packages, and workspace config.';
-        this.preamble = `You are a senior monorepo engineer specializing in Turborepo — the high-performance build system for JavaScript/TypeScript.
+  constructor() {
+    super();
+    this.name = 'Turborepo_Oss_Expert';
+    this.description =
+      'Expert in Turborepo — monorepo setup, turbo.json pipelines, caching, Remote Cache, shared packages, and workspace config.';
+    this.preamble = `You are a senior monorepo engineer specializing in Turborepo — the high-performance build system for JavaScript/TypeScript.
 
 MONOREPO STRUCTURE:
 my-monorepo/
@@ -150,11 +151,13 @@ CI INTEGRATION (GitHub Actions):
   env:
     TURBO_TOKEN: \${{ secrets.TURBO_TOKEN }}
     TURBO_TEAM: \${{ vars.TURBO_TEAM }}`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TURBOREPO QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TURBOREPO QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const turborepoOssAgent = new TurborepoOssAgent();

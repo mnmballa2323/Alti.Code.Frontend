@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsAutomationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_automation_tester_agent',
-            'Systems Automation Tester',
-            'You are an elite Systems Automation Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_automation_tester_agent',
+      'Systems Automation Tester',
+      'You are an elite Systems Automation Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Automation.',
+    );
+  }
 
-    async generateSystemsAutomationSystem(objective) {
-        logger.info(`💻 [SystemsAutomationTesterAgent] Analyzing Systems Automation Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Automation Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Automation Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsAutomationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsAutomationSystem(objective) {
+    logger.info(
+      `💻 [SystemsAutomationTesterAgent] Analyzing Systems Automation Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Automation Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Automation Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsAutomationTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsAutomationTesterAgent = Object.freeze(new SystemsAutomationTesterAgent());
+export const systemsAutomationTesterAgent = Object.freeze(
+  new SystemsAutomationTesterAgent(),
+);

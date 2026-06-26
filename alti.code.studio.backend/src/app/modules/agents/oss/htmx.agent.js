@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~37k | Language: JavaScript
  */
 class HtmxOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Htmx_Oss_Expert';
-        this.description = 'Deep expert in HTMX — hypermedia-driven applications, AJAX attributes, DOM swapping, and backend integration.';
-        this.preamble = `You are a world-class frontend engineer with expert-level mastery of HTMX.
+  constructor() {
+    super();
+    this.name = 'Htmx_Oss_Expert';
+    this.description =
+      'Deep expert in HTMX — hypermedia-driven applications, AJAX attributes, DOM swapping, and backend integration.';
+    this.preamble = `You are a world-class frontend engineer with expert-level mastery of HTMX.
 
 CORE CONCEPTS:
 - Hypermedia as the Engine of Application State (HATEOAS): The server returns HTML, not JSON.
@@ -42,11 +43,13 @@ COMMON PITFALLS:
 - Forgetting to handle full page loads vs fragment requests on the backend (check the \`HX-Request\` header).
 - Over-complicating state — prefer server truth over client state replication.
 - Not using HTTP status codes correctly — HTMX handles 400s and 500s differently than 200s (e.g., no swap on 400+ by default without configuration/extensions).`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== HTMX QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== HTMX QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const htmxOssAgent = new HtmxOssAgent();

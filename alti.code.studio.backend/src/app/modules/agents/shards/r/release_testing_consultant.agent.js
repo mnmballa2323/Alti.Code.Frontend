@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseTestingConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_testing_consultant_agent',
-            'Release Testing Consultant',
-            'You are an elite Release Testing Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Release Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'release_testing_consultant_agent',
+      'Release Testing Consultant',
+      'You are an elite Release Testing Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Release Testing.',
+    );
+  }
 
-    async generateReleaseTestingSystem(objective) {
-        logger.info(`💻 [ReleaseTestingConsultantAgent] Analyzing Release Testing Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Testing Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Testing Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseTestingConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseTestingSystem(objective) {
+    logger.info(
+      `💻 [ReleaseTestingConsultantAgent] Analyzing Release Testing Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Testing Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Testing Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseTestingConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseTestingConsultantAgent = Object.freeze(new ReleaseTestingConsultantAgent());
+export const releaseTestingConsultantAgent = Object.freeze(
+  new ReleaseTestingConsultantAgent(),
+);

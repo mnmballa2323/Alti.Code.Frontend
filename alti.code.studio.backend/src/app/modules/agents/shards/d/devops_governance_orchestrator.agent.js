@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsGovernanceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_governance_orchestrator_agent',
-            'DevOps Governance Orchestrator',
-            'You are an elite DevOps Governance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_governance_orchestrator_agent',
+      'DevOps Governance Orchestrator',
+      'You are an elite DevOps Governance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Governance.',
+    );
+  }
 
-    async generateDevOpsGovernanceSystem(objective) {
-        logger.info(`💻 [DevOpsGovernanceOrchestratorAgent] Analyzing DevOps Governance Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Governance Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Governance Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsGovernanceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsGovernanceSystem(objective) {
+    logger.info(
+      `💻 [DevOpsGovernanceOrchestratorAgent] Analyzing DevOps Governance Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Governance Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Governance Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsGovernanceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsGovernanceOrchestratorAgent = Object.freeze(new DevOpsGovernanceOrchestratorAgent());
+export const devOpsGovernanceOrchestratorAgent = Object.freeze(
+  new DevOpsGovernanceOrchestratorAgent(),
+);

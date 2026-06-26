@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackServerlessEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_serverless_engineer_agent',
-            'FullStack Serverless Engineer',
-            'You are an elite FullStack Serverless Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_serverless_engineer_agent',
+      'FullStack Serverless Engineer',
+      'You are an elite FullStack Serverless Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Serverless.',
+    );
+  }
 
-    async generateFullStackServerlessSystem(objective) {
-        logger.info(`💻 [FullStackServerlessEngineerAgent] Analyzing FullStack Serverless Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Serverless Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Serverless Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackServerlessEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackServerlessSystem(objective) {
+    logger.info(
+      `💻 [FullStackServerlessEngineerAgent] Analyzing FullStack Serverless Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Serverless Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Serverless Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackServerlessEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackServerlessEngineerAgent = Object.freeze(new FullStackServerlessEngineerAgent());
+export const fullStackServerlessEngineerAgent = Object.freeze(
+  new FullStackServerlessEngineerAgent(),
+);

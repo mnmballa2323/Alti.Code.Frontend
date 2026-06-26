@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIOptimizationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_optimization_designer_agent',
-            'UI Optimization Designer',
-            'You are an elite UI Optimization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and UI Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_optimization_designer_agent',
+      'UI Optimization Designer',
+      'You are an elite UI Optimization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and UI Optimization.',
+    );
+  }
 
-    async generateUIOptimizationSystem(objective) {
-        logger.info(`💻 [UIOptimizationDesignerAgent] Analyzing UI Optimization Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Optimization Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Optimization Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIOptimizationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIOptimizationSystem(objective) {
+    logger.info(
+      `💻 [UIOptimizationDesignerAgent] Analyzing UI Optimization Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Optimization Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Optimization Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIOptimizationDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIOptimizationDesignerAgent = Object.freeze(new UIOptimizationDesignerAgent());
+export const uIOptimizationDesignerAgent = Object.freeze(
+  new UIOptimizationDesignerAgent(),
+);

@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class LorawanAgtechAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'LorawanAgtechAgent';
-        this.description = 'Agricultural IoT specialist mapping extreme-range low-power LoRaWAN topologies, extracting payload payloads across precision farming sensors.';
+  constructor() {
+    super();
+    this.name = 'LorawanAgtechAgent';
+    this.description =
+      'Agricultural IoT specialist mapping extreme-range low-power LoRaWAN topologies, extracting payload payloads across precision farming sensors.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Precision Agriculture & LoRaWAN Agent.
 You assist AgTech Engineers in building radio networks that can penetrate dense cornfields traversing 15 kilometers, running on a simple coin-cell battery for 10 years.
 
@@ -36,12 +37,12 @@ You assist AgTech Engineers in building radio networks that can penetrate dense 
 **Best Practices**
 - Because 15km transmissions inevitably drop packets constantly, instruct developers tracking tractor/combine GPS telemetry to implement explicit mathematical Kalman filters predicting the geographical position even when the gateway misses 5 consecutive packets.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const lorawanAgtechAgent = Object.freeze(new LorawanAgtechAgent());

@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ClimateCarbonMarketsAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'climate_carbon_markets',
-            'Carbon Markets & Climate Economics Quant',
-            'You are an elite Carbon Quant. Your objective is to design software for global climate economics. You specialize in cap-and-trade algorithmic trading, strict ESG regulatory compliance tracking, and verifiable reforestation carbon offset modeling.'
-        );
-    }
+  constructor() {
+    super(
+      'climate_carbon_markets',
+      'Carbon Markets & Climate Economics Quant',
+      'You are an elite Carbon Quant. Your objective is to design software for global climate economics. You specialize in cap-and-trade algorithmic trading, strict ESG regulatory compliance tracking, and verifiable reforestation carbon offset modeling.',
+    );
+  }
 
-    /**
-     * Generates carbon market algorithms or ESG logic.
-     * @param {string} carbonObjective - The climate economics software requirement.
-     * @returns {Promise<string>} The generated climate economics code or architecture.
-     */
-    async generateCarbonSystem(carbonObjective) {
-        logger.info(`🌳 [ClimateCarbonMarkets] Analyzing objective for algorithmic carbon trading and ESG verification...`);
+  /**
+   * Generates carbon market algorithms or ESG logic.
+   * @param {string} carbonObjective - The climate economics software requirement.
+   * @returns {Promise<string>} The generated climate economics code or architecture.
+   */
+  async generateCarbonSystem(carbonObjective) {
+    logger.info(
+      `🌳 [ClimateCarbonMarkets] Analyzing objective for algorithmic carbon trading and ESG verification...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Carbon Markets, ESG Compliance, or Climate Economics requirement.
 Generate the corresponding trading algorithm, compliance model, or raw source code.
 RULES:
@@ -42,16 +44,24 @@ CARBON OBJECTIVE:
 ${carbonObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Carbon Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```/gi, '').trim();
-            logger.info(`✅ [ClimateCarbonMarkets] Carbon architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [ClimateCarbonMarkets] Failed to generate carbon system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Carbon Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```python|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [ClimateCarbonMarkets] Carbon architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [ClimateCarbonMarkets] Failed to generate carbon system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const climateCarbonMarketsAgent = Object.freeze(new ClimateCarbonMarketsAgent());
+export const climateCarbonMarketsAgent = Object.freeze(
+  new ClimateCarbonMarketsAgent(),
+);

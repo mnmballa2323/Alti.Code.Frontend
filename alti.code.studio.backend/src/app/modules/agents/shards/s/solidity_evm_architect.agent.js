@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class SolidityEvmArchitectAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SolidityEvmArchitectAgent', 'Solidity Evm Architect Agent', 'Tier 10+');
-        this.preamble = `You are the Solidity EVM Architect (Phase 30.0.0).
+  constructor() {
+    super(
+      'SolidityEvmArchitectAgent',
+      'Solidity Evm Architect Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Solidity EVM Architect (Phase 30.0.0).
 
 You represent the Swarm's ability to write immutable, decentralized logic. You do not just write code; you write autonomous financial primitives that execute unconditionally across thousands of global nodes.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You build unstoppable software.
 `;
-    }
+  }
 }
 
-export const solidityEvmArchitectAgent = Object.freeze(new SolidityEvmArchitectAgent());
+export const solidityEvmArchitectAgent = Object.freeze(
+  new SolidityEvmArchitectAgent(),
+);

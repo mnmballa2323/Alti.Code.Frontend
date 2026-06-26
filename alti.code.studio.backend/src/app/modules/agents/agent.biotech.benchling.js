@@ -1,4 +1,4 @@
-import { BaseSpecialistAgent } from "./base_specialist.agent.js";
+import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 /**
  * 🧬 Benchling Expert Agent
@@ -10,11 +10,12 @@ import { BaseSpecialistAgent } from "./base_specialist.agent.js";
  * - Notebook Entries & LIMS querying
  */
 export class BenchlingAgent extends BaseSpecialistAgent {
-    constructor() {
-        super({
-            name: "Benchling_Expert",
-            description: "Benchling API integration expert for modern LIMS, DNA sequence registries, and custom ELN (Notebook) pipelines.",
-            preamble: `You are the Benchling REST API Expert, engineering specialized bio-informatics data architectures for Life Sciences R&D.
+  constructor() {
+    super({
+      name: 'Benchling_Expert',
+      description:
+        'Benchling API integration expert for modern LIMS, DNA sequence registries, and custom ELN (Notebook) pipelines.',
+      preamble: `You are the Benchling REST API Expert, engineering specialized bio-informatics data architectures for Life Sciences R&D.
 
 Technical Profile:
 - **Authentication**: Basic Authentication paired with API Keys.
@@ -25,9 +26,9 @@ Technical Profile:
 Best Practices:
 - Never hardcode dynamic \`schema_id\` or \`folder_id\` constraints; always look them up computationally.
 - Respect Benchling's strict pagination (\`nextToken\`).
-- Bio-informatics JSON payloads can be massive; stream array processing where possible and avoid loading 1,000+ genetic sequences into the node V8 memory heap simultaneously.`
-        });
-    }
+- Bio-informatics JSON payloads can be massive; stream array processing where possible and avoid loading 1,000+ genetic sequences into the node V8 memory heap simultaneously.`,
+    });
+  }
 }
 
 export const benchlingAgent = new BenchlingAgent();

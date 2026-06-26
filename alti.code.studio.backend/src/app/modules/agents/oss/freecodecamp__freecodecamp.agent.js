@@ -9,14 +9,15 @@ import { logger } from '../../../../shared/logger.js';
  * Stars: 443,492 | Language: TypeScript
  */
 class FreeCodeCampFreeCodeCamp_Oss_Agent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'FreeCodeCampFreeCodeCamp_Oss_Agent';
-        this.description = 'Provides expertise on the freeCodeCamp monorepo, guiding contributors on local setup, testing, API/client architecture, and authoring curriculum challenges.';
-        this.repoUrl = 'https://github.com/freeCodeCamp/freeCodeCamp';
-        this.repoSlug = 'freeCodeCamp/freeCodeCamp';
+  constructor() {
+    super();
+    this.name = 'FreeCodeCampFreeCodeCamp_Oss_Agent';
+    this.description =
+      'Provides expertise on the freeCodeCamp monorepo, guiding contributors on local setup, testing, API/client architecture, and authoring curriculum challenges.';
+    this.repoUrl = 'https://github.com/freeCodeCamp/freeCodeCamp';
+    this.repoSlug = 'freeCodeCamp/freeCodeCamp';
 
-        this.preamble = `
+    this.preamble = `
 OVERVIEW:
 freeCodeCamp/freeCodeCamp is a massive open-source monorepo containing the codebase and curriculum that powers freeCodeCamp.org. The application consists of a React/Gatsby client, a Node.js/Fastify API server, and a vast collection of Markdown-based interactive challenges. The repository's primary focus is providing a free, accessible learning platform for full-stack web development, machine learning, and basic programming.
 
@@ -86,31 +87,32 @@ RESOURCES:
 - Discord: https://discord.gg/PRyKn3Vbay
 - GitHub: https://github.com/freeCodeCamp/freeCodeCamp
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== USER CONTEXT ===\n${contextBlock}\n\n=== FREECODECAMP / FREECODECAMP QUESTION ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== USER CONTEXT ===\n${contextBlock}\n\n=== FREECODECAMP / FREECODECAMP QUESTION ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 
-    /**
-     * Generate a getting-started guide or integration example for this repo.
-     * @param {string} useCase - e.g. 'REST API', 'authentication', 'testing'
-     */
-    async generateExample(useCase) {
-        const prompt = `Generate a concise, copy-pasteable freeCodeCamp example for: ${useCase}\n${this.preamble}`;
-        return GeminiAiService.generateContent(prompt);
-    }
+  /**
+   * Generate a getting-started guide or integration example for this repo.
+   * @param {string} useCase - e.g. 'REST API', 'authentication', 'testing'
+   */
+  async generateExample(useCase) {
+    const prompt = `Generate a concise, copy-pasteable freeCodeCamp example for: ${useCase}\n${this.preamble}`;
+    return GeminiAiService.generateContent(prompt);
+  }
 
-    /**
-     * Debug a specific error or problem with this repo.
-     * @param {string} errorMessage
-     * @param {string} context
-     */
-    async debugIssue(errorMessage, context = '') {
-        const prompt = `Debug this freeCodeCamp error:\nError: ${errorMessage}\nContext: ${context}\n${this.preamble}`;
-        return GeminiAiService.generateContent(prompt);
-    }
+  /**
+   * Debug a specific error or problem with this repo.
+   * @param {string} errorMessage
+   * @param {string} context
+   */
+  async debugIssue(errorMessage, context = '') {
+    const prompt = `Debug this freeCodeCamp error:\nError: ${errorMessage}\nContext: ${context}\n${this.preamble}`;
+    return GeminiAiService.generateContent(prompt);
+  }
 }
 
-export const freeCodeCampFreeCodeCamp_Oss_Agent = new FreeCodeCampFreeCodeCamp_Oss_Agent();
+export const freeCodeCampFreeCodeCamp_Oss_Agent =
+  new FreeCodeCampFreeCodeCamp_Oss_Agent();

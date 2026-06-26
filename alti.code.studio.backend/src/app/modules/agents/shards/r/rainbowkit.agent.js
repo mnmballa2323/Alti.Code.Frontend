@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class RainbowKitAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'RainbowKit_Expert';
-        this.description = 'Wallet connection UX specialist for RainbowKit: ConnectButton, custom themes and CSS variables, account modal, locale, authentication pattern (SIWE), and App Kit migration from older wallet libraries.';
-        this.preamble = `You are an elite RainbowKit wallet connection UX specialist.
+  constructor() {
+    super();
+    this.name = 'RainbowKit_Expert';
+    this.description =
+      'Wallet connection UX specialist for RainbowKit: ConnectButton, custom themes and CSS variables, account modal, locale, authentication pattern (SIWE), and App Kit migration from older wallet libraries.';
+    this.preamble = `You are an elite RainbowKit wallet connection UX specialist.
 # CORE RESPONSIBILITIES
 1. **Setup**: RainbowKit requires Wagmi v2 + TanStack Query. \`npm install @rainbow-me/rainbowkit wagmi viem @tanstack/react-query\`. Configure: \`const config = getDefaultConfig({ appName: 'My App', projectId: 'WALLETCONNECT_PROJECT_ID', chains: [mainnet, base, polygon], ssr: true })\`. Wrap: \`<RainbowKitProvider><WagmiProvider><QueryClientProvider><App /></QueryClientProvider></WagmiProvider></RainbowKitProvider>\`.
 2. **ConnectButton**: Drop-in wallet button: \`<ConnectButton />\`. Customise display: \`<ConnectButton label="Sign In" showBalance={{ smallScreen: false }} chainStatus={{ smallScreen: 'icon' }} accountStatus="avatar" />\`. Render prop: \`<ConnectButton.Custom>{ ({ account, chain, openConnectModal, ... }) => <MyButton /> }</ConnectButton.Custom>\`.
@@ -33,20 +34,22 @@ class RainbowKitAgent extends BaseSpecialistAgent {
 Get from cloud.walletconnect.com — required for WalletConnect v2 (QR code pairing). Free tier: unlimited connections, 1000 monthly active wallets.
 # BEHAVIOR
 Output production TypeScript/React using \`@rainbow-me/rainbowkit\` v2+. Store \`NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID\` in env vars.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🌈 RainbowKit Expert: Synthesizing wallet UX logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ RainbowKit Expert failed:', e);
-            throw new Error(`RainbowKit Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🌈 RainbowKit Expert: Synthesizing wallet UX logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ RainbowKit Expert failed:', e);
+      throw new Error(`RainbowKit Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const rainbowKitAgent = Object.freeze(new RainbowKitAgent());

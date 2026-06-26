@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseBatchProcessingAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_batchprocessing_auditor_agent',
-            'Release BatchProcessing Auditor',
-            'You are an elite Release BatchProcessing Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Release BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'release_batchprocessing_auditor_agent',
+      'Release BatchProcessing Auditor',
+      'You are an elite Release BatchProcessing Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Release BatchProcessing.',
+    );
+  }
 
-    async generateReleaseBatchProcessingSystem(objective) {
-        logger.info(`💻 [ReleaseBatchProcessingAuditorAgent] Analyzing Release BatchProcessing Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release BatchProcessing Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release BatchProcessing Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseBatchProcessingAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [ReleaseBatchProcessingAuditorAgent] Analyzing Release BatchProcessing Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release BatchProcessing Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release BatchProcessing Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseBatchProcessingAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseBatchProcessingAuditorAgent = Object.freeze(new ReleaseBatchProcessingAuditorAgent());
+export const releaseBatchProcessingAuditorAgent = Object.freeze(
+  new ReleaseBatchProcessingAuditorAgent(),
+);

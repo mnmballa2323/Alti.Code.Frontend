@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREObservabilityArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_observability_architect_agent',
-            'SRE Observability Architect',
-            'You are an elite SRE Observability Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_observability_architect_agent',
+      'SRE Observability Architect',
+      'You are an elite SRE Observability Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Observability.',
+    );
+  }
 
-    async generateSREObservabilitySystem(objective) {
-        logger.info(`💻 [SREObservabilityArchitectAgent] Analyzing SRE Observability Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Observability Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Observability Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREObservabilityArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREObservabilitySystem(objective) {
+    logger.info(
+      `💻 [SREObservabilityArchitectAgent] Analyzing SRE Observability Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Observability Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Observability Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREObservabilityArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREObservabilityArchitectAgent = Object.freeze(new SREObservabilityArchitectAgent());
+export const sREObservabilityArchitectAgent = Object.freeze(
+  new SREObservabilityArchitectAgent(),
+);

@@ -1,277 +1,176 @@
 # ==============================================================================
-# ALTI CODE STUDIO: Azure Sovereign Cloud Resource Groups & Networks
+# ALTI CODE STUDIO: GCP Sovereign Cloud Networks & Resource Management
 # ==============================================================================
 
 terraform {
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "~> 5.0"
     }
   }
 
   # ----------------------------------------------------------------------------
-  # Remote State Configuration (Azure Blob Storage Backend)
+  # Remote State Configuration (Google Cloud Storage Backend)
   # ----------------------------------------------------------------------------
-  # To enable team collaboration and state locking, uncomment the following block
-  # and configure your Azure storage account coordinates.
-  #
-  # backend "azurerm" {
-  #   resource_group_name  = "alti-tfstate-rg"
-  #   storage_account_name = "altitfstatexxxx"
-  #   container_name       = "tfstate"
-  #   key                  = "terraform.tfstate"
+  # backend "gcs" {
+  #   bucket  = "alti-tfstate-bucket"
+  #   prefix  = "terraform/state"
   # }
 }
 
-# 1. Azure Commercial Cloud Provider Configuration
-provider "azurerm" {
-  features {}
-  subscription_id = var.subscription_id_commercial
-  tenant_id       = var.tenant_id
+provider "google" {
+  project = var.gcp_project_id
 }
 
-# 2. Azure Government Cloud (IL4/IL5) Provider Configuration
-provider "azurerm" {
-  alias           = "government"
-  environment     = "usgovernment"
-  subscription_id = var.subscription_id_government
-  tenant_id       = var.tenant_id
-  features {}
+provider "google-beta" {
+  project = var.gcp_project_id
 }
+
 locals {
-  deploy_commercial = var.enable_azure_cloud || var.enable_azure_dedicated
-  commercial_vm_ids = concat(
-    var.enable_azure_cloud ? [azurerm_linux_virtual_machine.commercial_node[0].id] : [],
-    var.enable_azure_dedicated ? [azurerm_linux_virtual_machine.dedicated_node[0].id] : []
+  deploy_commercial = var.enable_gcp_cloud || var.enable_gcp_dedicated
+  commercial_vm_names = concat(
+    var.enable_gcp_cloud ? [google_compute_instance.commercial_node[0].name] : [],
+    var.enable_gcp_dedicated ? [google_compute_instance.dedicated_node[0].name] : []
   )
 }
 
-
 # ==============================================================================
-# Azure Commercial Cloud Infrastructure
+# GCP Commercial Cloud Infrastructure
 # ==============================================================================
-resource "azurerm_resource_group" "commercial_rg" {
-  count    = local.deploy_commercial ? 1 : 0
-  name     = "alti-${var.customer_id}-commercial-rg"
-  location = var.azure_commercial_region
+
+resource "google_compute_network" "commercial_vpc" {
+  count                   = local.deploy_commercial ? 1 : 0
+  name                    = "alti-${var.customer_id}-commercial-vpc"
+  auto_create_subnetworks = false
 }
 
-resource "azurerm_management_lock" "commercial_rg_lock" {
-  count      = (local.deploy_commercial && var.environment == "prod") ? 1 : 0
-  name       = "rg-prevent-delete"
-  scope      = azurerm_resource_group.commercial_rg[0].id
-  lock_level = "CanNotDelete"
-  notes      = "Accidental deletion prevention lock for production resources"
+resource "google_compute_subnetwork" "commercial_subnet" {
+  count         = local.deploy_commercial ? 1 : 0
+  name          = "commercial-subnet"
+  ip_cidr_range = "10.100.1.0/24"
+  region        = var.gcp_region_commercial
+  network       = google_compute_network.commercial_vpc[0].id
 }
 
-resource "azurerm_virtual_network" "commercial_vnet" {
-  count               = local.deploy_commercial ? 1 : 0
-  name                = "alti-${var.customer_id}-commercial-vnet"
-  address_space       = ["10.100.0.0/16"]
-  location            = azurerm_resource_group.commercial_rg[0].location
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
+# Private IP Allocation and Service Connection for Cloud SQL Private Access
+resource "google_compute_global_address" "private_ip_alloc" {
+  count         = local.deploy_commercial ? 1 : 0
+  name          = "private-ip-alloc"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = google_compute_network.commercial_vpc[0].id
 }
 
-resource "azurerm_subnet" "commercial_subnet" {
-  count                = local.deploy_commercial ? 1 : 0
-  name                 = "commercial-subnet"
-  resource_group_name  = azurerm_resource_group.commercial_rg[0].name
-  virtual_network_name = azurerm_virtual_network.commercial_vnet[0].name
-  address_prefixes     = ["10.100.1.0/24"]
+resource "google_service_networking_connection" "private_vpc_connection" {
+  count                   = local.deploy_commercial ? 1 : 0
+  network                 = google_compute_network.commercial_vpc[0].id
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [google_compute_global_address.private_ip_alloc[0].name]
 }
 
-resource "azurerm_subnet" "commercial_db_subnet" {
-  count                = local.deploy_commercial ? 1 : 0
-  name                 = "commercial-db-subnet"
-  resource_group_name  = azurerm_resource_group.commercial_rg[0].name
-  virtual_network_name = azurerm_virtual_network.commercial_vnet[0].name
-  address_prefixes     = ["10.100.2.0/24"]
+# Firewall Rules for Inbound Ingress
+resource "google_compute_firewall" "commercial_firewall_rules" {
+  count   = local.deploy_commercial ? 1 : 0
+  name    = "alti-${var.customer_id}-commercial-fw"
+  network = google_compute_network.commercial_vpc[0].name
 
-  delegation {
-    name = "db-delegation"
-    service_delegation {
-      name    = "Microsoft.DBforPostgreSQL/flexibleServers"
-      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
-    }
-  }
-}
-
-
-resource "azurerm_network_security_group" "commercial_nsg" {
-  count               = local.deploy_commercial ? 1 : 0
-  name                = "alti-${var.customer_id}-commercial-nsg"
-  location            = azurerm_resource_group.commercial_rg[0].location
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
-
-  security_rule {
-    name                       = "allow-ssh-inbound"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = var.admin_source_ip_range
-    destination_address_prefix = "*"
+  allow {
+    protocol = "tcp"
+    ports    = ["22"] # SSH Inbound
   }
 
-  security_rule {
-    name                       = "allow-http-inbound"
-    priority                   = 110
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "80"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "443"] # HTTP/HTTPS Inbound
   }
 
-  security_rule {
-    name                       = "allow-https-inbound"
-    priority                   = 120
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "443"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-}
-
-resource "azurerm_subnet_network_security_group_association" "commercial_nsg_assoc" {
-  count                     = local.deploy_commercial ? 1 : 0
-  subnet_id                 = azurerm_subnet.commercial_subnet[0].id
-  network_security_group_id = azurerm_network_security_group.commercial_nsg[0].id
+  source_ranges = [var.admin_source_ip_range]
 }
 
 # ==============================================================================
-# Azure Government Cloud (IL5) Infrastructure
+# GCP Government Cloud Infrastructure
 # ==============================================================================
-resource "azurerm_resource_group" "government_rg" {
-  count    = var.enable_azure_government ? 1 : 0
-  provider = azurerm.government
-  name     = "alti-${var.customer_id}-government-rg"
-  location = var.azure_government_region
+
+resource "google_compute_network" "government_vpc" {
+  count                   = var.enable_gcp_government ? 1 : 0
+  name                    = "alti-${var.customer_id}-government-vpc"
+  auto_create_subnetworks = false
 }
 
-resource "azurerm_management_lock" "government_rg_lock" {
-  count      = (var.enable_azure_government && var.environment == "prod") ? 1 : 0
-  provider   = azurerm.government
-  name       = "rg-prevent-delete"
-  scope      = azurerm_resource_group.government_rg[0].id
-  lock_level = "CanNotDelete"
-  notes      = "Accidental deletion prevention lock for production resources"
+resource "google_compute_subnetwork" "government_subnet" {
+  count         = var.enable_gcp_government ? 1 : 0
+  name          = "government-subnet"
+  ip_cidr_range = "10.200.1.0/24"
+  region        = var.gcp_region_government
+  network       = google_compute_network.government_vpc[0].id
 }
 
-resource "azurerm_virtual_network" "government_vnet" {
-  count               = var.enable_azure_government ? 1 : 0
-  provider            = azurerm.government
-  name                = "alti-${var.customer_id}-government-vnet"
-  address_space       = ["10.200.0.0/16"]
-  location            = azurerm_resource_group.government_rg[0].location
-  resource_group_name = azurerm_resource_group.government_rg[0].name
+resource "google_compute_global_address" "gov_private_ip_alloc" {
+  count         = var.enable_gcp_government ? 1 : 0
+  name          = "gov-private-ip-alloc"
+  purpose       = "VPC_PEERING"
+  address_type  = "INTERNAL"
+  prefix_length = 16
+  network       = google_compute_network.government_vpc[0].id
 }
 
-resource "azurerm_subnet" "government_subnet" {
-  count                = var.enable_azure_government ? 1 : 0
-  provider             = azurerm.government
-  name                 = "government-subnet"
-  resource_group_name  = azurerm_resource_group.government_rg[0].name
-  virtual_network_name = azurerm_virtual_network.government_vnet[0].name
-  address_prefixes     = ["10.200.1.0/24"]
+resource "google_service_networking_connection" "gov_private_vpc_connection" {
+  count                   = var.enable_gcp_government ? 1 : 0
+  network                 = google_compute_network.government_vpc[0].id
+  service                 = "servicenetworking.googleapis.com"
+  reserved_peering_ranges = [google_compute_global_address.gov_private_ip_alloc[0].name]
 }
 
-resource "azurerm_subnet" "government_db_subnet" {
-  count                = var.enable_azure_government ? 1 : 0
-  provider             = azurerm.government
-  name                 = "government-db-subnet"
-  resource_group_name  = azurerm_resource_group.government_rg[0].name
-  virtual_network_name = azurerm_virtual_network.government_vnet[0].name
-  address_prefixes     = ["10.200.2.0/24"]
+resource "google_compute_firewall" "government_firewall_rules" {
+  count   = var.enable_gcp_government ? 1 : 0
+  name    = "alti-${var.customer_id}-government-fw"
+  network = google_compute_network.government_vpc[0].name
 
-  delegation {
-    name = "db-delegation"
-    service_delegation {
-      name    = "Microsoft.DBforPostgreSQL/flexibleServers"
-      actions = ["Microsoft.Network/virtualNetworks/subnets/join/action"]
-    }
-  }
-}
-
-
-resource "azurerm_network_security_group" "government_nsg" {
-  count               = var.enable_azure_government ? 1 : 0
-  provider            = azurerm.government
-  name                = "alti-${var.customer_id}-government-nsg"
-  location            = azurerm_resource_group.government_rg[0].location
-  resource_group_name = azurerm_resource_group.government_rg[0].name
-
-  # Allow inbound only from designated Gov IP ranges/internal bastion
-  security_rule {
-    name                       = "allow-internal-ssh"
-    priority                   = 100
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "10.200.0.0/16"
-    destination_address_prefix = "*"
+  # Deny public access, allow internal network VM connectivity only
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
   }
 
-  security_rule {
-    name                       = "deny-public-ingress"
-    priority                   = 200
-    direction                  = "Inbound"
-    access                     = "Deny"
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-}
-
-resource "azurerm_subnet_network_security_group_association" "government_nsg_assoc" {
-  count                     = var.enable_azure_government ? 1 : 0
-  provider                  = azurerm.government
-  subnet_id                 = azurerm_subnet.government_subnet[0].id
-  network_security_group_id = azurerm_network_security_group.government_nsg[0].id
+  source_ranges = ["10.200.0.0/16"]
 }
 
 # ==============================================================================
 # Commercial Sovereign Services Module Instantiations
 # ==============================================================================
+
 module "secrets_commercial" {
-  count               = local.deploy_commercial ? 1 : 0
-  source              = "./modules/secrets"
-  customer_id         = var.customer_id
-  environment         = var.environment
-  location            = azurerm_resource_group.commercial_rg[0].location
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
-  tenant_id           = var.tenant_id
+  count       = local.deploy_commercial ? 1 : 0
+  source      = "./modules/secrets"
+  customer_id = var.customer_id
+  environment = var.environment
   secrets = {
     "pg-admin-password" = var.pg_admin_password
   }
 }
 
 module "database_commercial" {
-  count               = local.deploy_commercial ? 1 : 0
-  source              = "./modules/database"
-  customer_id         = var.customer_id
-  environment         = var.environment
-  location            = azurerm_resource_group.commercial_rg[0].location
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
-  subnet_id           = azurerm_subnet.commercial_db_subnet[0].id
-  admin_username      = var.pg_admin_username
-  admin_password      = var.pg_admin_password
-  db_sku_name         = var.pg_db_sku_name
-  redis_sku_name      = var.redis_cache_sku
-  redis_capacity      = var.redis_cache_capacity
-  redis_family        = var.redis_cache_family
+  count          = local.deploy_commercial ? 1 : 0
+  source         = "./modules/database"
+  customer_id    = var.customer_id
+  environment    = var.environment
+  region         = var.gcp_region_commercial
+  network_id     = google_compute_network.commercial_vpc[0].id
+  admin_username = var.pg_admin_username
+  admin_password = var.pg_admin_password
+  db_tier        = var.pg_db_tier
+  redis_tier     = var.redis_tier
+  redis_size     = var.redis_memory_size_gb
+  
+  depends_on = [
+    google_service_networking_connection.private_vpc_connection
+  ]
 }
 
 module "observability_commercial" {
@@ -279,113 +178,85 @@ module "observability_commercial" {
   source              = "./modules/observability"
   customer_id         = var.customer_id
   environment         = var.environment
-  location            = azurerm_resource_group.commercial_rg[0].location
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
-  target_resource_ids = local.commercial_vm_ids
+  region              = var.gcp_region_commercial
+  target_resource_ids = local.commercial_vm_names
 }
 
 # ==============================================================================
 # Government Sovereign Services Module Instantiations
 # ==============================================================================
+
 module "secrets_government" {
-  count               = var.enable_azure_government ? 1 : 0
-  source              = "./modules/secrets"
-  providers = {
-    azurerm = azurerm.government
-  }
-  customer_id         = var.customer_id
-  environment         = var.environment
-  location            = azurerm_resource_group.government_rg[0].location
-  resource_group_name = azurerm_resource_group.government_rg[0].name
-  tenant_id           = var.tenant_id
+  count       = var.enable_gcp_government ? 1 : 0
+  source      = "./modules/secrets"
+  customer_id = var.customer_id
+  environment = var.environment
   secrets = {
     "pg-admin-password" = var.pg_admin_password
   }
 }
 
 module "database_government" {
-  count               = var.enable_azure_government ? 1 : 0
-  source              = "./modules/database"
-  providers = {
-    azurerm = azurerm.government
-  }
-  customer_id         = var.customer_id
-  environment         = var.environment
-  location            = azurerm_resource_group.government_rg[0].location
-  resource_group_name = azurerm_resource_group.government_rg[0].name
-  subnet_id           = azurerm_subnet.government_db_subnet[0].id
-  admin_username      = var.pg_admin_username
-  admin_password      = var.pg_admin_password
-  db_sku_name         = var.pg_db_sku_name
-  redis_sku_name      = var.redis_cache_sku
-  redis_capacity      = var.redis_cache_capacity
-  redis_family        = var.redis_cache_family
+  count          = var.enable_gcp_government ? 1 : 0
+  source         = "./modules/database"
+  customer_id    = var.customer_id
+  environment    = var.environment
+  region         = var.gcp_region_government
+  network_id     = google_compute_network.government_vpc[0].id
+  admin_username = var.pg_admin_username
+  admin_password = var.pg_admin_password
+  db_tier        = var.pg_db_tier
+  redis_tier     = var.redis_tier
+  redis_size     = var.redis_memory_size_gb
+  
+  depends_on = [
+    google_service_networking_connection.gov_private_vpc_connection
+  ]
 }
 
 module "observability_government" {
-  count               = var.enable_azure_government ? 1 : 0
+  count               = var.enable_gcp_government ? 1 : 0
   source              = "./modules/observability"
-  providers = {
-    azurerm = azurerm.government
-  }
   customer_id         = var.customer_id
   environment         = var.environment
-  location            = azurerm_resource_group.government_rg[0].location
-  resource_group_name = azurerm_resource_group.government_rg[0].name
-  target_resource_ids = var.enable_azure_government ? [azurerm_linux_virtual_machine.government_node[0].id] : []
+  region              = var.gcp_region_government
+  target_resource_ids = var.enable_gcp_government ? [google_compute_instance.government_node[0].name] : []
 }
 
 # ==============================================================================
-# Commercial Advanced Sovereign Controls
+# Advanced Sovereign Controls (FinOps and Workload Identity)
 # ==============================================================================
+
 module "finops_commercial" {
-  count               = local.deploy_commercial ? 1 : 0
-  source              = "./modules/finops"
-  customer_id         = var.customer_id
-  environment         = var.environment
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
-  resource_group_id   = azurerm_resource_group.commercial_rg[0].id
-  budget_amount       = 3500
+  count         = local.deploy_commercial ? 1 : 0
+  source        = "./modules/finops"
+  customer_id   = var.customer_id
+  environment   = var.environment
+  project_id    = var.gcp_project_id
+  budget_amount = 3500
 }
 
 module "workload_identity_commercial" {
-  count               = local.deploy_commercial ? 1 : 0
-  source              = "./modules/workload_identity"
-  customer_id         = var.customer_id
-  environment         = var.environment
-  location            = azurerm_resource_group.commercial_rg[0].location
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
-  github_repository   = var.github_repository
+  count             = local.deploy_commercial ? 1 : 0
+  source            = "./modules/workload_identity"
+  customer_id       = var.customer_id
+  environment       = var.environment
+  github_repository = var.github_repository
 }
 
-# ==============================================================================
-# Government Advanced Sovereign Controls
-# ==============================================================================
 module "finops_government" {
-  count               = var.enable_azure_government ? 1 : 0
-  source              = "./modules/finops"
-  providers = {
-    azurerm = azurerm.government
-  }
-  customer_id         = var.customer_id
-  environment         = var.environment
-  resource_group_name = azurerm_resource_group.government_rg[0].name
-  resource_group_id   = azurerm_resource_group.government_rg[0].id
-  budget_amount       = 5000
+  count         = var.enable_gcp_government ? 1 : 0
+  source        = "./modules/finops"
+  customer_id   = var.customer_id
+  environment   = var.environment
+  project_id    = var.gcp_project_id
+  budget_amount = 5000
 }
 
 module "workload_identity_government" {
-  count               = var.enable_azure_government ? 1 : 0
-  source              = "./modules/workload_identity"
-  providers = {
-    azurerm = azurerm.government
-  }
-  customer_id         = var.customer_id
-  environment         = var.environment
-  location            = azurerm_resource_group.government_rg[0].location
-  resource_group_name = azurerm_resource_group.government_rg[0].name
-  github_repository   = var.github_repository
+  count             = var.enable_gcp_government ? 1 : 0
+  source            = "./modules/workload_identity"
+  customer_id       = var.customer_id
+  environment       = var.environment
+  github_repository = var.github_repository
 }
-
-
-

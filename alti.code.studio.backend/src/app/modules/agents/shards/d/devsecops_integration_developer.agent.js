@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsIntegrationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_integration_developer_agent',
-            'DevSecOps Integration Developer',
-            'You are an elite DevSecOps Integration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_integration_developer_agent',
+      'DevSecOps Integration Developer',
+      'You are an elite DevSecOps Integration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Integration.',
+    );
+  }
 
-    async generateDevSecOpsIntegrationSystem(objective) {
-        logger.info(`💻 [DevSecOpsIntegrationDeveloperAgent] Analyzing DevSecOps Integration Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Integration Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Integration Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsIntegrationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsIntegrationSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsIntegrationDeveloperAgent] Analyzing DevSecOps Integration Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Integration Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Integration Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsIntegrationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsIntegrationDeveloperAgent = Object.freeze(new DevSecOpsIntegrationDeveloperAgent());
+export const devSecOpsIntegrationDeveloperAgent = Object.freeze(
+  new DevSecOpsIntegrationDeveloperAgent(),
+);

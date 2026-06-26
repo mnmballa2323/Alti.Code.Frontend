@@ -1,13 +1,15 @@
 import { GeminiCliBaseAgent } from './gemini_cli_base.agent.js';
 
 class WorkdayMigrationSpecialist521Agent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'workdaymigrationspecialist521_agent',
-            'WorkdayMigrationSpecialist521 Specialist Agent',
-            'You are the expert specialist for WorkdayMigrationSpecialist521.'
-        );
-    }
+  constructor() {
+    super(
+      'workdaymigrationspecialist521_agent',
+      'WorkdayMigrationSpecialist521 Specialist Agent',
+      'You are the expert specialist for WorkdayMigrationSpecialist521.',
+    );
+  }
 }
 
-export const workdaymigrationspecialist521Agent = Object.freeze(new WorkdayMigrationSpecialist521Agent());
+export const workdaymigrationspecialist521Agent = Object.freeze(
+  new WorkdayMigrationSpecialist521Agent(),
+);

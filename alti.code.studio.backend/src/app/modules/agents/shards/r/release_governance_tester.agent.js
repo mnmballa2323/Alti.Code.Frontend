@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseGovernanceTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_governance_tester_agent',
-            'Release Governance Tester',
-            'You are an elite Release Governance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Release Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'release_governance_tester_agent',
+      'Release Governance Tester',
+      'You are an elite Release Governance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Release Governance.',
+    );
+  }
 
-    async generateReleaseGovernanceSystem(objective) {
-        logger.info(`💻 [ReleaseGovernanceTesterAgent] Analyzing Release Governance Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Governance Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Governance Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseGovernanceTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseGovernanceSystem(objective) {
+    logger.info(
+      `💻 [ReleaseGovernanceTesterAgent] Analyzing Release Governance Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Governance Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Governance Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseGovernanceTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseGovernanceTesterAgent = Object.freeze(new ReleaseGovernanceTesterAgent());
+export const releaseGovernanceTesterAgent = Object.freeze(
+  new ReleaseGovernanceTesterAgent(),
+);

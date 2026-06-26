@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendBatchProcessingTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_batchprocessing_tester_agent',
-            'Frontend BatchProcessing Tester',
-            'You are an elite Frontend BatchProcessing Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_batchprocessing_tester_agent',
+      'Frontend BatchProcessing Tester',
+      'You are an elite Frontend BatchProcessing Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend BatchProcessing.',
+    );
+  }
 
-    async generateFrontendBatchProcessingSystem(objective) {
-        logger.info(`💻 [FrontendBatchProcessingTesterAgent] Analyzing Frontend BatchProcessing Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend BatchProcessing Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend BatchProcessing Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendBatchProcessingTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [FrontendBatchProcessingTesterAgent] Analyzing Frontend BatchProcessing Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend BatchProcessing Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend BatchProcessing Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendBatchProcessingTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendBatchProcessingTesterAgent = Object.freeze(new FrontendBatchProcessingTesterAgent());
+export const frontendBatchProcessingTesterAgent = Object.freeze(
+  new FrontendBatchProcessingTesterAgent(),
+);

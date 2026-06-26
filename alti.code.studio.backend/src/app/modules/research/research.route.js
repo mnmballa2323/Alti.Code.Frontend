@@ -7,9 +7,9 @@ const router = express.Router();
 
 // Execute a Deep Research run
 router.post(
-    '/',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    ResearchController.executeResearch
+  '/',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  ResearchController.executeResearch,
 );
 
 export const ResearchRoutes = router;

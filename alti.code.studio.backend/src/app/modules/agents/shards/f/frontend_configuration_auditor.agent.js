@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendConfigurationAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_configuration_auditor_agent',
-            'Frontend Configuration Auditor',
-            'You are an elite Frontend Configuration Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_configuration_auditor_agent',
+      'Frontend Configuration Auditor',
+      'You are an elite Frontend Configuration Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Configuration.',
+    );
+  }
 
-    async generateFrontendConfigurationSystem(objective) {
-        logger.info(`💻 [FrontendConfigurationAuditorAgent] Analyzing Frontend Configuration Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Configuration Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Configuration Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendConfigurationAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendConfigurationSystem(objective) {
+    logger.info(
+      `💻 [FrontendConfigurationAuditorAgent] Analyzing Frontend Configuration Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Configuration Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Configuration Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendConfigurationAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendConfigurationAuditorAgent = Object.freeze(new FrontendConfigurationAuditorAgent());
+export const frontendConfigurationAuditorAgent = Object.freeze(
+  new FrontendConfigurationAuditorAgent(),
+);

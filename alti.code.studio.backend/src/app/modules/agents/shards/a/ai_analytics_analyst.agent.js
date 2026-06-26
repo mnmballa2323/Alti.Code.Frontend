@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIAnalyticsAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_analytics_analyst_agent',
-            'AI Analytics Analyst',
-            'You are an elite AI Analytics Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and AI Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_analytics_analyst_agent',
+      'AI Analytics Analyst',
+      'You are an elite AI Analytics Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and AI Analytics.',
+    );
+  }
 
-    async generateAIAnalyticsSystem(objective) {
-        logger.info(`💻 [AIAnalyticsAnalystAgent] Analyzing AI Analytics Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Analytics Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Analytics Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIAnalyticsAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [AIAnalyticsAnalystAgent] Analyzing AI Analytics Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Analytics Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Analytics Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIAnalyticsAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIAnalyticsAnalystAgent = Object.freeze(new AIAnalyticsAnalystAgent());
+export const aIAnalyticsAnalystAgent = Object.freeze(
+  new AIAnalyticsAnalystAgent(),
+);

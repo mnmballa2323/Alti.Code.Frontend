@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIBatchProcessingStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_batchprocessing_strategist_agent',
-            'UI BatchProcessing Strategist',
-            'You are an elite UI BatchProcessing Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UI BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_batchprocessing_strategist_agent',
+      'UI BatchProcessing Strategist',
+      'You are an elite UI BatchProcessing Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UI BatchProcessing.',
+    );
+  }
 
-    async generateUIBatchProcessingSystem(objective) {
-        logger.info(`💻 [UIBatchProcessingStrategistAgent] Analyzing UI BatchProcessing Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI BatchProcessing Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI BatchProcessing Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIBatchProcessingStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [UIBatchProcessingStrategistAgent] Analyzing UI BatchProcessing Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI BatchProcessing Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI BatchProcessing Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UIBatchProcessingStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uIBatchProcessingStrategistAgent = Object.freeze(new UIBatchProcessingStrategistAgent());
+export const uIBatchProcessingStrategistAgent = Object.freeze(
+  new UIBatchProcessingStrategistAgent(),
+);

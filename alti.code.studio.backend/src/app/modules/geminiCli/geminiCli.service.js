@@ -21,7 +21,9 @@ const MAX_HISTORY = 200;
  */
 const runGeminiCLI = (command, args = []) => {
   if (!command || typeof command !== 'string') {
-    return Promise.reject(new Error('GeminiCliService: command must be a non-empty string.'));
+    return Promise.reject(
+      new Error('GeminiCliService: command must be a non-empty string.'),
+    );
   }
   return new Promise((resolve, reject) => {
     let finalOutput = '';
@@ -29,7 +31,12 @@ const runGeminiCLI = (command, args = []) => {
     const fullCmd = `gemini ${command} ${args.join(' ')}`.trim();
     logger.info(`[GeminiCLI:${uniqueId}] Executing: ${fullCmd}`);
 
-    _history.push({ id: uniqueId, command: fullCmd, timestamp: new Date().toISOString(), output: null });
+    _history.push({
+      id: uniqueId,
+      command: fullCmd,
+      timestamp: new Date().toISOString(),
+      output: null,
+    });
     if (_history.length > MAX_HISTORY) _history.shift();
 
     const proc = spawn('gemini', [command, ...args]);
@@ -42,7 +49,7 @@ const runGeminiCLI = (command, args = []) => {
       logger.warn(`[GeminiCLI:${uniqueId}] stderr: ${data.toString().trim()}`);
     });
 
-    proc.on('close', (code) => {
+    proc.on('close', code => {
       logger.info(`[GeminiCLI:${uniqueId}] Exited with code ${code}`);
       const entry = _history.find(h => h.id === uniqueId);
       if (entry) entry.output = finalOutput.trim();
@@ -67,26 +74,37 @@ const streamGeminiCLI = (command, args = [], res) => {
   const fullCmd = `gemini ${command} ${args.join(' ')}`.trim();
   logger.info(`[GeminiCLI:${uniqueId}] Streaming: ${fullCmd}`);
 
-  _history.push({ id: uniqueId, command: fullCmd, timestamp: new Date().toISOString(), output: '[streamed]' });
+  _history.push({
+    id: uniqueId,
+    command: fullCmd,
+    timestamp: new Date().toISOString(),
+    output: '[streamed]',
+  });
   if (_history.length > MAX_HISTORY) _history.shift();
 
   const proc = spawn('gemini', [command, ...args]);
 
   proc.stdout.on('data', data => {
-    res.write(`data: ${JSON.stringify({ type: 'stdout', text: data.toString() })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({ type: 'stdout', text: data.toString() })}\n\n`,
+    );
   });
 
   proc.stderr.on('data', data => {
-    res.write(`data: ${JSON.stringify({ type: 'stderr', text: data.toString() })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({ type: 'stderr', text: data.toString() })}\n\n`,
+    );
   });
 
-  proc.on('close', (code) => {
+  proc.on('close', code => {
     res.write(`data: ${JSON.stringify({ type: 'close', code })}\n\n`);
     res.end();
   });
 
   proc.on('error', err => {
-    res.write(`data: ${JSON.stringify({ type: 'error', text: err.message })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({ type: 'error', text: err.message })}\n\n`,
+    );
     res.end();
   });
 

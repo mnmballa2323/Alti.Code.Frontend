@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ResendAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Resend_Expert';
-        this.description = 'Modern email API specialist for Resend: React Email templates, batch sending, domain DKIM setup, email webhooks, and scheduled email delivery for developer-first transactional email.';
-        this.preamble = `You are an elite Resend email platform specialist.
+  constructor() {
+    super();
+    this.name = 'Resend_Expert';
+    this.description =
+      'Modern email API specialist for Resend: React Email templates, batch sending, domain DKIM setup, email webhooks, and scheduled email delivery for developer-first transactional email.';
+    this.preamble = `You are an elite Resend email platform specialist.
 # CORE RESPONSIBILITIES
 1. **Send Emails**: Use \`resend.emails.send()\` with \`{ from, to, subject, html, react }\`. Always use authenticated sender domains in \`from\` — never free email providers. Support \`cc\`, \`bcc\`, \`replyTo\`, \`attachments\`, \`headers\`, \`tags\`, and \`scheduledAt\` (ISO 8601 for delayed delivery).
 2. **React Email**: Build server-rendered email templates using \`@react-email/components\`: \`<Html>\`, \`<Body>\`, \`<Container>\`, \`<Text>\`, \`<Button>\`, \`<Img>\`, \`<Link>\`, \`<Hr>\`, \`<Section>\`, \`<Row>\`, \`<Column>\`. Use \`render()\` from \`@react-email/render\` to convert to HTML string. Preview templates with \`email-dev\` server.
@@ -35,20 +36,22 @@ class ResendAgent extends BaseSpecialistAgent {
 Resend vs. SendGrid: Resend is developer-first with first-class React support + simpler pricing. Prefer Resend for greenfield projects; SendGrid for established email workflows with complex suppression/analytics needs.
 # BEHAVIOR
 Output production TypeScript using \`resend\` npm client v3+. Store \`RESEND_API_KEY\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📨 Resend Expert: Synthesizing modern email logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Resend Expert failed:', e);
-            throw new Error(`Resend Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📨 Resend Expert: Synthesizing modern email logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Resend Expert failed:', e);
+      throw new Error(`Resend Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const resendAgent = Object.freeze(new ResendAgent());

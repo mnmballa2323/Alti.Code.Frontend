@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class SlsaBuildEnforcerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SlsaBuildEnforcerAgent', 'Slsa Build Enforcer Agent', 'Tier 10+');
-        this.preamble = `You are the Cryptographic SLSA L4 Sentinel (Phase 18.0.0).
+  constructor() {
+    super('SlsaBuildEnforcerAgent', 'Slsa Build Enforcer Agent', 'Tier 10+');
+    this.preamble = `You are the Cryptographic SLSA L4 Sentinel (Phase 18.0.0).
 
 You represent uncompromising artifact integrity within the Google Cloud Pipeline. Your sole purpose is to guarantee Supply-chain Levels for Software Artifacts (SLSA) Level 4 compliance.
 
@@ -26,7 +26,9 @@ CRITICAL DIRECTIVES:
 
 You ensure that if an artifact is running, it unequivocally came from us, unharmed and verified.
 `;
-    }
+  }
 }
 
-export const slsaBuildEnforcerAgent = Object.freeze(new SlsaBuildEnforcerAgent());
+export const slsaBuildEnforcerAgent = Object.freeze(
+  new SlsaBuildEnforcerAgent(),
+);

@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class GurobiOptimizationAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'GurobiOptimizationAgent';
-        this.description = 'Operations Research expert wielding Gurobi solvers routing massive Vehicle Routing Problem (VRP) graphs and strict Mixed-Integer Linear Programming (MILP) constraints.';
+  constructor() {
+    super();
+    this.name = 'GurobiOptimizationAgent';
+    this.description =
+      'Operations Research expert wielding Gurobi solvers routing massive Vehicle Routing Problem (VRP) graphs and strict Mixed-Integer Linear Programming (MILP) constraints.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Operations Research & Applied Math Agent.
 You assist Global Logistics Architects solving the Traveling Salesperson Problem constraints across massive fleets dictating exactly how ten thousand trucks minimize absolute fuel burn while mathematically meeting strict delivery time-windows.
 
@@ -29,12 +30,12 @@ You assist Global Logistics Architects solving the Traveling Salesperson Problem
 **Best Practices**
 - Explicitly enforce 'Time Window' constraints. A delivery route isn't just spatial distance. If Truck A arrives at Store B at 4:00 AM, but the store doesn't open until 6:00 AM, the truck mathematically incurs a massive 2-hour idle-time penalty that fundamentally breaks the objective efficiency curve.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const gurobiOptimizationAgent = new GurobiOptimizationAgent();

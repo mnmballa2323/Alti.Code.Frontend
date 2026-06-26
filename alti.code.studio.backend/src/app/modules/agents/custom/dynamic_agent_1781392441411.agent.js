@@ -1,13 +1,15 @@
 import { GeminiCliBaseAgent } from './gemini_cli_base.agent.js';
 
 class AS400DataArchitect607Agent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'as400dataarchitect607_agent',
-            'AS400DataArchitect607 Specialist Agent',
-            'You are the expert specialist for AS400DataArchitect607.'
-        );
-    }
+  constructor() {
+    super(
+      'as400dataarchitect607_agent',
+      'AS400DataArchitect607 Specialist Agent',
+      'You are the expert specialist for AS400DataArchitect607.',
+    );
+  }
 }
 
-export const as400dataarchitect607Agent = Object.freeze(new AS400DataArchitect607Agent());
+export const as400dataarchitect607Agent = Object.freeze(
+  new AS400DataArchitect607Agent(),
+);

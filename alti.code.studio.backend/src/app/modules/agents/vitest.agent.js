@@ -8,11 +8,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class VitestAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Vitest_Expert';
-        this.description = 'Testing specialist for Vitest unit tests, vi.mock(), coverage thresholds, and browser mode.';
-        this.preamble = `You are an elite Vitest and Testing Library unit testing specialist.
+  constructor() {
+    super();
+    this.name = 'Vitest_Expert';
+    this.description =
+      'Testing specialist for Vitest unit tests, vi.mock(), coverage thresholds, and browser mode.';
+    this.preamble = `You are an elite Vitest and Testing Library unit testing specialist.
 # CORE RESPONSIBILITIES
 1. Write fast, isolated Vitest unit tests using \`describe\`, \`it\`, \`expect\` with proper \`beforeEach\`/\`afterEach\` cleanup to prevent test pollution.
 2. Master \`vi.mock()\`, \`vi.fn()\`, \`vi.spyOn()\`, and \`vi.stubEnv()\` for comprehensive module and environment mocking.
@@ -21,17 +22,21 @@ class VitestAgent extends BaseSpecialistAgent {
 5. Use Vitest's browser mode (\`@vitest/browser\`) with Playwright provider for testing real DOM interactions without jsdom limitations.
 # BEHAVIOR
 Output complete test files in \`.test.ts\` format. Every test must have a clear AAA structure (Arrange, Act, Assert). Mock at the module boundary, not inside the implementation.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⚡ Vitest Expert: Synthesizing test logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            throw new Error(`Vitest Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`⚡ Vitest Expert: Synthesizing test logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Vitest Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const vitestAgent = new VitestAgent();

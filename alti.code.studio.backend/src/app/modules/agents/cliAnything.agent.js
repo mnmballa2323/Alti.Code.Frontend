@@ -15,7 +15,8 @@ export class CliAnythingAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'cliAnything';
-    this.description = 'Agent-Native Software Compiler — Autonomously transforms target application codebases into stateful agent-native CLIs using a 7-phase compilation pipeline.';
+    this.description =
+      'Agent-Native Software Compiler — Autonomously transforms target application codebases into stateful agent-native CLIs using a 7-phase compilation pipeline.';
     this.preamble = `
 You are the CLI-Anything specialist agent.
 Your core capability is executing the HKUDS 7-phase agent-native compilation pipeline over codebases to turn standard apps into stateful, agent-ready command line interfaces (CLIs).
@@ -38,38 +39,57 @@ You can also refine and extend commands iteratively based on gap-analysis user r
    */
   async _invoke(prompt, contextBlock, opts = {}) {
     const correlationId = crypto.randomUUID().slice(0, 8);
-    logger.info(`⚡ [cliAnything] [cid:${correlationId}] Swarm request received: ${prompt}`);
+    logger.info(
+      `⚡ [cliAnything] [cid:${correlationId}] Swarm request received: ${prompt}`,
+    );
 
     const cleanPrompt = prompt.toLowerCase();
-    
+
     // Parse target paths out of prompt or context
-    const pathMatch = prompt.match(/(?:in\s+path|at\s+path|in\s+dir|in\s+directory|in|at|path|dir)\s+([^\s]+)/i);
+    const pathMatch = prompt.match(
+      /(?:in\s+path|at\s+path|in\s+dir|in\s+directory|in|at|path|dir)\s+([^\s]+)/i,
+    );
     const workspacePath = pathMatch ? pathMatch[1] : './scratch/compiled-cli';
-    
+
     const appNameMatch = prompt.match(/(?:app|project|name)\s+([^\s]+)/i);
     const appName = appNameMatch ? appNameMatch[1] : 'SovereignApp';
 
-    if (cleanPrompt.includes('refine') || cleanPrompt.includes('extend') || cleanPrompt.includes('gap')) {
+    if (
+      cleanPrompt.includes('refine') ||
+      cleanPrompt.includes('extend') ||
+      cleanPrompt.includes('gap')
+    ) {
       logger.info(`⚡ [cliAnything] Triggering iterative CLI refinement...`);
       try {
-        const res = await CliAnythingService.refineCLI(workspacePath, appName, prompt);
+        const res = await CliAnythingService.refineCLI(
+          workspacePath,
+          appName,
+          prompt,
+        );
         return `✅ [cliAnything] Refinement successful!\n\n${res.message}\nNew capability added: '${res.refinedCommand}'`;
       } catch (err) {
-        throw new AgentError(`Refinement failed: ${err.message}`, 'REFINEMENT_ERROR', false);
+        throw new AgentError(
+          `Refinement failed: ${err.message}`,
+          'REFINEMENT_ERROR',
+          false,
+        );
       }
     }
 
     // Parse active execution commands (status, execute, undo, redo, history)
     const commandWords = ['status', 'execute', 'undo', 'redo', 'history'];
-    const matchedCommand = commandWords.find(cmd => 
-      cleanPrompt.includes(`run ${cmd}`) || 
-      cleanPrompt.includes(`execute ${cmd}`) || 
-      (cmd !== 'execute' && cleanPrompt.includes(cmd))
+    const matchedCommand = commandWords.find(
+      cmd =>
+        cleanPrompt.includes(`run ${cmd}`) ||
+        cleanPrompt.includes(`execute ${cmd}`) ||
+        (cmd !== 'execute' && cleanPrompt.includes(cmd)),
     );
 
     if (matchedCommand) {
-      logger.info(`⚡ [cliAnything] Routing active execution command: '${matchedCommand}'`);
-      
+      logger.info(
+        `⚡ [cliAnything] Routing active execution command: '${matchedCommand}'`,
+      );
+
       const args = [];
       if (matchedCommand === 'execute') {
         const actionMatch = prompt.match(/(?:--action|action)\s+([^\s]+)/i);
@@ -83,7 +103,12 @@ You can also refine and extend commands iteratively based on gap-analysis user r
       }
 
       try {
-        const res = await CliAnythingService.executeCLICommand(workspacePath, appName, matchedCommand, args);
+        const res = await CliAnythingService.executeCLICommand(
+          workspacePath,
+          appName,
+          matchedCommand,
+          args,
+        );
         return `
 🌌 **cliAnything Command Executed Successfully!**
 Workspace: \`${workspacePath}\` | Executable: \`cli_${appName.toLowerCase()}\`
@@ -95,7 +120,11 @@ ${JSON.stringify(res, null, 2)}
 \`\`\`
         `.trim();
       } catch (err) {
-        throw new AgentError(`Command execution failed: ${err.message}`, 'EXECUTION_ERROR', false);
+        throw new AgentError(
+          `Command execution failed: ${err.message}`,
+          'EXECUTION_ERROR',
+          false,
+        );
       }
     }
 
@@ -103,9 +132,12 @@ ${JSON.stringify(res, null, 2)}
     logger.info(`⚡ [cliAnything] Triggering full 7-phase CLI compilation...`);
     try {
       const res = await CliAnythingService.generateCLI(workspacePath, appName);
-      
+
       const fileSummary = Object.entries(res.results)
-        .map(([phase, detail]) => `- **Phase: ${phase}** -> status: ${detail.status} (${detail.file || 'scanned'})`)
+        .map(
+          ([phase, detail]) =>
+            `- **Phase: ${phase}** -> status: ${detail.status} (${detail.file || 'scanned'})`,
+        )
         .join('\n');
 
       return `
@@ -118,7 +150,11 @@ ${fileSummary}
 Generated files are fully verified, written to disk, and ready for system installation.
       `.trim();
     } catch (err) {
-      throw new AgentError(`Compilation pipeline exploded: ${err.message}`, 'PIPELINE_ERROR', false);
+      throw new AgentError(
+        `Compilation pipeline exploded: ${err.message}`,
+        'PIPELINE_ERROR',
+        false,
+      );
     }
   }
 
@@ -138,7 +174,8 @@ export class CliAnythingAnalyst extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'cliAnythingAnalyst';
-    this.description = 'Surgical Diagnostic Agent — Performs deep codebase structure checks, parses entrypoint dependencies, and produces diagnostic conversion reports.';
+    this.description =
+      'Surgical Diagnostic Agent — Performs deep codebase structure checks, parses entrypoint dependencies, and produces diagnostic conversion reports.';
     this.preamble = `
 You are the CLI-Anything Diagnostic Analyst Surgeon.
 Your specialty is scanning directory structures, analyzing language configurations, and mapping internal APIs to evaluate codebase readiness for Click CLI conversions.
@@ -147,12 +184,16 @@ You produce high-fidelity diagnostic reports detailing modules and entries.
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    const pathMatch = prompt.match(/(?:in\s+path|at\s+path|in\s+dir|in\s+directory|in|at|path|dir)\s+([^\s]+)/i);
+    const pathMatch = prompt.match(
+      /(?:in\s+path|at\s+path|in\s+dir|in\s+directory|in|at|path|dir)\s+([^\s]+)/i,
+    );
     const workspacePath = pathMatch ? pathMatch[1] : './scratch/compiled-cli';
     const appNameMatch = prompt.match(/(?:app|project|name)\s+([^\s]+)/i);
     const appName = appNameMatch ? appNameMatch[1] : 'SovereignApp';
 
-    logger.info(`🕵️‍♂️ [cliAnythingAnalyst] Diagnosing codebase workspace: ${workspacePath}`);
+    logger.info(
+      `🕵️‍♂️ [cliAnythingAnalyst] Diagnosing codebase workspace: ${workspacePath}`,
+    );
 
     try {
       const res = await CliAnythingService.generateCLI(workspacePath, appName);
@@ -169,7 +210,11 @@ Workspace: \`${workspacePath}\` | Application Name: \`${appName}\`
 Codebase structure successfully triaged and marked ready for Click compilation!
       `.trim();
     } catch (err) {
-      throw new AgentError(`Diagnostics failed: ${err.message}`, 'DIAGNOSTIC_ERROR', false);
+      throw new AgentError(
+        `Diagnostics failed: ${err.message}`,
+        'DIAGNOSTIC_ERROR',
+        false,
+      );
     }
   }
 
@@ -185,7 +230,8 @@ export class CliAnythingArchitect extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'cliAnythingArchitect';
-    this.description = 'Surgical Design Architect Agent — Models high-fidelity state schemas, designs click command routing hierarchies, and structures undo/redo session boundaries.';
+    this.description =
+      'Surgical Design Architect Agent — Models high-fidelity state schemas, designs click command routing hierarchies, and structures undo/redo session boundaries.';
     this.preamble = `
 You are the CLI-Anything Design Architect Surgeon.
 Your specialty is designing structured schemas, identifying subcommand structures, state indicators, and mapping session persistence JSON models.
@@ -193,12 +239,16 @@ Your specialty is designing structured schemas, identifying subcommand structure
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    const pathMatch = prompt.match(/(?:in\s+path|at\s+path|in\s+dir|in\s+directory|in|at|path|dir)\s+([^\s]+)/i);
+    const pathMatch = prompt.match(
+      /(?:in\s+path|at\s+path|in\s+dir|in\s+directory|in|at|path|dir)\s+([^\s]+)/i,
+    );
     const workspacePath = pathMatch ? pathMatch[1] : './scratch/compiled-cli';
     const appNameMatch = prompt.match(/(?:app|project|name)\s+([^\s]+)/i);
     const appName = appNameMatch ? appNameMatch[1] : 'SovereignApp';
 
-    logger.info(`📐 [cliAnythingArchitect] Modeling command schemas for: ${appName}`);
+    logger.info(
+      `📐 [cliAnythingArchitect] Modeling command schemas for: ${appName}`,
+    );
 
     try {
       const res = await CliAnythingService.generateCLI(workspacePath, appName);
@@ -213,7 +263,11 @@ ${schema.commands.map(c => `- \`${c.name}\` -> args: \`${c.args.join(' ')}\` | *
 Stateful model successfully compiled to \`cli_schema.json\`!
       `.trim();
     } catch (err) {
-      throw new AgentError(`Design modeling failed: ${err.message}`, 'DESIGN_ERROR', false);
+      throw new AgentError(
+        `Design modeling failed: ${err.message}`,
+        'DESIGN_ERROR',
+        false,
+      );
     }
   }
 
@@ -229,7 +283,8 @@ export class CliAnythingSurgeon extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'cliAnythingSurgeon';
-    this.description = 'Surgical Implementation Agent — Generates highly optimized Python Click harnesses, interactive REPL shells, E2E test suites, and setup scripts.';
+    this.description =
+      'Surgical Implementation Agent — Generates highly optimized Python Click harnesses, interactive REPL shells, E2E test suites, and setup scripts.';
     this.preamble = `
 You are the CLI-Anything Implementation Surgeon.
 Your specialty is generating highly optimized python Click code, unit tests, setuptools publishing packaging, and discovery SKILL.md manifests with absolute code precision.
@@ -237,12 +292,16 @@ Your specialty is generating highly optimized python Click code, unit tests, set
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    const pathMatch = prompt.match(/(?:in\s+path|at\s+path|in\s+dir|in\s+directory|in|at|path|dir)\s+([^\s]+)/i);
+    const pathMatch = prompt.match(
+      /(?:in\s+path|at\s+path|in\s+dir|in\s+directory|in|at|path|dir)\s+([^\s]+)/i,
+    );
     const workspacePath = pathMatch ? pathMatch[1] : './scratch/compiled-cli';
     const appNameMatch = prompt.match(/(?:app|project|name)\s+([^\s]+)/i);
     const appName = appNameMatch ? appNameMatch[1] : 'SovereignApp';
 
-    logger.info(`🛠️ [cliAnythingSurgeon] Executing surgical file generation inside: ${workspacePath}`);
+    logger.info(
+      `🛠️ [cliAnythingSurgeon] Executing surgical file generation inside: ${workspacePath}`,
+    );
 
     try {
       const res = await CliAnythingService.generateCLI(workspacePath, appName);
@@ -260,7 +319,11 @@ Workspace compiled: \`${workspacePath}\` | Executable: \`cli_${appName.toLowerCa
 Work product is fully verified, written to disk, and ready for execution.
       `.trim();
     } catch (err) {
-      throw new AgentError(`Implementation generation failed: ${err.message}`, 'IMPLEMENTATION_ERROR', false);
+      throw new AgentError(
+        `Implementation generation failed: ${err.message}`,
+        'IMPLEMENTATION_ERROR',
+        false,
+      );
     }
   }
 
@@ -276,7 +339,8 @@ export class CliAnythingRefiner extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'cliAnythingRefiner';
-    this.description = 'Surgical Refinement Agent — Performs gap-analyses and hot-patches existing Click CLI harnesses dynamically without code corruption.';
+    this.description =
+      'Surgical Refinement Agent — Performs gap-analyses and hot-patches existing Click CLI harnesses dynamically without code corruption.';
     this.preamble = `
 You are the CLI-Anything Refinement Surgeon.
 Your specialty is gap-analysis and iterative command refinement. You surgically insert new click subcommands and update existing harnesses safely.
@@ -284,15 +348,23 @@ Your specialty is gap-analysis and iterative command refinement. You surgically 
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    const pathMatch = prompt.match(/(?:in\s+path|at\s+path|in\s+dir|in\s+directory|in|at|path|dir)\s+([^\s]+)/i);
+    const pathMatch = prompt.match(
+      /(?:in\s+path|at\s+path|in\s+dir|in\s+directory|in|at|path|dir)\s+([^\s]+)/i,
+    );
     const workspacePath = pathMatch ? pathMatch[1] : './scratch/compiled-cli';
     const appNameMatch = prompt.match(/(?:app|project|name)\s+([^\s]+)/i);
     const appName = appNameMatch ? appNameMatch[1] : 'SovereignApp';
 
-    logger.info(`🔄 [cliAnythingRefiner] Executing click harness hot-patch refinement...`);
+    logger.info(
+      `🔄 [cliAnythingRefiner] Executing click harness hot-patch refinement...`,
+    );
 
     try {
-      const res = await CliAnythingService.refineCLI(workspacePath, appName, prompt);
+      const res = await CliAnythingService.refineCLI(
+        workspacePath,
+        appName,
+        prompt,
+      );
       return `
 🔄 **cliAnythingRefiner: Stateful CLI Hot-Patch Integrated!**
 Workspace: \`${workspacePath}\` | Extended Executable: \`cli_${appName.toLowerCase()}\`
@@ -303,7 +375,11 @@ Workspace: \`${workspacePath}\` | Extended Executable: \`cli_${appName.toLowerCa
 Click script has been cleanly patched without corrupting the main REPL execution boundaries!
       `.trim();
     } catch (err) {
-      throw new AgentError(`Refinement hot-patch failed: ${err.message}`, 'REFINEMENT_ERROR', false);
+      throw new AgentError(
+        `Refinement hot-patch failed: ${err.message}`,
+        'REFINEMENT_ERROR',
+        false,
+      );
     }
   }
 
@@ -318,10 +394,15 @@ agentRegistry.register({
   name: cliAnythingAgentInstance.name,
   description: cliAnythingAgentInstance.description,
   queue: 'cli-anything-queue',
-  capabilities: ['cli-generation', 'codebase-refinement', 'stateful-repl-scaffolding', 'agentic-compiler'],
+  capabilities: [
+    'cli-generation',
+    'codebase-refinement',
+    'stateful-repl-scaffolding',
+    'agentic-compiler',
+  ],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: cliAnythingAgentInstance
+  instance: cliAnythingAgentInstance,
 });
 
 // Register Surgeon Swarm Agents
@@ -333,7 +414,7 @@ agentRegistry.register({
   capabilities: ['cli-diagnostics', 'codebase-scanning', 'api-diagnostics'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: analyst
+  instance: analyst,
 });
 
 const architect = new CliAnythingArchitect();
@@ -344,7 +425,7 @@ agentRegistry.register({
   capabilities: ['cli-designing', 'schema-modeling', 'state-architecture'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: architect
+  instance: architect,
 });
 
 const surgeon = new CliAnythingSurgeon();
@@ -352,10 +433,15 @@ agentRegistry.register({
   name: surgeon.name,
   description: surgeon.description,
   queue: 'cli-anything-queue',
-  capabilities: ['cli-scaffolding', 'python-generation', 'click-synthesis', 'test-generation'],
+  capabilities: [
+    'cli-scaffolding',
+    'python-generation',
+    'click-synthesis',
+    'test-generation',
+  ],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: surgeon
+  instance: surgeon,
 });
 
 const refiner = new CliAnythingRefiner();
@@ -366,5 +452,5 @@ agentRegistry.register({
   capabilities: ['cli-refining', 'gap-analysis', 'harness-patching'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: refiner
+  instance: refiner,
 });

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * "The DigitalOcean Master" - Tier 16 Cloud Provider Specialist
  * Expert in Droplets, App Platform, Spaces, DOKS (Kubernetes), and Managed Databases.
  */
@@ -10,11 +10,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class DigitaloceanAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'DigitalOcean_Expert';
-        this.description = 'Cloud specialist for DigitalOcean Droplets, App Platform, Spaces S3, DOKS, and Managed Databases.';
-        this.preamble = `You are an elite DigitalOcean Cloud Infrastructure Specialist.
+  constructor() {
+    super();
+    this.name = 'DigitalOcean_Expert';
+    this.description =
+      'Cloud specialist for DigitalOcean Droplets, App Platform, Spaces S3, DOKS, and Managed Databases.';
+    this.preamble = `You are an elite DigitalOcean Cloud Infrastructure Specialist.
 Your core expertise revolves around designing extremely reliable, developer-friendly, and cost-effective DigitalOcean architectures.
 
 # DROPLETS & COMPUTE
@@ -32,18 +33,22 @@ Your core expertise revolves around designing extremely reliable, developer-frie
 
 # OUTPUT STANDARDS
 When providing code or blueprints, output specific \`doctl\` CLI commands, App Platform \`app.yaml\` specs, or Terraform HCL using the \`digitalocean/digitalocean\` provider. Never hallucinate syntax.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🌊 DigitalOcean Expert: Synthesizing cloud logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            logger.error(`❌ DigitalOcean Expert failed:`, e);
-            throw new Error(`DigitalOcean Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🌊 DigitalOcean Expert: Synthesizing cloud logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error(`❌ DigitalOcean Expert failed:`, e);
+      throw new Error(`DigitalOcean Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const digitaloceanAgent = new DigitaloceanAgent();

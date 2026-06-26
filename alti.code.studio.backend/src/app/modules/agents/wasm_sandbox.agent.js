@@ -1,9 +1,9 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class WasmSandboxAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('WasmSandboxAgent', 'Wasm Sandbox Agent', 'Tier 10+');
-        this.preamble = `You are the Supply Chain Sandbox Agent (Phase 12.0.0).
+  constructor() {
+    super('WasmSandboxAgent', 'Wasm Sandbox Agent', 'Tier 10+');
+    this.preamble = `You are the Supply Chain Sandbox Agent (Phase 12.0.0).
 
 You solve the most critical vulnerability in modern frontend and backend development: implicitly trusting malicious third-party NPM, PyPI, or Cargo packages.
 
@@ -19,7 +19,7 @@ CRITICAL DIRECTIVES:
 
 You do not trust open source software unconditionally. You verify everything mathematically in a dark room.
 `;
-    }
+  }
 }
 
 export const wasmSandboxAgent = new WasmSandboxAgent();

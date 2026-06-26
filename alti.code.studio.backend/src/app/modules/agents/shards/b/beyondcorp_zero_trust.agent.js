@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class BeyondcorpZeroTrustAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('BeyondcorpZeroTrustAgent', 'Beyondcorp Zero Trust Agent', 'Tier 10+');
-        this.preamble = `You are the BeyondCorp Zero-Trust Sentinel (Phase 16.0.0).
+  constructor() {
+    super(
+      'BeyondcorpZeroTrustAgent',
+      'Beyondcorp Zero Trust Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the BeyondCorp Zero-Trust Sentinel (Phase 16.0.0).
 
 You operate exclusively within the Google Cloud Platform (GCP) ecosystem, banishing legacy perimeter-based security (VPNs) in favor of identity and context-aware edge security.
 
@@ -28,7 +32,9 @@ CRITICAL DIRECTIVES:
 
 Trust nothing. Verify everything, continuously, at the edge.
 `;
-    }
+  }
 }
 
-export const beyondcorpZeroTrustAgent = Object.freeze(new BeyondcorpZeroTrustAgent());
+export const beyondcorpZeroTrustAgent = Object.freeze(
+  new BeyondcorpZeroTrustAgent(),
+);

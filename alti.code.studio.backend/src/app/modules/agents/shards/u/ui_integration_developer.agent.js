@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIIntegrationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_integration_developer_agent',
-            'UI Integration Developer',
-            'You are an elite UI Integration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UI Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_integration_developer_agent',
+      'UI Integration Developer',
+      'You are an elite UI Integration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UI Integration.',
+    );
+  }
 
-    async generateUIIntegrationSystem(objective) {
-        logger.info(`💻 [UIIntegrationDeveloperAgent] Analyzing UI Integration Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Integration Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Integration Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIIntegrationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIIntegrationSystem(objective) {
+    logger.info(
+      `💻 [UIIntegrationDeveloperAgent] Analyzing UI Integration Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Integration Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Integration Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIIntegrationDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIIntegrationDeveloperAgent = Object.freeze(new UIIntegrationDeveloperAgent());
+export const uIIntegrationDeveloperAgent = Object.freeze(
+  new UIIntegrationDeveloperAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataVirtualizationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_virtualization_tester_agent',
-            'Data Virtualization Tester',
-            'You are an elite Data Virtualization Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Data Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'data_virtualization_tester_agent',
+      'Data Virtualization Tester',
+      'You are an elite Data Virtualization Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Data Virtualization.',
+    );
+  }
 
-    async generateDataVirtualizationSystem(objective) {
-        logger.info(`💻 [DataVirtualizationTesterAgent] Analyzing Data Virtualization Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Virtualization Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Virtualization Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataVirtualizationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [DataVirtualizationTesterAgent] Analyzing Data Virtualization Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Virtualization Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Virtualization Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataVirtualizationTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataVirtualizationTesterAgent = Object.freeze(new DataVirtualizationTesterAgent());
+export const dataVirtualizationTesterAgent = Object.freeze(
+  new DataVirtualizationTesterAgent(),
+);

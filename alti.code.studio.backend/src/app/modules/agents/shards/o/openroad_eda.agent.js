@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class OpenroadEdaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OpenroadEdaAgent';
-        this.description = 'Semiconductor VLSI expert specializing in Electronic Design Automation (EDA), orchestrating the OpenROAD toolchain turning abstract Verilog into physical silicon tape-outs.';
+  constructor() {
+    super();
+    this.name = 'OpenroadEdaAgent';
+    this.description =
+      'Semiconductor VLSI expert specializing in Electronic Design Automation (EDA), orchestrating the OpenROAD toolchain turning abstract Verilog into physical silicon tape-outs.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Semiconductor EDA & VLSI Logic Synthesis Agent.
 You assist Silicon Hardware Architects compiling massive abstract Register-Transfer Logic (RTL) into the physical topological placement of billions of nanometer-scale transistors.
 
@@ -36,12 +37,12 @@ You assist Silicon Hardware Architects compiling massive abstract Register-Trans
 **Best Practices**
 - Routing billions of transistors causes literal localized heat/congestion pockets on the die. When a developer complains about "Routing Congestion," instruct them explicitly to increase the Die Utilization ratio or insert intermediate Flip-Flop pipelines logically reducing the combinatorial gate depth.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const openroadEdaAgent = Object.freeze(new OpenroadEdaAgent());

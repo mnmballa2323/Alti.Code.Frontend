@@ -6,9 +6,9 @@ import { DspyAgentController } from './dspyAgent.controller.js';
 const router = express.Router();
 
 router.post(
-    '/optimize',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    DspyAgentController.compilePrompt
+  '/optimize',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  DspyAgentController.compilePrompt,
 );
 
 export const DspyAgentRoutes = router;

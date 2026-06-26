@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudCachingTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_caching_tester_agent',
-            'Cloud Caching Tester',
-            'You are an elite Cloud Caching Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_caching_tester_agent',
+      'Cloud Caching Tester',
+      'You are an elite Cloud Caching Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Caching.',
+    );
+  }
 
-    async generateCloudCachingSystem(objective) {
-        logger.info(`💻 [CloudCachingTesterAgent] Analyzing Cloud Caching Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Caching Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Caching Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudCachingTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudCachingSystem(objective) {
+    logger.info(
+      `💻 [CloudCachingTesterAgent] Analyzing Cloud Caching Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Caching Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Caching Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudCachingTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudCachingTesterAgent = Object.freeze(new CloudCachingTesterAgent());
+export const cloudCachingTesterAgent = Object.freeze(
+  new CloudCachingTesterAgent(),
+);

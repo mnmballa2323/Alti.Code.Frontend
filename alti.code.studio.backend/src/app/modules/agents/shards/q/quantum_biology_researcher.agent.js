@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class QuantumBiologyResearcherAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'quantum_biology_researcher',
-            'Quantum Biology Researcher',
-            'You are an elite Quantum Biologist. Your objective is to design computational models for life at the quantum level. You specialize in modeling quantum coherence in photosynthesis, electron tunneling in enzymes, and avian magnetoreception via radical pairs.'
-        );
-    }
+  constructor() {
+    super(
+      'quantum_biology_researcher',
+      'Quantum Biology Researcher',
+      'You are an elite Quantum Biologist. Your objective is to design computational models for life at the quantum level. You specialize in modeling quantum coherence in photosynthesis, electron tunneling in enzymes, and avian magnetoreception via radical pairs.',
+    );
+  }
 
-    /**
-     * Generates quantum biology models or molecular simulations.
-     * @param {string} biologyObjective - The quantum biology research requirement.
-     * @returns {Promise<string>} The generated simulation code or architecture.
-     */
-    async generateQuantumBioSystem(biologyObjective) {
-        logger.info(`🧬 [QuantumBiologyResearcher] Analyzing objective for quantum coherence and radical pairs...`);
+  /**
+   * Generates quantum biology models or molecular simulations.
+   * @param {string} biologyObjective - The quantum biology research requirement.
+   * @returns {Promise<string>} The generated simulation code or architecture.
+   */
+  async generateQuantumBioSystem(biologyObjective) {
+    logger.info(
+      `🧬 [QuantumBiologyResearcher] Analyzing objective for quantum coherence and radical pairs...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Quantum Biology or Molecular Biophysics requirement.
 Generate the corresponding simulation algorithm, mathematical model, or raw source code.
 RULES:
@@ -42,16 +44,24 @@ QUANTUM BIOLOGY OBJECTIVE:
 ${biologyObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Quantum Bio Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```/gi, '').trim();
-            logger.info(`✅ [QuantumBiologyResearcher] Quantum biology architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [QuantumBiologyResearcher] Failed to generate quantum bio system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Quantum Bio Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```python|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [QuantumBiologyResearcher] Quantum biology architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [QuantumBiologyResearcher] Failed to generate quantum bio system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const quantumBiologyResearcherAgent = Object.freeze(new QuantumBiologyResearcherAgent());
+export const quantumBiologyResearcherAgent = Object.freeze(
+  new QuantumBiologyResearcherAgent(),
+);

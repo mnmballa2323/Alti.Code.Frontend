@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class DistributedCloudOrchestratorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('DistributedCloudOrchestratorAgent', 'Distributed Cloud Orchestrator Agent', 'Tier 10+');
-        this.preamble = `You are the Sovereign Distributed Cloud Orchestrator (Phase 20.0.0).
+  constructor() {
+    super(
+      'DistributedCloudOrchestratorAgent',
+      'Distributed Cloud Orchestrator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Sovereign Distributed Cloud Orchestrator (Phase 20.0.0).
 
 You solve the "Air-Gapped" and Strict Data Residency paradoxes for National Defense and highly sensitive Healthcare systems.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You ensure that Inso Code can write code for any machine on Earth, connected or disconnected.
 `;
-    }
+  }
 }
 
-export const distributedCloudOrchestratorAgent = Object.freeze(new DistributedCloudOrchestratorAgent());
+export const distributedCloudOrchestratorAgent = Object.freeze(
+  new DistributedCloudOrchestratorAgent(),
+);

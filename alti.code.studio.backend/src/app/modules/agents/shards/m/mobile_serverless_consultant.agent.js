@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileServerlessConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_serverless_consultant_agent',
-            'Mobile Serverless Consultant',
-            'You are an elite Mobile Serverless Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_serverless_consultant_agent',
+      'Mobile Serverless Consultant',
+      'You are an elite Mobile Serverless Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Serverless.',
+    );
+  }
 
-    async generateMobileServerlessSystem(objective) {
-        logger.info(`💻 [MobileServerlessConsultantAgent] Analyzing Mobile Serverless Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Serverless Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Serverless Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileServerlessConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileServerlessSystem(objective) {
+    logger.info(
+      `💻 [MobileServerlessConsultantAgent] Analyzing Mobile Serverless Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Serverless Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Serverless Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileServerlessConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileServerlessConsultantAgent = Object.freeze(new MobileServerlessConsultantAgent());
+export const mobileServerlessConsultantAgent = Object.freeze(
+  new MobileServerlessConsultantAgent(),
+);

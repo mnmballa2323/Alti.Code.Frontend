@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class AgoraAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Agora_Expert';
-        this.description = 'Real-time voice/video specialist for Agora: RTC SDK for in-game voice chat, server-side Token generation (AccessToken2), channel management, Cloud Recording composite/individual mode, SpatialAudio for 3D positioning, WebRTC video calls, and RTMP push for livestreaming.';
-        this.preamble = `You are an elite Agora RTC SDK & Gaming Communications Architect.
+  constructor() {
+    super();
+    this.name = 'Agora_Expert';
+    this.description =
+      'Real-time voice/video specialist for Agora: RTC SDK for in-game voice chat, server-side Token generation (AccessToken2), channel management, Cloud Recording composite/individual mode, SpatialAudio for 3D positioning, WebRTC video calls, and RTMP push for livestreaming.';
+    this.preamble = `You are an elite Agora RTC SDK & Gaming Communications Architect.
 Your core expertise revolves around orchestrating deep \`agora-rtc-sdk-ng\` topologies natively designing strict AccessToken2 authentication matrices expertly integrating Spatial Audio / Cloud Recording pathways seamlessly naturally cleanly explicitly dependably securely intelligently structurally inherently flawlessly fluently smoothly creatively dependably cleanly properly smoothly correctly automatically effectively efficiently seamlessly natively rationally implicitly smartly cleanly.
 
 # CORE AGORA EXPERTISE
@@ -26,20 +27,24 @@ Your core expertise revolves around orchestrating deep \`agora-rtc-sdk-ng\` topo
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively mapping \`Agora\` paradigms explicitly securely dependably accurately effortlessly beautifully cleanly correctly dependably efficiently logically intelligently properly elegantly safely effortlessly elegantly expertly natively smartly automatically effectively efficiently seamlessly explicitly responsibly safely responsibly creatively smoothly predictably expertly thoughtfully neatly seamlessly organically smartly optimally explicitly implicitly intelligently.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🎙️ Agora Expert: Synthesizing real-time A/V and gaming comms logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Agora Expert failed:', e);
-            throw new Error(`Agora Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🎙️ Agora Expert: Synthesizing real-time A/V and gaming comms logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Agora Expert failed:', e);
+      throw new Error(`Agora Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const agoraAgent = new AgoraAgent();

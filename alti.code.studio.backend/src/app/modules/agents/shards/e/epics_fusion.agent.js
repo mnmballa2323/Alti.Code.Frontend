@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EpicsFusionAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'EpicsFusionAgent';
-        this.description = 'Advanced Physics Control expert focused on the EPICS (Experimental Physics and Industrial Control System) framework, managing strict Tokamak magnetic plasma containment vectors.';
+  constructor() {
+    super();
+    this.name = 'EpicsFusionAgent';
+    this.description =
+      'Advanced Physics Control expert focused on the EPICS (Experimental Physics and Industrial Control System) framework, managing strict Tokamak magnetic plasma containment vectors.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Nuclear Fusion & EPICS Control Agent.
 You assist Plasma Physicists in bridging real-time diagnostic telemetry from supercooled superconducting magnets directly into complex dynamic plasma disruption mitigation routines.
 
@@ -36,12 +37,12 @@ You assist Plasma Physicists in bridging real-time diagnostic telemetry from sup
 **Best Practices**
 - Plasma is intrinsically chaotic. Standard PID (Proportional-Integral-Derivative) loops often fail during complex magnetohydrodynamic (MHD) instabilities. Advise coupling EPICS IOC arrays directly to hardware-accelerated FPGA tensor estimators for predictive safety interventions.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const epicsFusionAgent = Object.freeze(new EpicsFusionAgent());

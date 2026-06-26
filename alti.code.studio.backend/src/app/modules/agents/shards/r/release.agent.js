@@ -15,31 +15,35 @@ import { logger } from '../../../../shared/logger.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
 
 export class ReleaseAgent {
-    constructor() {
-        this.name = 'release';
-        this.description = 'Autonomous Release Manager and SemVer Engineer';
-        this.capabilities = [
-            'Analyze recent Git commit histories natively',
-            'Calculate precise Semantic Versioning (SemVer) bumps',
-            'Generate formal markdown CHANGELOGs and Release Notes'
-        ];
+  constructor() {
+    this.name = 'release';
+    this.description = 'Autonomous Release Manager and SemVer Engineer';
+    this.capabilities = [
+      'Analyze recent Git commit histories natively',
+      'Calculate precise Semantic Versioning (SemVer) bumps',
+      'Generate formal markdown CHANGELOGs and Release Notes',
+    ];
+  }
+
+  /**
+   * Synthesizes commit logs into a structured release payload.
+   * @param {string} currentVersion The current application version (e.g., 'v1.4.2')
+   * @param {Array<string>} commitHistory Array of semantic commit messages
+   */
+  async calculateRelease(currentVersion, commitHistory = []) {
+    logger.info(
+      `📦 Release Agent: Calculating next SemVer bump from ${currentVersion} based on ${commitHistory.length} commits...`,
+    );
+
+    if (commitHistory.length === 0) {
+      logger.info(
+        '📦 Release Agent: No commits found. Skipping release generation.',
+      );
+      return { status: 'NO_CHANGES' };
     }
 
-    /**
-     * Synthesizes commit logs into a structured release payload.
-     * @param {string} currentVersion The current application version (e.g., 'v1.4.2')
-     * @param {Array<string>} commitHistory Array of semantic commit messages
-     */
-    async calculateRelease(currentVersion, commitHistory = []) {
-        logger.info(`📦 Release Agent: Calculating next SemVer bump from ${currentVersion} based on ${commitHistory.length} commits...`);
-
-        if (commitHistory.length === 0) {
-            logger.info('📦 Release Agent: No commits found. Skipping release generation.');
-            return { status: 'NO_CHANGES' };
-        }
-
-        try {
-            const prompt = `
+    try {
+      const prompt = `
             You are an elite DevOps Release Manager.
             Your current deployment is exactly at version: ${currentVersion}
 
@@ -59,44 +63,55 @@ export class ReleaseAgent {
             Do not include markdown code block syntax.
             `;
 
-            const rawResponse = await GeminiAiService.generateContent(prompt);
-            const reportJson = rawResponse.replace(/^```json/, '').replace(/^```/, '').replace(/```$/, '').trim();
-            const releaseData = JSON.parse(reportJson);
+      const rawResponse = await GeminiAiService.generateContent(prompt);
+      const reportJson = rawResponse
+        .replace(/^```json/, '')
+        .replace(/^```/, '')
+        .replace(/```$/, '')
+        .trim();
+      const releaseData = JSON.parse(reportJson);
 
-            logger.info(`✅ Release Agent: Determined next version is ${releaseData.nextVersion} (${releaseData.semverType} bump).`);
+      logger.info(
+        `✅ Release Agent: Determined next version is ${releaseData.nextVersion} (${releaseData.semverType} bump).`,
+      );
 
-            // Output to the physical docs registry
-            const releaseDocsDir = path.join(process.cwd(), 'docs', 'releases');
-            await fs.mkdir(releaseDocsDir, { recursive: true });
+      // Output to the physical docs registry
+      const releaseDocsDir = path.join(process.cwd(), 'docs', 'releases');
+      await fs.mkdir(releaseDocsDir, { recursive: true });
 
-            const filePath = path.join(releaseDocsDir, `release-${releaseData.nextVersion}.md`);
-            await fs.writeFile(filePath, releaseData.changelogMarkdown);
-            logger.info(`✅ Release Agent: Release notes drafted to ${filePath}`);
+      const filePath = path.join(
+        releaseDocsDir,
+        `release-${releaseData.nextVersion}.md`,
+      );
+      await fs.writeFile(filePath, releaseData.changelogMarkdown);
+      logger.info(`✅ Release Agent: Release notes drafted to ${filePath}`);
 
-            return {
-                status: 'RELEASE_DRAFTED',
-                ...releaseData,
-                filePath
-            };
-
-        } catch (err) {
-            logger.error(`❌ Release Agent Calculation Failed: ${err.message}`);
-            throw err;
-        }
+      return {
+        status: 'RELEASE_DRAFTED',
+        ...releaseData,
+        filePath,
+      };
+    } catch (err) {
+      logger.error(`❌ Release Agent Calculation Failed: ${err.message}`);
+      throw err;
     }
+  }
 
-    async process(state) {
-        const history = state.data?.commits || [];
-        const currentVersion = state.data?.currentVersion || 'v1.0.0';
+  async process(state) {
+    const history = state.data?.commits || [];
+    const currentVersion = state.data?.currentVersion || 'v1.0.0';
 
-        const result = await this.calculateRelease(currentVersion, history);
+    const result = await this.calculateRelease(currentVersion, history);
 
-        return {
-            ...state,
-            status: 'success',
-            results: [...(state.results || []), `Release Formulated: ${result.nextVersion}`]
-        };
-    }
+    return {
+      ...state,
+      status: 'success',
+      results: [
+        ...(state.results || []),
+        `Release Formulated: ${result.nextVersion}`,
+      ],
+    };
+  }
 }
 
 export const releaseAgent = Object.freeze(new ReleaseAgent());

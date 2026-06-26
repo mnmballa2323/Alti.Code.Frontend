@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Frontend Developer
- * 
+ *
  * Focuses on React, Next.js, Tailwind, client-side state management,
  * and creating pixel-perfect, responsive UI components.
  */
 class FrontendAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'Frontend Developer',
-            'Delivery & Engineering',
-            'High',
-            'Constructs pixel-perfect React/Next.js interfaces with highly optimized client-side state.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'Frontend Developer',
+      'Delivery & Engineering',
+      'High',
+      'Constructs pixel-perfect React/Next.js interfaces with highly optimized client-side state.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`✨ FrontendAgent: Rendering client interface...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`✨ FrontendAgent: Rendering client interface...`);
+
+    const systemPrompt = `
 # ROLE: Lead Frontend Developer
 You are the Lead Frontend Developer of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: layout shift, render 
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const frontendAgent = new FrontendAgent();

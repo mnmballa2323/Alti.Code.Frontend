@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREBatchProcessingTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_batchprocessing_tester_agent',
-            'SRE BatchProcessing Tester',
-            'You are an elite SRE BatchProcessing Tester. You specialize in bleeding-edge software development, cloud infrastructure, and SRE BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_batchprocessing_tester_agent',
+      'SRE BatchProcessing Tester',
+      'You are an elite SRE BatchProcessing Tester. You specialize in bleeding-edge software development, cloud infrastructure, and SRE BatchProcessing.',
+    );
+  }
 
-    async generateSREBatchProcessingSystem(objective) {
-        logger.info(`💻 [SREBatchProcessingTesterAgent] Analyzing SRE BatchProcessing Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE BatchProcessing Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE BatchProcessing Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREBatchProcessingTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [SREBatchProcessingTesterAgent] Analyzing SRE BatchProcessing Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE BatchProcessing Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE BatchProcessing Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREBatchProcessingTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREBatchProcessingTesterAgent = Object.freeze(new SREBatchProcessingTesterAgent());
+export const sREBatchProcessingTesterAgent = Object.freeze(
+  new SREBatchProcessingTesterAgent(),
+);

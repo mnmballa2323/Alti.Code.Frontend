@@ -1,17 +1,17 @@
 /**
  * Copyright (c) 2024 Inso Code — TIER 4: OPERATIONS
- * 
+ *
  * Release Agent — "The Commander"
  * Release management, semantic versioning, changelog generation.
  */
 import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 
-export const releaseWorkerProcessor = async (job) => {
-    const { commits, currentVersion, type } = job.data;
-    logger.info(`🚀 Release [${job.id}]: Planning ${type || 'release'}...`);
+export const releaseWorkerProcessor = async job => {
+  const { commits, currentVersion, type } = job.data;
+  logger.info(`🚀 Release [${job.id}]: Planning ${type || 'release'}...`);
 
-    const plan = await aiProvider.generate(`
+  const plan = await aiProvider.generate(`
 You are a release manager. Plan the next release based on recent commits.
 
 Current Version: ${currentVersion || '1.0.0'}
@@ -29,5 +29,5 @@ Provide:
 Respond in JSON: { "nextVersion": string, "type": string, "changelog": string, "releaseNotes": string, "checks": [] }
     `);
 
-    return { release: JSON.parse(plan.match(/\{[\s\S]*\}/)?.[0] || '{}') };
+  return { release: JSON.parse(plan.match(/\{[\s\S]*\}/)?.[0] || '{}') };
 };

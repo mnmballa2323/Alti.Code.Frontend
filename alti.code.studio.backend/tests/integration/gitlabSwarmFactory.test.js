@@ -7,7 +7,7 @@ import {
   GITLAB_SPECIALISTS_TAXONOMY,
 } from '../../src/app/modules/agents/gitlab_swarm_factory.js';
 import { vectorStoreService } from '../../src/app/modules/memory/vector.store.js';
-import { AzureGenAiService } from '../../src/app/modules/googleGenAi/azureGenAi.service.js';
+import { azureGenAiService as AzureGenAiService } from '../../src/app/modules/ai/azureGenAi.service.js';
 import fs from 'fs/promises';
 import path from 'path';
 

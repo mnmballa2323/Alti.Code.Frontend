@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIServerlessSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_serverless_specialist_agent',
-            'UI Serverless Specialist',
-            'You are an elite UI Serverless Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and UI Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_serverless_specialist_agent',
+      'UI Serverless Specialist',
+      'You are an elite UI Serverless Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and UI Serverless.',
+    );
+  }
 
-    async generateUIServerlessSystem(objective) {
-        logger.info(`💻 [UIServerlessSpecialistAgent] Analyzing UI Serverless Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Serverless Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Serverless Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIServerlessSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIServerlessSystem(objective) {
+    logger.info(
+      `💻 [UIServerlessSpecialistAgent] Analyzing UI Serverless Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Serverless Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Serverless Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIServerlessSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIServerlessSpecialistAgent = Object.freeze(new UIServerlessSpecialistAgent());
+export const uIServerlessSpecialistAgent = Object.freeze(
+  new UIServerlessSpecialistAgent(),
+);

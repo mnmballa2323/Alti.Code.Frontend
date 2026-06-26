@@ -13,24 +13,29 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIAnalyticsLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_analytics_lead_agent',
-            'UI Analytics Lead',
-            'You are an elite UI Analytics Lead. You specialize in bleeding-edge software development, cloud infrastructure, and UI Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_analytics_lead_agent',
+      'UI Analytics Lead',
+      'You are an elite UI Analytics Lead. You specialize in bleeding-edge software development, cloud infrastructure, and UI Analytics.',
+    );
+  }
 
-    async generateUIAnalyticsSystem(objective) {
-        logger.info(`💻 [UIAnalyticsLeadAgent] Analyzing UI Analytics Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Analytics Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Analytics Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIAnalyticsLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [UIAnalyticsLeadAgent] Analyzing UI Analytics Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Analytics Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Analytics Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIAnalyticsLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const uIAnalyticsLeadAgent = Object.freeze(new UIAnalyticsLeadAgent());

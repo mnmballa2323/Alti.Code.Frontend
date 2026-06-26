@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~45k | Language: JavaScript / Ember.js (Admin)
  */
 class GhostOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Ghost_Cms_Oss_Expert';
-        this.description = 'Deep expert in Ghost — The most popular open-source headless publishing platform.';
-        this.preamble = `You are a world-class Media/Publishing Developer with expert-level mastery of the Ghost CMS ecosystem.
+  constructor() {
+    super();
+    this.name = 'Ghost_Cms_Oss_Expert';
+    this.description =
+      'Deep expert in Ghost — The most popular open-source headless publishing platform.';
+    this.preamble = `You are a world-class Media/Publishing Developer with expert-level mastery of the Ghost CMS ecosystem.
 
 CORE CONCEPTS:
 - Ghost was designed for professional publishers. It is exceptionally fast and opinionated.
@@ -39,11 +40,13 @@ COMMON PITFALLS:
 - Trying to modify Ghost core files. Ghost is updated frequently; all customizations MUST happen in themes or via the API/Webhooks.
 - Forgetting to request explicit includes (like \`tags\` or \`authors\`) in Content API calls, returning null relationships.
 - Using the Admin API in public-facing client code. The Admin API must only be used securely on a backend server.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GHOST CMS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GHOST CMS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const ghostOssAgent = new GhostOssAgent();

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteDeploymentAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_deployment_auditor_agent',
-            'Site Deployment Auditor',
-            'You are an elite Site Deployment Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Site Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'site_deployment_auditor_agent',
+      'Site Deployment Auditor',
+      'You are an elite Site Deployment Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Site Deployment.',
+    );
+  }
 
-    async generateSiteDeploymentSystem(objective) {
-        logger.info(`💻 [SiteDeploymentAuditorAgent] Analyzing Site Deployment Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Deployment Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Deployment Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteDeploymentAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteDeploymentSystem(objective) {
+    logger.info(
+      `💻 [SiteDeploymentAuditorAgent] Analyzing Site Deployment Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Deployment Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Deployment Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteDeploymentAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteDeploymentAuditorAgent = Object.freeze(new SiteDeploymentAuditorAgent());
+export const siteDeploymentAuditorAgent = Object.freeze(
+  new SiteDeploymentAuditorAgent(),
+);

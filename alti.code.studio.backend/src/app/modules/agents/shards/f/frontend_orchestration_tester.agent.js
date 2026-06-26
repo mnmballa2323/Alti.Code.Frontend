@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendOrchestrationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_orchestration_tester_agent',
-            'Frontend Orchestration Tester',
-            'You are an elite Frontend Orchestration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_orchestration_tester_agent',
+      'Frontend Orchestration Tester',
+      'You are an elite Frontend Orchestration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Orchestration.',
+    );
+  }
 
-    async generateFrontendOrchestrationSystem(objective) {
-        logger.info(`💻 [FrontendOrchestrationTesterAgent] Analyzing Frontend Orchestration Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Orchestration Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Orchestration Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendOrchestrationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [FrontendOrchestrationTesterAgent] Analyzing Frontend Orchestration Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Orchestration Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Orchestration Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendOrchestrationTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendOrchestrationTesterAgent = Object.freeze(new FrontendOrchestrationTesterAgent());
+export const frontendOrchestrationTesterAgent = Object.freeze(
+  new FrontendOrchestrationTesterAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendProvisioningSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_provisioning_specialist_agent',
-            'Frontend Provisioning Specialist',
-            'You are an elite Frontend Provisioning Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_provisioning_specialist_agent',
+      'Frontend Provisioning Specialist',
+      'You are an elite Frontend Provisioning Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Provisioning.',
+    );
+  }
 
-    async generateFrontendProvisioningSystem(objective) {
-        logger.info(`💻 [FrontendProvisioningSpecialistAgent] Analyzing Frontend Provisioning Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Provisioning Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Provisioning Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendProvisioningSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendProvisioningSystem(objective) {
+    logger.info(
+      `💻 [FrontendProvisioningSpecialistAgent] Analyzing Frontend Provisioning Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Provisioning Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Provisioning Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendProvisioningSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendProvisioningSpecialistAgent = Object.freeze(new FrontendProvisioningSpecialistAgent());
+export const frontendProvisioningSpecialistAgent = Object.freeze(
+  new FrontendProvisioningSpecialistAgent(),
+);

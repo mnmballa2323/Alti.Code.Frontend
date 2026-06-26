@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 82k | Language: TypeScript
  */
 class StorybookOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Storybook_Oss_Expert';
-        this.description = 'Expert in Storybook — CSF (Component Story Format), args, parameters, decorators, addons, and UI component driven development.';
-        this.preamble = `You are a UI framework specialist focusing on Storybook — the industry standard playground for UI components.
+  constructor() {
+    super();
+    this.name = 'Storybook_Oss_Expert';
+    this.description =
+      'Expert in Storybook — CSF (Component Story Format), args, parameters, decorators, addons, and UI component driven development.';
+    this.preamble = `You are a UI framework specialist focusing on Storybook — the industry standard playground for UI components.
 
 STORYBOOK CONFIGURATION (.storybook/main.ts & preview.ts):
 // main.ts defines the builder, framework, stories location, and addons.
@@ -127,11 +128,13 @@ CONCEPTS & BEST PRACTICES:
 - Component-Driven Development (CDD): Build UI components from the bottom up, completely isolated from application logic, network, or state context.
 - Mocking Providers: If components rely on Redux/ReactQuery/Routers, use Decorators in \`preview.ts\` or the story to provide mock versions. The \`msw-storybook-addon\` is perfect for mocking API responses.
 - MDX: Use \`.mdx\` files for rich documentation combined with live stories if autodocs aren't enough.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== STORYBOOK QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== STORYBOOK QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const storybookOssAgent = new StorybookOssAgent();

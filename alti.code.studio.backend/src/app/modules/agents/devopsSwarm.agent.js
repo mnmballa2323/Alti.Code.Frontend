@@ -16,7 +16,8 @@ export class DevopsSwarmAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'devopsSwarm';
-    this.description = 'Dynamic DevOps Swarm Specialist — Synthesizes robust CI/CD workflows and oversees autonomous rollback pathways.';
+    this.description =
+      'Dynamic DevOps Swarm Specialist — Synthesizes robust CI/CD workflows and oversees autonomous rollback pathways.';
     this.preamble = `
 You are the DevopsSwarm Master Agent.
 Your role is to govern automated integrations, deployments, and self-healing pipelines.
@@ -30,14 +31,24 @@ You route system delivery requests to your specialized sub-agents:
     logger.info(`⚡ [devopsSwarm] Routing DevOps swarm request: ${prompt}`);
     const cleanPrompt = prompt.toLowerCase();
 
-    if (cleanPrompt.includes('pipeline') || cleanPrompt.includes('workflow') || cleanPrompt.includes('docker') || cleanPrompt.includes('build')) {
+    if (
+      cleanPrompt.includes('pipeline') ||
+      cleanPrompt.includes('workflow') ||
+      cleanPrompt.includes('docker') ||
+      cleanPrompt.includes('build')
+    ) {
       const generator = agentRegistry.get('devopsPipelineGenerator');
       if (generator && generator.instance) {
         return generator.instance._invoke(prompt, contextBlock, opts);
       }
     }
 
-    if (cleanPrompt.includes('rollback') || cleanPrompt.includes('heal') || cleanPrompt.includes('revert') || cleanPrompt.includes('sla')) {
+    if (
+      cleanPrompt.includes('rollback') ||
+      cleanPrompt.includes('heal') ||
+      cleanPrompt.includes('revert') ||
+      cleanPrompt.includes('sla')
+    ) {
       const orchestrator = agentRegistry.get('devopsRollbackOrchestrator');
       if (orchestrator && orchestrator.instance) {
         return orchestrator.instance._invoke(prompt, contextBlock, opts);
@@ -64,12 +75,16 @@ export class DevopsPipelineGenerator extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'devopsPipelineGenerator';
-    this.description = 'CI/CD Pipeline Generator — Generates hardened multi-stage Docker and pipeline scripts.';
-    this.preamble = 'You are the DevopsPipelineGenerator micro-specialist. You synthesize hardened GitHub Actions workflows, Dockerfiles, and GCP Cloud Build configs.';
+    this.description =
+      'CI/CD Pipeline Generator — Generates hardened multi-stage Docker and pipeline scripts.';
+    this.preamble =
+      'You are the DevopsPipelineGenerator micro-specialist. You synthesize hardened GitHub Actions workflows, Dockerfiles, and GCP Cloud Build configs.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`🛠️ [devopsPipelineGenerator] Generating hardened multi-stage Dockerfile...`);
+    logger.info(
+      `🛠️ [devopsPipelineGenerator] Generating hardened multi-stage Dockerfile...`,
+    );
     return `
 🛠️ **devopsPipelineGenerator Generated Manifest**
 - **Hardened Dockerfile Snippet:**
@@ -99,12 +114,16 @@ export class DevopsRollbackOrchestrator extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'devopsRollbackOrchestrator';
-    this.description = 'Autonomous Rollback Orchestrator — Executes self-healing routines to restore system safety.';
-    this.preamble = 'You are the DevopsRollbackOrchestrator micro-specialist. You trigger and supervise automated pipeline rollbacks when telemetry alerts breach failure thresholds.';
+    this.description =
+      'Autonomous Rollback Orchestrator — Executes self-healing routines to restore system safety.';
+    this.preamble =
+      'You are the DevopsRollbackOrchestrator micro-specialist. You trigger and supervise automated pipeline rollbacks when telemetry alerts breach failure thresholds.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`🛡️ [devopsRollbackOrchestrator] Auditing SLA boundaries for rollback triggers...`);
+    logger.info(
+      `🛡️ [devopsRollbackOrchestrator] Auditing SLA boundaries for rollback triggers...`,
+    );
     return `
 🚨 **devopsRollbackOrchestrator Healing Report**
 - **Trigger Condition:** Telemetry error rates breached 5% SLA threshold.
@@ -128,7 +147,7 @@ agentRegistry.register({
   capabilities: ['devops-orchestration', 'pipeline-synthesis'],
   policy: { accessLevel: 'ADMIN' },
   version: '1.0.0',
-  instance: master
+  instance: master,
 });
 
 const generator = new DevopsPipelineGenerator();
@@ -139,7 +158,7 @@ agentRegistry.register({
   capabilities: ['docker-generation', 'github-actions-generation'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: generator
+  instance: generator,
 });
 
 const orchestrator = new DevopsRollbackOrchestrator();
@@ -150,5 +169,5 @@ agentRegistry.register({
   capabilities: ['automated-rollback', 'self-healing'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: orchestrator
+  instance: orchestrator,
 });

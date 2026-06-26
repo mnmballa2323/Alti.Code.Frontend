@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteResilienceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_resilience_manager_agent',
-            'Site Resilience Manager',
-            'You are an elite Site Resilience Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Site Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'site_resilience_manager_agent',
+      'Site Resilience Manager',
+      'You are an elite Site Resilience Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Site Resilience.',
+    );
+  }
 
-    async generateSiteResilienceSystem(objective) {
-        logger.info(`💻 [SiteResilienceManagerAgent] Analyzing Site Resilience Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Resilience Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Resilience Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteResilienceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteResilienceSystem(objective) {
+    logger.info(
+      `💻 [SiteResilienceManagerAgent] Analyzing Site Resilience Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Resilience Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Resilience Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteResilienceManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteResilienceManagerAgent = Object.freeze(new SiteResilienceManagerAgent());
+export const siteResilienceManagerAgent = Object.freeze(
+  new SiteResilienceManagerAgent(),
+);

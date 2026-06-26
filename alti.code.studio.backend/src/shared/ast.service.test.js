@@ -2,9 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { astService } from './ast.service.js';
 
 describe('Universal AST Syntactic Awareness (Phase 15)', () => {
-
-    it('should mathematically extract a nested class method regardless of regex fragility', () => {
-        const sourceCode = `
+  it('should mathematically extract a nested class method regardless of regex fragility', () => {
+    const sourceCode = `
 import { logger } from 'shared';
 
 class ComplexHandler {
@@ -35,17 +34,17 @@ class ComplexHandler {
 }
         `;
 
-        const extracted = astService.extractFunction(sourceCode, 'processData');
+    const extracted = astService.extractFunction(sourceCode, 'processData');
 
-        expect(extracted).not.toBeNull();
-        expect(extracted).toContain('async processData(input)');
-        expect(extracted).toContain('return mapped;');
-        expect(extracted).not.toContain('anotherMethod');
-        expect(extracted).not.toContain('constructor');
-    });
+    expect(extracted).not.toBeNull();
+    expect(extracted).toContain('async processData(input)');
+    expect(extracted).toContain('return mapped;');
+    expect(extracted).not.toContain('anotherMethod');
+    expect(extracted).not.toContain('constructor');
+  });
 
-    it('should calculate structural cyclomatic complexity', () => {
-        const highComplexityCode = `
+  it('should calculate structural cyclomatic complexity', () => {
+    const highComplexityCode = `
 function calculate(a, b) {
     if (a > b) {
         return true;
@@ -60,20 +59,20 @@ function calculate(a, b) {
 }
         `;
 
-        const complexity = astService.calculateComplexity(highComplexityCode);
+    const complexity = astService.calculateComplexity(highComplexityCode);
 
-        // Base(1) + if(1) + else-if(1) + &&(1) + ||(1) + for(1) + while(1) + ternary(1) = 8
-        expect(complexity).toBe(8);
-    });
+    // Base(1) + if(1) + else-if(1) + &&(1) + ||(1) + for(1) + while(1) + ternary(1) = 8
+    expect(complexity).toBe(8);
+  });
 
-    it('should calculate base complexity as 1 for a flat function', () => {
-        const flatCode = `
+  it('should calculate base complexity as 1 for a flat function', () => {
+    const flatCode = `
 function simple() {
     console.log("Hello");
     return 1 + 1;
 }
         `;
-        const complexity = astService.calculateComplexity(flatCode);
-        expect(complexity).toBe(1);
-    });
+    const complexity = astService.calculateComplexity(flatCode);
+    expect(complexity).toBe(1);
+  });
 });

@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class LegalForensicsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Digital_Forensics_Auditor';
-        this.description = 'Specialist software engineer for building court-admissible Chain of Custody (CoC) audit logs, cryptographic hashing data pipelines, e-discovery extractors, and automated PII redaction filters.';
-        this.preamble = `You are an elite Legal Tech & Digital Forensics Software Engineer specializing in court-admissible evidence ledgers, e-discovery, and strict data compliance regulations (GDPR, CCPA, SOC2).
+  constructor() {
+    super();
+    this.name = 'Digital_Forensics_Auditor';
+    this.description =
+      'Specialist software engineer for building court-admissible Chain of Custody (CoC) audit logs, cryptographic hashing data pipelines, e-discovery extractors, and automated PII redaction filters.';
+    this.preamble = `You are an elite Legal Tech & Digital Forensics Software Engineer specializing in court-admissible evidence ledgers, e-discovery, and strict data compliance regulations (GDPR, CCPA, SOC2).
 
 # CORE RESPONSIBILITIES
 1. **Chain of Custody (CoC)**: Scaffold append-only, immutable audit ledger architectures. Ensure every system event generates a strict SHA-384 cryptographic hash of the payload, timestamp, and previous block hash to guarantee tamper-evident logging.
@@ -28,21 +29,27 @@ class LegalForensicsAgent extends BaseSpecialistAgent {
 
 # BEHAVIOR
 Output production-quality legal technology and forensic extraction code. When writing cryptographic hashing logic, handle stream piping correctly to avoid OOM (Out of Memory) crashes on multi-terabyte evidence files. Do not generate markdown explanations unless explicitly asked; prioritize raw, immediately compilable architectures.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⚖️ Forensics Auditor: Scaffolding cryptographic Chain-of-Custody and e-discovery logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `⚖️ Forensics Auditor: Scaffolding cryptographic Chain-of-Custody and e-discovery logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Forensics Auditor failed:', e);
-            throw new Error(`Legal/Forensics Integration Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Forensics Auditor failed:', e);
+      throw new Error(
+        `Legal/Forensics Integration Synthesis Failed: ${e.message}`,
+      );
     }
+  }
 }
 
 export const legalForensicsAgent = new LegalForensicsAgent();

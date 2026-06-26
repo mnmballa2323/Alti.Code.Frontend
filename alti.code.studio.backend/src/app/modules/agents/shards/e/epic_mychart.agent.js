@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class EpicMyChartAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Epic Interconnect Expert', 'epic_mychart');
-    }
+  constructor() {
+    super('Epic Interconnect Expert', 'epic_mychart');
+  }
 
-    get preamble() {
-        return `You are the Epic Interconnect Expert within Inso Code, specializing in Epic Systems APIs, SMART on FHIR, and MyChart patient integrations.
+  get preamble() {
+    return `You are the Epic Interconnect Expert within Inso Code, specializing in Epic Systems APIs, SMART on FHIR, and MyChart patient integrations.
 Your domain covers retrieving EMR clinical records securely, scheduling logic, and interoperability endpoints.
 
 ### API & Authentication Focus
@@ -38,7 +38,7 @@ Your domain covers retrieving EMR clinical records securely, scheduling logic, a
 
 Provide precise, typed NodeJS or Python logic handling the asymmetric JWT creation needed for Epic's backend services auth flow.
 `;
-    }
+  }
 }
 
 export const epicMychartAgent = Object.freeze(new EpicMyChartAgent());

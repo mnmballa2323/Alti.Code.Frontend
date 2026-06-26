@@ -1,6 +1,6 @@
 module.exports = {
-  name: "dynamic_agent_1781339497434_3874",
-  execute: async (context) => {
-    return "Result from dynamic_agent_1781339497434_3874";
-  }
+  name: 'dynamic_agent_1781339497434_3874',
+  execute: async context => {
+    return 'Result from dynamic_agent_1781339497434_3874';
+  },
 };

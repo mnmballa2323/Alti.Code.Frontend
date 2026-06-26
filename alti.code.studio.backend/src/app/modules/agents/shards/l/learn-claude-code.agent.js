@@ -15,11 +15,12 @@ import { nanoAgentService } from '../openclaw/nano-agent.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class LearnClaudeCodeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('LearnClaudeCodeAgent', 'The Nano Code Executor', 'Tier 13');
-        this.name = 'NanoCode_Autonomous_Agent';
-        this.description = 'Minimal autonomous code agent using the read/write/bash tool loop (learn-claude-code pattern). Iteratively reads files, writes code, runs bash commands, and self-corrects until tasks complete. Ideal for: automated refactoring, file generation, test execution, script automation, and any task where autonomous fs/shell access is needed.';
-        this.preamble = `You are the Nano Code Agent — a minimal, autonomous code executor.
+  constructor() {
+    super('LearnClaudeCodeAgent', 'The Nano Code Executor', 'Tier 13');
+    this.name = 'NanoCode_Autonomous_Agent';
+    this.description =
+      'Minimal autonomous code agent using the read/write/bash tool loop (learn-claude-code pattern). Iteratively reads files, writes code, runs bash commands, and self-corrects until tasks complete. Ideal for: automated refactoring, file generation, test execution, script automation, and any task where autonomous fs/shell access is needed.';
+    this.preamble = `You are the Nano Code Agent — a minimal, autonomous code executor.
 You embody the core insight from "learn-claude-code": that a powerful coding agent needs only 4 primitives:
 
 **Your 4 Tools (The Bash Manifesto):**
@@ -48,38 +49,42 @@ list_dir(path)            → Explore directory structure
 **Pattern from learn-claude-code:**
 The nano-agent demonstrates that a coding agent fundamentally just needs:
 a tight loop of tool calls, LLM reasoning between calls, and self-correction on errors.`;
+  }
+
+  async _invoke(prompt, contextBlock) {
+    logger.info(`⚡ NanoCode Agent: Starting autonomous execution task...`);
+
+    // Determine if this needs the full nano-agent loop or Gemini reasoning
+    const needsExecution =
+      /(?:run|execute|create file|write|fix|refactor|test|npm|python|bash|shell)/i.test(
+        prompt,
+      );
+
+    if (needsExecution) {
+      logger.info('[nano-agent] Detected executable task — starting tool loop');
+      const result = await nanoAgentService.run(prompt, {
+        maxIterations: 12,
+        systemPrompt: `${this.preamble}\n\nTask: ${prompt}\n\nContext: ${contextBlock || ''}`,
+      });
+
+      const summary =
+        result.status === 'done'
+          ? `✅ **Completed** (${result.iterations} iterations)\n\n${result.summary}`
+          : `⚠️ **Status: ${result.status}** after ${result.iterations} iterations\n\nAgent history captured.`;
+
+      return summary;
     }
 
-    async _invoke(prompt, contextBlock) {
-        logger.info(`⚡ NanoCode Agent: Starting autonomous execution task...`);
+    // For reasoning/planning tasks, use Gemini with the nano-agent preamble
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\nContext: ${contextBlock || ''}\n\nTask: ${prompt}`,
+    );
+  }
 
-        // Determine if this needs the full nano-agent loop or Gemini reasoning
-        const needsExecution = /(?:run|execute|create file|write|fix|refactor|test|npm|python|bash|shell)/i.test(prompt);
-
-        if (needsExecution) {
-            logger.info('[nano-agent] Detected executable task — starting tool loop');
-            const result = await nanoAgentService.run(prompt, {
-                maxIterations: 12,
-                systemPrompt: `${this.preamble}\n\nTask: ${prompt}\n\nContext: ${contextBlock || ''}`,
-            });
-
-            const summary = result.status === 'done'
-                ? `✅ **Completed** (${result.iterations} iterations)\n\n${result.summary}`
-                : `⚠️ **Status: ${result.status}** after ${result.iterations} iterations\n\nAgent history captured.`;
-
-            return summary;
-        }
-
-        // For reasoning/planning tasks, use Gemini with the nano-agent preamble
-        return GeminiAiService.generateContent(
-            `${this.preamble}\n\nContext: ${contextBlock || ''}\n\nTask: ${prompt}`
-        );
-    }
-
-    /** Expose available tools to the orchestrator */
-    getTools() {
-        return nanoAgentService.getTools();
-    }
+  /** Expose available tools to the orchestrator */
+  getTools() {
+    return nanoAgentService.getTools();
+  }
 }
 
 export const learnClaudeCodeAgent = Object.freeze(new LearnClaudeCodeAgent());

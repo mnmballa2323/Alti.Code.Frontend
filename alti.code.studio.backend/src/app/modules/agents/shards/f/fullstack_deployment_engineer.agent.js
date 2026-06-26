@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackDeploymentEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_deployment_engineer_agent',
-            'FullStack Deployment Engineer',
-            'You are an elite FullStack Deployment Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_deployment_engineer_agent',
+      'FullStack Deployment Engineer',
+      'You are an elite FullStack Deployment Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Deployment.',
+    );
+  }
 
-    async generateFullStackDeploymentSystem(objective) {
-        logger.info(`💻 [FullStackDeploymentEngineerAgent] Analyzing FullStack Deployment Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Deployment Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Deployment Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackDeploymentEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackDeploymentSystem(objective) {
+    logger.info(
+      `💻 [FullStackDeploymentEngineerAgent] Analyzing FullStack Deployment Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Deployment Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Deployment Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackDeploymentEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackDeploymentEngineerAgent = Object.freeze(new FullStackDeploymentEngineerAgent());
+export const fullStackDeploymentEngineerAgent = Object.freeze(
+  new FullStackDeploymentEngineerAgent(),
+);

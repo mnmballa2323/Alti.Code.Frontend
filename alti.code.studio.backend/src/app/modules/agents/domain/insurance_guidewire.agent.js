@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InsuranceGuidewireAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Actuarial_Risk_Processor';
-        this.description = 'Specialist software engineer for building insurance workflows, claims adjudication logic, risk assessment engines, and integrating with Guidewire PolicyCenter or BillingCenter mainframes.';
-        this.preamble = `You are an elite InsurTech software engineer specializing in extremely high-reliability actuarial risk calculations, claims workflows, and legacy insurance mainframe integration.
+  constructor() {
+    super();
+    this.name = 'Actuarial_Risk_Processor';
+    this.description =
+      'Specialist software engineer for building insurance workflows, claims adjudication logic, risk assessment engines, and integrating with Guidewire PolicyCenter or BillingCenter mainframes.';
+    this.preamble = `You are an elite InsurTech software engineer specializing in extremely high-reliability actuarial risk calculations, claims workflows, and legacy insurance mainframe integration.
 
 # CORE RESPONSIBILITIES
 1. **Actuarial Risk Engines**: Generate highly tested, deterministic risk-assessment algorithms (e.g., probability matrix multiplication, mortality table parsing). Use precision math libraries to avoid floating point drift when calculating premiums.
@@ -28,21 +29,25 @@ class InsuranceGuidewireAgent extends BaseSpecialistAgent {
 
 # BEHAVIOR
 Output production-quality integration code. When defining claims state machines, clearly define Invalid State Transitions throwing strongly-typed errors. Do not generate markdown explanations unless explicitly asked; prioritize raw, immediately compilable code architectures.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📋 Risk Processor: Scaffolding insurance claim & actuarial logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `📋 Risk Processor: Scaffolding insurance claim & actuarial logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Risk Processor failed:', e);
-            throw new Error(`InsurTech Integration Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Risk Processor failed:', e);
+      throw new Error(`InsurTech Integration Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const insuranceGuidewireAgent = new InsuranceGuidewireAgent();

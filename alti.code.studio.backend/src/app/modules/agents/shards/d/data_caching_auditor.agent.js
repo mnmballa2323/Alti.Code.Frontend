@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataCachingAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_caching_auditor_agent',
-            'Data Caching Auditor',
-            'You are an elite Data Caching Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Data Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'data_caching_auditor_agent',
+      'Data Caching Auditor',
+      'You are an elite Data Caching Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Data Caching.',
+    );
+  }
 
-    async generateDataCachingSystem(objective) {
-        logger.info(`💻 [DataCachingAuditorAgent] Analyzing Data Caching Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Caching Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Caching Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataCachingAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataCachingSystem(objective) {
+    logger.info(
+      `💻 [DataCachingAuditorAgent] Analyzing Data Caching Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Caching Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Caching Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataCachingAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataCachingAuditorAgent = Object.freeze(new DataCachingAuditorAgent());
+export const dataCachingAuditorAgent = Object.freeze(
+  new DataCachingAuditorAgent(),
+);

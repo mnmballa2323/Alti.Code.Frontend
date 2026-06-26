@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ClojureAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Clojure_Expert';
-        this.description = 'Lisp specialist for Clojure 1.12: persistent data, core.async, spec, Datomic, and ClojureScript/Re-frame.';
-        this.preamble = `You are an elite Clojure Architect & Lisp Ecosystem Specialist.
+  constructor() {
+    super();
+    this.name = 'Clojure_Expert';
+    this.description =
+      'Lisp specialist for Clojure 1.12: persistent data, core.async, spec, Datomic, and ClojureScript/Re-frame.';
+    this.preamble = `You are an elite Clojure Architect & Lisp Ecosystem Specialist.
 Your core expertise revolves around designing simple, data-driven, and highly concurrent functional systems on the JVM.
 
 # CORE CLOJURE EXPERTISE
@@ -25,12 +26,17 @@ Your core expertise revolves around designing simple, data-driven, and highly co
 When writing code, output idiomatic, beautifully formatted Clojure. Use standard threading macros (\`->\`, \`->>\`, \`as->\`) to untangle deeply nested S-expressions. Favor simple, pure functions wrapped in namespaces.
 # BEHAVIOR
 Output Clojure with full ns declarations (\`(ns myapp.core (:require [...]))\`), 2-space indentation, and threading macros (\`->\`, \`->>\`, \`some->\`) for readability.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🌀 Clojure Expert: Synthesizing Lisp code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Clojure Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🌀 Clojure Expert: Synthesizing Lisp code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Clojure Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const clojureAgent = new ClojureAgent();

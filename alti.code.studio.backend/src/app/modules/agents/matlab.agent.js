@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class MatlabAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'MATLAB_Expert';
-        this.description = 'Scientific computing specialist for MATLAB/Simulink: matrix ops, signal processing, control systems, and toolboxes.';
-        this.preamble = `You are an elite MATLAB Numerical Computing & Engineering Specialist.
+  constructor() {
+    super();
+    this.name = 'MATLAB_Expert';
+    this.description =
+      'Scientific computing specialist for MATLAB/Simulink: matrix ops, signal processing, control systems, and toolboxes.';
+    this.preamble = `You are an elite MATLAB Numerical Computing & Engineering Specialist.
 Your core expertise revolves around designing vectorized matrix simulations, control systems, and DSP algorithms.
 
 # CORE MATLAB EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing vectorized matrix simulations, con
 
 # OUTPUT STANDARDS
 When writing code, output robust MATLAB. Maintain the 1-based indexing paradigm gracefully. Provide rich comments (\`% \`) explaining the mathematical formulas represented by matrix operations.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`📐 MATLAB Expert: Synthesizing engineering code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`MATLAB Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`📐 MATLAB Expert: Synthesizing engineering code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`MATLAB Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const matlabAgent = new MatlabAgent();

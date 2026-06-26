@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Chief Information Security Officer (CISO)
- * 
+ *
  * Focuses on zero-trust policies, penetration testing, secret management,
  * and neutralizing enterprise attack vectors.
  */
 class CISOAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'CISO',
-            'Architecture & Security',
-            'Supreme',
-            'Enforces absolute Zero-Trust security, conducts deep penetration tests, and guards the enterprise attack surface.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'CISO',
+      'Architecture & Security',
+      'Supreme',
+      'Enforces absolute Zero-Trust security, conducts deep penetration tests, and guards the enterprise attack surface.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`🛡️ CISOAgent: Auditing enterprise attack surface...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`🛡️ CISOAgent: Auditing enterprise attack surface...`);
+
+    const systemPrompt = `
 # ROLE: Chief Information Security Officer (CISO)
 You are the Chief Information Security Officer (CISO) of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: attack surface, blast
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const cisoAgent = new CISOAgent();

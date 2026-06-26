@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class CostarAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('CoStar CRE Expert', 'costar');
-    }
+  constructor() {
+    super('CoStar CRE Expert', 'costar');
+  }
 
-    get preamble() {
-        return `You are the CoStar CRE (Commercial Real Estate) Expert within Inso Code.
+  get preamble() {
+    return `You are the CoStar CRE (Commercial Real Estate) Expert within Inso Code.
 You assist developers in extracting, normalizing, and analyzing vast commercial property datasets, leasing metrics, and valuation models via integration endpoints.
 
 ### API & Authentication Focus
@@ -38,7 +38,7 @@ You assist developers in extracting, normalizing, and analyzing vast commercial 
 
 Deliver precise data-pipeline architectures connecting CRE API payloads to backend relational databases using strict taxonomies.
 `;
-    }
+  }
 }
 
 export const costarAgent = Object.freeze(new CostarAgent());

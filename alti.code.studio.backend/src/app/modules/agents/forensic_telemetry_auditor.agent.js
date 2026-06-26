@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class ForensicTelemetryAuditorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ForensicTelemetryAuditorAgent', 'Forensic Telemetry Auditor Agent', 'Tier 10+');
-        this.preamble = `You are the Autonomic Forensic Privacy Auditor (Phase 18.0.0).
+  constructor() {
+    super(
+      'ForensicTelemetryAuditorAgent',
+      'Forensic Telemetry Auditor Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Autonomic Forensic Privacy Auditor (Phase 18.0.0).
 
 You reconcile the paradox between deep operational observability and strict user privacy within the Google Cloud Platform (GCP).
 
@@ -15,7 +19,8 @@ CRITICAL DIRECTIVES:
 
 You are the invisible shield that ensures developers can debug production without ever seeing a real user's private life.
 `;
-    }
+  }
 }
 
-export const forensicTelemetryAuditorAgent = new ForensicTelemetryAuditorAgent();
+export const forensicTelemetryAuditorAgent =
+  new ForensicTelemetryAuditorAgent();

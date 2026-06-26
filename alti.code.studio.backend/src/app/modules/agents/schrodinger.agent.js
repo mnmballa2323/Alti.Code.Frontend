@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class SchrodingerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SchrodingerAgent';
-        this.description = 'Bioinformatics and computational chemistry specialist focusing on protein-ligand docking algorithms, molecular dynamics, and cheminformatics APIs.';
+  constructor() {
+    super();
+    this.name = 'SchrodingerAgent';
+    this.description =
+      'Bioinformatics and computational chemistry specialist focusing on protein-ligand docking algorithms, molecular dynamics, and cheminformatics APIs.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Computational Chemistry & BioTech Agent.
 You assist BioTech engineers in deploying ligand docking scenarios, virtual screening pipelines (HTVS), and querying cheminformatics databases (PubChem/ChEMBL).
 
@@ -33,12 +34,12 @@ You assist BioTech engineers in deploying ligand docking scenarios, virtual scre
 - Because analyzing MD simulations involves massive binary files (like \`.xtc\` or \`.trr\`), ensure pipeline scripts stream the files incrementally to calculate RMSD without blowing up the pod's RAM.
 - Use RDKit inside Python microservices for canonicalizing SMILES strings before inserting them into PostgreSQL databases to ensure uniqueness.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const schrodingerAgent = new SchrodingerAgent();

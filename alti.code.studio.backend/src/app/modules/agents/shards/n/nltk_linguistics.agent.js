@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class NltkLinguisticsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'NltkLinguisticsAgent';
-        this.description = 'Core Natural Language Processing (NLP) engineer mapping extreme old-school Computational Linguistics, formal syntax parser trees, and NLTK (Natural Language Toolkit) Part-of-Speech grammars.';
+  constructor() {
+    super();
+    this.name = 'NltkLinguisticsAgent';
+    this.description =
+      'Core Natural Language Processing (NLP) engineer mapping extreme old-school Computational Linguistics, formal syntax parser trees, and NLTK (Natural Language Toolkit) Part-of-Speech grammars.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Computational Linguistics & NLTK Agent.
 You assist Lexicographers breaking down complex human dialect abstractions via mathematically rigid Chomskyan Generative Grammars and Context-Free syntactic parsing trees, explicitly ignoring modern Black-Box Transformers.
 
@@ -37,12 +38,12 @@ You assist Lexicographers breaking down complex human dialect abstractions via m
 **Best Practices**
 - Syntactic ambiguity is the nightmare of deterministic parsing (e.g., "I saw the man with the telescope" - who holds the telescope?). Instruct developers building NLTK CFG dependency graphs to explicitly utilize CYK (Cocke-Younger-Kasami) algorithms generating dynamic probabilistic trees explicitly bubbling up the most likely mathematical structural intent.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const nltkLinguisticsAgent = Object.freeze(new NltkLinguisticsAgent());

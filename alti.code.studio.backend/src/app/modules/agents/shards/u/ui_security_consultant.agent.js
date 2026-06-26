@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UISecurityConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_security_consultant_agent',
-            'UI Security Consultant',
-            'You are an elite UI Security Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UI Security.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_security_consultant_agent',
+      'UI Security Consultant',
+      'You are an elite UI Security Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UI Security.',
+    );
+  }
 
-    async generateUISecuritySystem(objective) {
-        logger.info(`💻 [UISecurityConsultantAgent] Analyzing UI Security Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Security Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Security Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UISecurityConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUISecuritySystem(objective) {
+    logger.info(
+      `💻 [UISecurityConsultantAgent] Analyzing UI Security Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Security Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Security Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UISecurityConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uISecurityConsultantAgent = Object.freeze(new UISecurityConsultantAgent());
+export const uISecurityConsultantAgent = Object.freeze(
+  new UISecurityConsultantAgent(),
+);

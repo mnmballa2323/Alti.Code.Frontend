@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileConfigurationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_configuration_lead_agent',
-            'Mobile Configuration Lead',
-            'You are an elite Mobile Configuration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_configuration_lead_agent',
+      'Mobile Configuration Lead',
+      'You are an elite Mobile Configuration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Configuration.',
+    );
+  }
 
-    async generateMobileConfigurationSystem(objective) {
-        logger.info(`💻 [MobileConfigurationLeadAgent] Analyzing Mobile Configuration Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Configuration Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Configuration Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileConfigurationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileConfigurationSystem(objective) {
+    logger.info(
+      `💻 [MobileConfigurationLeadAgent] Analyzing Mobile Configuration Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Configuration Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Configuration Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [MobileConfigurationLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const mobileConfigurationLeadAgent = Object.freeze(new MobileConfigurationLeadAgent());
+export const mobileConfigurationLeadAgent = Object.freeze(
+  new MobileConfigurationLeadAgent(),
+);

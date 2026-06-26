@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityConfigurationAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_configuration_auditor_agent',
-            'Security Configuration Auditor',
-            'You are an elite Security Configuration Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Security Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'security_configuration_auditor_agent',
+      'Security Configuration Auditor',
+      'You are an elite Security Configuration Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Security Configuration.',
+    );
+  }
 
-    async generateSecurityConfigurationSystem(objective) {
-        logger.info(`💻 [SecurityConfigurationAuditorAgent] Analyzing Security Configuration Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Configuration Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Configuration Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityConfigurationAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityConfigurationSystem(objective) {
+    logger.info(
+      `💻 [SecurityConfigurationAuditorAgent] Analyzing Security Configuration Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Configuration Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Configuration Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityConfigurationAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityConfigurationAuditorAgent = Object.freeze(new SecurityConfigurationAuditorAgent());
+export const securityConfigurationAuditorAgent = Object.freeze(
+  new SecurityConfigurationAuditorAgent(),
+);

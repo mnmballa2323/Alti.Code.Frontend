@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureServerlessAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_serverless_auditor_agent',
-            'Infrastructure Serverless Auditor',
-            'You are an elite Infrastructure Serverless Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_serverless_auditor_agent',
+      'Infrastructure Serverless Auditor',
+      'You are an elite Infrastructure Serverless Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Serverless.',
+    );
+  }
 
-    async generateInfrastructureServerlessSystem(objective) {
-        logger.info(`💻 [InfrastructureServerlessAuditorAgent] Analyzing Infrastructure Serverless Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Serverless Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Serverless Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureServerlessAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureServerlessSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureServerlessAuditorAgent] Analyzing Infrastructure Serverless Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Serverless Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Serverless Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureServerlessAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureServerlessAuditorAgent = Object.freeze(new InfrastructureServerlessAuditorAgent());
+export const infrastructureServerlessAuditorAgent = Object.freeze(
+  new InfrastructureServerlessAuditorAgent(),
+);

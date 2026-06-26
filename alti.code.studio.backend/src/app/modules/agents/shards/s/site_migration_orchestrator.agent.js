@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteMigrationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_migration_orchestrator_agent',
-            'Site Migration Orchestrator',
-            'You are an elite Site Migration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Site Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'site_migration_orchestrator_agent',
+      'Site Migration Orchestrator',
+      'You are an elite Site Migration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Site Migration.',
+    );
+  }
 
-    async generateSiteMigrationSystem(objective) {
-        logger.info(`💻 [SiteMigrationOrchestratorAgent] Analyzing Site Migration Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Migration Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Migration Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteMigrationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteMigrationSystem(objective) {
+    logger.info(
+      `💻 [SiteMigrationOrchestratorAgent] Analyzing Site Migration Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Migration Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Migration Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SiteMigrationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const siteMigrationOrchestratorAgent = Object.freeze(new SiteMigrationOrchestratorAgent());
+export const siteMigrationOrchestratorAgent = Object.freeze(
+  new SiteMigrationOrchestratorAgent(),
+);

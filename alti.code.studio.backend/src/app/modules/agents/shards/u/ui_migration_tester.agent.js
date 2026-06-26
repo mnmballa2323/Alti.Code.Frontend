@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIMigrationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_migration_tester_agent',
-            'UI Migration Tester',
-            'You are an elite UI Migration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and UI Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_migration_tester_agent',
+      'UI Migration Tester',
+      'You are an elite UI Migration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and UI Migration.',
+    );
+  }
 
-    async generateUIMigrationSystem(objective) {
-        logger.info(`💻 [UIMigrationTesterAgent] Analyzing UI Migration Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Migration Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Migration Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIMigrationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIMigrationSystem(objective) {
+    logger.info(
+      `💻 [UIMigrationTesterAgent] Analyzing UI Migration Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Migration Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Migration Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIMigrationTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIMigrationTesterAgent = Object.freeze(new UIMigrationTesterAgent());
+export const uIMigrationTesterAgent = Object.freeze(
+  new UIMigrationTesterAgent(),
+);

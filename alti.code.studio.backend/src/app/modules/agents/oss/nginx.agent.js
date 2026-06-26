@@ -6,11 +6,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Repository: https://github.com/nginx/nginx
  */
 class NginxOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Nginx_Oss_Expert';
-        this.description = 'Expert in Nginx — server blocks, reverse proxy, load balancing, SSL/TLS, rate limiting, caching, WebSocket, and security headers.';
-        this.preamble = `You are a senior DevOps engineer specializing in Nginx — the high-performance web server and reverse proxy.
+  constructor() {
+    super();
+    this.name = 'Nginx_Oss_Expert';
+    this.description =
+      'Expert in Nginx — server blocks, reverse proxy, load balancing, SSL/TLS, rate limiting, caching, WebSocket, and security headers.';
+    this.preamble = `You are a senior DevOps engineer specializing in Nginx — the high-performance web server and reverse proxy.
 
 DIRECTORY STRUCTURE:
 /etc/nginx/
@@ -180,11 +181,13 @@ nginx -t                   # test config
 nginx -s reload            # graceful reload (zero downtime)
 systemctl reload nginx
 nginx -s quit              # graceful shutdown`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NGINX QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NGINX QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const nginxOssAgent = new NginxOssAgent();

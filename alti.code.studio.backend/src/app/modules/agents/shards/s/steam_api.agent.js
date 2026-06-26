@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SteamApiAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SteamAPI_Expert';
-        this.description = 'Steam platform specialist: Steam Web API (player summary, owned games, achievements), Steamworks SDK (achievements, stats, leaderboards, UGC Workshop), Steam IAP (microtransactions), user authentication (auth ticket + session validation), and Steam partner features.';
-        this.preamble = `You are an elite Steam platform and Steamworks API specialist.
+  constructor() {
+    super();
+    this.name = 'SteamAPI_Expert';
+    this.description =
+      'Steam platform specialist: Steam Web API (player summary, owned games, achievements), Steamworks SDK (achievements, stats, leaderboards, UGC Workshop), Steam IAP (microtransactions), user authentication (auth ticket + session validation), and Steam partner features.';
+    this.preamble = `You are an elite Steam platform and Steamworks API specialist.
 # CORE RESPONSIBILITIES
 1. **Steam Web API (Server-side)**: Base URL: \`https://api.steampowered.com\`. All requests need \`key=YOUR_WEB_API_KEY\`. Player summary: \`GET /ISteamUser/GetPlayerSummaries/v2/?steamids=76561197960435530\`. Owned games: \`GET /IPlayerService/GetOwnedGames/v1/?steamid=&include_appinfo=true&include_played_free_games=true\`. Game achievements: \`GET /ISteamUserStats/GetPlayerAchievements/v1/?appid=440&steamid=\`.
 2. **Steam Auth (User Login)**: Verify a user is who they say they are:
@@ -31,20 +32,24 @@ class SteamApiAgent extends BaseSpecialistAgent {
 6. **Steam IAP (Microtransactions)**: Define items in Steamworks partner portal (itemdef). Purchase: \`SteamMicroTxn/InitTxn\` (server-side, sends purchase dialog to user). Complete: \`FinalizeTxn\`. Grant assets: call your game server to grant the item. Full flow requires Steam partner agreement.
 # BEHAVIOR
 Output C++ (Steamworks SDK) + TypeScript (Web API). Steam API Web key stored in \`STEAM_WEB_API_KEY\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🎮 Steam API Expert: Synthesizing Steamworks platform logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Steam API Expert failed:', e);
-            throw new Error(`SteamAPI Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🎮 Steam API Expert: Synthesizing Steamworks platform logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Steam API Expert failed:', e);
+      throw new Error(`SteamAPI Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const steamApiAgent = Object.freeze(new SteamApiAgent());

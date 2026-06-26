@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class KlarnaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Klarna_Expert';
-        this.description = 'Buy Now Pay Later specialist for Klarna: Klarna Checkout v3 (full hosted UI), Payments API (authorize/capture flow), BNPL product types (Pay Later, Slice It, Pay in X), On-Site Messaging widget, refunds, settlements, and dispute management.';
-        this.preamble = `You are an elite Klarna Buy Now Pay Later (BNPL) payment integration specialist.
+  constructor() {
+    super();
+    this.name = 'Klarna_Expert';
+    this.description =
+      'Buy Now Pay Later specialist for Klarna: Klarna Checkout v3 (full hosted UI), Payments API (authorize/capture flow), BNPL product types (Pay Later, Slice It, Pay in X), On-Site Messaging widget, refunds, settlements, and dispute management.';
+    this.preamble = `You are an elite Klarna Buy Now Pay Later (BNPL) payment integration specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: HTTP Basic Auth — \`Authorization: Basic base64(username:password)\`. Credentials from Klarna Merchant Portal. Regions: EU (\`https://api.klarna.com\`), NA (\`https://api-na.klarna.com\`), OC (\`https://api-oc.klarna.com\`). Test base: \`https://api.playground.klarna.com\`.
 2. **Klarna Checkout (Full-Hosted Flow)**: Simplest integration — Klarna hosts the entire checkout UI:
@@ -32,20 +33,22 @@ class KlarnaAgent extends BaseSpecialistAgent {
 5. **On-Site Messaging**: Show BNPL promotional messages (e.g., "Pay in 4" callout). Add script: \`<script src="https://js.klarna.com/web-sdk/v1/klarna.js" data-environment="production" data-client-id="klarna_client_id"></script>\`. Placement: \`<klarna-placement data-key="top-strip-promotion-auto-size" data-locale="en-US" data-purchase-amount="10000"></klarna-placement>\`.
 # BEHAVIOR
 Output production TypeScript. Store \`KLARNA_USERNAME\` and \`KLARNA_PASSWORD\` server-side. Never expose credentials to frontend.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🛍️ Klarna Expert: Synthesizing BNPL payment logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Klarna Expert failed:', e);
-            throw new Error(`Klarna Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🛍️ Klarna Expert: Synthesizing BNPL payment logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Klarna Expert failed:', e);
+      throw new Error(`Klarna Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const klarnaAgent = Object.freeze(new KlarnaAgent());

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileStreamingAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_streaming_auditor_agent',
-            'Mobile Streaming Auditor',
-            'You are an elite Mobile Streaming Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_streaming_auditor_agent',
+      'Mobile Streaming Auditor',
+      'You are an elite Mobile Streaming Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Streaming.',
+    );
+  }
 
-    async generateMobileStreamingSystem(objective) {
-        logger.info(`💻 [MobileStreamingAuditorAgent] Analyzing Mobile Streaming Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Streaming Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Streaming Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileStreamingAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileStreamingSystem(objective) {
+    logger.info(
+      `💻 [MobileStreamingAuditorAgent] Analyzing Mobile Streaming Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Streaming Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Streaming Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [MobileStreamingAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const mobileStreamingAuditorAgent = Object.freeze(new MobileStreamingAuditorAgent());
+export const mobileStreamingAuditorAgent = Object.freeze(
+  new MobileStreamingAuditorAgent(),
+);

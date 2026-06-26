@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteArchitectureStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_architecture_strategist_agent',
-            'Site Architecture Strategist',
-            'You are an elite Site Architecture Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Site Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'site_architecture_strategist_agent',
+      'Site Architecture Strategist',
+      'You are an elite Site Architecture Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Site Architecture.',
+    );
+  }
 
-    async generateSiteArchitectureSystem(objective) {
-        logger.info(`💻 [SiteArchitectureStrategistAgent] Analyzing Site Architecture Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Architecture Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Architecture Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteArchitectureStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteArchitectureSystem(objective) {
+    logger.info(
+      `💻 [SiteArchitectureStrategistAgent] Analyzing Site Architecture Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Architecture Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Architecture Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SiteArchitectureStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const siteArchitectureStrategistAgent = Object.freeze(new SiteArchitectureStrategistAgent());
+export const siteArchitectureStrategistAgent = Object.freeze(
+  new SiteArchitectureStrategistAgent(),
+);

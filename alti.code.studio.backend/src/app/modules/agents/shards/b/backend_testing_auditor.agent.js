@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendTestingAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_testing_auditor_agent',
-            'Backend Testing Auditor',
-            'You are an elite Backend Testing Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_testing_auditor_agent',
+      'Backend Testing Auditor',
+      'You are an elite Backend Testing Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Testing.',
+    );
+  }
 
-    async generateBackendTestingSystem(objective) {
-        logger.info(`💻 [BackendTestingAuditorAgent] Analyzing Backend Testing Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Testing Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Testing Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendTestingAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendTestingSystem(objective) {
+    logger.info(
+      `💻 [BackendTestingAuditorAgent] Analyzing Backend Testing Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Testing Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Testing Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [BackendTestingAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const backendTestingAuditorAgent = Object.freeze(new BackendTestingAuditorAgent());
+export const backendTestingAuditorAgent = Object.freeze(
+  new BackendTestingAuditorAgent(),
+);

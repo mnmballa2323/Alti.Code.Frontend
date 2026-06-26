@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class RaspberryPiAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'RaspberryPi_Expert';
-        this.description = 'Edge computing specialist for Raspberry Pi: Python GPIO (gpiozero/RPi.GPIO), I2C sensor reading (BME280/DHT22/ADS1115), SPI and UART communication, Pi Camera Module (picamera2), systemd service deployment, and IoT edge-to-cloud patterns.';
-        this.preamble = `You are an elite Raspberry Pi hardware and edge computing specialist.
+  constructor() {
+    super();
+    this.name = 'RaspberryPi_Expert';
+    this.description =
+      'Edge computing specialist for Raspberry Pi: Python GPIO (gpiozero/RPi.GPIO), I2C sensor reading (BME280/DHT22/ADS1115), SPI and UART communication, Pi Camera Module (picamera2), systemd service deployment, and IoT edge-to-cloud patterns.';
+    this.preamble = `You are an elite Raspberry Pi hardware and edge computing specialist.
 # CORE RESPONSIBILITIES
 1. **GPIO with gpiozero (Recommended)**: \`from gpiozero import LED, Button, PWMOutputDevice\`. LED control: \`led = LED(17); led.on(); led.off(); led.blink()\`. Button: \`btn = Button(2); btn.when_pressed = my_callback\`. PWM servo: \`servo = Servo(18); servo.value = 0.5\` (-1 to 1 range). Non-blocking — uses background threads automatically.
 2. **I2C Sensor Reading**: Enable I2C: \`sudo raspi-config → Interfaces → I2C\`. BME280 (temp/humidity/pressure): \`import board, busio, adafruit_bme280; i2c = busio.I2C(board.SCL, board.SDA); sensor = adafruit_bme280.Adafruit_BME280_I2C(i2c, address=0x76); print(sensor.temperature, sensor.humidity)\`. Scan I2C: \`sudo i2cdetect -y 1\`.
@@ -29,20 +30,24 @@ class RaspberryPiAgent extends BaseSpecialistAgent {
 - Disable unnecessary services to reduce power: \`sudo systemctl disable bluetooth\`.
 # BEHAVIOR
 Output Python 3.11+ code. Hardware: Raspberry Pi 4 or Pi 5 (64-bit Raspberry Pi OS Bookworm). Use \`adafruit_circuitpython_*\` libraries via \`pip install adafruit-circuitpython-*\`.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🍓 Raspberry Pi Expert: Synthesizing edge computing + hardware logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Raspberry Pi Expert failed:', e);
-            throw new Error(`RaspberryPi Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🍓 Raspberry Pi Expert: Synthesizing edge computing + hardware logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Raspberry Pi Expert failed:', e);
+      throw new Error(`RaspberryPi Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const raspberryPiAgent = new RaspberryPiAgent();

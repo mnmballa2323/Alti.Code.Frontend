@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SRETestingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_testing_specialist_agent',
-            'SRE Testing Specialist',
-            'You are an elite SRE Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_testing_specialist_agent',
+      'SRE Testing Specialist',
+      'You are an elite SRE Testing Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Testing.',
+    );
+  }
 
-    async generateSRETestingSystem(objective) {
-        logger.info(`💻 [SRETestingSpecialistAgent] Analyzing SRE Testing Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Testing Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Testing Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SRETestingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSRETestingSystem(objective) {
+    logger.info(
+      `💻 [SRETestingSpecialistAgent] Analyzing SRE Testing Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Testing Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Testing Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SRETestingSpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sRETestingSpecialistAgent = Object.freeze(new SRETestingSpecialistAgent());
+export const sRETestingSpecialistAgent = Object.freeze(
+  new SRETestingSpecialistAgent(),
+);

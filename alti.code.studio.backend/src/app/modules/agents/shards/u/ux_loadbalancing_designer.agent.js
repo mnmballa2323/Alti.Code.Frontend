@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXLoadBalancingDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_loadbalancing_designer_agent',
-            'UX LoadBalancing Designer',
-            'You are an elite UX LoadBalancing Designer. You specialize in bleeding-edge software development, cloud infrastructure, and UX LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_loadbalancing_designer_agent',
+      'UX LoadBalancing Designer',
+      'You are an elite UX LoadBalancing Designer. You specialize in bleeding-edge software development, cloud infrastructure, and UX LoadBalancing.',
+    );
+  }
 
-    async generateUXLoadBalancingSystem(objective) {
-        logger.info(`💻 [UXLoadBalancingDesignerAgent] Analyzing UX LoadBalancing Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX LoadBalancing Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX LoadBalancing Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXLoadBalancingDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [UXLoadBalancingDesignerAgent] Analyzing UX LoadBalancing Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX LoadBalancing Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX LoadBalancing Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXLoadBalancingDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXLoadBalancingDesignerAgent = Object.freeze(new UXLoadBalancingDesignerAgent());
+export const uXLoadBalancingDesignerAgent = Object.freeze(
+  new UXLoadBalancingDesignerAgent(),
+);

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class AplAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'APL_Expert';
-        this.description = 'Array language specialist for APL/J/K/Q: array-oriented thinking, tacit style, kdb+ time-series, and financial data.';
-        this.preamble = `You are an elite APL (A Programming Language) Array Processing Specialist.
+  constructor() {
+    super();
+    this.name = 'APL_Expert';
+    this.description =
+      'Array language specialist for APL/J/K/Q: array-oriented thinking, tacit style, kdb+ time-series, and financial data.';
+    this.preamble = `You are an elite APL (A Programming Language) Array Processing Specialist.
 Your core expertise revolves around designing extremely dense, multidimensional, symbol-driven algorithmic solutions primarily for Dyalog APL.
 
 # CORE APL EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing extremely dense, multidimensional,
 
 # OUTPUT STANDARDS
 When writing code, output Unicode APL expressions. Explain every single glyph's purpose step-by-step through a right-to-left execution pipeline, as APL is highly impenetrable to non-experts. Focus on the Dyalog APL dialect.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`⍺ APL Expert: Synthesizing array-oriented code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`APL Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`⍺ APL Expert: Synthesizing array-oriented code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`APL Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const aplAgent = new AplAgent();

@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MaerskAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'MaerskAgent';
-        this.description = 'Global maritime logistics expert specializing in Ocean freight APIs (Maersk), Electronic Bill of Lading (eBL) lifecycles, and port Terminal Operating Systems (TOS).';
+  constructor() {
+    super();
+    this.name = 'MaerskAgent';
+    this.description =
+      'Global maritime logistics expert specializing in Ocean freight APIs (Maersk), Electronic Bill of Lading (eBL) lifecycles, and port Terminal Operating Systems (TOS).';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Maritime Logistics & Port Infrastructure Agent.
 You assist global supply chain engineers in integrating Ocean Carrier APIs, tracking massive cargo vessels (TEU containers), and dematerializing shipping documentation.
 
@@ -40,12 +41,12 @@ You assist global supply chain engineers in integrating Ocean Carrier APIs, trac
 **Best Practices**
 - Ocean Freight APIs are notoriously asynchronous. Container vessels cross dead zones constantly; cache last-known-locations locally utilizing geospatial AIS satellite data instead of polling standard carrier endpoints repeatedly.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const maerskAgent = Object.freeze(new MaerskAgent());

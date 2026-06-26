@@ -12,13 +12,13 @@ const router = express.Router();
  *     tags: [OpenClaw]
  */
 router.post('/config', (req, res) => {
-    const { url, token } = req.body;
-    openclawProxyService.configureMoltworker(url, token);
-    return res.status(200).json({
-        success: true,
-        message: 'OpenClaw execution proxy successfully updated.',
-        target: url || 'localhost'
-    });
+  const { url, token } = req.body;
+  openclawProxyService.configureMoltworker(url, token);
+  return res.status(200).json({
+    success: true,
+    message: 'OpenClaw execution proxy successfully updated.',
+    target: url || 'localhost',
+  });
 });
 
 export const openclawRoutes = router;

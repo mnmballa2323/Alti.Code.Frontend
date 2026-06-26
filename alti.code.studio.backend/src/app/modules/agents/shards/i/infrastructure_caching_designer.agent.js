@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureCachingDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_caching_designer_agent',
-            'Infrastructure Caching Designer',
-            'You are an elite Infrastructure Caching Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_caching_designer_agent',
+      'Infrastructure Caching Designer',
+      'You are an elite Infrastructure Caching Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Caching.',
+    );
+  }
 
-    async generateInfrastructureCachingSystem(objective) {
-        logger.info(`💻 [InfrastructureCachingDesignerAgent] Analyzing Infrastructure Caching Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Caching Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Caching Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureCachingDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureCachingSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureCachingDesignerAgent] Analyzing Infrastructure Caching Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Caching Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Caching Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureCachingDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureCachingDesignerAgent = Object.freeze(new InfrastructureCachingDesignerAgent());
+export const infrastructureCachingDesignerAgent = Object.freeze(
+  new InfrastructureCachingDesignerAgent(),
+);

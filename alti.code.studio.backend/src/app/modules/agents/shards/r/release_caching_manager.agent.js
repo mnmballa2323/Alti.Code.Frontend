@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseCachingManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_caching_manager_agent',
-            'Release Caching Manager',
-            'You are an elite Release Caching Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'release_caching_manager_agent',
+      'Release Caching Manager',
+      'You are an elite Release Caching Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release Caching.',
+    );
+  }
 
-    async generateReleaseCachingSystem(objective) {
-        logger.info(`💻 [ReleaseCachingManagerAgent] Analyzing Release Caching Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Caching Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Caching Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseCachingManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseCachingSystem(objective) {
+    logger.info(
+      `💻 [ReleaseCachingManagerAgent] Analyzing Release Caching Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Caching Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Caching Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseCachingManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseCachingManagerAgent = Object.freeze(new ReleaseCachingManagerAgent());
+export const releaseCachingManagerAgent = Object.freeze(
+  new ReleaseCachingManagerAgent(),
+);

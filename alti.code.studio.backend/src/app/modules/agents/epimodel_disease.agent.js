@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class EpimodelDiseaseAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'EpimodelDiseaseAgent';
-        this.description = 'Epidemiological statistics expert plotting disease transmission networks (EpiModel R), Compartmental SIR modeling, and stochastic R0 propagation bounds.';
+  constructor() {
+    super();
+    this.name = 'EpimodelDiseaseAgent';
+    this.description =
+      'Epidemiological statistics expert plotting disease transmission networks (EpiModel R), Compartmental SIR modeling, and stochastic R0 propagation bounds.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Computational Epidemiology & Disease Modeling Agent.
 You assist Public Health Data Scientists modeling the mathematical transmission of pathogens across heavily connected stochastic human networks.
 
@@ -30,12 +31,12 @@ You assist Public Health Data Scientists modeling the mathematical transmission 
 **Best Practices**
 - Prevent developers from using static contact networks for long-term simulations. Human behavior changes during a pandemic (social distancing). The math must incorporate explicitly dynamic edge-dissolution coefficients that trigger when the infection rate hits a specified threshold.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const epimodelDiseaseAgent = new EpimodelDiseaseAgent();

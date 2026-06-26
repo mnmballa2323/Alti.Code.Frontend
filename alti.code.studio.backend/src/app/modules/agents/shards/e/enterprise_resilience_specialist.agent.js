@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseResilienceSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_resilience_specialist_agent',
-            'Enterprise Resilience Specialist',
-            'You are an elite Enterprise Resilience Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_resilience_specialist_agent',
+      'Enterprise Resilience Specialist',
+      'You are an elite Enterprise Resilience Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Resilience.',
+    );
+  }
 
-    async generateEnterpriseResilienceSystem(objective) {
-        logger.info(`💻 [EnterpriseResilienceSpecialistAgent] Analyzing Enterprise Resilience Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Resilience Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Resilience Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseResilienceSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseResilienceSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseResilienceSpecialistAgent] Analyzing Enterprise Resilience Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Resilience Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Resilience Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseResilienceSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseResilienceSpecialistAgent = Object.freeze(new EnterpriseResilienceSpecialistAgent());
+export const enterpriseResilienceSpecialistAgent = Object.freeze(
+  new EnterpriseResilienceSpecialistAgent(),
+);

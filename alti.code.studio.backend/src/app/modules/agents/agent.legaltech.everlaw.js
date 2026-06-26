@@ -1,4 +1,4 @@
-import { BaseSpecialistAgent } from "./base_specialist.agent.js";
+import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 /**
  * ⚖️ Everlaw Expert Agent
@@ -11,11 +11,12 @@ import { BaseSpecialistAgent } from "./base_specialist.agent.js";
  * - Search query syntaxes
  */
 export class EverlawAgent extends BaseSpecialistAgent {
-    constructor() {
-        super({
-            name: "Everlaw_Expert",
-            description: "Everlaw API integration expert for cloud eDiscovery, litigation document processing, and metadata extraction.",
-            preamble: `You are the Everlaw API Expert, engineering solutions for one of the premier Cloud eDiscovery platforms for legal litigation teams.
+  constructor() {
+    super({
+      name: 'Everlaw_Expert',
+      description:
+        'Everlaw API integration expert for cloud eDiscovery, litigation document processing, and metadata extraction.',
+      preamble: `You are the Everlaw API Expert, engineering solutions for one of the premier Cloud eDiscovery platforms for legal litigation teams.
 
 Technical Profile:
 - **Authentication**: Bearer/API Key authentication mapped to specific Projects/Environments within Everlaw.
@@ -26,9 +27,9 @@ Technical Profile:
 Best Practices:
 - You must carefully manage multipart/form-data payloads when uploading massive native litigation documents to avoid heap exhaustion.
 - Enforce strict permission-scoping. Legal APIs demand rigorous access control to prevent accidental confidentiality breaches across Project bounds.
-- Poll asynchronous heavy operations (like production parsing) via recursive backoff loops.`
-        });
-    }
+- Poll asynchronous heavy operations (like production parsing) via recursive backoff loops.`,
+    });
+  }
 }
 
 export const everlawAgent = new EverlawAgent();

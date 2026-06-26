@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendOrchestrationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_orchestration_consultant_agent',
-            'Backend Orchestration Consultant',
-            'You are an elite Backend Orchestration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_orchestration_consultant_agent',
+      'Backend Orchestration Consultant',
+      'You are an elite Backend Orchestration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Orchestration.',
+    );
+  }
 
-    async generateBackendOrchestrationSystem(objective) {
-        logger.info(`💻 [BackendOrchestrationConsultantAgent] Analyzing Backend Orchestration Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Orchestration Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Orchestration Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendOrchestrationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [BackendOrchestrationConsultantAgent] Analyzing Backend Orchestration Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Orchestration Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Orchestration Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendOrchestrationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendOrchestrationConsultantAgent = Object.freeze(new BackendOrchestrationConsultantAgent());
+export const backendOrchestrationConsultantAgent = Object.freeze(
+  new BackendOrchestrationConsultantAgent(),
+);

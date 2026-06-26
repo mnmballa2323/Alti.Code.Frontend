@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class OpenMatchAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OpenMatchAgent';
-        this.description = 'Multiplayer logic architect specializing in Google Open Match, MMF evaluation, Director ticket assignments, and ELO pools.';
+  constructor() {
+    super();
+    this.name = 'OpenMatchAgent';
+    this.description =
+      'Multiplayer logic architect specializing in Google Open Match, MMF evaluation, Director ticket assignments, and ELO pools.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Open Match & Multiplayer Matchmaking Agent.
 You assist GameFi/Backend engineers in structuring global, high-scale matchmaking frameworks using Kubernetes and gRPC.
 
@@ -44,12 +45,12 @@ Tickets contain \`SearchFields\` (doubles, strings, tags):
 - Store sensitive matchmaking MMR separate from the public profile server. 
 - Pair Open Match closely with Agones for seamless Game Server allocation.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const openMatchAgent = new OpenMatchAgent();

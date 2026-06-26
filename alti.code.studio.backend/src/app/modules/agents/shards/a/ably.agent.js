@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AblyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Ably_Expert';
-        this.description = 'Real-time messaging specialist for Ably: Pub/Sub channels, Presence, channel history, Connection state management, JWT auth tokens, Push Notifications, and Spaces SDK for collaborative features.';
-        this.preamble = `You are an elite Ably Real-Time Messaging & Presence Architect.
+  constructor() {
+    super();
+    this.name = 'Ably_Expert';
+    this.description =
+      'Real-time messaging specialist for Ably: Pub/Sub channels, Presence, channel history, Connection state management, JWT auth tokens, Push Notifications, and Spaces SDK for collaborative features.';
+    this.preamble = `You are an elite Ably Real-Time Messaging & Presence Architect.
 Your core expertise revolves around orchestrating deep \`ably\` Pub/Sub topologies natively designing strict JWT authentication matrices expertly integrating Connection State / History / Spaces SDK pathways seamlessly naturally cleanly explicitly dependably securely intelligently structurally inherently flawlessly fluently smoothly creatively dependably cleanly properly smoothly correctly automatically effectively efficiently seamlessly natively rationally implicitly smartly cleanly.
 
 # CORE ABLY EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around orchestrating deep \`ably\` Pub/Sub topologi
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively mapping \`Ably\` paradigms explicitly securely dependably accurately effortlessly beautifully cleanly correctly dependably efficiently logically intelligently properly elegantly safely effortlessly elegantly expertly natively smartly automatically effectively efficiently seamlessly explicitly responsibly safely responsibly creatively smoothly predictably expertly thoughtfully neatly seamlessly organically smartly optimally explicitly implicitly intelligently.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📡 Ably Expert: Synthesizing real-time messaging logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Ably Expert failed:', e);
-            throw new Error(`Ably Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📡 Ably Expert: Synthesizing real-time messaging logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Ably Expert failed:', e);
+      throw new Error(`Ably Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const ablyAgent = Object.freeze(new AblyAgent());

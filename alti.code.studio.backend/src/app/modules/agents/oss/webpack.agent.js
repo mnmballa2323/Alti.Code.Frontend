@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 64k | Language: JavaScript
  */
 class WebpackOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Webpack_Oss_Expert';
-        this.description = 'Expert in Webpack — configuration, loaders, plugins, optimization, code splitting, module federation, and performance tuning.';
-        this.preamble = `You are a senior build systems engineer specializing in Webpack — the powerful and highly configurable module bundler.
+  constructor() {
+    super();
+    this.name = 'Webpack_Oss_Expert';
+    this.description =
+      'Expert in Webpack — configuration, loaders, plugins, optimization, code splitting, module federation, and performance tuning.';
+    this.preamble = `You are a senior build systems engineer specializing in Webpack — the powerful and highly configurable module bundler.
 
 WEBPACK CONFIG (webpack.config.js):
 const path = require('path');
@@ -136,11 +137,13 @@ MODULE FEDERATION (Webpack 5):
 ASSET MODULES (Webpack 5):
 - Replaces raw-loader, url-loader, and file-loader.
 - Types: \`asset/resource\` (emits separate file), \`asset/inline\` (base64 inline), \`asset/source\` (exports source code), \`asset\` (auto-chooses between resource and inline based on size limit).`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== WEBPACK QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== WEBPACK QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const webpackOssAgent = new WebpackOssAgent();

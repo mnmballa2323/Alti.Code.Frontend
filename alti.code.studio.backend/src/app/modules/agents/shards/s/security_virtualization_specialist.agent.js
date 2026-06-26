@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityVirtualizationSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_virtualization_specialist_agent',
-            'Security Virtualization Specialist',
-            'You are an elite Security Virtualization Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Security Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'security_virtualization_specialist_agent',
+      'Security Virtualization Specialist',
+      'You are an elite Security Virtualization Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Security Virtualization.',
+    );
+  }
 
-    async generateSecurityVirtualizationSystem(objective) {
-        logger.info(`💻 [SecurityVirtualizationSpecialistAgent] Analyzing Security Virtualization Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Virtualization Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Virtualization Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityVirtualizationSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [SecurityVirtualizationSpecialistAgent] Analyzing Security Virtualization Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Virtualization Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Virtualization Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityVirtualizationSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityVirtualizationSpecialistAgent = Object.freeze(new SecurityVirtualizationSpecialistAgent());
+export const securityVirtualizationSpecialistAgent = Object.freeze(
+  new SecurityVirtualizationSpecialistAgent(),
+);

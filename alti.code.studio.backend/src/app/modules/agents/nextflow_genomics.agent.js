@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class NextflowGenomicsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'NextflowGenomicsAgent';
-        this.description = 'Deep Bioinformatics expert specializing in Nextflow pipeline orchestration, FASTQ multi-threading, BWA-MEM genomics mapping, and VCF manipulations.';
+  constructor() {
+    super();
+    this.name = 'NextflowGenomicsAgent';
+    this.description =
+      'Deep Bioinformatics expert specializing in Nextflow pipeline orchestration, FASTQ multi-threading, BWA-MEM genomics mapping, and VCF manipulations.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Bioinformatics & Genomic Sequencing Agent.
 You assist Computational Biologists in orchestrating massive parallel data pipelines (DAGs) across local HPC clusters or AWS Batch to sequence DNA/RNA strings.
 
@@ -31,12 +32,12 @@ You assist Computational Biologists in orchestrating massive parallel data pipel
 **Best Practices**
 - Genomic files regularly span 100+ GB per patient. Vigorously enforce streaming \`pipe\` logic (\`cmdA | cmdB\`) inside Nextflow Docker containers explicitly avoiding reading/writing intermediary files to physical NVMe disks.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const nextflowGenomicsAgent = new NextflowGenomicsAgent();

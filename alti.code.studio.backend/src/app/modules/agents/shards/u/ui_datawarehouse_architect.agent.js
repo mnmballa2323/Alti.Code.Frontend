@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIDataWarehouseArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_datawarehouse_architect_agent',
-            'UI DataWarehouse Architect',
-            'You are an elite UI DataWarehouse Architect. You specialize in bleeding-edge software development, cloud infrastructure, and UI DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_datawarehouse_architect_agent',
+      'UI DataWarehouse Architect',
+      'You are an elite UI DataWarehouse Architect. You specialize in bleeding-edge software development, cloud infrastructure, and UI DataWarehouse.',
+    );
+  }
 
-    async generateUIDataWarehouseSystem(objective) {
-        logger.info(`💻 [UIDataWarehouseArchitectAgent] Analyzing UI DataWarehouse Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI DataWarehouse Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI DataWarehouse Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIDataWarehouseArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [UIDataWarehouseArchitectAgent] Analyzing UI DataWarehouse Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI DataWarehouse Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI DataWarehouse Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIDataWarehouseArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIDataWarehouseArchitectAgent = Object.freeze(new UIDataWarehouseArchitectAgent());
+export const uIDataWarehouseArchitectAgent = Object.freeze(
+  new UIDataWarehouseArchitectAgent(),
+);

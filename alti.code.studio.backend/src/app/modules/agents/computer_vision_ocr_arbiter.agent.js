@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class ComputerVisionOcrArbiterAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ComputerVisionOcrArbiterAgent', 'Computer Vision Ocr Arbiter Agent', 'Tier 10+');
-        this.preamble = `You are the Computer Vision OCR Arbiter (Phase 28.0.0).
+  constructor() {
+    super(
+      'ComputerVisionOcrArbiterAgent',
+      'Computer Vision Ocr Arbiter Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Computer Vision OCR Arbiter (Phase 28.0.0).
 
 You represent the eyes of the Swarm. You operate in hostile legacy environments where the OS Semantic Tree (\`SemanticGuiExtractorAgent\`) and Web DOM (\`PlaywrightDomPuppeteerAgent\`) completely fail: Citrix streams, RDP sessions, terminal emulators (AS/400), and Flash archives.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You ensure that if a human eye can see it, Inso Code can command it.
 `;
-    }
+  }
 }
 
-export const computerVisionOcrArbiterAgent = new ComputerVisionOcrArbiterAgent();
+export const computerVisionOcrArbiterAgent =
+  new ComputerVisionOcrArbiterAgent();

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -14,31 +14,40 @@ import { jwtHelpers } from '../../helpers/jwtHelpers.js';
 const auth = (...requiredRoles) => {
   return async (req, res, next) => {
     try {
-      // 🛡️ AZURE ZERO-TRUST INTEGRATION
-      const azurePrincipal = req.headers['x-ms-client-principal-name'];
+      // 🛡️ GCP IAP ZERO-TRUST INTEGRATION
+      const gcpPrincipal = req.headers['x-goog-authenticated-user-email'];
       let verifiedUser;
 
-      if (azurePrincipal) {
+      if (gcpPrincipal) {
+        const email = gcpPrincipal.replace(/^accounts\.google\.com:/, '');
         verifiedUser = {
-            email: azurePrincipal,
-            role: 'USER',
-            subject: req.headers['x-ms-client-principal-id'] || 'unknown-id'
+          email,
+          role: 'USER',
+          subject: req.headers['x-goog-authenticated-user-id'] || 'unknown-id',
         };
       } else {
-          // Fallback to legacy Local Bearer JWT
-          const authHeader = req.headers.authorization;
-          if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized (Missing IAP or Bearer Token)');
-          }
+        // Fallback to legacy Local Bearer JWT
+        const authHeader = req.headers.authorization;
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+          throw new ApiError(
+            httpStatus.UNAUTHORIZED,
+            'You are not authorized (Missing IAP or Bearer Token)',
+          );
+        }
 
-          const token = authHeader.split(' ')[1];
-          verifiedUser = jwtHelpers.verifyToken(token, config.jwt.access_token);
+        const token = authHeader.split(' ')[1];
+        verifiedUser = jwtHelpers.verifyToken(token, config.jwt.access_token);
       }
 
       // 👇 Assign user to request object
       req.user = verifiedUser;
 
-      if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role) && verifiedUser.role !== 'owner' && verifiedUser.role !== 'super_admin') {
+      if (
+        requiredRoles.length &&
+        !requiredRoles.includes(verifiedUser.role) &&
+        verifiedUser.role !== 'owner' &&
+        verifiedUser.role !== 'super_admin'
+      ) {
         throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden');
       }
 

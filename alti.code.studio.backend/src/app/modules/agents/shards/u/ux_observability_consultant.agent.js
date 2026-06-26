@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXObservabilityConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_observability_consultant_agent',
-            'UX Observability Consultant',
-            'You are an elite UX Observability Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UX Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_observability_consultant_agent',
+      'UX Observability Consultant',
+      'You are an elite UX Observability Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UX Observability.',
+    );
+  }
 
-    async generateUXObservabilitySystem(objective) {
-        logger.info(`💻 [UXObservabilityConsultantAgent] Analyzing UX Observability Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Observability Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Observability Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXObservabilityConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXObservabilitySystem(objective) {
+    logger.info(
+      `💻 [UXObservabilityConsultantAgent] Analyzing UX Observability Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Observability Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Observability Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UXObservabilityConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uXObservabilityConsultantAgent = Object.freeze(new UXObservabilityConsultantAgent());
+export const uXObservabilityConsultantAgent = Object.freeze(
+  new UXObservabilityConsultantAgent(),
+);

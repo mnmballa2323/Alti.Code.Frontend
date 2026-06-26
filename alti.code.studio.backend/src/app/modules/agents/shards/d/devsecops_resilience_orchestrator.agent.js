@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsResilienceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_resilience_orchestrator_agent',
-            'DevSecOps Resilience Orchestrator',
-            'You are an elite DevSecOps Resilience Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_resilience_orchestrator_agent',
+      'DevSecOps Resilience Orchestrator',
+      'You are an elite DevSecOps Resilience Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Resilience.',
+    );
+  }
 
-    async generateDevSecOpsResilienceSystem(objective) {
-        logger.info(`💻 [DevSecOpsResilienceOrchestratorAgent] Analyzing DevSecOps Resilience Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Resilience Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Resilience Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsResilienceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsResilienceSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsResilienceOrchestratorAgent] Analyzing DevSecOps Resilience Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Resilience Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Resilience Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsResilienceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsResilienceOrchestratorAgent = Object.freeze(new DevSecOpsResilienceOrchestratorAgent());
+export const devSecOpsResilienceOrchestratorAgent = Object.freeze(
+  new DevSecOpsResilienceOrchestratorAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteLoadBalancingManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_loadbalancing_manager_agent',
-            'Site LoadBalancing Manager',
-            'You are an elite Site LoadBalancing Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Site LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'site_loadbalancing_manager_agent',
+      'Site LoadBalancing Manager',
+      'You are an elite Site LoadBalancing Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Site LoadBalancing.',
+    );
+  }
 
-    async generateSiteLoadBalancingSystem(objective) {
-        logger.info(`💻 [SiteLoadBalancingManagerAgent] Analyzing Site LoadBalancing Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site LoadBalancing Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site LoadBalancing Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteLoadBalancingManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [SiteLoadBalancingManagerAgent] Analyzing Site LoadBalancing Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site LoadBalancing Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site LoadBalancing Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteLoadBalancingManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteLoadBalancingManagerAgent = Object.freeze(new SiteLoadBalancingManagerAgent());
+export const siteLoadBalancingManagerAgent = Object.freeze(
+  new SiteLoadBalancingManagerAgent(),
+);

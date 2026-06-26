@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class WorkdayAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Workday_Expert';
-        this.description = 'Workday RaaS (Reporting as a Service) APIs, SOAP/REST HCM integration, worker sync, and financial reporting.';
-        this.preamble = `You are an elite Workday HCM & Financials Integration Architect.
+  constructor() {
+    super();
+    this.name = 'Workday_Expert';
+    this.description =
+      'Workday RaaS (Reporting as a Service) APIs, SOAP/REST HCM integration, worker sync, and financial reporting.';
+    this.preamble = `You are an elite Workday HCM & Financials Integration Architect.
 Your core expertise revolves around designing massive enterprise service buses, complex RaaS (Reporting as a Service) extractions, and highly robust bidirectional SOAP/REST API logic against multi-tenant Workday environments.
 
 # CORE WORKDAY EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing massive enterprise service buses, 
 
 # OUTPUT STANDARDS
 When writing code, output hyper-reliable integration clients (Python/Java/Node). Handle SOAP Faults and REST 400 responses elegantly by decoding the inner Workday error strings. Explicitly avoid exposing Workday tenant URLs (\`wd5-impl\`, etc.) in source control.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const workdayAgent = new WorkdayAgent();

@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class Telecommunications5gArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'telecommunications_5g_architect',
-            'Telecommunications & 5G/6G Networks Architect',
-            'You are an elite Telecommunications Architect. Your objective is to design software for global connectivity infrastructure. You specialize in designing 5G/6G Evolved Packet Core (EPC) topologies, Massive MIMO beamforming algorithms, and BGP routing logic for global Tier-1 ISPs.'
-        );
-    }
+  constructor() {
+    super(
+      'telecommunications_5g_architect',
+      'Telecommunications & 5G/6G Networks Architect',
+      'You are an elite Telecommunications Architect. Your objective is to design software for global connectivity infrastructure. You specialize in designing 5G/6G Evolved Packet Core (EPC) topologies, Massive MIMO beamforming algorithms, and BGP routing logic for global Tier-1 ISPs.',
+    );
+  }
 
-    /**
-     * Generates telecommunications architecture or network logic.
-     * @param {string} telecomObjective - The telecommunications software requirement.
-     * @returns {Promise<string>} The generated networking code or architecture.
-     */
-    async generateTelecomSystem(telecomObjective) {
-        logger.info(`📡 [Telecommunications5gArchitect] Analyzing objective for 5G packet cores and ISP routing...`);
+  /**
+   * Generates telecommunications architecture or network logic.
+   * @param {string} telecomObjective - The telecommunications software requirement.
+   * @returns {Promise<string>} The generated networking code or architecture.
+   */
+  async generateTelecomSystem(telecomObjective) {
+    logger.info(
+      `📡 [Telecommunications5gArchitect] Analyzing objective for 5G packet cores and ISP routing...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Telecommunications, 5G/6G, or ISP Networking requirement.
 Generate the corresponding network architecture, signal processing algorithm, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ TELECOM OBJECTIVE:
 ${telecomObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Telecom Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```yaml|```python|```/gi, '').trim();
-            logger.info(`✅ [Telecommunications5gArchitect] Telecom architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [Telecommunications5gArchitect] Failed to generate telecom system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Telecom Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```yaml|```python|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [Telecommunications5gArchitect] Telecom architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [Telecommunications5gArchitect] Failed to generate telecom system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const telecommunications5gArchitectAgent = Object.freeze(new Telecommunications5gArchitectAgent());
+export const telecommunications5gArchitectAgent = Object.freeze(
+  new Telecommunications5gArchitectAgent(),
+);

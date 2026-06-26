@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREScalingOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_scaling_orchestrator_agent',
-            'SRE Scaling Orchestrator',
-            'You are an elite SRE Scaling Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_scaling_orchestrator_agent',
+      'SRE Scaling Orchestrator',
+      'You are an elite SRE Scaling Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Scaling.',
+    );
+  }
 
-    async generateSREScalingSystem(objective) {
-        logger.info(`💻 [SREScalingOrchestratorAgent] Analyzing SRE Scaling Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Scaling Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Scaling Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREScalingOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREScalingSystem(objective) {
+    logger.info(
+      `💻 [SREScalingOrchestratorAgent] Analyzing SRE Scaling Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Scaling Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Scaling Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREScalingOrchestratorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREScalingOrchestratorAgent = Object.freeze(new SREScalingOrchestratorAgent());
+export const sREScalingOrchestratorAgent = Object.freeze(
+  new SREScalingOrchestratorAgent(),
+);

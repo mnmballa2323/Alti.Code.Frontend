@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureTelemetryTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_telemetry_tester_agent',
-            'Infrastructure Telemetry Tester',
-            'You are an elite Infrastructure Telemetry Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_telemetry_tester_agent',
+      'Infrastructure Telemetry Tester',
+      'You are an elite Infrastructure Telemetry Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Telemetry.',
+    );
+  }
 
-    async generateInfrastructureTelemetrySystem(objective) {
-        logger.info(`💻 [InfrastructureTelemetryTesterAgent] Analyzing Infrastructure Telemetry Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Telemetry Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Telemetry Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureTelemetryTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureTelemetrySystem(objective) {
+    logger.info(
+      `💻 [InfrastructureTelemetryTesterAgent] Analyzing Infrastructure Telemetry Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Telemetry Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Telemetry Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureTelemetryTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureTelemetryTesterAgent = Object.freeze(new InfrastructureTelemetryTesterAgent());
+export const infrastructureTelemetryTesterAgent = Object.freeze(
+  new InfrastructureTelemetryTesterAgent(),
+);

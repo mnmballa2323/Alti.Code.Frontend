@@ -26,7 +26,7 @@ function saveMockUsers(users) {
   }
 }
 
-const mapToScimUser = (user) => {
+const mapToScimUser = user => {
   return {
     schemas: ['urn:ietf:params:scim:schemas:core:2.0:User'],
     id: user.id,
@@ -82,7 +82,9 @@ export const getUsers = async (req, res, next) => {
         where: whereClause,
       });
     } catch (dbErr) {
-      logger.warn('⚠️ [Postgres Offline] SCIM getUsers falling back to mock storage');
+      logger.warn(
+        '⚠️ [Postgres Offline] SCIM getUsers falling back to mock storage',
+      );
       const mockUsers = getMockUsers();
       users = mockUsers.filter(u => u.tenantId === req.tenantId);
       if (emailFilter) {
@@ -113,13 +115,20 @@ export const getUserById = async (req, res, next) => {
         where: { id, tenantId: req.tenantId },
       });
     } catch (dbErr) {
-      logger.warn('⚠️ [Postgres Offline] SCIM getUserById falling back to mock storage');
+      logger.warn(
+        '⚠️ [Postgres Offline] SCIM getUserById falling back to mock storage',
+      );
       const mockUsers = getMockUsers();
-      user = mockUsers.find(u => u.id === id && u.tenantId === req.tenantId) || null;
+      user =
+        mockUsers.find(u => u.id === id && u.tenantId === req.tenantId) || null;
     }
 
     if (!user) {
-      return sendScimError(res, httpStatus.NOT_FOUND, `User with ID ${id} not found.`);
+      return sendScimError(
+        res,
+        httpStatus.NOT_FOUND,
+        `User with ID ${id} not found.`,
+      );
     }
 
     res.status(200).json(mapToScimUser(user));
@@ -134,7 +143,12 @@ export const createUser = async (req, res, next) => {
     const email = emails?.[0]?.value || userName;
 
     if (!email) {
-      return sendScimError(res, httpStatus.BAD_REQUEST, 'Email address is required in SCIM payload.', 'invalidValue');
+      return sendScimError(
+        res,
+        httpStatus.BAD_REQUEST,
+        'Email address is required in SCIM payload.',
+        'invalidValue',
+      );
     }
 
     let existingUser = null;
@@ -148,7 +162,12 @@ export const createUser = async (req, res, next) => {
     }
 
     if (existingUser) {
-      return sendScimError(res, httpStatus.CONFLICT, `User with email ${email} already exists.`, 'uniqueness');
+      return sendScimError(
+        res,
+        httpStatus.CONFLICT,
+        `User with email ${email} already exists.`,
+        'uniqueness',
+      );
     }
 
     const userRole = active === false ? 'unauthorized' : 'user';
@@ -165,9 +184,13 @@ export const createUser = async (req, res, next) => {
         },
       });
     } catch (dbErr) {
-      logger.warn('⚠️ [Postgres Offline] SCIM createUser falling back to mock storage');
+      logger.warn(
+        '⚠️ [Postgres Offline] SCIM createUser falling back to mock storage',
+      );
       const mockUsers = getMockUsers();
-      const newId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
+      const newId = crypto.randomUUID
+        ? crypto.randomUUID()
+        : crypto.randomBytes(16).toString('hex');
       newUser = {
         id: newId,
         email,
@@ -195,7 +218,12 @@ export const updateUser = async (req, res, next) => {
     const email = emails?.[0]?.value || userName;
 
     if (!email) {
-      return sendScimError(res, httpStatus.BAD_REQUEST, 'Email address is required in SCIM payload.', 'invalidValue');
+      return sendScimError(
+        res,
+        httpStatus.BAD_REQUEST,
+        'Email address is required in SCIM payload.',
+        'invalidValue',
+      );
     }
 
     let user = null;
@@ -215,9 +243,13 @@ export const updateUser = async (req, res, next) => {
         });
       }
     } catch (dbErr) {
-      logger.warn('⚠️ [Postgres Offline] SCIM updateUser falling back to mock storage');
+      logger.warn(
+        '⚠️ [Postgres Offline] SCIM updateUser falling back to mock storage',
+      );
       const mockUsers = getMockUsers();
-      const userIndex = mockUsers.findIndex(u => u.id === id && u.tenantId === req.tenantId);
+      const userIndex = mockUsers.findIndex(
+        u => u.id === id && u.tenantId === req.tenantId,
+      );
       if (userIndex !== -1) {
         mockUsers[userIndex] = {
           ...mockUsers[userIndex],
@@ -231,7 +263,11 @@ export const updateUser = async (req, res, next) => {
     }
 
     if (!user) {
-      return sendScimError(res, httpStatus.NOT_FOUND, `User with ID ${id} not found.`);
+      return sendScimError(
+        res,
+        httpStatus.NOT_FOUND,
+        `User with ID ${id} not found.`,
+      );
     }
 
     res.status(200).json(mapToScimUser(user));
@@ -246,7 +282,12 @@ export const patchUser = async (req, res, next) => {
     const { Operations } = req.body;
 
     if (!Operations || !Array.isArray(Operations)) {
-      return sendScimError(res, httpStatus.BAD_REQUEST, 'Operations array is required for PATCH.', 'invalidSyntax');
+      return sendScimError(
+        res,
+        httpStatus.BAD_REQUEST,
+        'Operations array is required for PATCH.',
+        'invalidSyntax',
+      );
     }
 
     let activeValue = null;
@@ -254,7 +295,11 @@ export const patchUser = async (req, res, next) => {
       if (op.op?.toLowerCase() === 'replace') {
         if (op.path === 'active') {
           activeValue = op.value;
-        } else if (op.value && typeof op.value === 'object' && op.value.active !== undefined) {
+        } else if (
+          op.value &&
+          typeof op.value === 'object' &&
+          op.value.active !== undefined
+        ) {
           activeValue = op.value.active;
         } else if (op.value !== undefined && !op.path) {
           activeValue = op.value;
@@ -263,7 +308,12 @@ export const patchUser = async (req, res, next) => {
     }
 
     if (activeValue === null) {
-      return sendScimError(res, httpStatus.BAD_REQUEST, 'Only replacing active status is supported.', 'mutability');
+      return sendScimError(
+        res,
+        httpStatus.BAD_REQUEST,
+        'Only replacing active status is supported.',
+        'mutability',
+      );
     }
 
     const userRole = activeValue === false ? 'unauthorized' : 'user';
@@ -282,9 +332,13 @@ export const patchUser = async (req, res, next) => {
         });
       }
     } catch (dbErr) {
-      logger.warn('⚠️ [Postgres Offline] SCIM patchUser falling back to mock storage');
+      logger.warn(
+        '⚠️ [Postgres Offline] SCIM patchUser falling back to mock storage',
+      );
       const mockUsers = getMockUsers();
-      const userIndex = mockUsers.findIndex(u => u.id === id && u.tenantId === req.tenantId);
+      const userIndex = mockUsers.findIndex(
+        u => u.id === id && u.tenantId === req.tenantId,
+      );
       if (userIndex !== -1) {
         mockUsers[userIndex] = {
           ...mockUsers[userIndex],
@@ -297,7 +351,11 @@ export const patchUser = async (req, res, next) => {
     }
 
     if (!user) {
-      return sendScimError(res, httpStatus.NOT_FOUND, `User with ID ${id} not found.`);
+      return sendScimError(
+        res,
+        httpStatus.NOT_FOUND,
+        `User with ID ${id} not found.`,
+      );
     }
 
     res.status(200).json(mapToScimUser(user));
@@ -322,9 +380,13 @@ export const deleteUser = async (req, res, next) => {
         deleted = true;
       }
     } catch (dbErr) {
-      logger.warn('⚠️ [Postgres Offline] SCIM deleteUser falling back to mock storage');
+      logger.warn(
+        '⚠️ [Postgres Offline] SCIM deleteUser falling back to mock storage',
+      );
       const mockUsers = getMockUsers();
-      const userIndex = mockUsers.findIndex(u => u.id === id && u.tenantId === req.tenantId);
+      const userIndex = mockUsers.findIndex(
+        u => u.id === id && u.tenantId === req.tenantId,
+      );
       if (userIndex !== -1) {
         mockUsers.splice(userIndex, 1);
         saveMockUsers(mockUsers);
@@ -333,7 +395,11 @@ export const deleteUser = async (req, res, next) => {
     }
 
     if (!deleted) {
-      return sendScimError(res, httpStatus.NOT_FOUND, `User with ID ${id} not found.`);
+      return sendScimError(
+        res,
+        httpStatus.NOT_FOUND,
+        `User with ID ${id} not found.`,
+      );
     }
 
     res.status(204).end();

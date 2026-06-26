@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -24,38 +24,52 @@ import { RedisChatMessageHistory } from '@langchain/community/stores/message/ior
 import { redisCacheService } from '../memory/redis.service.js';
 import { zepMemoryService } from '../memory/zep.service.js';
 
-const geminiOpenMemoryService = async (sessionId, prompt, userId, language, mode = 'Agent', domain) => {
+const geminiOpenMemoryService = async (
+  sessionId,
+  prompt,
+  userId,
+  language,
+  mode = 'Agent',
+  domain,
+) => {
   const memory = new BufferMemory({
     returnMessages: true,
     memoryKey: 'history',
     chatHistory: new RedisChatMessageHistory({
       sessionId,
-      client: redisCacheService.client
+      client: redisCacheService.client,
     }),
   });
 
   let systemPrompt = '';
   switch (mode.toLowerCase()) {
     case 'agent':
-      systemPrompt = 'You are an autonomous Agent. Execute the task independently without asking for permission, providing complete solutions and commands.\n\n';
+      systemPrompt =
+        'You are an autonomous Agent. Execute the task independently without asking for permission, providing complete solutions and commands.\n\n';
       break;
     case 'chat':
-      systemPrompt = 'You are a helpful AI conversational assistant. Engage with the user naturally, answering questions and providing assistance in a standard conversational manner without overly technical rigidness.\n\n';
+      systemPrompt =
+        'You are a helpful AI conversational assistant. Engage with the user naturally, answering questions and providing assistance in a standard conversational manner without overly technical rigidness.\n\n';
       break;
     case 'ask':
-      systemPrompt = 'You are in Human-in-the-Loop mode. Propose the solution but ask the human for approval or further clarification before executing complex changes.\n\n';
+      systemPrompt =
+        'You are in Human-in-the-Loop mode. Propose the solution but ask the human for approval or further clarification before executing complex changes.\n\n';
       break;
     case 'plan':
-      systemPrompt = 'You are a Planner. Your task is to create a step-by-step actionable plan for the user\'s request. Do not execute the code, just provide the blueprint.\n\n';
+      systemPrompt =
+        "You are a Planner. Your task is to create a step-by-step actionable plan for the user's request. Do not execute the code, just provide the blueprint.\n\n";
       break;
     case 'architect':
-      systemPrompt = 'You are a Software Architect. Focus on the high-level system design, patterns, structure, and technical trade-offs for the request.\n\n';
+      systemPrompt =
+        'You are a Software Architect. Focus on the high-level system design, patterns, structure, and technical trade-offs for the request.\n\n';
       break;
     case 'debug':
-      systemPrompt = 'You are a Debugger. Analyze the problem, identify root causes of bugs, and provide the exact fix needed.\n\n';
+      systemPrompt =
+        'You are a Debugger. Analyze the problem, identify root causes of bugs, and provide the exact fix needed.\n\n';
       break;
     case 'refactor':
-      systemPrompt = 'You are a Refactoring expert. Improve the code\'s readability, maintainability, and performance without changing its external behavior.\n\n';
+      systemPrompt =
+        "You are a Refactoring expert. Improve the code's readability, maintainability, and performance without changing its external behavior.\n\n";
       break;
     case 'test':
       systemPrompt = `You are an elite, world-class QA Automation Engineer and Testing Architect. Your sole objective is to ensure absolute, deterministic correctness through rigorous testing.
@@ -82,16 +96,20 @@ Focus exclusively on outputting the most robust, unbreakable, and enterprise-rea
 Do not sugarcoat findings. Be brutal, mathematically precise, and secure by default.\n\n`;
       break;
     case 'review':
-      systemPrompt = 'You are a strict Code Reviewer. Perform a code review focusing on best practices, security vulnerabilities, edge cases, and logic flaws.\n\n';
+      systemPrompt =
+        'You are a strict Code Reviewer. Perform a code review focusing on best practices, security vulnerabilities, edge cases, and logic flaws.\n\n';
       break;
     case 'explain':
-      systemPrompt = 'You are a Code Explainer. Break down complex code blocks or concepts into simple, easily understandable explanations.\n\n';
+      systemPrompt =
+        'You are a Code Explainer. Break down complex code blocks or concepts into simple, easily understandable explanations.\n\n';
       break;
     case 'document':
-      systemPrompt = 'You are a Technical Writer. Automatically generate clear, standard docstrings, inline comments, or README files for the code.\n\n';
+      systemPrompt =
+        'You are a Technical Writer. Automatically generate clear, standard docstrings, inline comments, or README files for the code.\n\n';
       break;
     case 'optimize':
-      systemPrompt = 'You are a Performance Optimizer. Focus strictly on improving the execution speed, memory usage, or algorithmic complexity of the provided code.\n\n';
+      systemPrompt =
+        'You are a Performance Optimizer. Focus strictly on improving the execution speed, memory usage, or algorithmic complexity of the provided code.\n\n';
       break;
     case 'deploy':
       systemPrompt = `You are an elite, world-class Site Reliability Engineer (SRE) and DevOps Architect. Your sole objective is to orchestrate, containerize, and execute zero-downtime deployments into production cloud environments.
@@ -105,7 +123,8 @@ Do not sugarcoat findings. Be brutal, mathematically precise, and secure by defa
 Never deploy blindly. Validate the build locally, run the pre-flight checks, and then launch it to production.\n\n`;
       break;
     default:
-      systemPrompt = 'You are an autonomous Agent. Execute the task independently.\n\n';
+      systemPrompt =
+        'You are an autonomous Agent. Execute the task independently.\n\n';
   }
 
   // Global Vault Injection Guardrail
@@ -144,9 +163,11 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
       if (connectedTools && connectedTools.length > 0) {
         // Local MCP tool integration requires advanced Vertex setup, falling back to base model for now
         activeModel = AzureGenAiService.getGenerativeModel('gemini-3.1-pro');
-        logger.info(`🔌 Injected ${connectedTools.length} local MCP tools into active LLM session for user ${userId}`);
+        logger.info(
+          `🔌 Injected ${connectedTools.length} local MCP tools into active LLM session for user ${userId}`,
+        );
       }
-    } catch(e) {
+    } catch (e) {
       logger.warn('Failed to inject local MCP tools: ' + e.message);
     }
 
@@ -157,53 +178,65 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
 
     let result = await chat.sendMessage(enhancedPrompt);
     let reply = result?.response?.candidates?.[0]?.content?.parts?.[0]?.text;
-    
+
     // Autonomous Multi-Turn Execution Loop for native MCP function calls
     let loopCount = 0;
     const MAX_TOOL_LOOPS = 10;
     const allToolExecutions = [];
-    
-    while (result?.response?.functionCalls && (result?.response?.functionCalls() || []).length > 0 && loopCount < MAX_TOOL_LOOPS) {
+
+    while (
+      result?.response?.functionCalls &&
+      (result?.response?.functionCalls() || []).length > 0 &&
+      loopCount < MAX_TOOL_LOOPS
+    ) {
       loopCount++;
       const functionCalls = result.response.functionCalls();
       const functionResponses = [];
 
       for (const functionCall of functionCalls) {
-        logger.info(`🤖 LLM requested tool execution [Loop ${loopCount}]: ${functionCall.name}`);
+        logger.info(
+          `🤖 LLM requested tool execution [Loop ${loopCount}]: ${functionCall.name}`,
+        );
         let toolResult;
         try {
           const mcpTools = await mcpClientService.getAllTools();
           const targetTool = mcpTools.find(t => t.name === functionCall.name);
           const serverName = targetTool ? targetTool.server : 'local';
-          const executionData = await mcpClientService.callTool(serverName, functionCall.name, functionCall.args);
+          const executionData = await mcpClientService.callTool(
+            serverName,
+            functionCall.name,
+            functionCall.args,
+          );
           toolResult = { result: executionData };
           logger.info(`✅ Tool executed successfully`);
         } catch (err) {
           logger.error(`❌ Tool execution failed: ${err.message}`);
           toolResult = { error: err.message };
         }
-        
+
         functionResponses.push({
           functionResponse: {
             name: functionCall.name,
-            response: toolResult
-          }
+            response: toolResult,
+          },
         });
         allToolExecutions.push({
           tool: functionCall.name,
           args: functionCall.args,
           status: toolResult.error ? 'failed' : 'success',
-          result: toolResult
+          result: toolResult,
         });
       }
-      
+
       // Feed all execution results back to the model for the next step or final synthesis
       result = await chat.sendMessage(functionResponses);
       reply = result?.response?.candidates?.[0]?.content?.parts?.[0]?.text;
     }
-    
+
     if (loopCount >= MAX_TOOL_LOOPS) {
-      logger.warn(`⚠️ Maximum tool execution depth (${MAX_TOOL_LOOPS}) reached for user ${userId}. Aborting loop.`);
+      logger.warn(
+        `⚠️ Maximum tool execution depth (${MAX_TOOL_LOOPS}) reached for user ${userId}. Aborting loop.`,
+      );
     }
 
     if (!reply) reply = 'No reply generated';
@@ -230,7 +263,7 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
 
     const responseData = {
       prompt,
-      model:  'gemini-3.1-pro',
+      model: 'gemini-3.1-pro',
       reply,
       toolExecutions: allToolExecutions,
       total_time: result?.usage?.total_time || 0,
@@ -246,7 +279,7 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
           data: {
             email: 'dev@alti.code.studio',
             role: 'admin',
-          }
+          },
         });
         targetUserId = seedUser.id;
       }
@@ -255,29 +288,37 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
     const chatHistory = await prisma.chatHistory.findFirst({
       where: {
         userId: targetUserId,
-        sessionId: sessionId
-      }
+        sessionId: sessionId,
+      },
     });
 
     if (chatHistory) {
-      const existingResponses = Array.isArray(chatHistory.responses) ? chatHistory.responses : [];
+      const existingResponses = Array.isArray(chatHistory.responses)
+        ? chatHistory.responses
+        : [];
       existingResponses.push(responseData);
 
       await prisma.chatHistory.update({
         where: { id: chatHistory.id },
-        data: { responses: existingResponses }
+        data: { responses: existingResponses },
       });
     } else {
       await prisma.chatHistory.create({
         data: {
           userId: targetUserId,
           sessionId: sessionId,
-          responses: [responseData]
-        }
+          responses: [responseData],
+        },
       });
     }
 
-    const payload = { prompt, sessionId, reply, mode, toolExecutions: allToolExecutions };
+    const payload = {
+      prompt,
+      sessionId,
+      reply,
+      mode,
+      toolExecutions: allToolExecutions,
+    };
     return payload;
   } catch (err) {
     logger.error('Gemini Service Error:', err);

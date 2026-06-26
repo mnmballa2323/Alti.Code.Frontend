@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -16,7 +16,11 @@ const GeminiOpenMemoryAiGetResponse = catchAsync(async (req, res) => {
   const { prompt, userId, sessionId, errorResponse } =
     await validatePromptRequest(req);
 
-  const result = await GeminiAiService.geminiOpenMemoryService(sessionId, prompt, userId);
+  const result = await GeminiAiService.geminiOpenMemoryService(
+    sessionId,
+    prompt,
+    userId,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

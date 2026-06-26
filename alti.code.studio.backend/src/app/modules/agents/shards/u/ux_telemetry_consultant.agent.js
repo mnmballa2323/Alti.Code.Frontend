@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXTelemetryConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_telemetry_consultant_agent',
-            'UX Telemetry Consultant',
-            'You are an elite UX Telemetry Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UX Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_telemetry_consultant_agent',
+      'UX Telemetry Consultant',
+      'You are an elite UX Telemetry Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and UX Telemetry.',
+    );
+  }
 
-    async generateUXTelemetrySystem(objective) {
-        logger.info(`💻 [UXTelemetryConsultantAgent] Analyzing UX Telemetry Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Telemetry Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Telemetry Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXTelemetryConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXTelemetrySystem(objective) {
+    logger.info(
+      `💻 [UXTelemetryConsultantAgent] Analyzing UX Telemetry Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Telemetry Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Telemetry Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXTelemetryConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXTelemetryConsultantAgent = Object.freeze(new UXTelemetryConsultantAgent());
+export const uXTelemetryConsultantAgent = Object.freeze(
+  new UXTelemetryConsultantAgent(),
+);

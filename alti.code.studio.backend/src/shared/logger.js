@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -23,10 +23,7 @@ const baseFormat = combine(
   prettyPrint(),
 );
 
-const transports = [
-  new winston.transports.Console(),
-  new EventBusTransport(),
-];
+const transports = [new winston.transports.Console(), new EventBusTransport()];
 
 const errorTransports = [
   new winston.transports.Console(),
@@ -42,7 +39,9 @@ if (process.env.LOKI_URL) {
 }
 
 // 🌐 External Cloud Native Logging completely removed for pure air-gapped compliance.
-console.log('⚠️ Running in pure air-gapped enterprise mode. External cloud logging is disabled.');
+console.log(
+  '⚠️ Running in pure air-gapped enterprise mode. External cloud logging is disabled.',
+);
 
 // Success logger
 export const logger = winston.createLogger({
@@ -51,7 +50,7 @@ export const logger = winston.createLogger({
   transports: transports,
 });
 
-logger.on('error', (err) => {
+logger.on('error', err => {
   console.error('Winston Logger Error:', err.message);
 });
 
@@ -62,7 +61,6 @@ export const errorlogger = winston.createLogger({
   transports: errorTransports,
 });
 
-errorlogger.on('error', (err) => {
+errorlogger.on('error', err => {
   console.error('Winston ErrorLogger Error:', err.message);
 });
-

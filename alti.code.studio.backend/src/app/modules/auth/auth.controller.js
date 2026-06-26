@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -15,24 +15,33 @@ import { logger } from '../../../shared/logger.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { authService } from './auth.service.js';
 import { UserRepository } from './prisma.user.repository.js';
+import { generateOTP } from './auth.utils.js';
 import {
-  generateOTP,
-} from './auth.utils.js';
-import { recaptchaService, kmsService } from '../azureCloud/azureServices.service.js';
+  recaptchaService,
+  kmsService,
+} from '../gcpCloud/gcpServices.service.js';
 
 // transactional emails.
-const sendMailWithAzure = async (mailData) => {
-    logger.info(`[Azure Identity] Simulating transactional email to ${mailData.to} via Azure Communication Services`);
-    return { success: true };
+const sendMailWithAzure = async mailData => {
+  logger.info(
+    `[Azure Identity] Simulating transactional email to ${mailData.to} via Azure Communication Services`,
+  );
+  return { success: true };
 };
 
 const register = catchAsync(async (req, res) => {
   const { recaptchaToken } = req.body;
   if (recaptchaToken) {
-      const riskScore = await recaptchaService.createAssessment(recaptchaToken, 'register');
-      if (riskScore < 0.7) {
-          throw new ApiError(httpStatus.FORBIDDEN, `Google reCAPTCHA Enterprise: Automated bot detected (Score: ${riskScore})`);
-      }
+    const riskScore = await recaptchaService.createAssessment(
+      recaptchaToken,
+      'register',
+    );
+    if (riskScore < 0.7) {
+      throw new ApiError(
+        httpStatus.FORBIDDEN,
+        `Google reCAPTCHA Enterprise: Automated bot detected (Score: ${riskScore})`,
+      );
+    }
   }
 
   const result = await authService.registerService(req);
@@ -65,10 +74,16 @@ const login = catchAsync(async (req, res) => {
   const { email, password, recaptchaToken } = req.body;
 
   if (recaptchaToken) {
-      const riskScore = await recaptchaService.createAssessment(recaptchaToken, 'login');
-      if (riskScore < 0.7) {
-          throw new ApiError(httpStatus.FORBIDDEN, `Google reCAPTCHA Enterprise: Automated bot detected (Score: ${riskScore})`);
-      }
+    const riskScore = await recaptchaService.createAssessment(
+      recaptchaToken,
+      'login',
+    );
+    if (riskScore < 0.7) {
+      throw new ApiError(
+        httpStatus.FORBIDDEN,
+        `Google reCAPTCHA Enterprise: Automated bot detected (Score: ${riskScore})`,
+      );
+    }
   }
 
   // logger.info(`Login attempt for: ${email}`); // safe to log email, but not password
@@ -99,7 +114,9 @@ const login = catchAsync(async (req, res) => {
   logger.info(`User logged in: ${email}`);
 
   // KMS Encrypt the payload before sending to client
-  const encryptedPayload = await kmsService.encryptPayload(JSON.stringify(others));
+  const encryptedPayload = await kmsService.encryptPayload(
+    JSON.stringify(others),
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -107,7 +124,7 @@ const login = catchAsync(async (req, res) => {
     message: 'Login Successfully',
     data: {
       encryptedPayload,
-      ...others // We keep others for backward compatibility right now, ideally we only send the encrypted string
+      ...others, // We keep others for backward compatibility right now, ideally we only send the encrypted string
     },
   });
 });
@@ -149,7 +166,11 @@ const forgetPassword = catchAsync(async (req, res) => {
     resetPasswordExpires: OTPExpiration,
   });
 
-  const mailData = { to: email, subject: 'Password Reset', body: `OTP: ${OTP}` };
+  const mailData = {
+    to: email,
+    subject: 'Password Reset',
+    body: `OTP: ${OTP}`,
+  };
   await sendMailWithAzure(mailData);
 
   sendResponse(res, {
@@ -211,7 +232,11 @@ const deleteUserAccountOTP = catchAsync(async (req, res) => {
     deleteAccountExpires: OTPExpiration,
   });
 
-  const mailData = { to: user.email, subject: 'Delete Account', body: `OTP: ${OTP}` };
+  const mailData = {
+    to: user.email,
+    subject: 'Delete Account',
+    body: `OTP: ${OTP}`,
+  };
   await sendMailWithAzure(mailData);
 
   sendResponse(res, {
@@ -259,7 +284,10 @@ const changePassword = catchAsync(async (req, res) => {
   const { newPassword, oldPassword } = req.body;
 
   if (!oldPassword || !newPassword) {
-    throw new ApiError(httpStatus.BAD_REQUEST, 'Old password and new password are required');
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      'Old password and new password are required',
+    );
   }
 
   if (!userId) {
@@ -332,7 +360,7 @@ const sendMailWithAzureController = async (req, res) => {
     const result = await sendMailWithAzure(mailData);
     res.status(201).send(result);
   } catch (error) {
-    logger.error("Azure Email Error:", error);
+    logger.error('Azure Email Error:', error);
   }
 };
 
@@ -442,7 +470,9 @@ const validateMfaChallenge = catchAsync(async (req, res) => {
   };
   res.cookie('refreshToken', refreshToken, cookieOption);
 
-  const encryptedPayload = await kmsService.encryptPayload(JSON.stringify(others));
+  const encryptedPayload = await kmsService.encryptPayload(
+    JSON.stringify(others),
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -458,7 +488,10 @@ const validateMfaChallenge = catchAsync(async (req, res) => {
 const verifyProductAccess = catchAsync(async (req, res) => {
   const userId = req.user.id;
   const { productId } = req.params;
-  const result = await authService.verifyProductAccessService(userId, productId);
+  const result = await authService.verifyProductAccessService(
+    userId,
+    productId,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -489,4 +522,3 @@ export const authController = {
   validateMfaChallenge,
   verifyProductAccess,
 };
-

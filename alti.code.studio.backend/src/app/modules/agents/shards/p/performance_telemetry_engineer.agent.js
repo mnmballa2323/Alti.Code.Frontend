@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceTelemetryEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_telemetry_engineer_agent',
-            'Performance Telemetry Engineer',
-            'You are an elite Performance Telemetry Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_telemetry_engineer_agent',
+      'Performance Telemetry Engineer',
+      'You are an elite Performance Telemetry Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Telemetry.',
+    );
+  }
 
-    async generatePerformanceTelemetrySystem(objective) {
-        logger.info(`💻 [PerformanceTelemetryEngineerAgent] Analyzing Performance Telemetry Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Telemetry Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Telemetry Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceTelemetryEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceTelemetrySystem(objective) {
+    logger.info(
+      `💻 [PerformanceTelemetryEngineerAgent] Analyzing Performance Telemetry Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Telemetry Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Telemetry Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceTelemetryEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceTelemetryEngineerAgent = Object.freeze(new PerformanceTelemetryEngineerAgent());
+export const performanceTelemetryEngineerAgent = Object.freeze(
+  new PerformanceTelemetryEngineerAgent(),
+);

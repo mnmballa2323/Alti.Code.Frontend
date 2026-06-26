@@ -7,17 +7,18 @@ import { logger } from '../shared/logger.js';
  * Note: Requires the GDS Plugin to be installed on the Neo4j Database Instance.
  */
 class Neo4jGDSService {
+  /**
+   * Executes PageRank on the AST codebase graph to identify the most critical/central files.
+   * Useful for Swarm Agents deciding where to focus bug hunting or refactoring.
+   */
+  async calculatePageRank() {
+    logger.info(
+      '🔷 [Neo4jGDS] Swarm is initiating PageRank algorithm across the Cognitive Graph...',
+    );
 
-    /**
-     * Executes PageRank on the AST codebase graph to identify the most critical/central files.
-     * Useful for Swarm Agents deciding where to focus bug hunting or refactoring.
-     */
-    async calculatePageRank() {
-        logger.info('🔷 [Neo4jGDS] Swarm is initiating PageRank algorithm across the Cognitive Graph...');
-        
-        try {
-            // 1. Create an in-memory graph projection for performance
-            await neo4jService.executeCypher(`
+    try {
+      // 1. Create an in-memory graph projection for performance
+      await neo4jService.executeCypher(`
                 CALL gds.graph.project(
                     'astGraph',
                     'AstNode',
@@ -25,8 +26,8 @@ class Neo4jGDSService {
                 )
             `);
 
-            // 2. Run PageRank and stream results
-            const results = await neo4jService.executeCypher(`
+      // 2. Run PageRank and stream results
+      const results = await neo4jService.executeCypher(`
                 CALL gds.pageRank.stream('astGraph')
                 YIELD nodeId, score
                 RETURN gds.util.asNode(nodeId).name AS name, score
@@ -34,32 +35,37 @@ class Neo4jGDSService {
                 LIMIT 10
             `);
 
-            // 3. Drop the projection to free memory
-            await neo4jService.executeCypher(`CALL gds.graph.drop('astGraph')`);
+      // 3. Drop the projection to free memory
+      await neo4jService.executeCypher(`CALL gds.graph.drop('astGraph')`);
 
-            const topNodes = results.map(r => ({
-                name: r.get('name'),
-                score: r.get('score')
-            }));
+      const topNodes = results.map(r => ({
+        name: r.get('name'),
+        score: r.get('score'),
+      }));
 
-            logger.info(`✅ [Neo4jGDS] PageRank complete. Top architectural nexus: ${topNodes[0]?.name || 'N/A'}`);
-            return topNodes;
-            
-        } catch (error) {
-            logger.warn(`⚠️ [Neo4jGDS] PageRank failed. Ensure the Neo4j GDS Plugin is installed on the database instance. Error: ${error.message}`);
-            return [];
-        }
+      logger.info(
+        `✅ [Neo4jGDS] PageRank complete. Top architectural nexus: ${topNodes[0]?.name || 'N/A'}`,
+      );
+      return topNodes;
+    } catch (error) {
+      logger.warn(
+        `⚠️ [Neo4jGDS] PageRank failed. Ensure the Neo4j GDS Plugin is installed on the database instance. Error: ${error.message}`,
+      );
+      return [];
     }
+  }
 
-    /**
-     * Uses Node Similarity (Jaccard) to find architectural twins or duplicate code logic
-     * based on their dependency relationships.
-     */
-    async findArchitecturalTwins() {
-        logger.info('🔷 [Neo4jGDS] Swarm is initiating Node Similarity analysis...');
-        
-        try {
-            await neo4jService.executeCypher(`
+  /**
+   * Uses Node Similarity (Jaccard) to find architectural twins or duplicate code logic
+   * based on their dependency relationships.
+   */
+  async findArchitecturalTwins() {
+    logger.info(
+      '🔷 [Neo4jGDS] Swarm is initiating Node Similarity analysis...',
+    );
+
+    try {
+      await neo4jService.executeCypher(`
                 CALL gds.graph.project(
                     'similarityGraph',
                     'AstNode',
@@ -67,7 +73,7 @@ class Neo4jGDSService {
                 )
             `);
 
-            const results = await neo4jService.executeCypher(`
+      const results = await neo4jService.executeCypher(`
                 CALL gds.nodeSimilarity.stream('similarityGraph')
                 YIELD node1, node2, similarity
                 RETURN gds.util.asNode(node1).name AS node1Name, gds.util.asNode(node2).name AS node2Name, similarity
@@ -75,19 +81,20 @@ class Neo4jGDSService {
                 LIMIT 5
             `);
 
-            await neo4jService.executeCypher(`CALL gds.graph.drop('similarityGraph')`);
+      await neo4jService.executeCypher(
+        `CALL gds.graph.drop('similarityGraph')`,
+      );
 
-            return results.map(r => ({
-                node1: r.get('node1Name'),
-                node2: r.get('node2Name'),
-                similarity: r.get('similarity')
-            }));
-            
-        } catch (error) {
-            logger.warn(`⚠️ [Neo4jGDS] Node Similarity failed: ${error.message}`);
-            return [];
-        }
+      return results.map(r => ({
+        node1: r.get('node1Name'),
+        node2: r.get('node2Name'),
+        similarity: r.get('similarity'),
+      }));
+    } catch (error) {
+      logger.warn(`⚠️ [Neo4jGDS] Node Similarity failed: ${error.message}`);
+      return [];
     }
+  }
 }
 
 export const neo4jGdsService = new Neo4jGDSService();

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsAutomationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_automation_planner_agent',
-            'Systems Automation Planner',
-            'You are an elite Systems Automation Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_automation_planner_agent',
+      'Systems Automation Planner',
+      'You are an elite Systems Automation Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Automation.',
+    );
+  }
 
-    async generateSystemsAutomationSystem(objective) {
-        logger.info(`💻 [SystemsAutomationPlannerAgent] Analyzing Systems Automation Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Automation Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Automation Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsAutomationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsAutomationSystem(objective) {
+    logger.info(
+      `💻 [SystemsAutomationPlannerAgent] Analyzing Systems Automation Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Automation Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Automation Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SystemsAutomationPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const systemsAutomationPlannerAgent = Object.freeze(new SystemsAutomationPlannerAgent());
+export const systemsAutomationPlannerAgent = Object.freeze(
+  new SystemsAutomationPlannerAgent(),
+);

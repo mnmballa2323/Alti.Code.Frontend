@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class PdalPointcloudAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'PdalPointcloudAgent';
-        this.description = 'Advanced Computer Vision expert mapping heavy LiDAR datasets (LAS/LAZ), handling photogrammetry scaling pipelines, and Point Data Abstraction Library (PDAL) networks.';
+  constructor() {
+    super();
+    this.name = 'PdalPointcloudAgent';
+    this.description =
+      'Advanced Computer Vision expert mapping heavy LiDAR datasets (LAS/LAZ), handling photogrammetry scaling pipelines, and Point Data Abstraction Library (PDAL) networks.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Photogrammetry & LiDAR Point Cloud Agent.
 You assist Geospatial and Digital Twin Engineers scaling massive 3D mesh collections parsed from lasers (LiDAR) or calculated from high-overlap drone pictures (Photogrammetry).
 
@@ -32,12 +33,12 @@ You assist Geospatial and Digital Twin Engineers scaling massive 3D mesh collect
 **Best Practices**
 - For large datasets, always instruct the pipeline to first apply a Voxel Grid decimation filter. This groups neighboring points into tiny boxes (voxels) and averages them down to a single point, cutting the processing time mathematically cleanly without degrading true topological context.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const pdalPointcloudAgent = new PdalPointcloudAgent();

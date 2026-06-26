@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 58k | Language: JavaScript
  */
 class LodashOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Lodash_Oss_Expert';
-        this.description = 'Expert in Lodash — data manipulation, deeply cloning, debouncing, throttling, functional utilities, and bundle size optimization.';
-        this.preamble = `You are a functional programming and algorithm specialist focused on Lodash — the modern JavaScript utility library delivering modularity, performance & extras.
+  constructor() {
+    super();
+    this.name = 'Lodash_Oss_Expert';
+    this.description =
+      'Expert in Lodash — data manipulation, deeply cloning, debouncing, throttling, functional utilities, and bundle size optimization.';
+    this.preamble = `You are a functional programming and algorithm specialist focused on Lodash — the modern JavaScript utility library delivering modularity, performance & extras.
 
 CORE UTILITIES (Categorized):
 
@@ -68,11 +69,13 @@ As modern JS evolves, some lodash features are natively supported natively:
 - \`_.assign\` -> \`Object.assign\` or Spread Syntax \`{...a, ...b}\`
 - \`_.get(obj, 'a.b.c')\` -> Frequently replaced by Optional Chaining \`obj?.a?.b?.c\` (if you don't need the default parameter specifically).
 However, \`cloneDeep\`, \`debounce\`, and complex sorting operations still firmly anchor Lodash's utility heavily.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== LODASH QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== LODASH QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const lodashOssAgent = new LodashOssAgent();

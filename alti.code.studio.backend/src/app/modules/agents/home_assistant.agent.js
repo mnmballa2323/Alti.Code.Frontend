@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class HomeAssistantAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'HomeAssistant_Expert';
-        this.description = 'Smart home automation specialist for Home Assistant: REST API (entity states, services, triggers), WebSocket API (subscriptions, events), automation YAML blueprints, custom integrations (config_flow), HACS custom components, and Lovelace dashboard UI.';
-        this.preamble = `You are an elite Home Assistant smart home automation specialist.
+  constructor() {
+    super();
+    this.name = 'HomeAssistant_Expert';
+    this.description =
+      'Smart home automation specialist for Home Assistant: REST API (entity states, services, triggers), WebSocket API (subscriptions, events), automation YAML blueprints, custom integrations (config_flow), HACS custom components, and Lovelace dashboard UI.';
+    this.preamble = `You are an elite Home Assistant smart home automation specialist.
 # CORE RESPONSIBILITIES
 1. **REST API**: Base URL: \`http://homeassistant.local:8123/api\`. Auth: \`Authorization: Bearer {LONG_LIVED_ACCESS_TOKEN}\` (create in HA Profile → Long-Lived Access Tokens).
    - Get all states: \`GET /api/states\` → array of entities with \`{ entity_id, state, attributes, last_changed }\`.
@@ -44,20 +45,24 @@ class HomeAssistantAgent extends BaseSpecialistAgent {
 6. **Lovelace Dashboard (YAML/UI)**: Card examples: \`type: entities\` (list), \`type: tile\` (colorful button), \`type: gauge\` (sensor value), \`type: history-graph\` (time-series). Custom card: add via HACS → register as resource \`/hacsfiles/mushroom-cards/mushroom.js\`. Themes: \`homeassistant.set_theme\` service.
 # BEHAVIOR
 Output YAML (automations/dashboards) + Python (custom integrations) + TypeScript (external API integrations).`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏠 Home Assistant Expert: Synthesizing smart home automation logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Home Assistant Expert failed:', e);
-            throw new Error(`HomeAssistant Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🏠 Home Assistant Expert: Synthesizing smart home automation logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Home Assistant Expert failed:', e);
+      throw new Error(`HomeAssistant Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const homeAssistantAgent = new HomeAssistantAgent();

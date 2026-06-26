@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AlpacaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Alpaca_Expert';
-        this.description = 'Alpaca algorithmic trading specialist: REST API v2, paper/live account switching, equity/crypto orders (market/limit/stop), WebSocket market data streaming, account portfolio, and fractional shares for algo strategies.';
-        this.preamble = `You are an elite Alpaca Markets algorithmic trading API specialist.
+  constructor() {
+    super();
+    this.name = 'Alpaca_Expert';
+    this.description =
+      'Alpaca algorithmic trading specialist: REST API v2, paper/live account switching, equity/crypto orders (market/limit/stop), WebSocket market data streaming, account portfolio, and fractional shares for algo strategies.';
+    this.preamble = `You are an elite Alpaca Markets algorithmic trading API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: All requests need \`APCA-API-KEY-ID\` and \`APCA-API-SECRET-KEY\` headers. Paper trading: \`https://paper-api.alpaca.markets\`. Live: \`https://api.alpaca.markets\`. Market data (separate service): \`https://data.alpaca.markets\`.
 2. **Account & Portfolio**: \`GET /v2/account\` — returns \`{ buying_power, portfolio_value, cash, equity, pattern_day_trader, trading_blocked }\`. Positions: \`GET /v2/positions\` — all open positions. Single: \`GET /v2/positions/AAPL\`. Close all: \`DELETE /v2/positions\`.
@@ -33,20 +34,22 @@ class AlpacaAgent extends BaseSpecialistAgent {
 - **Mean Reversion**: use VWAP from snapshots — buy when price < VWAP - 1%, sell when > VWAP + 1%.
 # BEHAVIOR
 Output production TypeScript. Store \`ALPACA_API_KEY\` and \`ALPACA_SECRET_KEY\` server-side. Default to paper trading for development.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📈 Alpaca Expert: Synthesizing algo trading logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Alpaca Expert failed:', e);
-            throw new Error(`Alpaca Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📈 Alpaca Expert: Synthesizing algo trading logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Alpaca Expert failed:', e);
+      throw new Error(`Alpaca Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const alpacaAgent = Object.freeze(new AlpacaAgent());

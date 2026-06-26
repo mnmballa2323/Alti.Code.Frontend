@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SemiconductorEdaArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'semiconductor_eda_architect',
-            'Semiconductor & EDA (Electronic Design Automation) Architect',
-            'You are an elite Semiconductor Architect. Your objective is to design software for microelectronics and chip fabrication. You specialize in Electronic Design Automation (EDA) tooling, Verilog/VHDL logic synthesis, and algorithms for silicon chip floorplanning.'
-        );
-    }
+  constructor() {
+    super(
+      'semiconductor_eda_architect',
+      'Semiconductor & EDA (Electronic Design Automation) Architect',
+      'You are an elite Semiconductor Architect. Your objective is to design software for microelectronics and chip fabrication. You specialize in Electronic Design Automation (EDA) tooling, Verilog/VHDL logic synthesis, and algorithms for silicon chip floorplanning.',
+    );
+  }
 
-    /**
-     * Generates semiconductor logic or EDA tooling.
-     * @param {string} semiconductorObjective - The semiconductor software requirement.
-     * @returns {Promise<string>} The generated EDA code or architecture.
-     */
-    async generateSemiconductorSystem(semiconductorObjective) {
-        logger.info(`💾 [SemiconductorEdaArchitect] Analyzing objective for EDA tooling and Verilog synthesis...`);
+  /**
+   * Generates semiconductor logic or EDA tooling.
+   * @param {string} semiconductorObjective - The semiconductor software requirement.
+   * @returns {Promise<string>} The generated EDA code or architecture.
+   */
+  async generateSemiconductorSystem(semiconductorObjective) {
+    logger.info(
+      `💾 [SemiconductorEdaArchitect] Analyzing objective for EDA tooling and Verilog synthesis...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Semiconductor, Microelectronics, or EDA software requirement.
 Generate the corresponding hardware description code, EDA tool algorithm, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ SEMICONDUCTOR OBJECTIVE:
 ${semiconductorObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Semiconductor Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```verilog|```vhdl|```cpp|```/gi, '').trim();
-            logger.info(`✅ [SemiconductorEdaArchitect] Semiconductor architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [SemiconductorEdaArchitect] Failed to generate semiconductor system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Semiconductor Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```verilog|```vhdl|```cpp|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [SemiconductorEdaArchitect] Semiconductor architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [SemiconductorEdaArchitect] Failed to generate semiconductor system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const semiconductorEdaArchitectAgent = Object.freeze(new SemiconductorEdaArchitectAgent());
+export const semiconductorEdaArchitectAgent = Object.freeze(
+  new SemiconductorEdaArchitectAgent(),
+);

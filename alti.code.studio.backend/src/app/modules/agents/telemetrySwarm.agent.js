@@ -16,7 +16,8 @@ export class TelemetrySwarmAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'telemetrySwarm';
-    this.description = 'Dynamic Observability & Telemetry Swarm Specialist — Orchestrates Prometheus/OpenTelemetry parsing, bottleneck audits, and alert triggers.';
+    this.description =
+      'Dynamic Observability & Telemetry Swarm Specialist — Orchestrates Prometheus/OpenTelemetry parsing, bottleneck audits, and alert triggers.';
     this.preamble = `
 You are the TelemetrySwarm Master Agent.
 Your role is to monitor and analyze systems metrics, logs, traces, and alert pathways.
@@ -28,24 +29,41 @@ You route system monitoring requests to your specialized sub-agents:
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`⚡ [telemetrySwarm] Processing observability request: ${prompt}`);
+    logger.info(
+      `⚡ [telemetrySwarm] Processing observability request: ${prompt}`,
+    );
     const cleanPrompt = prompt.toLowerCase();
 
-    if (cleanPrompt.includes('parse') || cleanPrompt.includes('log') || cleanPrompt.includes('stream') || cleanPrompt.includes('metric')) {
+    if (
+      cleanPrompt.includes('parse') ||
+      cleanPrompt.includes('log') ||
+      cleanPrompt.includes('stream') ||
+      cleanPrompt.includes('metric')
+    ) {
       const parser = agentRegistry.get('telemetryMetricsParser');
       if (parser && parser.instance) {
         return parser.instance._invoke(prompt, contextBlock, opts);
       }
     }
 
-    if (cleanPrompt.includes('anomaly') || cleanPrompt.includes('bottleneck') || cleanPrompt.includes('latency') || cleanPrompt.includes('cpu')) {
+    if (
+      cleanPrompt.includes('anomaly') ||
+      cleanPrompt.includes('bottleneck') ||
+      cleanPrompt.includes('latency') ||
+      cleanPrompt.includes('cpu')
+    ) {
       const detector = agentRegistry.get('telemetryAnomalyDetector');
       if (detector && detector.instance) {
         return detector.instance._invoke(prompt, contextBlock, opts);
       }
     }
 
-    if (cleanPrompt.includes('alert') || cleanPrompt.includes('rule') || cleanPrompt.includes('sentry') || cleanPrompt.includes('trigger')) {
+    if (
+      cleanPrompt.includes('alert') ||
+      cleanPrompt.includes('rule') ||
+      cleanPrompt.includes('sentry') ||
+      cleanPrompt.includes('trigger')
+    ) {
       const architect = agentRegistry.get('telemetryAlertingArchitect');
       if (architect && architect.instance) {
         return architect.instance._invoke(prompt, contextBlock, opts);
@@ -72,12 +90,16 @@ export class TelemetryMetricsParser extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'telemetryMetricsParser';
-    this.description = 'Observability Metrics Parser — Aggregates and structures live process metrics and trace context.';
-    this.preamble = 'You are the TelemetryMetricsParser micro-specialist. You parse raw logs, standard Prometheus streams, and OpenTelemetry spans.';
+    this.description =
+      'Observability Metrics Parser — Aggregates and structures live process metrics and trace context.';
+    this.preamble =
+      'You are the TelemetryMetricsParser micro-specialist. You parse raw logs, standard Prometheus streams, and OpenTelemetry spans.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`🔍 [telemetryMetricsParser] Aggregating OpenTelemetry metrics streams...`);
+    logger.info(
+      `🔍 [telemetryMetricsParser] Aggregating OpenTelemetry metrics streams...`,
+    );
     return `
 📊 **telemetryMetricsParser Live Diagnostics**
 - **Log Parsing Rate:** 4500 events/sec.
@@ -99,12 +121,16 @@ export class TelemetryAnomalyDetector extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'telemetryAnomalyDetector';
-    this.description = 'Observability Anomaly Detector — Isolates outlier latencies and performance anomalies.';
-    this.preamble = 'You are the TelemetryAnomalyDetector micro-specialist. You analyze latency metrics, isolate anomalies, and map resource bottleneck vectors.';
+    this.description =
+      'Observability Anomaly Detector — Isolates outlier latencies and performance anomalies.';
+    this.preamble =
+      'You are the TelemetryAnomalyDetector micro-specialist. You analyze latency metrics, isolate anomalies, and map resource bottleneck vectors.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`📐 [telemetryAnomalyDetector] Scanning latency profiles for anomalies...`);
+    logger.info(
+      `📐 [telemetryAnomalyDetector] Scanning latency profiles for anomalies...`,
+    );
     return `
 📉 **telemetryAnomalyDetector Incident Scanner**
 - **Anomaly Severity:** Green (Normal).
@@ -126,12 +152,16 @@ export class TelemetryAlertingArchitect extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'telemetryAlertingArchitect';
-    this.description = 'Observability Alert Architect — Synthesizes robust Sentry and Prometheus alerting targets.';
-    this.preamble = 'You are the TelemetryAlertingArchitect micro-specialist. You architect alerting threshold expressions and alert routing maps.';
+    this.description =
+      'Observability Alert Architect — Synthesizes robust Sentry and Prometheus alerting targets.';
+    this.preamble =
+      'You are the TelemetryAlertingArchitect micro-specialist. You architect alerting threshold expressions and alert routing maps.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`🛡️ [telemetryAlertingArchitect] Architecting alerting rules configurations...`);
+    logger.info(
+      `🛡️ [telemetryAlertingArchitect] Architecting alerting rules configurations...`,
+    );
     return `
 🛠️ **telemetryAlertingArchitect Scaffolder**
 - **Prometheus Rule Configured:**
@@ -160,7 +190,7 @@ agentRegistry.register({
   capabilities: ['telemetry-orchestration', 'observability-audit'],
   policy: { accessLevel: 'ADMIN' },
   version: '1.0.0',
-  instance: master
+  instance: master,
 });
 
 const parser = new TelemetryMetricsParser();
@@ -171,7 +201,7 @@ agentRegistry.register({
   capabilities: ['metrics-parsing', 'span-aggregation'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: parser
+  instance: parser,
 });
 
 const detector = new TelemetryAnomalyDetector();
@@ -182,7 +212,7 @@ agentRegistry.register({
   capabilities: ['anomaly-detection', 'bottleneck-isolation'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: detector
+  instance: detector,
 });
 
 const architect = new TelemetryAlertingArchitect();
@@ -193,5 +223,5 @@ agentRegistry.register({
   capabilities: ['alert-architecture', 'rule-generation'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: architect
+  instance: architect,
 });

@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class HardhatAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Hardhat_Expert';
-        this.description = 'Smart contract dev specialist for Hardhat: Solidity compilation, testing (Mocha/Chai + hardhat-toolbox), Hardhat Ignition deployments, local forking, gas reporting, contract verification (Etherscan), and Hardhat Network.';
-        this.preamble = `You are an elite Hardhat Solidity Compilation & Deployment Architect.
+  constructor() {
+    super();
+    this.name = 'Hardhat_Expert';
+    this.description =
+      'Smart contract dev specialist for Hardhat: Solidity compilation, testing (Mocha/Chai + hardhat-toolbox), Hardhat Ignition deployments, local forking, gas reporting, contract verification (Etherscan), and Hardhat Network.';
+    this.preamble = `You are an elite Hardhat Solidity Compilation & Deployment Architect.
 Your core expertise revolves around designing mass-scale testing environments, orchestrating deterministic Hardhat Ignition deployments, and manipulating the localized Hardhat Network seamlessly via extreme fork logic.
 
 # CORE HARDHAT EXPERTISE
@@ -30,20 +31,22 @@ Your core expertise revolves around designing mass-scale testing environments, o
 
 # OUTPUT STANDARDS
 When writing code, output comprehensive \`hardhat.config.ts\` configurations gracefully merging TypeScript, highly-isolated \`loadFixture\` tests, and deterministic Ignition deployments. Never expose \`DEPLOYER_PRIVATE_KEY\` syntaxes statically.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🪖 Hardhat Expert: Synthesizing smart contract dev logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Hardhat Expert failed:', e);
-            throw new Error(`Hardhat Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🪖 Hardhat Expert: Synthesizing smart contract dev logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Hardhat Expert failed:', e);
+      throw new Error(`Hardhat Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const hardhatAgent = Object.freeze(new HardhatAgent());

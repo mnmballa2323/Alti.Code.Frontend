@@ -31,7 +31,7 @@ describe('Product Access Validator', () => {
 
   it('should verify product access for launch plan tier users', async () => {
     const user = { id: 'user-1', role: 'user' };
-    
+
     // Mock database output
     prisma.user.findUnique.mockResolvedValue({ subscriptionPlan: 'launch' });
 
@@ -46,7 +46,7 @@ describe('Product Access Validator', () => {
 
   it('should verify product access for build plan tier users', async () => {
     const user = { id: 'user-2', role: 'user' };
-    
+
     prisma.user.findUnique.mockResolvedValue({ subscriptionPlan: 'build' });
 
     const hasAccessCode = await checkProductAccess(user, 'inso-code');
@@ -60,7 +60,7 @@ describe('Product Access Validator', () => {
 
   it('should verify product access for scale plan tier users', async () => {
     const user = { id: 'user-3', role: 'user' };
-    
+
     prisma.user.findUnique.mockResolvedValue({ subscriptionPlan: 'scale' });
 
     const hasAccessCode = await checkProductAccess(user, 'inso-code');
@@ -75,7 +75,7 @@ describe('Product Access Validator', () => {
   it('should fallback to local/mock environment controls in private cloud dev mode', async () => {
     process.env.PRIVATE_CLOUD_MODE = 'true';
     const user = { id: 'user-4', role: 'user', subscriptionPlan: 'launch' };
-    
+
     // Simulate database offline / failed connection
     prisma.user.findUnique.mockRejectedValue(new Error('Connection error'));
 

@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class N8nAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'n8n_Expert';
-        this.description = 'Open-source workflow automation specialist for n8n: self-hosted deployment, custom node development, webhook triggers, credential management, AI/LLM nodes, and workflow design patterns.';
-        this.preamble = `You are an elite n8n workflow automation platform specialist.
+  constructor() {
+    super();
+    this.name = 'n8n_Expert';
+    this.description =
+      'Open-source workflow automation specialist for n8n: self-hosted deployment, custom node development, webhook triggers, credential management, AI/LLM nodes, and workflow design patterns.';
+    this.preamble = `You are an elite n8n workflow automation platform specialist.
 # CORE RESPONSIBILITIES
 1. **Self-Hosted Deployment**: Deploy n8n via Docker Compose with PostgreSQL backend: \`N8N_ENCRYPTION_KEY\`, \`DB_TYPE=postgresdb\`, \`DB_POSTGRESDB_*\` env vars. Configure \`WEBHOOK_URL\` for production. Use \`n8n-custom-extensions\` volume for custom nodes. Set up basic auth or SSO with \`N8N_BASIC_AUTH_ACTIVE\`.
 2. **Workflow Design**: Build n8n workflows with Trigger → Logic → Action patterns. Key built-in nodes: Webhook (HTTP trigger), HTTP Request (API calls), Code (custom JS/Python), Set, IF, Switch, Merge, Loop Over Items, Wait. Use workflow variables and sticky notes for documentation.
@@ -36,20 +37,22 @@ class N8nAgent extends BaseSpecialistAgent {
 - Use expressions (\`{{ }}\`) with \`$json\`, \`$node\`, \`$workflow\`, \`$env\` for dynamic values.
 # BEHAVIOR
 Guide n8n workflow design and custom node development. Default to TypeScript for custom node code.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔄 n8n Expert: Synthesizing workflow automation logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ n8n Expert failed:', e);
-            throw new Error(`n8n Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔄 n8n Expert: Synthesizing workflow automation logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ n8n Expert failed:', e);
+      throw new Error(`n8n Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const n8nAgent = Object.freeze(new N8nAgent());

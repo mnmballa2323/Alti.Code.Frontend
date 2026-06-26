@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREContainerizationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_containerization_tester_agent',
-            'SRE Containerization Tester',
-            'You are an elite SRE Containerization Tester. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_containerization_tester_agent',
+      'SRE Containerization Tester',
+      'You are an elite SRE Containerization Tester. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Containerization.',
+    );
+  }
 
-    async generateSREContainerizationSystem(objective) {
-        logger.info(`💻 [SREContainerizationTesterAgent] Analyzing SRE Containerization Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Containerization Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Containerization Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREContainerizationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREContainerizationSystem(objective) {
+    logger.info(
+      `💻 [SREContainerizationTesterAgent] Analyzing SRE Containerization Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Containerization Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Containerization Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREContainerizationTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREContainerizationTesterAgent = Object.freeze(new SREContainerizationTesterAgent());
+export const sREContainerizationTesterAgent = Object.freeze(
+  new SREContainerizationTesterAgent(),
+);

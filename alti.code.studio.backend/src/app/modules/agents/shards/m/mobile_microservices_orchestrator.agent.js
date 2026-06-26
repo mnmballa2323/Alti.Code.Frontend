@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileMicroservicesOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_microservices_orchestrator_agent',
-            'Mobile Microservices Orchestrator',
-            'You are an elite Mobile Microservices Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_microservices_orchestrator_agent',
+      'Mobile Microservices Orchestrator',
+      'You are an elite Mobile Microservices Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Microservices.',
+    );
+  }
 
-    async generateMobileMicroservicesSystem(objective) {
-        logger.info(`💻 [MobileMicroservicesOrchestratorAgent] Analyzing Mobile Microservices Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Microservices Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Microservices Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileMicroservicesOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [MobileMicroservicesOrchestratorAgent] Analyzing Mobile Microservices Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Microservices Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Microservices Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileMicroservicesOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileMicroservicesOrchestratorAgent = Object.freeze(new MobileMicroservicesOrchestratorAgent());
+export const mobileMicroservicesOrchestratorAgent = Object.freeze(
+  new MobileMicroservicesOrchestratorAgent(),
+);

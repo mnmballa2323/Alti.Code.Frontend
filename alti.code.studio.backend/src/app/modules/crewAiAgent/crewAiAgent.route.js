@@ -6,15 +6,15 @@ import { CrewAiAgentController } from './crewAiAgent.controller.js';
 const router = express.Router();
 
 router.post(
-    '/debate',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    CrewAiAgentController.startDebate
+  '/debate',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  CrewAiAgentController.startDebate,
 );
 
 router.post(
-    '/spec',
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    CrewAiAgentController.generateSpec
+  '/spec',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  CrewAiAgentController.generateSpec,
 );
 
 export const CrewAiAgentRoutes = router;

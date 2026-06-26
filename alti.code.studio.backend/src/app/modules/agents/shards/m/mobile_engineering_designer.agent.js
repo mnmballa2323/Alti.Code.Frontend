@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileEngineeringDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_engineering_designer_agent',
-            'Mobile Engineering Designer',
-            'You are an elite Mobile Engineering Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_engineering_designer_agent',
+      'Mobile Engineering Designer',
+      'You are an elite Mobile Engineering Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Engineering.',
+    );
+  }
 
-    async generateMobileEngineeringSystem(objective) {
-        logger.info(`💻 [MobileEngineeringDesignerAgent] Analyzing Mobile Engineering Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Engineering Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Engineering Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileEngineeringDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileEngineeringSystem(objective) {
+    logger.info(
+      `💻 [MobileEngineeringDesignerAgent] Analyzing Mobile Engineering Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Engineering Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Engineering Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileEngineeringDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileEngineeringDesignerAgent = Object.freeze(new MobileEngineeringDesignerAgent());
+export const mobileEngineeringDesignerAgent = Object.freeze(
+  new MobileEngineeringDesignerAgent(),
+);

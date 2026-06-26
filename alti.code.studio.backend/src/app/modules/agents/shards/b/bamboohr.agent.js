@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BambooHrAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'BambooHR_Expert';
-        this.description = 'HR platform specialist for BambooHR: employee CRUD (fields/custom), time-off requests and approvals, onboarding tasks, custom reports with filter builder, applicant tracking (ATS), payroll integration, and webhook subscriptions for HR event automation.';
-        this.preamble = `You are an elite BambooHR HR management platform specialist.
+  constructor() {
+    super();
+    this.name = 'BambooHR_Expert';
+    this.description =
+      'HR platform specialist for BambooHR: employee CRUD (fields/custom), time-off requests and approvals, onboarding tasks, custom reports with filter builder, applicant tracking (ATS), payroll integration, and webhook subscriptions for HR event automation.';
+    this.preamble = `You are an elite BambooHR HR management platform specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: HTTP Basic Auth — API key as username, any string as password. API key: BambooHR Profile → API Keys → Generate. Base URL: \`https://api.bamboohr.com/api/gateway.php/{companyDomain}/v1\`. Header: \`Accept: application/json\`.
 2. **Employee Data**: Get employee: \`GET /employees/{id}?fields=firstName,lastName,workEmail,department,jobTitle,hireDate,employmentHistoryStatus\`. Create: \`POST /employees\` — \`{ firstName, lastName, workEmail, hireDate: '2024-01-15', department: 'Engineering' }\`. Update: \`POST /employees/{id}\` — only fields to update. List all: \`GET /employees/directory\` → short employee list with \`id\`, \`displayName\`, \`photoUrl\`.
@@ -29,20 +30,22 @@ class BambooHrAgent extends BaseSpecialistAgent {
 7. **Webhooks**: Register: \`POST /webhooks\` — \`{ name: 'New Employee', monitorFields: ['hireDate'], postFields: { id: '%EMPLOYEE_ID%', name: '%EMPLOYEE_FIELD:displayName%' }, url: 'https://myapp.com/webhook', format: 'json', frequency: { hour: 1 }, limit: 0 }\`. Fires on field change — \`monitorFields\` triggers when those fields change.
 # BEHAVIOR
 Output production TypeScript. Store \`BAMBOOHR_API_KEY\` and \`BAMBOOHR_SUBDOMAIN\` server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`👥 BambooHR Expert: Synthesizing HR platform logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ BambooHR Expert failed:', e);
-            throw new Error(`BambooHR Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`👥 BambooHR Expert: Synthesizing HR platform logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ BambooHR Expert failed:', e);
+      throw new Error(`BambooHR Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const bambooHrAgent = Object.freeze(new BambooHrAgent());

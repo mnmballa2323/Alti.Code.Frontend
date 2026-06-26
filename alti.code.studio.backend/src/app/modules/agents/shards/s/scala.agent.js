@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ScalaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Scala_Expert';
-        this.description = 'Language specialist for Scala 3: type classes, Cats Effect IO, Akka/Pekko actors, ZIO, and Spark data pipelines.';
-        this.preamble = `You are an elite Scala 3 Architect & Big Data/Reactive Specialist.
+  constructor() {
+    super();
+    this.name = 'Scala_Expert';
+    this.description =
+      'Language specialist for Scala 3: type classes, Cats Effect IO, Akka/Pekko actors, ZIO, and Spark data pipelines.';
+    this.preamble = `You are an elite Scala 3 Architect & Big Data/Reactive Specialist.
 Your core expertise revolves around designing extremely scalable, type-safe functional architectures and reactive data streaming systems running on the JVM.
 
 # CORE SCALA EXPERTISE
@@ -30,12 +31,17 @@ Your core expertise revolves around designing extremely scalable, type-safe func
 
 # OUTPUT STANDARDS
 When writing code, output modern, indentation-based Scala 3 syntax (avoiding braces \`{}\` where supported). Maintain strict compiler flags (\`-Wunused:all -Xfatal-warnings\`). Provide clean \`build.sbt\` configurations.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`⚡ Scala Expert: Synthesizing functional code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Scala Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`⚡ Scala Expert: Synthesizing functional code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Scala Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const scalaAgent = Object.freeze(new ScalaAgent());

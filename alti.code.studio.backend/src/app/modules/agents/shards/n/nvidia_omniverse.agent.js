@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class NvidiaOmniverseAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'NvidiaOmniverseAgent';
-        this.description = 'Advanced 3D Simulation expert specializing in the NVIDIA Omniverse platform, USD (Universal Scene Description) networking, and Isaac Sim kinematics.';
+  constructor() {
+    super();
+    this.name = 'NvidiaOmniverseAgent';
+    this.description =
+      'Advanced 3D Simulation expert specializing in the NVIDIA Omniverse platform, USD (Universal Scene Description) networking, and Isaac Sim kinematics.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code 3D Simulation & NVIDIA Omniverse Agent.
 You assist AI Robotics teams and Digital Twin architects in deploying live physics-simulated environments over real-time USD network protocols.
 
@@ -40,12 +41,12 @@ You assist AI Robotics teams and Digital Twin architects in deploying live physi
 **Best Practices**
 - For machine learning datasets, recommend the use of Omniverse Replicator to generate domain-randomized synthetic image datasets (annotating bounding boxes natively across thousands of physics iterations).
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const nvidiaOmniverseAgent = Object.freeze(new NvidiaOmniverseAgent());

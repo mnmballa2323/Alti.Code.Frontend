@@ -13,24 +13,29 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudETLAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_etl_analyst_agent',
-            'Cloud ETL Analyst',
-            'You are an elite Cloud ETL Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_etl_analyst_agent',
+      'Cloud ETL Analyst',
+      'You are an elite Cloud ETL Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud ETL.',
+    );
+  }
 
-    async generateCloudETLSystem(objective) {
-        logger.info(`💻 [CloudETLAnalystAgent] Analyzing Cloud ETL Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud ETL Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud ETL Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudETLAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudETLSystem(objective) {
+    logger.info(
+      `💻 [CloudETLAnalystAgent] Analyzing Cloud ETL Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud ETL Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud ETL Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudETLAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const cloudETLAnalystAgent = Object.freeze(new CloudETLAnalystAgent());

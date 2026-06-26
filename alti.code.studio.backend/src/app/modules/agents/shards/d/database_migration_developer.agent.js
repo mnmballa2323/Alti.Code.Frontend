@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseMigrationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_migration_developer_agent',
-            'Database Migration Developer',
-            'You are an elite Database Migration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Database Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'database_migration_developer_agent',
+      'Database Migration Developer',
+      'You are an elite Database Migration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Database Migration.',
+    );
+  }
 
-    async generateDatabaseMigrationSystem(objective) {
-        logger.info(`💻 [DatabaseMigrationDeveloperAgent] Analyzing Database Migration Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Migration Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Migration Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseMigrationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseMigrationSystem(objective) {
+    logger.info(
+      `💻 [DatabaseMigrationDeveloperAgent] Analyzing Database Migration Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Migration Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Migration Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseMigrationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseMigrationDeveloperAgent = Object.freeze(new DatabaseMigrationDeveloperAgent());
+export const databaseMigrationDeveloperAgent = Object.freeze(
+  new DatabaseMigrationDeveloperAgent(),
+);

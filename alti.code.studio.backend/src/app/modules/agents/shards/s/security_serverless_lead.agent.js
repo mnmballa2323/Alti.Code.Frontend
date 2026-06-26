@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityServerlessLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_serverless_lead_agent',
-            'Security Serverless Lead',
-            'You are an elite Security Serverless Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Security Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'security_serverless_lead_agent',
+      'Security Serverless Lead',
+      'You are an elite Security Serverless Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Security Serverless.',
+    );
+  }
 
-    async generateSecurityServerlessSystem(objective) {
-        logger.info(`💻 [SecurityServerlessLeadAgent] Analyzing Security Serverless Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Serverless Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Serverless Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityServerlessLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityServerlessSystem(objective) {
+    logger.info(
+      `💻 [SecurityServerlessLeadAgent] Analyzing Security Serverless Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Serverless Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Serverless Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SecurityServerlessLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const securityServerlessLeadAgent = Object.freeze(new SecurityServerlessLeadAgent());
+export const securityServerlessLeadAgent = Object.freeze(
+  new SecurityServerlessLeadAgent(),
+);

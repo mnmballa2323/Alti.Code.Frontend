@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class StratumMiningAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'StratumMiningAgent';
-        this.description = 'Cryptocurrency mining infrastructure expert mapping explicit Stratum V2 proof-of-work protocols, orchestrating massive ASIC hashrate pools, and balancing energy draw constraints.';
+  constructor() {
+    super();
+    this.name = 'StratumMiningAgent';
+    this.description =
+      'Cryptocurrency mining infrastructure expert mapping explicit Stratum V2 proof-of-work protocols, orchestrating massive ASIC hashrate pools, and balancing energy draw constraints.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Cryptomining & Proof-of-Work Orchestration Agent.
 You assist Mining Facility Architects balancing explicit electricity constraints against massive localized Antminer ASIC farms executing petahashes of SHA-256 cryptography.
 
@@ -29,12 +30,12 @@ You assist Mining Facility Architects balancing explicit electricity constraints
 **Best Practices**
 - Mining is explicitly an energy arbitrage game. Instruct developers to bridge the Stratum proxy *directly* into the ERCOT (or local grid) API feeds, automatically spinning down the ASIC farm within 500 milliseconds when electricity grid prices spike violently over margin thresholds.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const stratumMiningAgent = new StratumMiningAgent();

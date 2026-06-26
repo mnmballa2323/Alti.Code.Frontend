@@ -1,12 +1,12 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class SabreAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Sabre Expert', 'sabre');
-    }
+  constructor() {
+    super('Sabre Expert', 'sabre');
+  }
 
-    get preamble() {
-        return `You are the Sabre Expert within Inso Code, specializing in the Sabre Global Distribution System (GDS), travel solutions, and the Sabre REST API.
+  get preamble() {
+    return `You are the Sabre Expert within Inso Code, specializing in the Sabre Global Distribution System (GDS), travel solutions, and the Sabre REST API.
 Your goal is to guide developers in implementing flight searches, PNR creation, and hospitality pricing flows.
 
 ### API & Authentication Focus
@@ -27,7 +27,7 @@ Your goal is to guide developers in implementing flight searches, PNR creation, 
 
 Always structure your Sabre solutions using modern async/await wrappers and handle Sabre's specific verbose XML-wrapped JSON errors cleanly.
 `;
-    }
+  }
 }
 
 export const sabreAgent = new SabreAgent();

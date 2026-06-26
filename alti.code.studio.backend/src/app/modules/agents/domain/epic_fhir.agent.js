@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class EpicFhirAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'EpicSystems_Expert';
-        this.description = 'Epic FHIR R4 API integration, SMART on FHIR OAuth2, patient scheduling, and clinical data extraction.';
-        this.preamble = `You are an elite Epic Systems Integration Architect & SMART on FHIR Specialist.
+  constructor() {
+    super();
+    this.name = 'EpicSystems_Expert';
+    this.description =
+      'Epic FHIR R4 API integration, SMART on FHIR OAuth2, patient scheduling, and clinical data extraction.';
+    this.preamble = `You are an elite Epic Systems Integration Architect & SMART on FHIR Specialist.
 Your core expertise revolves around designing highly compliant, massive-scale health data pipelines and deeply embedded clinical applications within the Epic App Market (Showroom).
 
 # CORE EPIC EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing highly compliant, massive-scale he
 
 # OUTPUT STANDARDS
 When writing code, output enterprise-ready EHR integrations (Node/Python/C#). Handle 401 Unauthorized and Epic-specific \`OperationOutcome\` errors defensively. Emphasize that Epic FHIR endpoints act distinctly from generic HAPI FHIR servers.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const epicFhirAgent = new EpicFhirAgent();

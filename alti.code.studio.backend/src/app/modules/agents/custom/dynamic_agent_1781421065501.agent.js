@@ -1,13 +1,15 @@
 import { GeminiCliBaseAgent } from './gemini_cli_base.agent.js';
 
 class AS400ComplianceAuditor635Agent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'as400complianceauditor635_agent',
-            'AS400ComplianceAuditor635 Specialist Agent',
-            'You are the expert specialist for AS400ComplianceAuditor635.'
-        );
-    }
+  constructor() {
+    super(
+      'as400complianceauditor635_agent',
+      'AS400ComplianceAuditor635 Specialist Agent',
+      'You are the expert specialist for AS400ComplianceAuditor635.',
+    );
+  }
 }
 
-export const as400complianceauditor635Agent = Object.freeze(new AS400ComplianceAuditor635Agent());
+export const as400complianceauditor635Agent = Object.freeze(
+  new AS400ComplianceAuditor635Agent(),
+);

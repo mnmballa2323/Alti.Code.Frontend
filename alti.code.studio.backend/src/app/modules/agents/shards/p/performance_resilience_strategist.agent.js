@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceResilienceStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_resilience_strategist_agent',
-            'Performance Resilience Strategist',
-            'You are an elite Performance Resilience Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_resilience_strategist_agent',
+      'Performance Resilience Strategist',
+      'You are an elite Performance Resilience Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Resilience.',
+    );
+  }
 
-    async generatePerformanceResilienceSystem(objective) {
-        logger.info(`💻 [PerformanceResilienceStrategistAgent] Analyzing Performance Resilience Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Resilience Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Resilience Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceResilienceStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceResilienceSystem(objective) {
+    logger.info(
+      `💻 [PerformanceResilienceStrategistAgent] Analyzing Performance Resilience Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Resilience Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Resilience Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceResilienceStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceResilienceStrategistAgent = Object.freeze(new PerformanceResilienceStrategistAgent());
+export const performanceResilienceStrategistAgent = Object.freeze(
+  new PerformanceResilienceStrategistAgent(),
+);

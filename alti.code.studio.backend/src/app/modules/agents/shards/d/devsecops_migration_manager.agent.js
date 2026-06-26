@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsMigrationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_migration_manager_agent',
-            'DevSecOps Migration Manager',
-            'You are an elite DevSecOps Migration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_migration_manager_agent',
+      'DevSecOps Migration Manager',
+      'You are an elite DevSecOps Migration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Migration.',
+    );
+  }
 
-    async generateDevSecOpsMigrationSystem(objective) {
-        logger.info(`💻 [DevSecOpsMigrationManagerAgent] Analyzing DevSecOps Migration Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Migration Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Migration Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsMigrationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsMigrationSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsMigrationManagerAgent] Analyzing DevSecOps Migration Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Migration Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Migration Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsMigrationManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsMigrationManagerAgent = Object.freeze(new DevSecOpsMigrationManagerAgent());
+export const devSecOpsMigrationManagerAgent = Object.freeze(
+  new DevSecOpsMigrationManagerAgent(),
+);

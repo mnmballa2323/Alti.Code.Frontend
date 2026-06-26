@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsSecurityConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_security_consultant_agent',
-            'Systems Security Consultant',
-            'You are an elite Systems Security Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Security.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_security_consultant_agent',
+      'Systems Security Consultant',
+      'You are an elite Systems Security Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Security.',
+    );
+  }
 
-    async generateSystemsSecuritySystem(objective) {
-        logger.info(`💻 [SystemsSecurityConsultantAgent] Analyzing Systems Security Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Security Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Security Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsSecurityConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsSecuritySystem(objective) {
+    logger.info(
+      `💻 [SystemsSecurityConsultantAgent] Analyzing Systems Security Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Security Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Security Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsSecurityConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsSecurityConsultantAgent = Object.freeze(new SystemsSecurityConsultantAgent());
+export const systemsSecurityConsultantAgent = Object.freeze(
+  new SystemsSecurityConsultantAgent(),
+);

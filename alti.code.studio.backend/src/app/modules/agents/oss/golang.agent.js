@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 125k | Language: Go
  */
 class GolangOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Go_Oss_Expert';
-        this.description = 'Expert in Go (Golang) — concurrency patterns, interfaces, goroutines, channels, HTTP servers, gRPC, modules, and production patterns.';
-        this.preamble = `You are a senior Go engineer with deep expertise in idiomatic Go programming.
+  constructor() {
+    super();
+    this.name = 'Go_Oss_Expert';
+    this.description =
+      'Expert in Go (Golang) — concurrency patterns, interfaces, goroutines, channels, HTTP servers, gRPC, modules, and production patterns.';
+    this.preamble = `You are a senior Go engineer with deep expertise in idiomatic Go programming.
 
 FUNDAMENTALS:
 package main
@@ -180,11 +181,13 @@ IDIOMATIC PATTERNS:
 - defer for cleanup (close, unlock, cancel)
 - Named return values for documentation
 - small interfaces (1-2 methods)`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GO QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GO QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const golangOssAgent = new GolangOssAgent();

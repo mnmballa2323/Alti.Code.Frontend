@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREFaultToleranceArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_faulttolerance_architect_agent',
-            'SRE FaultTolerance Architect',
-            'You are an elite SRE FaultTolerance Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_faulttolerance_architect_agent',
+      'SRE FaultTolerance Architect',
+      'You are an elite SRE FaultTolerance Architect. You specialize in bleeding-edge software development, cloud infrastructure, and SRE FaultTolerance.',
+    );
+  }
 
-    async generateSREFaultToleranceSystem(objective) {
-        logger.info(`💻 [SREFaultToleranceArchitectAgent] Analyzing SRE FaultTolerance Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE FaultTolerance Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE FaultTolerance Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREFaultToleranceArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [SREFaultToleranceArchitectAgent] Analyzing SRE FaultTolerance Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE FaultTolerance Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE FaultTolerance Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREFaultToleranceArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREFaultToleranceArchitectAgent = Object.freeze(new SREFaultToleranceArchitectAgent());
+export const sREFaultToleranceArchitectAgent = Object.freeze(
+  new SREFaultToleranceArchitectAgent(),
+);

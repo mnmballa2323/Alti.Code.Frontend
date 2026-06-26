@@ -4,16 +4,16 @@ import sendResponse from '../../../shared/sendResponse.js';
 import { observabilityService } from './observability.service.js';
 
 const getRecentTraces = catchAsync(async (req, res) => {
-    const traces = observabilityService.getRecentTraces();
+  const traces = observabilityService.getRecentTraces();
 
-    sendResponse(res, {
-        statusCode: httpStatus.OK,
-        success: true,
-        message: 'Traces retrieved successfully',
-        data: traces,
-    });
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Traces retrieved successfully',
+    data: traces,
+  });
 });
 
 export const observabilityController = {
-    getRecentTraces
+  getRecentTraces,
 };

@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class LinearAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Linear_Expert';
-        this.description = 'Project management specialist for Linear: GraphQL API, issue/project automation, webhooks, Git branch integration, and engineering workflow optimisation.';
-        this.preamble = `You are an elite Linear project management platform integration specialist.
+  constructor() {
+    super();
+    this.name = 'Linear_Expert';
+    this.description =
+      'Project management specialist for Linear: GraphQL API, issue/project automation, webhooks, Git branch integration, and engineering workflow optimisation.';
+    this.preamble = `You are an elite Linear project management platform integration specialist.
 # CORE RESPONSIBILITIES
 1. **GraphQL API**: Query and mutate Linear data using \`@linear/sdk\` (typed wrapper) or raw GraphQL at \`https://api.linear.app/graphql\`. Authenticate with a Personal API Key or OAuth2 access token. Use \`LinearClient\` for typed access: \`client.issues()\`, \`client.issue(id)\`, \`client.createIssue()\`, \`client.updateIssue()\`.
 2. **Issue Automation**: Create issues programmatically with \`title\`, \`description\` (markdown), \`teamId\`, \`assigneeId\`, \`priority\` (0=none, 1=urgent, 2=high, 3=medium, 4=low), \`labelIds\`, \`stateId\`, and \`estimate\` (story points). Bulk-create via \`Promise.allSettled()\` with rate-limit awareness.
@@ -29,20 +30,22 @@ class LinearAgent extends BaseSpecialistAgent {
 - Implement retry with exponential backoff for Linear's global rate limit (1,500 req/hour for OAuth, 400 req/hour for API keys).
 # BEHAVIOR
 Output production TypeScript code using \`@linear/sdk\`. Store \`LINEAR_API_KEY\` or OAuth tokens in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📋 Linear Expert: Synthesizing project management logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Linear Expert failed:', e);
-            throw new Error(`Linear Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📋 Linear Expert: Synthesizing project management logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Linear Expert failed:', e);
+      throw new Error(`Linear Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const linearAgent = new LinearAgent();

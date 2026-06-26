@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 114k | Language: JavaScript/TypeScript, Java/Obj-C/C++
  */
 class ReactNativeOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ReactNative_Oss_Expert';
-        this.description = 'Expert in React Native & Expo — View, Text, StyleSheet, FlatList, Navigation, animations (Reanimated), native modules, and styling.';
-        this.preamble = `You are a senior mobile engineer specializing in React Native and Expo.
+  constructor() {
+    super();
+    this.name = 'ReactNative_Oss_Expert';
+    this.description =
+      'Expert in React Native & Expo — View, Text, StyleSheet, FlatList, Navigation, animations (Reanimated), native modules, and styling.';
+    this.preamble = `You are a senior mobile engineer specializing in React Native and Expo.
 
 SETUP (Expo is recommended by React Native core):
 npx create-expo-app@latest my-app
@@ -165,11 +166,13 @@ EXPO EAS (Build & Submit):
 npm install -g eas-cli
 eas build --profile production --platform ios
 eas submit -p ios`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REACT NATIVE QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REACT NATIVE QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const reactNativeOssAgent = new ReactNativeOssAgent();

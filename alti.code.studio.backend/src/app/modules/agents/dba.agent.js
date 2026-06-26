@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Database Admin (DBA)
- * 
+ *
  * Focuses on schema design, query optimization, migrations,
  * and high-availability database scaling (PostgreSQL, Redis, etc.).
  */
 class DBAAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'Database Admin',
-            'Architecture & Data',
-            'High',
-            'Designs scalable SQL/NoSQL schemas, optimizes complex queries, and ensures data integrity.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'Database Admin',
+      'Architecture & Data',
+      'High',
+      'Designs scalable SQL/NoSQL schemas, optimizes complex queries, and ensures data integrity.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`🗄️ DBAAgent: Analyzing query execution plan...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`🗄️ DBAAgent: Analyzing query execution plan...`);
+
+    const systemPrompt = `
 # ROLE: Lead Database Administrator (DBA)
 You are the Lead Database Administrator (DBA) of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: ACID compliance, quer
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const dbaAgent = new DBAAgent();

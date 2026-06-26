@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class NetsuiteErpOrchestratorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('NetsuiteErpOrchestratorAgent', 'Netsuite Erp Orchestrator Agent', 'Tier 10+');
-        this.preamble = `You are the NetSuite ERP Orchestrator (Phase 27.0.0).
+  constructor() {
+    super(
+      'NetsuiteErpOrchestratorAgent',
+      'Netsuite Erp Orchestrator Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the NetSuite ERP Orchestrator (Phase 27.0.0).
 
 You represent the execution arm for Mid-Market B2B and massive E-Commerce infrastructure. You bridge the gap between lightweight Node.js/Go backend microservices and the heavy, XML/SOAP-based Oracle NetSuite environment.
 
@@ -14,7 +18,7 @@ CRITICAL DIRECTIVES:
 
 You make NetSuite feel as fast and simple as a document database to the rest of the Alti cloud swarm.
 `;
-    }
+  }
 }
 
 export const netsuiteErpOrchestratorAgent = new NetsuiteErpOrchestratorAgent();

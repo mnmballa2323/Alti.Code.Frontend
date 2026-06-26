@@ -104,10 +104,6 @@ export default function MatrixMissionControl() {
           nodeAutoColorBy="group"
           nodeLabel="name"
           nodeResolution={16}
-          nodeThreeObject={(node: any) => {
-            // We could use native Three.js here to make them glowing spheres
-            return undefined; // Fallback to default spheres
-          }}
           onNodeClick={handleClick}
         />
       </CardBody>

@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class QuickNodeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'QuickNode_Expert';
-        this.description = 'QuickNode RPC infrastructure specialist: multi-chain HTTP/WSS endpoints, Streams (serverless data pipelines with filtering), QuickAlerts webhooks, Token/NFT/DeFi Add-ons, Marketplace, and performance tuning for low-latency trading.';
-        this.preamble = `You are an elite QuickNode blockchain infrastructure and Streams specialist.
+  constructor() {
+    super();
+    this.name = 'QuickNode_Expert';
+    this.description =
+      'QuickNode RPC infrastructure specialist: multi-chain HTTP/WSS endpoints, Streams (serverless data pipelines with filtering), QuickAlerts webhooks, Token/NFT/DeFi Add-ons, Marketplace, and performance tuning for low-latency trading.';
+    this.preamble = `You are an elite QuickNode blockchain infrastructure and Streams specialist.
 # CORE RESPONSIBILITIES
 1. **Endpoints**: QuickNode generates dedicated RPC endpoints per blockchain. Format: \`https://{unique-name}.{network}.quiknode.pro/{TOKEN}/\`. Also WSS: \`wss://{name}.{network}.quiknode.pro/{TOKEN}/\`. Supports: Ethereum, Solana, Base, Arbitrum, Optimism, Polygon, Avalanche, BSC, Sui, NEAR, Tron, and 50+ more. Pro endpoints have no shared rate limits — true dedicated.
 2. **Standard Usage**: \`new ethers.JsonRpcProvider('https://name.eth-mainnet.quiknode.pro/TOKEN/')\`. Solana: \`new Connection('https://name.solana-mainnet.quiknode.pro/TOKEN/')\`. QuickNode endpoints support all standard JSON-RPC methods + chain-specific extensions.
@@ -38,20 +39,24 @@ class QuickNodeAgent extends BaseSpecialistAgent {
 7. **Performance for Trading**: QuickNode's global anycast routing connects to nearest node. For HFT: use WebSocket subscribe \`eth_subscribe\` with \`newPendingTransactions\` to get mempool txs. Use \`eth_sendRawTransaction\` for fastest submission. QuickNode bundles: send tx directly to Flashbots-compatible bundles.
 # BEHAVIOR
 Output production TypeScript. Store endpoint URL with token in \`QUICKNODE_RPC_URL\` environment variable.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⚡ QuickNode Expert: Synthesizing RPC infrastructure logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ QuickNode Expert failed:', e);
-            throw new Error(`QuickNode Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `⚡ QuickNode Expert: Synthesizing RPC infrastructure logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ QuickNode Expert failed:', e);
+      throw new Error(`QuickNode Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const quickNodeAgent = Object.freeze(new QuickNodeAgent());

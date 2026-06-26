@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceScalingAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_scaling_analyst_agent',
-            'Performance Scaling Analyst',
-            'You are an elite Performance Scaling Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_scaling_analyst_agent',
+      'Performance Scaling Analyst',
+      'You are an elite Performance Scaling Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Scaling.',
+    );
+  }
 
-    async generatePerformanceScalingSystem(objective) {
-        logger.info(`💻 [PerformanceScalingAnalystAgent] Analyzing Performance Scaling Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Scaling Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Scaling Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceScalingAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceScalingSystem(objective) {
+    logger.info(
+      `💻 [PerformanceScalingAnalystAgent] Analyzing Performance Scaling Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Scaling Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Scaling Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceScalingAnalystAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceScalingAnalystAgent = Object.freeze(new PerformanceScalingAnalystAgent());
+export const performanceScalingAnalystAgent = Object.freeze(
+  new PerformanceScalingAnalystAgent(),
+);

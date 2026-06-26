@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -9,27 +9,29 @@ import { logger } from '../../../shared/logger.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
 
 export class DetectiveAgent {
-    constructor() {
-        this.name = 'detective';
-        this.description = 'Autonomous Incident Responder and Debugger';
-        this.capabilities = [
-            'Ingest raw error logs and stack traces',
-            'Cross-reference traces to identify the exact line of failure',
-            'Output immediate Root Cause Analysis (RCA) and mitigation fixes'
-        ];
-    }
+  constructor() {
+    this.name = 'detective';
+    this.description = 'Autonomous Incident Responder and Debugger';
+    this.capabilities = [
+      'Ingest raw error logs and stack traces',
+      'Cross-reference traces to identify the exact line of failure',
+      'Output immediate Root Cause Analysis (RCA) and mitigation fixes',
+    ];
+  }
 
-    /**
-     * Reconstructs an incident based on an error log and reverse-engineers the Root Cause.
-     * @param {string} error The raw error message
-     * @param {string} stackTrace The system stack trace output
-     * @param {string} code Relevant code snippets if discovered
-     */
-    async investigateIncident(error, stackTrace = '', code = '') {
-        logger.info(`🕵️‍♀️ Detective Agent: Beginning Root Cause Analysis (RCA) for "${error.substring(0, 30)}..."`);
+  /**
+   * Reconstructs an incident based on an error log and reverse-engineers the Root Cause.
+   * @param {string} error The raw error message
+   * @param {string} stackTrace The system stack trace output
+   * @param {string} code Relevant code snippets if discovered
+   */
+  async investigateIncident(error, stackTrace = '', code = '') {
+    logger.info(
+      `🕵️‍♀️ Detective Agent: Beginning Root Cause Analysis (RCA) for "${error.substring(0, 30)}..."`,
+    );
 
-        try {
-            const prompt = `
+    try {
+      const prompt = `
             You are an elite Site Reliability Engineer (SRE) / Incident Responder.
             A live production error has occurred. Your task is to perform an immediate Root Cause Analysis.
 
@@ -53,32 +55,37 @@ export class DetectiveAgent {
             Do not include markdown code ticks around your JSON.
             `;
 
-            const rawResponse = await GeminiAiService.generateContent(prompt);
-            const rcaJson = rawResponse.replace(/^```json/, '').replace(/^```/, '').replace(/```$/, '').trim();
-            const analysis = JSON.parse(rcaJson);
+      const rawResponse = await GeminiAiService.generateContent(prompt);
+      const rcaJson = rawResponse
+        .replace(/^```json/, '')
+        .replace(/^```/, '')
+        .replace(/```$/, '')
+        .trim();
+      const analysis = JSON.parse(rcaJson);
 
-            logger.info(`✅ Detective Agent: RCA Generated. Confidence: ${analysis.confidence}%`);
-            return analysis;
-
-        } catch (err) {
-            logger.error(`❌ Detective Agent RCA Failure: ${err.message}`);
-            throw err;
-        }
+      logger.info(
+        `✅ Detective Agent: RCA Generated. Confidence: ${analysis.confidence}%`,
+      );
+      return analysis;
+    } catch (err) {
+      logger.error(`❌ Detective Agent RCA Failure: ${err.message}`);
+      throw err;
     }
+  }
 
-    async process(state) {
-        const errorMsg = state.data?.error || state.goal || "Unknown Failure";
-        const stack = state.data?.stackTrace || "";
-        const code = state.data?.code || "";
+  async process(state) {
+    const errorMsg = state.data?.error || state.goal || 'Unknown Failure';
+    const stack = state.data?.stackTrace || '';
+    const code = state.data?.code || '';
 
-        const rca = await this.investigateIncident(errorMsg, stack, code);
+    const rca = await this.investigateIncident(errorMsg, stack, code);
 
-        return {
-            ...state,
-            status: 'success',
-            results: [...(state.results || []), `RCA Provided: ${rca.rootCause}`]
-        };
-    }
+    return {
+      ...state,
+      status: 'success',
+      results: [...(state.results || []), `RCA Provided: ${rca.rootCause}`],
+    };
+  }
 }
 
 export const detectiveAgent = new DetectiveAgent();

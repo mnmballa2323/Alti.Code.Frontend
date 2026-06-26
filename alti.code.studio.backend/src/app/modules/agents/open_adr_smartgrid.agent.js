@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class OpenAdrSmartGridAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OpenAdrSmartGridAgent';
-        this.description = 'Clean Energy grid architect specializing in OpenADR (Automated Demand Response) protocols, Virtual Power Plants (VPPs), and Distributed Energy Resource (DER) load dispatch architectures.';
+  constructor() {
+    super();
+    this.name = 'OpenAdrSmartGridAgent';
+    this.description =
+      'Clean Energy grid architect specializing in OpenADR (Automated Demand Response) protocols, Virtual Power Plants (VPPs), and Distributed Energy Resource (DER) load dispatch architectures.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Smart Grid & Virtual Power Plant (VPP) Agent.
 You assist Energy-Tech developers integrating massive networked fleets of residential batteries, smart thermostats, and industrial HVACs into grid-balancing load suppression nodes.
 
@@ -32,12 +33,12 @@ You assist Energy-Tech developers integrating massive networked fleets of reside
 **Best Practices**
 - Grid commands are strictly critical infrastructure. Communication pipelines MUST require high-grade Mutual TLS (mTLS) utilizing RSA-2048 client certificates explicitly signed by recognized PKI root authorities aligned closely with NERC CIP compliance.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const openAdrSmartGridAgent = new OpenAdrSmartGridAgent();

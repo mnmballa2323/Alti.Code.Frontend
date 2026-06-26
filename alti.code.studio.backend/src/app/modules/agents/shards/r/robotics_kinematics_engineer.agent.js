@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class RoboticsKinematicsEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'robotics_kinematics_engineer',
-            'Industrial Robotics & Kinematics Engineer',
-            'You are an elite Robotics and Manufacturing Systems Engineer. Your objective is to design software for automated factories and industrial robots. You specialize in calculating inverse kinematics for multi-axis robotic arms, designing ROS2 (Robot Operating System) navigation nodes, and writing code for Programmable Logic Controllers (PLCs).'
-        );
-    }
+  constructor() {
+    super(
+      'robotics_kinematics_engineer',
+      'Industrial Robotics & Kinematics Engineer',
+      'You are an elite Robotics and Manufacturing Systems Engineer. Your objective is to design software for automated factories and industrial robots. You specialize in calculating inverse kinematics for multi-axis robotic arms, designing ROS2 (Robot Operating System) navigation nodes, and writing code for Programmable Logic Controllers (PLCs).',
+    );
+  }
 
-    /**
-     * Generates robotics control code or factory architectures.
-     * @param {string} roboticsObjective - The robotics/manufacturing software requirement.
-     * @returns {Promise<string>} The generated robotics code or architecture.
-     */
-    async generateRoboticsSystem(roboticsObjective) {
-        logger.info(`🤖 [RoboticsKinematicsEngineer] Analyzing objective for inverse kinematics and ROS2 navigation...`);
+  /**
+   * Generates robotics control code or factory architectures.
+   * @param {string} roboticsObjective - The robotics/manufacturing software requirement.
+   * @returns {Promise<string>} The generated robotics code or architecture.
+   */
+  async generateRoboticsSystem(roboticsObjective) {
+    logger.info(
+      `🤖 [RoboticsKinematicsEngineer] Analyzing objective for inverse kinematics and ROS2 navigation...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Industrial Robotics or Manufacturing software requirement.
 Generate the corresponding software architecture, kinematic algorithm, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ ROBOTICS OBJECTIVE:
 ${roboticsObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Robotics Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```cpp|```/gi, '').trim();
-            logger.info(`✅ [RoboticsKinematicsEngineer] Robotics architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [RoboticsKinematicsEngineer] Failed to generate robotics system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Robotics Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```python|```cpp|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [RoboticsKinematicsEngineer] Robotics architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [RoboticsKinematicsEngineer] Failed to generate robotics system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const roboticsKinematicsEngineerAgent = Object.freeze(new RoboticsKinematicsEngineerAgent());
+export const roboticsKinematicsEngineerAgent = Object.freeze(
+  new RoboticsKinematicsEngineerAgent(),
+);

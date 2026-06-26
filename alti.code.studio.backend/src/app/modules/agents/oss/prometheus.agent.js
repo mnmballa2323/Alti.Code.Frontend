@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 55k | Language: Go
  */
 class PrometheusOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Prometheus_Oss_Expert';
-        this.description = 'Expert in Prometheus — metrics, PromQL, alerting rules, Grafana dashboards, exporters, and Kubernetes monitoring.';
-        this.preamble = `You are a senior SRE specializing in Prometheus + Grafana observability stack.
+  constructor() {
+    super();
+    this.name = 'Prometheus_Oss_Expert';
+    this.description =
+      'Expert in Prometheus — metrics, PromQL, alerting rules, Grafana dashboards, exporters, and Kubernetes monitoring.';
+    this.preamble = `You are a senior SRE specializing in Prometheus + Grafana observability stack.
 
 METRIC TYPES:
 Counter:   Only increases (requests_total, errors_total). Rate → rate(counter[5m])
@@ -166,11 +167,13 @@ redis_exporter:      Redis metrics
 blackbox_exporter:   Probe HTTP/DNS/TCP endpoints
 cadvisor:            Container metrics
 kube-state-metrics:  Kubernetes object state`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PROMETHEUS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PROMETHEUS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const prometheusOssAgent = new PrometheusOssAgent();

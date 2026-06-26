@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class RetailEcommerceArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'retail_ecommerce_architect',
-            'Omnichannel Retail & E-Commerce Systems Architect',
-            'You are an elite Retail and E-Commerce Architect. Your objective is to design hyper-scale software for global commerce. You specialize in ultra-high throughput shopping cart states, dynamic pricing ML models, and integrating logistics with automated warehouse robotics.'
-        );
-    }
+  constructor() {
+    super(
+      'retail_ecommerce_architect',
+      'Omnichannel Retail & E-Commerce Systems Architect',
+      'You are an elite Retail and E-Commerce Architect. Your objective is to design hyper-scale software for global commerce. You specialize in ultra-high throughput shopping cart states, dynamic pricing ML models, and integrating logistics with automated warehouse robotics.',
+    );
+  }
 
-    /**
-     * Generates e-commerce architectures or retail logic.
-     * @param {string} retailObjective - The retail software requirement.
-     * @returns {Promise<string>} The generated retail code or architecture.
-     */
-    async generateRetailSystem(retailObjective) {
-        logger.info(`🛒 [RetailEcommerceArchitect] Analyzing objective for high-throughput commerce and dynamic pricing...`);
+  /**
+   * Generates e-commerce architectures or retail logic.
+   * @param {string} retailObjective - The retail software requirement.
+   * @returns {Promise<string>} The generated retail code or architecture.
+   */
+  async generateRetailSystem(retailObjective) {
+    logger.info(
+      `🛒 [RetailEcommerceArchitect] Analyzing objective for high-throughput commerce and dynamic pricing...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Retail, E-Commerce, or Supply Chain software requirement.
 Generate the corresponding software architecture, ML model, or raw source code.
 RULES:
@@ -42,16 +44,24 @@ RETAIL OBJECTIVE:
 ${retailObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Retail Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```/gi, '').trim();
-            logger.info(`✅ [RetailEcommerceArchitect] Retail architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [RetailEcommerceArchitect] Failed to generate retail system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Retail Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```python|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [RetailEcommerceArchitect] Retail architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [RetailEcommerceArchitect] Failed to generate retail system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const retailEcommerceArchitectAgent = Object.freeze(new RetailEcommerceArchitectAgent());
+export const retailEcommerceArchitectAgent = Object.freeze(
+  new RetailEcommerceArchitectAgent(),
+);

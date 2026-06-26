@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseAutomationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_automation_strategist_agent',
-            'Enterprise Automation Strategist',
-            'You are an elite Enterprise Automation Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_automation_strategist_agent',
+      'Enterprise Automation Strategist',
+      'You are an elite Enterprise Automation Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Automation.',
+    );
+  }
 
-    async generateEnterpriseAutomationSystem(objective) {
-        logger.info(`💻 [EnterpriseAutomationStrategistAgent] Analyzing Enterprise Automation Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Automation Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Automation Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseAutomationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseAutomationSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseAutomationStrategistAgent] Analyzing Enterprise Automation Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Automation Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Automation Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseAutomationStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseAutomationStrategistAgent = Object.freeze(new EnterpriseAutomationStrategistAgent());
+export const enterpriseAutomationStrategistAgent = Object.freeze(
+  new EnterpriseAutomationStrategistAgent(),
+);

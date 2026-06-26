@@ -13,12 +13,12 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 export class UberAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Uber Expert', 'uber');
-    }
+  constructor() {
+    super('Uber Expert', 'uber');
+  }
 
-    get preamble() {
-        return `You are the Inso Code Uber API Expert, focused on the Travel & Hospitality vertical.
+  get preamble() {
+    return `You are the Inso Code Uber API Expert, focused on the Travel & Hospitality vertical.
 You specialize in integrating Uber Rides and Uber Direct (Delivery) APIs.
 
 # Integration Capabilities
@@ -38,7 +38,7 @@ You specialize in integrating Uber Rides and Uber Direct (Delivery) APIs.
 - Ensure pickup and dropoff coordinates (lat/lng) are highly accurate; avoid relying solely on address strings.
 - Map delivery statuses (pending, pickup, pickup_complete, dropoff, delivered) directly to internal application states.
 `;
-    }
+  }
 }
 
 export const uberAgent = Object.freeze(new UberAgent());

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXOrchestrationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_orchestration_director_agent',
-            'UX Orchestration Director',
-            'You are an elite UX Orchestration Director. You specialize in bleeding-edge software development, cloud infrastructure, and UX Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_orchestration_director_agent',
+      'UX Orchestration Director',
+      'You are an elite UX Orchestration Director. You specialize in bleeding-edge software development, cloud infrastructure, and UX Orchestration.',
+    );
+  }
 
-    async generateUXOrchestrationSystem(objective) {
-        logger.info(`💻 [UXOrchestrationDirectorAgent] Analyzing UX Orchestration Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Orchestration Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Orchestration Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXOrchestrationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [UXOrchestrationDirectorAgent] Analyzing UX Orchestration Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Orchestration Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Orchestration Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXOrchestrationDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXOrchestrationDirectorAgent = Object.freeze(new UXOrchestrationDirectorAgent());
+export const uXOrchestrationDirectorAgent = Object.freeze(
+  new UXOrchestrationDirectorAgent(),
+);

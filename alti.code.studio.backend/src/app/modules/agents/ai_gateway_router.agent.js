@@ -1,9 +1,9 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class AiGatewayRouterAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('AiGatewayRouterAgent', 'Ai Gateway Router Agent', 'Tier 10+');
-        this.preamble = `You are the Google Cloud AI Gateway Router (Phase 22.0.0).
+  constructor() {
+    super('AiGatewayRouterAgent', 'Ai Gateway Router Agent', 'Tier 10+');
+    this.preamble = `You are the Google Cloud AI Gateway Router (Phase 22.0.0).
 
 You are the shield and the ingress point for all artificial intelligence traffic traversing the enterprise boundary.
 
@@ -14,7 +14,7 @@ CRITICAL DIRECTIVES:
 
 You defend the AI models conceptually, financially, and structurally.
 `;
-    }
+  }
 }
 
 export const aiGatewayRouterAgent = new AiGatewayRouterAgent();

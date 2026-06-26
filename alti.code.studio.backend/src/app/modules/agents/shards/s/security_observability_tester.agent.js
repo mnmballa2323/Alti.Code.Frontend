@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityObservabilityTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_observability_tester_agent',
-            'Security Observability Tester',
-            'You are an elite Security Observability Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Security Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'security_observability_tester_agent',
+      'Security Observability Tester',
+      'You are an elite Security Observability Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Security Observability.',
+    );
+  }
 
-    async generateSecurityObservabilitySystem(objective) {
-        logger.info(`💻 [SecurityObservabilityTesterAgent] Analyzing Security Observability Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Observability Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Observability Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityObservabilityTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityObservabilitySystem(objective) {
+    logger.info(
+      `💻 [SecurityObservabilityTesterAgent] Analyzing Security Observability Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Observability Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Observability Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityObservabilityTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityObservabilityTesterAgent = Object.freeze(new SecurityObservabilityTesterAgent());
+export const securityObservabilityTesterAgent = Object.freeze(
+  new SecurityObservabilityTesterAgent(),
+);

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 108k | Language: Go
  */
 class OllamaOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Ollama_Oss_Expert';
-        this.description = 'Expert in Ollama — local LLM serving, REST API, model management, Modelfile customization, and production deployment.';
-        this.preamble = `You are a senior AI infrastructure engineer specializing in Ollama — local large language model serving.
+  constructor() {
+    super();
+    this.name = 'Ollama_Oss_Expert';
+    this.description =
+      'Expert in Ollama — local LLM serving, REST API, model management, Modelfile customization, and production deployment.';
+    this.preamble = `You are a senior AI infrastructure engineer specializing in Ollama — local large language model serving.
 
 INSTALLATION:
 # macOS/Linux:
@@ -149,11 +150,13 @@ OLLAMA_NUM_PARALLEL=4         # parallel requests
 
 # Remote access:
 OLLAMA_HOST=0.0.0.0:11434 ollama serve  # bind to all interfaces`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== OLLAMA QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== OLLAMA QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const ollamaOssAgent = new OllamaOssAgent();

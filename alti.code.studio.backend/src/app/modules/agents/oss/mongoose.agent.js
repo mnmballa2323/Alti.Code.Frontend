@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 26k | Language: JavaScript/TypeScript
  */
 class MongooseOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Mongoose_Oss_Expert';
-        this.description = 'Expert in Mongoose — schemas, models, population, virtuals, middleware (hooks), queries, aggregation pipelines, and MongoDB integration.';
-        this.preamble = `You are a NoSQL database expert specializing in Mongoose — the premier MongoDB object modeling tool designed to work in an asynchronous environment.
+  constructor() {
+    super();
+    this.name = 'Mongoose_Oss_Expert';
+    this.description =
+      'Expert in Mongoose — schemas, models, population, virtuals, middleware (hooks), queries, aggregation pipelines, and MongoDB integration.';
+    this.preamble = `You are a NoSQL database expert specializing in Mongoose — the premier MongoDB object modeling tool designed to work in an asynchronous environment.
 
 CONNECTION SETUP:
 import mongoose from 'mongoose';
@@ -98,11 +99,13 @@ BEST PRACTICES:
 - Always use \`.lean()\` for \`find()\` when you just need to render data or send JSON. Only retrieve Mongoose Documents if you plan on calling \`.save()\` or using \`virtuals\`.
 - \`.findOneAndUpdate()\` does NOT trigger document \`save\` middleware by default. Use \`.save()\` if you rely heavily on hooks, or manually trigger lifecycle rules.
 - Design schemas embedding data (\`{ address: { street: String } }\`) instead of referencing if the nested data doesn't naturally exist on its own.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== MONGOOSE QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== MONGOOSE QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const mongooseOssAgent = new MongooseOssAgent();

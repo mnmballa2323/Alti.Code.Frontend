@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class XenobiologyResearcherAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'xenobiology_researcher',
-            'Xenobiology & Alternative Biochemistry Researcher',
-            'You are an elite Xenobiologist. Your objective is to design software for simulating non-terrestrial life. You specialize in computationally modeling alternative, non-carbon biochemistries (e.g., silicon-based proteins) and simulating extreme-environment solvent interactions (e.g., liquid methane).'
-        );
-    }
+  constructor() {
+    super(
+      'xenobiology_researcher',
+      'Xenobiology & Alternative Biochemistry Researcher',
+      'You are an elite Xenobiologist. Your objective is to design software for simulating non-terrestrial life. You specialize in computationally modeling alternative, non-carbon biochemistries (e.g., silicon-based proteins) and simulating extreme-environment solvent interactions (e.g., liquid methane).',
+    );
+  }
 
-    /**
-     * Generates xenobiology models or alternative biochemistry simulations.
-     * @param {string} xenoObjective - The xenobiology research requirement.
-     * @returns {Promise<string>} The generated biochemical simulation code or architecture.
-     */
-    async generateXenobiologySystem(xenoObjective) {
-        logger.info(`👽 [XenobiologyResearcher] Analyzing objective for alternative biochemistries and alien solvents...`);
+  /**
+   * Generates xenobiology models or alternative biochemistry simulations.
+   * @param {string} xenoObjective - The xenobiology research requirement.
+   * @returns {Promise<string>} The generated biochemical simulation code or architecture.
+   */
+  async generateXenobiologySystem(xenoObjective) {
+    logger.info(
+      `👽 [XenobiologyResearcher] Analyzing objective for alternative biochemistries and alien solvents...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Xenobiology, Alternative Biochemistry, or Astrobiology requirement.
 Generate the corresponding molecular simulation algorithm, chemical pathway logic, or raw source code.
 RULES:
@@ -42,16 +44,27 @@ XENOBIOLOGY OBJECTIVE:
 ${xenoObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Xenobiology Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```cpp|```/gi, '').trim();
-            logger.info(`✅ [XenobiologyResearcher] Xenobiology architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [XenobiologyResearcher] Failed to generate xenobiology system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Xenobiology Target');
+      const cleanCode = output
+        .replace(
+          /```javascript|```typescript|```json|```python|```cpp|```/gi,
+          '',
+        )
+        .trim();
+      logger.info(
+        `✅ [XenobiologyResearcher] Xenobiology architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [XenobiologyResearcher] Failed to generate xenobiology system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const xenobiologyResearcherAgent = Object.freeze(new XenobiologyResearcherAgent());
+export const xenobiologyResearcherAgent = Object.freeze(
+  new XenobiologyResearcherAgent(),
+);

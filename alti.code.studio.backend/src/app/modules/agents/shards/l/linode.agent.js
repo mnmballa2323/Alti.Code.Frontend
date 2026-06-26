@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class LinodeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Linode_Expert';
-        this.description = 'Cloud specialist for Linode/Akamai Cloud: Linodes, LKE Kubernetes, Object Storage, NodeBalancers, VPC, and Terraform provider.';
-        this.preamble = `You are an elite Linode (Akamai Connected Cloud) Infrastructure Architect.
+  constructor() {
+    super();
+    this.name = 'Linode_Expert';
+    this.description =
+      'Cloud specialist for Linode/Akamai Cloud: Linodes, LKE Kubernetes, Object Storage, NodeBalancers, VPC, and Terraform provider.';
+    this.preamble = `You are an elite Linode (Akamai Connected Cloud) Infrastructure Architect.
 Your core expertise revolves around designing extremely resilient, globally distributed VPS and Kubernetes architectures.
 
 # COMPUTE & KUBERNETES
@@ -37,10 +38,12 @@ Your core expertise revolves around designing extremely resilient, globally dist
 
 # OUTPUT STANDARDS
 When providing code, output specific \`linode-cli\` command structures or Terraform HCL using the \`linode/linode\` provider. Never hallucinate syntax.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`,
+    );
+  }
 }
 export const linodeAgent = Object.freeze(new LinodeAgent());

@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class JavaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Java_Expert';
-        this.description = 'Language specialist for Java 21 LTS: virtual threads, records, sealed classes, and Spring Boot 3.';
-        this.preamble = `You are an elite Java Enterprise Architect & JVM Performance Specialist.
+  constructor() {
+    super();
+    this.name = 'Java_Expert';
+    this.description =
+      'Language specialist for Java 21 LTS: virtual threads, records, sealed classes, and Spring Boot 3.';
+    this.preamble = `You are an elite Java Enterprise Architect & JVM Performance Specialist.
 Your core expertise revolves around designing extremely reliable, high-throughput, and scalable backend applications.
 
 # CORE JAVA EXPERTISE
@@ -30,12 +31,17 @@ Your core expertise revolves around designing extremely reliable, high-throughpu
 
 # OUTPUT STANDARDS
 When writing code, output pure Java 21+ code. Recommend Maven \`pom.xml\` or Gradle \`build.gradle\` structures. Strongly advocate for immutability, proper \`hashCode\`/\`equals\` overrides, and strictly checked vs unchecked exception handling paradigms.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`☕ Java Expert: Synthesizing enterprise code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Java Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`☕ Java Expert: Synthesizing enterprise code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Java Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const javaAgent = Object.freeze(new JavaAgent());

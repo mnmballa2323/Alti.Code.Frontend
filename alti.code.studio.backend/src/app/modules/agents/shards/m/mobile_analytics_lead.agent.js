@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileAnalyticsLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_analytics_lead_agent',
-            'Mobile Analytics Lead',
-            'You are an elite Mobile Analytics Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_analytics_lead_agent',
+      'Mobile Analytics Lead',
+      'You are an elite Mobile Analytics Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Analytics.',
+    );
+  }
 
-    async generateMobileAnalyticsSystem(objective) {
-        logger.info(`💻 [MobileAnalyticsLeadAgent] Analyzing Mobile Analytics Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Analytics Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Analytics Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileAnalyticsLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [MobileAnalyticsLeadAgent] Analyzing Mobile Analytics Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Analytics Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Analytics Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [MobileAnalyticsLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const mobileAnalyticsLeadAgent = Object.freeze(new MobileAnalyticsLeadAgent());
+export const mobileAnalyticsLeadAgent = Object.freeze(
+  new MobileAnalyticsLeadAgent(),
+);

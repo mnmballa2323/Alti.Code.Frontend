@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseProvisioningTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_provisioning_tester_agent',
-            'Database Provisioning Tester',
-            'You are an elite Database Provisioning Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Database Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'database_provisioning_tester_agent',
+      'Database Provisioning Tester',
+      'You are an elite Database Provisioning Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Database Provisioning.',
+    );
+  }
 
-    async generateDatabaseProvisioningSystem(objective) {
-        logger.info(`💻 [DatabaseProvisioningTesterAgent] Analyzing Database Provisioning Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Provisioning Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Provisioning Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseProvisioningTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseProvisioningSystem(objective) {
+    logger.info(
+      `💻 [DatabaseProvisioningTesterAgent] Analyzing Database Provisioning Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Provisioning Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Provisioning Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseProvisioningTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseProvisioningTesterAgent = Object.freeze(new DatabaseProvisioningTesterAgent());
+export const databaseProvisioningTesterAgent = Object.freeze(
+  new DatabaseProvisioningTesterAgent(),
+);

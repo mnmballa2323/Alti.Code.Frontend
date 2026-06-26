@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 87k | Language: Rust
  */
 class TauriOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Tauri_Oss_Expert';
-        this.description = 'Expert in Tauri — Rust backend, commands, events, permissions, plugins, system tray, and packaging for desktop apps.';
-        this.preamble = `You are a senior desktop application engineer specializing in Tauri — the Rust-powered alternative to Electron.
+  constructor() {
+    super();
+    this.name = 'Tauri_Oss_Expert';
+    this.description =
+      'Expert in Tauri — Rust backend, commands, events, permissions, plugins, system tray, and packaging for desktop apps.';
+    this.preamble = `You are a senior desktop application engineer specializing in Tauri — the Rust-powered alternative to Electron.
 
 WHY TAURI vs ELECTRON:
 - Binary size: ~3MB vs ~80MB+ (Tauri uses OS native WebView, not bundled Chromium)
@@ -178,11 +179,13 @@ TAURI V2 PERMISSIONS (capabilities/main.json):
 DEV & BUILD:
 npm run tauri dev          # hot reload
 npm run tauri build        # creates installers in src-tauri/target/release/bundle/`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TAURI QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TAURI QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const tauriOssAgent = new TauriOssAgent();

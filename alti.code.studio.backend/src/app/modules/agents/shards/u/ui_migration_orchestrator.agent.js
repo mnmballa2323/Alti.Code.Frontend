@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIMigrationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_migration_orchestrator_agent',
-            'UI Migration Orchestrator',
-            'You are an elite UI Migration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UI Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_migration_orchestrator_agent',
+      'UI Migration Orchestrator',
+      'You are an elite UI Migration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UI Migration.',
+    );
+  }
 
-    async generateUIMigrationSystem(objective) {
-        logger.info(`💻 [UIMigrationOrchestratorAgent] Analyzing UI Migration Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Migration Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Migration Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIMigrationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIMigrationSystem(objective) {
+    logger.info(
+      `💻 [UIMigrationOrchestratorAgent] Analyzing UI Migration Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Migration Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Migration Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIMigrationOrchestratorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIMigrationOrchestratorAgent = Object.freeze(new UIMigrationOrchestratorAgent());
+export const uIMigrationOrchestratorAgent = Object.freeze(
+  new UIMigrationOrchestratorAgent(),
+);

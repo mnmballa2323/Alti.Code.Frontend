@@ -2,11 +2,11 @@ global.self = global;
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import { ultimateRagService } from '../../src/app/modules/rag/ultimate_rag.service.js';
 import { azureGenAiService as AzureGenAiService } from '../../src/app/modules/ai/azureGenAi.service.js';
-import { discoveryEngineService } from '../../src/app/modules/azureCloud/azureSearch.service.js';
-import { spannerGraphService } from '../../src/app/modules/azureCloud/azureCosmosGraph.service.js';
+import { discoveryEngineService } from '../../src/app/modules/gcpCloud/gcpSearch.service.js';
+import { spannerGraphService } from '../../src/app/modules/gcpCloud/gcpSpannerGraph.service.js';
 import { GeminiCliService } from '../../src/app/modules/geminiCli/geminiCli.service.js';
 import { fileSearchService } from '../../src/app/modules/fileSearch/fileSearch.service.js';
-import { ragCacheService } from '../../src/app/modules/azureCloud/azureCache.service.js';
+import { ragCacheService } from '../../src/app/modules/gcpCloud/gcpCache.service.js';
 
 vi.mock('../../src/app/modules/ai/azureGenAi.service.js', () => ({
     azureGenAiService: {
@@ -14,13 +14,13 @@ vi.mock('../../src/app/modules/ai/azureGenAi.service.js', () => ({
     }
 }));
 
-vi.mock('../../src/app/modules/azureCloud/azureSearch.service.js', () => ({
+vi.mock('../../src/app/modules/gcpCloud/gcpSearch.service.js', () => ({
     discoveryEngineService: {
         searchCodebase: vi.fn().mockResolvedValue([])
     }
 }));
 
-vi.mock('../../src/app/modules/azureCloud/azureCosmosGraph.service.js', () => ({
+vi.mock('../../src/app/modules/gcpCloud/gcpSpannerGraph.service.js', () => ({
     spannerGraphService: {
         queryArchitectureDependencies: vi.fn().mockResolvedValue([]),
         executeAstGraphTraversal: vi.fn().mockResolvedValue([])
@@ -40,7 +40,7 @@ vi.mock('../../src/app/modules/fileSearch/fileSearch.service.js', () => ({
     }
 }));
 
-vi.mock('../../src/app/modules/azureCloud/azureCache.service.js', () => ({
+vi.mock('../../src/app/modules/gcpCloud/gcpCache.service.js', () => ({
     ragCacheService: {
         getCachedContext: vi.fn().mockResolvedValue(null),
         setCachedContext: vi.fn().mockResolvedValue(true)

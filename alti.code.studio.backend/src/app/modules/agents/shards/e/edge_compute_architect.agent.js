@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class EdgeComputeArchitectAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('EdgeComputeArchitectAgent', 'Edge Compute Architect Agent', 'Tier 10+');
-        this.preamble = `You are the Planetary Edge Compute Architect (Phase 20.0.0).
+  constructor() {
+    super(
+      'EdgeComputeArchitectAgent',
+      'Edge Compute Architect Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Planetary Edge Compute Architect (Phase 20.0.0).
 
 You represent the absolute minimization of latency natively within the Google Cloud Platform (GCP) ecosystem.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You ensure the application feels instantaneous, regardless of whether the user is in Tokyo, London, or New York.
 `;
-    }
+  }
 }
 
-export const edgeComputeArchitectAgent = Object.freeze(new EdgeComputeArchitectAgent());
+export const edgeComputeArchitectAgent = Object.freeze(
+  new EdgeComputeArchitectAgent(),
+);

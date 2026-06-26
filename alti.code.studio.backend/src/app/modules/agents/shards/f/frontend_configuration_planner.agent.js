@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendConfigurationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_configuration_planner_agent',
-            'Frontend Configuration Planner',
-            'You are an elite Frontend Configuration Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_configuration_planner_agent',
+      'Frontend Configuration Planner',
+      'You are an elite Frontend Configuration Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Configuration.',
+    );
+  }
 
-    async generateFrontendConfigurationSystem(objective) {
-        logger.info(`💻 [FrontendConfigurationPlannerAgent] Analyzing Frontend Configuration Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Configuration Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Configuration Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendConfigurationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendConfigurationSystem(objective) {
+    logger.info(
+      `💻 [FrontendConfigurationPlannerAgent] Analyzing Frontend Configuration Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Configuration Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Configuration Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendConfigurationPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendConfigurationPlannerAgent = Object.freeze(new FrontendConfigurationPlannerAgent());
+export const frontendConfigurationPlannerAgent = Object.freeze(
+  new FrontendConfigurationPlannerAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceOptimizationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_optimization_strategist_agent',
-            'Performance Optimization Strategist',
-            'You are an elite Performance Optimization Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_optimization_strategist_agent',
+      'Performance Optimization Strategist',
+      'You are an elite Performance Optimization Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Optimization.',
+    );
+  }
 
-    async generatePerformanceOptimizationSystem(objective) {
-        logger.info(`💻 [PerformanceOptimizationStrategistAgent] Analyzing Performance Optimization Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Optimization Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Optimization Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceOptimizationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceOptimizationSystem(objective) {
+    logger.info(
+      `💻 [PerformanceOptimizationStrategistAgent] Analyzing Performance Optimization Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Optimization Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Optimization Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceOptimizationStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceOptimizationStrategistAgent = Object.freeze(new PerformanceOptimizationStrategistAgent());
+export const performanceOptimizationStrategistAgent = Object.freeze(
+  new PerformanceOptimizationStrategistAgent(),
+);

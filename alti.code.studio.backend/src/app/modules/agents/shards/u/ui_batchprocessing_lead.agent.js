@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIBatchProcessingLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_batchprocessing_lead_agent',
-            'UI BatchProcessing Lead',
-            'You are an elite UI BatchProcessing Lead. You specialize in bleeding-edge software development, cloud infrastructure, and UI BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_batchprocessing_lead_agent',
+      'UI BatchProcessing Lead',
+      'You are an elite UI BatchProcessing Lead. You specialize in bleeding-edge software development, cloud infrastructure, and UI BatchProcessing.',
+    );
+  }
 
-    async generateUIBatchProcessingSystem(objective) {
-        logger.info(`💻 [UIBatchProcessingLeadAgent] Analyzing UI BatchProcessing Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI BatchProcessing Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI BatchProcessing Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIBatchProcessingLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [UIBatchProcessingLeadAgent] Analyzing UI BatchProcessing Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI BatchProcessing Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI BatchProcessing Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIBatchProcessingLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIBatchProcessingLeadAgent = Object.freeze(new UIBatchProcessingLeadAgent());
+export const uIBatchProcessingLeadAgent = Object.freeze(
+  new UIBatchProcessingLeadAgent(),
+);

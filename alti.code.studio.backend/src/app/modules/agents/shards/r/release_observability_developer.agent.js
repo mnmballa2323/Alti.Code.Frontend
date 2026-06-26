@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseObservabilityDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_observability_developer_agent',
-            'Release Observability Developer',
-            'You are an elite Release Observability Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'release_observability_developer_agent',
+      'Release Observability Developer',
+      'You are an elite Release Observability Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Observability.',
+    );
+  }
 
-    async generateReleaseObservabilitySystem(objective) {
-        logger.info(`💻 [ReleaseObservabilityDeveloperAgent] Analyzing Release Observability Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Observability Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Observability Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseObservabilityDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseObservabilitySystem(objective) {
+    logger.info(
+      `💻 [ReleaseObservabilityDeveloperAgent] Analyzing Release Observability Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Observability Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Observability Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseObservabilityDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseObservabilityDeveloperAgent = Object.freeze(new ReleaseObservabilityDeveloperAgent());
+export const releaseObservabilityDeveloperAgent = Object.freeze(
+  new ReleaseObservabilityDeveloperAgent(),
+);

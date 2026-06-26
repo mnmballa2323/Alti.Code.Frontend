@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class OcamlAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OCaml_Expert';
-        this.description = 'Functional specialist for OCaml 5: algebraic effects, Dune build, Eio async, modules/functors, and Dream web.';
-        this.preamble = `You are an elite OCaml Systems Architect & Type Theory Specialist.
+  constructor() {
+    super();
+    this.name = 'OCaml_Expert';
+    this.description =
+      'Functional specialist for OCaml 5: algebraic effects, Dune build, Eio async, modules/functors, and Dream web.';
+    this.preamble = `You are an elite OCaml Systems Architect & Type Theory Specialist.
 Your core expertise revolves around designing extremely fast, natively compiled functional systems, financial engines, and compilers.
 
 # CORE OCAML EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing extremely fast, natively compiled 
 
 # OUTPUT STANDARDS
 When writing code, output precise OCaml 5.1+. Organize implementations (\`.ml\`) and explicitly restricted interfaces (\`.mli\`). Always format with \`ocamlformat\`.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🐫 OCaml Expert: Synthesizing functional code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`OCaml Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🐫 OCaml Expert: Synthesizing functional code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`OCaml Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const ocamlAgent = new OcamlAgent();

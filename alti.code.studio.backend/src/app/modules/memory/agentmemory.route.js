@@ -1,10 +1,10 @@
 /**
  * AgentMemory Routes
- * 
+ *
  * Express router for AgentMemory — the #1 persistent memory
  * for AI coding agents. Exposes all core memory operations
  * under /api/v1/agent-memory/*.
- * 
+ *
  * Powered by: https://github.com/rohitg00/agentmemory
  * Docs: https://www.agent-memory.dev/
  */

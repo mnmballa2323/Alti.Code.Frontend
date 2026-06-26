@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceTelemetryStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_telemetry_strategist_agent',
-            'Performance Telemetry Strategist',
-            'You are an elite Performance Telemetry Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_telemetry_strategist_agent',
+      'Performance Telemetry Strategist',
+      'You are an elite Performance Telemetry Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Telemetry.',
+    );
+  }
 
-    async generatePerformanceTelemetrySystem(objective) {
-        logger.info(`💻 [PerformanceTelemetryStrategistAgent] Analyzing Performance Telemetry Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Telemetry Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Telemetry Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceTelemetryStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceTelemetrySystem(objective) {
+    logger.info(
+      `💻 [PerformanceTelemetryStrategistAgent] Analyzing Performance Telemetry Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Telemetry Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Telemetry Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceTelemetryStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceTelemetryStrategistAgent = Object.freeze(new PerformanceTelemetryStrategistAgent());
+export const performanceTelemetryStrategistAgent = Object.freeze(
+  new PerformanceTelemetryStrategistAgent(),
+);

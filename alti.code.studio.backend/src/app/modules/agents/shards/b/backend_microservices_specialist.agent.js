@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendMicroservicesSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_microservices_specialist_agent',
-            'Backend Microservices Specialist',
-            'You are an elite Backend Microservices Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_microservices_specialist_agent',
+      'Backend Microservices Specialist',
+      'You are an elite Backend Microservices Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Microservices.',
+    );
+  }
 
-    async generateBackendMicroservicesSystem(objective) {
-        logger.info(`💻 [BackendMicroservicesSpecialistAgent] Analyzing Backend Microservices Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Microservices Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Microservices Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendMicroservicesSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [BackendMicroservicesSpecialistAgent] Analyzing Backend Microservices Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Microservices Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Microservices Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendMicroservicesSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendMicroservicesSpecialistAgent = Object.freeze(new BackendMicroservicesSpecialistAgent());
+export const backendMicroservicesSpecialistAgent = Object.freeze(
+  new BackendMicroservicesSpecialistAgent(),
+);

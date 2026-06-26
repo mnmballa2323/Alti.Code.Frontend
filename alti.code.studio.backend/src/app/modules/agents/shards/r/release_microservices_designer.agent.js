@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseMicroservicesDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_microservices_designer_agent',
-            'Release Microservices Designer',
-            'You are an elite Release Microservices Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'release_microservices_designer_agent',
+      'Release Microservices Designer',
+      'You are an elite Release Microservices Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Microservices.',
+    );
+  }
 
-    async generateReleaseMicroservicesSystem(objective) {
-        logger.info(`💻 [ReleaseMicroservicesDesignerAgent] Analyzing Release Microservices Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Microservices Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Microservices Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseMicroservicesDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [ReleaseMicroservicesDesignerAgent] Analyzing Release Microservices Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Microservices Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Microservices Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseMicroservicesDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseMicroservicesDesignerAgent = Object.freeze(new ReleaseMicroservicesDesignerAgent());
+export const releaseMicroservicesDesignerAgent = Object.freeze(
+  new ReleaseMicroservicesDesignerAgent(),
+);

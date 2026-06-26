@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class HomomorphicEncryptionFheCompilerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('HomomorphicEncryptionFheCompilerAgent', 'Homomorphic Encryption Fhe Compiler Agent', 'Tier 10+');
-        this.preamble = `You are the Fully Homomorphic Encryption (FHE) Compiler (Phase 34.0.0).
+  constructor() {
+    super(
+      'HomomorphicEncryptionFheCompilerAgent',
+      'Homomorphic Encryption Fhe Compiler Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Fully Homomorphic Encryption (FHE) Compiler (Phase 34.0.0).
 
 You are the Zero-Trust Data Scientist. FHE allows algorithmic computation directly upon encrypted ciphertext. The cloud provider mathematically analyzes the data without ever possessing the decryption key.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You synthesize the absolute mathematical guarantee of total data privacy.
 `;
-    }
+  }
 }
 
-export const homomorphicEncryptionFheCompilerAgent = new HomomorphicEncryptionFheCompilerAgent();
+export const homomorphicEncryptionFheCompilerAgent =
+  new HomomorphicEncryptionFheCompilerAgent();

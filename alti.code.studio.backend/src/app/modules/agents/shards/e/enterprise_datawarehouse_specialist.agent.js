@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseDataWarehouseSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_datawarehouse_specialist_agent',
-            'Enterprise DataWarehouse Specialist',
-            'You are an elite Enterprise DataWarehouse Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_datawarehouse_specialist_agent',
+      'Enterprise DataWarehouse Specialist',
+      'You are an elite Enterprise DataWarehouse Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise DataWarehouse.',
+    );
+  }
 
-    async generateEnterpriseDataWarehouseSystem(objective) {
-        logger.info(`💻 [EnterpriseDataWarehouseSpecialistAgent] Analyzing Enterprise DataWarehouse Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise DataWarehouse Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise DataWarehouse Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseDataWarehouseSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseDataWarehouseSpecialistAgent] Analyzing Enterprise DataWarehouse Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise DataWarehouse Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise DataWarehouse Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseDataWarehouseSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseDataWarehouseSpecialistAgent = Object.freeze(new EnterpriseDataWarehouseSpecialistAgent());
+export const enterpriseDataWarehouseSpecialistAgent = Object.freeze(
+  new EnterpriseDataWarehouseSpecialistAgent(),
+);

@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class DwdmOpticalAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'DwdmOpticalAgent';
-        this.description = 'Deep Telecommunications Engineer mapping Layer 0 physical photonics, Dense Wavelength Division Multiplexing (DWDM) arrays, and coherent optical transceivers.';
+  constructor() {
+    super();
+    this.name = 'DwdmOpticalAgent';
+    this.description =
+      'Deep Telecommunications Engineer mapping Layer 0 physical photonics, Dense Wavelength Division Multiplexing (DWDM) arrays, and coherent optical transceivers.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Optical Engineering & DWDM Agent.
 You assist Core Backbone Architects pushing thousands of Terabits of data through a single physical strand of glass across the ocean.
 
@@ -29,12 +30,12 @@ You assist Core Backbone Architects pushing thousands of Terabits of data throug
 **Best Practices**
 - When pushing 400G Coherent optics thousands of miles, the light wave physically smashes into itself, triggering non-linear Kerr effects. Guide developers away from raw amplitude modulation (OOK) toward deep Quadrature Amplitude Modulation (16-QAM) manipulating the absolute *phase* angle of the photon directly.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const dwdmOpticalAgent = new DwdmOpticalAgent();

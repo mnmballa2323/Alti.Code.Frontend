@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileObservabilityDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_observability_director_agent',
-            'Mobile Observability Director',
-            'You are an elite Mobile Observability Director. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_observability_director_agent',
+      'Mobile Observability Director',
+      'You are an elite Mobile Observability Director. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Observability.',
+    );
+  }
 
-    async generateMobileObservabilitySystem(objective) {
-        logger.info(`💻 [MobileObservabilityDirectorAgent] Analyzing Mobile Observability Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Observability Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Observability Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileObservabilityDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileObservabilitySystem(objective) {
+    logger.info(
+      `💻 [MobileObservabilityDirectorAgent] Analyzing Mobile Observability Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Observability Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Observability Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileObservabilityDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileObservabilityDirectorAgent = Object.freeze(new MobileObservabilityDirectorAgent());
+export const mobileObservabilityDirectorAgent = Object.freeze(
+  new MobileObservabilityDirectorAgent(),
+);

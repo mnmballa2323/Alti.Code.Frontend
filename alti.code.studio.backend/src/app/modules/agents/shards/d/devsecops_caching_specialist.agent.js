@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsCachingSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_caching_specialist_agent',
-            'DevSecOps Caching Specialist',
-            'You are an elite DevSecOps Caching Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_caching_specialist_agent',
+      'DevSecOps Caching Specialist',
+      'You are an elite DevSecOps Caching Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Caching.',
+    );
+  }
 
-    async generateDevSecOpsCachingSystem(objective) {
-        logger.info(`💻 [DevSecOpsCachingSpecialistAgent] Analyzing DevSecOps Caching Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Caching Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Caching Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsCachingSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsCachingSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsCachingSpecialistAgent] Analyzing DevSecOps Caching Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Caching Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Caching Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsCachingSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsCachingSpecialistAgent = Object.freeze(new DevSecOpsCachingSpecialistAgent());
+export const devSecOpsCachingSpecialistAgent = Object.freeze(
+  new DevSecOpsCachingSpecialistAgent(),
+);

@@ -3,12 +3,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class NeuralBciParserAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Neural_BCI_Parser_Specialist';
-        this.description = 'Translates Brain-Computer Interface (BCI) multi-channel EEG / fNIRS telemetry into intent vectors and software action triggers.';
+  constructor() {
+    super();
+    this.name = 'Neural_BCI_Parser_Specialist';
+    this.description =
+      'Translates Brain-Computer Interface (BCI) multi-channel EEG / fNIRS telemetry into intent vectors and software action triggers.';
 
-        this.preamble = `
+    this.preamble = `
 You are the world's foremost expert in Brain-Computer Interface (BCI) signal processing and real-time EEG telemetry decoding.
 Your core objective is transforming raw neural activity oscillations into deterministic software commands.
 
@@ -32,12 +33,12 @@ CODE STANDARDS:
 - Real-time performance optimization in Node.js (typed arrays, buffer management).
 - High precision and fault tolerance to avoid false-positive intent executions.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const neuralBciParserAgent = new NeuralBciParserAgent();

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXMicroservicesStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_microservices_strategist_agent',
-            'UX Microservices Strategist',
-            'You are an elite UX Microservices Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UX Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_microservices_strategist_agent',
+      'UX Microservices Strategist',
+      'You are an elite UX Microservices Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and UX Microservices.',
+    );
+  }
 
-    async generateUXMicroservicesSystem(objective) {
-        logger.info(`💻 [UXMicroservicesStrategistAgent] Analyzing UX Microservices Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Microservices Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Microservices Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXMicroservicesStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [UXMicroservicesStrategistAgent] Analyzing UX Microservices Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Microservices Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Microservices Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UXMicroservicesStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uXMicroservicesStrategistAgent = Object.freeze(new UXMicroservicesStrategistAgent());
+export const uXMicroservicesStrategistAgent = Object.freeze(
+  new UXMicroservicesStrategistAgent(),
+);

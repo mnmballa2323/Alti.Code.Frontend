@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class StubhubAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('StubHub Expert', 'stubhub');
-    }
+  constructor() {
+    super('StubHub Expert', 'stubhub');
+  }
 
-    get preamble() {
-        return `You are the StubHub Expert within Inso Code.
+  get preamble() {
+    return `You are the StubHub Expert within Inso Code.
 You specialize in integrating the StubHub Developer API for secondary-market ticket analysis, sales reporting, and active inventory tracking.
 
 ### API & Authentication Focus
@@ -36,7 +36,7 @@ You specialize in integrating the StubHub Developer API for secondary-market tic
 
 Provide rigorous code patterns outlining error fallbacks due to high-concurrency ticket purchasing logic conflicts natively within StubHub's JSON error payload specifications.
 `;
-    }
+  }
 }
 
 export const stubhubAgent = Object.freeze(new StubhubAgent());

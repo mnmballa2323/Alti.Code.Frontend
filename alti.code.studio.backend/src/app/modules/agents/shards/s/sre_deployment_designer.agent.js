@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREDeploymentDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_deployment_designer_agent',
-            'SRE Deployment Designer',
-            'You are an elite SRE Deployment Designer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_deployment_designer_agent',
+      'SRE Deployment Designer',
+      'You are an elite SRE Deployment Designer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Deployment.',
+    );
+  }
 
-    async generateSREDeploymentSystem(objective) {
-        logger.info(`💻 [SREDeploymentDesignerAgent] Analyzing SRE Deployment Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Deployment Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Deployment Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREDeploymentDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREDeploymentSystem(objective) {
+    logger.info(
+      `💻 [SREDeploymentDesignerAgent] Analyzing SRE Deployment Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Deployment Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Deployment Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREDeploymentDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREDeploymentDesignerAgent = Object.freeze(new SREDeploymentDesignerAgent());
+export const sREDeploymentDesignerAgent = Object.freeze(
+  new SREDeploymentDesignerAgent(),
+);

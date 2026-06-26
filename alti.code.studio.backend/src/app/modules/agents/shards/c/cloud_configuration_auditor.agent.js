@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudConfigurationAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_configuration_auditor_agent',
-            'Cloud Configuration Auditor',
-            'You are an elite Cloud Configuration Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_configuration_auditor_agent',
+      'Cloud Configuration Auditor',
+      'You are an elite Cloud Configuration Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Configuration.',
+    );
+  }
 
-    async generateCloudConfigurationSystem(objective) {
-        logger.info(`💻 [CloudConfigurationAuditorAgent] Analyzing Cloud Configuration Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Configuration Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Configuration Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudConfigurationAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudConfigurationSystem(objective) {
+    logger.info(
+      `💻 [CloudConfigurationAuditorAgent] Analyzing Cloud Configuration Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Configuration Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Configuration Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [CloudConfigurationAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const cloudConfigurationAuditorAgent = Object.freeze(new CloudConfigurationAuditorAgent());
+export const cloudConfigurationAuditorAgent = Object.freeze(
+  new CloudConfigurationAuditorAgent(),
+);

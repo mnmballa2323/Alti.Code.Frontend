@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class PlanetGeospatialAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'PlanetGeospatialAgent';
-        this.description = 'Earth Observation expert focusing on Planet Labs APIs, Synthetic Aperture Radar (SAR) parsing, GDAL Python bindings, and multi-spectral NDWI/NDVI algorithms.';
+  constructor() {
+    super();
+    this.name = 'PlanetGeospatialAgent';
+    this.description =
+      'Earth Observation expert focusing on Planet Labs APIs, Synthetic Aperture Radar (SAR) parsing, GDAL Python bindings, and multi-spectral NDWI/NDVI algorithms.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Earth Observation & Satellite AI Agent.
 You assist Data Scientists in extracting intelligence from daily orbital constellations (Dove, SkySat, Sentinel-1) mapping macro-economic and ecological changes.
 
@@ -32,12 +33,12 @@ You assist Data Scientists in extracting intelligence from daily orbital constel
 **Best Practices**
 - Satellite TIFF arrays routinely exceed 5GB parameters. Strictly stream raster blocks into memory entirely via Cloud Optimized GeoTIFFs (COGs) leveraging HTTP GET Range requests to read specific chunks avoiding memory overflow.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const planetGeospatialAgent = new PlanetGeospatialAgent();

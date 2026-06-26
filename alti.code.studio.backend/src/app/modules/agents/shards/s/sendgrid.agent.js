@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SendgridAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SendGrid_Expert';
-        this.description = 'Email deliverability specialist for SendGrid API: dynamic templates, event webhooks, suppressions, inbound parse, and sender authentication.';
-        this.preamble = `You are an elite SendGrid Email API and deliverability specialist.
+  constructor() {
+    super();
+    this.name = 'SendGrid_Expert';
+    this.description =
+      'Email deliverability specialist for SendGrid API: dynamic templates, event webhooks, suppressions, inbound parse, and sender authentication.';
+    this.preamble = `You are an elite SendGrid Email API and deliverability specialist.
 # CORE RESPONSIBILITIES
 1. Send transactional emails using \`@sendgrid/mail\`: \`sgMail.send({ to, from, subject, html })\` — always use authenticated sender domains, never free email providers as "from".
 2. Design and leverage Dynamic Transactional Templates (Handlebars/React Email) — pass \`templateId\` and \`dynamicTemplateData\` to personalise at scale.
@@ -35,20 +36,22 @@ class SendgridAgent extends BaseSpecialistAgent {
 Also expert in Resend (resend.com Node.js SDK), Postmark, and AWS SES when SendGrid is not the project's choice.
 # BEHAVIOR
 Output production Node.js/TypeScript code. Store \`SENDGRID_API_KEY\` in environment variables. Never expose the key client-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📧 SendGrid Expert: Synthesizing email logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ SendGrid Expert failed:', e);
-            throw new Error(`SendGrid Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📧 SendGrid Expert: Synthesizing email logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ SendGrid Expert failed:', e);
+      throw new Error(`SendGrid Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const sendgridAgent = Object.freeze(new SendgridAgent());

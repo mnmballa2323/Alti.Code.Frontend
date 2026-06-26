@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsFaultToleranceArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_faulttolerance_architect_agent',
-            'DevSecOps FaultTolerance Architect',
-            'You are an elite DevSecOps FaultTolerance Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_faulttolerance_architect_agent',
+      'DevSecOps FaultTolerance Architect',
+      'You are an elite DevSecOps FaultTolerance Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps FaultTolerance.',
+    );
+  }
 
-    async generateDevSecOpsFaultToleranceSystem(objective) {
-        logger.info(`💻 [DevSecOpsFaultToleranceArchitectAgent] Analyzing DevSecOps FaultTolerance Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps FaultTolerance Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps FaultTolerance Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsFaultToleranceArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsFaultToleranceArchitectAgent] Analyzing DevSecOps FaultTolerance Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps FaultTolerance Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps FaultTolerance Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsFaultToleranceArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsFaultToleranceArchitectAgent = Object.freeze(new DevSecOpsFaultToleranceArchitectAgent());
+export const devSecOpsFaultToleranceArchitectAgent = Object.freeze(
+  new DevSecOpsFaultToleranceArchitectAgent(),
+);

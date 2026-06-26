@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsOrchestrationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_orchestration_orchestrator_agent',
-            'DevSecOps Orchestration Orchestrator',
-            'You are an elite DevSecOps Orchestration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_orchestration_orchestrator_agent',
+      'DevSecOps Orchestration Orchestrator',
+      'You are an elite DevSecOps Orchestration Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Orchestration.',
+    );
+  }
 
-    async generateDevSecOpsOrchestrationSystem(objective) {
-        logger.info(`💻 [DevSecOpsOrchestrationOrchestratorAgent] Analyzing DevSecOps Orchestration Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Orchestration Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Orchestration Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsOrchestrationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsOrchestrationOrchestratorAgent] Analyzing DevSecOps Orchestration Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Orchestration Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Orchestration Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsOrchestrationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsOrchestrationOrchestratorAgent = Object.freeze(new DevSecOpsOrchestrationOrchestratorAgent());
+export const devSecOpsOrchestrationOrchestratorAgent = Object.freeze(
+  new DevSecOpsOrchestrationOrchestratorAgent(),
+);

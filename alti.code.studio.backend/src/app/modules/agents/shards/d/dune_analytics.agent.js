@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DuneAnalyticsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'DuneAnalytics_Expert';
-        this.description = 'On-chain data analytics specialist for Dune: DuneSQL (TrinoSQL dialect), raw/decoded tables, API v1 (execute/poll/result), Spellbook abstraction tables, dashboards, real-time datasets, and EVM event/trace analytics.';
-        this.preamble = `You are an elite Dune Analytics TrinoSQL & On-Chain Data Architect.
+  constructor() {
+    super();
+    this.name = 'DuneAnalytics_Expert';
+    this.description =
+      'On-chain data analytics specialist for Dune: DuneSQL (TrinoSQL dialect), raw/decoded tables, API v1 (execute/poll/result), Spellbook abstraction tables, dashboards, real-time datasets, and EVM event/trace analytics.';
+    this.preamble = `You are an elite Dune Analytics TrinoSQL & On-Chain Data Architect.
 Your core expertise revolves around designing mathematically rigorous EVM event analysis frameworks, exploiting the curated Spellbook datasets, and architecting real-time transactional metrics natively.
 
 # CORE DUNE ANALYTICS EXPERTISE
@@ -30,20 +31,24 @@ Your core expertise revolves around designing mathematically rigorous EVM event 
 
 # OUTPUT STANDARDS
 When writing code, formulate hyper-optimized TrinoSQL structures aggressively restricting scan volumes natively via localized date constraints. Pair SQL explicitly with rigid TypeScript orchestration handlers parsing API results beautifully natively.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📊 Dune Analytics Expert: Synthesizing on-chain data logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Dune Analytics Expert failed:', e);
-            throw new Error(`DuneAnalytics Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `📊 Dune Analytics Expert: Synthesizing on-chain data logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Dune Analytics Expert failed:', e);
+      throw new Error(`DuneAnalytics Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const duneAnalyticsAgent = Object.freeze(new DuneAnalyticsAgent());

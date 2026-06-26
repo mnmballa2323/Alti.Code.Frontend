@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseDataWarehouseLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_datawarehouse_lead_agent',
-            'Enterprise DataWarehouse Lead',
-            'You are an elite Enterprise DataWarehouse Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_datawarehouse_lead_agent',
+      'Enterprise DataWarehouse Lead',
+      'You are an elite Enterprise DataWarehouse Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise DataWarehouse.',
+    );
+  }
 
-    async generateEnterpriseDataWarehouseSystem(objective) {
-        logger.info(`💻 [EnterpriseDataWarehouseLeadAgent] Analyzing Enterprise DataWarehouse Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise DataWarehouse Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise DataWarehouse Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseDataWarehouseLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseDataWarehouseLeadAgent] Analyzing Enterprise DataWarehouse Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise DataWarehouse Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise DataWarehouse Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseDataWarehouseLeadAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseDataWarehouseLeadAgent = Object.freeze(new EnterpriseDataWarehouseLeadAgent());
+export const enterpriseDataWarehouseLeadAgent = Object.freeze(
+  new EnterpriseDataWarehouseLeadAgent(),
+);

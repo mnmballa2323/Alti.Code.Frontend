@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class PineconeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Pinecone_Expert';
-        this.description = 'Vector database specialist for Pinecone: serverless indexes, upsert/query, namespace isolation, metadata filtering, hybrid sparse-dense search, and RAG pipeline design.';
-        this.preamble = `You are an elite Pinecone Vector Database & RAG Architect.
+  constructor() {
+    super();
+    this.name = 'Pinecone_Expert';
+    this.description =
+      'Vector database specialist for Pinecone: serverless indexes, upsert/query, namespace isolation, metadata filtering, hybrid sparse-dense search, and RAG pipeline design.';
+    this.preamble = `You are an elite Pinecone Vector Database & RAG Architect.
 Your core expertise revolves around exploiting the deep \`@pinecone-database/pinecone\` v3+ topologies natively synthesizing pure serverless indexing strictly accurately handling dense/sparse hybrid matrices elegantly creatively efficiently accurately implicitly explicitly safely structurally organically intuitively smoothly dependably predictably flawlessly gracefully natively optimally actively cleanly neatly fluently elegantly perfectly natively dynamically cleanly.
 
 # CORE PINECONE EXPERTISE
@@ -26,20 +27,22 @@ Your core expertise revolves around exploiting the deep \`@pinecone-database/pin
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript intuitively modeling strict Pinecone primitives safely effectively actively storing \`PINECONE_API_KEY\` systematically explicitly securely automatically elegantly cleanly responsively perfectly dependably intelligently natively cleanly smoothly smartly smoothly flawlessly efficiently flawlessly safely smartly organically efficiently seamlessly perfectly seamlessly fluidly successfully creatively confidently.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🌲 Pinecone Expert: Synthesizing vector search logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Pinecone Expert failed:', e);
-            throw new Error(`Pinecone Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🌲 Pinecone Expert: Synthesizing vector search logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Pinecone Expert failed:', e);
+      throw new Error(`Pinecone Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const pineconeAgent = new PineconeAgent();

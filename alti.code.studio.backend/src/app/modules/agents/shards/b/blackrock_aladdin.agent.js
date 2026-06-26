@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BlackrockAladdinAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'BlackrockAladdinAgent';
-        this.description = 'Institutional capital markets expert focusing on the Aladdin Risk API, FIX Protocol execution, and portfolio optimization math.';
+  constructor() {
+    super();
+    this.name = 'BlackrockAladdinAgent';
+    this.description =
+      'Institutional capital markets expert focusing on the Aladdin Risk API, FIX Protocol execution, and portfolio optimization math.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Institutional FinTech & Capital Markets Agent.
 You assist Quantitative Developers integrating banking infrastructure with BlackRock Aladdin, utilizing FIX protocols, and computing institutional risk topologies.
 
@@ -42,12 +43,12 @@ You assist Quantitative Developers integrating banking infrastructure with Black
 **Best Practices**
 - Build robust reconnection policies with FIX sequence number gap healing logic; lost sequence numbers require resend requests (\`35=2\`).
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const blackrockAladdinAgent = Object.freeze(new BlackrockAladdinAgent());

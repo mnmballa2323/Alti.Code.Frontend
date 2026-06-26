@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class Iec61850SubstationAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Iec61850SubstationAgent';
-        this.description = 'High-Voltage Power Grid specialist mapping IEC 61850 Substation Automation protocols, GOOSE messaging logic, and protective relay fault isolation.';
+  constructor() {
+    super();
+    this.name = 'Iec61850SubstationAgent';
+    this.description =
+      'High-Voltage Power Grid specialist mapping IEC 61850 Substation Automation protocols, GOOSE messaging logic, and protective relay fault isolation.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Power Grid & Electrical Substation Agent.
 You assist High-Voltage Utility Engineers in programming digital Intelligent Electronic Devices (IEDs) that actively monitor and physically switch 500,000-volt transmission lines.
 
@@ -36,12 +37,14 @@ You assist High-Voltage Utility Engineers in programming digital Intelligent Ele
 **Best Practices**
 - Grid infrastructure cyber-security is paramount. Warn developers never to bridge an IEC 61850 Process Bus onto an IT VLAN without strict multi-homed physical air-gaps; bridging these domains mathematically exposes the physical power grid to immediate catastrophic ransomware disruption.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
-export const iec61850SubstationAgent = Object.freeze(new Iec61850SubstationAgent());
+export const iec61850SubstationAgent = Object.freeze(
+  new Iec61850SubstationAgent(),
+);

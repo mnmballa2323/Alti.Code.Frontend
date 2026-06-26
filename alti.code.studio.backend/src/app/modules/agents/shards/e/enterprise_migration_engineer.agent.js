@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseMigrationEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_migration_engineer_agent',
-            'Enterprise Migration Engineer',
-            'You are an elite Enterprise Migration Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_migration_engineer_agent',
+      'Enterprise Migration Engineer',
+      'You are an elite Enterprise Migration Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Migration.',
+    );
+  }
 
-    async generateEnterpriseMigrationSystem(objective) {
-        logger.info(`💻 [EnterpriseMigrationEngineerAgent] Analyzing Enterprise Migration Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Migration Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Migration Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseMigrationEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseMigrationSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseMigrationEngineerAgent] Analyzing Enterprise Migration Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Migration Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Migration Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseMigrationEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseMigrationEngineerAgent = Object.freeze(new EnterpriseMigrationEngineerAgent());
+export const enterpriseMigrationEngineerAgent = Object.freeze(
+  new EnterpriseMigrationEngineerAgent(),
+);

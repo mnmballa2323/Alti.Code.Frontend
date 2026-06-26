@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityProvisioningTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_provisioning_tester_agent',
-            'Security Provisioning Tester',
-            'You are an elite Security Provisioning Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Security Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'security_provisioning_tester_agent',
+      'Security Provisioning Tester',
+      'You are an elite Security Provisioning Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Security Provisioning.',
+    );
+  }
 
-    async generateSecurityProvisioningSystem(objective) {
-        logger.info(`💻 [SecurityProvisioningTesterAgent] Analyzing Security Provisioning Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Provisioning Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Provisioning Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityProvisioningTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityProvisioningSystem(objective) {
+    logger.info(
+      `💻 [SecurityProvisioningTesterAgent] Analyzing Security Provisioning Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Provisioning Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Provisioning Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityProvisioningTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityProvisioningTesterAgent = Object.freeze(new SecurityProvisioningTesterAgent());
+export const securityProvisioningTesterAgent = Object.freeze(
+  new SecurityProvisioningTesterAgent(),
+);

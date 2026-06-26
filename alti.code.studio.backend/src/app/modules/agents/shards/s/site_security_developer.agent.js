@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteSecurityDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_security_developer_agent',
-            'Site Security Developer',
-            'You are an elite Site Security Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Site Security.'
-        );
-    }
+  constructor() {
+    super(
+      'site_security_developer_agent',
+      'Site Security Developer',
+      'You are an elite Site Security Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Site Security.',
+    );
+  }
 
-    async generateSiteSecuritySystem(objective) {
-        logger.info(`💻 [SiteSecurityDeveloperAgent] Analyzing Site Security Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Security Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Security Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteSecurityDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteSecuritySystem(objective) {
+    logger.info(
+      `💻 [SiteSecurityDeveloperAgent] Analyzing Site Security Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Security Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Security Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteSecurityDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteSecurityDeveloperAgent = Object.freeze(new SiteSecurityDeveloperAgent());
+export const siteSecurityDeveloperAgent = Object.freeze(
+  new SiteSecurityDeveloperAgent(),
+);

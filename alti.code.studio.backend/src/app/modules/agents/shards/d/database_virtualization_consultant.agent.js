@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseVirtualizationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_virtualization_consultant_agent',
-            'Database Virtualization Consultant',
-            'You are an elite Database Virtualization Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Database Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'database_virtualization_consultant_agent',
+      'Database Virtualization Consultant',
+      'You are an elite Database Virtualization Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Database Virtualization.',
+    );
+  }
 
-    async generateDatabaseVirtualizationSystem(objective) {
-        logger.info(`💻 [DatabaseVirtualizationConsultantAgent] Analyzing Database Virtualization Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Virtualization Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Virtualization Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseVirtualizationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [DatabaseVirtualizationConsultantAgent] Analyzing Database Virtualization Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Virtualization Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Virtualization Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseVirtualizationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseVirtualizationConsultantAgent = Object.freeze(new DatabaseVirtualizationConsultantAgent());
+export const databaseVirtualizationConsultantAgent = Object.freeze(
+  new DatabaseVirtualizationConsultantAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendOrchestrationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_orchestration_lead_agent',
-            'Frontend Orchestration Lead',
-            'You are an elite Frontend Orchestration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_orchestration_lead_agent',
+      'Frontend Orchestration Lead',
+      'You are an elite Frontend Orchestration Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Orchestration.',
+    );
+  }
 
-    async generateFrontendOrchestrationSystem(objective) {
-        logger.info(`💻 [FrontendOrchestrationLeadAgent] Analyzing Frontend Orchestration Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Orchestration Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Orchestration Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendOrchestrationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [FrontendOrchestrationLeadAgent] Analyzing Frontend Orchestration Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Orchestration Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Orchestration Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendOrchestrationLeadAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendOrchestrationLeadAgent = Object.freeze(new FrontendOrchestrationLeadAgent());
+export const frontendOrchestrationLeadAgent = Object.freeze(
+  new FrontendOrchestrationLeadAgent(),
+);

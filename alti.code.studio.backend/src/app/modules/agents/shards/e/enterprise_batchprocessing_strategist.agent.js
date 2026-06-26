@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseBatchProcessingStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_batchprocessing_strategist_agent',
-            'Enterprise BatchProcessing Strategist',
-            'You are an elite Enterprise BatchProcessing Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_batchprocessing_strategist_agent',
+      'Enterprise BatchProcessing Strategist',
+      'You are an elite Enterprise BatchProcessing Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise BatchProcessing.',
+    );
+  }
 
-    async generateEnterpriseBatchProcessingSystem(objective) {
-        logger.info(`💻 [EnterpriseBatchProcessingStrategistAgent] Analyzing Enterprise BatchProcessing Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise BatchProcessing Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise BatchProcessing Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseBatchProcessingStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseBatchProcessingStrategistAgent] Analyzing Enterprise BatchProcessing Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise BatchProcessing Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise BatchProcessing Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseBatchProcessingStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseBatchProcessingStrategistAgent = Object.freeze(new EnterpriseBatchProcessingStrategistAgent());
+export const enterpriseBatchProcessingStrategistAgent = Object.freeze(
+  new EnterpriseBatchProcessingStrategistAgent(),
+);

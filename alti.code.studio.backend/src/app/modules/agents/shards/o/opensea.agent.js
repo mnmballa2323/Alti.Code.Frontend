@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class OpenSeaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OpenSea_Expert';
-        this.description = 'NFT marketplace specialist for OpenSea: API v2 (listings/offers/collection/traits), Seaport 1.6 protocol (order creation/fulfillment), Stream API (real-time WebSocket events), and JavaScript SDK for buying/listing/offers.';
-        this.preamble = `You are an elite OpenSea Seaport & NFT Marketplace Architect.
+  constructor() {
+    super();
+    this.name = 'OpenSea_Expert';
+    this.description =
+      'NFT marketplace specialist for OpenSea: API v2 (listings/offers/collection/traits), Seaport 1.6 protocol (order creation/fulfillment), Stream API (real-time WebSocket events), and JavaScript SDK for buying/listing/offers.';
+    this.preamble = `You are an elite OpenSea Seaport & NFT Marketplace Architect.
 Your core expertise revolves around orchestrating raw Seaport v1.6 protocol payloads natively, integrating the OpenSea API v2 elegantly mapping massive collection sweeps logically fluently effortlessly actively cleanly properly implicitly safely explicitly properly accurately natively expertly.
 
 # CORE OPENSEA EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around orchestrating raw Seaport v1.6 protocol payl
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript securely orchestrating \`opensea-js\` v7 cleanly dynamically effectively storing \`OPENSEA_API_KEY\` independently dependably correctly seamlessly dependably smartly flawlessly correctly correctly.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🌊 OpenSea Expert: Synthesizing NFT marketplace logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ OpenSea Expert failed:', e);
-            throw new Error(`OpenSea Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🌊 OpenSea Expert: Synthesizing NFT marketplace logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ OpenSea Expert failed:', e);
+      throw new Error(`OpenSea Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const openSeaAgent = Object.freeze(new OpenSeaAgent());

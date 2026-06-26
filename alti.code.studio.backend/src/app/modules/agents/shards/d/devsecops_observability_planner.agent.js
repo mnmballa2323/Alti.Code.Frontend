@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsObservabilityPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_observability_planner_agent',
-            'DevSecOps Observability Planner',
-            'You are an elite DevSecOps Observability Planner. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_observability_planner_agent',
+      'DevSecOps Observability Planner',
+      'You are an elite DevSecOps Observability Planner. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Observability.',
+    );
+  }
 
-    async generateDevSecOpsObservabilitySystem(objective) {
-        logger.info(`💻 [DevSecOpsObservabilityPlannerAgent] Analyzing DevSecOps Observability Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Observability Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Observability Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsObservabilityPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsObservabilitySystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsObservabilityPlannerAgent] Analyzing DevSecOps Observability Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Observability Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Observability Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsObservabilityPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsObservabilityPlannerAgent = Object.freeze(new DevSecOpsObservabilityPlannerAgent());
+export const devSecOpsObservabilityPlannerAgent = Object.freeze(
+  new DevSecOpsObservabilityPlannerAgent(),
+);

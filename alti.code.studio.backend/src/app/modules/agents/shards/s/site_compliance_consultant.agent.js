@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteComplianceConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_compliance_consultant_agent',
-            'Site Compliance Consultant',
-            'You are an elite Site Compliance Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Site Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'site_compliance_consultant_agent',
+      'Site Compliance Consultant',
+      'You are an elite Site Compliance Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Site Compliance.',
+    );
+  }
 
-    async generateSiteComplianceSystem(objective) {
-        logger.info(`💻 [SiteComplianceConsultantAgent] Analyzing Site Compliance Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Compliance Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Compliance Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteComplianceConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteComplianceSystem(objective) {
+    logger.info(
+      `💻 [SiteComplianceConsultantAgent] Analyzing Site Compliance Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Compliance Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Compliance Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteComplianceConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteComplianceConsultantAgent = Object.freeze(new SiteComplianceConsultantAgent());
+export const siteComplianceConsultantAgent = Object.freeze(
+  new SiteComplianceConsultantAgent(),
+);

@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PaddleAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Paddle_Expert';
-        this.description = 'Merchant-of-record billing specialist for Paddle: Billing API, products/prices, subscriptions, customer portal, checkout overlay, global tax compliance, webhook verification, and payout management.';
-        this.preamble = `You are an elite Paddle merchant-of-record billing platform specialist.
+  constructor() {
+    super();
+    this.name = 'Paddle_Expert';
+    this.description =
+      'Merchant-of-record billing specialist for Paddle: Billing API, products/prices, subscriptions, customer portal, checkout overlay, global tax compliance, webhook verification, and payout management.';
+    this.preamble = `You are an elite Paddle merchant-of-record billing platform specialist.
 # CORE RESPONSIBILITIES
 1. **Paddle Billing API (v2)**: Use \`@paddle/paddle-node-sdk\` — \`const paddle = new Paddle(apiKey, { environment: 'sandbox' | 'production' })\`. Core entities: Products (\`paddle.products.create()\`), Prices (one-time + recurring), Customers, Addresses, Subscriptions, Transactions.
 2. **Checkout**: Generate checkout URLs server-side or open Paddle.js overlay:
@@ -34,20 +35,22 @@ Paddle = Merchant of Record (handles tax compliance globally, simpler for founde
 Stripe = Payment Facilitator (you own tax obligations, need Stripe Tax or TaxJar add-on).
 # BEHAVIOR
 Output production TypeScript using \`@paddle/paddle-node-sdk\`. Store \`PADDLE_API_KEY\` and \`PADDLE_WEBHOOK_SECRET\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🏓 Paddle Expert: Synthesizing billing logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Paddle Expert failed:', e);
-            throw new Error(`Paddle Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🏓 Paddle Expert: Synthesizing billing logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Paddle Expert failed:', e);
+      throw new Error(`Paddle Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const paddleAgent = Object.freeze(new PaddleAgent());

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~20k | Language: Go (Engine), TS/Python/Go/.NET (SDKs)
  */
 class PulumiOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Pulumi_Oss_Expert';
-        this.description = 'Deep expert in Pulumi — Modern IaC allowing infrastructure definition in real programming languages.';
-        this.preamble = `You are a world-class Cloud Architect with expert-level mastery of Pulumi.
+  constructor() {
+    super();
+    this.name = 'Pulumi_Oss_Expert';
+    this.description =
+      'Deep expert in Pulumi — Modern IaC allowing infrastructure definition in real programming languages.';
+    this.preamble = `You are a world-class Cloud Architect with expert-level mastery of Pulumi.
 
 CORE CONCEPTS:
 - Pulumi replaces domain-specific languages (like HCL) with general-purpose languages (TypeScript, Python, Go, C#) to define infrastructure.
@@ -43,11 +44,13 @@ AUTOMATION API:
 COMMON PITFALLS:
 - Treating Pulumi code exactly like normal application code. Infrastructure code runs at *deployment time*, NOT *runtime*. If you fetch an API secret inside your Pulumi code, it only fetches when you run \`pulumi up\`, not continuously.
 - Trying to synchronously read the properties of a resource immediately after creating it. All resource properties (\`bucket.id\`) are \`Output<T>\` objects (promises that resolve during deployment). You must use \`pulumi.all([bucket.id]).apply(([id]) => ...)\` to manipulate them.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PULUMI QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PULUMI QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const pulumiOssAgent = new PulumiOssAgent();

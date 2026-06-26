@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREOrchestrationSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_orchestration_specialist_agent',
-            'SRE Orchestration Specialist',
-            'You are an elite SRE Orchestration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_orchestration_specialist_agent',
+      'SRE Orchestration Specialist',
+      'You are an elite SRE Orchestration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Orchestration.',
+    );
+  }
 
-    async generateSREOrchestrationSystem(objective) {
-        logger.info(`💻 [SREOrchestrationSpecialistAgent] Analyzing SRE Orchestration Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Orchestration Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Orchestration Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREOrchestrationSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [SREOrchestrationSpecialistAgent] Analyzing SRE Orchestration Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Orchestration Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Orchestration Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREOrchestrationSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREOrchestrationSpecialistAgent = Object.freeze(new SREOrchestrationSpecialistAgent());
+export const sREOrchestrationSpecialistAgent = Object.freeze(
+  new SREOrchestrationSpecialistAgent(),
+);

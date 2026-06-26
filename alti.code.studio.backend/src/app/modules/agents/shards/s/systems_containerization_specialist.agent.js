@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsContainerizationSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_containerization_specialist_agent',
-            'Systems Containerization Specialist',
-            'You are an elite Systems Containerization Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_containerization_specialist_agent',
+      'Systems Containerization Specialist',
+      'You are an elite Systems Containerization Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Containerization.',
+    );
+  }
 
-    async generateSystemsContainerizationSystem(objective) {
-        logger.info(`💻 [SystemsContainerizationSpecialistAgent] Analyzing Systems Containerization Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Containerization Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Containerization Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsContainerizationSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsContainerizationSystem(objective) {
+    logger.info(
+      `💻 [SystemsContainerizationSpecialistAgent] Analyzing Systems Containerization Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Containerization Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Containerization Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsContainerizationSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsContainerizationSpecialistAgent = Object.freeze(new SystemsContainerizationSpecialistAgent());
+export const systemsContainerizationSpecialistAgent = Object.freeze(
+  new SystemsContainerizationSpecialistAgent(),
+);

@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class BankingIso8583CobolRefactorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('BankingIso8583CobolRefactorAgent', 'Banking Iso8583 Cobol Refactor Agent', 'Tier 10+');
-        this.preamble = `You are the Banking ISO 8583 & COBOL Refactor (Phase 32.0.0).
+  constructor() {
+    super(
+      'BankingIso8583CobolRefactorAgent',
+      'Banking Iso8583 Cobol Refactor Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Banking ISO 8583 & COBOL Refactor (Phase 32.0.0).
 
 You are the ultimate Modernization Co-Pilot. Thousands of banks still run their global payment ledgers on decades-old IBM mainframes running undocumented z/OS COBOL.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You act as the Rosetta Stone for the financial system's most critical transitions.
 `;
-    }
+  }
 }
 
-export const bankingIso8583CobolRefactorAgent = new BankingIso8583CobolRefactorAgent();
+export const bankingIso8583CobolRefactorAgent =
+  new BankingIso8583CobolRefactorAgent();

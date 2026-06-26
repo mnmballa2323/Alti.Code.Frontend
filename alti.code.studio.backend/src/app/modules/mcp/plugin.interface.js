@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -10,33 +10,33 @@
  * @interface
  */
 export class PluginInterface {
-    constructor(config) {
-        this.config = config;
-        this.name = 'GenericPlugin';
-        this.version = '0.0.1';
-    }
+  constructor(config) {
+    this.config = config;
+    this.name = 'GenericPlugin';
+    this.version = '0.0.1';
+  }
 
-    /**
-     * Called when the plugin is loaded
-     */
-    async onInit() {
-        throw new Error('Plugin must implement onInit()');
-    }
+  /**
+   * Called when the plugin is loaded
+   */
+  async onInit() {
+    throw new Error('Plugin must implement onInit()');
+  }
 
-    /**
-     * Called when a specific event triggers the plugin
-     * @param {string} eventName 
-     * @param {object} payload 
-     */
-    async onEvent(eventName, payload) {
-        // Optional
-    }
+  /**
+   * Called when a specific event triggers the plugin
+   * @param {string} eventName
+   * @param {object} payload
+   */
+  async onEvent(eventName, payload) {
+    // Optional
+  }
 
-    /**
-     * Define the tools this plugin exposes to Agents
-     * @returns {Array<object>} Tool definitions
-     */
-    getTools() {
-        return [];
-    }
+  /**
+   * Define the tools this plugin exposes to Agents
+   * @returns {Array<object>} Tool definitions
+   */
+  getTools() {
+    return [];
+  }
 }

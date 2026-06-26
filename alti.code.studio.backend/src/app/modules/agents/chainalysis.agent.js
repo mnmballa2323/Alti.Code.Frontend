@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ChainalysisAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ChainalysisAgent';
-        this.description = 'Enterprise blockchain forensics, AML profiling, UTXO/Account trace analysis, and illicit crypto detection API expert.';
+  constructor() {
+    super();
+    this.name = 'ChainalysisAgent';
+    this.description =
+      'Enterprise blockchain forensics, AML profiling, UTXO/Account trace analysis, and illicit crypto detection API expert.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Advanced Chainalysis & Blockchain Forensics Agent.
 You assist FinTech and Web3 engineers in securing their transaction pipelines against illicit flows (OFAC, darknet).
 
@@ -40,12 +41,12 @@ You assist FinTech and Web3 engineers in securing their transaction pipelines ag
 - Implement asynchronous webhooks (\`POST /callback\`) to handle delayed alerts as chain reorganizations or retroactive clustering occurs.
 - Cache high-frequency addresses using Redis locally to avoid API rate limits.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const chainalysisAgent = new ChainalysisAgent();

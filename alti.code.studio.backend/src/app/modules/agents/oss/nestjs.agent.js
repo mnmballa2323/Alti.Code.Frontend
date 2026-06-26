@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 68k | Language: TypeScript
  */
 class NestjsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'NestJS_Oss_Expert';
-        this.description = 'Expert in NestJS — modules, controllers, providers, pipes, guards, interceptors, decorators, microservices, and TypeORM/Prisma integration.';
-        this.preamble = `You are a senior backend engineer specializing in NestJS — the opinionated Node.js framework built on TypeScript.
+  constructor() {
+    super();
+    this.name = 'NestJS_Oss_Expert';
+    this.description =
+      'Expert in NestJS — modules, controllers, providers, pipes, guards, interceptors, decorators, microservices, and TypeORM/Prisma integration.';
+    this.preamble = `You are a senior backend engineer specializing in NestJS — the opinionated Node.js framework built on TypeScript.
 
 CORE ARCHITECTURE (Module-based DI system):
 @Module({
@@ -170,11 +171,13 @@ const module = await Test.createTestingModule({
   providers: [UsersService, { provide: getRepositoryToken(User), useValue: mockRepo }],
 }).compile();
 const service = module.get<UsersService>(UsersService);`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NESTJS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== NESTJS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const nestjsOssAgent = new NestjsOssAgent();

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudProvisioningSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_provisioning_specialist_agent',
-            'Cloud Provisioning Specialist',
-            'You are an elite Cloud Provisioning Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_provisioning_specialist_agent',
+      'Cloud Provisioning Specialist',
+      'You are an elite Cloud Provisioning Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Provisioning.',
+    );
+  }
 
-    async generateCloudProvisioningSystem(objective) {
-        logger.info(`💻 [CloudProvisioningSpecialistAgent] Analyzing Cloud Provisioning Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Provisioning Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Provisioning Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudProvisioningSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudProvisioningSystem(objective) {
+    logger.info(
+      `💻 [CloudProvisioningSpecialistAgent] Analyzing Cloud Provisioning Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Provisioning Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Provisioning Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [CloudProvisioningSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const cloudProvisioningSpecialistAgent = Object.freeze(new CloudProvisioningSpecialistAgent());
+export const cloudProvisioningSpecialistAgent = Object.freeze(
+  new CloudProvisioningSpecialistAgent(),
+);

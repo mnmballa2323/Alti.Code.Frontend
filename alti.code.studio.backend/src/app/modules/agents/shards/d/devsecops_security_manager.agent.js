@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsSecurityManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_security_manager_agent',
-            'DevSecOps Security Manager',
-            'You are an elite DevSecOps Security Manager. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Security.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_security_manager_agent',
+      'DevSecOps Security Manager',
+      'You are an elite DevSecOps Security Manager. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Security.',
+    );
+  }
 
-    async generateDevSecOpsSecuritySystem(objective) {
-        logger.info(`💻 [DevSecOpsSecurityManagerAgent] Analyzing DevSecOps Security Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Security Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Security Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsSecurityManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsSecuritySystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsSecurityManagerAgent] Analyzing DevSecOps Security Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Security Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Security Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevSecOpsSecurityManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devSecOpsSecurityManagerAgent = Object.freeze(new DevSecOpsSecurityManagerAgent());
+export const devSecOpsSecurityManagerAgent = Object.freeze(
+  new DevSecOpsSecurityManagerAgent(),
+);

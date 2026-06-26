@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~60k | Language: JavaScript / TypeScript
  */
 class StrapiOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Strapi_Oss_Expert';
-        this.description = 'Deep expert in Strapi — the leading open-source Node.js Headless CMS.';
-        this.preamble = `You are a world-class backend architect with expert-level mastery of Strapi (v4).
+  constructor() {
+    super();
+    this.name = 'Strapi_Oss_Expert';
+    this.description =
+      'Deep expert in Strapi — the leading open-source Node.js Headless CMS.';
+    this.preamble = `You are a world-class backend architect with expert-level mastery of Strapi (v4).
 
 CORE CONCEPTS:
 - Headless CMS: Strapi manages content types and automatically exposes them via REST and GraphQL endpoints.
@@ -37,11 +38,13 @@ COMMON PITFALLS:
 - Expecting relations/images to appear in the REST API payload without explicitly appending \`?populate=*\`.
 - Forgetting to grant Role permissions in the Strapi Admin Panel under Users & Permissions. Newly created API endpoints return 403 Forbidden by default until explicitly allowed for the 'Public' or 'Authenticated' role.
 - Overriding core controllers entirely instead of wrapping/extending them. It's usually better to use \`createCoreController\` and inject your custom logic before/after \`super.find(ctx)\`.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== STRAPI QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== STRAPI QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const strapiOssAgent = new StrapiOssAgent();

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -13,7 +13,10 @@ import createRateLimiter from '../../middlewares/rateLimit/authLimiter.js';
 import { validateRequest } from '../../middlewares/validateRequest/validateRequest.js';
 import { authController } from './auth.controller.js';
 import { AuthValidation } from './auth.validation.js';
-import { createSamlStrategy, createOIDCStrategy } from './enterprise.strategy.js';
+import {
+  createSamlStrategy,
+  createOIDCStrategy,
+} from './enterprise.strategy.js';
 import { prisma } from '../../../config/prisma.js';
 // import { validateRequest } from '../../middlewares/validateRequest/validateRequest.js';
 
@@ -107,10 +110,25 @@ router.route('/register/confirmation/:token').get(authController.confirmEmail); 
 router.route('/login').post(createRateLimiter(5, 5), authController.login); // login in app
 
 // Multi-Factor Authentication Routes
-router.route('/mfa/setup').post(auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER), authController.setupMfa);
-router.route('/mfa/verify').post(auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER), authController.verifyMfa);
+router
+  .route('/mfa/setup')
+  .post(
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+    authController.setupMfa,
+  );
+router
+  .route('/mfa/verify')
+  .post(
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+    authController.verifyMfa,
+  );
 router.route('/mfa/challenge').post(authController.validateMfaChallenge);
-router.route('/verify-product/:productId').get(auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER), authController.verifyProductAccess);
+router
+  .route('/verify-product/:productId')
+  .get(
+    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+    authController.verifyProductAccess,
+  );
 router
   .route('/social-login')
   .post(
@@ -151,13 +169,11 @@ router
 router
   .route('/reset-password')
   .post(createRateLimiter(5, 1), authController.resetPassword);
-router
-  .route('/change-password')
-  .post(
-    auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
-    // createRateLimiter(10, 1),
-    authController.changePassword,
-  );
+router.route('/change-password').post(
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  // createRateLimiter(10, 1),
+  authController.changePassword,
+);
 
 router
   .route('/update-user/:userId')
@@ -205,7 +221,9 @@ router.get('/saml/login/:tenantId', async (req, res, next) => {
       where: { id: tenantId },
     });
     if (!tenantConfig || !tenantConfig.samlEntryPoint) {
-      return res.status(400).json({ error: 'SAML not configured for this tenant.' });
+      return res
+        .status(400)
+        .json({ error: 'SAML not configured for this tenant.' });
     }
     const strategyName = `saml-${tenantId}`;
     if (!passport._strategies[strategyName]) {
@@ -227,7 +245,8 @@ router.post('/saml/callback', async (req, res, next) => {
   const strategyName = `saml-${tenantId}`;
   passport.authenticate(strategyName, { session: false }, (err, user, info) => {
     if (err) return next(err);
-    if (!user) return res.status(401).json({ error: 'SSO Authentication failed.' });
+    if (!user)
+      return res.status(401).json({ error: 'SSO Authentication failed.' });
     req.user = user;
     authController.ssoAuthCallback(req, res, next);
   })(req, res, next);
@@ -241,7 +260,9 @@ router.get('/oidc/login/:tenantId', async (req, res, next) => {
       where: { id: tenantId },
     });
     if (!tenantConfig || !tenantConfig.oidcIssuer) {
-      return res.status(400).json({ error: 'OIDC not configured for this tenant.' });
+      return res
+        .status(400)
+        .json({ error: 'OIDC not configured for this tenant.' });
     }
     const strategyName = `oidc-${tenantId}`;
     if (!passport._strategies[strategyName]) {
@@ -254,14 +275,15 @@ router.get('/oidc/login/:tenantId', async (req, res, next) => {
 });
 
 router.get('/oidc/callback', async (req, res, next) => {
-  const tenantId = req.query.state || req.session?.tenantId; 
+  const tenantId = req.query.state || req.session?.tenantId;
   if (!tenantId) {
     return res.status(400).json({ error: 'State/tenantId is required.' });
   }
   const strategyName = `oidc-${tenantId}`;
   passport.authenticate(strategyName, { session: false }, (err, user, info) => {
     if (err) return next(err);
-    if (!user) return res.status(401).json({ error: 'SSO Authentication failed.' });
+    if (!user)
+      return res.status(401).json({ error: 'SSO Authentication failed.' });
     req.user = user;
     authController.ssoAuthCallback(req, res, next);
   })(req, res, next);

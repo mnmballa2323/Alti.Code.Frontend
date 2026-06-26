@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceCachingAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_caching_auditor_agent',
-            'Performance Caching Auditor',
-            'You are an elite Performance Caching Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_caching_auditor_agent',
+      'Performance Caching Auditor',
+      'You are an elite Performance Caching Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Caching.',
+    );
+  }
 
-    async generatePerformanceCachingSystem(objective) {
-        logger.info(`💻 [PerformanceCachingAuditorAgent] Analyzing Performance Caching Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Caching Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Caching Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceCachingAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceCachingSystem(objective) {
+    logger.info(
+      `💻 [PerformanceCachingAuditorAgent] Analyzing Performance Caching Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Caching Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Caching Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceCachingAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceCachingAuditorAgent = Object.freeze(new PerformanceCachingAuditorAgent());
+export const performanceCachingAuditorAgent = Object.freeze(
+  new PerformanceCachingAuditorAgent(),
+);

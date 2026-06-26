@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseMicroservicesSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_microservices_specialist_agent',
-            'Enterprise Microservices Specialist',
-            'You are an elite Enterprise Microservices Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_microservices_specialist_agent',
+      'Enterprise Microservices Specialist',
+      'You are an elite Enterprise Microservices Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Microservices.',
+    );
+  }
 
-    async generateEnterpriseMicroservicesSystem(objective) {
-        logger.info(`💻 [EnterpriseMicroservicesSpecialistAgent] Analyzing Enterprise Microservices Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Microservices Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Microservices Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseMicroservicesSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseMicroservicesSpecialistAgent] Analyzing Enterprise Microservices Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Microservices Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Microservices Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseMicroservicesSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseMicroservicesSpecialistAgent = Object.freeze(new EnterpriseMicroservicesSpecialistAgent());
+export const enterpriseMicroservicesSpecialistAgent = Object.freeze(
+  new EnterpriseMicroservicesSpecialistAgent(),
+);

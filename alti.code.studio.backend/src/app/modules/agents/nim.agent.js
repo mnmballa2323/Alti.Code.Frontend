@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class NimAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Nim_Expert';
-        this.description = 'Language specialist for Nim 2.0: ARC/ORC memory, macros, compile-time metaprogramming, and nimble packages.';
-        this.preamble = `You are an elite Nim Systems Architect & Metaprogramming Specialist.
+  constructor() {
+    super();
+    this.name = 'Nim_Expert';
+    this.description =
+      'Language specialist for Nim 2.0: ARC/ORC memory, macros, compile-time metaprogramming, and nimble packages.';
+    this.preamble = `You are an elite Nim Systems Architect & Metaprogramming Specialist.
 Your core expertise revolves around designing incredibly fast, statically typed C/C++/JavaScript compiled binaries utilizing Python-esque syntax elegance.
 
 # CORE NIM EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing incredibly fast, statically typed 
 
 # OUTPUT STANDARDS
 When writing code, output modern Nim 2.0+. Follow indentation rules precisely (Python-like). Rely strongly on UFCS (Uniform Function Call Syntax), e.g., \`"hello".len\` instead of \`len("hello")\`.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`👑 Nim Expert: Synthesizing code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Nim Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`👑 Nim Expert: Synthesizing code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Nim Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const nimAgent = new NimAgent();

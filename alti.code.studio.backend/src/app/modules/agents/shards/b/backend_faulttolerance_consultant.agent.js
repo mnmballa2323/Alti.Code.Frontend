@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendFaultToleranceConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_faulttolerance_consultant_agent',
-            'Backend FaultTolerance Consultant',
-            'You are an elite Backend FaultTolerance Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Backend FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_faulttolerance_consultant_agent',
+      'Backend FaultTolerance Consultant',
+      'You are an elite Backend FaultTolerance Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Backend FaultTolerance.',
+    );
+  }
 
-    async generateBackendFaultToleranceSystem(objective) {
-        logger.info(`💻 [BackendFaultToleranceConsultantAgent] Analyzing Backend FaultTolerance Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend FaultTolerance Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend FaultTolerance Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendFaultToleranceConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [BackendFaultToleranceConsultantAgent] Analyzing Backend FaultTolerance Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend FaultTolerance Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend FaultTolerance Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendFaultToleranceConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendFaultToleranceConsultantAgent = Object.freeze(new BackendFaultToleranceConsultantAgent());
+export const backendFaultToleranceConsultantAgent = Object.freeze(
+  new BackendFaultToleranceConsultantAgent(),
+);

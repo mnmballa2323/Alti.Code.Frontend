@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataProvisioningOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_provisioning_orchestrator_agent',
-            'Data Provisioning Orchestrator',
-            'You are an elite Data Provisioning Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Data Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'data_provisioning_orchestrator_agent',
+      'Data Provisioning Orchestrator',
+      'You are an elite Data Provisioning Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Data Provisioning.',
+    );
+  }
 
-    async generateDataProvisioningSystem(objective) {
-        logger.info(`💻 [DataProvisioningOrchestratorAgent] Analyzing Data Provisioning Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Provisioning Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Provisioning Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataProvisioningOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataProvisioningSystem(objective) {
+    logger.info(
+      `💻 [DataProvisioningOrchestratorAgent] Analyzing Data Provisioning Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Provisioning Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Provisioning Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DataProvisioningOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const dataProvisioningOrchestratorAgent = Object.freeze(new DataProvisioningOrchestratorAgent());
+export const dataProvisioningOrchestratorAgent = Object.freeze(
+  new DataProvisioningOrchestratorAgent(),
+);

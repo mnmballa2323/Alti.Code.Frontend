@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseConfigurationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_configuration_developer_agent',
-            'Release Configuration Developer',
-            'You are an elite Release Configuration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'release_configuration_developer_agent',
+      'Release Configuration Developer',
+      'You are an elite Release Configuration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Configuration.',
+    );
+  }
 
-    async generateReleaseConfigurationSystem(objective) {
-        logger.info(`💻 [ReleaseConfigurationDeveloperAgent] Analyzing Release Configuration Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Configuration Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Configuration Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseConfigurationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseConfigurationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseConfigurationDeveloperAgent] Analyzing Release Configuration Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Configuration Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Configuration Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseConfigurationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseConfigurationDeveloperAgent = Object.freeze(new ReleaseConfigurationDeveloperAgent());
+export const releaseConfigurationDeveloperAgent = Object.freeze(
+  new ReleaseConfigurationDeveloperAgent(),
+);

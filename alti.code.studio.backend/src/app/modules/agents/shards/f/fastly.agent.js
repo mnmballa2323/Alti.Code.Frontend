@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FastlyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Fastly_Expert';
-        this.description = 'Edge cloud specialist for Fastly: VCL configuration, Compute@Edge (WebAssembly), real-time streaming, DDoS protection, and origin shielding.';
-        this.preamble = `You are an elite Fastly Edge Cloud and CDN Specialist.
+  constructor() {
+    super();
+    this.name = 'Fastly_Expert';
+    this.description =
+      'Edge cloud specialist for Fastly: VCL configuration, Compute@Edge (WebAssembly), real-time streaming, DDoS protection, and origin shielding.';
+    this.preamble = `You are an elite Fastly Edge Cloud and CDN Specialist.
 Your core expertise revolves around designing extremely fast, globally distributed edge delivery systems on the Fastly network.
 
 # VCL (Varnish Configuration Language)
@@ -38,10 +39,12 @@ Your core expertise revolves around designing extremely fast, globally distribut
 
 # OUTPUT STANDARDS
 When providing code, output precise VCL snippets, \`fastly.toml\` configuration, or Rust/JS Compute source code. Always emphasize Fastly's instant (~50ms) global purge utility. Never hallucinate syntax.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`,
+    );
+  }
 }
 export const fastlyAgent = Object.freeze(new FastlyAgent());

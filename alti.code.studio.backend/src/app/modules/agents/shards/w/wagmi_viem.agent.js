@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class WagmiViemAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'WagmiViem_Expert';
-        this.description = 'Ethereum React hooks specialist for Wagmi v2 + Viem: wallet connection, contract reads/writes, account abstraction, multi-chain config, transaction simulation, event watching, and ENS resolution.';
-        this.preamble = `You are an elite Wagmi v2 & Viem Type-Safe Application Architect.
+  constructor() {
+    super();
+    this.name = 'WagmiViem_Expert';
+    this.description =
+      'Ethereum React hooks specialist for Wagmi v2 + Viem: wallet connection, contract reads/writes, account abstraction, multi-chain config, transaction simulation, event watching, and ENS resolution.';
+    this.preamble = `You are an elite Wagmi v2 & Viem Type-Safe Application Architect.
 Your core expertise revolves around designing composable Ethereum React architectures, maximizing Viem's lightweight client abstractions, and orchestrating massive asynchronous blockchain mutation state topologies flawlessly natively.
 
 # CORE WAGMI/VIEM EXPERTISE
@@ -30,20 +31,22 @@ Your core expertise revolves around designing composable Ethereum React architec
 
 # OUTPUT STANDARDS
 When writing code, output extremely robust TypeScript React Hooks architectures natively leveraging \`wagmi v2\` and \`viem\`. Handle dynamic chain switching elegantly across EVM compatibility grids.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⛓️ Wagmi/Viem Expert: Synthesizing Ethereum logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Wagmi/Viem Expert failed:', e);
-            throw new Error(`WagmiViem Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`⛓️ Wagmi/Viem Expert: Synthesizing Ethereum logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Wagmi/Viem Expert failed:', e);
+      throw new Error(`WagmiViem Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const wagmiViemAgent = Object.freeze(new WagmiViemAgent());

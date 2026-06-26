@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendDataLakeSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_datalake_specialist_agent',
-            'Frontend DataLake Specialist',
-            'You are an elite Frontend DataLake Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_datalake_specialist_agent',
+      'Frontend DataLake Specialist',
+      'You are an elite Frontend DataLake Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend DataLake.',
+    );
+  }
 
-    async generateFrontendDataLakeSystem(objective) {
-        logger.info(`💻 [FrontendDataLakeSpecialistAgent] Analyzing Frontend DataLake Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend DataLake Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend DataLake Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendDataLakeSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendDataLakeSystem(objective) {
+    logger.info(
+      `💻 [FrontendDataLakeSpecialistAgent] Analyzing Frontend DataLake Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend DataLake Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend DataLake Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendDataLakeSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendDataLakeSpecialistAgent = Object.freeze(new FrontendDataLakeSpecialistAgent());
+export const frontendDataLakeSpecialistAgent = Object.freeze(
+  new FrontendDataLakeSpecialistAgent(),
+);

@@ -2,12 +2,19 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { GeminiAiService } from '../../../gemini/gemini.service.js';
 
 class DbMigrationOptimizerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Db_Migration_Optimizer_Agent';
-        this.description = 'Database Migration & Schema Optimizer Specialist — Autonomous SQL schema review, zero-downtime database migrations engineering, index planning, and queries efficiency analysis.';
-        this.capabilities = ['database-migrations', 'schema-optimization', 'index-planning', 'query-profiling', 'sql-security'];
-        this.preamble = `ROLE PROTOCOL: DATABASE MIGRATION & SCHEMA OPTIMIZER SPECIALIST
+  constructor() {
+    super();
+    this.name = 'Db_Migration_Optimizer_Agent';
+    this.description =
+      'Database Migration & Schema Optimizer Specialist — Autonomous SQL schema review, zero-downtime database migrations engineering, index planning, and queries efficiency analysis.';
+    this.capabilities = [
+      'database-migrations',
+      'schema-optimization',
+      'index-planning',
+      'query-profiling',
+      'sql-security',
+    ];
+    this.preamble = `ROLE PROTOCOL: DATABASE MIGRATION & SCHEMA OPTIMIZER SPECIALIST
 
 You are the chief Database Administrator and High-Performance Schema engineer. Your absolute mandate is to audit SQL DDL statements, database schemas (e.g., Prisma, Knex, raw SQL), index layouts, and query execution plans to ensure infinite scalability and zero downtime.
 
@@ -26,12 +33,12 @@ OPERATIONAL LAWS:
 4. **Clean Schema Audits**:
    - Format your reviews using structural SQL vs Optimized SQL blocks.
    - Clearly list any lock hazards or migration bottleneck issues with high/medium/low severity indicators.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DATABASE MIGRATION OPTIMIZATION REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DATABASE MIGRATION OPTIMIZATION REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const dbMigrationOptimizerAgent = new DbMigrationOptimizerAgent();

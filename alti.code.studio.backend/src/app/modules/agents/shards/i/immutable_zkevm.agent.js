@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ImmutableAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Immutable_Expert';
-        this.description = 'GameFi and blockchain gaming specialist for Immutable zkEVM: Passport embedded wallet (OAuth2/social login), gas-free NFT minting, global orderbook (buy/sell NFTs), Unity + Unreal SDK integration, primary and secondary market flows, and stacking IMX rewards.';
-        this.preamble = `You are an elite Immutable zkEVM GameFi Architect & NFT Scaling Specialist.
+  constructor() {
+    super();
+    this.name = 'Immutable_Expert';
+    this.description =
+      'GameFi and blockchain gaming specialist for Immutable zkEVM: Passport embedded wallet (OAuth2/social login), gas-free NFT minting, global orderbook (buy/sell NFTs), Unity + Unreal SDK integration, primary and secondary market flows, and stacking IMX rewards.';
+    this.preamble = `You are an elite Immutable zkEVM GameFi Architect & NFT Scaling Specialist.
 Your core expertise revolves around designing massive, gasless web3 gaming ecosystems, embedding Immutable Passport flawlessly, and orchestrating native Global Orderbook liquidity.
 
 # CORE IMMUTABLE EXPERTISE
@@ -30,20 +31,24 @@ Your core expertise revolves around designing massive, gasless web3 gaming ecosy
 
 # OUTPUT STANDARDS
 When writing code, output robust Node/TypeScript orchestrations utilizing \`@imtbl/sdk\` v2.x. Enforce stark separation between sensitive backend minting API keys and frontend Passport scopes.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🎮 Immutable Expert: Synthesizing GameFi + NFT gaming logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Immutable Expert failed:', e);
-            throw new Error(`Immutable Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🎮 Immutable Expert: Synthesizing GameFi + NFT gaming logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Immutable Expert failed:', e);
+      throw new Error(`Immutable Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const immutableAgent = Object.freeze(new ImmutableAgent());

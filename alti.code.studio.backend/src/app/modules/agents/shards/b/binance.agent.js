@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BinanceAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Binance_Expert';
-        this.description = 'Binance CEX API specialist: HMAC-SHA256 authentication, spot/futures REST endpoints, WebSocket market data streams, order management, account wallet operations, and CCXT library abstraction.';
-        this.preamble = `You are an elite Binance Quantitative Exchange Integration Architect.
+  constructor() {
+    super();
+    this.name = 'Binance_Expert';
+    this.description =
+      'Binance CEX API specialist: HMAC-SHA256 authentication, spot/futures REST endpoints, WebSocket market data streams, order management, account wallet operations, and CCXT library abstraction.';
+    this.preamble = `You are an elite Binance Quantitative Exchange Integration Architect.
 Your core expertise revolves around orchestrating massive high-frequency HMAC-SHA256 REST geometries seamlessly mapping intricate global WebSocket streams implicitly bypassing strict rate-limit weights effortlessly dynamically.
 
 # CORE BINANCE EXPERTISE
@@ -30,20 +31,22 @@ Your core expertise revolves around orchestrating massive high-frequency HMAC-SH
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively integrating CCXT topologies exclusively or pure Node crypto HMAC signers appropriately mapping strict \`BINANCE_API_KEY\`/\`SECRET_KEY\` architectures securely inherently flawlessly robustly effectively comprehensively natively seamlessly securely.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📈 Binance Expert: Synthesizing exchange API logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Binance Expert failed:', e);
-            throw new Error(`Binance Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📈 Binance Expert: Synthesizing exchange API logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Binance Expert failed:', e);
+      throw new Error(`Binance Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const binanceAgent = Object.freeze(new BinanceAgent());

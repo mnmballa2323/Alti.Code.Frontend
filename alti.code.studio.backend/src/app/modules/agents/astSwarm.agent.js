@@ -16,7 +16,8 @@ export class AstSwarmAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'astSwarm';
-    this.description = 'Dynamic AST & Code Intelligence Swarm Specialist — Orchestrates multi-language Tree-sitter parsing, surgical code mutations, and cognitive refactoring algorithms.';
+    this.description =
+      'Dynamic AST & Code Intelligence Swarm Specialist — Orchestrates multi-language Tree-sitter parsing, surgical code mutations, and cognitive refactoring algorithms.';
     this.preamble = `
 You are the AstSwarm Master Agent.
 Your role is to govern Abstract Syntax Tree configurations, token parses, code patches, and code quality audits.
@@ -31,21 +32,36 @@ You route code intelligence requests to your specialized sub-agents:
     logger.info(`⚡ [astSwarm] Routing AST code query: ${prompt}`);
     const cleanPrompt = prompt.toLowerCase();
 
-    if (cleanPrompt.includes('parse') || cleanPrompt.includes('tree-sitter') || cleanPrompt.includes('syntax') || cleanPrompt.includes('nodes')) {
+    if (
+      cleanPrompt.includes('parse') ||
+      cleanPrompt.includes('tree-sitter') ||
+      cleanPrompt.includes('syntax') ||
+      cleanPrompt.includes('nodes')
+    ) {
       const parser = agentRegistry.get('astNativeParser');
       if (parser && parser.instance) {
         return parser.instance._invoke(prompt, contextBlock, opts);
       }
     }
 
-    if (cleanPrompt.includes('mutate') || cleanPrompt.includes('patch') || cleanPrompt.includes('surgical') || cleanPrompt.includes('replace')) {
+    if (
+      cleanPrompt.includes('mutate') ||
+      cleanPrompt.includes('patch') ||
+      cleanPrompt.includes('surgical') ||
+      cleanPrompt.includes('replace')
+    ) {
       const mutator = agentRegistry.get('astNativeMutator');
       if (mutator && mutator.instance) {
         return mutator.instance._invoke(prompt, contextBlock, opts);
       }
     }
 
-    if (cleanPrompt.includes('refactor') || cleanPrompt.includes('smell') || cleanPrompt.includes('big-o') || cleanPrompt.includes('complexity')) {
+    if (
+      cleanPrompt.includes('refactor') ||
+      cleanPrompt.includes('smell') ||
+      cleanPrompt.includes('big-o') ||
+      cleanPrompt.includes('complexity')
+    ) {
       const optimizer = agentRegistry.get('astRefactorOptimizer');
       if (optimizer && optimizer.instance) {
         return optimizer.instance._invoke(prompt, contextBlock, opts);
@@ -72,12 +88,16 @@ export class AstNativeParser extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'astNativeParser';
-    this.description = 'AST Native Parser — Directs tree-sitter parsing and syntax node indexing.';
-    this.preamble = 'You are the AstNativeParser micro-specialist. You parse raw code strings into fully indexed syntax trees, highlighting function declarations, scopes, and imports.';
+    this.description =
+      'AST Native Parser — Directs tree-sitter parsing and syntax node indexing.';
+    this.preamble =
+      'You are the AstNativeParser micro-specialist. You parse raw code strings into fully indexed syntax trees, highlighting function declarations, scopes, and imports.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`🕵️‍♂️ [astNativeParser] Ingesting source code and parsing syntax trees...`);
+    logger.info(
+      `🕵️‍♂️ [astNativeParser] Ingesting source code and parsing syntax trees...`,
+    );
     return `
 📊 **astNativeParser Code Anatomy**
 - **Syntax Nodes Scanned:** 248 nodes.
@@ -99,12 +119,16 @@ export class AstNativeMutator extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'astNativeMutator';
-    this.description = 'AST Native Mutator — Applies secure, parser-verified syntax node transformations.';
-    this.preamble = 'You are the AstNativeMutator micro-specialist. You apply surgical JSON AST patches to modify source tokens precisely without corrupting structural layout.';
+    this.description =
+      'AST Native Mutator — Applies secure, parser-verified syntax node transformations.';
+    this.preamble =
+      'You are the AstNativeMutator micro-specialist. You apply surgical JSON AST patches to modify source tokens precisely without corrupting structural layout.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`📐 [astNativeMutator] Structuring precise AST node patches...`);
+    logger.info(
+      `📐 [astNativeMutator] Structuring precise AST node patches...`,
+    );
     return `
 🛠️ **astNativeMutator Transmutation**
 - **Target Node:** function_declaration name: "myLegacyMethod".
@@ -131,12 +155,16 @@ export class AstRefactorOptimizer extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'astRefactorOptimizer';
-    this.description = 'AST Refactor Optimizer — Isolates code smells and recommends Big-O efficiency refactoring.';
-    this.preamble = 'You are the AstRefactorOptimizer micro-specialist. You evaluate cognitive complexities and propose optimized algorithmic structures.';
+    this.description =
+      'AST Refactor Optimizer — Isolates code smells and recommends Big-O efficiency refactoring.';
+    this.preamble =
+      'You are the AstRefactorOptimizer micro-specialist. You evaluate cognitive complexities and propose optimized algorithmic structures.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`🧹 [astRefactorOptimizer] Analyzing cognitive code complexities...`);
+    logger.info(
+      `🧹 [astRefactorOptimizer] Analyzing cognitive code complexities...`,
+    );
     return `
 📈 **astRefactorOptimizer Complexity Report**
 - **Symptom Identified:** Nested loops (O(N^2) complexity) detected on line 42.
@@ -160,7 +188,7 @@ agentRegistry.register({
   capabilities: ['ast-orchestration', 'code-intelligence'],
   policy: { accessLevel: 'ADMIN' },
   version: '1.0.0',
-  instance: master
+  instance: master,
 });
 
 const parser = new AstNativeParser();
@@ -171,7 +199,7 @@ agentRegistry.register({
   capabilities: ['tree-sitter-parsing', 'syntax-indexing'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: parser
+  instance: parser,
 });
 
 const mutator = new AstNativeMutator();
@@ -182,7 +210,7 @@ agentRegistry.register({
   capabilities: ['ast-mutations', 'precise-patching'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: mutator
+  instance: mutator,
 });
 
 const optimizer = new AstRefactorOptimizer();
@@ -193,5 +221,5 @@ agentRegistry.register({
   capabilities: ['complexity-audits', 'refactoring-optimizations'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: optimizer
+  instance: optimizer,
 });

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * "The Negotiator" - Integration & Connectivity Agent
  * Responsible for scaffolding 3rd party integrations, webhooks, and mocks.
  */
@@ -10,20 +10,23 @@ import { aiProvider } from '../ai/ai.provider.js';
 import { logger } from '../../../shared/logger.js';
 
 class NegotiatorAgent {
-    constructor() {
-        this.projectRoot = process.cwd();
-        this.integrationsDir = path.resolve(this.projectRoot, 'src/app/modules/integrations');
-    }
+  constructor() {
+    this.projectRoot = process.cwd();
+    this.integrationsDir = path.resolve(
+      this.projectRoot,
+      'src/app/modules/integrations',
+    );
+  }
 
-    /**
-     * Scaffold a new integration module
-     * @param {string} serviceName e.g., 'stripe', 'twilio'
-     * @param {string} description Usage context
-     */
-    async scaffoldIntegration(serviceName, description) {
-        logger.info(`🤝 Negotiator: Scaffolding integration for ${serviceName}...`);
+  /**
+   * Scaffold a new integration module
+   * @param {string} serviceName e.g., 'stripe', 'twilio'
+   * @param {string} description Usage context
+   */
+  async scaffoldIntegration(serviceName, description) {
+    logger.info(`🤝 Negotiator: Scaffolding integration for ${serviceName}...`);
 
-        const prompt = `
+    const prompt = `
         You are "The Negotiator", a Backend Integration Specialist.
         TASK: Create a Service Class for interacting with: ${serviceName}.
         Context: ${description}
@@ -35,28 +38,28 @@ class NegotiatorAgent {
         4. Return ONLY the code for the service file.
         `;
 
-        const response = await aiProvider.generate(prompt);
-        const code = response.replace(/^```(javascript|js|ts)?|```$/g, '').trim();
+    const response = await aiProvider.generate(prompt);
+    const code = response.replace(/^```(javascript|js|ts)?|```$/g, '').trim();
 
-        // Save file
-        const dir = path.join(this.integrationsDir, serviceName);
-        await fs.mkdir(dir, { recursive: true });
+    // Save file
+    const dir = path.join(this.integrationsDir, serviceName);
+    await fs.mkdir(dir, { recursive: true });
 
-        const filePath = path.join(dir, `${serviceName}.service.js`);
-        await fs.writeFile(filePath, code);
+    const filePath = path.join(dir, `${serviceName}.service.js`);
+    await fs.writeFile(filePath, code);
 
-        logger.info(`✅ Negotiator: Created ${filePath}`);
-        return { serviceName, filePath, code };
-    }
+    logger.info(`✅ Negotiator: Created ${filePath}`);
+    return { serviceName, filePath, code };
+  }
 
-    /**
-     * Create a Mock for testing
-     * @param {string} serviceName 
-     */
-    async generateMock(serviceName) {
-        logger.info(`🤝 Negotiator: Generating mock for ${serviceName}...`);
+  /**
+   * Create a Mock for testing
+   * @param {string} serviceName
+   */
+  async generateMock(serviceName) {
+    logger.info(`🤝 Negotiator: Generating mock for ${serviceName}...`);
 
-        const prompt = `
+    const prompt = `
         You are "The Negotiator".
         TASK: Create a Mock implementation for: ${serviceName}.
         It should export an object with the same methods as a typical service, but returning static dummy data.
@@ -64,26 +67,28 @@ class NegotiatorAgent {
         Return ONLY the code.
         `;
 
-        const response = await aiProvider.generate(prompt);
-        const code = response.replace(/^```(javascript|js|ts)?|```$/g, '').trim();
+    const response = await aiProvider.generate(prompt);
+    const code = response.replace(/^```(javascript|js|ts)?|```$/g, '').trim();
 
-        const dir = path.join(this.integrationsDir, serviceName);
-        await fs.mkdir(dir, { recursive: true });
+    const dir = path.join(this.integrationsDir, serviceName);
+    await fs.mkdir(dir, { recursive: true });
 
-        const filePath = path.join(dir, `${serviceName}.mock.js`);
-        await fs.writeFile(filePath, code);
+    const filePath = path.join(dir, `${serviceName}.mock.js`);
+    await fs.writeFile(filePath, code);
 
-        return { serviceName, filePath, code };
-    }
+    return { serviceName, filePath, code };
+  }
 
-    /**
-     * Scaffold a Webhook Handler
-     * @param {string} serviceName 
-     */
-    async createWebhookHandler(serviceName) {
-        logger.info(`🤝 Negotiator: Creating webhook handler for ${serviceName}...`);
+  /**
+   * Scaffold a Webhook Handler
+   * @param {string} serviceName
+   */
+  async createWebhookHandler(serviceName) {
+    logger.info(
+      `🤝 Negotiator: Creating webhook handler for ${serviceName}...`,
+    );
 
-        const prompt = `
+    const prompt = `
         You are "The Negotiator".
         TASK: Create an Express Controller to handle webhooks from: ${serviceName}.
         
@@ -96,17 +101,17 @@ class NegotiatorAgent {
         Return ONLY the code.
         `;
 
-        const response = await aiProvider.generate(prompt);
-        const code = response.replace(/^```(javascript|js|ts)?|```$/g, '').trim();
+    const response = await aiProvider.generate(prompt);
+    const code = response.replace(/^```(javascript|js|ts)?|```$/g, '').trim();
 
-        const dir = path.join(this.integrationsDir, serviceName);
-        await fs.mkdir(dir, { recursive: true });
+    const dir = path.join(this.integrationsDir, serviceName);
+    await fs.mkdir(dir, { recursive: true });
 
-        const filePath = path.join(dir, `${serviceName}.webhook.js`);
-        await fs.writeFile(filePath, code);
+    const filePath = path.join(dir, `${serviceName}.webhook.js`);
+    await fs.writeFile(filePath, code);
 
-        return { serviceName, filePath, code };
-    }
+    return { serviceName, filePath, code };
+  }
 }
 
 export const negotiatorAgent = new NegotiatorAgent();

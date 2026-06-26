@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREGovernanceDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_governance_designer_agent',
-            'SRE Governance Designer',
-            'You are an elite SRE Governance Designer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_governance_designer_agent',
+      'SRE Governance Designer',
+      'You are an elite SRE Governance Designer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Governance.',
+    );
+  }
 
-    async generateSREGovernanceSystem(objective) {
-        logger.info(`💻 [SREGovernanceDesignerAgent] Analyzing SRE Governance Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Governance Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Governance Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREGovernanceDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREGovernanceSystem(objective) {
+    logger.info(
+      `💻 [SREGovernanceDesignerAgent] Analyzing SRE Governance Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Governance Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Governance Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREGovernanceDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREGovernanceDesignerAgent = Object.freeze(new SREGovernanceDesignerAgent());
+export const sREGovernanceDesignerAgent = Object.freeze(
+  new SREGovernanceDesignerAgent(),
+);

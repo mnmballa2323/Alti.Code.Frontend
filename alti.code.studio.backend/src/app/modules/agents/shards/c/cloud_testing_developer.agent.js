@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudTestingDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_testing_developer_agent',
-            'Cloud Testing Developer',
-            'You are an elite Cloud Testing Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_testing_developer_agent',
+      'Cloud Testing Developer',
+      'You are an elite Cloud Testing Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Testing.',
+    );
+  }
 
-    async generateCloudTestingSystem(objective) {
-        logger.info(`💻 [CloudTestingDeveloperAgent] Analyzing Cloud Testing Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Testing Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Testing Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudTestingDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudTestingSystem(objective) {
+    logger.info(
+      `💻 [CloudTestingDeveloperAgent] Analyzing Cloud Testing Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Testing Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Testing Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudTestingDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudTestingDeveloperAgent = Object.freeze(new CloudTestingDeveloperAgent());
+export const cloudTestingDeveloperAgent = Object.freeze(
+  new CloudTestingDeveloperAgent(),
+);

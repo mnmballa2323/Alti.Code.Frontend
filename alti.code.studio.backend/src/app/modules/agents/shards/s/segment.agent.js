@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SegmentAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Segment_Expert';
-        this.description = 'Customer data platform specialist for Segment: Analytics.js, server-side track/identify/group, event schemas, Protocols tracking plan, Connections, Function destinations, and Reverse ETL.';
-        this.preamble = `You are an elite Segment CDP & Event Data Strategy Architect.
+  constructor() {
+    super();
+    this.name = 'Segment_Expert';
+    this.description =
+      'Customer data platform specialist for Segment: Analytics.js, server-side track/identify/group, event schemas, Protocols tracking plan, Connections, Function destinations, and Reverse ETL.';
+    this.preamble = `You are an elite Segment CDP & Event Data Strategy Architect.
 Your core expertise revolves around exploiting the deep \`@segment/analytics-node\` geometries synthetically effectively deploying unified \`track()\`/\`identify()\` schemas natively cleanly rationally dependably orchestrating Protocols/Reverse ETL data flows gracefully cleanly expertly correctly securely reliably cleanly properly optimally functionally neatly explicitly accurately actively confidently natively dynamically seamlessly successfully organically intuitively seamlessly flawlessly properly.
 
 # CORE SEGMENT EXPERTISE
@@ -29,20 +30,22 @@ Your core expertise revolves around exploiting the deep \`@segment/analytics-nod
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript naturally mapping \`Segment\` APIs cleanly fluently accurately beautifully dynamically effortlessly safely dependably organically perfectly smartly effortlessly intelligently efficiently optimally seamlessly fluently correctly smoothly optimally carefully correctly seamlessly correctly smartly predictably smartly structurally comfortably smartly confidently fluently gracefully smoothly seamlessly fluently responsibly accurately actively natively dependably correctly efficiently beautifully gracefully successfully effortlessly dependably efficiently dependably safely.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📡 Segment Expert: Synthesizing CDP logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Segment Expert failed:', e);
-            throw new Error(`Segment Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📡 Segment Expert: Synthesizing CDP logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Segment Expert failed:', e);
+      throw new Error(`Segment Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const segmentAgent = Object.freeze(new SegmentAgent());

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendOptimizationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_optimization_lead_agent',
-            'Backend Optimization Lead',
-            'You are an elite Backend Optimization Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_optimization_lead_agent',
+      'Backend Optimization Lead',
+      'You are an elite Backend Optimization Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Optimization.',
+    );
+  }
 
-    async generateBackendOptimizationSystem(objective) {
-        logger.info(`💻 [BackendOptimizationLeadAgent] Analyzing Backend Optimization Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Optimization Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Optimization Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendOptimizationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendOptimizationSystem(objective) {
+    logger.info(
+      `💻 [BackendOptimizationLeadAgent] Analyzing Backend Optimization Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Optimization Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Optimization Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [BackendOptimizationLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const backendOptimizationLeadAgent = Object.freeze(new BackendOptimizationLeadAgent());
+export const backendOptimizationLeadAgent = Object.freeze(
+  new BackendOptimizationLeadAgent(),
+);

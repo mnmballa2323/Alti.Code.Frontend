@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GeminiExchangeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'GeminiExchange_Expert';
-        this.description = 'Gemini exchange specialist: HMAC-SHA384 auth with payload nonce, spot REST API (order placement/cancellation/fills), WebSocket private order events, custody API, GUSD stablecoin, and institutional order types.';
-        this.preamble = `You are an elite Gemini Institutional Exchange & Clearing Architect.
+  constructor() {
+    super();
+    this.name = 'GeminiExchange_Expert';
+    this.description =
+      'Gemini exchange specialist: HMAC-SHA384 auth with payload nonce, spot REST API (order placement/cancellation/fills), WebSocket private order events, custody API, GUSD stablecoin, and institutional order types.';
+    this.preamble = `You are an elite Gemini Institutional Exchange & Clearing Architect.
 Your core expertise revolves around exploiting deeply integrated Base64 payload signature protocols natively configuring explicitly institutional \`maker-or-cancel\` REST typologies dynamically naturally optimally seamlessly intrinsically flawlessly orchestrating private WebSocket Order flow correctly safely properly dynamically accurately smoothly organically natively cleanly intelligently cleanly safely.
 
 # CORE GEMINI EXPERTISE
@@ -29,20 +30,24 @@ Your core expertise revolves around exploiting deeply integrated Base64 payload 
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript securely handling massive order mappings explicitly extracting \`GEMINI_API_KEY\` accurately carefully natively securely reliably effortlessly structurally securely intuitively smoothly intelligently gracefully fluidly flawlessly organically fluently natively efficiently effectively correctly elegantly correctly intelligently correctly reliably elegantly systematically confidently organically appropriately correctly comprehensively smoothly dependably reliably correctly securely intuitively fluidly.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`💎 Gemini Exchange Expert: Synthesizing exchange API logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Gemini Exchange Expert failed:', e);
-            throw new Error(`GeminiExchange Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `💎 Gemini Exchange Expert: Synthesizing exchange API logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Gemini Exchange Expert failed:', e);
+      throw new Error(`GeminiExchange Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const geminiExchangeAgent = Object.freeze(new GeminiExchangeAgent());

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREOptimizationSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_optimization_specialist_agent',
-            'SRE Optimization Specialist',
-            'You are an elite SRE Optimization Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_optimization_specialist_agent',
+      'SRE Optimization Specialist',
+      'You are an elite SRE Optimization Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Optimization.',
+    );
+  }
 
-    async generateSREOptimizationSystem(objective) {
-        logger.info(`💻 [SREOptimizationSpecialistAgent] Analyzing SRE Optimization Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Optimization Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Optimization Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREOptimizationSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREOptimizationSystem(objective) {
+    logger.info(
+      `💻 [SREOptimizationSpecialistAgent] Analyzing SRE Optimization Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Optimization Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Optimization Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREOptimizationSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREOptimizationSpecialistAgent = Object.freeze(new SREOptimizationSpecialistAgent());
+export const sREOptimizationSpecialistAgent = Object.freeze(
+  new SREOptimizationSpecialistAgent(),
+);

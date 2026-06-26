@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseFaultToleranceEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_faulttolerance_engineer_agent',
-            'Enterprise FaultTolerance Engineer',
-            'You are an elite Enterprise FaultTolerance Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_faulttolerance_engineer_agent',
+      'Enterprise FaultTolerance Engineer',
+      'You are an elite Enterprise FaultTolerance Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise FaultTolerance.',
+    );
+  }
 
-    async generateEnterpriseFaultToleranceSystem(objective) {
-        logger.info(`💻 [EnterpriseFaultToleranceEngineerAgent] Analyzing Enterprise FaultTolerance Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise FaultTolerance Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise FaultTolerance Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseFaultToleranceEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseFaultToleranceEngineerAgent] Analyzing Enterprise FaultTolerance Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise FaultTolerance Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise FaultTolerance Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseFaultToleranceEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseFaultToleranceEngineerAgent = Object.freeze(new EnterpriseFaultToleranceEngineerAgent());
+export const enterpriseFaultToleranceEngineerAgent = Object.freeze(
+  new EnterpriseFaultToleranceEngineerAgent(),
+);

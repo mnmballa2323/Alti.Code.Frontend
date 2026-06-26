@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileDataWarehouseOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_datawarehouse_orchestrator_agent',
-            'Mobile DataWarehouse Orchestrator',
-            'You are an elite Mobile DataWarehouse Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_datawarehouse_orchestrator_agent',
+      'Mobile DataWarehouse Orchestrator',
+      'You are an elite Mobile DataWarehouse Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile DataWarehouse.',
+    );
+  }
 
-    async generateMobileDataWarehouseSystem(objective) {
-        logger.info(`💻 [MobileDataWarehouseOrchestratorAgent] Analyzing Mobile DataWarehouse Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile DataWarehouse Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile DataWarehouse Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileDataWarehouseOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [MobileDataWarehouseOrchestratorAgent] Analyzing Mobile DataWarehouse Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile DataWarehouse Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile DataWarehouse Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileDataWarehouseOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileDataWarehouseOrchestratorAgent = Object.freeze(new MobileDataWarehouseOrchestratorAgent());
+export const mobileDataWarehouseOrchestratorAgent = Object.freeze(
+  new MobileDataWarehouseOrchestratorAgent(),
+);

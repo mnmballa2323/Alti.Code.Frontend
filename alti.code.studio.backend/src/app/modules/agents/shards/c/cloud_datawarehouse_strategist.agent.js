@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudDataWarehouseStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_datawarehouse_strategist_agent',
-            'Cloud DataWarehouse Strategist',
-            'You are an elite Cloud DataWarehouse Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_datawarehouse_strategist_agent',
+      'Cloud DataWarehouse Strategist',
+      'You are an elite Cloud DataWarehouse Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud DataWarehouse.',
+    );
+  }
 
-    async generateCloudDataWarehouseSystem(objective) {
-        logger.info(`💻 [CloudDataWarehouseStrategistAgent] Analyzing Cloud DataWarehouse Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud DataWarehouse Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud DataWarehouse Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudDataWarehouseStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [CloudDataWarehouseStrategistAgent] Analyzing Cloud DataWarehouse Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud DataWarehouse Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud DataWarehouse Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [CloudDataWarehouseStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const cloudDataWarehouseStrategistAgent = Object.freeze(new CloudDataWarehouseStrategistAgent());
+export const cloudDataWarehouseStrategistAgent = Object.freeze(
+  new CloudDataWarehouseStrategistAgent(),
+);

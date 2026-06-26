@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityOptimizationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_optimization_tester_agent',
-            'Security Optimization Tester',
-            'You are an elite Security Optimization Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Security Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'security_optimization_tester_agent',
+      'Security Optimization Tester',
+      'You are an elite Security Optimization Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Security Optimization.',
+    );
+  }
 
-    async generateSecurityOptimizationSystem(objective) {
-        logger.info(`💻 [SecurityOptimizationTesterAgent] Analyzing Security Optimization Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Optimization Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Optimization Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityOptimizationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityOptimizationSystem(objective) {
+    logger.info(
+      `💻 [SecurityOptimizationTesterAgent] Analyzing Security Optimization Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Optimization Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Optimization Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityOptimizationTesterAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityOptimizationTesterAgent = Object.freeze(new SecurityOptimizationTesterAgent());
+export const securityOptimizationTesterAgent = Object.freeze(
+  new SecurityOptimizationTesterAgent(),
+);

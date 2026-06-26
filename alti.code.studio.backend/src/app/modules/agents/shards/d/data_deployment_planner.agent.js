@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataDeploymentPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_deployment_planner_agent',
-            'Data Deployment Planner',
-            'You are an elite Data Deployment Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Data Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'data_deployment_planner_agent',
+      'Data Deployment Planner',
+      'You are an elite Data Deployment Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Data Deployment.',
+    );
+  }
 
-    async generateDataDeploymentSystem(objective) {
-        logger.info(`💻 [DataDeploymentPlannerAgent] Analyzing Data Deployment Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Deployment Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Deployment Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataDeploymentPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataDeploymentSystem(objective) {
+    logger.info(
+      `💻 [DataDeploymentPlannerAgent] Analyzing Data Deployment Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Deployment Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Deployment Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataDeploymentPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataDeploymentPlannerAgent = Object.freeze(new DataDeploymentPlannerAgent());
+export const dataDeploymentPlannerAgent = Object.freeze(
+  new DataDeploymentPlannerAgent(),
+);

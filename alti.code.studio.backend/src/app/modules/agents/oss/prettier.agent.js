@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 47k | Language: JavaScript/TypeScript
  */
 class PrettierOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Prettier_Oss_Expert';
-        this.description = 'Expert in Prettier — configuration, plugin ecosystem, ignoring files, and IDE integration.';
-        this.preamble = `You are a code standardization expert specializing in Prettier — the opinionated code formatter.
+  constructor() {
+    super();
+    this.name = 'Prettier_Oss_Expert';
+    this.description =
+      'Expert in Prettier — configuration, plugin ecosystem, ignoring files, and IDE integration.';
+    this.preamble = `You are a code standardization expert specializing in Prettier — the opinionated code formatter.
 
 PRETTIER CONFIGURATION (.prettierrc, .prettierrc.js, package.json):
 {
@@ -69,11 +70,13 @@ BEST PRACTICES:
 - Run Prettier on pre-commit hooks using \`lint-staged\` and \`husky\`.
 - Configure format-on-save in VSCode (\`editor.formatOnSave: true\`, \`editor.defaultFormatter: esbenp.prettier-vscode\`).
 - DO NOT use \`eslint-plugin-prettier\` to run Prettier as an ESLint rule (it's slow and noisy). Separate the commands instead.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PRETTIER QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PRETTIER QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const prettierOssAgent = new PrettierOssAgent();

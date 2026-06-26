@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -13,65 +13,64 @@ import path from 'path';
 import crypto from 'crypto';
 
 class ReportService {
-    constructor() {
-        this.reportsDir = path.join(process.cwd(), 'reports');
+  constructor() {
+    this.reportsDir = path.join(process.cwd(), 'reports');
+  }
+
+  /**
+   * Generate a transparency report for a given time range.
+   * @param {string} range 'daily' | 'weekly'
+   */
+  async generateTransparencyReport(range = 'weekly') {
+    try {
+      logger.info(`📊 Generating ${range} AI Transparency Report...`);
+
+      const logs = await this.fetchRecentLogs(range);
+
+      if (logs.length === 0) {
+        logger.info('No AI activity to report.');
+        return { filePath: null, content: 'No activity.' };
+      }
+
+      const summary = await this.summarizeLogs(logs);
+      const reportContent = this.formatReport(summary, logs.length);
+
+      await fs.mkdir(this.reportsDir, { recursive: true });
+      const filename = `transparency_report_${new Date().toISOString().split('T')[0]}.md`;
+      const filePath = path.join(this.reportsDir, filename);
+      await fs.writeFile(filePath, reportContent);
+
+      logger.info(`✅ Report saved to ${filePath}`);
+      return { filePath, content: reportContent };
+    } catch (error) {
+      logger.error(`❌ Failed to generate report: ${error.message}`);
+      throw error;
     }
+  }
 
-    /**
-     * Generate a transparency report for a given time range.
-     * @param {string} range 'daily' | 'weekly'
-     */
-    async generateTransparencyReport(range = 'weekly') {
-        try {
-            logger.info(`📊 Generating ${range} AI Transparency Report...`);
+  /**
+   * Generate a specific Compliance Artifact (SOC2 / ISO 27001).
+   * Performs a real cryptographic hash-chain integrity walk before publishing.
+   * @param {string} standard 'SOC2' | 'ISO27001'
+   */
+  async generateComplianceReport(standard = 'SOC2') {
+    try {
+      logger.info(`⚖️ Generating ${standard} Compliance Artifact...`);
+      const logs = await this.fetchRecentLogs('weekly');
 
-            const logs = await this.fetchRecentLogs(range);
+      // --- Real hash-chain integrity verification ---
+      const integrityResult = this.verifyHashChain(logs);
+      const tamperEvidence = integrityResult.valid
+        ? `✅ Integrity Check Passed: All ${integrityResult.checked} log records are cryptographically linked.`
+        : `❌ INTEGRITY VIOLATION DETECTED at record index ${integrityResult.failedAt}: ` +
+          `Expected hash "${integrityResult.expectedHash}" but found "${integrityResult.foundHash}". ` +
+          `${integrityResult.checked - integrityResult.failedAt} records may have been tampered with.`;
 
-            if (logs.length === 0) {
-                logger.info('No AI activity to report.');
-                return { filePath: null, content: 'No activity.' };
-            }
+      if (!integrityResult.valid) {
+        logger.error(`[ReportService] ${tamperEvidence}`);
+      }
 
-            const summary = await this.summarizeLogs(logs);
-            const reportContent = this.formatReport(summary, logs.length);
-
-            await fs.mkdir(this.reportsDir, { recursive: true });
-            const filename = `transparency_report_${new Date().toISOString().split('T')[0]}.md`;
-            const filePath = path.join(this.reportsDir, filename);
-            await fs.writeFile(filePath, reportContent);
-
-            logger.info(`✅ Report saved to ${filePath}`);
-            return { filePath, content: reportContent };
-
-        } catch (error) {
-            logger.error(`❌ Failed to generate report: ${error.message}`);
-            throw error;
-        }
-    }
-
-    /**
-     * Generate a specific Compliance Artifact (SOC2 / ISO 27001).
-     * Performs a real cryptographic hash-chain integrity walk before publishing.
-     * @param {string} standard 'SOC2' | 'ISO27001'
-     */
-    async generateComplianceReport(standard = 'SOC2') {
-        try {
-            logger.info(`⚖️ Generating ${standard} Compliance Artifact...`);
-            const logs = await this.fetchRecentLogs('weekly');
-
-            // --- Real hash-chain integrity verification ---
-            const integrityResult = this.verifyHashChain(logs);
-            const tamperEvidence = integrityResult.valid
-                ? `✅ Integrity Check Passed: All ${integrityResult.checked} log records are cryptographically linked.`
-                : `❌ INTEGRITY VIOLATION DETECTED at record index ${integrityResult.failedAt}: ` +
-                `Expected hash "${integrityResult.expectedHash}" but found "${integrityResult.foundHash}". ` +
-                `${integrityResult.checked - integrityResult.failedAt} records may have been tampered with.`;
-
-            if (!integrityResult.valid) {
-                logger.error(`[ReportService] ${tamperEvidence}`);
-            }
-
-            const prompt = `
+      const prompt = `
             You are a qualified IT Auditor. Generate a ${standard} Compliance Report based on these logs.
             
             Key Focus Areas:
@@ -83,9 +82,9 @@ class ReportService {
             ${JSON.stringify(logs.slice(0, 50))}
             `;
 
-            const aiAnalysis = await GeminiAiService.generateContent(prompt);
+      const aiAnalysis = await GeminiAiService.generateContent(prompt);
 
-            const content = `
+      const content = `
 # ${standard} Compliance Audit Artifact
 **Date**: ${new Date().toISOString()}
 **Generated By**: Inso Code Governor
@@ -101,93 +100,115 @@ ${JSON.stringify(logs.slice(0, 5), null, 2)}
 \`\`\`
             `;
 
-            await fs.mkdir(this.reportsDir, { recursive: true });
-            const filename = `${standard}_audit_artifact_${Date.now()}.md`;
-            const filePath = path.join(this.reportsDir, filename);
-            await fs.writeFile(filePath, content);
+      await fs.mkdir(this.reportsDir, { recursive: true });
+      const filename = `${standard}_audit_artifact_${Date.now()}.md`;
+      const filePath = path.join(this.reportsDir, filename);
+      await fs.writeFile(filePath, content);
 
-            return { filePath, content, integrityResult };
+      return { filePath, content, integrityResult };
+    } catch (error) {
+      logger.error(`❌ Failed to generate compliance report: ${error.message}`);
+      throw error;
+    }
+  }
 
-        } catch (error) {
-            logger.error(`❌ Failed to generate compliance report: ${error.message}`);
-            throw error;
-        }
+  /**
+   * Walk the sorted audit log array and verify the hash chain.
+   * Each document is expected to have a `hash` (SHA-256 of its own content)
+   * and a `previousHash` that must match the previous record's `hash`.
+   *
+   * @param {object[]} logs - Sorted oldest-first array of audit log documents
+   * @returns {{ valid: boolean, checked: number, failedAt: number|null, expectedHash: string|null, foundHash: string|null }}
+   */
+  verifyHashChain(logs) {
+    if (!logs || logs.length === 0) {
+      return {
+        valid: true,
+        checked: 0,
+        failedAt: null,
+        expectedHash: null,
+        foundHash: null,
+      };
     }
 
-    /**
-     * Walk the sorted audit log array and verify the hash chain.
-     * Each document is expected to have a `hash` (SHA-256 of its own content)
-     * and a `previousHash` that must match the previous record's `hash`.
-     *
-     * @param {object[]} logs - Sorted oldest-first array of audit log documents
-     * @returns {{ valid: boolean, checked: number, failedAt: number|null, expectedHash: string|null, foundHash: string|null }}
-     */
-    verifyHashChain(logs) {
-        if (!logs || logs.length === 0) {
-            return { valid: true, checked: 0, failedAt: null, expectedHash: null, foundHash: null };
-        }
+    // Sort oldest-first so the chain can be walked linearly
+    const sorted = [...logs].sort(
+      (a, b) => new Date(a.timestamp) - new Date(b.timestamp),
+    );
 
-        // Sort oldest-first so the chain can be walked linearly
-        const sorted = [...logs].sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+    let previousHash = '0'; // Genesis marker
 
-        let previousHash = '0'; // Genesis marker
+    for (let i = 0; i < sorted.length; i++) {
+      const record = sorted[i];
 
-        for (let i = 0; i < sorted.length; i++) {
-            const record = sorted[i];
+      // If the record has a previousHash field, verify it matches what we computed
+      if (
+        record.previousHash !== undefined &&
+        record.previousHash !== previousHash
+      ) {
+        return {
+          valid: false,
+          checked: i,
+          failedAt: i,
+          expectedHash: previousHash,
+          foundHash: record.previousHash,
+        };
+      }
 
-            // If the record has a previousHash field, verify it matches what we computed
-            if (record.previousHash !== undefined && record.previousHash !== previousHash) {
-                return {
-                    valid: false,
-                    checked: i,
-                    failedAt: i,
-                    expectedHash: previousHash,
-                    foundHash: record.previousHash,
-                };
-            }
+      // Compute this record's expected hash for the next iteration
+      // We exclude the `hash` field itself from the digest
+      const { hash: _ignored, ...recordBody } = record;
+      const digest = crypto
+        .createHash('sha256')
+        .update(JSON.stringify(recordBody))
+        .digest('hex');
 
-            // Compute this record's expected hash for the next iteration
-            // We exclude the `hash` field itself from the digest
-            const { hash: _ignored, ...recordBody } = record;
-            const digest = crypto
-                .createHash('sha256')
-                .update(JSON.stringify(recordBody))
-                .digest('hex');
+      // If the record carries its own hash, verify it matches
+      if (record.hash !== undefined && record.hash !== digest) {
+        return {
+          valid: false,
+          checked: i,
+          failedAt: i,
+          expectedHash: digest,
+          foundHash: record.hash,
+        };
+      }
 
-            // If the record carries its own hash, verify it matches
-            if (record.hash !== undefined && record.hash !== digest) {
-                return {
-                    valid: false,
-                    checked: i,
-                    failedAt: i,
-                    expectedHash: digest,
-                    foundHash: record.hash,
-                };
-            }
-
-            previousHash = record.hash ?? digest;
-        }
-
-        return { valid: true, checked: sorted.length, failedAt: null, expectedHash: null, foundHash: null };
+      previousHash = record.hash ?? digest;
     }
 
-    async fetchRecentLogs(range) {
-        let since = new Date();
-        if (range === 'daily') since.setDate(since.getDate() - 1);
-        else since.setDate(since.getDate() - 7);
+    return {
+      valid: true,
+      checked: sorted.length,
+      failedAt: null,
+      expectedHash: null,
+      foundHash: null,
+    };
+  }
 
-        try {
-            return await AuditLog.find({
-                timestamp: { $gte: since }
-            }).sort({ timestamp: -1 }).limit(1000).lean();
-        } catch (dbError) {
-            logger.warn('⚠️ ReportService: DB query failed (using empty set)', dbError.message);
-            return [];
-        }
+  async fetchRecentLogs(range) {
+    let since = new Date();
+    if (range === 'daily') since.setDate(since.getDate() - 1);
+    else since.setDate(since.getDate() - 7);
+
+    try {
+      return await AuditLog.find({
+        timestamp: { $gte: since },
+      })
+        .sort({ timestamp: -1 })
+        .limit(1000)
+        .lean();
+    } catch (dbError) {
+      logger.warn(
+        '⚠️ ReportService: DB query failed (using empty set)',
+        dbError.message,
+      );
+      return [];
     }
+  }
 
-    async summarizeLogs(logs) {
-        const prompt = `
+  async summarizeLogs(logs) {
+    const prompt = `
             You are a Compliance Officer. Summarize the following AI Audit Logs into a high-level executive summary.
             Focus on what was created, modified, or fixed.
             
@@ -195,16 +216,16 @@ ${JSON.stringify(logs.slice(0, 5), null, 2)}
             ${JSON.stringify(logs.slice(0, 100))}
         `;
 
-        try {
-            return await GeminiAiService.generateContent(prompt);
-        } catch (e) {
-            logger.warn('AI Summary failed, using raw logs count.');
-            return `AI processed ${logs.length} actions. Detailed summary unavailable due to AI service interruption.`;
-        }
+    try {
+      return await GeminiAiService.generateContent(prompt);
+    } catch (e) {
+      logger.warn('AI Summary failed, using raw logs count.');
+      return `AI processed ${logs.length} actions. Detailed summary unavailable due to AI service interruption.`;
     }
+  }
 
-    formatReport(summary, count) {
-        return `
+  formatReport(summary, count) {
+    return `
 # 🤖 AI Transparency Report
 **Date**: ${new Date().toLocaleDateString()}
 **Total Actions**: ${count}
@@ -215,7 +236,7 @@ ${summary}
 ## Compliance Footer
 Generated by Inso Code Governor Module.
         `;
-    }
+  }
 }
 
 export const reportService = new ReportService();

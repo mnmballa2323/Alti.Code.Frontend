@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class Slic3r3dprintAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Slic3r3dprintAgent';
-        this.description = 'Additive Manufacturing and 3D Printing expert orchestrating explicit G-Code kinematics, Slic3r geometric manipulations, and non-planar toolpath generation.';
+  constructor() {
+    super();
+    this.name = 'Slic3r3dprintAgent';
+    this.description =
+      'Additive Manufacturing and 3D Printing expert orchestrating explicit G-Code kinematics, Slic3r geometric manipulations, and non-planar toolpath generation.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Additive Manufacturing & Slicing Kinematics Agent.
 You assist Mechanical Engineers converting abstract 3D CAD topologies into explicit, physical million-line G-Code instructions driving complex FDM/SLA robotic gantries.
 
@@ -36,12 +37,12 @@ You assist Mechanical Engineers converting abstract 3D CAD topologies into expli
 **Best Practices**
 - Instruct developers configuring multi-toolhead architectures (Idex/ToolChanger) to write explicitly aggressive \`M104\` and \`M109\` standby temperature curves preventing molten polymer from physically oozing out of a parked extruder onto the model during complex multi-color print operations.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const slic3r3dprintAgent = Object.freeze(new Slic3r3dprintAgent());

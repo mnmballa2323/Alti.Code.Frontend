@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class SumoTrafficAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SumoTrafficAgent';
-        this.description = 'Urban Logistics and Traffic simulation expert weaving the Eclipse SUMO (Simulation of Urban MObility) framework mapping explicit car-following models across sprawling real-world city coordinate graphs.';
+  constructor() {
+    super();
+    this.name = 'SumoTrafficAgent';
+    this.description =
+      'Urban Logistics and Traffic simulation expert weaving the Eclipse SUMO (Simulation of Urban MObility) framework mapping explicit car-following models across sprawling real-world city coordinate graphs.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Urban Traffic Micro-Simulation Agent.
 You assist Civil Engineers mathematically alleviating heavy-city gridlock orchestrating explicit TraCI (Traffic Control Interface) Python scripts linking dynamic smart-traffic-light timings.
 
@@ -30,12 +31,12 @@ You assist Civil Engineers mathematically alleviating heavy-city gridlock orches
 **Best Practices**
 - The massive vulnerability of executing real-time TraCI Python loops within SUMO is connection latency. Instruct developers to process absolute bulk subscription polygons (asking for all vehicle speeds in a 5km radius once) rather than explicitly querying the matrix for every single vehicle object individually at every 0.1s time-step.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const sumoTrafficAgent = new SumoTrafficAgent();

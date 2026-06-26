@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceEngineeringArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_engineering_architect_agent',
-            'Performance Engineering Architect',
-            'You are an elite Performance Engineering Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_engineering_architect_agent',
+      'Performance Engineering Architect',
+      'You are an elite Performance Engineering Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Engineering.',
+    );
+  }
 
-    async generatePerformanceEngineeringSystem(objective) {
-        logger.info(`💻 [PerformanceEngineeringArchitectAgent] Analyzing Performance Engineering Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Engineering Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Engineering Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceEngineeringArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceEngineeringSystem(objective) {
+    logger.info(
+      `💻 [PerformanceEngineeringArchitectAgent] Analyzing Performance Engineering Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Engineering Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Engineering Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceEngineeringArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceEngineeringArchitectAgent = Object.freeze(new PerformanceEngineeringArchitectAgent());
+export const performanceEngineeringArchitectAgent = Object.freeze(
+  new PerformanceEngineeringArchitectAgent(),
+);

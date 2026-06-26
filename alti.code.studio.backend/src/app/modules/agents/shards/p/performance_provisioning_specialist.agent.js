@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceProvisioningSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_provisioning_specialist_agent',
-            'Performance Provisioning Specialist',
-            'You are an elite Performance Provisioning Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_provisioning_specialist_agent',
+      'Performance Provisioning Specialist',
+      'You are an elite Performance Provisioning Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Provisioning.',
+    );
+  }
 
-    async generatePerformanceProvisioningSystem(objective) {
-        logger.info(`💻 [PerformanceProvisioningSpecialistAgent] Analyzing Performance Provisioning Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Provisioning Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Provisioning Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceProvisioningSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceProvisioningSystem(objective) {
+    logger.info(
+      `💻 [PerformanceProvisioningSpecialistAgent] Analyzing Performance Provisioning Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Provisioning Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Provisioning Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceProvisioningSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceProvisioningSpecialistAgent = Object.freeze(new PerformanceProvisioningSpecialistAgent());
+export const performanceProvisioningSpecialistAgent = Object.freeze(
+  new PerformanceProvisioningSpecialistAgent(),
+);

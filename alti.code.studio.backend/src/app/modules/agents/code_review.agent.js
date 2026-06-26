@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -9,26 +9,28 @@ import { logger } from '../../../shared/logger.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
 
 export class CodeReviewAgent {
-    constructor() {
-        this.name = 'codereview';
-        this.description = 'Autonomous Quality Control and Senior PR Reviewer';
-        this.capabilities = [
-            'Audit source code for clean-code principles and style violations',
-            'Identify subtle logic errors before they reach production',
-            'Output formal structured JSON PR review critiques'
-        ];
-    }
+  constructor() {
+    this.name = 'codereview';
+    this.description = 'Autonomous Quality Control and Senior PR Reviewer';
+    this.capabilities = [
+      'Audit source code for clean-code principles and style violations',
+      'Identify subtle logic errors before they reach production',
+      'Output formal structured JSON PR review critiques',
+    ];
+  }
 
-    /**
-     * Executes a strict Senior Engineer level code review on a given payload.
-     * @param {string} sourceCode The raw code string to review
-     * @param {string} language Context language (e.g. 'javascript', 'python')
-     */
-    async reviewCode(sourceCode, language = 'javascript') {
-        logger.info(`🔍 CodeReview Agent: Initiating strict Senior level code review on [${language}] logic...`);
+  /**
+   * Executes a strict Senior Engineer level code review on a given payload.
+   * @param {string} sourceCode The raw code string to review
+   * @param {string} language Context language (e.g. 'javascript', 'python')
+   */
+  async reviewCode(sourceCode, language = 'javascript') {
+    logger.info(
+      `🔍 CodeReview Agent: Initiating strict Senior level code review on [${language}] logic...`,
+    );
 
-        try {
-            const prompt = `
+    try {
+      const prompt = `
             You are a strict, principle-driven Senior Principal Software Engineer.
             Review the following ${language} code as if it were a Pull Request from a Junior Developer.
             Look for:
@@ -55,38 +57,48 @@ export class CodeReviewAgent {
             Do not enclose the JSON inside markdown ticks. Return raw JSON.
             `;
 
-            const rawResponse = await GeminiAiService.generateContent(prompt);
-            const reportJson = rawResponse.replace(/^```json/, '').replace(/^```/, '').replace(/```$/, '').trim();
-            const reviewReport = JSON.parse(reportJson);
+      const rawResponse = await GeminiAiService.generateContent(prompt);
+      const reportJson = rawResponse
+        .replace(/^```json/, '')
+        .replace(/^```/, '')
+        .replace(/```$/, '')
+        .trim();
+      const reviewReport = JSON.parse(reportJson);
 
-            if (!reviewReport.approved) {
-                logger.warn(`🛑 CodeReview Agent: PR REJECTED. Quality Score: ${reviewReport.qualityScore}/100.`);
-                logger.info(`   Summary: ${reviewReport.summary}`);
-                logger.info(`   Issues Found: ${reviewReport.critiques.length}`);
-            } else {
-                logger.info(`✅ CodeReview Agent: PR APPROVED. Quality Score: ${reviewReport.qualityScore}/100.`);
-            }
+      if (!reviewReport.approved) {
+        logger.warn(
+          `🛑 CodeReview Agent: PR REJECTED. Quality Score: ${reviewReport.qualityScore}/100.`,
+        );
+        logger.info(`   Summary: ${reviewReport.summary}`);
+        logger.info(`   Issues Found: ${reviewReport.critiques.length}`);
+      } else {
+        logger.info(
+          `✅ CodeReview Agent: PR APPROVED. Quality Score: ${reviewReport.qualityScore}/100.`,
+        );
+      }
 
-            return reviewReport;
-
-        } catch (err) {
-            logger.error(`❌ CodeReview Agent Audit Failed: ${err.message}`);
-            throw err;
-        }
+      return reviewReport;
+    } catch (err) {
+      logger.error(`❌ CodeReview Agent Audit Failed: ${err.message}`);
+      throw err;
     }
+  }
 
-    async process(state) {
-        const code = state.data?.content || state.goal || "";
-        const language = state.data?.context || "javascript";
+  async process(state) {
+    const code = state.data?.content || state.goal || '';
+    const language = state.data?.context || 'javascript';
 
-        const reviewReport = await this.reviewCode(code, language);
+    const reviewReport = await this.reviewCode(code, language);
 
-        return {
-            ...state,
-            status: reviewReport.approved ? 'success' : 'blocked',
-            results: [...(state.results || []), `CodeReview Score: ${reviewReport.qualityScore}/100 - ${reviewReport.summary}`]
-        };
-    }
+    return {
+      ...state,
+      status: reviewReport.approved ? 'success' : 'blocked',
+      results: [
+        ...(state.results || []),
+        `CodeReview Score: ${reviewReport.qualityScore}/100 - ${reviewReport.summary}`,
+      ],
+    };
+  }
 }
 
 export const codeReviewAgent = new CodeReviewAgent();

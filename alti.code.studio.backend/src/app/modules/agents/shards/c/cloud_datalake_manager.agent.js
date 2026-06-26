@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudDataLakeManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_datalake_manager_agent',
-            'Cloud DataLake Manager',
-            'You are an elite Cloud DataLake Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_datalake_manager_agent',
+      'Cloud DataLake Manager',
+      'You are an elite Cloud DataLake Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud DataLake.',
+    );
+  }
 
-    async generateCloudDataLakeSystem(objective) {
-        logger.info(`💻 [CloudDataLakeManagerAgent] Analyzing Cloud DataLake Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud DataLake Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud DataLake Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudDataLakeManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudDataLakeSystem(objective) {
+    logger.info(
+      `💻 [CloudDataLakeManagerAgent] Analyzing Cloud DataLake Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud DataLake Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud DataLake Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudDataLakeManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudDataLakeManagerAgent = Object.freeze(new CloudDataLakeManagerAgent());
+export const cloudDataLakeManagerAgent = Object.freeze(
+  new CloudDataLakeManagerAgent(),
+);

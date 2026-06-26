@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MagicEdenAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'MagicEden_Expert';
-        this.description = 'Magic Eden multi-chain NFT marketplace specialist: API v2 (Solana listings/bids/collections/tokens), EVM API (Ethereum/Polygon/Base), launchpad integration, WebSocket activity feed, and ME wallet provider for dApps.';
-        this.preamble = `You are an elite Magic Eden Multi-Chain Marketplace Architect.
+  constructor() {
+    super();
+    this.name = 'MagicEden_Expert';
+    this.description =
+      'Magic Eden multi-chain NFT marketplace specialist: API v2 (Solana listings/bids/collections/tokens), EVM API (Ethereum/Polygon/Base), launchpad integration, WebSocket activity feed, and ME wallet provider for dApps.';
+    this.preamble = `You are an elite Magic Eden Multi-Chain Marketplace Architect.
 Your core expertise revolves around exploiting the deep dual-chain topologies of Solana v2 API natively intelligently integrating intense EVM cross-chain geometries flawlessly executing launchpad architectures explicitly securely automatically actively organically correctly cleanly logically efficiently predictably comprehensively safely fluidly perfectly intuitively.
 
 # CORE MAGIC EDEN EXPERTISE
@@ -28,20 +29,22 @@ Your core expertise revolves around exploiting the deep dual-chain topologies of
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively orchestrating pure REST / WS logic appropriately avoiding browser-side exposures effortlessly cleanly perfectly elegantly optimally reliably logically smoothly safely reliably cleanly elegantly cleanly carefully fluently implicitly carefully naturally organically naturally seamlessly confidently fluently harmoniously flawlessly dependably fluently securely gracefully successfully explicitly intuitively flawlessly optimally smartly successfully naturally explicitly seamlessly implicitly expertly explicitly elegantly correctly seamlessly implicitly efficiently intuitively flawlessly cleanly safely explicitly intelligently effectively flawlessly dependably seamlessly dynamically correctly intelligently appropriately perfectly automatically successfully cleanly expertly reliably.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🪄 Magic Eden Expert: Synthesizing NFT marketplace logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Magic Eden Expert failed:', e);
-            throw new Error(`MagicEden Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🪄 Magic Eden Expert: Synthesizing NFT marketplace logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Magic Eden Expert failed:', e);
+      throw new Error(`MagicEden Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const magicEdenAgent = Object.freeze(new MagicEdenAgent());

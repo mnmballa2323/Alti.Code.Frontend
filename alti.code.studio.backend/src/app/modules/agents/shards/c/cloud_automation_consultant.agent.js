@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudAutomationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_automation_consultant_agent',
-            'Cloud Automation Consultant',
-            'You are an elite Cloud Automation Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_automation_consultant_agent',
+      'Cloud Automation Consultant',
+      'You are an elite Cloud Automation Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud Automation.',
+    );
+  }
 
-    async generateCloudAutomationSystem(objective) {
-        logger.info(`💻 [CloudAutomationConsultantAgent] Analyzing Cloud Automation Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Automation Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud Automation Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudAutomationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudAutomationSystem(objective) {
+    logger.info(
+      `💻 [CloudAutomationConsultantAgent] Analyzing Cloud Automation Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud Automation Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud Automation Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [CloudAutomationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const cloudAutomationConsultantAgent = Object.freeze(new CloudAutomationConsultantAgent());
+export const cloudAutomationConsultantAgent = Object.freeze(
+  new CloudAutomationConsultantAgent(),
+);

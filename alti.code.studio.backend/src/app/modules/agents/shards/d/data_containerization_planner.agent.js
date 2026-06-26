@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataContainerizationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_containerization_planner_agent',
-            'Data Containerization Planner',
-            'You are an elite Data Containerization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Data Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'data_containerization_planner_agent',
+      'Data Containerization Planner',
+      'You are an elite Data Containerization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Data Containerization.',
+    );
+  }
 
-    async generateDataContainerizationSystem(objective) {
-        logger.info(`💻 [DataContainerizationPlannerAgent] Analyzing Data Containerization Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Containerization Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Containerization Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataContainerizationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataContainerizationSystem(objective) {
+    logger.info(
+      `💻 [DataContainerizationPlannerAgent] Analyzing Data Containerization Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Containerization Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Containerization Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DataContainerizationPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const dataContainerizationPlannerAgent = Object.freeze(new DataContainerizationPlannerAgent());
+export const dataContainerizationPlannerAgent = Object.freeze(
+  new DataContainerizationPlannerAgent(),
+);

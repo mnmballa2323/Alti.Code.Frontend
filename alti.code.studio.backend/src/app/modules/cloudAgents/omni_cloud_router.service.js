@@ -1,12 +1,12 @@
 /**
  * 🌌 SOVEREIGN OMNI-CLOUD ROUTER
- * 
+ *
  * The Ultimate "Citadel" Intelligence Matrix.
- * 
- * This engine intercepts any deployment, compute, or scaling request and 
- * autonomously routes it to the absolute best cloud provider out of the 44 
+ *
+ * This engine intercepts any deployment, compute, or scaling request and
+ * autonomously routes it to the absolute best cloud provider out of the 44
  * ingested hyperscalers, edge networks, and PaaS architectures.
- * 
+ *
  * Backed by the 5,609 Pure MIT/Apache 2.0 Repositories, it inherently understands
  * the precise Terraform/API configurations required for each provider.
  */
@@ -23,18 +23,22 @@ const indexPath = path.join(process.cwd(), 'cloud_sovereign_repos', 'index.js');
 const repoDir = path.dirname(indexPath);
 
 async function loadSovereignRepos() {
-    try {
-        if (fs.existsSync(indexPath)) {
-            // Dynamically import the hardwired config with cache-busting for hot-reloads
-            const cacheBuster = `?update=${Date.now()}`;
-            const module = await import('file://' + indexPath + cacheBuster);
-            SOVEREIGN_REPOS = module.SOVEREIGN_REPOS;
-            TOTAL_COMPLIANT = module.TOTAL_COMPLIANT;
-            logger.info(`[Omni-Router] ⚡ Hot-Reload Complete: Intelligence instantly updated to ${TOTAL_COMPLIANT} Sovereign Repositories.`);
-        }
-    } catch (e) {
-        logger.warn('[Omni-Router] Sovereign Index not found or failed to load. Awaiting Orchestrator.');
+  try {
+    if (fs.existsSync(indexPath)) {
+      // Dynamically import the hardwired config with cache-busting for hot-reloads
+      const cacheBuster = `?update=${Date.now()}`;
+      const module = await import('file://' + indexPath + cacheBuster);
+      SOVEREIGN_REPOS = module.SOVEREIGN_REPOS;
+      TOTAL_COMPLIANT = module.TOTAL_COMPLIANT;
+      logger.info(
+        `[Omni-Router] ⚡ Hot-Reload Complete: Intelligence instantly updated to ${TOTAL_COMPLIANT} Sovereign Repositories.`,
+      );
     }
+  } catch (e) {
+    logger.warn(
+      '[Omni-Router] Sovereign Index not found or failed to load. Awaiting Orchestrator.',
+    );
+  }
 }
 
 // Initial load
@@ -42,16 +46,18 @@ loadSovereignRepos();
 
 // Hot-reload watcher - instantly picks up new repositories without reboot
 if (fs.existsSync(repoDir)) {
-    let reloadTimeout;
-    fs.watch(repoDir, (eventType, filename) => {
-        if (filename === 'index.js') {
-            clearTimeout(reloadTimeout);
-            reloadTimeout = setTimeout(() => {
-                logger.info(`[Omni-Router] Detected change in Sovereign Index. Initiating instant hot-reload...`);
-                loadSovereignRepos();
-            }, 1000); // Debounce to ensure file write completes
-        }
-    });
+  let reloadTimeout;
+  fs.watch(repoDir, (eventType, filename) => {
+    if (filename === 'index.js') {
+      clearTimeout(reloadTimeout);
+      reloadTimeout = setTimeout(() => {
+        logger.info(
+          `[Omni-Router] Detected change in Sovereign Index. Initiating instant hot-reload...`,
+        );
+        loadSovereignRepos();
+      }, 1000); // Debounce to ensure file write completes
+    }
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════════
@@ -59,173 +65,218 @@ if (fs.existsSync(repoDir)) {
 // ═══════════════════════════════════════════════════════════════════
 
 const CLOUD_SECTORS = {
-    GPU_COMPUTE: ['coreweave', 'runpod', 'lambdal', 'paperspace', 'togethercomputer'],
-    EDGE_NETWORK: ['cloudflare', 'fastly', 'vercel', 'fly.io', 'render-oss'],
-    ENTERPRISE_DATA: ['snowflakedb', 'databricks', 'cloudera', 'oracle', 'SAP'],
-    HYPERSCALER: ['azure'],
-    BARE_METAL: ['cherryservers', 'packethost', 'macstadium', 'rackspace'],
-    VPS_CHEAP: ['hetznercloud', 'digitalocean', 'linode', 'vultr']
+  GPU_COMPUTE: [
+    'coreweave',
+    'runpod',
+    'lambdal',
+    'paperspace',
+    'togethercomputer',
+  ],
+  EDGE_NETWORK: ['cloudflare', 'fastly', 'vercel', 'fly.io', 'render-oss'],
+  ENTERPRISE_DATA: ['snowflakedb', 'databricks', 'cloudera', 'oracle', 'SAP'],
+  HYPERSCALER: ['gcp'],
+  BARE_METAL: ['cherryservers', 'packethost', 'macstadium', 'rackspace'],
+  VPS_CHEAP: ['hetznercloud', 'digitalocean', 'linode', 'vultr'],
 };
 
 class OmniCloudRouterService {
-    constructor() {
-        this.activeConnections = new Map();
-        this.preWarmConnections();
-        this.startConnectionHealthChecks();
-    }
+  constructor() {
+    this.activeConnections = new Map();
+    this.preWarmConnections();
+    this.startConnectionHealthChecks();
+  }
 
-    /**
-     * Pre-warms the top cloud connections asynchronously so that 
-     * the very first deployment request is completely instant.
-     */
-    async preWarmConnections() {
-        const priorityProviders = ['azure', 'cloudflare', 'coreweave'];
-        logger.info(`[Omni-Router] ⚡ Pre-warming critical connections for: ${priorityProviders.join(', ')}...`);
-        for (const provider of priorityProviders) {
-            try {
-                const adapter = new UniversalCloudAdapter(provider);
-                // Background warm-up
-                adapter.authenticate().then(() => {
-                    this.activeConnections.set(provider, adapter);
-                    logger.info(`[Omni-Router] ⚡ ${provider.toUpperCase()} connection pre-warmed and instantly available.`);
-                }).catch(err => {
-                    // Fail gracefully in background
-                });
-            } catch (error) {
-                // Ignore pre-warm failures
-            }
-        }
-    }
-
-    /**
-     * Determines the optimal cloud provider based on the workload requirements.
-     * Now supports High Availability Primary/Fallback routing.
-     */
-    evaluateOptimalCloud(workloadProfile) {
-        const { type, latencyRequirement, compliance, computeIntensity, budget } = workloadProfile;
-        
-        logger.info(`[Omni-Router] Evaluating optimal deployment matrix for workload: ${type}`);
-
-        let primary = 'azure'; // Default fallback
-        let fallback = 'azure';
-
-        if (computeIntensity === 'HPC_GPU') {
-            primary = 'coreweave'; // Highest Tier NVIDIA H100s
-            fallback = 'runpod';
-        } else if (latencyRequirement === 'ULTRA_LOW' && type === 'STATIC_EDGE') {
-            primary = 'cloudflare'; // Global Anycast Edge
-            fallback = 'fastly';
-        } else if (type === 'AI_INFERENCE_API') {
-            primary = 'vercel'; // Edge functions + caching
-            fallback = 'fly.io';
-        } else if (compliance === 'SOVEREIGN_EU' || budget === 'LOW') {
-            primary = 'hetznercloud'; // German Privacy + Low Cost
-            fallback = 'scaleway';
-        } else if (type === 'MASSIVE_DATA_WAREHOUSE') {
-            primary = 'snowflakedb'; 
-            fallback = 'databricks';
-        } else if (compliance === 'ENTERPRISE_HARDENED') {
-            primary = 'azure';
-            fallback = 'azure';
-        }
-
-        logger.info(`[Omni-Router] 🎯 Routing Decision: PRIMARY=[${primary.toUpperCase()}] | FALLBACK=[${fallback.toUpperCase()}]`);
-        return { primary, fallback };
-    }
-
-    /**
-     * Retrieves an active adapter or establishes a new connection instantly.
-     */
-    async getAdapter(provider) {
-        let adapter = this.activeConnections.get(provider);
-        if (!adapter) {
-            adapter = new UniversalCloudAdapter(provider);
-            await adapter.authenticate();
+  /**
+   * Pre-warms the top cloud connections asynchronously so that
+   * the very first deployment request is completely instant.
+   */
+  async preWarmConnections() {
+    const priorityProviders = ['gcp', 'cloudflare', 'coreweave'];
+    logger.info(
+      `[Omni-Router] ⚡ Pre-warming critical connections for: ${priorityProviders.join(', ')}...`,
+    );
+    for (const provider of priorityProviders) {
+      try {
+        const adapter = new UniversalCloudAdapter(provider);
+        // Background warm-up
+        adapter
+          .authenticate()
+          .then(() => {
             this.activeConnections.set(provider, adapter);
+            logger.info(
+              `[Omni-Router] ⚡ ${provider.toUpperCase()} connection pre-warmed and instantly available.`,
+            );
+          })
+          .catch(err => {
+            // Fail gracefully in background
+          });
+      } catch (error) {
+        // Ignore pre-warm failures
+      }
+    }
+  }
+
+  /**
+   * Determines the optimal cloud provider based on the workload requirements.
+   * Now supports High Availability Primary/Fallback routing.
+   */
+  evaluateOptimalCloud(workloadProfile) {
+    const { type, latencyRequirement, compliance, computeIntensity, budget } =
+      workloadProfile;
+
+    logger.info(
+      `[Omni-Router] Evaluating optimal deployment matrix for workload: ${type}`,
+    );
+
+    let primary = 'gcp'; // Default fallback
+    let fallback = 'gcp';
+
+    if (computeIntensity === 'HPC_GPU') {
+      primary = 'coreweave'; // Highest Tier NVIDIA H100s
+      fallback = 'runpod';
+    } else if (latencyRequirement === 'ULTRA_LOW' && type === 'STATIC_EDGE') {
+      primary = 'cloudflare'; // Global Anycast Edge
+      fallback = 'fastly';
+    } else if (type === 'AI_INFERENCE_API') {
+      primary = 'vercel'; // Edge functions + caching
+      fallback = 'fly.io';
+    } else if (compliance === 'SOVEREIGN_EU' || budget === 'LOW') {
+      primary = 'hetznercloud'; // German Privacy + Low Cost
+      fallback = 'scaleway';
+    } else if (type === 'MASSIVE_DATA_WAREHOUSE') {
+      primary = 'snowflakedb';
+      fallback = 'databricks';
+    } else if (compliance === 'ENTERPRISE_HARDENED') {
+      primary = 'gcp';
+      fallback = 'gcp';
+    }
+
+    logger.info(
+      `[Omni-Router] 🎯 Routing Decision: PRIMARY=[${primary.toUpperCase()}] | FALLBACK=[${fallback.toUpperCase()}]`,
+    );
+    return { primary, fallback };
+  }
+
+  /**
+   * Retrieves an active adapter or establishes a new connection instantly.
+   */
+  async getAdapter(provider) {
+    let adapter = this.activeConnections.get(provider);
+    if (!adapter) {
+      adapter = new UniversalCloudAdapter(provider);
+      await adapter.authenticate();
+      this.activeConnections.set(provider, adapter);
+    }
+    return adapter;
+  }
+
+  /**
+   * Executes the infrastructure deployment logic for a specific target.
+   */
+  async executeDeployment(targetOrg, workloadProfile, startTime) {
+    // Intelligence Pull
+    const orgRepos = SOVEREIGN_REPOS[targetOrg] || [];
+    logger.info(
+      `[Omni-Router] Tapping into ${orgRepos.length} AST architectures for ${targetOrg}...`,
+    );
+
+    // Connect Adapter
+    const adapter = await this.getAdapter(targetOrg);
+
+    // Autonomous Execution
+    logger.info(
+      `[Omni-Router] Synthesizing zero-downtime infrastructure for ${workloadProfile.name}`,
+    );
+    logger.info(
+      `[Omni-Router] Deploying via ${targetOrg} APIs using Pure MIT/Apache 2.0 Hard Law templates.`,
+    );
+
+    const executionTime = Date.now() - startTime;
+
+    return {
+      success: true,
+      provider: targetOrg,
+      intelligence_vectors_used: orgRepos.length,
+      execution_time_ms: executionTime,
+      status: 'DEPLOYED_TO_CITADEL',
+      message: `Workload [${workloadProfile.name}] physically routed to ${targetOrg.toUpperCase()} fortress in ${executionTime}ms.`,
+    };
+  }
+
+  /**
+   * The Master Method. Takes a high-level intent, selects the cloud,
+   * pulls the AST intelligence, and executes with High Availability Failover.
+   */
+  async deployWorkload(workloadProfile) {
+    const startTime = Date.now();
+    logger.info(`\n🚀 [Omni-Router] Initiating Citadel Deployment Sequence...`);
+
+    // 1. Smart Routing (Primary + Fallback)
+    const targets = this.evaluateOptimalCloud(workloadProfile);
+
+    try {
+      // Attempt Deployment to Primary
+      return await this.executeDeployment(
+        targets.primary,
+        workloadProfile,
+        startTime,
+      );
+    } catch (error) {
+      logger.warn(
+        `[Omni-Router] ⚠️ PRIMARY PROVIDER (${targets.primary.toUpperCase()}) FAILED: ${error.message}`,
+      );
+      logger.info(
+        `[Omni-Router] 🔄 Initiating automatic failover to Secondary Provider (${targets.fallback.toUpperCase()})...`,
+      );
+
+      try {
+        // Attempt Deployment to Fallback
+        return await this.executeDeployment(
+          targets.fallback,
+          workloadProfile,
+          startTime,
+        );
+      } catch (fallbackError) {
+        logger.error(
+          `[Omni-Router] ❌ CATASTROPHIC FAILURE: Both Primary and Fallback providers failed.`,
+        );
+        throw new Error('Omni-Cloud Multi-Region Failover Exhausted');
+      }
+    }
+  }
+
+  /**
+   * Self-healing background process to ensure stale connections are evicted.
+   */
+  startConnectionHealthChecks() {
+    // Run health checks periodically
+    setInterval(
+      () => {
+        logger.info(
+          `[Omni-Router] 🩺 Running connection health checks across ${this.activeConnections.size} active providers...`,
+        );
+        for (const [provider, adapter] of this.activeConnections.entries()) {
+          if (typeof adapter.checkHealth === 'function') {
+            adapter.checkHealth().catch(() => {
+              logger.warn(
+                `[Omni-Router] ⚠️ Connection to ${provider.toUpperCase()} degraded. Evicting from pool.`,
+              );
+              this.activeConnections.delete(provider);
+            });
+          }
         }
-        return adapter;
-    }
+      },
+      5 * 60 * 1000,
+    ); // Every 5 minutes
+  }
 
-    /**
-     * Executes the infrastructure deployment logic for a specific target.
-     */
-    async executeDeployment(targetOrg, workloadProfile, startTime) {
-        // Intelligence Pull
-        const orgRepos = SOVEREIGN_REPOS[targetOrg] || [];
-        logger.info(`[Omni-Router] Tapping into ${orgRepos.length} AST architectures for ${targetOrg}...`);
-
-        // Connect Adapter
-        const adapter = await this.getAdapter(targetOrg);
-
-        // Autonomous Execution
-        logger.info(`[Omni-Router] Synthesizing zero-downtime infrastructure for ${workloadProfile.name}`);
-        logger.info(`[Omni-Router] Deploying via ${targetOrg} APIs using Pure MIT/Apache 2.0 Hard Law templates.`);
-
-        const executionTime = Date.now() - startTime;
-
-        return {
-            success: true,
-            provider: targetOrg,
-            intelligence_vectors_used: orgRepos.length,
-            execution_time_ms: executionTime,
-            status: 'DEPLOYED_TO_CITADEL',
-            message: `Workload [${workloadProfile.name}] physically routed to ${targetOrg.toUpperCase()} fortress in ${executionTime}ms.`
-        };
-    }
-
-    /**
-     * The Master Method. Takes a high-level intent, selects the cloud, 
-     * pulls the AST intelligence, and executes with High Availability Failover.
-     */
-    async deployWorkload(workloadProfile) {
-        const startTime = Date.now();
-        logger.info(`\n🚀 [Omni-Router] Initiating Citadel Deployment Sequence...`);
-        
-        // 1. Smart Routing (Primary + Fallback)
-        const targets = this.evaluateOptimalCloud(workloadProfile);
-
-        try {
-            // Attempt Deployment to Primary
-            return await this.executeDeployment(targets.primary, workloadProfile, startTime);
-        } catch (error) {
-            logger.warn(`[Omni-Router] ⚠️ PRIMARY PROVIDER (${targets.primary.toUpperCase()}) FAILED: ${error.message}`);
-            logger.info(`[Omni-Router] 🔄 Initiating automatic failover to Secondary Provider (${targets.fallback.toUpperCase()})...`);
-            
-            try {
-                // Attempt Deployment to Fallback
-                return await this.executeDeployment(targets.fallback, workloadProfile, startTime);
-            } catch (fallbackError) {
-                logger.error(`[Omni-Router] ❌ CATASTROPHIC FAILURE: Both Primary and Fallback providers failed.`);
-                throw new Error('Omni-Cloud Multi-Region Failover Exhausted');
-            }
-        }
-    }
-    
-    /**
-     * Self-healing background process to ensure stale connections are evicted.
-     */
-    startConnectionHealthChecks() {
-        // Run health checks periodically
-        setInterval(() => {
-            logger.info(`[Omni-Router] 🩺 Running connection health checks across ${this.activeConnections.size} active providers...`);
-            for (const [provider, adapter] of this.activeConnections.entries()) {
-                if (typeof adapter.checkHealth === 'function') {
-                    adapter.checkHealth().catch(() => {
-                        logger.warn(`[Omni-Router] ⚠️ Connection to ${provider.toUpperCase()} degraded. Evicting from pool.`);
-                        this.activeConnections.delete(provider);
-                    });
-                }
-            }
-        }, 5 * 60 * 1000); // Every 5 minutes
-    }
-    
-    getGlobalTopology() {
-        return {
-            total_compliant_architectures: TOTAL_COMPLIANT,
-            active_cloud_connections: Array.from(this.activeConnections.keys()),
-            fortress_status: 'SECURE'
-        };
-    }
+  getGlobalTopology() {
+    return {
+      total_compliant_architectures: TOTAL_COMPLIANT,
+      active_cloud_connections: Array.from(this.activeConnections.keys()),
+      fortress_status: 'SECURE',
+    };
+  }
 }
 
 export const omniCloudRouter = new OmniCloudRouterService();

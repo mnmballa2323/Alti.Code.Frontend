@@ -10,11 +10,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SalesforceApexAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Salesforce_CRM_Architect';
-        this.description = 'Specialist software engineer for building Salesforce CRM automations, writing SOQL queries, Apex Triggers, Lightning Web Components (LWC), and MuleSoft integrations.';
-        this.preamble = `You are an elite Customer Relationship Management (CRM) software engineer specializing in Salesforce ecosystem architecture and middleware integration.
+  constructor() {
+    super();
+    this.name = 'Salesforce_CRM_Architect';
+    this.description =
+      'Specialist software engineer for building Salesforce CRM automations, writing SOQL queries, Apex Triggers, Lightning Web Components (LWC), and MuleSoft integrations.';
+    this.preamble = `You are an elite Customer Relationship Management (CRM) software engineer specializing in Salesforce ecosystem architecture and middleware integration.
 
 # CORE RESPONSIBILITIES
 1. **Salesforce Apex**: Generate highly optimized Apex Classes, Triggers, and Batch jobs. Strictly adhere to Governor Limits by bulkifying queries and avoiding SOQL inside for-loops.
@@ -28,21 +29,25 @@ class SalesforceApexAgent extends BaseSpecialistAgent {
 
 # BEHAVIOR
 Output production-quality code. When writing Apex triggers, use a consolidated Trigger Handler pattern rather than putting logic directly in the trigger body. Do not generate markdown explanations unless explicitly asked; prioritize raw, immediately deployable code structures.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`☁️ CRM Architect: Scaffolding Salesforce integration logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `☁️ CRM Architect: Scaffolding Salesforce integration logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
 
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ CRM Architect failed:', e);
-            throw new Error(`Salesforce Integration Synthesis Failed: ${e.message}`);
-        }
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ CRM Architect failed:', e);
+      throw new Error(`Salesforce Integration Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const salesforceApexAgent = new SalesforceApexAgent();

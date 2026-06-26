@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteIntegrationTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_integration_tester_agent',
-            'Site Integration Tester',
-            'You are an elite Site Integration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Site Integration.'
-        );
-    }
+  constructor() {
+    super(
+      'site_integration_tester_agent',
+      'Site Integration Tester',
+      'You are an elite Site Integration Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Site Integration.',
+    );
+  }
 
-    async generateSiteIntegrationSystem(objective) {
-        logger.info(`💻 [SiteIntegrationTesterAgent] Analyzing Site Integration Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Integration Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Integration Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteIntegrationTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteIntegrationSystem(objective) {
+    logger.info(
+      `💻 [SiteIntegrationTesterAgent] Analyzing Site Integration Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Integration Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Integration Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteIntegrationTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteIntegrationTesterAgent = Object.freeze(new SiteIntegrationTesterAgent());
+export const siteIntegrationTesterAgent = Object.freeze(
+  new SiteIntegrationTesterAgent(),
+);

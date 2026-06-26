@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseVirtualizationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_virtualization_planner_agent',
-            'Release Virtualization Planner',
-            'You are an elite Release Virtualization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Release Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'release_virtualization_planner_agent',
+      'Release Virtualization Planner',
+      'You are an elite Release Virtualization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Release Virtualization.',
+    );
+  }
 
-    async generateReleaseVirtualizationSystem(objective) {
-        logger.info(`💻 [ReleaseVirtualizationPlannerAgent] Analyzing Release Virtualization Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Virtualization Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Virtualization Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseVirtualizationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseVirtualizationPlannerAgent] Analyzing Release Virtualization Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Virtualization Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Virtualization Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseVirtualizationPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseVirtualizationPlannerAgent = Object.freeze(new ReleaseVirtualizationPlannerAgent());
+export const releaseVirtualizationPlannerAgent = Object.freeze(
+  new ReleaseVirtualizationPlannerAgent(),
+);

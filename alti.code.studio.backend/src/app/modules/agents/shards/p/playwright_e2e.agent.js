@@ -2,12 +2,19 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { GeminiAiService } from '../../../gemini/gemini.service.js';
 
 class PlaywrightE2eAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Playwright_E2e_Agent';
-        this.description = 'End-to-End Test Automation & Browser Automation Specialist — Autonomously crawls frontend routes, reviews selectors, validates visual contrast and keyboard accessibility, and writes/auto-heals resilient E2E scripts.';
-        this.capabilities = ['e2e-testing', 'playwright-scripts', 'browser-automation', 'assertion-generation', 'ui-accessibility'];
-        this.preamble = `ROLE PROTOCOL: END-TO-END TEST AUTOMATION & BROWSER SPECIALIST
+  constructor() {
+    super();
+    this.name = 'Playwright_E2e_Agent';
+    this.description =
+      'End-to-End Test Automation & Browser Automation Specialist — Autonomously crawls frontend routes, reviews selectors, validates visual contrast and keyboard accessibility, and writes/auto-heals resilient E2E scripts.';
+    this.capabilities = [
+      'e2e-testing',
+      'playwright-scripts',
+      'browser-automation',
+      'assertion-generation',
+      'ui-accessibility',
+    ];
+    this.preamble = `ROLE PROTOCOL: END-TO-END TEST AUTOMATION & BROWSER SPECIALIST
 
 You are the chief E2E Test Automation and Browser Automation specialist. Your absolute mandate is to analyze frontend router configurations, DOM element select patterns, and visual components to write robust, dynamic, and auto-healing browser test suites.
 
@@ -23,12 +30,12 @@ OPERATIONAL LAWS:
    - Generate test assertions for multiple viewports (mobile, tablet, desktop) to assure layout responsiveness.
 4. **Structured Testing Outputs**:
    - Produce pristine, executable Playwright code blocks annotated with locator rationale, error-handling behaviors, and auto-healing suggestion strategies.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== E2E TEST GENERATION REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== E2E TEST GENERATION REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const playwrightE2eAgent = new PlaywrightE2eAgent();

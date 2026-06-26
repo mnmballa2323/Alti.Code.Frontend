@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -10,24 +10,26 @@ import fs from 'fs/promises';
 import path from 'path';
 
 const applyInfrastructure = async (tool, stackName) => {
-    if (!tool || typeof tool !== 'string') {
-        throw new Error('IacAgentService: tool must be a non-empty string.');
-    }
-    if (!stackName || typeof stackName !== 'string') {
-        throw new Error('IacAgentService: stackName must be a non-empty string.');
-    }
-    logger.info(`🚀 IaC Agent: Applying infrastructure using ${tool} for stack: ${stackName}`);
+  if (!tool || typeof tool !== 'string') {
+    throw new Error('IacAgentService: tool must be a non-empty string.');
+  }
+  if (!stackName || typeof stackName !== 'string') {
+    throw new Error('IacAgentService: stackName must be a non-empty string.');
+  }
+  logger.info(
+    `🚀 IaC Agent: Applying infrastructure using ${tool} for stack: ${stackName}`,
+  );
 
-    try {
-        const rootDir = process.cwd();
-        // Go up one level to the workspace root and into an infrastructure folder
-        const infraDir = path.join(rootDir, '..', 'infrastructure', stackName);
-        await fs.mkdir(infraDir, { recursive: true });
+  try {
+    const rootDir = process.cwd();
+    // Go up one level to the workspace root and into an infrastructure folder
+    const infraDir = path.join(rootDir, '..', 'infrastructure', stackName);
+    await fs.mkdir(infraDir, { recursive: true });
 
-        let generatedFiles = [];
+    let generatedFiles = [];
 
-        if (tool.toLowerCase() === 'terraform') {
-            const tfContent = `
+    if (tool.toLowerCase() === 'terraform') {
+      const tfContent = `
 # Generated Terraform configuration for stack: ${stackName}
 
 provider "google" {
@@ -47,12 +49,12 @@ resource "google_compute_subnetwork" "subnet" {
   network       = google_compute_network.vpc_network.id
 }
 `;
-            const mainTfPath = path.join(infraDir, 'main.tf');
-            await fs.writeFile(mainTfPath, tfContent.trim());
-            generatedFiles.push(mainTfPath);
-            logger.info(`📝 Wrote Terraform architecture to ${mainTfPath}`);
-        } else if (tool.toLowerCase() === 'kubernetes') {
-            const k8sContent = `
+      const mainTfPath = path.join(infraDir, 'main.tf');
+      await fs.writeFile(mainTfPath, tfContent.trim());
+      generatedFiles.push(mainTfPath);
+      logger.info(`📝 Wrote Terraform architecture to ${mainTfPath}`);
+    } else if (tool.toLowerCase() === 'kubernetes') {
+      const k8sContent = `
 # Generated Kubernetes deployment for stack: ${stackName}
 apiVersion: apps/v1
 kind: Deployment
@@ -76,30 +78,37 @@ spec:
         ports:
         - containerPort: 8080
 `;
-            const deployYamlPath = path.join(infraDir, 'deployment.yaml');
-            await fs.writeFile(deployYamlPath, k8sContent.trim());
-            generatedFiles.push(deployYamlPath);
-            logger.info(`📝 Wrote Kubernetes manifest to ${deployYamlPath}`);
-        } else {
-            // Default generic config writer
-            const genericPath = path.join(infraDir, 'config.json');
-            await fs.writeFile(genericPath, JSON.stringify({ stack: stackName, tool, timestamp: Date.now() }, null, 2));
-            generatedFiles.push(genericPath);
-        }
-
-        return {
-            status: 'success',
-            tool,
-            stack: stackName,
-            files_generated: generatedFiles.length,
-            locations: generatedFiles,
-        };
-    } catch (err) {
-        logger.error(`Failed to generate IaC for ${stackName}: ${err.message}`);
-        throw err;
+      const deployYamlPath = path.join(infraDir, 'deployment.yaml');
+      await fs.writeFile(deployYamlPath, k8sContent.trim());
+      generatedFiles.push(deployYamlPath);
+      logger.info(`📝 Wrote Kubernetes manifest to ${deployYamlPath}`);
+    } else {
+      // Default generic config writer
+      const genericPath = path.join(infraDir, 'config.json');
+      await fs.writeFile(
+        genericPath,
+        JSON.stringify(
+          { stack: stackName, tool, timestamp: Date.now() },
+          null,
+          2,
+        ),
+      );
+      generatedFiles.push(genericPath);
     }
+
+    return {
+      status: 'success',
+      tool,
+      stack: stackName,
+      files_generated: generatedFiles.length,
+      locations: generatedFiles,
+    };
+  } catch (err) {
+    logger.error(`Failed to generate IaC for ${stackName}: ${err.message}`);
+    throw err;
+  }
 };
 
 export const IacAgentService = {
-    applyInfrastructure,
+  applyInfrastructure,
 };

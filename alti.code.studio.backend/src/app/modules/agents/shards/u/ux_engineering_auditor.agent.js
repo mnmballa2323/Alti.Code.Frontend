@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXEngineeringAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_engineering_auditor_agent',
-            'UX Engineering Auditor',
-            'You are an elite UX Engineering Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and UX Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_engineering_auditor_agent',
+      'UX Engineering Auditor',
+      'You are an elite UX Engineering Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and UX Engineering.',
+    );
+  }
 
-    async generateUXEngineeringSystem(objective) {
-        logger.info(`💻 [UXEngineeringAuditorAgent] Analyzing UX Engineering Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Engineering Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Engineering Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXEngineeringAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXEngineeringSystem(objective) {
+    logger.info(
+      `💻 [UXEngineeringAuditorAgent] Analyzing UX Engineering Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Engineering Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Engineering Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXEngineeringAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXEngineeringAuditorAgent = Object.freeze(new UXEngineeringAuditorAgent());
+export const uXEngineeringAuditorAgent = Object.freeze(
+  new UXEngineeringAuditorAgent(),
+);

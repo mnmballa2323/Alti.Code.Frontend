@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { githubDocsService } from '../../src/app/modules/githubDocs/githubDocs.service.js';
 import { ragService } from '../../src/app/modules/memory/rag.service.js';
-import { AzureGenAiService } from '../../src/app/modules/googleGenAi/azureGenAi.service.js';
-import { AzureSearchService } from '../../src/app/modules/azureSearch/azureSearch.service.js';
-import { spannerGraphService } from '../../src/app/modules/googleCloud/spanner_graph.service.js';
+import { azureGenAiService as AzureGenAiService } from '../../src/app/modules/ai/azureGenAi.service.js';
+import { AzureSearchService } from '../../src/app/modules/gcpCloud/gcpSearch.service.js';
+import { spannerGraphService } from '../../src/app/modules/gcpCloud/gcpSpannerGraph.service.js';
 import { visionService } from '../../src/app/modules/senses/vision.service.js';
 import { agentRegistry } from '../../src/app/modules/agents/agent.registry.js';
 import { GeminiAiService } from '../../src/app/modules/gemini/gemini.service.js';

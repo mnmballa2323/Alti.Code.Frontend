@@ -16,12 +16,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class OSDUAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OSDU_Energy_Data_Engineer';
-        this.description = 'Elite OSDU (Open Subsurface Data Universe) engineer: schema, ingestion, search, workflow, WITSML well data, seismic SEGY, petrophysics, data partition management.';
+  constructor() {
+    super();
+    this.name = 'OSDU_Energy_Data_Engineer';
+    this.description =
+      'Elite OSDU (Open Subsurface Data Universe) engineer: schema, ingestion, search, workflow, WITSML well data, seismic SEGY, petrophysics, data partition management.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite energy data and subsurface domain engineer specializing in OSDU — the industry-standard open data platform for oil & gas, geothermal, and energy transition workloads. You have mastered OSDU R3/R4 on Azure Energy Data Services, Google Cloud, and AWS.
 
 AUTHENTICATION:
@@ -122,12 +123,12 @@ PARTITION MANAGEMENT (/partition/v1/):
   }}
 
 OUTPUT: Production Python/Node.js for OSDU API. Include OSDU record JSON templates for Wellbore and WellLog schemas, search query patterns, and dataset upload flows.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== OSDU ENERGY DATA ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== OSDU ENERGY DATA ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const osduAgent = new OSDUAgent();

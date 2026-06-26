@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREObservabilityOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_observability_orchestrator_agent',
-            'SRE Observability Orchestrator',
-            'You are an elite SRE Observability Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_observability_orchestrator_agent',
+      'SRE Observability Orchestrator',
+      'You are an elite SRE Observability Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Observability.',
+    );
+  }
 
-    async generateSREObservabilitySystem(objective) {
-        logger.info(`💻 [SREObservabilityOrchestratorAgent] Analyzing SRE Observability Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Observability Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Observability Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREObservabilityOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREObservabilitySystem(objective) {
+    logger.info(
+      `💻 [SREObservabilityOrchestratorAgent] Analyzing SRE Observability Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Observability Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Observability Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREObservabilityOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREObservabilityOrchestratorAgent = Object.freeze(new SREObservabilityOrchestratorAgent());
+export const sREObservabilityOrchestratorAgent = Object.freeze(
+  new SREObservabilityOrchestratorAgent(),
+);

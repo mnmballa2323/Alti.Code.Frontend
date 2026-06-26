@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREConfigurationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_configuration_analyst_agent',
-            'SRE Configuration Analyst',
-            'You are an elite SRE Configuration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_configuration_analyst_agent',
+      'SRE Configuration Analyst',
+      'You are an elite SRE Configuration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Configuration.',
+    );
+  }
 
-    async generateSREConfigurationSystem(objective) {
-        logger.info(`💻 [SREConfigurationAnalystAgent] Analyzing SRE Configuration Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Configuration Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Configuration Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREConfigurationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREConfigurationSystem(objective) {
+    logger.info(
+      `💻 [SREConfigurationAnalystAgent] Analyzing SRE Configuration Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Configuration Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Configuration Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREConfigurationAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREConfigurationAnalystAgent = Object.freeze(new SREConfigurationAnalystAgent());
+export const sREConfigurationAnalystAgent = Object.freeze(
+  new SREConfigurationAnalystAgent(),
+);

@@ -5,6 +5,23 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.1.0] - 2026-06-25 — Complete AWS/Azure/OpenStack Purge & GCP Alignment
+
+### Removed
+- **Azure & AWS Marketplace Manifests**: Removed SaaS marketplace entitlement definitions (`aws_marketplace_manifest.json`, `azure_marketplace_manifest.json`).
+- **Cloud Specialist Agents**: Removed legacy cloud-specific specialists (`aws_cdk.agent.js`, `azure_enterprise_architect.agent.js`, `aws.worker.js`).
+- **Azure Isolation Infrastructure**: Removed deprecated isolation network configurations (`infrastructure/azure-isolated`).
+- **Legacy Frontend Owner Routes**: Deleted Azure Active Directory and Liberty Center One (OpenStack) provider portals (`app/owner/azure`, `app/owner/liberty`).
+
+### Added
+- **GCP Legal Notice Service**: Implemented [gcp_legal_notice.service.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/compliance/gcp_legal_notice.service.js) to dispatch compliance SLA notices to GCP endpoints or Pub/Sub topics.
+- **GCP Owner Console**: Added an interactive Google Cloud Platform dashboard page at [app/owner/gcp/page.tsx](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.frontend/app/owner/gcp/page.tsx).
+
+### Changed
+- **Cicero Compliance Integration**: Refactored [cicero_law_enforcement.service.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/compliance/cicero_law_enforcement.service.js) and [compliance.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/compliance/compliance.test.js) to route SLA compliance dispatches through GCP instead of Azure.
+- **Frontend Sidebar Re-branding**: Updated [layout.tsx](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.frontend/app/owner/layout.tsx) under `app/owner/` to link to the new Google Cloud Platform dashboard instead of Microsoft Azure and Liberty Center One.
+- **Dynamic Swarm Registry Purge**: Updated [expand_registry_to_50k.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/scripts/expand_registry_to_50k.js) to generate GCP-native prefixes, and completely purged **1,328** Azure, AWS, and OpenStack-related agent templates from [polyglots_registry.json](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/agents/polyglots_registry.json).
+
 ## [53.0.66] - 2026-06-21 — Global Discovery Sync & Federated Search
 
 ### Added

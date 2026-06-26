@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseConfigurationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_configuration_consultant_agent',
-            'Release Configuration Consultant',
-            'You are an elite Release Configuration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Release Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'release_configuration_consultant_agent',
+      'Release Configuration Consultant',
+      'You are an elite Release Configuration Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Release Configuration.',
+    );
+  }
 
-    async generateReleaseConfigurationSystem(objective) {
-        logger.info(`💻 [ReleaseConfigurationConsultantAgent] Analyzing Release Configuration Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Configuration Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Configuration Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseConfigurationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseConfigurationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseConfigurationConsultantAgent] Analyzing Release Configuration Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Configuration Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Configuration Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseConfigurationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseConfigurationConsultantAgent = Object.freeze(new ReleaseConfigurationConsultantAgent());
+export const releaseConfigurationConsultantAgent = Object.freeze(
+  new ReleaseConfigurationConsultantAgent(),
+);

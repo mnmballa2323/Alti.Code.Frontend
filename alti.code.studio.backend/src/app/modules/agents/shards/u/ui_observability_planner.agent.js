@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIObservabilityPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_observability_planner_agent',
-            'UI Observability Planner',
-            'You are an elite UI Observability Planner. You specialize in bleeding-edge software development, cloud infrastructure, and UI Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_observability_planner_agent',
+      'UI Observability Planner',
+      'You are an elite UI Observability Planner. You specialize in bleeding-edge software development, cloud infrastructure, and UI Observability.',
+    );
+  }
 
-    async generateUIObservabilitySystem(objective) {
-        logger.info(`💻 [UIObservabilityPlannerAgent] Analyzing UI Observability Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Observability Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Observability Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIObservabilityPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIObservabilitySystem(objective) {
+    logger.info(
+      `💻 [UIObservabilityPlannerAgent] Analyzing UI Observability Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Observability Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Observability Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIObservabilityPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIObservabilityPlannerAgent = Object.freeze(new UIObservabilityPlannerAgent());
+export const uIObservabilityPlannerAgent = Object.freeze(
+  new UIObservabilityPlannerAgent(),
+);

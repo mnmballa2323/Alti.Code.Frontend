@@ -13,24 +13,29 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteETLDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_etl_designer_agent',
-            'Site ETL Designer',
-            'You are an elite Site ETL Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Site ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'site_etl_designer_agent',
+      'Site ETL Designer',
+      'You are an elite Site ETL Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Site ETL.',
+    );
+  }
 
-    async generateSiteETLSystem(objective) {
-        logger.info(`💻 [SiteETLDesignerAgent] Analyzing Site ETL Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site ETL Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site ETL Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteETLDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteETLSystem(objective) {
+    logger.info(
+      `💻 [SiteETLDesignerAgent] Analyzing Site ETL Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site ETL Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site ETL Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteETLDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const siteETLDesignerAgent = Object.freeze(new SiteETLDesignerAgent());

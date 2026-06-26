@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseDeploymentDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_deployment_developer_agent',
-            'Enterprise Deployment Developer',
-            'You are an elite Enterprise Deployment Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Deployment.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_deployment_developer_agent',
+      'Enterprise Deployment Developer',
+      'You are an elite Enterprise Deployment Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Deployment.',
+    );
+  }
 
-    async generateEnterpriseDeploymentSystem(objective) {
-        logger.info(`💻 [EnterpriseDeploymentDeveloperAgent] Analyzing Enterprise Deployment Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Deployment Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Deployment Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseDeploymentDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseDeploymentSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseDeploymentDeveloperAgent] Analyzing Enterprise Deployment Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Deployment Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Deployment Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseDeploymentDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseDeploymentDeveloperAgent = Object.freeze(new EnterpriseDeploymentDeveloperAgent());
+export const enterpriseDeploymentDeveloperAgent = Object.freeze(
+  new EnterpriseDeploymentDeveloperAgent(),
+);

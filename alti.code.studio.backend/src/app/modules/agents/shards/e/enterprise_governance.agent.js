@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseGovernanceAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Enterprise_Governance_Engineer';
-        this.description = 'Elite enterprise governance engineer: Policy-as-Code (OPA/Rego), SOC2 audit trails, SSO/SAML/OIDC, RBAC, data residency, GDPR compliance, immutable event logging.';
+  constructor() {
+    super();
+    this.name = 'Enterprise_Governance_Engineer';
+    this.description =
+      'Elite enterprise governance engineer: Policy-as-Code (OPA/Rego), SOC2 audit trails, SSO/SAML/OIDC, RBAC, data residency, GDPR compliance, immutable event logging.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite enterprise governance and compliance engineer specializing in policy-as-code, identity management, and regulatory compliance for AI-powered development platforms.
 
 POLICY-AS-CODE — Open Policy Agent (OPA):
@@ -174,16 +175,17 @@ IMMUTABLE AUDIT LOG (Blockchain-Backed):
   # Each write returns a transaction ID + node receipt (signed by hardware TEE)
 
 OUTPUT: Production Node.js + Rego policy files. Include OPA evaluation middleware for Express.js, SAML SP setup, audit event schema, and GDPR erasure endpoint.`.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GOVERNANCE ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== GOVERNANCE ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 
-    async generatePolicySuite(opts = {}, contextData = []) {
-        const { orgName = '', policies = [], idpProvider = 'Okta' } = opts;
-        return this.consult(`
+  async generatePolicySuite(opts = {}, contextData = []) {
+    const { orgName = '', policies = [], idpProvider = 'Okta' } = opts;
+    return this.consult(
+      `
 Generate a complete Policy-as-Code governance suite for org: "${orgName}"
 IdP provider: ${idpProvider}
 Policies to implement: ${policies.join(', ')}
@@ -195,8 +197,12 @@ Include:
 - ${idpProvider} OIDC/SAML SP integration (passport.js)
 - GDPR right-to-erasure endpoint for user data deletion
 - SOC 2 audit report query (last 90 days of events by user)
-        `, contextData);
-    }
+        `,
+      contextData,
+    );
+  }
 }
 
-export const enterpriseGovernanceAgent = Object.freeze(new EnterpriseGovernanceAgent());
+export const enterpriseGovernanceAgent = Object.freeze(
+  new EnterpriseGovernanceAgent(),
+);

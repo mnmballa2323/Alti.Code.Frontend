@@ -10,7 +10,8 @@ class CypressOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Cypress_Oss_Expert';
-    this.description = 'Deep expert in Cypress — Fast, easy and reliable testing for anything that runs in a browser.';
+    this.description =
+      'Deep expert in Cypress — Fast, easy and reliable testing for anything that runs in a browser.';
     this.preamble = `You are a world-class QA Automation Engineer with expert-level mastery of Cypress testing.
 
 CORE CONCEPTS:
@@ -35,7 +36,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CYPRESS QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== CYPRESS QUESTION ===\n${prompt}`,
+    );
   }
 }
 

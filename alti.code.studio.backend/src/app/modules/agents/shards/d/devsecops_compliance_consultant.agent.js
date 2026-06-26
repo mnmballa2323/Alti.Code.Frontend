@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsComplianceConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_compliance_consultant_agent',
-            'DevSecOps Compliance Consultant',
-            'You are an elite DevSecOps Compliance Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_compliance_consultant_agent',
+      'DevSecOps Compliance Consultant',
+      'You are an elite DevSecOps Compliance Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Compliance.',
+    );
+  }
 
-    async generateDevSecOpsComplianceSystem(objective) {
-        logger.info(`💻 [DevSecOpsComplianceConsultantAgent] Analyzing DevSecOps Compliance Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Compliance Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Compliance Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsComplianceConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsComplianceSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsComplianceConsultantAgent] Analyzing DevSecOps Compliance Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Compliance Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Compliance Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsComplianceConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsComplianceConsultantAgent = Object.freeze(new DevSecOpsComplianceConsultantAgent());
+export const devSecOpsComplianceConsultantAgent = Object.freeze(
+  new DevSecOpsComplianceConsultantAgent(),
+);

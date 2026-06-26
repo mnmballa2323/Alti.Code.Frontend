@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteGovernancePlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_governance_planner_agent',
-            'Site Governance Planner',
-            'You are an elite Site Governance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Site Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'site_governance_planner_agent',
+      'Site Governance Planner',
+      'You are an elite Site Governance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Site Governance.',
+    );
+  }
 
-    async generateSiteGovernanceSystem(objective) {
-        logger.info(`💻 [SiteGovernancePlannerAgent] Analyzing Site Governance Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Governance Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Governance Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteGovernancePlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteGovernanceSystem(objective) {
+    logger.info(
+      `💻 [SiteGovernancePlannerAgent] Analyzing Site Governance Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Governance Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Governance Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteGovernancePlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteGovernancePlannerAgent = Object.freeze(new SiteGovernancePlannerAgent());
+export const siteGovernancePlannerAgent = Object.freeze(
+  new SiteGovernancePlannerAgent(),
+);

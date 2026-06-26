@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class AirtableAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Airtable_Expert';
-        this.description = 'No-code database specialist for Airtable: REST API / Web API, record CRUD, filtering, views, automations, OAuth integration, and Airtable as a headless CMS.';
-        this.preamble = `You are an elite Airtable API integration and workflow automation specialist.
+  constructor() {
+    super();
+    this.name = 'Airtable_Expert';
+    this.description =
+      'No-code database specialist for Airtable: REST API / Web API, record CRUD, filtering, views, automations, OAuth integration, and Airtable as a headless CMS.';
+    this.preamble = `You are an elite Airtable API integration and workflow automation specialist.
 # CORE RESPONSIBILITIES
 1. **Records API**: Use the Airtable Web API (v0) or \`airtable\` npm SDK. Authenticate with \`AIRTABLE_API_KEY\` PAT or OAuth2 access token. Base operations:
    - LIST: \`base(tableId).select({ fields, filterByFormula, sort, view, pageSize }).eachPage()\`
@@ -34,20 +35,22 @@ class AirtableAgent extends BaseSpecialistAgent {
 - Cache Airtable schema (field IDs, table IDs) at startup — avoid repeated metadata fetches.
 # BEHAVIOR
 Output production TypeScript code using \`airtable\` npm SDK v0.12+. Store \`AIRTABLE_API_KEY\` and \`AIRTABLE_BASE_ID\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📊 Airtable Expert: Synthesizing no-code database logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Airtable Expert failed:', e);
-            throw new Error(`Airtable Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📊 Airtable Expert: Synthesizing no-code database logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Airtable Expert failed:', e);
+      throw new Error(`Airtable Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const airtableAgent = new AirtableAgent();

@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class BybitAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Bybit_Expert';
-        this.description = 'Bybit V5 API specialist: HMAC-SHA256 auth with recv window, spot/linear-perp/inverse/options trading, position management, WebSocket private topics, copy trading API, and sub-account management.';
-        this.preamble = `You are an elite Bybit V5 Derivatives & Quantitative Architecture Specialist.
+  constructor() {
+    super();
+    this.name = 'Bybit_Expert';
+    this.description =
+      'Bybit V5 API specialist: HMAC-SHA256 auth with recv window, spot/linear-perp/inverse/options trading, position management, WebSocket private topics, copy trading API, and sub-account management.';
+    this.preamble = `You are an elite Bybit V5 Derivatives & Quantitative Architecture Specialist.
 Your core expertise revolves around exploiting the V5 Unified Margin endpoints intricately, architecting complex persistent WebSocket connections natively comprehensively avoiding signature failures implicitly efficiently securely seamlessly cleanly.
 
 # CORE BYBIT EXPERTISE
@@ -26,20 +27,22 @@ Your core expertise revolves around exploiting the V5 Unified Margin endpoints i
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript natively formatting explicit V5 REST/WSS abstractions gracefully securely explicitly storing \`BYBIT_API_KEY\` logically avoiding all browser exposures natively flawlessly safely cleanly properly gracefully appropriately cleanly securely appropriately safely naturally logically properly dynamically correctly gracefully.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`⚡ Bybit Expert: Synthesizing derivatives exchange logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Bybit Expert failed:', e);
-            throw new Error(`Bybit Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`⚡ Bybit Expert: Synthesizing derivatives exchange logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Bybit Expert failed:', e);
+      throw new Error(`Bybit Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const bybitAgent = new BybitAgent();

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataSecuritySpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_security_specialist_agent',
-            'Data Security Specialist',
-            'You are an elite Data Security Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Data Security.'
-        );
-    }
+  constructor() {
+    super(
+      'data_security_specialist_agent',
+      'Data Security Specialist',
+      'You are an elite Data Security Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Data Security.',
+    );
+  }
 
-    async generateDataSecuritySystem(objective) {
-        logger.info(`💻 [DataSecuritySpecialistAgent] Analyzing Data Security Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Security Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Security Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataSecuritySpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataSecuritySystem(objective) {
+    logger.info(
+      `💻 [DataSecuritySpecialistAgent] Analyzing Data Security Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Security Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Security Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataSecuritySpecialistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataSecuritySpecialistAgent = Object.freeze(new DataSecuritySpecialistAgent());
+export const dataSecuritySpecialistAgent = Object.freeze(
+  new DataSecuritySpecialistAgent(),
+);

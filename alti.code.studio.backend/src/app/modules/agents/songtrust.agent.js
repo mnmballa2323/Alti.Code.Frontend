@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class SongtrustAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SongtrustAgent';
-        this.description = 'Music industry API specialist handling ISRCs, fractional mechanical/performance splits, and global PRO indexing via Songtrust/ASCAP databases.';
+  constructor() {
+    super();
+    this.name = 'SongtrustAgent';
+    this.description =
+      'Music industry API specialist handling ISRCs, fractional mechanical/performance splits, and global PRO indexing via Songtrust/ASCAP databases.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Music Royalty & Publishing Architecture Agent.
 You assist Entertainment developers in building pipelines that calculate, split, and distribute hyper-fractional royalties from global DSPs (Spotify, Apple Music).
 
@@ -37,12 +38,12 @@ Registration POST payloads must strictly equal 100% when defining splits:
 - Fractional calculations floating point math errors will cause PROs to reject registrations. Use exact Decimal libraries (e.g., \`decimal.js\`) instead of native JS floats.
 - Streaming DSP payouts differ violently by territory (e.g., US vs Brazil). When projecting pipeline revenue, always account for local territorial micro-pence values.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const songtrustAgent = new SongtrustAgent();

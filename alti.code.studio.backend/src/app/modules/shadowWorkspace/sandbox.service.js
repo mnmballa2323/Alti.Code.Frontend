@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -18,59 +18,60 @@ import { simulatorAgent } from '../simulator/simulator.agent.js';
  * @returns {Promise<any>}
  */
 const execute = async (code, context = {}) => {
-    logger.info('📦 Sandbox: Executing code in isolation...');
+  logger.info('📦 Sandbox: Executing code in isolation...');
 
-    try {
-        // 1. Create a safe context with basic test capabilities
-        const sandbox = {
-            console: {
-                log: (...args) => logger.info('[Sandbox Log]', ...args),
-                error: (...args) => logger.error('[Sandbox Error]', ...args)
-            },
-            setTimeout, // Allow basic timing
-            clearTimeout,
-            URL, // Safe global often needed by scripts
-            URLSearchParams, // Safe global often needed by scripts
-            require: (moduleName) => {
-                if (moduleName === 'assert') {
-                    return require('assert');
-                }
-                throw new Error(`Module '${moduleName}' is not allowed in this sandbox.`);
-            },
-            ...context
-        };
+  try {
+    // 1. Create a safe context with basic test capabilities
+    const sandbox = {
+      console: {
+        log: (...args) => logger.info('[Sandbox Log]', ...args),
+        error: (...args) => logger.error('[Sandbox Error]', ...args),
+      },
+      setTimeout, // Allow basic timing
+      clearTimeout,
+      URL, // Safe global often needed by scripts
+      URLSearchParams, // Safe global often needed by scripts
+      require: moduleName => {
+        if (moduleName === 'assert') {
+          return require('assert');
+        }
+        throw new Error(
+          `Module '${moduleName}' is not allowed in this sandbox.`,
+        );
+      },
+      ...context,
+    };
 
-        vm.createContext(sandbox);
+    vm.createContext(sandbox);
 
-        // 2. Execute with limits
-        const result = vm.runInContext(code, sandbox, {
-            timeout: 5000, // 5 second timeout
-            displayErrors: true,
-            microtaskMode: 'afterEvaluate' // Prevent infinite promise loops
-        });
+    // 2. Execute with limits
+    const result = vm.runInContext(code, sandbox, {
+      timeout: 5000, // 5 second timeout
+      displayErrors: true,
+      microtaskMode: 'afterEvaluate', // Prevent infinite promise loops
+    });
 
-        logger.info('✅ Sandbox: Execution successful');
-        return result;
-
-    } catch (error) {
-        logger.error('❌ Sandbox: Execution failed / timed out', error);
-        throw new Error(`Sandbox Error: ${error.message}`);
-    }
+    logger.info('✅ Sandbox: Execution successful');
+    return result;
+  } catch (error) {
+    logger.error('❌ Sandbox: Execution failed / timed out', error);
+    throw new Error(`Sandbox Error: ${error.message}`);
+  }
 };
 
 // Keep existing methods delegating to Simulator for backward compatibility / other features
 const injectChaos = async (targetService, chaosType) => {
-    return await simulatorAgent.injectChaos(targetService, chaosType);
+  return await simulatorAgent.injectChaos(targetService, chaosType);
 };
 
 const loadTest = async (endpoint, rps) => {
-    return await simulatorAgent.loadTest(endpoint, rps);
+  return await simulatorAgent.loadTest(endpoint, rps);
 };
 
 export const sandboxService = {
-    execute,
-    injectChaos,
-    loadTest
+  execute,
+  injectChaos,
+  loadTest,
 };
 
 export { execute, injectChaos, loadTest };

@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class FederalRampAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'FederalRampAgent';
-        this.description = 'Federal cloud compliance expert specializing in FedRAMP Moderate/High baselines, DISA STIG automation, and Open Security Controls Assessment Language (OSCAL).';
+  constructor() {
+    super();
+    this.name = 'FederalRampAgent';
+    this.description =
+      'Federal cloud compliance expert specializing in FedRAMP Moderate/High baselines, DISA STIG automation, and Open Security Controls Assessment Language (OSCAL).';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code GovTech & Federal Compliance Agent.
 You assist DevOps engineers building infrastructure intended for US Federal Government environments (AWS GovCloud, Azure Government).
 
@@ -34,12 +35,12 @@ You assist DevOps engineers building infrastructure intended for US Federal Gove
 **Best Practices**
 - When recommending IAM policies, default to absolute Zero-Trust. Deny all cross-region replication that moves data outside the Continental US (CONUS) boundaries.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const federalRampAgent = new FederalRampAgent();

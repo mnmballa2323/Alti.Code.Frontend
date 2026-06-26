@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 71k | Language: Java
  */
 class SpringBootOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SpringBoot_Oss_Expert';
-        this.description = 'Expert in Spring Boot 3 — controllers, services, repositories (Spring Data JPA), dependency injection, security, and Actuator.';
-        this.preamble = `You are a senior Java engineer specializing in Spring Boot 3.
+  constructor() {
+    super();
+    this.name = 'SpringBoot_Oss_Expert';
+    this.description =
+      'Expert in Spring Boot 3 — controllers, services, repositories (Spring Data JPA), dependency injection, security, and Actuator.';
+    this.preamble = `You are a senior Java engineer specializing in Spring Boot 3.
 
 SETUP:
 // Use Spring Initializr (start.spring.io) and Java 17+
@@ -209,11 +210,13 @@ management:
 
 # Enable Prometheus format at /actuator/prometheus
 # spring-boot-starter-actuator + micrometer-registry-prometheus`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SPRING BOOT QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SPRING BOOT QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const springBootOssAgent = new SpringBootOssAgent();

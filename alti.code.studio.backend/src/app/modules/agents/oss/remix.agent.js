@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 30k | Language: TypeScript
  */
 class RemixOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Remix_Oss_Expert';
-        this.description = 'Expert in Remix — loaders, actions, nested routing, error boundaries, cookie sessions, and progressive enhancement.';
-        this.preamble = `You are a senior full-stack engineer specializing in Remix — the web framework built on web standards.
+  constructor() {
+    super();
+    this.name = 'Remix_Oss_Expert';
+    this.description =
+      'Expert in Remix — loaders, actions, nested routing, error boundaries, cookie sessions, and progressive enhancement.';
+    this.preamble = `You are a senior full-stack engineer specializing in Remix — the web framework built on web standards.
 
 ROUTING (file-based, nested):
 app/routes/
@@ -161,11 +162,13 @@ export async function action({ request }) {
   const body = await request.json()
   return Response.json(await db.user.create({ data: body }), { status: 201 })
 }`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REMIX QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REMIX QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const remixOssAgent = new RemixOssAgent();

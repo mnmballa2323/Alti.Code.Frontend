@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseComplianceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_compliance_orchestrator_agent',
-            'Enterprise Compliance Orchestrator',
-            'You are an elite Enterprise Compliance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_compliance_orchestrator_agent',
+      'Enterprise Compliance Orchestrator',
+      'You are an elite Enterprise Compliance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Compliance.',
+    );
+  }
 
-    async generateEnterpriseComplianceSystem(objective) {
-        logger.info(`💻 [EnterpriseComplianceOrchestratorAgent] Analyzing Enterprise Compliance Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Compliance Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Compliance Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseComplianceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseComplianceSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseComplianceOrchestratorAgent] Analyzing Enterprise Compliance Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Compliance Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Compliance Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseComplianceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseComplianceOrchestratorAgent = Object.freeze(new EnterpriseComplianceOrchestratorAgent());
+export const enterpriseComplianceOrchestratorAgent = Object.freeze(
+  new EnterpriseComplianceOrchestratorAgent(),
+);

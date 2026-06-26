@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteVirtualizationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_virtualization_planner_agent',
-            'Site Virtualization Planner',
-            'You are an elite Site Virtualization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Site Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'site_virtualization_planner_agent',
+      'Site Virtualization Planner',
+      'You are an elite Site Virtualization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Site Virtualization.',
+    );
+  }
 
-    async generateSiteVirtualizationSystem(objective) {
-        logger.info(`💻 [SiteVirtualizationPlannerAgent] Analyzing Site Virtualization Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Virtualization Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Virtualization Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteVirtualizationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [SiteVirtualizationPlannerAgent] Analyzing Site Virtualization Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Virtualization Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Virtualization Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SiteVirtualizationPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const siteVirtualizationPlannerAgent = Object.freeze(new SiteVirtualizationPlannerAgent());
+export const siteVirtualizationPlannerAgent = Object.freeze(
+  new SiteVirtualizationPlannerAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureOptimizationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_optimization_strategist_agent',
-            'Infrastructure Optimization Strategist',
-            'You are an elite Infrastructure Optimization Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_optimization_strategist_agent',
+      'Infrastructure Optimization Strategist',
+      'You are an elite Infrastructure Optimization Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Optimization.',
+    );
+  }
 
-    async generateInfrastructureOptimizationSystem(objective) {
-        logger.info(`💻 [InfrastructureOptimizationStrategistAgent] Analyzing Infrastructure Optimization Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Optimization Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Optimization Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureOptimizationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureOptimizationSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureOptimizationStrategistAgent] Analyzing Infrastructure Optimization Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Optimization Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Optimization Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureOptimizationStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureOptimizationStrategistAgent = Object.freeze(new InfrastructureOptimizationStrategistAgent());
+export const infrastructureOptimizationStrategistAgent = Object.freeze(
+  new InfrastructureOptimizationStrategistAgent(),
+);

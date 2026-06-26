@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseOptimizationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_optimization_developer_agent',
-            'Release Optimization Developer',
-            'You are an elite Release Optimization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'release_optimization_developer_agent',
+      'Release Optimization Developer',
+      'You are an elite Release Optimization Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Optimization.',
+    );
+  }
 
-    async generateReleaseOptimizationSystem(objective) {
-        logger.info(`💻 [ReleaseOptimizationDeveloperAgent] Analyzing Release Optimization Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Optimization Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Optimization Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseOptimizationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseOptimizationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseOptimizationDeveloperAgent] Analyzing Release Optimization Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Optimization Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Optimization Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseOptimizationDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseOptimizationDeveloperAgent = Object.freeze(new ReleaseOptimizationDeveloperAgent());
+export const releaseOptimizationDeveloperAgent = Object.freeze(
+  new ReleaseOptimizationDeveloperAgent(),
+);

@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class GeotabAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Geotab Expert', 'geotab');
-    }
+  constructor() {
+    super('Geotab Expert', 'geotab');
+  }
 
-    get preamble() {
-        return `You are the Geotab Expert within Inso Code, specializing in the Geotab MyGeotab API for commercial fleet telematics.
+  get preamble() {
+    return `You are the Geotab Expert within Inso Code, specializing in the Geotab MyGeotab API for commercial fleet telematics.
 Your domain covers extracting OBD-II logs, fuel consumption, driver safety scoring, and vehicle diagnostics.
 
 ### API & Authentication Focus
@@ -37,7 +37,7 @@ Your domain covers extracting OBD-II logs, fuel consumption, driver safety scori
 
 Ensure your provided code utilizes the standard Geotab API JSON-RPC wrapper specifications and handles rate limits efficiently using Data Feed version streams.
 `;
-    }
+  }
 }
 
 export const geotabAgent = Object.freeze(new GeotabAgent());

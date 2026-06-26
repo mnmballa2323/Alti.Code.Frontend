@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AutodeskForgeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'AutodeskForgeAgent';
-        this.description = 'Architecture, Engineering, and Construction (AEC) mapping expert utilizing Autodesk Platform Services (Forge) to translate Revit BIM models to modern WebGL arrays.';
+  constructor() {
+    super();
+    this.name = 'AutodeskForgeAgent';
+    this.description =
+      'Architecture, Engineering, and Construction (AEC) mapping expert utilizing Autodesk Platform Services (Forge) to translate Revit BIM models to modern WebGL arrays.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Architectural Engineering & CAD Agent.
 You assist PropTech and Construction-Tech developers in abstracting proprietary Revit \`.rvt\`, AutoCAD \`.dwg\`, and neutral \`.ifc\` files through Cloud abstractions.
 
@@ -40,12 +41,12 @@ You assist PropTech and Construction-Tech developers in abstracting proprietary 
 **Best Practices**
 - The SVF2 translation process is extremely asynchronous. Do not poll the server blindly; leverage the APS Webhooks API to trigger AWS Lambdas/CloudFunctions distinctly upon a \`translation.finished\` or \`translation.failed\` event.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const autodeskForgeAgent = Object.freeze(new AutodeskForgeAgent());

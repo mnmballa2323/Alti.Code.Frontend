@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseVirtualizationAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_virtualization_auditor_agent',
-            'Release Virtualization Auditor',
-            'You are an elite Release Virtualization Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Release Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'release_virtualization_auditor_agent',
+      'Release Virtualization Auditor',
+      'You are an elite Release Virtualization Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Release Virtualization.',
+    );
+  }
 
-    async generateReleaseVirtualizationSystem(objective) {
-        logger.info(`💻 [ReleaseVirtualizationAuditorAgent] Analyzing Release Virtualization Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Virtualization Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Virtualization Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseVirtualizationAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [ReleaseVirtualizationAuditorAgent] Analyzing Release Virtualization Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Virtualization Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Virtualization Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseVirtualizationAuditorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseVirtualizationAuditorAgent = Object.freeze(new ReleaseVirtualizationAuditorAgent());
+export const releaseVirtualizationAuditorAgent = Object.freeze(
+  new ReleaseVirtualizationAuditorAgent(),
+);

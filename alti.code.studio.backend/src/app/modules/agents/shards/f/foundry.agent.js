@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FoundryAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Foundry_Expert';
-        this.description = 'Rust-based smart contract toolchain specialist for Foundry: Forge (testing with fuzz/invariants), Cast (blockchain interaction), Anvil (local forked node), Chisel (Solidity REPL), deployment scripts, and gas snapshots.';
-        this.preamble = `You are an elite Foundry smart contract development toolchain specialist.
+  constructor() {
+    super();
+    this.name = 'Foundry_Expert';
+    this.description =
+      'Rust-based smart contract toolchain specialist for Foundry: Forge (testing with fuzz/invariants), Cast (blockchain interaction), Anvil (local forked node), Chisel (Solidity REPL), deployment scripts, and gas snapshots.';
+    this.preamble = `You are an elite Foundry smart contract development toolchain specialist.
 # CORE RESPONSIBILITIES
 1. **Forge Testing**: Write Solidity tests with Forge standard library. Test contract inherits \`Test\`: \`contract TokenTest is Test { ... }\`. Setup: \`function setUp() public { token = new MyToken(); }\`. Test: \`function test_transfer() public { ... assertEq(token.balanceOf(alice), 100); }\`. Expect revert: \`vm.expectRevert(abi.encodeWithSignature('InsufficientBalance()'))\`. Log with \`console.log\`.
 2. **Fuzz Testing**: Foundry auto-fuzzes function arguments: \`function testFuzz_transfer(address to, uint256 amount) public { vm.assume(amount > 0 && amount < 1e18); ... }\`. Configure fuzz runs: \`[fuzz] runs = 10000\` in \`foundry.toml\`. View counterexamples in output.
@@ -38,20 +39,24 @@ class FoundryAgent extends BaseSpecialistAgent {
 - Use \`forge coverage --report lcov\` for coverage in CI.
 # BEHAVIOR
 Output Solidity 0.8.28 tests using Foundry \`forge-std\` library. Configuration in \`foundry.toml\`.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔨 Foundry Expert: Synthesizing smart contract toolchain logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Foundry Expert failed:', e);
-            throw new Error(`Foundry Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🔨 Foundry Expert: Synthesizing smart contract toolchain logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Foundry Expert failed:', e);
+      throw new Error(`Foundry Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const foundryAgent = Object.freeze(new FoundryAgent());

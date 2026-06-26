@@ -97,18 +97,19 @@ describe('Milestone v52.0.0 Feature Tests', () => {
         });
     });
 
-    describe('Pillar 3: Azure deploy script dry-run validation', () => {
-        it('should validate air-gapped AKS local registry preloading and template updates in dry-run', () => {
+    describe('Pillar 3: GCP deploy script dry-run validation', () => {
+        it('should validate Google Cloud sovereign deployment parameters in dry-run', () => {
             const rootPath = path.resolve(process.cwd(), '..');
             const result = execSync(
-                `bash ./deploy_enterprise.sh --deployment-option classified --dry-run`,
+                `bash ./deploy_enterprise.sh --deployment-option government --region us-gov-west1 --project alti-gov-project --dry-run`,
                 { encoding: 'utf8', cwd: rootPath }
             );
 
-            expect(result).toContain('[Classified] Preloading AKS cluster system images');
-            expect(result).toContain('Preloading and retagging mcr.microsoft.com/oss/kubernetes/kube-apiserver');
-            expect(result).toContain('Preloading and retagging mcr.microsoft.com/oss/kubernetes/coredns');
-            expect(result).toContain('[Classified] Overriding AKS cluster template configuration');
+            expect(result).toContain('🌍 ALTI CODE STUDIO: GCP SOVEREIGN ENTERPRISE DEPLOYER');
+            expect(result).toContain('[DRY RUN] Simulating GCP Sovereign deployment...');
+            expect(result).toContain('-var="gcp_project_id=alti-gov-project"');
+            expect(result).toContain('-var="gcp_region_government=us-gov-west1"');
+            expect(result).toContain('-var="enable_gcp_government=true"');
         });
     });
 });

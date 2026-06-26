@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIOptimizationOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_optimization_orchestrator_agent',
-            'UI Optimization Orchestrator',
-            'You are an elite UI Optimization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UI Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_optimization_orchestrator_agent',
+      'UI Optimization Orchestrator',
+      'You are an elite UI Optimization Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UI Optimization.',
+    );
+  }
 
-    async generateUIOptimizationSystem(objective) {
-        logger.info(`💻 [UIOptimizationOrchestratorAgent] Analyzing UI Optimization Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Optimization Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Optimization Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIOptimizationOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIOptimizationSystem(objective) {
+    logger.info(
+      `💻 [UIOptimizationOrchestratorAgent] Analyzing UI Optimization Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Optimization Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Optimization Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UIOptimizationOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uIOptimizationOrchestratorAgent = Object.freeze(new UIOptimizationOrchestratorAgent());
+export const uIOptimizationOrchestratorAgent = Object.freeze(
+  new UIOptimizationOrchestratorAgent(),
+);

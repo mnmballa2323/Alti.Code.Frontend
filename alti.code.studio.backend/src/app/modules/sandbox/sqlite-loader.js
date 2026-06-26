@@ -5,11 +5,11 @@
 const polyfillUrl = new URL('./sqlite-polyfill.js', import.meta.url).href;
 
 export async function resolve(specifier, context, nextResolve) {
-    if (specifier === 'node:sqlite') {
-        return {
-            shortCircuit: true,
-            url: polyfillUrl
-        };
-    }
-    return nextResolve(specifier, context);
+  if (specifier === 'node:sqlite') {
+    return {
+      shortCircuit: true,
+      url: polyfillUrl,
+    };
+  }
+  return nextResolve(specifier, context);
 }

@@ -22,21 +22,21 @@ class RecastService {
         'classProperties',
         'decorators-legacy',
         'objectRestSpread',
-        'dynamicImport'
-      ]
+        'dynamicImport',
+      ],
     };
 
     // Custom recast parser using babel
     this.recastParser = {
-      parse: (source) => {
+      parse: source => {
         return babelParser.parse(source, this.parserOptions);
-      }
+      },
     };
   }
 
   /**
    * Parse code into an AST using Recast (remembers exact formatting tokens).
-   * @param {string} sourceCode 
+   * @param {string} sourceCode
    * @returns {object} AST
    */
   parse(sourceCode) {
@@ -46,7 +46,7 @@ class RecastService {
 
   /**
    * Print modified AST back to code while preserving unmodified code style.
-   * @param {object} ast 
+   * @param {object} ast
    * @returns {string} Formatted code
    */
   print(ast) {
@@ -57,38 +57,39 @@ class RecastService {
 
   /**
    * Parse, traverse/modify, and print.
-   * @param {string} sourceCode 
+   * @param {string} sourceCode
    * @param {object} visitors - Babel traverse visitor definitions
    * @returns {string} Trandformed code
    */
   transform(sourceCode, visitors) {
     const ast = this.parse(sourceCode);
-    
+
     // traverse the AST using Babel's traverse
     traverse(ast, visitors);
-    
+
     return this.print(ast);
   }
 
   /**
    * Helper to perform a simple function rename.
-   * @param {string} sourceCode 
-   * @param {string} oldName 
-   * @param {string} newName 
+   * @param {string} sourceCode
+   * @param {string} oldName
+   * @param {string} newName
    * @returns {string} Transformed code
    */
   renameFunction(sourceCode, oldName, newName) {
     logger.info(`🔮 [Recast] Renaming function: "${oldName}" -> "${newName}"`);
     return this.transform(sourceCode, {
       Identifier(path) {
-        if (path.node.name === oldName && (
-          path.parent.type === 'FunctionDeclaration' ||
-          path.parent.type === 'ClassMethod' ||
-          path.parent.type === 'VariableDeclarator'
-        )) {
+        if (
+          path.node.name === oldName &&
+          (path.parent.type === 'FunctionDeclaration' ||
+            path.parent.type === 'ClassMethod' ||
+            path.parent.type === 'VariableDeclarator')
+        ) {
           path.node.name = newName;
         }
-      }
+      },
     });
   }
 }

@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class OcppEvChargingAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'OcppEvChargingAgent';
-        this.description = 'Clean mobility networking expert dealing natively with Open Charge Point Protocol (OCPP) APIs, bidirectional V2G profiles, and EVSE telemetry.';
+  constructor() {
+    super();
+    this.name = 'OcppEvChargingAgent';
+    this.description =
+      'Clean mobility networking expert dealing natively with Open Charge Point Protocol (OCPP) APIs, bidirectional V2G profiles, and EVSE telemetry.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code OCPP & Electric Vehicle Charging Agent.
 You assist EV Infrastructure Architects in connecting physical DC Fast Chargers and Level 2 destination chargers to central management networks (CSMS - Charging Station Management Systems).
 
@@ -33,12 +34,12 @@ You assist EV Infrastructure Architects in connecting physical DC Fast Chargers 
 **Best Practices**
 - For high-volume networks, never push firmware updates (\`UpdateFirmware\`) or massive configuration profiles across the entire fleet concurrently. Always stagger firmware downloads across overlapping time-slots to prevent catastrophic DNS / bandwidth saturation at the cell tower.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const ocppEvChargingAgent = new OcppEvChargingAgent();

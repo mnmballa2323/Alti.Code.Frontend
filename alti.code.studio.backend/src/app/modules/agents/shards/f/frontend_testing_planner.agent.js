@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendTestingPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_testing_planner_agent',
-            'Frontend Testing Planner',
-            'You are an elite Frontend Testing Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_testing_planner_agent',
+      'Frontend Testing Planner',
+      'You are an elite Frontend Testing Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Testing.',
+    );
+  }
 
-    async generateFrontendTestingSystem(objective) {
-        logger.info(`💻 [FrontendTestingPlannerAgent] Analyzing Frontend Testing Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Testing Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Testing Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendTestingPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendTestingSystem(objective) {
+    logger.info(
+      `💻 [FrontendTestingPlannerAgent] Analyzing Frontend Testing Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Testing Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Testing Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendTestingPlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendTestingPlannerAgent = Object.freeze(new FrontendTestingPlannerAgent());
+export const frontendTestingPlannerAgent = Object.freeze(
+  new FrontendTestingPlannerAgent(),
+);

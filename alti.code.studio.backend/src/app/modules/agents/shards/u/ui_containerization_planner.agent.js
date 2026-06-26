@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIContainerizationPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_containerization_planner_agent',
-            'UI Containerization Planner',
-            'You are an elite UI Containerization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and UI Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_containerization_planner_agent',
+      'UI Containerization Planner',
+      'You are an elite UI Containerization Planner. You specialize in bleeding-edge software development, cloud infrastructure, and UI Containerization.',
+    );
+  }
 
-    async generateUIContainerizationSystem(objective) {
-        logger.info(`💻 [UIContainerizationPlannerAgent] Analyzing UI Containerization Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Containerization Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Containerization Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIContainerizationPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIContainerizationSystem(objective) {
+    logger.info(
+      `💻 [UIContainerizationPlannerAgent] Analyzing UI Containerization Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Containerization Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Containerization Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [UIContainerizationPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const uIContainerizationPlannerAgent = Object.freeze(new UIContainerizationPlannerAgent());
+export const uIContainerizationPlannerAgent = Object.freeze(
+  new UIContainerizationPlannerAgent(),
+);

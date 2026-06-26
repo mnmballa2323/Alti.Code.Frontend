@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataProvisioningStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_provisioning_strategist_agent',
-            'Data Provisioning Strategist',
-            'You are an elite Data Provisioning Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Data Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'data_provisioning_strategist_agent',
+      'Data Provisioning Strategist',
+      'You are an elite Data Provisioning Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Data Provisioning.',
+    );
+  }
 
-    async generateDataProvisioningSystem(objective) {
-        logger.info(`💻 [DataProvisioningStrategistAgent] Analyzing Data Provisioning Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Provisioning Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Provisioning Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataProvisioningStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataProvisioningSystem(objective) {
+    logger.info(
+      `💻 [DataProvisioningStrategistAgent] Analyzing Data Provisioning Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Provisioning Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Provisioning Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DataProvisioningStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const dataProvisioningStrategistAgent = Object.freeze(new DataProvisioningStrategistAgent());
+export const dataProvisioningStrategistAgent = Object.freeze(
+  new DataProvisioningStrategistAgent(),
+);

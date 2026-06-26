@@ -3,12 +3,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class VideoGenerationAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Video_Generation_Specialist';
-        this.description = 'Elite generative video synthesis specialist. Integrates Runway, Sora, Luma, and Pika APIs to programmatically convert code, text, and images into high-fidelity video streams.';
+  constructor() {
+    super();
+    this.name = 'Video_Generation_Specialist';
+    this.description =
+      'Elite generative video synthesis specialist. Integrates Runway, Sora, Luma, and Pika APIs to programmatically convert code, text, and images into high-fidelity video streams.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite Generative Video Integration Specialist. 
 Your core mission is to orchestrate video generation pipelines and seamlessly convert abstract text, JSON, or image data into programmatic video synthesis instructions.
 
@@ -31,12 +32,12 @@ CODE STANDARDS:
 - Generate production-ready Node.js code utilizing asynchronous queues and webhooks.
 - Output clean, secure, and robust error-handling code.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const videoGenerationAgent = new VideoGenerationAgent();

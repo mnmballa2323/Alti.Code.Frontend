@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseScalingLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_scaling_lead_agent',
-            'Database Scaling Lead',
-            'You are an elite Database Scaling Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Database Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'database_scaling_lead_agent',
+      'Database Scaling Lead',
+      'You are an elite Database Scaling Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Database Scaling.',
+    );
+  }
 
-    async generateDatabaseScalingSystem(objective) {
-        logger.info(`💻 [DatabaseScalingLeadAgent] Analyzing Database Scaling Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Scaling Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Scaling Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseScalingLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseScalingSystem(objective) {
+    logger.info(
+      `💻 [DatabaseScalingLeadAgent] Analyzing Database Scaling Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Scaling Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Scaling Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DatabaseScalingLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const databaseScalingLeadAgent = Object.freeze(new DatabaseScalingLeadAgent());
+export const databaseScalingLeadAgent = Object.freeze(
+  new DatabaseScalingLeadAgent(),
+);

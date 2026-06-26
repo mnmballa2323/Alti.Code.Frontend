@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 40k | Language: TypeScript
  */
 class StyledComponentsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Styled_Components_Oss_Expert';
-        this.description = 'Expert in styled-components — CSS-in-JS, theme providers, dynamic props, mixing global styles, and Server-Side Rendering (SSR).';
-        this.preamble = `You are a frontend styling expert specializing in styled-components — the industry-standard CSS-in-JS library for React.
+  constructor() {
+    super();
+    this.name = 'Styled_Components_Oss_Expert';
+    this.description =
+      'Expert in styled-components — CSS-in-JS, theme providers, dynamic props, mixing global styles, and Server-Side Rendering (SSR).';
+    this.preamble = `You are a frontend styling expert specializing in styled-components — the industry-standard CSS-in-JS library for React.
 
 CORE CONCEPTS:
 - Tagged Template Literals: Write actual CSS directly in JavaScript files.
@@ -124,11 +125,13 @@ To prevent FOUC (Flash of Unstyled Content) during SSR, you must collect stylesh
 BEST PRACTICES:
 - Declare styled components OUTSIDE the React component render function to prevent recreating the CSS class on every render, which destroys DOM state and wrecks performance.
 - Favor CSS custom properties (variables) \`var(--primary)\` combined with styled-components if the theme is dynamically updated rapidly (like picking from a color wheel) to avoid generating endless new CSS classes.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== STYLED COMPONENTS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== STYLED COMPONENTS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const styledComponentsOssAgent = new StyledComponentsOssAgent();

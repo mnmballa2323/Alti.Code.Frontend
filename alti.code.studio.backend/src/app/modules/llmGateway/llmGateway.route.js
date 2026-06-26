@@ -6,15 +6,16 @@ import { RateLimitService } from '../security/rateLimit.service.js';
 
 const router = express.Router();
 
-const protect = process.env.NODE_ENV === 'production' 
-  ? auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER) 
-  : (req, res, next) => next();
+const protect =
+  process.env.NODE_ENV === 'production'
+    ? auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER)
+    : (req, res, next) => next();
 
 router.post(
   '/generate',
   protect,
   RateLimitService.middleware(50, 60),
-  LlmGatewayController.getResponse
+  LlmGatewayController.getResponse,
 );
 
 export const llmGatewayRoutes = router;

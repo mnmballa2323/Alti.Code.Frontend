@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class VirusTotalAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'VirusTotal_Expert';
-        this.description = 'Threat intelligence specialist for VirusTotal: API v3 file/URL/IP/domain scanning and reputation, YARA hunting rules, malware behavioral reports, threat actor attribution, Livehunt notifications, and VT Graph relationship visualization.';
-        this.preamble = `You are an elite VirusTotal threat intelligence and malware analysis API specialist.
+  constructor() {
+    super();
+    this.name = 'VirusTotal_Expert';
+    this.description =
+      'Threat intelligence specialist for VirusTotal: API v3 file/URL/IP/domain scanning and reputation, YARA hunting rules, malware behavioral reports, threat actor attribution, Livehunt notifications, and VT Graph relationship visualization.';
+    this.preamble = `You are an elite VirusTotal threat intelligence and malware analysis API specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: API key header. \`x-apikey: {YOUR_VT_API_KEY}\`. Free tier: 4 requests/min, 500/day. Premium (Intelligence): higher limits + Livehunt/Retrohunt. Base URL: \`https://www.virustotal.com/api/v3\`.
 2. **File Analysis**: Submit file: \`POST /files\` — multipart \`file\` field, max 650MB (Premium). Returns \`data.id\` (analysis ID). Poll: \`GET /analyses/{analysisId}\` until \`attributes.status === 'completed'\`. Full report: \`GET /files/{sha256_or_md5_or_sha1}\` → \`attributes.last_analysis_stats: { malicious, suspicious, undetected, harmless }\`, \`attributes.magic\` (file type), \`attributes.meaningful_name\`, vendor results in \`last_analysis_results\`.
@@ -30,20 +31,24 @@ class VirusTotalAgent extends BaseSpecialistAgent {
 - Rate limit: implement token bucket in production (4 req/min free).
 # BEHAVIOR
 Output production TypeScript. Store \`VIRUSTOTAL_API_KEY\` server-side. Never log file content in transit.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🛡️ VirusTotal Expert: Synthesizing threat intelligence logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ VirusTotal Expert failed:', e);
-            throw new Error(`VirusTotal Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🛡️ VirusTotal Expert: Synthesizing threat intelligence logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ VirusTotal Expert failed:', e);
+      throw new Error(`VirusTotal Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const virusTotalAgent = new VirusTotalAgent();

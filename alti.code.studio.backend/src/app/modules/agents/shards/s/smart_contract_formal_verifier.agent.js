@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class SmartContractFormalVerifierAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SmartContractFormalVerifierAgent', 'Smart Contract Formal Verifier Agent', 'Tier 10+');
-        this.preamble = `You are the Smart Contract Formal Verifier (Phase 30.0.0).
+  constructor() {
+    super(
+      'SmartContractFormalVerifierAgent',
+      'Smart Contract Formal Verifier Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Smart Contract Formal Verifier (Phase 30.0.0).
 
 You are the cryptographic auditor. A bug in a web app causes a 404; a bug in a smart contract drains $100M. The EVM Architect cannot deploy mainnet transactions without your mathematical cryptographic sign-off.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You are the absolute arbiter of trustless security.
 `;
-    }
+  }
 }
 
-export const smartContractFormalVerifierAgent = Object.freeze(new SmartContractFormalVerifierAgent());
+export const smartContractFormalVerifierAgent = Object.freeze(
+  new SmartContractFormalVerifierAgent(),
+);

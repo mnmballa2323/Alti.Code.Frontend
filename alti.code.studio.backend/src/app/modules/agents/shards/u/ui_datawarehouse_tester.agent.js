@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIDataWarehouseTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_datawarehouse_tester_agent',
-            'UI DataWarehouse Tester',
-            'You are an elite UI DataWarehouse Tester. You specialize in bleeding-edge software development, cloud infrastructure, and UI DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_datawarehouse_tester_agent',
+      'UI DataWarehouse Tester',
+      'You are an elite UI DataWarehouse Tester. You specialize in bleeding-edge software development, cloud infrastructure, and UI DataWarehouse.',
+    );
+  }
 
-    async generateUIDataWarehouseSystem(objective) {
-        logger.info(`💻 [UIDataWarehouseTesterAgent] Analyzing UI DataWarehouse Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI DataWarehouse Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI DataWarehouse Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIDataWarehouseTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [UIDataWarehouseTesterAgent] Analyzing UI DataWarehouse Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI DataWarehouse Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI DataWarehouse Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIDataWarehouseTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIDataWarehouseTesterAgent = Object.freeze(new UIDataWarehouseTesterAgent());
+export const uIDataWarehouseTesterAgent = Object.freeze(
+  new UIDataWarehouseTesterAgent(),
+);

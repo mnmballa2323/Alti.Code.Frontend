@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseDataLakeConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_datalake_consultant_agent',
-            'Database DataLake Consultant',
-            'You are an elite Database DataLake Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Database DataLake.'
-        );
-    }
+  constructor() {
+    super(
+      'database_datalake_consultant_agent',
+      'Database DataLake Consultant',
+      'You are an elite Database DataLake Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Database DataLake.',
+    );
+  }
 
-    async generateDatabaseDataLakeSystem(objective) {
-        logger.info(`💻 [DatabaseDataLakeConsultantAgent] Analyzing Database DataLake Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database DataLake Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database DataLake Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseDataLakeConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseDataLakeSystem(objective) {
+    logger.info(
+      `💻 [DatabaseDataLakeConsultantAgent] Analyzing Database DataLake Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database DataLake Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database DataLake Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseDataLakeConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseDataLakeConsultantAgent = Object.freeze(new DatabaseDataLakeConsultantAgent());
+export const databaseDataLakeConsultantAgent = Object.freeze(
+  new DatabaseDataLakeConsultantAgent(),
+);

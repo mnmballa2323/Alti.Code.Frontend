@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -108,8 +108,9 @@ const makeAdminService = async userId => {
 };
 
 const deleteUserService = async userId => {
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  
+  const uuidRegex =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
   const isUuid = uuidRegex.test(userId);
   const isMongoId = mongoose.Types.ObjectId.isValid(userId);
 
@@ -121,7 +122,8 @@ const deleteUserService = async userId => {
   if (isUuid) {
     user = await prisma.user.findUnique({ where: { id: userId } });
   } else {
-    const { UserRepository } = await import('../auth/prisma.user.repository.js');
+    const { UserRepository } =
+      await import('../auth/prisma.user.repository.js');
     user = await UserRepository.findById(userId);
   }
 
@@ -137,7 +139,8 @@ const deleteUserService = async userId => {
   if (isUuid) {
     result = await prisma.user.delete({ where: { id: userId } });
   } else {
-    const { UserRepository } = await import('../auth/prisma.user.repository.js');
+    const { UserRepository } =
+      await import('../auth/prisma.user.repository.js');
     result = await UserRepository.deleteUser(userId);
   }
   return result;

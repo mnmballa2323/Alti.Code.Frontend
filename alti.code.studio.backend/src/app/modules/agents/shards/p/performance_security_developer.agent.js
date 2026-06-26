@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceSecurityDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_security_developer_agent',
-            'Performance Security Developer',
-            'You are an elite Performance Security Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Security.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_security_developer_agent',
+      'Performance Security Developer',
+      'You are an elite Performance Security Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Security.',
+    );
+  }
 
-    async generatePerformanceSecuritySystem(objective) {
-        logger.info(`💻 [PerformanceSecurityDeveloperAgent] Analyzing Performance Security Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Security Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Security Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceSecurityDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceSecuritySystem(objective) {
+    logger.info(
+      `💻 [PerformanceSecurityDeveloperAgent] Analyzing Performance Security Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Security Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Security Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceSecurityDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceSecurityDeveloperAgent = Object.freeze(new PerformanceSecurityDeveloperAgent());
+export const performanceSecurityDeveloperAgent = Object.freeze(
+  new PerformanceSecurityDeveloperAgent(),
+);

@@ -10,7 +10,8 @@ class PrismaOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Prisma_Oss_Expert';
-    this.description = 'Deep expert in Prisma — Next-generation Node.js and TypeScript ORM.';
+    this.description =
+      'Deep expert in Prisma — Next-generation Node.js and TypeScript ORM.';
     this.preamble = `You are a world-class Database Engineer with expert-level mastery of Prisma ORM and TypeScript.
 
 CORE CONCEPTS:
@@ -46,7 +47,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PRISMA QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PRISMA QUESTION ===\n${prompt}`,
+    );
   }
 }
 

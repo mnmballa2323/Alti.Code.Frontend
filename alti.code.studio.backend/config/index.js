@@ -1,5 +1,6 @@
 import { config } from 'dotenv';
 import path from 'path';
+import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 
 config({ path: path.join(process.cwd(), '.env') });
 
@@ -50,8 +51,7 @@ const configObject = {
     process.env.GITHUB_TOKEN || process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
   gitlab_token:
     process.env.GITLAB_TOKEN || process.env.GITLAB_PERSONAL_ACCESS_TOKEN,
-  gitlab_url:
-    process.env.GITLAB_URL || 'https://gitlab.com/api/v4',
+  gitlab_url: process.env.GITLAB_URL || 'https://gitlab.com/api/v4',
 
   mailgun: {
     mailgun_domain: process.env.MAILGUN_DOMAIN,
@@ -106,7 +106,7 @@ export const loadEnterpriseSecrets = async () => {
   if (process.env.NODE_ENV === 'test') {
     return; // Prevent network dependencies during unit tests
   }
-  
+
   const secretsMap = {
     DATABASE_LOCAL: val => {
       configObject.database_local = val;
@@ -122,15 +122,52 @@ export const loadEnterpriseSecrets = async () => {
     },
   };
 
-  // Azure Sovereign Environment-based or Vault-based Secrets Loader
+  // Load from Environment first (for local dev or CI)
   for (const [key, updater] of Object.entries(secretsMap)) {
     if (process.env[key]) {
       updater(process.env[key]);
     }
   }
 
+  // Google Secret Manager integration
+  const projectId = process.env.GCP_PROJECT_ID;
+  if (projectId) {
+    console.log(
+      `[GCP Secret Manager] Initializing secret loader for project: ${projectId}`,
+    );
+    try {
+      const client = new SecretManagerServiceClient();
+
+      // Fetch each secret dynamically
+      for (const [key, updater] of Object.entries(secretsMap)) {
+        const secretId = `alti-sec-${process.env.CUSTOMER_ID || 'enterprise-tenant'}-${process.env.NODE_ENV || 'prod'}-${key.toLowerCase().replace(/_/g, '-')}`;
+        const name = `projects/${projectId}/secrets/${secretId}/versions/latest`;
+        try {
+          const [version] = await client.accessSecretVersion({ name });
+          const secretValue = version.payload.data.toString().trim();
+          if (secretValue) {
+            updater(secretValue);
+            console.log(`[GCP Secret Manager] Loaded secret: ${key}`);
+          }
+        } catch (secretErr) {
+          // Fallback to existing env value if not found in Secret Manager
+          console.warn(
+            `⚠️ [GCP Secret Manager] Failed to load ${key} from Secret Manager: ${secretErr.message}. Using environment default.`,
+          );
+        }
+      }
+    } catch (err) {
+      console.error(
+        '❌ [GCP Secret Manager] Failed to initialize SecretManagerServiceClient:',
+        err.message,
+      );
+    }
+  }
+
   if (process.env.AZURE_KEYVAULT_NAME) {
-    console.log(`[Azure Key Vault] Sovereign Vault loaded: ${process.env.AZURE_KEYVAULT_NAME}`);
+    console.log(
+      `[Azure Key Vault] Sovereign Vault loaded: ${process.env.AZURE_KEYVAULT_NAME}`,
+    );
   }
 };
 

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileServerlessEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_serverless_engineer_agent',
-            'Mobile Serverless Engineer',
-            'You are an elite Mobile Serverless Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_serverless_engineer_agent',
+      'Mobile Serverless Engineer',
+      'You are an elite Mobile Serverless Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Serverless.',
+    );
+  }
 
-    async generateMobileServerlessSystem(objective) {
-        logger.info(`💻 [MobileServerlessEngineerAgent] Analyzing Mobile Serverless Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Serverless Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Serverless Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileServerlessEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileServerlessSystem(objective) {
+    logger.info(
+      `💻 [MobileServerlessEngineerAgent] Analyzing Mobile Serverless Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Serverless Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Serverless Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [MobileServerlessEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const mobileServerlessEngineerAgent = Object.freeze(new MobileServerlessEngineerAgent());
+export const mobileServerlessEngineerAgent = Object.freeze(
+  new MobileServerlessEngineerAgent(),
+);

@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MigrationAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Migration_Expert';
-        this.description = 'Database architect specializing in zero-downtime SQL migrations and schema evolution.';
+  constructor() {
+    super();
+    this.name = 'Migration_Expert';
+    this.description =
+      'Database architect specializing in zero-downtime SQL migrations and schema evolution.';
 
-        this.preamble = `You are an elite Database Reliability Engineer and Schema Architect.
+    this.preamble = `You are an elite Database Reliability Engineer and Schema Architect.
 Your core expertise revolves around designing robust SQL (PostgreSQL, MySQL) and NoSQL (MongoDB) database migrations safely in production.
 
 # CORE RESPONSIBILITIES
@@ -31,28 +32,30 @@ Your core expertise revolves around designing robust SQL (PostgreSQL, MySQL) and
 # BEHAVIOR
 When auditing code or providing blueprints, provide pure SQL syntax or Prisma/TypeORM/Mongoose migration scripts depending on the requested context. Document the transaction boundaries clearly.
 `;
+  }
+
+  /**
+   * Executes a Database migration review or DDL generation.
+   * @param {string} prompt
+   * @param {Array<object>} contextData Previous schemas or data maps
+   * @returns {Promise<string>}
+   */
+  async consult(prompt, contextData = []) {
+    logger.info(`💾 Migration Expert: Synthesizing logic for prompt...`);
+    let combinedContext = contextData
+      .map(c => `[Context File: ${c.path}]\n${c.content}\n`)
+      .join('\n');
+
+    let finalPrompt = `${this.preamble}\n\n=== SCHEMA CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
+
+    try {
+      const response = await GeminiAiService.generateContent(finalPrompt);
+      return response;
+    } catch (e) {
+      logger.error(`❌ Migration Expert: Consultation failed.`, e);
+      throw new Error(`Migration Synthesis Failed: ${e.message}`);
     }
-
-    /**
-     * Executes a Database migration review or DDL generation.
-     * @param {string} prompt
-     * @param {Array<object>} contextData Previous schemas or data maps
-     * @returns {Promise<string>}
-     */
-    async consult(prompt, contextData = []) {
-        logger.info(`💾 Migration Expert: Synthesizing logic for prompt...`);
-        let combinedContext = contextData.map(c => `[Context File: ${c.path}]\n${c.content}\n`).join('\n');
-
-        let finalPrompt = `${this.preamble}\n\n=== SCHEMA CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
-
-        try {
-            const response = await GeminiAiService.generateContent(finalPrompt);
-            return response;
-        } catch (e) {
-            logger.error(`❌ Migration Expert: Consultation failed.`, e);
-            throw new Error(`Migration Synthesis Failed: ${e.message}`);
-        }
-    }
+  }
 }
 
 export const migrationAgent = Object.freeze(new MigrationAgent());

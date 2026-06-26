@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudETLStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'cloud_etl_strategist_agent',
-            'Cloud ETL Strategist',
-            'You are an elite Cloud ETL Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'cloud_etl_strategist_agent',
+      'Cloud ETL Strategist',
+      'You are an elite Cloud ETL Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Cloud ETL.',
+    );
+  }
 
-    async generateCloudETLSystem(objective) {
-        logger.info(`💻 [CloudETLStrategistAgent] Analyzing Cloud ETL Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud ETL Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Cloud ETL Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [CloudETLStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateCloudETLSystem(objective) {
+    logger.info(
+      `💻 [CloudETLStrategistAgent] Analyzing Cloud ETL Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Cloud ETL Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Cloud ETL Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [CloudETLStrategistAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const cloudETLStrategistAgent = Object.freeze(new CloudETLStrategistAgent());
+export const cloudETLStrategistAgent = Object.freeze(
+  new CloudETLStrategistAgent(),
+);

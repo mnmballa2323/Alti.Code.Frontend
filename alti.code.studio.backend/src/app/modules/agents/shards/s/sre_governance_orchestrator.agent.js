@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREGovernanceOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_governance_orchestrator_agent',
-            'SRE Governance Orchestrator',
-            'You are an elite SRE Governance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_governance_orchestrator_agent',
+      'SRE Governance Orchestrator',
+      'You are an elite SRE Governance Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Governance.',
+    );
+  }
 
-    async generateSREGovernanceSystem(objective) {
-        logger.info(`💻 [SREGovernanceOrchestratorAgent] Analyzing SRE Governance Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Governance Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Governance Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREGovernanceOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREGovernanceSystem(objective) {
+    logger.info(
+      `💻 [SREGovernanceOrchestratorAgent] Analyzing SRE Governance Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Governance Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Governance Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREGovernanceOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREGovernanceOrchestratorAgent = Object.freeze(new SREGovernanceOrchestratorAgent());
+export const sREGovernanceOrchestratorAgent = Object.freeze(
+  new SREGovernanceOrchestratorAgent(),
+);

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AITelemetryAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_telemetry_analyst_agent',
-            'AI Telemetry Analyst',
-            'You are an elite AI Telemetry Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and AI Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_telemetry_analyst_agent',
+      'AI Telemetry Analyst',
+      'You are an elite AI Telemetry Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and AI Telemetry.',
+    );
+  }
 
-    async generateAITelemetrySystem(objective) {
-        logger.info(`💻 [AITelemetryAnalystAgent] Analyzing AI Telemetry Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Telemetry Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Telemetry Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AITelemetryAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAITelemetrySystem(objective) {
+    logger.info(
+      `💻 [AITelemetryAnalystAgent] Analyzing AI Telemetry Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Telemetry Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Telemetry Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AITelemetryAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aITelemetryAnalystAgent = Object.freeze(new AITelemetryAnalystAgent());
+export const aITelemetryAnalystAgent = Object.freeze(
+  new AITelemetryAnalystAgent(),
+);

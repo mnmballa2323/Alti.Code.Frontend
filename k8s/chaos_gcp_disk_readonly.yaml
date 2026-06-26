@@ -1,0 +1,86 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: chaos-gcp-disk-readonly-simulator
+  namespace: default
+spec:
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        app: chaos-gcp-disk-readonly
+    spec:
+      containers:
+      - name: readonly-injector
+        image: alpine:latest
+        securityContext:
+          # Required to perform block device manipulation
+          privileged: true
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          echo "=================================================="
+          echo "  CHAOS ENGINEERING: GCP PERSISTENT DISK READ-ONLY SIMULATOR"
+          echo "=================================================="
+          
+          # Find underlying block device for mounted volume.
+          # We write to a mounted volume, then suddenly remount it read-only.
+          
+          echo "[CHAOS] Creating test directory on the Google Persistent Volume..."
+          mkdir -p /chaos-data/db-simulation
+          
+          echo "[CHAOS] Spawning background process to simulate continuous database WAL writes..."
+          (
+            while true; do
+              echo "Simulated DB Transaction Data $(date)" >> /chaos-data/db-simulation/wal.log
+              sleep 0.1
+            done
+          ) &
+          
+          WRITE_PID=$!
+          echo "[CHAOS] Background writer spawned (PID $WRITE_PID)."
+          
+          sleep 5
+          echo "[CHAOS] Verifying writes are successful..."
+          tail -n 2 /chaos-data/db-simulation/wal.log
+          
+          # Critical chaos injection:
+          # Forcefully remount the filesystem as read-only.
+          # Simulates a Google Persistent Disk hardware failure or compute engine attachment freeze.
+          echo "[CHAOS] INJECTING FAILURE: Forcefully remounting GCP PV filesystem as READ-ONLY!"
+          
+          mount -o remount,ro /chaos-data
+          
+          echo "[CHAOS] Filesystem is now Read-Only."
+          echo "[CHAOS] Validating Database Resilience mechanisms:"
+          echo "  1. The background writer should immediately start throwing 'Read-only file system' errors."
+          echo "  2. The GKE Liveness Probe for the main database pod MUST fail."
+          echo "  3. GKE should attempt to reschedule or failover to a replica on a healthy node."
+          
+          # Monitor the writer's failure
+          sleep 5
+          
+          if kill -0 $WRITE_PID 2>/dev/null; then
+            echo "[WARNING] The background process did NOT crash when writes failed! Dangerous silent failure."
+            kill -9 $WRITE_PID
+          else
+            echo "[SUCCESS] The background writer gracefully crashed upon disk failure."
+          fi
+          
+          echo "[CHAOS] Holding Read-Only state for 2 minutes to observe cluster alarms..."
+          sleep 120
+          
+          echo "[CHAOS] Reverting to healthy Read-Write state..."
+          mount -o remount,rw /chaos-data
+          
+          echo "[CHAOS] Cleanup..."
+          rm -rf /chaos-data/db-simulation
+          
+          echo "[CHAOS] Experiment complete."
+        volumeMounts:
+        - name: target-pvc
+          mountPath: /chaos-data
+      volumes:
+      - name: target-pvc
+        emptyDir: {}
+      restartPolicy: Never

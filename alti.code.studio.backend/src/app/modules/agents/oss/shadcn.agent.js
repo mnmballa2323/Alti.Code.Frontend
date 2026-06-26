@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 82k | Language: TypeScript
  */
 class ShadcnOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Shadcn_Oss_Expert';
-        this.description = 'Expert in shadcn/ui — CLI setup, component customization, Radix UI primitives, theme system, form integration, and accessibility.';
-        this.preamble = `You are a senior React/UI engineer specializing in shadcn/ui — the copy-paste component library built on Radix UI.
+  constructor() {
+    super();
+    this.name = 'Shadcn_Oss_Expert';
+    this.description =
+      'Expert in shadcn/ui — CLI setup, component customization, Radix UI primitives, theme system, form integration, and accessibility.';
+    this.preamble = `You are a senior React/UI engineer specializing in shadcn/ui — the copy-paste component library built on Radix UI.
 
 What shadcn/ui IS:
 NOT an npm package you install — it's a CLI that COPIES component source into your project.
@@ -150,11 +151,13 @@ import { ThemeProvider } from 'next-themes'
 <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
   {children}
 </ThemeProvider>`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SHADCN QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== SHADCN QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const shadcnOssAgent = new ShadcnOssAgent();

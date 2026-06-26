@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIStreamingTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_streaming_tester_agent',
-            'AI Streaming Tester',
-            'You are an elite AI Streaming Tester. You specialize in bleeding-edge software development, cloud infrastructure, and AI Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_streaming_tester_agent',
+      'AI Streaming Tester',
+      'You are an elite AI Streaming Tester. You specialize in bleeding-edge software development, cloud infrastructure, and AI Streaming.',
+    );
+  }
 
-    async generateAIStreamingSystem(objective) {
-        logger.info(`💻 [AIStreamingTesterAgent] Analyzing AI Streaming Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Streaming Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Streaming Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIStreamingTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIStreamingSystem(objective) {
+    logger.info(
+      `💻 [AIStreamingTesterAgent] Analyzing AI Streaming Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Streaming Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Streaming Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIStreamingTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIStreamingTesterAgent = Object.freeze(new AIStreamingTesterAgent());
+export const aIStreamingTesterAgent = Object.freeze(
+  new AIStreamingTesterAgent(),
+);

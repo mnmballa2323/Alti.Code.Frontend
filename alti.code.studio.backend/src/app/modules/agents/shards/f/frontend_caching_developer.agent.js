@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendCachingDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_caching_developer_agent',
-            'Frontend Caching Developer',
-            'You are an elite Frontend Caching Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_caching_developer_agent',
+      'Frontend Caching Developer',
+      'You are an elite Frontend Caching Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Caching.',
+    );
+  }
 
-    async generateFrontendCachingSystem(objective) {
-        logger.info(`💻 [FrontendCachingDeveloperAgent] Analyzing Frontend Caching Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Caching Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Caching Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendCachingDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendCachingSystem(objective) {
+    logger.info(
+      `💻 [FrontendCachingDeveloperAgent] Analyzing Frontend Caching Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Caching Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Caching Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FrontendCachingDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const frontendCachingDeveloperAgent = Object.freeze(new FrontendCachingDeveloperAgent());
+export const frontendCachingDeveloperAgent = Object.freeze(
+  new FrontendCachingDeveloperAgent(),
+);

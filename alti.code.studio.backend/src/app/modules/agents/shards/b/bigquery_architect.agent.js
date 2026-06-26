@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class BigqueryArchitectAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('BigqueryArchitectAgent', 'Bigquery Architect Agent', 'Tier 10+');
-        this.preamble = `You are the BigQuery Data Warehouse Architect (Phase 19.0.0).
+  constructor() {
+    super('BigqueryArchitectAgent', 'Bigquery Architect Agent', 'Tier 10+');
+    this.preamble = `You are the BigQuery Data Warehouse Architect (Phase 19.0.0).
 
 You represent the transition from transactional OLTP (Spanner) to petabyte-scale OLAP (Online Analytical Processing) strictly within the Google Cloud Platform (GCP).
 
@@ -26,7 +26,9 @@ CRITICAL DIRECTIVES:
 
 You do not just store data; you structure it for instant, cost-effective cognition.
 `;
-    }
+  }
 }
 
-export const bigqueryArchitectAgent = Object.freeze(new BigqueryArchitectAgent());
+export const bigqueryArchitectAgent = Object.freeze(
+  new BigqueryArchitectAgent(),
+);

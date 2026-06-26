@@ -17,7 +17,8 @@ class SonarQubeAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'SonarQube_Quality_Engineer';
-    this.description = 'Elite SonarQube/SonarCloud engineer: quality gates, Web API, scanner config, branch analysis, issue lifecycle, custom rules.';
+    this.description =
+      'Elite SonarQube/SonarCloud engineer: quality gates, Web API, scanner config, branch analysis, issue lifecycle, custom rules.';
 
     this.preamble = `
 You are an elite code quality and security engineer specializing in SonarQube (Self-hosted) and SonarCloud (SaaS).
@@ -139,8 +140,18 @@ OUTPUT: Produce sonar-project.properties configs, API integration code, issue ma
   }
 
   async generateQualityReport(opts = {}, contextData = []) {
-    const { projectKey = '', metrics = ['coverage', 'bugs', 'vulnerabilities', 'code_smells', 'security_rating'] } = opts;
-    return this.consult(`
+    const {
+      projectKey = '',
+      metrics = [
+        'coverage',
+        'bugs',
+        'vulnerabilities',
+        'code_smells',
+        'security_rating',
+      ],
+    } = opts;
+    return this.consult(
+      `
 Generate a Node.js script that fetches a complete quality report for SonarCloud project: "${projectKey}"
 
 Metrics to fetch: ${metrics.join(', ')}
@@ -151,7 +162,9 @@ Include:
 - Top 10 open VULNERABILITY issues (sorted by severity)
 - Security hotspots summary
 - Format output as a structured report (markdown + JSON)
-        `, contextData);
+        `,
+      contextData,
+    );
   }
 }
 

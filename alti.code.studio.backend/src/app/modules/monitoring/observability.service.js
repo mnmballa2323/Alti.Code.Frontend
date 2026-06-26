@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -9,7 +9,7 @@ import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
 import axios from 'axios';
 import os from 'os';
-import { AzureLoggingService } from '../azureCloud/azureLogging.service.js';
+import { AzureLoggingService } from '../gcpCloud/gcpLogging.service.js';
 import otelNode from '@opentelemetry/sdk-trace-node';
 const { NodeTracerProvider } = otelNode;
 import otelBase from '@opentelemetry/sdk-trace-base';
@@ -25,196 +25,213 @@ const { trace, context, SpanStatusCode } = pkgApi;
 import EventEmitter from 'events';
 
 class ObservabilityService extends EventEmitter {
-    constructor() {
-        super();
+  constructor() {
+    super();
 
-        this.localTraces = []; // Buffer for "Glass Cockpit"
-        this.maxTraces = 50;
-        this.azureLogging = null;
-        this.logName = 'alti-agent-trace-log';
-        this.init();
+    this.localTraces = []; // Buffer for "Glass Cockpit"
+    this.maxTraces = 50;
+    this.azureLogging = null;
+    this.logName = 'alti-agent-trace-log';
+    this.init();
+  }
+
+  init() {
+    // Initialize Azure Logging client in production environments
+    if (
+      process.env.NODE_ENV === 'production' &&
+      process.env.PRIVATE_CLOUD_MODE !== 'true'
+    ) {
+      this.azureLogging = AzureLoggingService;
+      logger.info('🔭 Observability: Azure Logging client initialized.');
+    } else {
+      logger.info(
+        '🔭 Observability: Azure Logging client not initialized (private cloud or local dev).',
+      );
     }
 
-    init() {
-        // Initialize Azure Logging client in production environments
-        if (process.env.NODE_ENV === 'production' && process.env.PRIVATE_CLOUD_MODE !== 'true') {
-            this.azureLogging = AzureLoggingService;
-            logger.info('🔭 Observability: Azure Logging client initialized.');
+    // Initialize OpenTelemetry
+    try {
+      const provider = new NodeTracerProvider({
+        resource: new Resource({
+          [SemanticResourceAttributes.SERVICE_NAME]: 'alti-code-studio-backend',
+          [SemanticResourceAttributes.SERVICE_VERSION]: '1.0.0',
+        }),
+      });
+      const exporter = new OTLPTraceExporter();
+      provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
+      provider.register();
+
+      this.tracer = trace.getTracer('alti-agent-swarm');
+      this.telemetryEnabled = true;
+      logger.info(
+        '🔭 Observability: OpenTelemetry Tracing initialized for Mission Control.',
+      );
+    } catch (error) {
+      this.telemetryEnabled = false;
+      logger.warn(
+        '🔭 Observability: OpenTelemetry initialization failed or not configured.',
+      );
+    }
+  }
+
+  /**
+   * Create a new trace for a mission or task
+   * Emits a standard observability trace for any Agent execution to both Local UI & Azure Monitor
+   */
+  async emitTrace(agentName, action, metadata = {}) {
+    const traceId = `trace-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+    const localTrace = {
+      id: traceId,
+      agent: agentName,
+      action: action,
+      timestamp: new Date().toISOString(),
+      status: 'ACTIVE',
+      metadata: metadata, // Ensure metadata is captured locally
+    };
+    this.localTraces.unshift(localTrace);
+    if (this.localTraces.length > this.maxTraces) this.localTraces.pop();
+
+    // Broadcast to Azure Monitor if enabled
+    if (this.azureLogging) {
+      try {
+        await this.azureLogging.writeAuditLog(this.logName, localTrace, 'INFO');
+      } catch (e) {
+        // Fail gracefully
+      }
+    }
+
+    return localTrace;
+  }
+
+  /**
+   * Update the status of a local trace (e.g. to 'COMPLETED' or 'FAILED').
+   * @param {string} traceId - The UUID returned by emitTrace()
+   * @param {'COMPLETED'|'FAILED'|string} status
+   * @param {object} [metadata]
+   */
+  updateTraceStatus(traceId, status, metadata = {}) {
+    const t = this.localTraces.find(r => r.id === traceId);
+    if (t) {
+      t.status = status;
+      t.completedAt = new Date().toISOString();
+      Object.assign(t, metadata);
+    }
+  }
+
+  /**
+   * Get recent traces for the Agent Dashboard
+   */
+  getRecentTraces() {
+    return this.localTraces;
+  }
+
+  /**
+   * Parse and format incoming webhooks from Azure Monitor / Cloud Alerts
+   * @param {object} payload - The raw Azure Monitor JSON payload
+   */
+  ingestCloudAlert(payload) {
+    logger.info('🔭 Observability: Ingesting Azure Monitor Alert...');
+
+    // Handle standard Azure Monitor Alert shape or fallback
+    const incidentId =
+      payload?.data?.essentials?.alertId ||
+      `azure-alert-${crypto.randomUUID().slice(0, 8)}`;
+
+    const summary =
+      payload?.data?.essentials?.description || 'Unknown Production Alert';
+
+    let errorLog = summary;
+    let stackTrace = 'No stack trace provided in alert payload.';
+
+    // Add to recent traces for visibility
+    this.emitTrace(`Azure Alert: ${incidentId}`, 'system', { incidentId });
+
+    return {
+      incidentId,
+      errorLog,
+      stackTrace,
+      rawPayload: payload,
+    };
+  }
+
+  /**
+   * Start a new distributed trace span for an AI action (OpenTelemetry & WebSocket).
+   */
+  startAgentSpan(spanName, attributes = {}) {
+    if (!this.telemetryEnabled || !this.tracer)
+      return {
+        end: () => {},
+        setStatus: () => {},
+        recordException: () => {},
+        setAttribute: () => {},
+      };
+
+    const span = this.tracer.startSpan(spanName);
+    span.setAttributes(attributes);
+
+    // Emit event for real-time WebSocket Mission Control
+    this.emit('span_started', {
+      traceId: span.spanContext().traceId,
+      spanId: span.spanContext().spanId,
+      name: spanName,
+      attributes,
+      timestamp: Date.now(),
+    });
+
+    return {
+      setAttribute: (key, value) => span.setAttribute(key, value),
+      setStatus: (code, message) => span.setStatus({ code, message }),
+      recordException: err => span.recordException(err),
+      end: (success = true) => {
+        if (!success) {
+          span.setStatus({ code: SpanStatusCode.ERROR });
         } else {
-            logger.info('🔭 Observability: Azure Logging client not initialized (private cloud or local dev).');
+          span.setStatus({ code: SpanStatusCode.OK });
         }
+        span.end();
 
-        // Initialize OpenTelemetry
-        try {
-            const provider = new NodeTracerProvider({
-                resource: new Resource({
-                    [SemanticResourceAttributes.SERVICE_NAME]: 'alti-code-studio-backend',
-                    [SemanticResourceAttributes.SERVICE_VERSION]: '1.0.0',
-                }),
-            });
-            const exporter = new OTLPTraceExporter();
-            provider.addSpanProcessor(new SimpleSpanProcessor(exporter));
-            provider.register();
-
-            this.tracer = trace.getTracer('alti-agent-swarm');
-            this.telemetryEnabled = true;
-            logger.info('🔭 Observability: OpenTelemetry Tracing initialized for Mission Control.');
-        } catch (error) {
-            this.telemetryEnabled = false;
-            logger.warn('🔭 Observability: OpenTelemetry initialization failed or not configured.');
-        }
-    }
-
-    /**
-     * Create a new trace for a mission or task
-     * Emits a standard observability trace for any Agent execution to both Local UI & Azure Monitor
-     */
-    async emitTrace(agentName, action, metadata = {}) {
-        const traceId = `trace-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
-
-        const localTrace = {
-            id: traceId,
-            agent: agentName,
-            action: action,
-            timestamp: new Date().toISOString(),
-            status: 'ACTIVE',
-            metadata: metadata // Ensure metadata is captured locally
-        };
-        this.localTraces.unshift(localTrace);
-        if (this.localTraces.length > this.maxTraces) this.localTraces.pop();
-
-        // Broadcast to Azure Monitor if enabled
-        if (this.azureLogging) {
-            try {
-                await this.azureLogging.writeAuditLog(this.logName, localTrace, 'INFO');
-            } catch (e) {
-                // Fail gracefully
-            }
-        }
-
-        return localTrace;
-    }
-
-    /**
-     * Update the status of a local trace (e.g. to 'COMPLETED' or 'FAILED').
-     * @param {string} traceId - The UUID returned by emitTrace()
-     * @param {'COMPLETED'|'FAILED'|string} status
-     * @param {object} [metadata]
-     */
-    updateTraceStatus(traceId, status, metadata = {}) {
-        const t = this.localTraces.find(r => r.id === traceId);
-        if (t) {
-            t.status = status;
-            t.completedAt = new Date().toISOString();
-            Object.assign(t, metadata);
-        }
-    }
-
-    /**
-     * Get recent traces for the Agent Dashboard
-     */
-    getRecentTraces() {
-        return this.localTraces;
-    }
-
-    /**
-     * Parse and format incoming webhooks from Azure Monitor / Cloud Alerts
-     * @param {object} payload - The raw Azure Monitor JSON payload
-     */
-    ingestCloudAlert(payload) {
-        logger.info('🔭 Observability: Ingesting Azure Monitor Alert...');
-
-        // Handle standard Azure Monitor Alert shape or fallback
-        const incidentId = payload?.data?.essentials?.alertId
-            || `azure-alert-${crypto.randomUUID().slice(0, 8)}`;
-
-        const summary = payload?.data?.essentials?.description || 'Unknown Production Alert';
-
-        let errorLog = summary;
-        let stackTrace = "No stack trace provided in alert payload.";
-
-        // Add to recent traces for visibility
-        this.emitTrace(`Azure Alert: ${incidentId}`, 'system', { incidentId });
-
-        return {
-            incidentId,
-            errorLog,
-            stackTrace,
-            rawPayload: payload
-        };
-    }
-
-    /**
-     * Start a new distributed trace span for an AI action (OpenTelemetry & WebSocket).
-     */
-    startAgentSpan(spanName, attributes = {}) {
-        if (!this.telemetryEnabled || !this.tracer) return { end: () => { }, setStatus: () => { }, recordException: () => { }, setAttribute: () => { } };
-
-        const span = this.tracer.startSpan(spanName);
-        span.setAttributes(attributes);
-
-        // Emit event for real-time WebSocket Mission Control
-        this.emit('span_started', {
-            traceId: span.spanContext().traceId,
-            spanId: span.spanContext().spanId,
-            name: spanName,
-            attributes,
-            timestamp: Date.now()
+        // Emit end event for real-time tracking
+        this.emit('span_ended', {
+          traceId: span.spanContext().traceId,
+          spanId: span.spanContext().spanId,
+          name: spanName,
+          success,
+          timestamp: Date.now(),
         });
+      },
+    };
+  }
 
-        return {
-            setAttribute: (key, value) => span.setAttribute(key, value),
-            setStatus: (code, message) => span.setStatus({ code, message }),
-            recordException: (err) => span.recordException(err),
-            end: (success = true) => {
-                if (!success) {
-                    span.setStatus({ code: SpanStatusCode.ERROR });
-                } else {
-                    span.setStatus({ code: SpanStatusCode.OK });
-                }
-                span.end();
+  /**
+   * Express middleware to wrap incoming HTTP requests in a root trace span.
+   */
+  requestTracer() {
+    return (req, res, next) => {
+      if (!this.telemetryEnabled || !this.tracer) return next();
 
-                // Emit end event for real-time tracking
-                this.emit('span_ended', {
-                    traceId: span.spanContext().traceId,
-                    spanId: span.spanContext().spanId,
-                    name: spanName,
-                    success,
-                    timestamp: Date.now()
-                });
-            }
-        };
-    }
+      const span = this.tracer.startSpan(`${req.method} ${req.path}`);
+      span.setAttributes({
+        'http.method': req.method,
+        'http.url': req.originalUrl,
+        'http.client_ip': req.ip,
+      });
 
-    /**
-     * Express middleware to wrap incoming HTTP requests in a root trace span.
-     */
-    requestTracer() {
-        return (req, res, next) => {
-            if (!this.telemetryEnabled || !this.tracer) return next();
+      req.traceSpan = span;
 
-            const span = this.tracer.startSpan(`${req.method} ${req.path}`);
-            span.setAttributes({
-                'http.method': req.method,
-                'http.url': req.originalUrl,
-                'http.client_ip': req.ip,
-            });
+      res.on('finish', () => {
+        span.setAttribute('http.status_code', res.statusCode);
+        if (res.statusCode >= 400) {
+          span.setStatus({ code: SpanStatusCode.ERROR });
+        } else {
+          span.setStatus({ code: SpanStatusCode.OK });
+        }
+        span.end();
+      });
 
-            req.traceSpan = span;
-
-            res.on('finish', () => {
-                span.setAttribute('http.status_code', res.statusCode);
-                if (res.statusCode >= 400) {
-                    span.setStatus({ code: SpanStatusCode.ERROR });
-                } else {
-                    span.setStatus({ code: SpanStatusCode.OK });
-                }
-                span.end();
-            });
-
-            next();
-        };
-    }
+      next();
+    };
+  }
 }
 
 export const observabilityService = new ObservabilityService();

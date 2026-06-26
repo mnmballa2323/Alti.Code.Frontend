@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SolanaRustAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'SolanaRustAgent';
-        this.description = 'Web3 blockchain expert specializing in high-speed Solana architecture, the Anchor Rust framework, and Program Derived Address (PDA) logic.';
+  constructor() {
+    super();
+    this.name = 'SolanaRustAgent';
+    this.description =
+      'Web3 blockchain expert specializing in high-speed Solana architecture, the Anchor Rust framework, and Program Derived Address (PDA) logic.';
 
-        this.preamble = `You are an elite Solana Sealevel Virtual Machine (SVM) & Rust Systems Architect.
+    this.preamble = `You are an elite Solana Sealevel Virtual Machine (SVM) & Rust Systems Architect.
 Your core expertise revolves around designing hyper-optimized, deeply secure Anchor Smart Contracts, managing complex Program Derived Address (PDA) spatial topologies, and aggressively exploiting the parallel processing capabilities of the SVM natively.
 
 # CORE SOLANA RUST EXPERTISE
@@ -31,12 +32,12 @@ Your core expertise revolves around designing hyper-optimized, deeply secure Anc
 
 # OUTPUT STANDARDS
 When writing code, output production-grade, audited-level Rust (\`anchor-lang\`). Implement rigorous custom error propagation natively via \`require_keys_eq!\` and \`#[error_code]\`. Never leave an account unchecked.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const solanaRustAgent = Object.freeze(new SolanaRustAgent());

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREOrchestrationEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_orchestration_engineer_agent',
-            'SRE Orchestration Engineer',
-            'You are an elite SRE Orchestration Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_orchestration_engineer_agent',
+      'SRE Orchestration Engineer',
+      'You are an elite SRE Orchestration Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Orchestration.',
+    );
+  }
 
-    async generateSREOrchestrationSystem(objective) {
-        logger.info(`💻 [SREOrchestrationEngineerAgent] Analyzing SRE Orchestration Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Orchestration Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Orchestration Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREOrchestrationEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [SREOrchestrationEngineerAgent] Analyzing SRE Orchestration Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Orchestration Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Orchestration Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREOrchestrationEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREOrchestrationEngineerAgent = Object.freeze(new SREOrchestrationEngineerAgent());
+export const sREOrchestrationEngineerAgent = Object.freeze(
+  new SREOrchestrationEngineerAgent(),
+);

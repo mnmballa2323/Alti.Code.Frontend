@@ -15,57 +15,85 @@ import { MastraAgentService } from '../agents/mastra_agent.service.js';
 const router = express.Router();
 
 // 1. Vercel AI SDK Endpoint
-router.post('/vercel-ai', catchAsync(async (req, res) => {
+router.post(
+  '/vercel-ai',
+  catchAsync(async (req, res) => {
     const { prompt, model } = req.body;
     if (!prompt) {
-        return res.status(400).json({ success: false, message: 'Prompt is required' });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Prompt is required' });
     }
     const result = await VercelAiService.generate(prompt, { model });
     res.status(200).json({ success: true, ...result });
-}));
+  }),
+);
 
 // 2. ElizaOS Endpoint
-router.post('/eliza', catchAsync(async (req, res) => {
+router.post(
+  '/eliza',
+  catchAsync(async (req, res) => {
     const { character, prompt } = req.body;
     if (!prompt) {
-        return res.status(400).json({ success: false, message: 'Prompt is required' });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Prompt is required' });
     }
-    const char = ElizaAgentService.createCharacter(character || {
+    const char = ElizaAgentService.createCharacter(
+      character || {
         name: 'Eliza Tester',
         bio: ['A testing persona for ElizaOS integration.'],
-        lore: ['Created in an integration sandbox.']
-    });
-    const responseText = await ElizaAgentService.generateCharacterResponse(char, prompt);
-    res.status(200).json({ success: true, name: char.name, response: responseText });
-}));
+        lore: ['Created in an integration sandbox.'],
+      },
+    );
+    const responseText = await ElizaAgentService.generateCharacterResponse(
+      char,
+      prompt,
+    );
+    res
+      .status(200)
+      .json({ success: true, name: char.name, response: responseText });
+  }),
+);
 
 // 3. GenSX Endpoint
-router.post('/gensx', catchAsync(async (req, res) => {
+router.post(
+  '/gensx',
+  catchAsync(async (req, res) => {
     const { input } = req.body;
-    
+
     // Define a dummy GenSX component for testing
-    const testComponent = GenSxWorkflowService.createComponent('TestGenSXComponent', async (props) => {
+    const testComponent = GenSxWorkflowService.createComponent(
+      'TestGenSXComponent',
+      async props => {
         return `GenSX Workflow Result: successfully processed input [${props.input || 'default'}]`;
-    });
+      },
+    );
 
     const result = await GenSxWorkflowService.execute(testComponent, { input });
     res.status(200).json({ success: true, result });
-}));
+  }),
+);
 
 // 4. Mastra Endpoint
-router.post('/mastra', catchAsync(async (req, res) => {
+router.post(
+  '/mastra',
+  catchAsync(async (req, res) => {
     const { prompt, instructions, model } = req.body;
     if (!prompt) {
-        return res.status(400).json({ success: false, message: 'Prompt is required' });
+      return res
+        .status(400)
+        .json({ success: false, message: 'Prompt is required' });
     }
     const agent = MastraAgentService.createAgent({
-        id: 'mastra-test-agent',
-        name: 'Mastra Tester',
-        instructions: instructions || 'You are a test assistant.',
-        model
+      id: 'mastra-test-agent',
+      name: 'Mastra Tester',
+      instructions: instructions || 'You are a test assistant.',
+      model,
     });
     const result = await MastraAgentService.generate(agent, prompt);
     res.status(200).json({ success: true, result: result.text });
-}));
+  }),
+);
 
 export const frameworksRoutes = router;

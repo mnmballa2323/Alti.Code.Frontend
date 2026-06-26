@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataResilienceAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_resilience_auditor_agent',
-            'Data Resilience Auditor',
-            'You are an elite Data Resilience Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Data Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'data_resilience_auditor_agent',
+      'Data Resilience Auditor',
+      'You are an elite Data Resilience Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and Data Resilience.',
+    );
+  }
 
-    async generateDataResilienceSystem(objective) {
-        logger.info(`💻 [DataResilienceAuditorAgent] Analyzing Data Resilience Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Resilience Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Resilience Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataResilienceAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataResilienceSystem(objective) {
+    logger.info(
+      `💻 [DataResilienceAuditorAgent] Analyzing Data Resilience Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Resilience Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Resilience Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataResilienceAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataResilienceAuditorAgent = Object.freeze(new DataResilienceAuditorAgent());
+export const dataResilienceAuditorAgent = Object.freeze(
+  new DataResilienceAuditorAgent(),
+);

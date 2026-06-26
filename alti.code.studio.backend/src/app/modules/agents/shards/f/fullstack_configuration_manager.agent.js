@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackConfigurationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_configuration_manager_agent',
-            'FullStack Configuration Manager',
-            'You are an elite FullStack Configuration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_configuration_manager_agent',
+      'FullStack Configuration Manager',
+      'You are an elite FullStack Configuration Manager. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Configuration.',
+    );
+  }
 
-    async generateFullStackConfigurationSystem(objective) {
-        logger.info(`💻 [FullStackConfigurationManagerAgent] Analyzing FullStack Configuration Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Configuration Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Configuration Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackConfigurationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackConfigurationSystem(objective) {
+    logger.info(
+      `💻 [FullStackConfigurationManagerAgent] Analyzing FullStack Configuration Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Configuration Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Configuration Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackConfigurationManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackConfigurationManagerAgent = Object.freeze(new FullStackConfigurationManagerAgent());
+export const fullStackConfigurationManagerAgent = Object.freeze(
+  new FullStackConfigurationManagerAgent(),
+);

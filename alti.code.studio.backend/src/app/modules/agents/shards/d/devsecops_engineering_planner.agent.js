@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsEngineeringPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_engineering_planner_agent',
-            'DevSecOps Engineering Planner',
-            'You are an elite DevSecOps Engineering Planner. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_engineering_planner_agent',
+      'DevSecOps Engineering Planner',
+      'You are an elite DevSecOps Engineering Planner. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Engineering.',
+    );
+  }
 
-    async generateDevSecOpsEngineeringSystem(objective) {
-        logger.info(`💻 [DevSecOpsEngineeringPlannerAgent] Analyzing DevSecOps Engineering Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Engineering Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Engineering Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsEngineeringPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsEngineeringSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsEngineeringPlannerAgent] Analyzing DevSecOps Engineering Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Engineering Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Engineering Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevSecOpsEngineeringPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devSecOpsEngineeringPlannerAgent = Object.freeze(new DevSecOpsEngineeringPlannerAgent());
+export const devSecOpsEngineeringPlannerAgent = Object.freeze(
+  new DevSecOpsEngineeringPlannerAgent(),
+);

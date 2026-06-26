@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class OverTheAirOtaDeployerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('OverTheAirOtaDeployerAgent', 'Over The Air Ota Deployer Agent', 'Tier 10+');
-        this.preamble = `You are the Over-The-Air (OTA) Deployer (Phase 29.0.0).
+  constructor() {
+    super(
+      'OverTheAirOtaDeployerAgent',
+      'Over The Air Ota Deployer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Over-The-Air (OTA) Deployer (Phase 29.0.0).
 
 You represent the physical delivery mechanism of Swarm logic to global hardware fleets. You do not deploy to high-availability GKE clusters; you deploy to tractors, pacemakers, pacemakers, and 5G base stations. A bad rollout bricks physical hardware.
 
@@ -14,7 +18,7 @@ CRITICAL DIRECTIVES:
 
 You manage the terrifying physical logistics of AI code generation.
 `;
-    }
+  }
 }
 
 export const overTheAirOtaDeployerAgent = new OverTheAirOtaDeployerAgent();

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Alti.Code.Studio
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -17,22 +17,29 @@ class SarifService {
    * @param {Array<Object>} params.findings Array of detected violations or insights
    * @returns {Object} A valid SARIF JSON document matching the v2.1.0 schema
    */
-  generateReport({ toolName, toolVersion = '1.0.0', rules = [], findings = [] }) {
-    logger.info(`📊 [SarifService] Formatting ${findings.length} findings from [${toolName}] into SARIF v2.1.0 schema...`);
+  generateReport({
+    toolName,
+    toolVersion = '1.0.0',
+    rules = [],
+    findings = [],
+  }) {
+    logger.info(
+      `📊 [SarifService] Formatting ${findings.length} findings from [${toolName}] into SARIF v2.1.0 schema...`,
+    );
 
     const sarifRules = rules.map(rule => ({
       id: rule.id,
       name: rule.name || rule.id,
       shortDescription: {
-        text: rule.shortDescription || rule.description
+        text: rule.shortDescription || rule.description,
       },
       fullDescription: {
-        text: rule.description
+        text: rule.description,
       },
       defaultConfiguration: {
-        level: rule.level || 'warning' // warning, error, note
+        level: rule.level || 'warning', // warning, error, note
       },
-      helpUri: rule.helpUri || `https://docs.alti.code.studio/rules/${rule.id}`
+      helpUri: rule.helpUri || `https://docs.alti.code.studio/rules/${rule.id}`,
     }));
 
     const results = findings.map(finding => {
@@ -40,9 +47,9 @@ class SarifService {
         physicalLocation: {
           artifactLocation: {
             uri: finding.filePath,
-            uriBaseId: 'SRCROOT'
-          }
-        }
+            uriBaseId: 'SRCROOT',
+          },
+        },
       };
 
       if (finding.line !== undefined) {
@@ -50,23 +57,25 @@ class SarifService {
           startLine: finding.line,
           startColumn: finding.column || 1,
           endLine: finding.endLine || finding.line,
-          endColumn: finding.endColumn || (finding.column ? finding.column + 1 : 2)
+          endColumn:
+            finding.endColumn || (finding.column ? finding.column + 1 : 2),
         };
       }
 
       return {
         ruleId: finding.ruleId,
         message: {
-          text: finding.message
+          text: finding.message,
         },
         level: finding.level || 'warning',
         locations: [location],
-        properties: finding.properties || {}
+        properties: finding.properties || {},
       };
     });
 
     const sarifDocument = {
-      $schema: 'https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json',
+      $schema:
+        'https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json',
       version: '2.1.0',
       runs: [
         {
@@ -75,15 +84,17 @@ class SarifService {
               name: toolName,
               version: toolVersion,
               informationUri: 'https://github.com/microsoft/sarif-sdk',
-              rules: sarifRules
-            }
+              rules: sarifRules,
+            },
           },
-          results: results
-        }
-      ]
+          results: results,
+        },
+      ],
     };
 
-    logger.info(`✅ [SarifService] SARIF log generated successfully for [${toolName}].`);
+    logger.info(
+      `✅ [SarifService] SARIF log generated successfully for [${toolName}].`,
+    );
     return sarifDocument;
   }
 }

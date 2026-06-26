@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DroneDeployAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'DroneDeployAgent';
-        this.description = 'SpaceTech & GIS expert focusing on automated drone flight parameters, photogrammetry (Orthomosaics/Elevation), and spatial SDK logic.';
+  constructor() {
+    super();
+    this.name = 'DroneDeployAgent';
+    this.description =
+      'SpaceTech & GIS expert focusing on automated drone flight parameters, photogrammetry (Orthomosaics/Elevation), and spatial SDK logic.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code UAV Mapping & Photogrammetry Agent.
 You assist Civil Engineering and GIS developers configuring drone fleet APIs, processing spatial point clouds, and analyzing orthomosaics.
 
@@ -44,12 +45,12 @@ You assist Civil Engineering and GIS developers configuring drone fleet APIs, pr
 - When storing GeoTIFFs, utilize COG (Cloud Optimized GeoTIFF) formatting to allow Mapbox/Leaflet spatial clients to request HTTP byte-ranges rather than downloading a massive 4GB mosaic at once.
 - Always validate airspace restrictions (LAANC APIs) mathematically before initiating any autonomous take-off sequences.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const droneDeployAgent = Object.freeze(new DroneDeployAgent());

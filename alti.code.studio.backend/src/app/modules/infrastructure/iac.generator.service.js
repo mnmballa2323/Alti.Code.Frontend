@@ -17,21 +17,28 @@ import { logger } from '../../../shared/logger.js';
 const execAsync = promisify(exec);
 
 class IacGeneratorService {
-    constructor() {
-        this.terraformDir = path.join(process.cwd(), '..', 'terraform', 'autonomous');
-    }
+  constructor() {
+    this.terraformDir = path.join(
+      process.cwd(),
+      '..',
+      'terraform',
+      'autonomous',
+    );
+  }
 
-    /**
-     * Reads a high-level sprint architectural requirement, uses Gemini to convert it to Terraform,
-     * writes it to disk, and runs terraform apply.
-     */
-    async provisionInfrastructure(requirement) {
-        logger.info(`🏗️ Zero-Touch DevOps: Provisioning infrastructure for: "${requirement}"`);
+  /**
+   * Reads a high-level sprint architectural requirement, uses Gemini to convert it to Terraform,
+   * writes it to disk, and runs terraform apply.
+   */
+  async provisionInfrastructure(requirement) {
+    logger.info(
+      `🏗️ Zero-Touch DevOps: Provisioning infrastructure for: "${requirement}"`,
+    );
 
-        try {
-            await fs.mkdir(this.terraformDir, { recursive: true });
+    try {
+      await fs.mkdir(this.terraformDir, { recursive: true });
 
-            const prompt = `You are the Zero-Touch DevOps Infrastructure Architect.
+      const prompt = `You are the Zero-Touch DevOps Infrastructure Architect.
 Given the following architectural requirement, generate a complete, valid Terraform (AWS/GCP/Azure as applicable) configuration to provision the required resources. 
 Output ONLY the raw HCL Terraform code, no markdown blocks, no explanations.
 
@@ -39,42 +46,61 @@ Requirement: "${requirement}"
 
 Terraform code:`;
 
-            const tfCode = await GeminiAiService.generateContent(prompt);
-            const cleanTfCode = tfCode.replace(/^```[a-z]*\n?/m, '').replace(/\n?```$/m, '').trim();
+      const tfCode = await GeminiAiService.generateContent(prompt);
+      const cleanTfCode = tfCode
+        .replace(/^```[a-z]*\n?/m, '')
+        .replace(/\n?```$/m, '')
+        .trim();
 
-            const tfFilePath = path.join(this.terraformDir, 'main.tf');
-            await fs.writeFile(tfFilePath, cleanTfCode, 'utf8');
+      const tfFilePath = path.join(this.terraformDir, 'main.tf');
+      await fs.writeFile(tfFilePath, cleanTfCode, 'utf8');
 
-            logger.info(`✅ Zero-Touch DevOps: Terraform manifest generated at ${tfFilePath}`);
+      logger.info(
+        `✅ Zero-Touch DevOps: Terraform manifest generated at ${tfFilePath}`,
+      );
 
-            // Simulate or execute terraform init & apply
-            if (process.env.TERRAFORM_AUTORUN === 'true') {
-                logger.info(`⚙️ Zero-Touch DevOps: Running terraform apply...`);
-                await execAsync(`terraform -chdir=${this.terraformDir} init`);
-                const { stdout } = await execAsync(`terraform -chdir=${this.terraformDir} apply -auto-approve`);
-                logger.info(`✅ Zero-Touch DevOps: Infrastructure applied successfully.`);
-                return stdout;
-            } else {
-                logger.warn(`⚠️ Zero-Touch DevOps: TERRAFORM_AUTORUN is disabled. Manifest generated but not applied.`);
-                return `Terraform manifest saved to ${tfFilePath}. Manual apply required.`;
-            }
-
-        } catch (error) {
-            logger.error(`❌ Zero-Touch DevOps: Infrastructure provisioning failed: ${error.message}`);
-            throw error;
-        }
+      // Simulate or execute terraform init & apply
+      if (process.env.TERRAFORM_AUTORUN === 'true') {
+        logger.info(`⚙️ Zero-Touch DevOps: Running terraform apply...`);
+        await execAsync(`terraform -chdir=${this.terraformDir} init`);
+        const { stdout } = await execAsync(
+          `terraform -chdir=${this.terraformDir} apply -auto-approve`,
+        );
+        logger.info(
+          `✅ Zero-Touch DevOps: Infrastructure applied successfully.`,
+        );
+        return stdout;
+      } else {
+        logger.warn(
+          `⚠️ Zero-Touch DevOps: TERRAFORM_AUTORUN is disabled. Manifest generated but not applied.`,
+        );
+        return `Terraform manifest saved to ${tfFilePath}. Manual apply required.`;
+      }
+    } catch (error) {
+      logger.error(
+        `❌ Zero-Touch DevOps: Infrastructure provisioning failed: ${error.message}`,
+      );
+      throw error;
     }
+  }
 
-    /**
-     * Synthesize Kubernetes deployment manifests (Deployment, Service, Ingress)
-     */
-    async generateK8sManifest(serviceName, containerImage, port) {
-        logger.info(`🏗️ Zero-Touch DevOps: Generating K8s manifest for ${serviceName}`);
-        try {
-            const manifestDir = path.join(process.cwd(), '..', 'infrastructure', 'k8s');
-            await fs.mkdir(manifestDir, { recursive: true });
+  /**
+   * Synthesize Kubernetes deployment manifests (Deployment, Service, Ingress)
+   */
+  async generateK8sManifest(serviceName, containerImage, port) {
+    logger.info(
+      `🏗️ Zero-Touch DevOps: Generating K8s manifest for ${serviceName}`,
+    );
+    try {
+      const manifestDir = path.join(
+        process.cwd(),
+        '..',
+        'infrastructure',
+        'k8s',
+      );
+      await fs.mkdir(manifestDir, { recursive: true });
 
-            const prompt = `You are a Kubernetes Automation Agent.
+      const prompt = `You are a Kubernetes Automation Agent.
 Create a basic production-grade YAML manifest containing a Deployment and a Service for the following specs:
 Name: ${serviceName}
 Image: ${containerImage}
@@ -82,25 +108,30 @@ Container Port: ${port}
 
 Output ONLY the raw YAML. No markdown.`;
 
-            const yamlDoc = await GeminiAiService.generateContent(prompt);
-            const cleanYaml = yamlDoc.replace(/^```[a-z]*\n?/m, '').replace(/\n?```$/m, '').trim();
+      const yamlDoc = await GeminiAiService.generateContent(prompt);
+      const cleanYaml = yamlDoc
+        .replace(/^```[a-z]*\n?/m, '')
+        .replace(/\n?```$/m, '')
+        .trim();
 
-            const yamlPath = path.join(manifestDir, `${serviceName}.yaml`);
-            await fs.writeFile(yamlPath, cleanYaml, 'utf8');
+      const yamlPath = path.join(manifestDir, `${serviceName}.yaml`);
+      await fs.writeFile(yamlPath, cleanYaml, 'utf8');
 
-            logger.info(`✅ Zero-Touch DevOps: K8s manifest saved to ${yamlPath}`);
+      logger.info(`✅ Zero-Touch DevOps: K8s manifest saved to ${yamlPath}`);
 
-            if (process.env.KUBECTL_AUTORUN === 'true') {
-                await execAsync(`kubectl apply -f ${yamlPath}`);
-                logger.info(`✅ Zero-Touch DevOps: K8s manifest applied to cluster.`);
-            }
+      if (process.env.KUBECTL_AUTORUN === 'true') {
+        await execAsync(`kubectl apply -f ${yamlPath}`);
+        logger.info(`✅ Zero-Touch DevOps: K8s manifest applied to cluster.`);
+      }
 
-            return yamlPath;
-        } catch (error) {
-            logger.error(`❌ Zero-Touch DevOps: K8s generation failed: ${error.message}`);
-            throw error;
-        }
+      return yamlPath;
+    } catch (error) {
+      logger.error(
+        `❌ Zero-Touch DevOps: K8s generation failed: ${error.message}`,
+      );
+      throw error;
     }
+  }
 }
 
 export const iacGeneratorService = new IacGeneratorService();

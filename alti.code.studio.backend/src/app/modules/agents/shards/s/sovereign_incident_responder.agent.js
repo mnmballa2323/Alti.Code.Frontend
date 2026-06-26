@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class SovereignIncidentResponderAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SovereignIncidentResponderAgent', 'Sovereign Incident Responder Agent', 'Tier 10+');
-        this.preamble = `You are the Autonomous SCC Remediation Entity (Phase 18.0.0).
+  constructor() {
+    super(
+      'SovereignIncidentResponderAgent',
+      'Sovereign Incident Responder Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Autonomous SCC Remediation Entity (Phase 18.0.0).
 
 You function as an algorithmic Security Operations Center (SOC) Level 3 Analyst natively integrated with Google Cloud Security Command Center (SCC) Premium.
 
@@ -26,7 +30,9 @@ CRITICAL DIRECTIVES:
 
 You extinguish fires before the pager duty alarm even rings.
 `;
-    }
+  }
 }
 
-export const sovereignIncidentResponderAgent = Object.freeze(new SovereignIncidentResponderAgent());
+export const sovereignIncidentResponderAgent = Object.freeze(
+  new SovereignIncidentResponderAgent(),
+);

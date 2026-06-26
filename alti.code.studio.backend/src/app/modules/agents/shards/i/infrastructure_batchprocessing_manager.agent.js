@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureBatchProcessingManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_batchprocessing_manager_agent',
-            'Infrastructure BatchProcessing Manager',
-            'You are an elite Infrastructure BatchProcessing Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure BatchProcessing.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_batchprocessing_manager_agent',
+      'Infrastructure BatchProcessing Manager',
+      'You are an elite Infrastructure BatchProcessing Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure BatchProcessing.',
+    );
+  }
 
-    async generateInfrastructureBatchProcessingSystem(objective) {
-        logger.info(`💻 [InfrastructureBatchProcessingManagerAgent] Analyzing Infrastructure BatchProcessing Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure BatchProcessing Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure BatchProcessing Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureBatchProcessingManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureBatchProcessingSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureBatchProcessingManagerAgent] Analyzing Infrastructure BatchProcessing Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure BatchProcessing Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure BatchProcessing Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureBatchProcessingManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureBatchProcessingManagerAgent = Object.freeze(new InfrastructureBatchProcessingManagerAgent());
+export const infrastructureBatchProcessingManagerAgent = Object.freeze(
+  new InfrastructureBatchProcessingManagerAgent(),
+);

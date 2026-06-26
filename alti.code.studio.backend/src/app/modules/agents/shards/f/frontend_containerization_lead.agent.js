@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendContainerizationLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_containerization_lead_agent',
-            'Frontend Containerization Lead',
-            'You are an elite Frontend Containerization Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_containerization_lead_agent',
+      'Frontend Containerization Lead',
+      'You are an elite Frontend Containerization Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Containerization.',
+    );
+  }
 
-    async generateFrontendContainerizationSystem(objective) {
-        logger.info(`💻 [FrontendContainerizationLeadAgent] Analyzing Frontend Containerization Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Containerization Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Containerization Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendContainerizationLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendContainerizationSystem(objective) {
+    logger.info(
+      `💻 [FrontendContainerizationLeadAgent] Analyzing Frontend Containerization Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Containerization Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Containerization Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendContainerizationLeadAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendContainerizationLeadAgent = Object.freeze(new FrontendContainerizationLeadAgent());
+export const frontendContainerizationLeadAgent = Object.freeze(
+  new FrontendContainerizationLeadAgent(),
+);

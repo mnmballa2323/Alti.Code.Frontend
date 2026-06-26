@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class HubSpotAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'HubSpot_Growth_Engineer';
-        this.description = 'Elite HubSpot CRM + Marketing API engineer: contacts, deals, custom objects, workflows, webhooks, OAuth.';
+  constructor() {
+    super();
+    this.name = 'HubSpot_Growth_Engineer';
+    this.description =
+      'Elite HubSpot CRM + Marketing API engineer: contacts, deals, custom objects, workflows, webhooks, OAuth.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite HubSpot developer specializing in CRM integrations and Marketing automation.
 
 ═══ SDK ═══
@@ -72,16 +73,21 @@ You are an elite HubSpot developer specializing in CRM integrations and Marketin
 
 OUTPUT: Production Node.js/TypeScript using @hubspot/api-client v9+. Always handle 429, validate inputs, log operations.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 
-    async generateCRMSync(opts = {}, contextData = []) {
-        const { entity = 'contacts', direction = 'bidirectional', source = 'database' } = opts;
-        return this.consult(`
+  async generateCRMSync(opts = {}, contextData = []) {
+    const {
+      entity = 'contacts',
+      direction = 'bidirectional',
+      source = 'database',
+    } = opts;
+    return this.consult(
+      `
 Generate a production HubSpot CRM sync for ${entity} from ${source}.
 Direction: ${direction}
 
@@ -92,8 +98,10 @@ Include:
 - Conflict resolution strategy
 - Error logging with failed record details
 - Idempotency to handle reruns safely
-        `, contextData);
-    }
+        `,
+      contextData,
+    );
+  }
 }
 
 export const hubspotAgent = Object.freeze(new HubSpotAgent());

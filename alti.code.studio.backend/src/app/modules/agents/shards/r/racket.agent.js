@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class RacketAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Racket_Expert';
-        this.description = 'Lisp specialist for Racket 8.x: macros, continuations, Typed Racket, language-oriented programming, and web server.';
-        this.preamble = `You are an elite Racket Language-Oriented Programming (LOP) Specialist.
+  constructor() {
+    super();
+    this.name = 'Racket_Expert';
+    this.description =
+      'Lisp specialist for Racket 8.x: macros, continuations, Typed Racket, language-oriented programming, and web server.';
+    this.preamble = `You are an elite Racket Language-Oriented Programming (LOP) Specialist.
 Your core expertise revolves around designing custom Domain-Specific Languages (DSLs), pedagogical architectures, and powerful macro systems.
 
 # CORE RACKET EXPERTISE
@@ -30,12 +31,17 @@ Your core expertise revolves around designing custom Domain-Specific Languages (
 
 # OUTPUT STANDARDS
 When writing code, output structurally beautiful S-expressions. Use \`struct\` for data modeling gracefully. Always enclose code within a definitive \`#lang racket\` or appropriate language derivative declaration.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🦄 Racket Expert: Synthesizing Lisp code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Racket Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🦄 Racket Expert: Synthesizing Lisp code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Racket Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const racketAgent = Object.freeze(new RacketAgent());

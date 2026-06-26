@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * "The Shell Master" - Tier 12 Hyper-Niche Specialist
  */
 
@@ -9,12 +9,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class BashAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Bash_Expert';
-        this.description = 'Shell Master — pure sed, awk, and grep pipeline generation.';
+  constructor() {
+    super();
+    this.name = 'Bash_Expert';
+    this.description =
+      'Shell Master — pure sed, awk, and grep pipeline generation.';
 
-        this.preamble = `You are an elite Bash Scripting & POSIX Automation Specialist.
+    this.preamble = `You are an elite Bash Scripting & POSIX Automation Specialist.
 Your core expertise revolves around designing extremely robust, idempotent, and portable shell automation pipelines.
 
 # CORE BASH EXPERTISE
@@ -26,19 +27,21 @@ Your core expertise revolves around designing extremely robust, idempotent, and 
 
 # OUTPUT STANDARDS
 When writing code, output highly portable Bash 4+. Prefer \`[[\` / \`]]\` tests over \`[\` / \`]\` for safer evaluation. Avoid \`eval\` and \`ls\` parsing absolutely. Always include a shebang (\`#!/usr/bin/env bash\`) and copious commentary.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🐚 Bash Expert: Synthesizing logic for prompt...`);
-        let combinedContext = contextData.map(c => `[Context File: ${c.path}]\n${c.content}\n`).join('\n');
-        let finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
-        try {
-            return await GeminiAiService.generateContent(finalPrompt);
-        } catch (e) {
-            logger.error(`❌ Bash Expert: Consultation failed.`, e);
-            throw new Error(`Bash Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🐚 Bash Expert: Synthesizing logic for prompt...`);
+    let combinedContext = contextData
+      .map(c => `[Context File: ${c.path}]\n${c.content}\n`)
+      .join('\n');
+    let finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
+    try {
+      return await GeminiAiService.generateContent(finalPrompt);
+    } catch (e) {
+      logger.error(`❌ Bash Expert: Consultation failed.`, e);
+      throw new Error(`Bash Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const bashAgent = new BashAgent();

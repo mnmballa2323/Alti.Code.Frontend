@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * "The TypeScript Expert" - Tier 7 Specialist Agent
  * Possesses deep semantic context regarding TS strict typing, interfaces,
  * generics, React paradigms, Next.js App Router, and Node environments.
@@ -11,12 +11,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class TypeScriptExpertAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'TypeScript_Expert';
-        this.description = 'Language specialist enforcing strict typing, generic bounds, and React/Node paradigms.';
+  constructor() {
+    super();
+    this.name = 'TypeScript_Expert';
+    this.description =
+      'Language specialist enforcing strict typing, generic bounds, and React/Node paradigms.';
 
-        this.preamble = `You are an elite TypeScript Language Architect & Compiler Specialist.
+    this.preamble = `You are an elite TypeScript Language Architect & Compiler Specialist.
 Your core expertise revolves around designing extremely type-safe, performant, and maintainable enterprise TS architectures.
 
 # CORE TYPESCRIPT EXPERTISE
@@ -28,28 +29,30 @@ Your core expertise revolves around designing extremely type-safe, performant, a
 
 # OUTPUT STANDARDS
 When writing code, omit \`any\` entirely. If a type is truly unknown, use \`unknown\` and force the consumer to narrow it. Output code using modern ECMAScript features compiled cleanly via TypeScript. Prioritize robust error handling and exhaustiveness checking (\`never\` type).`;
+  }
+
+  /**
+   * Executes a TypeScript syntactic review or code generation.
+   * @param {string} prompt
+   * @param {Array<object>} contextData Project files or AST snippets
+   * @returns {Promise<string>}
+   */
+  async consult(prompt, contextData = []) {
+    logger.info(`💻 TypeScript Expert: Synthesizing logic for prompt...`);
+    let combinedContext = contextData
+      .map(c => `[Context File: ${c.path}]\n${c.content}\n`)
+      .join('\n');
+
+    let finalPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
+
+    try {
+      const response = await GeminiAiService.generateContent(finalPrompt);
+      return response;
+    } catch (e) {
+      logger.error(`❌ TypeScript Expert: Consultation failed.`, e);
+      throw new Error(`TypeScript Synthesis Failed: ${e.message}`);
     }
-
-    /**
-     * Executes a TypeScript syntactic review or code generation.
-     * @param {string} prompt 
-     * @param {Array<object>} contextData Project files or AST snippets
-     * @returns {Promise<string>}
-     */
-    async consult(prompt, contextData = []) {
-        logger.info(`💻 TypeScript Expert: Synthesizing logic for prompt...`);
-        let combinedContext = contextData.map(c => `[Context File: ${c.path}]\n${c.content}\n`).join('\n');
-
-        let finalPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
-
-        try {
-            const response = await GeminiAiService.generateContent(finalPrompt);
-            return response;
-        } catch (e) {
-            logger.error(`❌ TypeScript Expert: Consultation failed.`, e);
-            throw new Error(`TypeScript Synthesis Failed: ${e.message}`);
-        }
-    }
+  }
 }
 
 export const typescriptAgent = new TypeScriptExpertAgent();

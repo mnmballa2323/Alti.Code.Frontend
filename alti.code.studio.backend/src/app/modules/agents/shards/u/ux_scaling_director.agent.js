@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXScalingDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_scaling_director_agent',
-            'UX Scaling Director',
-            'You are an elite UX Scaling Director. You specialize in bleeding-edge software development, cloud infrastructure, and UX Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_scaling_director_agent',
+      'UX Scaling Director',
+      'You are an elite UX Scaling Director. You specialize in bleeding-edge software development, cloud infrastructure, and UX Scaling.',
+    );
+  }
 
-    async generateUXScalingSystem(objective) {
-        logger.info(`💻 [UXScalingDirectorAgent] Analyzing UX Scaling Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Scaling Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Scaling Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXScalingDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXScalingSystem(objective) {
+    logger.info(
+      `💻 [UXScalingDirectorAgent] Analyzing UX Scaling Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Scaling Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Scaling Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXScalingDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXScalingDirectorAgent = Object.freeze(new UXScalingDirectorAgent());
+export const uXScalingDirectorAgent = Object.freeze(
+  new UXScalingDirectorAgent(),
+);

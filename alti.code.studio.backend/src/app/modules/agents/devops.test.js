@@ -8,13 +8,11 @@ vi.mock('../gemini/gemini.service.js');
 vi.mock('fs/promises');
 
 describe('Autonomous Infrastructure-as-Code (Phase 22 - The DevOps Architect)', () => {
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   it('should generate a main.tf file, mock a terraform apply, and inject credentials into .env', async () => {
-
     // Mock the AI generating Terraform code
     GeminiAiService.generateContent.mockResolvedValueOnce(`
 provider "google" {
@@ -33,11 +31,15 @@ output "GCP_STORAGE_BUCKET_NAME" {
     // Mock reading an existing .env file
     fs.readFile.mockResolvedValueOnce('EXISTING_VAR=true\n');
 
-    const request = "I need an S3 bucket to store image uploads.";
+    const request = 'I need an S3 bucket to store image uploads.';
     const mockTfDir = '/mock/infra/s3';
     const mockEnvPath = '/mock/.env';
 
-    const result = await devopsAgent.provisionInfrastructure(request, mockTfDir, mockEnvPath);
+    const result = await devopsAgent.provisionInfrastructure(
+      request,
+      mockTfDir,
+      mockEnvPath,
+    );
 
     // ASSERTIONS
 
@@ -51,7 +53,7 @@ output "GCP_STORAGE_BUCKET_NAME" {
     expect(fs.writeFile).toHaveBeenCalledWith(
       path.join(mockTfDir, 'main.tf'),
       expect.stringContaining('resource "google_storage_bucket"'),
-      'utf8'
+      'utf8',
     );
 
     // 4. Check the extracted outputs exist
@@ -63,13 +65,12 @@ output "GCP_STORAGE_BUCKET_NAME" {
     expect(fs.writeFile).toHaveBeenCalledWith(
       mockEnvPath,
       expect.stringContaining('EXISTING_VAR=true'),
-      'utf8'
+      'utf8',
     );
     expect(fs.writeFile).toHaveBeenCalledWith(
       mockEnvPath,
       expect.stringContaining('GCP_STORAGE_BUCKET_NAME='),
-      'utf8'
+      'utf8',
     );
   });
-
 });

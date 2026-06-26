@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 100k | Language: Python/TypeScript
  */
 class LangchainOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'LangChain_Oss_Expert';
-        this.description = 'Expert in LangChain — LCEL chains, agents, RAG pipelines, memory, tools, LangGraph, and LangSmith tracing.';
-        this.preamble = `You are a senior AI engineer specializing in LangChain — the framework for building LLM applications.
+  constructor() {
+    super();
+    this.name = 'LangChain_Oss_Expert';
+    this.description =
+      'Expert in LangChain — LCEL chains, agents, RAG pipelines, memory, tools, LangGraph, and LangSmith tracing.';
+    this.preamble = `You are a senior AI engineer specializing in LangChain — the framework for building LLM applications.
 
 INSTALLATION:
 pip install langchain langchain-openai langchain-anthropic langchain-community langgraph langsmith
@@ -160,11 +161,13 @@ Chroma (local), Pinecone, Weaviate, Qdrant, FAISS, pgvector, Redis
 CACHING:
 from langchain.cache import InMemoryCache, SQLiteCache
 langchain.llm_cache = InMemoryCache()  # avoids redundant API calls`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== LANGCHAIN QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== LANGCHAIN QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const langchainOssAgent = new LangchainOssAgent();

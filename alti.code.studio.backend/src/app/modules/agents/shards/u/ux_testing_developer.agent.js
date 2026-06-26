@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXTestingDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_testing_developer_agent',
-            'UX Testing Developer',
-            'You are an elite UX Testing Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_testing_developer_agent',
+      'UX Testing Developer',
+      'You are an elite UX Testing Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Testing.',
+    );
+  }
 
-    async generateUXTestingSystem(objective) {
-        logger.info(`💻 [UXTestingDeveloperAgent] Analyzing UX Testing Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Testing Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Testing Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXTestingDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXTestingSystem(objective) {
+    logger.info(
+      `💻 [UXTestingDeveloperAgent] Analyzing UX Testing Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Testing Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Testing Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXTestingDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXTestingDeveloperAgent = Object.freeze(new UXTestingDeveloperAgent());
+export const uXTestingDeveloperAgent = Object.freeze(
+  new UXTestingDeveloperAgent(),
+);

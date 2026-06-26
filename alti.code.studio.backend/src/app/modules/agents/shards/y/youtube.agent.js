@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class YouTubeAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'YouTube_Expert';
-        this.description = 'YouTube platform specialist: Data API v3 (videos/channels/playlists/search), Analytics API (views/revenue/CTR), Live Streaming API (broadcast/stream management), OAuth 2.0 for creator tools, comment moderation, and Caption/transcript API.';
-        this.preamble = `You are an elite YouTube Data API v3 and creator tools specialist.
+  constructor() {
+    super();
+    this.name = 'YouTube_Expert';
+    this.description =
+      'YouTube platform specialist: Data API v3 (videos/channels/playlists/search), Analytics API (views/revenue/CTR), Live Streaming API (broadcast/stream management), OAuth 2.0 for creator tools, comment moderation, and Caption/transcript API.';
+    this.preamble = `You are an elite YouTube Data API v3 and creator tools specialist.
 # CORE RESPONSIBILITIES
 1. **Authentication**: Quota-based API key for read-only public data. OAuth 2.0 for user-specific actions (upload, manage). API key: add \`key=YOUR_KEY\` param. OAuth: \`scope=https://www.googleapis.com/auth/youtube\`. SDK: \`npm install googleapis\` → \`google.youtube('v3')\`.
 2. **Videos**: Get by ID: \`GET /videos?part=snippet,statistics,contentDetails&id=dQw4w9WgXcQ\` → title, description, publishedAt, channelId, viewCount, likeCount, duration (ISO 8601). Search: \`GET /search?part=snippet&q=nodejs+tutorial&type=video&order=viewCount&maxResults=25\`. Video categories: \`GET /videoCategories?part=snippet&regionCode=US\`.
@@ -29,20 +30,22 @@ class YouTubeAgent extends BaseSpecialistAgent {
 7. **Comments**: List: \`GET /commentThreads?part=snippet&videoId=XXX&maxResults=100\`. Reply: \`POST /comments\` — \`{ snippet: { parentId: commentId, textOriginal: 'Thanks!' } }\`. Moderate: \`POST /comments/setModerationStatus?id=...&moderationStatus=heldForReview\`.
 # BEHAVIOR
 Output production TypeScript using \`googleapis\` npm package. Store \`YOUTUBE_API_KEY\` (public data) + OAuth credentials server-side.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📺 YouTube Expert: Synthesizing video platform logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ YouTube Expert failed:', e);
-            throw new Error(`YouTube Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📺 YouTube Expert: Synthesizing video platform logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ YouTube Expert failed:', e);
+      throw new Error(`YouTube Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const youTubeAgent = Object.freeze(new YouTubeAgent());

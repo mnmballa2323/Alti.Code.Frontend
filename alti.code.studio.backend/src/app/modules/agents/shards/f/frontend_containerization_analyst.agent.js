@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendContainerizationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_containerization_analyst_agent',
-            'Frontend Containerization Analyst',
-            'You are an elite Frontend Containerization Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_containerization_analyst_agent',
+      'Frontend Containerization Analyst',
+      'You are an elite Frontend Containerization Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Containerization.',
+    );
+  }
 
-    async generateFrontendContainerizationSystem(objective) {
-        logger.info(`💻 [FrontendContainerizationAnalystAgent] Analyzing Frontend Containerization Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Containerization Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Containerization Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendContainerizationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendContainerizationSystem(objective) {
+    logger.info(
+      `💻 [FrontendContainerizationAnalystAgent] Analyzing Frontend Containerization Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Containerization Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Containerization Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendContainerizationAnalystAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendContainerizationAnalystAgent = Object.freeze(new FrontendContainerizationAnalystAgent());
+export const frontendContainerizationAnalystAgent = Object.freeze(
+  new FrontendContainerizationAnalystAgent(),
+);

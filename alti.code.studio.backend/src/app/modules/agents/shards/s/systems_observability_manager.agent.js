@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsObservabilityManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_observability_manager_agent',
-            'Systems Observability Manager',
-            'You are an elite Systems Observability Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_observability_manager_agent',
+      'Systems Observability Manager',
+      'You are an elite Systems Observability Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Observability.',
+    );
+  }
 
-    async generateSystemsObservabilitySystem(objective) {
-        logger.info(`💻 [SystemsObservabilityManagerAgent] Analyzing Systems Observability Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Observability Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Observability Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsObservabilityManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsObservabilitySystem(objective) {
+    logger.info(
+      `💻 [SystemsObservabilityManagerAgent] Analyzing Systems Observability Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Observability Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Observability Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsObservabilityManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsObservabilityManagerAgent = Object.freeze(new SystemsObservabilityManagerAgent());
+export const systemsObservabilityManagerAgent = Object.freeze(
+  new SystemsObservabilityManagerAgent(),
+);

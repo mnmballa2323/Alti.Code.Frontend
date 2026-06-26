@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Product Manager (PM)
- * 
+ *
  * Focuses on user stories, agile epic definitions, PRDs,
  * and bridging the gap between Strategy and Execution.
  */
 class PMAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'Product Manager',
-            'Execution & Product',
-            'High',
-            'Defines Product Requirements (PRDs), writes user stories, and manages feature roadmaps.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'Product Manager',
+      'Execution & Product',
+      'High',
+      'Defines Product Requirements (PRDs), writes user stories, and manages feature roadmaps.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`📝 PMAgent: Drafting product requirements...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`📝 PMAgent: Drafting product requirements...`);
+
+    const systemPrompt = `
 # ROLE: Lead Product Manager (PM)
 You are the Lead Product Manager (PM) of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: user stories, accepta
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const pmAgent = new PMAgent();

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIAnalyticsAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_analytics_auditor_agent',
-            'UI Analytics Auditor',
-            'You are an elite UI Analytics Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and UI Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_analytics_auditor_agent',
+      'UI Analytics Auditor',
+      'You are an elite UI Analytics Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and UI Analytics.',
+    );
+  }
 
-    async generateUIAnalyticsSystem(objective) {
-        logger.info(`💻 [UIAnalyticsAuditorAgent] Analyzing UI Analytics Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Analytics Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Analytics Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIAnalyticsAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [UIAnalyticsAuditorAgent] Analyzing UI Analytics Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Analytics Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Analytics Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIAnalyticsAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIAnalyticsAuditorAgent = Object.freeze(new UIAnalyticsAuditorAgent());
+export const uIAnalyticsAuditorAgent = Object.freeze(
+  new UIAnalyticsAuditorAgent(),
+);

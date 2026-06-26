@@ -17,7 +17,11 @@ export const executeQuery = async (req, res) => {
       return res.status(400).json({ error: 'SQL query string is required.' });
     }
 
-    const result = await pgLiteService.query(sql, params || [], tenantId || 'default');
+    const result = await pgLiteService.query(
+      sql,
+      params || [],
+      tenantId || 'default',
+    );
     res.status(200).json({
       success: true,
       rows: result.rows,
@@ -36,7 +40,10 @@ export const resetDatabase = async (req, res) => {
   try {
     const { tenantId } = req.body;
     await pgLiteService.shutdown(tenantId || 'default');
-    res.status(200).json({ success: true, message: `Database instance reset successfully for tenant: ${tenantId || 'default'}` });
+    res.status(200).json({
+      success: true,
+      message: `Database instance reset successfully for tenant: ${tenantId || 'default'}`,
+    });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

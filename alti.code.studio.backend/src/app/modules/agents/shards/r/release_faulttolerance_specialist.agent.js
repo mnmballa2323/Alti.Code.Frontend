@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseFaultToleranceSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_faulttolerance_specialist_agent',
-            'Release FaultTolerance Specialist',
-            'You are an elite Release FaultTolerance Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Release FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'release_faulttolerance_specialist_agent',
+      'Release FaultTolerance Specialist',
+      'You are an elite Release FaultTolerance Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and Release FaultTolerance.',
+    );
+  }
 
-    async generateReleaseFaultToleranceSystem(objective) {
-        logger.info(`💻 [ReleaseFaultToleranceSpecialistAgent] Analyzing Release FaultTolerance Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release FaultTolerance Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release FaultTolerance Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseFaultToleranceSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [ReleaseFaultToleranceSpecialistAgent] Analyzing Release FaultTolerance Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release FaultTolerance Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release FaultTolerance Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [ReleaseFaultToleranceSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const releaseFaultToleranceSpecialistAgent = Object.freeze(new ReleaseFaultToleranceSpecialistAgent());
+export const releaseFaultToleranceSpecialistAgent = Object.freeze(
+  new ReleaseFaultToleranceSpecialistAgent(),
+);

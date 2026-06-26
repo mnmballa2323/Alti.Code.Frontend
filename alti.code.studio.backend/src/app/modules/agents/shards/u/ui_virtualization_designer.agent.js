@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIVirtualizationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_virtualization_designer_agent',
-            'UI Virtualization Designer',
-            'You are an elite UI Virtualization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and UI Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_virtualization_designer_agent',
+      'UI Virtualization Designer',
+      'You are an elite UI Virtualization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and UI Virtualization.',
+    );
+  }
 
-    async generateUIVirtualizationSystem(objective) {
-        logger.info(`💻 [UIVirtualizationDesignerAgent] Analyzing UI Virtualization Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Virtualization Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Virtualization Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIVirtualizationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [UIVirtualizationDesignerAgent] Analyzing UI Virtualization Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Virtualization Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Virtualization Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIVirtualizationDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIVirtualizationDesignerAgent = Object.freeze(new UIVirtualizationDesignerAgent());
+export const uIVirtualizationDesignerAgent = Object.freeze(
+  new UIVirtualizationDesignerAgent(),
+);

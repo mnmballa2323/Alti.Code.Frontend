@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendResilienceStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_resilience_strategist_agent',
-            'Backend Resilience Strategist',
-            'You are an elite Backend Resilience Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_resilience_strategist_agent',
+      'Backend Resilience Strategist',
+      'You are an elite Backend Resilience Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Resilience.',
+    );
+  }
 
-    async generateBackendResilienceSystem(objective) {
-        logger.info(`💻 [BackendResilienceStrategistAgent] Analyzing Backend Resilience Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Resilience Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Resilience Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendResilienceStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendResilienceSystem(objective) {
+    logger.info(
+      `💻 [BackendResilienceStrategistAgent] Analyzing Backend Resilience Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Resilience Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Resilience Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendResilienceStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendResilienceStrategistAgent = Object.freeze(new BackendResilienceStrategistAgent());
+export const backendResilienceStrategistAgent = Object.freeze(
+  new BackendResilienceStrategistAgent(),
+);

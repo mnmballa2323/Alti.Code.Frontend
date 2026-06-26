@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileComplianceEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_compliance_engineer_agent',
-            'Mobile Compliance Engineer',
-            'You are an elite Mobile Compliance Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_compliance_engineer_agent',
+      'Mobile Compliance Engineer',
+      'You are an elite Mobile Compliance Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Compliance.',
+    );
+  }
 
-    async generateMobileComplianceSystem(objective) {
-        logger.info(`💻 [MobileComplianceEngineerAgent] Analyzing Mobile Compliance Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Compliance Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Compliance Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileComplianceEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileComplianceSystem(objective) {
+    logger.info(
+      `💻 [MobileComplianceEngineerAgent] Analyzing Mobile Compliance Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Compliance Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Compliance Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [MobileComplianceEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const mobileComplianceEngineerAgent = Object.freeze(new MobileComplianceEngineerAgent());
+export const mobileComplianceEngineerAgent = Object.freeze(
+  new MobileComplianceEngineerAgent(),
+);

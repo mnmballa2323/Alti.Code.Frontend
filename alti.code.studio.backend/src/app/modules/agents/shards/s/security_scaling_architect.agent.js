@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityScalingArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_scaling_architect_agent',
-            'Security Scaling Architect',
-            'You are an elite Security Scaling Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Security Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'security_scaling_architect_agent',
+      'Security Scaling Architect',
+      'You are an elite Security Scaling Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Security Scaling.',
+    );
+  }
 
-    async generateSecurityScalingSystem(objective) {
-        logger.info(`💻 [SecurityScalingArchitectAgent] Analyzing Security Scaling Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Scaling Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Scaling Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityScalingArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityScalingSystem(objective) {
+    logger.info(
+      `💻 [SecurityScalingArchitectAgent] Analyzing Security Scaling Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Scaling Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Scaling Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SecurityScalingArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const securityScalingArchitectAgent = Object.freeze(new SecurityScalingArchitectAgent());
+export const securityScalingArchitectAgent = Object.freeze(
+  new SecurityScalingArchitectAgent(),
+);

@@ -1,203 +1,135 @@
 # ==============================================================================
-# ALTI CODE STUDIO: Azure Sovereign Compute Node Provisioning
+# ALTI CODE STUDIO: GCP Compute Node Provisioning
 # ==============================================================================
 
 # ------------------------------------------------------------------------------
-# 1. Commercial VM (Azure Cloud)
+# 1. Commercial VM (GCP Cloud)
 # ------------------------------------------------------------------------------
-resource "azurerm_public_ip" "commercial_ip" {
-  count               = var.enable_azure_cloud ? 1 : 0
-  name                = "alti-${var.customer_id}-commercial-ip"
-  location            = azurerm_resource_group.commercial_rg[0].location
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
-  allocation_method   = "Static"
-  sku                 = "Standard"
-}
+resource "google_compute_instance" "commercial_node" {
+  count        = var.enable_gcp_cloud ? 1 : 0
+  name         = "alti-${var.customer_id}-commercial-node"
+  machine_type = var.machine_type_commercial
+  zone         = "${var.gcp_region_commercial}-a"
 
-resource "azurerm_network_interface" "commercial_nic" {
-  count               = var.enable_azure_cloud ? 1 : 0
-  name                = "alti-${var.customer_id}-commercial-nic"
-  location            = azurerm_resource_group.commercial_rg[0].location
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
-
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.commercial_subnet[0].id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.commercial_ip[0].id
-  }
-}
-
-resource "azurerm_linux_virtual_machine" "commercial_node" {
-  count               = var.enable_azure_cloud ? 1 : 0
-  name                = "alti-${var.customer_id}-commercial-node"
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
-  location            = azurerm_resource_group.commercial_rg[0].location
-  size                = var.vm_size_commercial
-  admin_username      = "azureuser"
-  network_interface_ids = [
-    azurerm_network_interface.commercial_nic[0].id,
-  ]
-
-  admin_ssh_key {
-    username   = "azureuser"
-    public_key = file(var.ssh_public_key_path)
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-2204-lts"
+      size  = 250
+      type  = "pd-ssd"
+    }
   }
 
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
-    disk_size_gb         = 250
+  network_interface {
+    subnetwork = google_compute_subnetwork.commercial_subnet[0].id
+    access_config {
+      # Allocates a public IP
+    }
   }
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
+  metadata = {
+    ssh-keys = "gcpuser:${file(var.ssh_public_key_path)}"
   }
 
-  # Enable Managed Identity
-  identity {
-    type = "SystemAssigned"
+  service_account {
+    scopes = ["cloud-platform"]
   }
 
-  tags = {
-    Environment = var.environment
-    Sovereignty = "Commercial"
+  labels = {
+    environment = var.environment
+    sovereignty = "commercial"
   }
 }
 
 # ------------------------------------------------------------------------------
-# 2. Government VM (Azure Government)
+# 2. Government VM (GCP Government Cloud)
 # ------------------------------------------------------------------------------
-resource "azurerm_network_interface" "government_nic" {
-  count               = var.enable_azure_government ? 1 : 0
-  provider            = azurerm.government
-  name                = "alti-${var.customer_id}-government-nic"
-  location            = azurerm_resource_group.government_rg[0].location
-  resource_group_name = azurerm_resource_group.government_rg[0].name
+resource "google_compute_instance" "government_node" {
+  count        = var.enable_gcp_government ? 1 : 0
+  name         = "alti-${var.customer_id}-government-node"
+  machine_type = var.machine_type_government
+  zone         = "${var.gcp_region_government}-a"
 
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.government_subnet[0].id
-    private_ip_address_allocation = "Dynamic"
-  }
-}
-
-resource "azurerm_linux_virtual_machine" "government_node" {
-  count               = var.enable_azure_government ? 1 : 0
-  provider            = azurerm.government
-  name                = "alti-${var.customer_id}-government-node"
-  resource_group_name = azurerm_resource_group.government_rg[0].name
-  location            = azurerm_resource_group.government_rg[0].location
-  size                = var.vm_size_government
-  admin_username      = "govuser"
-  network_interface_ids = [
-    azurerm_network_interface.government_nic[0].id,
-  ]
-
-  admin_ssh_key {
-    username   = "govuser"
-    public_key = file(var.ssh_public_key_path)
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-2204-lts"
+      size  = 500
+      type  = "pd-ssd"
+    }
   }
 
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
-    disk_size_gb         = 500
+  network_interface {
+    subnetwork = google_compute_subnetwork.government_subnet[0].id
+    # No public access for government nodes by default
   }
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
+  metadata = {
+    ssh-keys = "govuser:${file(var.ssh_public_key_path)}"
   }
 
-  # Enable Managed Identity for Secure Cloud Operations
-  identity {
-    type = "SystemAssigned"
+  service_account {
+    scopes = ["cloud-platform"]
   }
 
-  tags = {
-    Environment = var.environment
-    Sovereignty = "US-Government-IL5"
+  labels = {
+    environment = var.environment
+    sovereignty = "us-government-il5"
   }
 }
 
 # ------------------------------------------------------------------------------
-# 3. Dedicated Host and VM (Azure Dedicated)
+# 3. Dedicated Host and VM (GCP Sole-Tenant Nodes)
 # ------------------------------------------------------------------------------
-resource "azurerm_dedicated_host_group" "commercial_host_group" {
-  count                       = var.enable_azure_dedicated ? 1 : 0
-  name                        = "alti-${var.customer_id}-dedicated-host-group"
-  resource_group_name         = azurerm_resource_group.commercial_rg[0].name
-  location                    = azurerm_resource_group.commercial_rg[0].location
-  platform_fault_domain_count = 1
+resource "google_compute_node_template" "commercial_node_template" {
+  count     = var.enable_gcp_dedicated ? 1 : 0
+  name      = "alti-${var.customer_id}-node-template"
+  region    = var.gcp_region_commercial
+  node_type = var.sole_tenant_node_type
 }
 
-resource "azurerm_dedicated_host" "commercial_host" {
-  count                   = var.enable_azure_dedicated ? 1 : 0
-  name                    = "alti-${var.customer_id}-dedicated-host"
-  location                = azurerm_resource_group.commercial_rg[0].location
-  resource_group_name     = azurerm_resource_group.commercial_rg[0].name
-  dedicated_host_group_id = azurerm_dedicated_host_group.commercial_host_group[0].id
-  sku_name                = var.dedicated_host_sku
-  platform_fault_domain   = 0
+resource "google_compute_node_group" "commercial_node_group" {
+  count         = var.enable_gcp_dedicated ? 1 : 0
+  name          = "alti-${var.customer_id}-node-group"
+  zone          = "${var.gcp_region_commercial}-a"
+  node_template = google_compute_node_template.commercial_node_template[0].id
+  size          = 1
 }
 
-resource "azurerm_network_interface" "dedicated_nic" {
-  count               = var.enable_azure_dedicated ? 1 : 0
-  name                = "alti-${var.customer_id}-dedicated-nic"
-  location            = azurerm_resource_group.commercial_rg[0].location
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
+resource "google_compute_instance" "dedicated_node" {
+  count        = var.enable_gcp_dedicated ? 1 : 0
+  name         = "alti-${var.customer_id}-dedicated-node"
+  machine_type = var.machine_type_dedicated
+  zone         = "${var.gcp_region_commercial}-a"
 
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.commercial_subnet[0].id
-    private_ip_address_allocation = "Dynamic"
+  boot_disk {
+    initialize_params {
+      image = "ubuntu-os-cloud/ubuntu-2204-lts"
+      size  = 500
+      type  = "pd-ssd"
+    }
+  }
+
+  network_interface {
+    subnetwork = google_compute_subnetwork.commercial_subnet[0].id
+  }
+
+  scheduling {
+    node_affinities {
+      key      = "compute.googleapis.com/node-group-name"
+      operator = "IN"
+      values   = [google_compute_node_group.commercial_node_group[0].name]
+    }
+  }
+
+  metadata = {
+    ssh-keys = "dedicateduser:${file(var.ssh_public_key_path)}"
+  }
+
+  service_account {
+    scopes = ["cloud-platform"]
+  }
+
+  labels = {
+    environment = var.environment
+    sovereignty = "commercial-dedicated"
   }
 }
-
-resource "azurerm_linux_virtual_machine" "dedicated_node" {
-  count               = var.enable_azure_dedicated ? 1 : 0
-  name                = "alti-${var.customer_id}-dedicated-node"
-  resource_group_name = azurerm_resource_group.commercial_rg[0].name
-  location            = azurerm_resource_group.commercial_rg[0].location
-  size                = var.vm_size_dedicated
-  admin_username      = "dedicateduser"
-  network_interface_ids = [
-    azurerm_network_interface.dedicated_nic[0].id,
-  ]
-
-  dedicated_host_id = azurerm_dedicated_host.commercial_host[0].id
-
-  admin_ssh_key {
-    username   = "dedicateduser"
-    public_key = file(var.ssh_public_key_path)
-  }
-
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
-    disk_size_gb         = 500
-  }
-
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts"
-    version   = "latest"
-  }
-
-  identity {
-    type = "SystemAssigned"
-  }
-
-  tags = {
-    Environment = var.environment
-    Sovereignty = "Commercial-Dedicated"
-  }
-}
-

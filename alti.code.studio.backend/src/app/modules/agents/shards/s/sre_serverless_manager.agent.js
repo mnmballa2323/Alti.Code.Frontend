@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREServerlessManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_serverless_manager_agent',
-            'SRE Serverless Manager',
-            'You are an elite SRE Serverless Manager. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_serverless_manager_agent',
+      'SRE Serverless Manager',
+      'You are an elite SRE Serverless Manager. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Serverless.',
+    );
+  }
 
-    async generateSREServerlessSystem(objective) {
-        logger.info(`💻 [SREServerlessManagerAgent] Analyzing SRE Serverless Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Serverless Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Serverless Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREServerlessManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREServerlessSystem(objective) {
+    logger.info(
+      `💻 [SREServerlessManagerAgent] Analyzing SRE Serverless Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Serverless Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Serverless Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREServerlessManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREServerlessManagerAgent = Object.freeze(new SREServerlessManagerAgent());
+export const sREServerlessManagerAgent = Object.freeze(
+  new SREServerlessManagerAgent(),
+);

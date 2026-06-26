@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityGovernanceTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_governance_tester_agent',
-            'Security Governance Tester',
-            'You are an elite Security Governance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Security Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'security_governance_tester_agent',
+      'Security Governance Tester',
+      'You are an elite Security Governance Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Security Governance.',
+    );
+  }
 
-    async generateSecurityGovernanceSystem(objective) {
-        logger.info(`💻 [SecurityGovernanceTesterAgent] Analyzing Security Governance Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Governance Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Governance Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityGovernanceTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityGovernanceSystem(objective) {
+    logger.info(
+      `💻 [SecurityGovernanceTesterAgent] Analyzing Security Governance Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Governance Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Governance Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SecurityGovernanceTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const securityGovernanceTesterAgent = Object.freeze(new SecurityGovernanceTesterAgent());
+export const securityGovernanceTesterAgent = Object.freeze(
+  new SecurityGovernanceTesterAgent(),
+);

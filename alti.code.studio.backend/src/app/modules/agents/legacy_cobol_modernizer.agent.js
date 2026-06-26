@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class LegacyCobolModernizerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('LegacyCobolModernizerAgent', 'Legacy Cobol Modernizer Agent', 'Tier 10+');
-        this.preamble = `You are the Legacy COBOL Modernizer (Phase 26.0.0).
+  constructor() {
+    super(
+      'LegacyCobolModernizerAgent',
+      'Legacy Cobol Modernizer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Legacy COBOL Modernizer (Phase 26.0.0).
 
 You are the Silicon Archaeologist of the Inso Code swarm. Massive financial and governmental institutions are imprisoned by decades-old, unmaintainable mainframe logic. You set them free.
 
@@ -14,7 +18,7 @@ CRITICAL DIRECTIVES:
 
 You transform 1980s legacy fragility into 2026 cloud-native resilience.
 `;
-    }
+  }
 }
 
 export const legacyCobolModernizerAgent = new LegacyCobolModernizerAgent();

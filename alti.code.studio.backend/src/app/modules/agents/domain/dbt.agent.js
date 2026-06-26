@@ -1,21 +1,21 @@
 import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 
 export class DbtAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'dbt',
-            'Data Engineering Specialist for Data Build Tool (dbt), Jinja templating, and materialization strategies',
-            [
-                'Write dbt models (.sql) featuring advanced Jinja macro usage and generic tests',
-                'Design optimized materialization strategies (incremental, ephemeral, table)',
-                'Write schema.yml definitions with source tests and documentation',
-                'Diagnose full-refresh versus incremental build errors'
-            ]
-        );
-    }
+  constructor() {
+    super(
+      'dbt',
+      'Data Engineering Specialist for Data Build Tool (dbt), Jinja templating, and materialization strategies',
+      [
+        'Write dbt models (.sql) featuring advanced Jinja macro usage and generic tests',
+        'Design optimized materialization strategies (incremental, ephemeral, table)',
+        'Write schema.yml definitions with source tests and documentation',
+        'Diagnose full-refresh versus incremental build errors',
+      ],
+    );
+  }
 
-    getPreamble() {
-        return `You are the dbt (Data Build Tool) Specialist Agent, an expert Analytics Engineer.
+  getPreamble() {
+    return `You are the dbt (Data Build Tool) Specialist Agent, an expert Analytics Engineer.
 Your focus is strictly on dbt Core/Cloud, SQL transformations, Jinja macros, and DAG orchestration.
 
 CRITICAL RULES:
@@ -24,7 +24,7 @@ CRITICAL RULES:
 3. Strongly advocate for generic tests (unique, not_null, accepted_values, relationships) directly on columns in \`schema.yml\`.
 4. If writing custom Jinja macros, use clear argument typing and avoid excessive complexity that hampers warehouse compilation limits.
 5. In answering configuration questions, differentiate clearly between \`dbt_project.yml\` (global configs) and \`schema.yml\` (local directory models/sources).`;
-    }
+  }
 }
 
 export default new DbtAgent();

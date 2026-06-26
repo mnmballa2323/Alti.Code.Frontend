@@ -1,67 +1,59 @@
 # ==============================================================================
-# ALTI CODE STUDIO: Azure Database & Cache Provisioning Module
+# ALTI CODE STUDIO: GCP Database & Cache Provisioning Module
 # ==============================================================================
 
 terraform {
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.0"
+    google = {
+      source  = "hashicorp/google"
+      version = "~> 5.0"
     }
   }
 }
 
 # ------------------------------------------------------------------------------
-# 1. Azure Database for PostgreSQL Flexible Server
+# 1. Google Cloud SQL for PostgreSQL Database Instance
 # ------------------------------------------------------------------------------
-resource "azurerm_postgresql_flexible_server" "postgres" {
-  name                   = "alti-pg-${var.customer_id}-${var.environment}"
-  resource_group_name    = var.resource_group_name
-  location               = var.location
-  version                = "15"
-  delegated_subnet_id    = var.subnet_id
-  
-  administrator_login    = var.admin_username
-  administrator_password = var.admin_password
+resource "google_sql_database_instance" "postgres" {
+  name             = "alti-pg-${var.customer_id}-${var.environment}"
+  database_version = "POSTGRES_15"
+  region           = var.region
 
-  storage_mb = 131072 # 128 GB
+  settings {
+    tier = var.db_tier
 
-  sku_name = var.db_sku_name
+    ip_configuration {
+      ipv4_enabled    = false
+      private_network = var.network_id
+    }
 
-  backup_retention_days        = var.environment == "prod" ? 30 : 7
-  geo_redundant_backup_enabled = var.environment == "prod" ? true : false
-
-  lifecycle {
-    ignore_changes = [
-      zone,
-      high_availability,
-    ]
+    backup_configuration {
+      enabled    = true
+      start_time = "02:00"
+    }
   }
+
+  deletion_protection = false # Set to true in prod if desired
 }
 
-resource "azurerm_postgresql_flexible_server_database" "pentagidb" {
-  name      = "pentagidb"
-  server_id = azurerm_postgresql_flexible_server.postgres.id
-  collation = "en_US.utf8"
-  charset   = "UTF8"
+resource "google_sql_database" "pentagidb" {
+  name     = "pentagidb"
+  instance = google_sql_database_instance.postgres.name
 }
 
 # ------------------------------------------------------------------------------
-# 2. Azure Cache for Redis
+# 2. Google Cloud Memorystore for Redis
 # ------------------------------------------------------------------------------
-resource "azurerm_redis_cache" "cache" {
-  name                = "alti-redis-${var.customer_id}-${var.environment}"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  capacity            = var.redis_capacity
-  family              = var.redis_family
-  sku_name            = var.redis_sku_name
-  enable_non_ssl_port = false
-  minimum_tls_version = "1.2"
+resource "google_redis_instance" "cache" {
+  name               = "alti-redis-${var.customer_id}-${var.environment}"
+  tier               = var.redis_tier
+  memory_size_gb     = var.redis_size
+  region             = var.region
+  authorized_network = var.network_id
 
-  redis_configuration {
-    enable_authentication = true
-  }
+  redis_version = "REDIS_7_0"
+
+  displayName = "Alti Cache Redis"
 }
 
 # ------------------------------------------------------------------------------
@@ -77,25 +69,20 @@ variable "environment" {
   description = "Deployment environment (e.g. prod, staging)"
 }
 
-
-variable "location" {
+variable "region" {
   type        = string
-  description = "Azure region where resources will be created"
+  description = "GCP region where resources will be created"
 }
 
-variable "resource_group_name" {
+variable "network_id" {
   type        = string
-  description = "Name of the resource group"
-}
-
-variable "subnet_id" {
-  type        = string
-  description = "The ID of the delegated subnet for PostgreSQL integration"
+  description = "The ID of the VPC network where private service connection is configured"
 }
 
 variable "admin_username" {
   type        = string
-  description = "PostgreSQL administrator login name"
+  description = "PostgreSQL administrator login name (Note: Cloud SQL manages defaults, but parameter included for signature parity)"
+  default     = "postgres"
 }
 
 variable "admin_password" {
@@ -104,51 +91,40 @@ variable "admin_password" {
   sensitive   = true
 }
 
-variable "db_sku_name" {
+variable "db_tier" {
   type        = string
-  description = "PostgreSQL Flexible Server SKU name"
+  description = "Cloud SQL database tier (e.g., db-f1-micro, db-custom-4-16384)"
 }
 
-variable "redis_sku_name" {
+variable "redis_tier" {
   type        = string
-  description = "Redis Cache SKU name"
+  description = "Redis tier (BASIC or STANDARD_HA)"
 }
 
-variable "redis_capacity" {
+variable "redis_size" {
   type        = number
-  description = "Redis Cache capacity size"
-}
-
-variable "redis_family" {
-  type        = string
-  description = "Redis Cache family"
+  description = "Redis memory size in GB"
 }
 
 # ------------------------------------------------------------------------------
 # Outputs
 # ------------------------------------------------------------------------------
-output "postgres_fqdn" {
-  value       = azurerm_postgresql_flexible_server.postgres.fqdn
-  description = "Fully qualified domain name of the PostgreSQL server"
+output "postgres_ip" {
+  value       = google_sql_database_instance.postgres.private_ip_address
+  description = "Private IP address of the PostgreSQL database instance"
 }
 
 output "postgres_server_id" {
-  value       = azurerm_postgresql_flexible_server.postgres.id
-  description = "ID of the PostgreSQL flexible server"
+  value       = google_sql_database_instance.postgres.id
+  description = "ID of the PostgreSQL database instance"
 }
 
 output "redis_hostname" {
-  value       = azurerm_redis_cache.cache.hostname
-  description = "The hostname of the Redis instance"
+  value       = google_redis_instance.cache.host
+  description = "The hostname/IP of the Redis instance"
 }
 
-output "redis_ssl_port" {
-  value       = azurerm_redis_cache.cache.ssl_port
-  description = "The SSL port of the Redis instance"
-}
-
-output "redis_primary_access_key" {
-  value       = azurerm_redis_cache.cache.primary_access_key
-  sensitive   = true
-  description = "The primary access key for the Redis cache"
+output "redis_port" {
+  value       = google_redis_instance.cache.port
+  description = "The port of the Redis instance"
 }

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREArchitecturePlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_architecture_planner_agent',
-            'SRE Architecture Planner',
-            'You are an elite SRE Architecture Planner. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_architecture_planner_agent',
+      'SRE Architecture Planner',
+      'You are an elite SRE Architecture Planner. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Architecture.',
+    );
+  }
 
-    async generateSREArchitectureSystem(objective) {
-        logger.info(`💻 [SREArchitecturePlannerAgent] Analyzing SRE Architecture Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Architecture Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Architecture Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREArchitecturePlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREArchitectureSystem(objective) {
+    logger.info(
+      `💻 [SREArchitecturePlannerAgent] Analyzing SRE Architecture Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Architecture Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Architecture Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREArchitecturePlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREArchitecturePlannerAgent = Object.freeze(new SREArchitecturePlannerAgent());
+export const sREArchitecturePlannerAgent = Object.freeze(
+  new SREArchitecturePlannerAgent(),
+);

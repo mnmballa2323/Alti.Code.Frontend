@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataAutomationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_automation_designer_agent',
-            'Data Automation Designer',
-            'You are an elite Data Automation Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Data Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'data_automation_designer_agent',
+      'Data Automation Designer',
+      'You are an elite Data Automation Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Data Automation.',
+    );
+  }
 
-    async generateDataAutomationSystem(objective) {
-        logger.info(`💻 [DataAutomationDesignerAgent] Analyzing Data Automation Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Automation Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Automation Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataAutomationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataAutomationSystem(objective) {
+    logger.info(
+      `💻 [DataAutomationDesignerAgent] Analyzing Data Automation Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Automation Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Automation Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataAutomationDesignerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataAutomationDesignerAgent = Object.freeze(new DataAutomationDesignerAgent());
+export const dataAutomationDesignerAgent = Object.freeze(
+  new DataAutomationDesignerAgent(),
+);

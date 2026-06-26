@@ -12,7 +12,7 @@ import { logger } from '../../../shared/logger.js';
  * Upload and index documents via LlamaIndex.
  * @param {string} filePath - Absolute path to the file or directory to index.
  */
-const uploadAndIndexDocument = async (filePath) => {
+const uploadAndIndexDocument = async filePath => {
   if (!filePath || typeof filePath !== 'string') {
     throw new Error('LlamaIndexService: filePath must be a non-empty string.');
   }
@@ -24,7 +24,7 @@ const uploadAndIndexDocument = async (filePath) => {
  * Run a natural-language query against the indexed documents.
  * @param {string} query
  */
-const queryDocument = async (query) => {
+const queryDocument = async query => {
   if (!query || typeof query !== 'string' || query.trim().length === 0) {
     throw new Error('LlamaIndexService: query must be a non-empty string.');
   }

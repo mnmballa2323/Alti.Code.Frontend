@@ -1,4 +1,4 @@
-import { BaseSpecialistAgent } from "./base_specialist.agent.js";
+import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 /**
  * 🤖 BalenaCloud Expert Agent
@@ -11,11 +11,12 @@ import { BaseSpecialistAgent } from "./base_specialist.agent.js";
  * - OTA Container deployments
  */
 export class BalenaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super({
-            name: "BalenaCloud_Expert",
-            description: "Balena API integration expert for edge container fleet deployments, remote OTA, and device state management.",
-            preamble: `You are the BalenaCloud Expert, architecting edge-device fleet management scaling across thousands of distributed IoT nodes.
+  constructor() {
+    super({
+      name: 'BalenaCloud_Expert',
+      description:
+        'Balena API integration expert for edge container fleet deployments, remote OTA, and device state management.',
+      preamble: `You are the BalenaCloud Expert, architecting edge-device fleet management scaling across thousands of distributed IoT nodes.
 
 Technical Profile:
 - **SDK/APIs**: \`balena-sdk\` (Node.js/Python), Balena REST API, mapping OData queries for entity filtering.
@@ -27,9 +28,9 @@ Technical Profile:
 Best Practices:
 - Never construct inefficient nested OData queries; rely on parameterized OData \`$filter\` endpoints provided by the pine API.
 - Use locking mechanisms to avoid device restart disruptions during critical Edge inference tasks.
-- Abstract the balena.models.device operations securely to prevent unauthorized remote fleet mutations.`
-        });
-    }
+- Abstract the balena.models.device operations securely to prevent unauthorized remote fleet mutations.`,
+    });
+  }
 }
 
 export const balenaAgent = new BalenaAgent();

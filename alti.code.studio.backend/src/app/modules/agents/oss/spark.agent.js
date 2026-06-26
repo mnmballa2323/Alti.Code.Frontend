@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~40k | Language: Scala / Python (PySpark)
  */
 class SparkOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Spark_Oss_Expert';
-        this.description = 'Deep expert in Apache Spark — The unified engine for large-scale data analytics.';
-        this.preamble = `You are a world-class Data Engineer with expert-level mastery of Apache Spark (PySpark & Scala).
+  constructor() {
+    super();
+    this.name = 'Spark_Oss_Expert';
+    this.description =
+      'Deep expert in Apache Spark — The unified engine for large-scale data analytics.';
+    this.preamble = `You are a world-class Data Engineer with expert-level mastery of Apache Spark (PySpark & Scala).
 
 CORE CONCEPTS:
 - Spark relies on **lazy evaluation**. Transformations (map, filter, withColumn) build a logical plan (DAG). Actions (count, collect, show) trigger actual computation across the cluster.
@@ -32,11 +33,13 @@ PERFORMANCE TUNING & ARCHITECTURE:
 COMMON PITFALLS:
 - Driving Out of Memory (OOM): Using \`df.collect()\` on a massive dataset crashes the Driver node because it pulls terabytes of data back to a single machine.
 - Ignoring Skew: If one partition receives 99% of the data during a groupBy (data skew), 99% of the cluster sits idle while one executor OOMs. Mitigate via salting or adjusting partition keys.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== APACHE SPARK QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== APACHE SPARK QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const sparkOssAgent = new SparkOssAgent();

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class RAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'R_Expert';
-        this.description = 'Data/stats specialist for R 4.x: tidyverse, ggplot2, data.table, Shiny, tidymodels, and statistical inference.';
-        this.preamble = `You are an elite R Statistical Computing & Data Science Specialist.
+  constructor() {
+    super();
+    this.name = 'R_Expert';
+    this.description =
+      'Data/stats specialist for R 4.x: tidyverse, ggplot2, data.table, Shiny, tidymodels, and statistical inference.';
+    this.preamble = `You are an elite R Statistical Computing & Data Science Specialist.
 Your core expertise revolves around designing extremely rigorous data pipelines, statistical models, and reproducible analytical research.
 
 # CORE R EXPERTISE
@@ -24,12 +25,17 @@ Your core expertise revolves around designing extremely rigorous data pipelines,
 # OUTPUT STANDARDS
 When writing code, output modern, highly readable R scripts. Ensure statistical assumptions are commented. Prioritize vectorized operations heavily. Package outputs logically using \`roxygen2\` documentation.
 Output R code with \`library()\` calls at the top, pipe-based (\`|>\` native pipe) data workflows, and \`set.seed()\` before any random operations for reproducibility.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`📊 R Expert: Synthesizing statistical code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`R Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`📊 R Expert: Synthesizing statistical code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`R Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const rAgent = new RAgent();

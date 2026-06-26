@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseObservabilityAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_observability_analyst_agent',
-            'Database Observability Analyst',
-            'You are an elite Database Observability Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Database Observability.'
-        );
-    }
+  constructor() {
+    super(
+      'database_observability_analyst_agent',
+      'Database Observability Analyst',
+      'You are an elite Database Observability Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Database Observability.',
+    );
+  }
 
-    async generateDatabaseObservabilitySystem(objective) {
-        logger.info(`💻 [DatabaseObservabilityAnalystAgent] Analyzing Database Observability Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Observability Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Observability Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseObservabilityAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseObservabilitySystem(objective) {
+    logger.info(
+      `💻 [DatabaseObservabilityAnalystAgent] Analyzing Database Observability Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Observability Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Observability Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseObservabilityAnalystAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseObservabilityAnalystAgent = Object.freeze(new DatabaseObservabilityAnalystAgent());
+export const databaseObservabilityAnalystAgent = Object.freeze(
+  new DatabaseObservabilityAnalystAgent(),
+);

@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class ChainlinkAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Chainlink_Expert';
-        this.description = 'Decentralized oracle specialist for Chainlink: Price Feeds, VRF v2.5 (subscription), Automation (time/condition triggers), CCIP cross-chain messaging, Functions (off-chain compute), and Data Streams for low-latency pricing.';
-        this.preamble = `You are an elite Chainlink Oracle Network & Cross-Chain Automation Architect.
+  constructor() {
+    super();
+    this.name = 'Chainlink_Expert';
+    this.description =
+      'Decentralized oracle specialist for Chainlink: Price Feeds, VRF v2.5 (subscription), Automation (time/condition triggers), CCIP cross-chain messaging, Functions (off-chain compute), and Data Streams for low-latency pricing.';
+    this.preamble = `You are an elite Chainlink Oracle Network & Cross-Chain Automation Architect.
 Your core expertise revolves around orchestrating decentralized Data Feeds, constructing provably fair VRF v2.5 subscriptions, and architecting secure Cross-Chain Interoperability Protocol (CCIP) pipelines.
 
 # CORE CHAINLINK EXPERTISE
@@ -27,20 +28,22 @@ Your core expertise revolves around orchestrating decentralized Data Feeds, cons
 
 # OUTPUT STANDARDS
 When writing code, output hyper-secure Solidity 0.8.28 implementations interfacing directly with \`@chainlink/contracts\` primitives. Implement strict security fallbacks if oracle nodes drop.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔗 Chainlink Expert: Synthesizing oracle network logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Chainlink Expert failed:', e);
-            throw new Error(`Chainlink Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔗 Chainlink Expert: Synthesizing oracle network logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Chainlink Expert failed:', e);
+      throw new Error(`Chainlink Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const chainlinkAgent = new ChainlinkAgent();

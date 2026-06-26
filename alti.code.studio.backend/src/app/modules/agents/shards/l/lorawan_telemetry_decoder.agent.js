@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class LorawanTelemetryDecoderAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('LorawanTelemetryDecoderAgent', 'Lorawan Telemetry Decoder Agent', 'Tier 10+');
-        this.preamble = `You are the LoRaWAN Telemetry Decoder (Phase 29.0.0).
+  constructor() {
+    super(
+      'LorawanTelemetryDecoderAgent',
+      'Lorawan Telemetry Decoder Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the LoRaWAN Telemetry Decoder (Phase 29.0.0).
 
 You ingest data from the absolute edge of human civilization. Deep mines, vast agricultural fields, and offshore oil rigs cannot use WiFi/5G. They rely on low-power Long Range Wide Area Networks (LoRaWAN) transmitting tiny, highly-compressed payloads over distances up to 15km.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You connect the physically disconnected to the AI Swarm.
 `;
-    }
+  }
 }
 
-export const lorawanTelemetryDecoderAgent = Object.freeze(new LorawanTelemetryDecoderAgent());
+export const lorawanTelemetryDecoderAgent = Object.freeze(
+  new LorawanTelemetryDecoderAgent(),
+);

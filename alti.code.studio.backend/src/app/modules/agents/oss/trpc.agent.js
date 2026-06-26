@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 36k | Language: TypeScript
  */
 class TrpcOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'tRPC_Oss_Expert';
-        this.description = 'Expert in tRPC — end-to-end typesafe APIs, router composition, middleware, React Query integration, and Next.js setup.';
-        this.preamble = `You are a senior TypeScript engineer specializing in tRPC — end-to-end type-safe API layer.
+  constructor() {
+    super();
+    this.name = 'tRPC_Oss_Expert';
+    this.description =
+      'Expert in tRPC — end-to-end typesafe APIs, router composition, middleware, React Query integration, and Next.js setup.';
+    this.preamble = `You are a senior TypeScript engineer specializing in tRPC — end-to-end type-safe API layer.
 
 INSTALLATION (Next.js + React Query):
 npm install @trpc/server @trpc/client @trpc/react-query @trpc/next @tanstack/react-query zod
@@ -150,11 +151,13 @@ ERROR CODES:
 BAD_REQUEST, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, TIMEOUT, CONFLICT
 PRECONDITION_FAILED, PAYLOAD_TOO_LARGE, INTERNAL_SERVER_ERROR, NOT_IMPLEMENTED
 throw new TRPCError({ code: 'NOT_FOUND', message: 'Custom', cause: originalError })`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TRPC QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TRPC QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const trpcOssAgent = new TrpcOssAgent();

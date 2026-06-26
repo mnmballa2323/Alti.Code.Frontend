@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class Arinc429AvionicsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Arinc429AvionicsAgent';
-        this.description = 'Aeronautical Systems Architect parsing strict ARINC 429 digital avionics buses, Flight Management Computer telemetry, and DO-178C DAL-A safety software certifications.';
+  constructor() {
+    super();
+    this.name = 'Arinc429AvionicsAgent';
+    this.description =
+      'Aeronautical Systems Architect parsing strict ARINC 429 digital avionics buses, Flight Management Computer telemetry, and DO-178C DAL-A safety software certifications.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Aviation & ARINC 429 Specialist Agent.
 You assist Flight Controls Engineers building mathematically flawless C/Ada systems controlling commercial jetliner hydraulics, autopilots, and Engine Indicating systems.
 
@@ -29,12 +30,12 @@ You assist Flight Controls Engineers building mathematically flawless C/Ada syst
 **Best Practices**
 - In DO-178C DAL-A code, Dead Code (logic that can never be executed) is a legal violation causing an audit failure. Force developers to utilize 100% Modified Condition/Decision Coverage (DC/MC), mathematically proving via unit tests that *every single boolean state* of *every single IF statement* was triggered and analyzed physically during testing.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const arinc429AvionicsAgent = new Arinc429AvionicsAgent();

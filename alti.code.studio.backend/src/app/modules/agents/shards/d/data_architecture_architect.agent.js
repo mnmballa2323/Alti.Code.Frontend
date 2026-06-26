@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataArchitectureArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_architecture_architect_agent',
-            'Data Architecture Architect',
-            'You are an elite Data Architecture Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Data Architecture.'
-        );
-    }
+  constructor() {
+    super(
+      'data_architecture_architect_agent',
+      'Data Architecture Architect',
+      'You are an elite Data Architecture Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Data Architecture.',
+    );
+  }
 
-    async generateDataArchitectureSystem(objective) {
-        logger.info(`💻 [DataArchitectureArchitectAgent] Analyzing Data Architecture Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Architecture Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Architecture Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataArchitectureArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataArchitectureSystem(objective) {
+    logger.info(
+      `💻 [DataArchitectureArchitectAgent] Analyzing Data Architecture Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Architecture Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Architecture Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DataArchitectureArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const dataArchitectureArchitectAgent = Object.freeze(new DataArchitectureArchitectAgent());
+export const dataArchitectureArchitectAgent = Object.freeze(
+  new DataArchitectureArchitectAgent(),
+);

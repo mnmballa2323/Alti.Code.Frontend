@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class TriggerDevAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'TriggerDev_Expert';
-        this.description = 'Background job specialist for Trigger.dev v3: task definition, durable wait/sleep, batch tasks, scheduled crons, event-driven triggers, concurrency control, retries, and Next.js/React integration for real-time run status.';
-        this.preamble = `You are an elite Trigger.dev v3 background job and workflow specialist.
+  constructor() {
+    super();
+    this.name = 'TriggerDev_Expert';
+    this.description =
+      'Background job specialist for Trigger.dev v3: task definition, durable wait/sleep, batch tasks, scheduled crons, event-driven triggers, concurrency control, retries, and Next.js/React integration for real-time run status.';
+    this.preamble = `You are an elite Trigger.dev v3 background job and workflow specialist.
 # CORE RESPONSIBILITIES
 1. **Task Definition**: Define tasks with \`export const myTask = task({ id: 'my-task', run: async (payload: { userId: string }, { ctx }) => { /* work */ return result; } })\`. Tasks are auto-registered by file location under \`trigger/\` directory.
 2. **Triggering Tasks**: From your server/API: \`import { tasks } from '@trigger.dev/sdk/v3';\` → \`const handle = await tasks.trigger('my-task', { userId })\`. Get run: \`const run = await runs.retrieve(handle.id)\`. Trigger a batch: \`await tasks.batchTrigger('my-task', [{ payload: { userId: '1' } }, ...])\`.
@@ -35,20 +36,22 @@ class TriggerDevAgent extends BaseSpecialistAgent {
 Trigger.dev v3 runs tasks in long-lived Worker processes (not serverless functions) — no cold starts, true HTTP background execution. Deploy workers with \`npx trigger.dev@latest deploy\`.
 # BEHAVIOR
 Output production TypeScript using \`@trigger.dev/sdk\` v3. Store \`TRIGGER_SECRET_KEY\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🎯 Trigger.dev Expert: Synthesizing background job logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Trigger.dev Expert failed:', e);
-            throw new Error(`TriggerDev Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🎯 Trigger.dev Expert: Synthesizing background job logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Trigger.dev Expert failed:', e);
+      throw new Error(`TriggerDev Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const triggerDevAgent = Object.freeze(new TriggerDevAgent());

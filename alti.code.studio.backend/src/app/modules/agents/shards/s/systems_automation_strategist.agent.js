@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsAutomationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_automation_strategist_agent',
-            'Systems Automation Strategist',
-            'You are an elite Systems Automation Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_automation_strategist_agent',
+      'Systems Automation Strategist',
+      'You are an elite Systems Automation Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Automation.',
+    );
+  }
 
-    async generateSystemsAutomationSystem(objective) {
-        logger.info(`💻 [SystemsAutomationStrategistAgent] Analyzing Systems Automation Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Automation Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Automation Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsAutomationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsAutomationSystem(objective) {
+    logger.info(
+      `💻 [SystemsAutomationStrategistAgent] Analyzing Systems Automation Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Automation Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Automation Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsAutomationStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsAutomationStrategistAgent = Object.freeze(new SystemsAutomationStrategistAgent());
+export const systemsAutomationStrategistAgent = Object.freeze(
+  new SystemsAutomationStrategistAgent(),
+);

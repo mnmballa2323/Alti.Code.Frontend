@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackGovernanceSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_governance_specialist_agent',
-            'FullStack Governance Specialist',
-            'You are an elite FullStack Governance Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_governance_specialist_agent',
+      'FullStack Governance Specialist',
+      'You are an elite FullStack Governance Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Governance.',
+    );
+  }
 
-    async generateFullStackGovernanceSystem(objective) {
-        logger.info(`💻 [FullStackGovernanceSpecialistAgent] Analyzing FullStack Governance Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Governance Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Governance Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackGovernanceSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackGovernanceSystem(objective) {
+    logger.info(
+      `💻 [FullStackGovernanceSpecialistAgent] Analyzing FullStack Governance Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Governance Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Governance Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackGovernanceSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackGovernanceSpecialistAgent = Object.freeze(new FullStackGovernanceSpecialistAgent());
+export const fullStackGovernanceSpecialistAgent = Object.freeze(
+  new FullStackGovernanceSpecialistAgent(),
+);

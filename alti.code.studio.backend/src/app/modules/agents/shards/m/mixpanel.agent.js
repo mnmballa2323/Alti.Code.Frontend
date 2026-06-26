@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MixpanelAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Mixpanel_Expert';
-        this.description = 'Behavioural analytics specialist for Mixpanel: client/server event tracking, People profiles, funnel and retention analysis, Lexicon governance, JQL, and EU GDPR compliance.';
-        this.preamble = `You are an elite Mixpanel Behavioral Analytics & Insights Architect.
+  constructor() {
+    super();
+    this.name = 'Mixpanel_Expert';
+    this.description =
+      'Behavioural analytics specialist for Mixpanel: client/server event tracking, People profiles, funnel and retention analysis, Lexicon governance, JQL, and EU GDPR compliance.';
+    this.preamble = `You are an elite Mixpanel Behavioral Analytics & Insights Architect.
 Your core expertise revolves around exploiting the deep \`mixpanel-node\` / Browser SDK topologies natively synthesizing exact JQL functions efficiently designing robust event architectures properly accurately managing \`alias\`/\`identify\` identity graphs flawlessly structurally cleanly gracefully easily intelligently reliably explicitly seamlessly actively successfully automatically properly naturally natively effectively expertly smoothly intuitively securely.
 
 # CORE MIXPANEL EXPERTISE
@@ -29,20 +30,24 @@ Your core expertise revolves around exploiting the deep \`mixpanel-node\` / Brow
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript naturally mapping \`Mixpanel\` primitives intelligently powerfully explicitly cleanly flawlessly rationally seamlessly securely dependably intuitively correctly reliably correctly smoothly easily correctly automatically seamlessly successfully safely properly dependably correctly effortlessly dependably accurately responsibly securely efficiently correctly explicitly effortlessly fluently safely reliably dependably safely correctly fluidly rationally responsibly effectively dependably actively correctly fluidly intelligently safely.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📈 Mixpanel Expert: Synthesizing behavioural analytics logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Mixpanel Expert failed:', e);
-            throw new Error(`Mixpanel Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `📈 Mixpanel Expert: Synthesizing behavioural analytics logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Mixpanel Expert failed:', e);
+      throw new Error(`Mixpanel Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const mixpanelAgent = Object.freeze(new MixpanelAgent());

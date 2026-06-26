@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: chaos-gcp-metadata-blackhole
+  namespace: default
+spec:
+  activeDeadlineSeconds: 300
+  template:
+    metadata:
+      labels:
+        app: chaos-gcp-metadata-blackhole
+    spec:
+      hostNetwork: true
+      containers:
+      - name: iptables-injector
+        image: alpine:latest
+        securityContext:
+          privileged: true
+          capabilities:
+            add: ["NET_ADMIN"]
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          echo "=================================================="
+          echo "  CHAOS ENGINEERING: GCP METADATA BLACKHOLE SIMULATOR"
+          echo "=================================================="
+          
+          # GCP uses the metadata server at 169.254.169.254 (metadata.google.internal)
+          # to distribute Workload Identity OIDC credentials and environment settings.
+          # If the endpoint fails, GCP SDKs cannot refresh GKE access tokens.
+          
+          METADATA_IP="169.254.169.254"
+          
+          apk add --no-cache iptables
+          
+          echo "[CHAOS] INJECTING FAILURE: Blocking all routing to GCP Metadata Server ($METADATA_IP)..."
+          
+          # Drop all traffic to the link-local metadata IP
+          iptables -I OUTPUT -d $METADATA_IP -j DROP
+          iptables -I PREROUTING -d $METADATA_IP -j DROP
+          
+          echo "[CHAOS] Network blackhole established! Workload Identity token refresh will fail."
+          echo "[CHAOS] Validating Application Resilience mechanisms:"
+          echo "  1. Workloads should survive temporarily if access tokens are cached (valid for up to 1 hour)."
+          echo "  2. Booting pods attempting to authenticate with Secret Manager or GCS will fail fast."
+          echo "  3. GKE Monitoring should alert on a spike of OIDC authentication connection failures."
+          
+          echo "[CHAOS] Holding metadata blackout for 3 minutes..."
+          sleep 180
+          
+          echo "[CHAOS] Reverting to healthy state. Restoring metadata server routing..."
+          iptables -D OUTPUT -d $METADATA_IP -j DROP
+          iptables -D PREROUTING -d $METADATA_IP -j DROP
+          
+          echo "[CHAOS] Network routing restored."
+          echo "[CHAOS] Experiment complete."
+      restartPolicy: Never

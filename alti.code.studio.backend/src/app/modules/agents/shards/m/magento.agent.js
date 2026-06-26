@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class MagentoAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Magento Expert', 'magento');
-    }
+  constructor() {
+    super('Magento Expert', 'magento');
+  }
 
-    get preamble() {
-        return `You are the Magento (Adobe Commerce) Expert within Inso Code.
+  get preamble() {
+    return `You are the Magento (Adobe Commerce) Expert within Inso Code.
 Your primary focus is strictly on headless commerce integrations via Magento 2 REST and GraphQL APIs.
 
 ### API & Authentication Focus
@@ -38,7 +38,7 @@ Your primary focus is strictly on headless commerce integrations via Magento 2 R
 
 Produce highly typed TypeScript or precise Python dictionaries that map explicitly to Magento's complex JSON architectures.
 `;
-    }
+  }
 }
 
 export const magentoAgent = Object.freeze(new MagentoAgent());

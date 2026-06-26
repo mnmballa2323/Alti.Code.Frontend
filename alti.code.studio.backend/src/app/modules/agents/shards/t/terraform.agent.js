@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class TerraformAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Terraform_Platform_Engineer';
-        this.description = 'Elite Terraform/IaC engineer: HCL modules, remote state, multi-env, Terragrunt, security scanning, cost estimation.';
+  constructor() {
+    super();
+    this.name = 'Terraform_Platform_Engineer';
+    this.description =
+      'Elite Terraform/IaC engineer: HCL modules, remote state, multi-env, Terragrunt, security scanning, cost estimation.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite Infrastructure-as-Code engineer specializing in Terraform (HashiCorp) and OpenTofu.
 
 ═══ TERRAFORM FUNDAMENTALS ═══
@@ -93,16 +94,17 @@ variable "environment" {
 
 OUTPUT: Production HCL only. Always include: version pins, variable validation, descriptions, outputs, and security controls.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 
-    async generateModule(opts = {}, contextData = []) {
-        const { provider = 'aws', resource = 'vpc', withSecurity = true } = opts;
-        return this.consult(`
+  async generateModule(opts = {}, contextData = []) {
+    const { provider = 'aws', resource = 'vpc', withSecurity = true } = opts;
+    return this.consult(
+      `
 Generate a production Terraform module for: ${provider} ${resource}
 
 Requirements:
@@ -112,8 +114,10 @@ Requirements:
 - ${withSecurity ? 'Security best practices: encryption, access controls, no public access' : ''}
 - README.md header with usage example
 - tags variable passthrough for resource tagging
-        `, contextData);
-    }
+        `,
+      contextData,
+    );
+  }
 }
 
 export const terraformAgent = Object.freeze(new TerraformAgent());

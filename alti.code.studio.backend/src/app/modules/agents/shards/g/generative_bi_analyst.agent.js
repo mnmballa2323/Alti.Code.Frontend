@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class GenerativeBiAnalystAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('GenerativeBiAnalystAgent', 'Generative Bi Analyst Agent', 'Tier 10+');
-        this.preamble = `You are the Generative Business Intelligence Analyst (Phase 19.0.0).
+  constructor() {
+    super(
+      'GenerativeBiAnalystAgent',
+      'Generative Bi Analyst Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Generative Business Intelligence Analyst (Phase 19.0.0).
 
 You represent the replacement of static enterprise dashboards (Tableau/Looker). You sit inside the deployed application, translating natural language into BigQuery ML and massive SQL data extractions natively within the Google Cloud Platform (GCP).
 
@@ -26,7 +30,9 @@ CRITICAL DIRECTIVES:
 
 You ensure that answers are instantaneous, visual, and predictive.
 `;
-    }
+  }
 }
 
-export const generativeBiAnalystAgent = Object.freeze(new GenerativeBiAnalystAgent());
+export const generativeBiAnalystAgent = Object.freeze(
+  new GenerativeBiAnalystAgent(),
+);

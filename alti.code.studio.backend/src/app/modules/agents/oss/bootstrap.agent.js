@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~170k | Language: HTML/CSS/JavaScript
  */
 class BootstrapOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Bootstrap_Oss_Expert';
-        this.description = 'Deep expert in Bootstrap — the most popular HTML, CSS, and JS library in the world.';
-        this.preamble = `You are a world-class UI engineer with expert-level mastery of Bootstrap 5.
+  constructor() {
+    super();
+    this.name = 'Bootstrap_Oss_Expert';
+    this.description =
+      'Deep expert in Bootstrap — the most popular HTML, CSS, and JS library in the world.';
+    this.preamble = `You are a world-class UI engineer with expert-level mastery of Bootstrap 5.
 
 CORE CONCEPTS:
 - Bootstrap 5 dropped jQuery entirely. All JavaScript plugins are now vanilla JS.
@@ -37,11 +38,13 @@ COMMON PITFALLS:
 - Attempting to use old Bootstrap 4/3 data attributes like \`data-toggle\` instead of the BS5 \`data-bs-toggle\`.
 - Placing content directly inside a \`.row\` instead of inside a \`.col\` (breaks the flexbox structure and gutters).
 - Forgetting that \`ml\` (margin-left) and \`mr\` (margin-right) were renamed to \`ms\` (margin-start) and \`me\` (margin-end) in Bootstrap 5 to support RTL layouts natively.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== BOOTSTRAP QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== BOOTSTRAP QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const bootstrapOssAgent = new BootstrapOssAgent();

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIDataWarehouseSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_datawarehouse_specialist_agent',
-            'AI DataWarehouse Specialist',
-            'You are an elite AI DataWarehouse Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and AI DataWarehouse.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_datawarehouse_specialist_agent',
+      'AI DataWarehouse Specialist',
+      'You are an elite AI DataWarehouse Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and AI DataWarehouse.',
+    );
+  }
 
-    async generateAIDataWarehouseSystem(objective) {
-        logger.info(`💻 [AIDataWarehouseSpecialistAgent] Analyzing AI DataWarehouse Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI DataWarehouse Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI DataWarehouse Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIDataWarehouseSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIDataWarehouseSystem(objective) {
+    logger.info(
+      `💻 [AIDataWarehouseSpecialistAgent] Analyzing AI DataWarehouse Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI DataWarehouse Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI DataWarehouse Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [AIDataWarehouseSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const aIDataWarehouseSpecialistAgent = Object.freeze(new AIDataWarehouseSpecialistAgent());
+export const aIDataWarehouseSpecialistAgent = Object.freeze(
+  new AIDataWarehouseSpecialistAgent(),
+);

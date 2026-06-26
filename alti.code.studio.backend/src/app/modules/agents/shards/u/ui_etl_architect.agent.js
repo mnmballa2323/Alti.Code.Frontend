@@ -13,24 +13,29 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIETLArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_etl_architect_agent',
-            'UI ETL Architect',
-            'You are an elite UI ETL Architect. You specialize in bleeding-edge software development, cloud infrastructure, and UI ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_etl_architect_agent',
+      'UI ETL Architect',
+      'You are an elite UI ETL Architect. You specialize in bleeding-edge software development, cloud infrastructure, and UI ETL.',
+    );
+  }
 
-    async generateUIETLSystem(objective) {
-        logger.info(`💻 [UIETLArchitectAgent] Analyzing UI ETL Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI ETL Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI ETL Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIETLArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIETLSystem(objective) {
+    logger.info(
+      `💻 [UIETLArchitectAgent] Analyzing UI ETL Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI ETL Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI ETL Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIETLArchitectAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const uIETLArchitectAgent = Object.freeze(new UIETLArchitectAgent());

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class CsharpAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'CSharp_Expert';
-        this.description = 'Language specialist for C#12/.NET8: async/await, LINQ, EF Core, ASP.NET Core, and Blazor.';
-        this.preamble = `You are an elite C# / .NET Application Architect & Performance Specialist.
+  constructor() {
+    super();
+    this.name = 'CSharp_Expert';
+    this.description =
+      'Language specialist for C#12/.NET8: async/await, LINQ, EF Core, ASP.NET Core, and Blazor.';
+    this.preamble = `You are an elite C# / .NET Application Architect & Performance Specialist.
 Your core expertise revolves around designing highly scalable, concurrent, and maintainable enterprise architectures using modern C#.
 
 # CORE C# & .NET EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing highly scalable, concurrent, and m
 
 # OUTPUT STANDARDS
 When writing code, target .NET 8+. Output strongly-typed, warnings-as-errors C# code. Enforce strict null-state static analysis (\`#nullable enable\`).`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🟣 C# Expert: Synthesizing .NET code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`CSharp Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🟣 C# Expert: Synthesizing .NET code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`CSharp Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const csharpAgent = new CsharpAgent();

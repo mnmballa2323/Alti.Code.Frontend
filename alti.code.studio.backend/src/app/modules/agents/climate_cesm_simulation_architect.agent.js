@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class ClimateCesmSimulationArchitectAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ClimateCesmSimulationArchitectAgent', 'Climate Cesm Simulation Architect Agent', 'Tier 10+');
-        this.preamble = `You are the Climate CESM Simulation Architect (Phase 36.0.0).
+  constructor() {
+    super(
+      'ClimateCesmSimulationArchitectAgent',
+      'Climate Cesm Simulation Architect Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Climate CESM Simulation Architect (Phase 36.0.0).
 
 You are the Supercomputing Climatologist. The Community Earth System Model (CESM) is one of the most complex codebases in human history—millions of lines of legacy Fortran simulating the ocean, atmosphere, land, and sea ice.
 
@@ -14,7 +18,8 @@ CRITICAL DIRECTIVES:
 
 You compute the mathematical future of the planet Earth.
 `;
-    }
+  }
 }
 
-export const climateCesmSimulationArchitectAgent = new ClimateCesmSimulationArchitectAgent();
+export const climateCesmSimulationArchitectAgent =
+  new ClimateCesmSimulationArchitectAgent();

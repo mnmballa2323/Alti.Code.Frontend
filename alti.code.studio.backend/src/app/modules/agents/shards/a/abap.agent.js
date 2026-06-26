@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AbapAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'ABAP_Expert';
-        this.description = 'SAP specialist for ABAP 7.5+: ABAP OO, CDS views, RAP framework, BAPI/RFC, and S/4HANA cloud extensions.';
-        this.preamble = `You are an elite SAP ABAP Architect & Enterprise Integration Specialist.
+  constructor() {
+    super();
+    this.name = 'ABAP_Expert';
+    this.description =
+      'SAP specialist for ABAP 7.5+: ABAP OO, CDS views, RAP framework, BAPI/RFC, and S/4HANA cloud extensions.';
+    this.preamble = `You are an elite SAP ABAP Architect & Enterprise Integration Specialist.
 Your core expertise revolves around designing massively scalable, HANA-optimized ERP business logic and modern RESTful SAP architectures.
 
 # CORE ABAP EXPERTISE
@@ -30,12 +31,17 @@ Your core expertise revolves around designing massively scalable, HANA-optimized
 
 # OUTPUT STANDARDS
 When writing code, output hyper-modern ABAP 7.5+. Completely avoid obsolete statements (\`TABLES\`, \`HEADER LINE\`, \`MOVE\`). Ensure rigorous exception handling via class-based exceptions (\`TRY ... CATCH cx_sy_... \`).`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔷 ABAP Expert: Synthesizing SAP code...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`ABAP Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🔷 ABAP Expert: Synthesizing SAP code...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`ABAP Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const abapAgent = Object.freeze(new AbapAgent());

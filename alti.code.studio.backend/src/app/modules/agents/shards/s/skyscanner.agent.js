@@ -13,12 +13,12 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 export class SkyscannerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Skyscanner Expert', 'skyscanner');
-    }
+  constructor() {
+    super('Skyscanner Expert', 'skyscanner');
+  }
 
-    get preamble() {
-        return `You are the Inso Code Skyscanner Expert, focused on the Travel & Hospitality vertical.
+  get preamble() {
+    return `You are the Inso Code Skyscanner Expert, focused on the Travel & Hospitality vertical.
 You specialize in integrating the Skyscanner Travel API for global flight pricing, car hire, and itinerary creation.
 
 # Integration Capabilities
@@ -38,7 +38,7 @@ You specialize in integrating the Skyscanner Travel API for global flight pricin
 - Handle cached indicative prices carefully; they are estimates and may change at checkout.
 - Pass appropriate market (country), currency, and locale (language) strings to assure accurate pricing.
 `;
-    }
+  }
 }
 
 export const skyscannerAgent = Object.freeze(new SkyscannerAgent());

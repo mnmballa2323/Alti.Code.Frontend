@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseContainerizationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_containerization_director_agent',
-            'Enterprise Containerization Director',
-            'You are an elite Enterprise Containerization Director. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_containerization_director_agent',
+      'Enterprise Containerization Director',
+      'You are an elite Enterprise Containerization Director. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Containerization.',
+    );
+  }
 
-    async generateEnterpriseContainerizationSystem(objective) {
-        logger.info(`💻 [EnterpriseContainerizationDirectorAgent] Analyzing Enterprise Containerization Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Containerization Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Containerization Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseContainerizationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseContainerizationSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseContainerizationDirectorAgent] Analyzing Enterprise Containerization Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Containerization Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Containerization Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseContainerizationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseContainerizationDirectorAgent = Object.freeze(new EnterpriseContainerizationDirectorAgent());
+export const enterpriseContainerizationDirectorAgent = Object.freeze(
+  new EnterpriseContainerizationDirectorAgent(),
+);

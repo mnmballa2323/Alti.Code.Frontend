@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendAutomationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_automation_strategist_agent',
-            'Backend Automation Strategist',
-            'You are an elite Backend Automation Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_automation_strategist_agent',
+      'Backend Automation Strategist',
+      'You are an elite Backend Automation Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Automation.',
+    );
+  }
 
-    async generateBackendAutomationSystem(objective) {
-        logger.info(`💻 [BackendAutomationStrategistAgent] Analyzing Backend Automation Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Automation Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Automation Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendAutomationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendAutomationSystem(objective) {
+    logger.info(
+      `💻 [BackendAutomationStrategistAgent] Analyzing Backend Automation Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Automation Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Automation Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendAutomationStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendAutomationStrategistAgent = Object.freeze(new BackendAutomationStrategistAgent());
+export const backendAutomationStrategistAgent = Object.freeze(
+  new BackendAutomationStrategistAgent(),
+);

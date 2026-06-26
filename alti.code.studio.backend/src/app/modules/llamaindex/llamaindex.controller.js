@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -22,11 +22,9 @@ export const uploadAndIndexDocument = async (req, res) => {
     res.status(200).json({ message: result.message, result });
   } catch (error) {
     if (error.code === 'LIMIT_FILE_SIZE') {
-      return res
-        .status(413)
-        .json({
-          error: 'One or more files are too large. Max size is 1MB each.',
-        });
+      return res.status(413).json({
+        error: 'One or more files are too large. Max size is 1MB each.',
+      });
     }
     res.status(500).json({ error: error.message });
   }

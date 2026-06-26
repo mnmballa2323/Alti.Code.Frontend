@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsEngineeringArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_engineering_architect_agent',
-            'DevOps Engineering Architect',
-            'You are an elite DevOps Engineering Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Engineering.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_engineering_architect_agent',
+      'DevOps Engineering Architect',
+      'You are an elite DevOps Engineering Architect. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Engineering.',
+    );
+  }
 
-    async generateDevOpsEngineeringSystem(objective) {
-        logger.info(`💻 [DevOpsEngineeringArchitectAgent] Analyzing DevOps Engineering Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Engineering Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Engineering Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsEngineeringArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsEngineeringSystem(objective) {
+    logger.info(
+      `💻 [DevOpsEngineeringArchitectAgent] Analyzing DevOps Engineering Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Engineering Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Engineering Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsEngineeringArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsEngineeringArchitectAgent = Object.freeze(new DevOpsEngineeringArchitectAgent());
+export const devOpsEngineeringArchitectAgent = Object.freeze(
+  new DevOpsEngineeringArchitectAgent(),
+);

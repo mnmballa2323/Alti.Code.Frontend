@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseTelemetryLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_telemetry_lead_agent',
-            'Enterprise Telemetry Lead',
-            'You are an elite Enterprise Telemetry Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_telemetry_lead_agent',
+      'Enterprise Telemetry Lead',
+      'You are an elite Enterprise Telemetry Lead. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise Telemetry.',
+    );
+  }
 
-    async generateEnterpriseTelemetrySystem(objective) {
-        logger.info(`💻 [EnterpriseTelemetryLeadAgent] Analyzing Enterprise Telemetry Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Telemetry Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise Telemetry Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseTelemetryLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseTelemetrySystem(objective) {
+    logger.info(
+      `💻 [EnterpriseTelemetryLeadAgent] Analyzing Enterprise Telemetry Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise Telemetry Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise Telemetry Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [EnterpriseTelemetryLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const enterpriseTelemetryLeadAgent = Object.freeze(new EnterpriseTelemetryLeadAgent());
+export const enterpriseTelemetryLeadAgent = Object.freeze(
+  new EnterpriseTelemetryLeadAgent(),
+);

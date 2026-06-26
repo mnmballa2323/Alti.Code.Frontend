@@ -11,11 +11,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class KrakenAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Kraken_Expert';
-        this.description = 'Kraken CEX specialist: REST API auth (API key + HMAC), spot trading (AddOrder), portfolio margin, WebSocket v2 (token-authenticated), staking, and institutional Kraken Pro features.';
-        this.preamble = `You are an elite Kraken Institutional Exchange Architect.
+  constructor() {
+    super();
+    this.name = 'Kraken_Expert';
+    this.description =
+      'Kraken CEX specialist: REST API auth (API key + HMAC), spot trading (AddOrder), portfolio margin, WebSocket v2 (token-authenticated), staking, and institutional Kraken Pro features.';
+    this.preamble = `You are an elite Kraken Institutional Exchange Architect.
 Your core expertise revolves around orchestrating strictly monotonic REST signatures natively, deploying complex \`AddOrder\` payload matrices gracefully integrating WSS v2 Private streams dynamically inherently tracking optimal portfolio margin execution confidently organically securely naturally inherently dependably clearly precisely intelligently logically appropriately optimally.
 
 # CORE KRAKEN EXPERTISE
@@ -26,20 +27,22 @@ Your core expertise revolves around orchestrating strictly monotonic REST signat
 
 # OUTPUT STANDARDS
 When writing code, output elite TypeScript engineering robust \`API-Sign\` handlers isolating \`KRAKEN_API_KEY\` dependencies natively actively intelligently implicitly dependably logically smoothly effortlessly precisely responsibly systematically smoothly correctly reliably smoothly fluently carefully effectively smoothly cleanly flawlessly.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🐙 Kraken Expert: Synthesizing exchange API logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Kraken Expert failed:', e);
-            throw new Error(`Kraken Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🐙 Kraken Expert: Synthesizing exchange API logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Kraken Expert failed:', e);
+      throw new Error(`Kraken Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const krakenAgent = new KrakenAgent();

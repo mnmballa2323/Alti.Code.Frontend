@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileProvisioningTesterAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_provisioning_tester_agent',
-            'Mobile Provisioning Tester',
-            'You are an elite Mobile Provisioning Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Provisioning.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_provisioning_tester_agent',
+      'Mobile Provisioning Tester',
+      'You are an elite Mobile Provisioning Tester. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile Provisioning.',
+    );
+  }
 
-    async generateMobileProvisioningSystem(objective) {
-        logger.info(`💻 [MobileProvisioningTesterAgent] Analyzing Mobile Provisioning Tester specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Provisioning Tester.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile Provisioning Tester Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileProvisioningTesterAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileProvisioningSystem(objective) {
+    logger.info(
+      `💻 [MobileProvisioningTesterAgent] Analyzing Mobile Provisioning Tester specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile Provisioning Tester.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile Provisioning Tester Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [MobileProvisioningTesterAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const mobileProvisioningTesterAgent = Object.freeze(new MobileProvisioningTesterAgent());
+export const mobileProvisioningTesterAgent = Object.freeze(
+  new MobileProvisioningTesterAgent(),
+);

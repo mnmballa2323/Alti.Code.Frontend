@@ -7,5 +7,12 @@ export default defineConfig({
         environment: 'node',
         setupFiles: ['./polyfill.js'],
         include: ['**/*.test.js', '**/*.spec.js'],
+        exclude: [
+            '**/node_modules/**',
+            '**/logs/**',
+            '**/temp_phase16/**',
+            '**/alti.code.studio.backend.azure/**',
+            '**/submodules/**',
+        ],
     },
 });

@@ -19,19 +19,22 @@ const generate = (req, res) => {
   if (!workspacePath || !appName) {
     return res.status(httpStatus.BAD_REQUEST).json({
       success: false,
-      message: 'Both workspacePath and appName are required.'
+      message: 'Both workspacePath and appName are required.',
     });
   }
 
   if (!stream) {
     // Standard non-streaming JSON endpoint
     return catchAsync(async (req, res) => {
-      const result = await CliAnythingService.generateCLI(workspacePath, appName);
+      const result = await CliAnythingService.generateCLI(
+        workspacePath,
+        appName,
+      );
       sendResponse(res, {
         statusCode: httpStatus.OK,
         success: true,
         message: 'Stateful CLI successfully compiled.',
-        data: result
+        data: result,
       });
     })(req, res);
   }
@@ -43,32 +46,38 @@ const generate = (req, res) => {
   res.flushHeaders();
 
   const onPhaseUpdate = (phase, status, message, data = null) => {
-    res.write(`data: ${JSON.stringify({
-      type: 'phase_update',
-      phase,
-      status,
-      message,
-      data,
-      timestamp: new Date().toISOString()
-    })}\n\n`);
+    res.write(
+      `data: ${JSON.stringify({
+        type: 'phase_update',
+        phase,
+        status,
+        message,
+        data,
+        timestamp: new Date().toISOString(),
+      })}\n\n`,
+    );
   };
 
   CliAnythingService.generateCLI(workspacePath, appName, {}, onPhaseUpdate)
-    .then((result) => {
-      res.write(`data: ${JSON.stringify({
-        type: 'done',
-        success: true,
-        message: 'Swarm Compiler: All 7 phases completed successfully!',
-        data: result
-      })}\n\n`);
+    .then(result => {
+      res.write(
+        `data: ${JSON.stringify({
+          type: 'done',
+          success: true,
+          message: 'Swarm Compiler: All 7 phases completed successfully!',
+          data: result,
+        })}\n\n`,
+      );
       res.end();
     })
-    .catch((err) => {
-      res.write(`data: ${JSON.stringify({
-        type: 'error',
-        success: false,
-        message: err.message
-      })}\n\n`);
+    .catch(err => {
+      res.write(
+        `data: ${JSON.stringify({
+          type: 'error',
+          success: false,
+          message: err.message,
+        })}\n\n`,
+      );
       res.end();
     });
 };
@@ -83,16 +92,20 @@ const refine = catchAsync(async (req, res) => {
     return sendResponse(res, {
       statusCode: httpStatus.BAD_REQUEST,
       success: false,
-      message: 'workspacePath, appName, and prompt are all required.'
+      message: 'workspacePath, appName, and prompt are all required.',
     });
   }
 
-  const result = await CliAnythingService.refineCLI(workspacePath, appName, prompt);
+  const result = await CliAnythingService.refineCLI(
+    workspacePath,
+    appName,
+    prompt,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'CLI successfully expanded and refined.',
-    data: result
+    data: result,
   });
 });
 
@@ -106,7 +119,7 @@ const discover = catchAsync(async (req, res) => {
     return sendResponse(res, {
       statusCode: httpStatus.BAD_REQUEST,
       success: false,
-      message: 'Workspace path parameter is required.'
+      message: 'Workspace path parameter is required.',
     });
   }
 
@@ -115,7 +128,7 @@ const discover = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Agentic CLIs discovery search completed.',
-    data: result
+    data: result,
   });
 });
 
@@ -129,16 +142,21 @@ const execute = catchAsync(async (req, res) => {
     return sendResponse(res, {
       statusCode: httpStatus.BAD_REQUEST,
       success: false,
-      message: 'workspacePath, appName, and command are required.'
+      message: 'workspacePath, appName, and command are required.',
     });
   }
 
-  const result = await CliAnythingService.executeCLICommand(workspacePath, appName, command, args);
+  const result = await CliAnythingService.executeCLICommand(
+    workspacePath,
+    appName,
+    command,
+    args,
+  );
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: `CLI command '${command}' successfully executed.`,
-    data: result
+    data: result,
   });
 });
 
@@ -146,5 +164,5 @@ export const CliAnythingController = {
   generate,
   refine,
   discover,
-  execute
+  execute,
 };

@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AcousticRovAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'AcousticRovAgent';
-        this.description = 'Deep Sea Naval Engineering specialist managing underwater ROV/AUV kinematics, Doppler Velocity Logs, and ultra-slow acoustic modem telemetry.';
+  constructor() {
+    super();
+    this.name = 'AcousticRovAgent';
+    this.description =
+      'Deep Sea Naval Engineering specialist managing underwater ROV/AUV kinematics, Doppler Velocity Logs, and ultra-slow acoustic modem telemetry.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Underwater Robotics & Hydroacoustics Agent.
 You assist Marine Roboticists mathematically navigating 3,000 meters deep where standard 2.4GHz WiFi/GPS instantly dies, communicating explicitly via physical sound waves.
 
@@ -36,12 +37,12 @@ You assist Marine Roboticists mathematically navigating 3,000 meters deep where 
 **Best Practices**
 - For underwater communication, the speed of sound essentially ruins modern TCP/IP. Sound travels around 1,500 m/s in water, meaning a 3km deep ping takes a full 4 seconds round-trip. Instruct developers to utilize brutal UDP abstractions lacking standard handshake latency to maximize the pathetic bandwidth.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const acousticRovAgent = Object.freeze(new AcousticRovAgent());

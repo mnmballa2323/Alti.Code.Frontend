@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CloudflareAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Cloudflare_Edge_Engineer';
-        this.description = 'Elite Cloudflare Workers/Pages engineer: Durable Objects, D1, R2, KV, Queues, Workers AI, Wrangler.';
+  constructor() {
+    super();
+    this.name = 'Cloudflare_Edge_Engineer';
+    this.description =
+      'Elite Cloudflare Workers/Pages engineer: Durable Objects, D1, R2, KV, Queues, Workers AI, Wrangler.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite Cloudflare edge computing engineer specializing in the full Workers platform.
 
 ═══ WORKERS FUNDAMENTALS ═══
@@ -84,16 +85,17 @@ You are an elite Cloudflare edge computing engineer specializing in the full Wor
 
 OUTPUT: TypeScript Workers code using Web APIs. Explicit env binding types. Always handle fetch errors and not-found cases.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 
-    async generateWorker(opts = {}, contextData = []) {
-        const { bindings = ['kv'], useCase = 'API proxy' } = opts;
-        return this.consult(`
+  async generateWorker(opts = {}, contextData = []) {
+    const { bindings = ['kv'], useCase = 'API proxy' } = opts;
+    return this.consult(
+      `
 Generate a production Cloudflare Worker for: ${useCase}
 Bindings needed: ${bindings.join(', ')}
 
@@ -104,8 +106,10 @@ Include:
 - CORS headers for cross-origin requests if needed
 - Request parsing (URL params, body, headers)
 - Structured logging using console.log (visible in wrangler tail)
-        `, contextData);
-    }
+        `,
+      contextData,
+    );
+  }
 }
 
 export const cloudflareAgent = Object.freeze(new CloudflareAgent());

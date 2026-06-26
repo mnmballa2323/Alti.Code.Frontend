@@ -13,24 +13,29 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXScalingAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_scaling_auditor_agent',
-            'UX Scaling Auditor',
-            'You are an elite UX Scaling Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and UX Scaling.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_scaling_auditor_agent',
+      'UX Scaling Auditor',
+      'You are an elite UX Scaling Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and UX Scaling.',
+    );
+  }
 
-    async generateUXScalingSystem(objective) {
-        logger.info(`💻 [UXScalingAuditorAgent] Analyzing UX Scaling Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Scaling Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Scaling Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXScalingAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXScalingSystem(objective) {
+    logger.info(
+      `💻 [UXScalingAuditorAgent] Analyzing UX Scaling Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Scaling Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Scaling Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXScalingAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
 export const uXScalingAuditorAgent = Object.freeze(new UXScalingAuditorAgent());

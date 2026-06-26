@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UIAnalyticsDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_analytics_director_agent',
-            'UI Analytics Director',
-            'You are an elite UI Analytics Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_analytics_director_agent',
+      'UI Analytics Director',
+      'You are an elite UI Analytics Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI Analytics.',
+    );
+  }
 
-    async generateUIAnalyticsSystem(objective) {
-        logger.info(`💻 [UIAnalyticsDirectorAgent] Analyzing UI Analytics Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Analytics Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI Analytics Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UIAnalyticsDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUIAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [UIAnalyticsDirectorAgent] Analyzing UI Analytics Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI Analytics Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI Analytics Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UIAnalyticsDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uIAnalyticsDirectorAgent = Object.freeze(new UIAnalyticsDirectorAgent());
+export const uIAnalyticsDirectorAgent = Object.freeze(
+  new UIAnalyticsDirectorAgent(),
+);

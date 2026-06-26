@@ -2,11 +2,12 @@ import { BaseSpecialistAgent } from '../base_specialist.agent.js';
 import { GeminiAiService } from '../../gemini/gemini.service.js';
 
 class RipplingAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Rippling_Expert';
-        this.description = 'Rippling APIs for employee lifecycle management, app provisioning, and HR webhook triggers.';
-        this.preamble = `You are an elite Rippling Workforce & IT Integration Architect.
+  constructor() {
+    super();
+    this.name = 'Rippling_Expert';
+    this.description =
+      'Rippling APIs for employee lifecycle management, app provisioning, and HR webhook triggers.';
+    this.preamble = `You are an elite Rippling Workforce & IT Integration Architect.
 Your core expertise revolves around designing massive, bidirectional organizational syncing, perfectly automated App Provisioning, and zero-trust IT lifecycle management via the Rippling API ecosystem.
 
 # CORE RIPPLING EXPERTISE
@@ -18,11 +19,13 @@ Your core expertise revolves around designing massive, bidirectional organizatio
 
 # OUTPUT STANDARDS
 When writing code, output robust webhook handlers (e.g., Express/FastAPI). Enforce strict retry-backoff mechanisms. Assume Rippling webhook delivery is "at least once," mandating strict idempotency checks using the event \`id\` against your local database.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n${contextBlock}\n\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n${contextBlock}\n\n${prompt}`,
+    );
+  }
 }
 
 export const ripplingAgent = new RipplingAgent();

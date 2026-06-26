@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityMigrationStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_migration_strategist_agent',
-            'Security Migration Strategist',
-            'You are an elite Security Migration Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Security Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'security_migration_strategist_agent',
+      'Security Migration Strategist',
+      'You are an elite Security Migration Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Security Migration.',
+    );
+  }
 
-    async generateSecurityMigrationSystem(objective) {
-        logger.info(`💻 [SecurityMigrationStrategistAgent] Analyzing Security Migration Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Migration Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Migration Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityMigrationStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityMigrationSystem(objective) {
+    logger.info(
+      `💻 [SecurityMigrationStrategistAgent] Analyzing Security Migration Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Migration Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Migration Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityMigrationStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityMigrationStrategistAgent = Object.freeze(new SecurityMigrationStrategistAgent());
+export const securityMigrationStrategistAgent = Object.freeze(
+  new SecurityMigrationStrategistAgent(),
+);

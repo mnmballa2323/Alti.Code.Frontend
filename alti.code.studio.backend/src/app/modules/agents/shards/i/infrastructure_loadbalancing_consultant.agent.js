@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureLoadBalancingConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_loadbalancing_consultant_agent',
-            'Infrastructure LoadBalancing Consultant',
-            'You are an elite Infrastructure LoadBalancing Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_loadbalancing_consultant_agent',
+      'Infrastructure LoadBalancing Consultant',
+      'You are an elite Infrastructure LoadBalancing Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure LoadBalancing.',
+    );
+  }
 
-    async generateInfrastructureLoadBalancingSystem(objective) {
-        logger.info(`💻 [InfrastructureLoadBalancingConsultantAgent] Analyzing Infrastructure LoadBalancing Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure LoadBalancing Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure LoadBalancing Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureLoadBalancingConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureLoadBalancingConsultantAgent] Analyzing Infrastructure LoadBalancing Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure LoadBalancing Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure LoadBalancing Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureLoadBalancingConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureLoadBalancingConsultantAgent = Object.freeze(new InfrastructureLoadBalancingConsultantAgent());
+export const infrastructureLoadBalancingConsultantAgent = Object.freeze(
+  new InfrastructureLoadBalancingConsultantAgent(),
+);

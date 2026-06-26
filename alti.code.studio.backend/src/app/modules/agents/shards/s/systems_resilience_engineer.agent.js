@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SystemsResilienceEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'systems_resilience_engineer_agent',
-            'Systems Resilience Engineer',
-            'You are an elite Systems Resilience Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Resilience.'
-        );
-    }
+  constructor() {
+    super(
+      'systems_resilience_engineer_agent',
+      'Systems Resilience Engineer',
+      'You are an elite Systems Resilience Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Systems Resilience.',
+    );
+  }
 
-    async generateSystemsResilienceSystem(objective) {
-        logger.info(`💻 [SystemsResilienceEngineerAgent] Analyzing Systems Resilience Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Resilience Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Systems Resilience Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SystemsResilienceEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSystemsResilienceSystem(objective) {
+    logger.info(
+      `💻 [SystemsResilienceEngineerAgent] Analyzing Systems Resilience Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Systems Resilience Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Systems Resilience Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SystemsResilienceEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const systemsResilienceEngineerAgent = Object.freeze(new SystemsResilienceEngineerAgent());
+export const systemsResilienceEngineerAgent = Object.freeze(
+  new SystemsResilienceEngineerAgent(),
+);

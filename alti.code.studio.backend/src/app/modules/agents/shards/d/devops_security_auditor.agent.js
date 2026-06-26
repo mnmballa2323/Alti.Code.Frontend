@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsSecurityAuditorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_security_auditor_agent',
-            'DevOps Security Auditor',
-            'You are an elite DevOps Security Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Security.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_security_auditor_agent',
+      'DevOps Security Auditor',
+      'You are an elite DevOps Security Auditor. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Security.',
+    );
+  }
 
-    async generateDevOpsSecuritySystem(objective) {
-        logger.info(`💻 [DevOpsSecurityAuditorAgent] Analyzing DevOps Security Auditor specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Security Auditor.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Security Auditor Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsSecurityAuditorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsSecuritySystem(objective) {
+    logger.info(
+      `💻 [DevOpsSecurityAuditorAgent] Analyzing DevOps Security Auditor specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Security Auditor.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Security Auditor Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevOpsSecurityAuditorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devOpsSecurityAuditorAgent = Object.freeze(new DevOpsSecurityAuditorAgent());
+export const devOpsSecurityAuditorAgent = Object.freeze(
+  new DevOpsSecurityAuditorAgent(),
+);

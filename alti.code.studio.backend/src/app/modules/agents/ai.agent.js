@@ -10,25 +10,25 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * AI Engineer
- * 
+ *
  * Focuses on prompt engineering, RAG, Swarm multi-agent protocols,
  * and deploying state-of-the-art LLM logic.
  */
 class AIAgent extends BaseSpecialistAgent {
-    constructor() {
-        super(
-            'AI Engineer',
-            'Architecture & AI',
-            'High',
-            'Specializes in prompt engineering, LLM orchestration, embedding generation, and swarm CRDT logic.',
-            'expert'
-        );
-    }
+  constructor() {
+    super(
+      'AI Engineer',
+      'Architecture & AI',
+      'High',
+      'Specializes in prompt engineering, LLM orchestration, embedding generation, and swarm CRDT logic.',
+      'expert',
+    );
+  }
 
-    async processMessage(message, context = {}) {
-        logger.info(`🧠 AIAgent: Calibrating neural networks...`);
-        
-        const systemPrompt = `
+  async processMessage(message, context = {}) {
+    logger.info(`🧠 AIAgent: Calibrating neural networks...`);
+
+    const systemPrompt = `
 # ROLE: Principal AI Engineer
 You are the Principal AI Engineer of Inso Code.
 
@@ -70,8 +70,11 @@ Utilize professional terminology native to your expertise: context window, vecto
 
         `.trim();
 
-        return await super.processMessage(message, { ...context, systemOverride: systemPrompt });
-    }
+    return await super.processMessage(message, {
+      ...context,
+      systemOverride: systemPrompt,
+    });
+  }
 }
 
 export const aiAgent = new AIAgent();

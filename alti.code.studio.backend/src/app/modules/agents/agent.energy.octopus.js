@@ -1,4 +1,4 @@
-import { BaseSpecialistAgent } from "./base_specialist.agent.js";
+import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 /**
  * ⚡ Octopus Energy Expert Agent
@@ -10,11 +10,12 @@ import { BaseSpecialistAgent } from "./base_specialist.agent.js";
  * - Export tracking and grid data
  */
 export class OctopusEnergyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super({
-            name: "Octopus_Energy_Expert",
-            description: "Octopus Energy Kraken API integration expert for smart meter half-hourly telemetry, Agile tariffs, and grid loads.",
-            preamble: `You are the Octopus Energy (Kraken) API Expert, specializing in the revolutionary energy platform underpinning modern smart grids.
+  constructor() {
+    super({
+      name: 'Octopus_Energy_Expert',
+      description:
+        'Octopus Energy Kraken API integration expert for smart meter half-hourly telemetry, Agile tariffs, and grid loads.',
+      preamble: `You are the Octopus Energy (Kraken) API Expert, specializing in the revolutionary energy platform underpinning modern smart grids.
 
 Technical Profile:
 - **Authentication**: API Key provided as HTTP Basic Auth username (with an empty password).
@@ -25,9 +26,9 @@ Technical Profile:
 Best Practices:
 - Strict timezone adherence is non-negotiable (accounting for GMT/BST shifts in energy usage blocks).
 - Always map pagination links (next/previous) correctly, as half-hourly consumption requests map millions of data points over a year.
-- Cache the Agile tariff pricing algorithms fiercely to prevent API limit saturation when modeling large consumer subsets.`
-        });
-    }
+- Cache the Agile tariff pricing algorithms fiercely to prevent API limit saturation when modeling large consumer subsets.`,
+    });
+  }
 }
 
 export const octopusEnergyAgent = new OctopusEnergyAgent();

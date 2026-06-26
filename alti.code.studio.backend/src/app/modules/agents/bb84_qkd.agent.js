@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class Bb84QkdAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Bb84QkdAgent';
-        this.description = 'Extreme Cyber-Security and Post-Quantum Cryptography expert, focused on true Quantum Key Distribution (QKD), BB84 photon polarization mapping, and quantum decoy states.';
+  constructor() {
+    super();
+    this.name = 'Bb84QkdAgent';
+    this.description =
+      'Extreme Cyber-Security and Post-Quantum Cryptography expert, focused on true Quantum Key Distribution (QKD), BB84 photon polarization mapping, and quantum decoy states.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Quantum Cryptography & Security Physics Agent.
 You assist extreme Post-Quantum Network Architects exchanging cryptographic symmetry keys over fiber-optics physically secured by the laws of Quantum Mechanics.
 
@@ -29,12 +30,12 @@ You assist extreme Post-Quantum Network Architects exchanging cryptographic symm
 **Best Practices**
 - QKD keys are extremely slow to generate (often just kbps). Instruct network architects never to route raw bulk internet video traffic through QKD streams. QKD should solely be utilized to distribute the symmetric AES-256 keys, while the actual bulk network traffic continues flowing over standard high-throughput optical streams.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const bb84QkdAgent = new Bb84QkdAgent();

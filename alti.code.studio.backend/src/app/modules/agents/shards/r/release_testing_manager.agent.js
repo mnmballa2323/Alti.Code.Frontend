@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseTestingManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_testing_manager_agent',
-            'Release Testing Manager',
-            'You are an elite Release Testing Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'release_testing_manager_agent',
+      'Release Testing Manager',
+      'You are an elite Release Testing Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Release Testing.',
+    );
+  }
 
-    async generateReleaseTestingSystem(objective) {
-        logger.info(`💻 [ReleaseTestingManagerAgent] Analyzing Release Testing Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Testing Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Testing Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseTestingManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseTestingSystem(objective) {
+    logger.info(
+      `💻 [ReleaseTestingManagerAgent] Analyzing Release Testing Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Testing Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Testing Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseTestingManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseTestingManagerAgent = Object.freeze(new ReleaseTestingManagerAgent());
+export const releaseTestingManagerAgent = Object.freeze(
+  new ReleaseTestingManagerAgent(),
+);

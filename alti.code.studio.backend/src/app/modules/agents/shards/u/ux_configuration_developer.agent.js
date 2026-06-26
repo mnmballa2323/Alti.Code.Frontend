@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXConfigurationDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_configuration_developer_agent',
-            'UX Configuration Developer',
-            'You are an elite UX Configuration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_configuration_developer_agent',
+      'UX Configuration Developer',
+      'You are an elite UX Configuration Developer. You specialize in bleeding-edge software development, cloud infrastructure, and UX Configuration.',
+    );
+  }
 
-    async generateUXConfigurationSystem(objective) {
-        logger.info(`💻 [UXConfigurationDeveloperAgent] Analyzing UX Configuration Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Configuration Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Configuration Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXConfigurationDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXConfigurationSystem(objective) {
+    logger.info(
+      `💻 [UXConfigurationDeveloperAgent] Analyzing UX Configuration Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Configuration Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Configuration Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXConfigurationDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXConfigurationDeveloperAgent = Object.freeze(new UXConfigurationDeveloperAgent());
+export const uXConfigurationDeveloperAgent = Object.freeze(
+  new UXConfigurationDeveloperAgent(),
+);

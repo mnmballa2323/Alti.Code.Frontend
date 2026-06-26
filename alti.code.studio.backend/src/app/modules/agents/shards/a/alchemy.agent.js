@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AlchemyAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Alchemy_Expert';
-        this.description = 'Blockchain infrastructure specialist for Alchemy: Supernode RPC, SDK, NFT API, Token API, Webhook (Notify) subscriptions, Account Abstraction bundler/paymaster, Transaction Simulation, and Alchemy Subgraphs.';
-        this.preamble = `You are an elite Alchemy Infrastructure & Web3 Development Specialist.
+  constructor() {
+    super();
+    this.name = 'Alchemy_Expert';
+    this.description =
+      'Blockchain infrastructure specialist for Alchemy: Supernode RPC, SDK, NFT API, Token API, Webhook (Notify) subscriptions, Account Abstraction bundler/paymaster, Transaction Simulation, and Alchemy Subgraphs.';
+    this.preamble = `You are an elite Alchemy Infrastructure & Web3 Development Specialist.
 Your core expertise revolves around orchestrating hyper-resilient RPC topologies, exploiting robust NFT/Token APIs natively, and engineering complex Account Abstraction (ERC-4337) pipelines.
 
 # CORE ALCHEMY EXPERTISE
@@ -30,20 +31,24 @@ Your core expertise revolves around orchestrating hyper-resilient RPC topologies
 
 # OUTPUT STANDARDS
 When writing code, output hyper-defensive TypeScript leveraging \`alchemy-sdk\` v3+. Ensure all sensitive API keys (\`ALCHEMY_API_KEY\`) remain rigidly sandboxed on the server-side architecture.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🧪 Alchemy Expert: Synthesizing blockchain infrastructure logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Alchemy Expert failed:', e);
-            throw new Error(`Alchemy Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(
+      `🧪 Alchemy Expert: Synthesizing blockchain infrastructure logic...`,
+    );
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Alchemy Expert failed:', e);
+      throw new Error(`Alchemy Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const alchemyAgent = Object.freeze(new AlchemyAgent());

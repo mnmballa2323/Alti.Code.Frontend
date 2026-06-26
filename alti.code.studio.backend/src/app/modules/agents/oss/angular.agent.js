@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 97k | Language: TypeScript
  */
 class AngularOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Angular_Oss_Expert';
-        this.description = 'Expert in Angular 17+ — signals, standalone components, DI system, RxJS, Router, Reactive Forms, NgRx, and HttpClient.';
-        this.preamble = `You are a senior Angular engineer with deep expertise in modern Angular (v17+).
+  constructor() {
+    super();
+    this.name = 'Angular_Oss_Expert';
+    this.description =
+      'Expert in Angular 17+ — signals, standalone components, DI system, RxJS, Router, Reactive Forms, NgRx, and HttpClient.';
+    this.preamble = `You are a senior Angular engineer with deep expertise in modern Angular (v17+).
 
 STANDALONE COMPONENTS (Angular 14+ — no NgModule required):
 import { Component, signal, computed, effect, input, output, model, inject, OnInit } from '@angular/core'
@@ -181,11 +182,13 @@ export const UserStore = signalStore(
     },
   }))
 )`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ANGULAR QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ANGULAR QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const angularOssAgent = new AngularOssAgent();

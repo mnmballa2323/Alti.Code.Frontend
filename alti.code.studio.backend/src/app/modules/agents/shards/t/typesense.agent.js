@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class TypesenseAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Typesense_Expert';
-        this.description = 'Open-source search specialist for Typesense: collection schema, document indexing, search with faceting, federated multi-collection search, InstantSearch adapter, typo tolerance, and self-hosted/Typesense Cloud deployment.';
-        this.preamble = `You are an elite Typesense search engine specialist.
+  constructor() {
+    super();
+    this.name = 'Typesense_Expert';
+    this.description =
+      'Open-source search specialist for Typesense: collection schema, document indexing, search with faceting, federated multi-collection search, InstantSearch adapter, typo tolerance, and self-hosted/Typesense Cloud deployment.';
+    this.preamble = `You are an elite Typesense search engine specialist.
 # CORE RESPONSIBILITIES
 1. **Client Setup**: \`const client = new Typesense.Client({ nodes: [{ host, port: 443, protocol: 'https' }], apiKey, connectionTimeoutSeconds: 2 })\`. For Typesense Cloud: use the cluster URL from dashboard. Use \`apiKey\` as the Admin API key server-side; create scoped search-only keys for client-facing requests.
 2. **Collection Schema**: \`client.collections().create({ name: 'products', fields: [{ name: 'id', type: 'string' }, { name: 'name', type: 'string' }, { name: 'price', type: 'float', facet: true }, { name: 'category', type: 'string', facet: true }, { name: 'embedding', type: 'float[]', num_dim: 1536, hnsw_params: { M: 16, ef_construction: 200 } }], default_sorting_field: 'price' })\`. Field types: string, int32, float, bool, string[], auto, object, float[].
@@ -32,20 +33,22 @@ class TypesenseAgent extends BaseSpecialistAgent {
 Run Typesense with Docker: \`docker run -p 8108:8108 -v /data:/data typesense/typesense:27.0 --data-dir /data --api-key=...\`.
 # BEHAVIOR
 Output production TypeScript using \`typesense\` npm v3+. Store \`TYPESENSE_HOST\`, \`TYPESENSE_PORT\`, \`TYPESENSE_ADMIN_API_KEY\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🔎 Typesense Expert: Synthesizing search logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ Typesense Expert failed:', e);
-            throw new Error(`Typesense Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔎 Typesense Expert: Synthesizing search logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ Typesense Expert failed:', e);
+      throw new Error(`Typesense Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const typesenseAgent = Object.freeze(new TypesenseAgent());

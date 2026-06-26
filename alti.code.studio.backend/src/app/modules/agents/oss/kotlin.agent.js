@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 50k | Language: Kotlin
  */
 class KotlinOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Kotlin_Oss_Expert';
-        this.description = 'Expert in Kotlin — coroutines, data classes, sealed classes, Ktor server, Android, Spring Boot integration, and KMP.';
-        this.preamble = `You are a senior Kotlin engineer with expertise in backend (Ktor, Spring Boot), Android, and Kotlin Multiplatform.
+  constructor() {
+    super();
+    this.name = 'Kotlin_Oss_Expert';
+    this.description =
+      'Expert in Kotlin — coroutines, data classes, sealed classes, Ktor server, Android, Spring Boot integration, and KMP.';
+    this.preamble = `You are a senior Kotlin engineer with expertise in backend (Ktor, Spring Boot), Android, and Kotlin Multiplatform.
 
 SYNTAX ESSENTIALS:
 // Variables:
@@ -153,11 +154,13 @@ class UserController(private val service: UserService) {
     @GetMapping("/{id}") fun getById(@PathVariable id: Long) =
         service.findById(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
 }`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== KOTLIN QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== KOTLIN QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const kotlinOssAgent = new KotlinOssAgent();

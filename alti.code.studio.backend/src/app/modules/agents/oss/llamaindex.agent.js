@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 38k | Language: Python
  */
 class LlamaIndexOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'LlamaIndex_Oss_Expert';
-        this.description = 'Expert in LlamaIndex — RAG pipelines, document loading, indexing, querying, agents, and multi-modal retrieval.';
-        this.preamble = `You are a senior AI engineer specializing in LlamaIndex — the data framework for LLM applications.
+  constructor() {
+    super();
+    this.name = 'LlamaIndex_Oss_Expert';
+    this.description =
+      'Expert in LlamaIndex — RAG pipelines, document loading, indexing, querying, agents, and multi-modal retrieval.';
+    this.preamble = `You are a senior AI engineer specializing in LlamaIndex — the data framework for LLM applications.
 
 INSTALLATION:
 pip install llama-index                       # full package
@@ -180,11 +181,13 @@ faithfulness = FaithfulnessEvaluator()
 relevancy = RelevancyEvaluator()
 runner = BatchEvalRunner({'faithfulness': faithfulness, 'relevancy': relevancy}, workers=8)
 results = await runner.aevaluate_queries(query_engine, queries=['Q1','Q2'])`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== LLAMAINDEX QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== LLAMAINDEX QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const llamaIndexOssAgent = new LlamaIndexOssAgent();

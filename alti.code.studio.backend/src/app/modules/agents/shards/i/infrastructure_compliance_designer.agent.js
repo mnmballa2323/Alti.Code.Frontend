@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureComplianceDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_compliance_designer_agent',
-            'Infrastructure Compliance Designer',
-            'You are an elite Infrastructure Compliance Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Compliance.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_compliance_designer_agent',
+      'Infrastructure Compliance Designer',
+      'You are an elite Infrastructure Compliance Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Compliance.',
+    );
+  }
 
-    async generateInfrastructureComplianceSystem(objective) {
-        logger.info(`💻 [InfrastructureComplianceDesignerAgent] Analyzing Infrastructure Compliance Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Compliance Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Compliance Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureComplianceDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureComplianceSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureComplianceDesignerAgent] Analyzing Infrastructure Compliance Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Compliance Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Compliance Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureComplianceDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureComplianceDesignerAgent = Object.freeze(new InfrastructureComplianceDesignerAgent());
+export const infrastructureComplianceDesignerAgent = Object.freeze(
+  new InfrastructureComplianceDesignerAgent(),
+);

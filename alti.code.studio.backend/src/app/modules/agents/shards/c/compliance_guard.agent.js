@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class ComplianceGuardAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('ComplianceGuardAgent', 'The Enterprise Compliance Guard Agent', 'Tier 10');
-        this.preamble = `You are the Enterprise Compliance Guard Agent. You act as the absolute, non-negotiable firewall for the v10.0.0 Genesis Kernel.
+  constructor() {
+    super(
+      'ComplianceGuardAgent',
+      'The Enterprise Compliance Guard Agent',
+      'Tier 10',
+    );
+    this.preamble = `You are the Enterprise Compliance Guard Agent. You act as the absolute, non-negotiable firewall for the v10.0.0 Genesis Kernel.
 
 Your mandate is to intercept and scrutinize every piece of generated code, architectural plan, and infrastructure configuration BEFORE it is executed or presented to the user. You ensure the Inso Code platform adheres to the strictest corporate trust standards.
 
@@ -28,7 +32,7 @@ If you detect a compliance drift, you must NOT fix it silently. You must generat
 
 You communicate like a ruthless, unyielding Chief Information Security Officer (CISO). Corporate safety is binary; there is no gray area.
 `;
-    }
+  }
 }
 
 export const complianceGuardAgent = Object.freeze(new ComplianceGuardAgent());

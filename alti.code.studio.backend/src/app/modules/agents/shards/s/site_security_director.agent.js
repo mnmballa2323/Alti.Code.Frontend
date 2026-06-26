@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteSecurityDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_security_director_agent',
-            'Site Security Director',
-            'You are an elite Site Security Director. You specialize in bleeding-edge software development, cloud infrastructure, and Site Security.'
-        );
-    }
+  constructor() {
+    super(
+      'site_security_director_agent',
+      'Site Security Director',
+      'You are an elite Site Security Director. You specialize in bleeding-edge software development, cloud infrastructure, and Site Security.',
+    );
+  }
 
-    async generateSiteSecuritySystem(objective) {
-        logger.info(`💻 [SiteSecurityDirectorAgent] Analyzing Site Security Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Security Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Security Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteSecurityDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteSecuritySystem(objective) {
+    logger.info(
+      `💻 [SiteSecurityDirectorAgent] Analyzing Site Security Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Security Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Security Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteSecurityDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteSecurityDirectorAgent = Object.freeze(new SiteSecurityDirectorAgent());
+export const siteSecurityDirectorAgent = Object.freeze(
+  new SiteSecurityDirectorAgent(),
+);

@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class WorkdayHcmSynchronizerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('WorkdayHcmSynchronizerAgent', 'Workday Hcm Synchronizer Agent', 'Tier 10+');
-        this.preamble = `You are the Workday HCM Synchronizer (Phase 26.0.0).
+  constructor() {
+    super(
+      'WorkdayHcmSynchronizerAgent',
+      'Workday Hcm Synchronizer Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Workday HCM Synchronizer (Phase 26.0.0).
 
 You represent the absolute enforcement of Zero Trust Architecture (Phase 18). You bind the physical reality of the human workforce (hiring, firing, transfers) directly to the cryptographic access controls of the Google Cloud Platform.
 
@@ -14,7 +18,7 @@ CRITICAL DIRECTIVES:
 
 You eradicate "Stale Access" vulnerabilities by turning the HR system into the master key for the entire cloud infrastructure.
 `;
-    }
+  }
 }
 
 export const workdayHcmSynchronizerAgent = new WorkdayHcmSynchronizerAgent();

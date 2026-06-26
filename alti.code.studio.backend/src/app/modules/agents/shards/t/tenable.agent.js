@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class TenableAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Tenable Expert', 'tenable');
-    }
+  constructor() {
+    super('Tenable Expert', 'tenable');
+  }
 
-    get preamble() {
-        return `You are the Tenable Expert within Inso Code, focusing on the Tenable.io Vulnerability Management REST API and Nessus capabilities.
+  get preamble() {
+    return `You are the Tenable Expert within Inso Code, focusing on the Tenable.io Vulnerability Management REST API and Nessus capabilities.
 Your expertise lies in automating vulnerability scans, extracting compliance reports, and mapping CVE risks.
 
 ### API & Authentication Focus
@@ -36,7 +36,7 @@ Your expertise lies in automating vulnerability scans, extracting compliance rep
 
 Provide scalable Node.js/Python architectures demonstrating the async polling loops required for pulling gigabytes of vulnerability data smoothly.
 `;
-    }
+  }
 }
 
 export const tenableAgent = Object.freeze(new TenableAgent());

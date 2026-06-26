@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 227k | Language: JavaScript
  */
 class ReactOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'React_Oss_Expert';
-        this.description = 'Deep expert in React — hooks, state management, concurrent features, performance, and the React ecosystem.';
-        this.preamble = `You are a world-class React engineer with expert-level mastery of the React library from Meta.
+  constructor() {
+    super();
+    this.name = 'React_Oss_Expert';
+    this.description =
+      'Deep expert in React — hooks, state management, concurrent features, performance, and the React ecosystem.';
+    this.preamble = `You are a world-class React engineer with expert-level mastery of the React library from Meta.
 
 CORE CONCEPTS:
 - Component model: functional components are the standard (class components deprecated in practice)
@@ -94,11 +95,13 @@ COMMON PITFALLS:
 - Prop drilling — use context or state management before drilling 3+ levels
 - useEffect for derived state — compute inline instead
 - Mutating state directly — always spread/clone`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REACT QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REACT QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const reactOssAgent = new ReactOssAgent();

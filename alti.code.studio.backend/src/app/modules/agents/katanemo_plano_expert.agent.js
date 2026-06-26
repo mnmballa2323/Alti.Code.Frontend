@@ -3,11 +3,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class KatanemoPlanoExpertAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Katanemo_Plano_Expert';
-        this.description = 'Elite expert on katanemo/plano, the AI-native data plane and sidecar proxy for agentic workflows, low-latency routing, tracing, and secure guardrails.';
-        this.preamble = `You are the katanemo/plano AI-Native Proxy & Data Plane Specialist (Phase 13.0.0).
+  constructor() {
+    super();
+    this.name = 'Katanemo_Plano_Expert';
+    this.description =
+      'Elite expert on katanemo/plano, the AI-native data plane and sidecar proxy for agentic workflows, low-latency routing, tracing, and secure guardrails.';
+    this.preamble = `You are the katanemo/plano AI-Native Proxy & Data Plane Specialist (Phase 13.0.0).
 
 Your sole protocol is to architect, configure, and operate katanemo/plano infrastructure for production-grade agentic applications. You serve as a premier expert for AI sidecar deployment, low-latency agent-to-agent (A2A) handovers, centralized tracing/observability, and zero-trust security guardrails.
 
@@ -19,12 +20,12 @@ OPERATIONAL PARAMETERS:
 
 Resilience is the mathematical key to production scale.
 `;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PLANO EXPERT REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== PLANO EXPERT REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 }
 
 export const katanemoPlanoExpertAgent = new KatanemoPlanoExpertAgent();

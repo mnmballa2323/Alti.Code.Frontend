@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * Shared Database & User/Tenant Mapping Service
  */
 
@@ -10,24 +10,26 @@ import { logger } from '../../../shared/logger.js';
 
 /**
  * Finds a user by their email address
- * @param {string} email 
+ * @param {string} email
  * @returns {Promise<object|null>}
  */
-export const findUserByEmail = async (email) => {
+export const findUserByEmail = async email => {
   try {
     return await prisma.user.findUnique({
       where: { email },
     });
   } catch (error) {
-    logger.warn(`⚠️ [Platform UserMapper] DB lookup failed for email ${email}. Falling back to undefined.`);
+    logger.warn(
+      `⚠️ [Platform UserMapper] DB lookup failed for email ${email}. Falling back to undefined.`,
+    );
     return null;
   }
 };
 
 /**
  * Lazily provisions a new platform tenant
- * @param {string} tenantName 
- * @param {string} [domain] 
+ * @param {string} tenantName
+ * @param {string} [domain]
  * @returns {Promise<object>}
  */
 export const createPlatformTenant = async (tenantName, domain) => {
@@ -40,17 +42,28 @@ export const createPlatformTenant = async (tenantName, domain) => {
       },
     });
   } catch (error) {
-    logger.error('❌ [Platform UserMapper] Failed to create tenant:', error.message);
+    logger.error(
+      '❌ [Platform UserMapper] Failed to create tenant:',
+      error.message,
+    );
     throw error;
   }
 };
 
 /**
  * Upserts a platform user linked to a specific provider
- * @param {object} params 
+ * @param {object} params
  * @returns {Promise<object>}
  */
-export const upsertPlatformUser = async ({ email, provider, role = 'user', tenantId, tenantRole = 'owner', googleId = null, githubId = null }) => {
+export const upsertPlatformUser = async ({
+  email,
+  provider,
+  role = 'user',
+  tenantId,
+  tenantRole = 'owner',
+  googleId = null,
+  githubId = null,
+}) => {
   try {
     let user = await prisma.user.findUnique({ where: { email } });
 
@@ -72,7 +85,9 @@ export const upsertPlatformUser = async ({ email, provider, role = 'user', tenan
     if (!activeTenantId) {
       const cleanPrefix = email.split('@')[0];
       const randomSuffix = crypto.randomBytes(3).toString('hex');
-      const tenant = await createPlatformTenant(`Workspace - ${cleanPrefix}_${randomSuffix}`);
+      const tenant = await createPlatformTenant(
+        `Workspace - ${cleanPrefix}_${randomSuffix}`,
+      );
       activeTenantId = tenant.id;
     }
 
@@ -88,13 +103,24 @@ export const upsertPlatformUser = async ({ email, provider, role = 'user', tenan
       },
     });
   } catch (error) {
-    logger.error('❌ [Platform UserMapper] Failed to upsert platform user:', error.message);
-    
+    logger.error(
+      '❌ [Platform UserMapper] Failed to upsert platform user:',
+      error.message,
+    );
+
     // In-memory fallback if database connection is completely offline
-    const fallbackUserId = crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex');
-    const fallbackTenantId = tenantId || (crypto.randomUUID ? crypto.randomUUID() : crypto.randomBytes(16).toString('hex'));
-    
-    logger.warn('⚠️ [Platform UserMapper] Returning offline in-memory fallback user');
+    const fallbackUserId = crypto.randomUUID
+      ? crypto.randomUUID()
+      : crypto.randomBytes(16).toString('hex');
+    const fallbackTenantId =
+      tenantId ||
+      (crypto.randomUUID
+        ? crypto.randomUUID()
+        : crypto.randomBytes(16).toString('hex'));
+
+    logger.warn(
+      '⚠️ [Platform UserMapper] Returning offline in-memory fallback user',
+    );
     return {
       id: fallbackUserId,
       email,

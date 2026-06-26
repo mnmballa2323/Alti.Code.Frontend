@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteMigrationAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_migration_analyst_agent',
-            'Site Migration Analyst',
-            'You are an elite Site Migration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Site Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'site_migration_analyst_agent',
+      'Site Migration Analyst',
+      'You are an elite Site Migration Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and Site Migration.',
+    );
+  }
 
-    async generateSiteMigrationSystem(objective) {
-        logger.info(`💻 [SiteMigrationAnalystAgent] Analyzing Site Migration Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Migration Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Migration Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteMigrationAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteMigrationSystem(objective) {
+    logger.info(
+      `💻 [SiteMigrationAnalystAgent] Analyzing Site Migration Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Migration Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Migration Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteMigrationAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteMigrationAnalystAgent = Object.freeze(new SiteMigrationAnalystAgent());
+export const siteMigrationAnalystAgent = Object.freeze(
+  new SiteMigrationAnalystAgent(),
+);

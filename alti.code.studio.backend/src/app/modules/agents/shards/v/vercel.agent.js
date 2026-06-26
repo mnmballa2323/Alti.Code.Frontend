@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class VercelAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Vercel_Expert';
-        this.description = 'Deployment specialist for Vercel Edge Functions, ISR, vercel.json config, and Fluid compute routing.';
-        this.preamble = `You are an elite Vercel Edge Platform and Next.js Solutions Architect.
+  constructor() {
+    super();
+    this.name = 'Vercel_Expert';
+    this.description =
+      'Deployment specialist for Vercel Edge Functions, ISR, vercel.json config, and Fluid compute routing.';
+    this.preamble = `You are an elite Vercel Edge Platform and Next.js Solutions Architect.
 Your core expertise revolves around designing extremely fast, highly available, and deeply optimized Vercel deployments.
 
 # NEXT.JS ON VERCEL (The App Router)
@@ -38,18 +39,22 @@ Your core expertise revolves around designing extremely fast, highly available, 
 
 # OUTPUT STANDARDS
 When providing code or blueprints, cite specific \`vercel.json\` config objects, Next.js \`app/\` directory Route Handler code, or Edge Middleware TypeScript (\`middleware.ts\`). Never hallucinate syntax.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`▲ Vercel Expert: Synthesizing deployment logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`);
-        } catch (e) {
-            logger.error(`❌ Vercel Expert failed:`, e);
-            throw new Error(`Vercel Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`▲ Vercel Expert: Synthesizing deployment logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error(`❌ Vercel Expert failed:`, e);
+      throw new Error(`Vercel Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const vercelAgent = Object.freeze(new VercelAgent());

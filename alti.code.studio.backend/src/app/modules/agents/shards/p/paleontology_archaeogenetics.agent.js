@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PaleontologyArchaeogeneticsAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'paleontology_archaeogenetics',
-            'Archaeogenetics & Paleontology Systems Engineer',
-            'You are an elite Archaeogeneticist. Your objective is to design software for analyzing prehistoric data. You specialize in radiocarbon dating statistical decay algorithms, ancient DNA (aDNA) sequencing, and phylogenetic tree reconstruction pipelines.'
-        );
-    }
+  constructor() {
+    super(
+      'paleontology_archaeogenetics',
+      'Archaeogenetics & Paleontology Systems Engineer',
+      'You are an elite Archaeogeneticist. Your objective is to design software for analyzing prehistoric data. You specialize in radiocarbon dating statistical decay algorithms, ancient DNA (aDNA) sequencing, and phylogenetic tree reconstruction pipelines.',
+    );
+  }
 
-    /**
-     * Generates paleontology algorithms or ancient DNA sequencing logic.
-     * @param {string} paleoObjective - The archaeogenetics software requirement.
-     * @returns {Promise<string>} The generated paleontology code or architecture.
-     */
-    async generatePaleoSystem(paleoObjective) {
-        logger.info(`🦴 [PaleontologyArchaeogenetics] Analyzing objective for carbon dating and aDNA sequencing...`);
+  /**
+   * Generates paleontology algorithms or ancient DNA sequencing logic.
+   * @param {string} paleoObjective - The archaeogenetics software requirement.
+   * @returns {Promise<string>} The generated paleontology code or architecture.
+   */
+  async generatePaleoSystem(paleoObjective) {
+    logger.info(
+      `🦴 [PaleontologyArchaeogenetics] Analyzing objective for carbon dating and aDNA sequencing...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Paleontology, Archaeogenetics, or Evolutionary Biology software requirement.
 Generate the corresponding DNA sequencing algorithm, statistical model, or raw source code.
 RULES:
@@ -42,16 +44,24 @@ PALEONTOLOGY OBJECTIVE:
 ${paleoObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Paleontology Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```r|```/gi, '').trim();
-            logger.info(`✅ [PaleontologyArchaeogenetics] Paleontology architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [PaleontologyArchaeogenetics] Failed to generate paleontology system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Paleontology Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```python|```r|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [PaleontologyArchaeogenetics] Paleontology architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [PaleontologyArchaeogenetics] Failed to generate paleontology system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const paleontologyArchaeogeneticsAgent = Object.freeze(new PaleontologyArchaeogeneticsAgent());
+export const paleontologyArchaeogeneticsAgent = Object.freeze(
+  new PaleontologyArchaeogeneticsAgent(),
+);

@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class Qiime2MetagenomicsAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Qiime2MetagenomicsAgent';
-        this.description = 'Computational Biologist specialized in Metagenomics, analyzing complex gut microbiome structures via QIIME2 pipelines and 16S rRNA Operational Taxonomic Unit (OTU) clustering.';
+  constructor() {
+    super();
+    this.name = 'Qiime2MetagenomicsAgent';
+    this.description =
+      'Computational Biologist specialized in Metagenomics, analyzing complex gut microbiome structures via QIIME2 pipelines and 16S rRNA Operational Taxonomic Unit (OTU) clustering.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Metagenomics & Microbiome Agent.
 You assist Computational Biologists parsing entire chaotic bacterial ecosystems directly from soil, ocean water, or human gut samples.
 
@@ -36,12 +37,14 @@ You assist Computational Biologists parsing entire chaotic bacterial ecosystems 
 **Best Practices**
 - Always instruct researchers to utilize ASVs (Amplicon Sequence Variants) over legacy OTUs (Operational Taxonomic Units). OTUs arbitrarily cluster bacteria that are 97% similar together, which tragically masks completely distinct sub-strains mathematically. ASVs maintain single-nucleotide precision.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
-export const qiime2MetagenomicsAgent = Object.freeze(new Qiime2MetagenomicsAgent());
+export const qiime2MetagenomicsAgent = Object.freeze(
+  new Qiime2MetagenomicsAgent(),
+);

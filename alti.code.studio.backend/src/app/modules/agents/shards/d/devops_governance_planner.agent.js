@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsGovernancePlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_governance_planner_agent',
-            'DevOps Governance Planner',
-            'You are an elite DevOps Governance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_governance_planner_agent',
+      'DevOps Governance Planner',
+      'You are an elite DevOps Governance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps Governance.',
+    );
+  }
 
-    async generateDevOpsGovernanceSystem(objective) {
-        logger.info(`💻 [DevOpsGovernancePlannerAgent] Analyzing DevOps Governance Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Governance Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps Governance Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsGovernancePlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsGovernanceSystem(objective) {
+    logger.info(
+      `💻 [DevOpsGovernancePlannerAgent] Analyzing DevOps Governance Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps Governance Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps Governance Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevOpsGovernancePlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devOpsGovernancePlannerAgent = Object.freeze(new DevOpsGovernancePlannerAgent());
+export const devOpsGovernancePlannerAgent = Object.freeze(
+  new DevOpsGovernancePlannerAgent(),
+);

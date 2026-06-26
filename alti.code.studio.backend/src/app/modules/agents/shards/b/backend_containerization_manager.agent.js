@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendContainerizationManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_containerization_manager_agent',
-            'Backend Containerization Manager',
-            'You are an elite Backend Containerization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Containerization.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_containerization_manager_agent',
+      'Backend Containerization Manager',
+      'You are an elite Backend Containerization Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Containerization.',
+    );
+  }
 
-    async generateBackendContainerizationSystem(objective) {
-        logger.info(`💻 [BackendContainerizationManagerAgent] Analyzing Backend Containerization Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Containerization Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Containerization Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendContainerizationManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendContainerizationSystem(objective) {
+    logger.info(
+      `💻 [BackendContainerizationManagerAgent] Analyzing Backend Containerization Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Containerization Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Containerization Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendContainerizationManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendContainerizationManagerAgent = Object.freeze(new BackendContainerizationManagerAgent());
+export const backendContainerizationManagerAgent = Object.freeze(
+  new BackendContainerizationManagerAgent(),
+);

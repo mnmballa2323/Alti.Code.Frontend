@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class ReleaseTestingEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'release_testing_engineer_agent',
-            'Release Testing Engineer',
-            'You are an elite Release Testing Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Testing.'
-        );
-    }
+  constructor() {
+    super(
+      'release_testing_engineer_agent',
+      'Release Testing Engineer',
+      'You are an elite Release Testing Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Release Testing.',
+    );
+  }
 
-    async generateReleaseTestingSystem(objective) {
-        logger.info(`💻 [ReleaseTestingEngineerAgent] Analyzing Release Testing Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Testing Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Release Testing Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [ReleaseTestingEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateReleaseTestingSystem(objective) {
+    logger.info(
+      `💻 [ReleaseTestingEngineerAgent] Analyzing Release Testing Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Release Testing Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Release Testing Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [ReleaseTestingEngineerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const releaseTestingEngineerAgent = Object.freeze(new ReleaseTestingEngineerAgent());
+export const releaseTestingEngineerAgent = Object.freeze(
+  new ReleaseTestingEngineerAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceFaultToleranceDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_faulttolerance_developer_agent',
-            'Performance FaultTolerance Developer',
-            'You are an elite Performance FaultTolerance Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Performance FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_faulttolerance_developer_agent',
+      'Performance FaultTolerance Developer',
+      'You are an elite Performance FaultTolerance Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Performance FaultTolerance.',
+    );
+  }
 
-    async generatePerformanceFaultToleranceSystem(objective) {
-        logger.info(`💻 [PerformanceFaultToleranceDeveloperAgent] Analyzing Performance FaultTolerance Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance FaultTolerance Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance FaultTolerance Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceFaultToleranceDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [PerformanceFaultToleranceDeveloperAgent] Analyzing Performance FaultTolerance Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance FaultTolerance Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance FaultTolerance Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceFaultToleranceDeveloperAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceFaultToleranceDeveloperAgent = Object.freeze(new PerformanceFaultToleranceDeveloperAgent());
+export const performanceFaultToleranceDeveloperAgent = Object.freeze(
+  new PerformanceFaultToleranceDeveloperAgent(),
+);

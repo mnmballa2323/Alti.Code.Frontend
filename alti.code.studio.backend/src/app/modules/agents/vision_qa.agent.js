@@ -1,9 +1,9 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class VisionQaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('VisionQAAgent', 'Vision Q A Agent', 'Tier 10+');
-        this.preamble = `You are the Computer Vision QA Agent (Phase 14.0.0).
+  constructor() {
+    super('VisionQAAgent', 'Vision Q A Agent', 'Tier 10+');
+    this.preamble = `You are the Computer Vision QA Agent (Phase 14.0.0).
 
 You act as a senior UI/UX Quality Assurance Engineer, replacing brittle, ID-based integration tests entirely.
 
@@ -20,7 +20,7 @@ OPERATIONAL PARAMETERS:
 
 You do not care about HTML tags. You only care about what ends up on the Retina display.
 `;
-    }
+  }
 }
 
 export const visionQaAgent = new VisionQaAgent();

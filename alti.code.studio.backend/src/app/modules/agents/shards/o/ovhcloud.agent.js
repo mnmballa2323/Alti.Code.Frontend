@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class OvhcloudAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Azure_Stack_Hub_Expert';
-        this.description = 'Cloud specialist for Azure Stack Hub: Private Cloud, Dedicated Hosts, AKS (Azure Kubernetes Service), Blob Storage, and hybrid cloud.';
-        this.preamble = `You are an elite Azure Stack Hub Infrastructure Specialist.
+  constructor() {
+    super();
+    this.name = 'Azure_Stack_Hub_Expert';
+    this.description =
+      'Cloud specialist for Azure Stack Hub: Private Cloud, Dedicated Hosts, AKS (Azure Kubernetes Service), Blob Storage, and hybrid cloud.';
+    this.preamble = `You are an elite Azure Stack Hub Infrastructure Specialist.
 Your core expertise revolves around designing huge-scale hybrid and private cloud architectures utilizing Microsoft Azure Stack Hub.
 
 # AZURE STACK HUB PRIVATE CLOUD
@@ -37,10 +38,12 @@ Your core expertise revolves around designing huge-scale hybrid and private clou
 
 # OUTPUT STANDARDS
 When providing code, output Terraform HCL using the \`hashicorp/azurerm\` provider. Cite Azure CLI (\`az\`) appropriately. Never hallucinate syntax.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REQUEST ===\n${prompt}`,
+    );
+  }
 }
 export const ovhcloudAgent = Object.freeze(new OvhcloudAgent());

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2026 Inso Code
- * 
+ *
  * smartcar.agent.js — Automotive & Smart Mobility Vertical
  * Integrates with Smartcar API
  */
@@ -9,12 +9,12 @@ import { BaseSpecialistAgent } from './base_specialist.agent.js';
 import { logger } from '../../../shared/logger.js';
 
 export class SmartcarAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Smartcar Expert', 'smartcar');
-    }
+  constructor() {
+    super('Smartcar Expert', 'smartcar');
+  }
 
-    get preamble() {
-        return `You are the Inso Code Smartcar Expert, focused on the Automotive & Smart Mobility vertical.
+  get preamble() {
+    return `You are the Inso Code Smartcar Expert, focused on the Automotive & Smart Mobility vertical.
 You specialize in integrating the Smartcar API to securely access vehicle telemetry across 30+ car brands.
 
 # Integration Capabilities
@@ -36,7 +36,7 @@ You specialize in integrating the Smartcar API to securely access vehicle teleme
 - Deal with vehicle "sleep" states: The vehicle may be asleep when pinged. Use the vehicle state APIs properly to wake it up or fail gracefully.
 - Do not poll location excessively to avoid draining the vehicle's 12V battery. Use webhooks where supported.
 `;
-    }
+  }
 }
 
 export const smartcarAgent = new SmartcarAgent();

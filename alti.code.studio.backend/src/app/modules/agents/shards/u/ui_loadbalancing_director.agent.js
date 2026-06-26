@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UILoadBalancingDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ui_loadbalancing_director_agent',
-            'UI LoadBalancing Director',
-            'You are an elite UI LoadBalancing Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'ui_loadbalancing_director_agent',
+      'UI LoadBalancing Director',
+      'You are an elite UI LoadBalancing Director. You specialize in bleeding-edge software development, cloud infrastructure, and UI LoadBalancing.',
+    );
+  }
 
-    async generateUILoadBalancingSystem(objective) {
-        logger.info(`💻 [UILoadBalancingDirectorAgent] Analyzing UI LoadBalancing Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI LoadBalancing Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UI LoadBalancing Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UILoadBalancingDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUILoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [UILoadBalancingDirectorAgent] Analyzing UI LoadBalancing Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UI LoadBalancing Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UI LoadBalancing Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UILoadBalancingDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uILoadBalancingDirectorAgent = Object.freeze(new UILoadBalancingDirectorAgent());
+export const uILoadBalancingDirectorAgent = Object.freeze(
+  new UILoadBalancingDirectorAgent(),
+);

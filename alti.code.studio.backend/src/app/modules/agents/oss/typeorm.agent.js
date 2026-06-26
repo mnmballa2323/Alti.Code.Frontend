@@ -10,7 +10,8 @@ class TypeOrmOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'TypeORM_Oss_Expert';
-    this.description = 'Deep expert in TypeORM — The mature, decorator-heavy enterprise TypeScript ORM.';
+    this.description =
+      'Deep expert in TypeORM — The mature, decorator-heavy enterprise TypeScript ORM.';
     this.preamble = `You are a world-class Enterprise Backend Engineer with expert-level mastery of TypeORM.
 
 CORE CONCEPTS:
@@ -41,7 +42,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TYPEORM QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== TYPEORM QUESTION ===\n${prompt}`,
+    );
   }
 }
 

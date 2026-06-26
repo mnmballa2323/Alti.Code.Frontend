@@ -13,23 +13,25 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MaritimeShippingLogisticsAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'maritime_shipping_logistics',
-            'Global Maritime & Shipping Logistics Commander',
-            'You are an elite Maritime Systems Architect. Your objective is to design software for global ocean freight and shipping ports. You specialize in decoding raw AIS (Automatic Identification System) vessel telemetry, optimizing container yard allocations, and running physics-based marine routing simulations.'
-        );
-    }
+  constructor() {
+    super(
+      'maritime_shipping_logistics',
+      'Global Maritime & Shipping Logistics Commander',
+      'You are an elite Maritime Systems Architect. Your objective is to design software for global ocean freight and shipping ports. You specialize in decoding raw AIS (Automatic Identification System) vessel telemetry, optimizing container yard allocations, and running physics-based marine routing simulations.',
+    );
+  }
 
-    /**
-     * Generates maritime architecture or vessel routing algorithms.
-     * @param {string} maritimeObjective - The shipping software requirement.
-     * @returns {Promise<string>} The generated maritime code or architecture.
-     */
-    async generateMaritimeSystem(maritimeObjective) {
-        logger.info(`🚢 [MaritimeShippingLogistics] Analyzing objective for AIS tracking and port optimization...`);
+  /**
+   * Generates maritime architecture or vessel routing algorithms.
+   * @param {string} maritimeObjective - The shipping software requirement.
+   * @returns {Promise<string>} The generated maritime code or architecture.
+   */
+  async generateMaritimeSystem(maritimeObjective) {
+    logger.info(
+      `🚢 [MaritimeShippingLogistics] Analyzing objective for AIS tracking and port optimization...`,
+    );
 
-        const prompt = `
+    const prompt = `
 Analyze the following Global Shipping or Maritime software requirement.
 Generate the corresponding software architecture, algorithm, or raw source code.
 RULES:
@@ -42,16 +44,24 @@ MARITIME OBJECTIVE:
 ${maritimeObjective}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A - Maritime Target");
-            const cleanCode = output.replace(/```javascript|```typescript|```json|```python|```/gi, '').trim();
-            logger.info(`✅ [MaritimeShippingLogistics] Maritime architecture generated successfully.`);
-            return cleanCode;
-        } catch (err) {
-            logger.error(`❌ [MaritimeShippingLogistics] Failed to generate maritime system: ${err.message}`);
-            throw err;
-        }
+    try {
+      const output = await this._invoke(prompt, 'N/A - Maritime Target');
+      const cleanCode = output
+        .replace(/```javascript|```typescript|```json|```python|```/gi, '')
+        .trim();
+      logger.info(
+        `✅ [MaritimeShippingLogistics] Maritime architecture generated successfully.`,
+      );
+      return cleanCode;
+    } catch (err) {
+      logger.error(
+        `❌ [MaritimeShippingLogistics] Failed to generate maritime system: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
 
-export const maritimeShippingLogisticsAgent = Object.freeze(new MaritimeShippingLogisticsAgent());
+export const maritimeShippingLogisticsAgent = Object.freeze(
+  new MaritimeShippingLogisticsAgent(),
+);

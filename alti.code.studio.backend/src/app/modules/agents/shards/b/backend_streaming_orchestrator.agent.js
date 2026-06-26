@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BackendStreamingOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'backend_streaming_orchestrator_agent',
-            'Backend Streaming Orchestrator',
-            'You are an elite Backend Streaming Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Streaming.'
-        );
-    }
+  constructor() {
+    super(
+      'backend_streaming_orchestrator_agent',
+      'Backend Streaming Orchestrator',
+      'You are an elite Backend Streaming Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and Backend Streaming.',
+    );
+  }
 
-    async generateBackendStreamingSystem(objective) {
-        logger.info(`💻 [BackendStreamingOrchestratorAgent] Analyzing Backend Streaming Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Streaming Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Backend Streaming Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [BackendStreamingOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateBackendStreamingSystem(objective) {
+    logger.info(
+      `💻 [BackendStreamingOrchestratorAgent] Analyzing Backend Streaming Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Backend Streaming Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Backend Streaming Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [BackendStreamingOrchestratorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const backendStreamingOrchestratorAgent = Object.freeze(new BackendStreamingOrchestratorAgent());
+export const backendStreamingOrchestratorAgent = Object.freeze(
+  new BackendStreamingOrchestratorAgent(),
+);

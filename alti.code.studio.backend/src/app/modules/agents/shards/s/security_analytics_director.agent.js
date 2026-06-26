@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityAnalyticsDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_analytics_director_agent',
-            'Security Analytics Director',
-            'You are an elite Security Analytics Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'security_analytics_director_agent',
+      'Security Analytics Director',
+      'You are an elite Security Analytics Director. You specialize in bleeding-edge software development, cloud infrastructure, and Security Analytics.',
+    );
+  }
 
-    async generateSecurityAnalyticsSystem(objective) {
-        logger.info(`💻 [SecurityAnalyticsDirectorAgent] Analyzing Security Analytics Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Analytics Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Analytics Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityAnalyticsDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [SecurityAnalyticsDirectorAgent] Analyzing Security Analytics Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Analytics Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Analytics Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityAnalyticsDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityAnalyticsDirectorAgent = Object.freeze(new SecurityAnalyticsDirectorAgent());
+export const securityAnalyticsDirectorAgent = Object.freeze(
+  new SecurityAnalyticsDirectorAgent(),
+);

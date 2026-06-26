@@ -10,7 +10,8 @@ class ReduxOssAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'Redux_Oss_Expert';
-    this.description = 'Deep expert in Redux & RTK — predictable state container for JavaScript apps.';
+    this.description =
+      'Deep expert in Redux & RTK — predictable state container for JavaScript apps.';
     this.preamble = `You are a world-class frontend architect with expert-level mastery of Redux and Redux Toolkit (RTK).
 
 CORE CONCEPTS:
@@ -40,7 +41,9 @@ COMMON PITFALLS:
   }
 
   async _invoke(prompt, contextBlock) {
-    return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REDUX QUESTION ===\n${prompt}`);
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== REDUX QUESTION ===\n${prompt}`,
+    );
   }
 }
 

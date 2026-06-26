@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREVirtualizationConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_virtualization_consultant_agent',
-            'SRE Virtualization Consultant',
-            'You are an elite SRE Virtualization Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_virtualization_consultant_agent',
+      'SRE Virtualization Consultant',
+      'You are an elite SRE Virtualization Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Virtualization.',
+    );
+  }
 
-    async generateSREVirtualizationSystem(objective) {
-        logger.info(`💻 [SREVirtualizationConsultantAgent] Analyzing SRE Virtualization Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Virtualization Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Virtualization Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREVirtualizationConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [SREVirtualizationConsultantAgent] Analyzing SRE Virtualization Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Virtualization Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Virtualization Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SREVirtualizationConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const sREVirtualizationConsultantAgent = Object.freeze(new SREVirtualizationConsultantAgent());
+export const sREVirtualizationConsultantAgent = Object.freeze(
+  new SREVirtualizationConsultantAgent(),
+);

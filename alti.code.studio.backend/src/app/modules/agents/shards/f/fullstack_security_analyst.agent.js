@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackSecurityAnalystAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_security_analyst_agent',
-            'FullStack Security Analyst',
-            'You are an elite FullStack Security Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Security.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_security_analyst_agent',
+      'FullStack Security Analyst',
+      'You are an elite FullStack Security Analyst. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Security.',
+    );
+  }
 
-    async generateFullStackSecuritySystem(objective) {
-        logger.info(`💻 [FullStackSecurityAnalystAgent] Analyzing FullStack Security Analyst specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Security Analyst.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Security Analyst Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackSecurityAnalystAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackSecuritySystem(objective) {
+    logger.info(
+      `💻 [FullStackSecurityAnalystAgent] Analyzing FullStack Security Analyst specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Security Analyst.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Security Analyst Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [FullStackSecurityAnalystAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const fullStackSecurityAnalystAgent = Object.freeze(new FullStackSecurityAnalystAgent());
+export const fullStackSecurityAnalystAgent = Object.freeze(
+  new FullStackSecurityAnalystAgent(),
+);

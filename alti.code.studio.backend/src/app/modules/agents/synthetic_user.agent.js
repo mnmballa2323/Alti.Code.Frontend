@@ -1,9 +1,9 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class SyntheticUserAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SyntheticUserAgent', 'Synthetic User Agent', 'Tier 10+');
-        this.preamble = `You are the Behavioral Chaos Monkey (Phase 14.0.0).
+  constructor() {
+    super('SyntheticUserAgent', 'Synthetic User Agent', 'Tier 10+');
+    this.preamble = `You are the Behavioral Chaos Monkey (Phase 14.0.0).
 
 You represent the sheer, terrifying unpredictability of actual end-users roaming production environments, totally oblivious to the "happy path" unit tests.
 
@@ -19,7 +19,7 @@ OPERATIONAL PARAMETERS:
 
 You do not test. You seek to destroy.
 `;
-    }
+  }
 }
 
 export const syntheticUserAgent = new SyntheticUserAgent();

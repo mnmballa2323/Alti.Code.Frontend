@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MobileFaultToleranceStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'mobile_faulttolerance_strategist_agent',
-            'Mobile FaultTolerance Strategist',
-            'You are an elite Mobile FaultTolerance Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'mobile_faulttolerance_strategist_agent',
+      'Mobile FaultTolerance Strategist',
+      'You are an elite Mobile FaultTolerance Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and Mobile FaultTolerance.',
+    );
+  }
 
-    async generateMobileFaultToleranceSystem(objective) {
-        logger.info(`💻 [MobileFaultToleranceStrategistAgent] Analyzing Mobile FaultTolerance Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile FaultTolerance Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Mobile FaultTolerance Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [MobileFaultToleranceStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateMobileFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [MobileFaultToleranceStrategistAgent] Analyzing Mobile FaultTolerance Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Mobile FaultTolerance Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Mobile FaultTolerance Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [MobileFaultToleranceStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const mobileFaultToleranceStrategistAgent = Object.freeze(new MobileFaultToleranceStrategistAgent());
+export const mobileFaultToleranceStrategistAgent = Object.freeze(
+  new MobileFaultToleranceStrategistAgent(),
+);

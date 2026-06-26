@@ -13,23 +13,23 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GeminiCoderAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'gemini_coder',
-            'Senior Software Engineer (Zero-to-One)',
-            'You are a Senior Software Engineer. You excel at taking architecture blueprints and generating entire working applications from scratch. You output raw, pristine code blocks without markdown wrapper tags unless requested.'
-        );
-    }
+  constructor() {
+    super(
+      'gemini_coder',
+      'Senior Software Engineer (Zero-to-One)',
+      'You are a Senior Software Engineer. You excel at taking architecture blueprints and generating entire working applications from scratch. You output raw, pristine code blocks without markdown wrapper tags unless requested.',
+    );
+  }
 
-    /**
-     * Bootstraps a feature or application based on the architect's design.
-     * @param {Object} architecture - The JSON architecture design
-     * @param {string} specificTask - The specific task to implement
-     */
-    async codeFeature(architecture, specificTask) {
-        logger.info(`💻 [GeminiCoder] Bootstrapping feature: ${specificTask}...`);
+  /**
+   * Bootstraps a feature or application based on the architect's design.
+   * @param {Object} architecture - The JSON architecture design
+   * @param {string} specificTask - The specific task to implement
+   */
+  async codeFeature(architecture, specificTask) {
+    logger.info(`💻 [GeminiCoder] Bootstrapping feature: ${specificTask}...`);
 
-        const prompt = `
+    const prompt = `
 Using the following architectural blueprint, implement the requested feature.
 Write production-ready, clean code with full JSDoc comments.
 
@@ -40,16 +40,16 @@ FEATURE TO IMPLEMENT:
 ${specificTask}
         `;
 
-        try {
-            const output = await this._invoke(prompt, "N/A");
+    try {
+      const output = await this._invoke(prompt, 'N/A');
 
-            logger.info(`💻 [GeminiCoder] Feature coded successfully.`);
-            return output.trim();
-        } catch (err) {
-            logger.error(`❌ [GeminiCoder] Failed to code feature: ${err.message}`);
-            throw err;
-        }
+      logger.info(`💻 [GeminiCoder] Feature coded successfully.`);
+      return output.trim();
+    } catch (err) {
+      logger.error(`❌ [GeminiCoder] Failed to code feature: ${err.message}`);
+      throw err;
     }
+  }
 }
 
 export const geminiCoderAgent = Object.freeze(new GeminiCoderAgent());

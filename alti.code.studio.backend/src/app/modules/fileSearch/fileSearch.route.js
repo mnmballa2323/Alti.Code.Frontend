@@ -26,33 +26,61 @@ const router = express.Router();
 let readLimiter, mutateLimiter, uploadLimiter, queryLimiter;
 
 try {
-    readLimiter   = RateLimitService.middleware(60, 60);    // 60/min — cheap reads
-    mutateLimiter = RateLimitService.middleware(20, 60);    // 20/min — state changes
-    uploadLimiter = RateLimitService.middleware(10, 60);    // 10/min — heavy I/O
-    queryLimiter  = RateLimitService.middleware(30, 60);    // 30/min — LLM calls
+  readLimiter = RateLimitService.middleware(60, 60); // 60/min — cheap reads
+  mutateLimiter = RateLimitService.middleware(20, 60); // 20/min — state changes
+  uploadLimiter = RateLimitService.middleware(10, 60); // 10/min — heavy I/O
+  queryLimiter = RateLimitService.middleware(30, 60); // 30/min — LLM calls
 } catch {
-    // RateLimitService may not be available in all environments
-    const passthrough = (req, res, next) => next();
-    readLimiter = mutateLimiter = uploadLimiter = queryLimiter = passthrough;
+  // RateLimitService may not be available in all environments
+  const passthrough = (req, res, next) => next();
+  readLimiter = mutateLimiter = uploadLimiter = queryLimiter = passthrough;
 }
 
 // ─── Store Management ────────────────────────
-router.post('/stores',                          mutateLimiter, FileSearchController.createStore);
-router.get('/stores',                           readLimiter,   FileSearchController.listStores);
-router.get('/stores/:storeName',                readLimiter,   FileSearchController.getStore);
-router.delete('/stores/:storeName',             mutateLimiter, FileSearchController.deleteStore);
+router.post('/stores', mutateLimiter, FileSearchController.createStore);
+router.get('/stores', readLimiter, FileSearchController.listStores);
+router.get('/stores/:storeName', readLimiter, FileSearchController.getStore);
+router.delete(
+  '/stores/:storeName',
+  mutateLimiter,
+  FileSearchController.deleteStore,
+);
 
 // ─── File Upload & Import ────────────────────
-router.post('/stores/:storeName/upload',        uploadLimiter, FileSearchController.uploadFile);
-router.post('/stores/:storeName/import',        uploadLimiter, FileSearchController.importFile);
+router.post(
+  '/stores/:storeName/upload',
+  uploadLimiter,
+  FileSearchController.uploadFile,
+);
+router.post(
+  '/stores/:storeName/import',
+  uploadLimiter,
+  FileSearchController.importFile,
+);
 
 // ─── Document Management ─────────────────────
-router.get('/stores/:storeName/documents',                   readLimiter,   FileSearchController.listDocuments);
-router.get('/stores/:storeName/documents/:documentId',       readLimiter,   FileSearchController.getDocument);
-router.delete('/stores/:storeName/documents/:documentId',    mutateLimiter, FileSearchController.deleteDocument);
+router.get(
+  '/stores/:storeName/documents',
+  readLimiter,
+  FileSearchController.listDocuments,
+);
+router.get(
+  '/stores/:storeName/documents/:documentId',
+  readLimiter,
+  FileSearchController.getDocument,
+);
+router.delete(
+  '/stores/:storeName/documents/:documentId',
+  mutateLimiter,
+  FileSearchController.deleteDocument,
+);
 
 // ─── RAG Query ───────────────────────────────
-router.post('/query',                           queryLimiter, FileSearchController.queryStores);
-router.post('/query/structured',                queryLimiter, FileSearchController.queryStructured);
+router.post('/query', queryLimiter, FileSearchController.queryStores);
+router.post(
+  '/query/structured',
+  queryLimiter,
+  FileSearchController.queryStructured,
+);
 
 export const fileSearchRoutes = router;

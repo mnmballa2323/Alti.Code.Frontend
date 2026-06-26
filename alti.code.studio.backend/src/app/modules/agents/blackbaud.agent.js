@@ -7,12 +7,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class BlackbaudAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'BlackbaudAgent';
-        this.description = 'Non-Profit technology specialist focusing on Blackbaud Raiser’s Edge NXT APIs, donor retention analytics, and philanthropic general ledgers.';
+  constructor() {
+    super();
+    this.name = 'BlackbaudAgent';
+    this.description =
+      'Non-Profit technology specialist focusing on Blackbaud Raiser’s Edge NXT APIs, donor retention analytics, and philanthropic general ledgers.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Non-Profit & Philanthropy (NGO) Agent.
 You assist developers in integrating global fundraising portals with backend CRMs like Blackbaud Raiser’s Edge NXT and DonorPerfect.
 
@@ -31,12 +32,12 @@ You assist developers in integrating global fundraising portals with backend CRM
 - Treat Soft Credits (e.g., a donation from a donor-advised fund technically given by Fidelity, but credited to John Doe) carefully; distinguish legally recognized tax-receipt amounts from soft recognition credit.
 - Employ exponential backoff aggressively, as Raiser's Edge NXT frequently enforces strict rate Limits during cyclical giving milestones like 'Giving Tuesday'.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const blackbaudAgent = new BlackbaudAgent();

@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class NrelAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('NREL Expert', 'nrel');
-    }
+  constructor() {
+    super('NREL Expert', 'nrel');
+  }
 
-    get preamble() {
-        return `You are the NREL Expert within Inso Code, specializing in the National Renewable Energy Laboratory (NREL) APIs.
+  get preamble() {
+    return `You are the NREL Expert within Inso Code, specializing in the National Renewable Energy Laboratory (NREL) APIs.
 You provide deep technical guidance on tools like PVWatts, SAM (System Advisor Model), and Alternative Fuel Stations.
 
 ### API & Authentication Focus
@@ -38,7 +38,7 @@ You provide deep technical guidance on tools like PVWatts, SAM (System Advisor M
 
 Your provided code should excel at extracting and transforming grid energy predictions into responsive charts or dashboard feeds.
 `;
-    }
+  }
 }
 
 export const nrelAgent = Object.freeze(new NrelAgent());

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREAutomationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_automation_director_agent',
-            'SRE Automation Director',
-            'You are an elite SRE Automation Director. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Automation.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_automation_director_agent',
+      'SRE Automation Director',
+      'You are an elite SRE Automation Director. You specialize in bleeding-edge software development, cloud infrastructure, and SRE Automation.',
+    );
+  }
 
-    async generateSREAutomationSystem(objective) {
-        logger.info(`💻 [SREAutomationDirectorAgent] Analyzing SRE Automation Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Automation Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE Automation Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREAutomationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREAutomationSystem(objective) {
+    logger.info(
+      `💻 [SREAutomationDirectorAgent] Analyzing SRE Automation Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE Automation Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE Automation Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREAutomationDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREAutomationDirectorAgent = Object.freeze(new SREAutomationDirectorAgent());
+export const sREAutomationDirectorAgent = Object.freeze(
+  new SREAutomationDirectorAgent(),
+);

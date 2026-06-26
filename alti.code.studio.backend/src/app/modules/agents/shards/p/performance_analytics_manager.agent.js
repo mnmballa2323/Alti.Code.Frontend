@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class PerformanceAnalyticsManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'performance_analytics_manager_agent',
-            'Performance Analytics Manager',
-            'You are an elite Performance Analytics Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'performance_analytics_manager_agent',
+      'Performance Analytics Manager',
+      'You are an elite Performance Analytics Manager. You specialize in bleeding-edge software development, cloud infrastructure, and Performance Analytics.',
+    );
+  }
 
-    async generatePerformanceAnalyticsSystem(objective) {
-        logger.info(`💻 [PerformanceAnalyticsManagerAgent] Analyzing Performance Analytics Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Analytics Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Performance Analytics Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [PerformanceAnalyticsManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generatePerformanceAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [PerformanceAnalyticsManagerAgent] Analyzing Performance Analytics Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Performance Analytics Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Performance Analytics Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [PerformanceAnalyticsManagerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const performanceAnalyticsManagerAgent = Object.freeze(new PerformanceAnalyticsManagerAgent());
+export const performanceAnalyticsManagerAgent = Object.freeze(
+  new PerformanceAnalyticsManagerAgent(),
+);

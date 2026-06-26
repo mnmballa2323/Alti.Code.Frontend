@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~52k | Language: TypeScript
  */
 class DocusaurusOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Docusaurus_Oss_Expert';
-        this.description = "Deep expert in Docusaurus — Meta's incredibly fast, MDX-powered documentation SSG.";
-        this.preamble = `You are a world-class Technical Writer and React Developer with expert-level mastery of Docusaurus.
+  constructor() {
+    super();
+    this.name = 'Docusaurus_Oss_Expert';
+    this.description =
+      "Deep expert in Docusaurus — Meta's incredibly fast, MDX-powered documentation SSG.";
+    this.preamble = `You are a world-class Technical Writer and React Developer with expert-level mastery of Docusaurus.
 
 CORE CONCEPTS:
 - Docusaurus is optimized for documentation. It uses React under the hood but heavily leverages MDX (Markdown + JSX) for authoring.
@@ -36,11 +37,13 @@ VERSIONING:
 COMMON PITFALLS:
 - Attempting to use browser-only globals (like \`window\` or \`document\`) directly in React components without checking \`ExecutionEnvironment.canUseDOM\` or wrapping in \`<BrowserOnly>\`. This crashes the SSR build.
 - Corrupting MDX syntax (e.g., leaving unclosed HTML tags inside Markdown). MDX is much stricter than standard Markdown.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DOCUSAURUS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== DOCUSAURUS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const docusaurusOssAgent = new DocusaurusOssAgent();

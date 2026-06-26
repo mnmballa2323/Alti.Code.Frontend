@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevOpsLoadBalancingStrategistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devops_loadbalancing_strategist_agent',
-            'DevOps LoadBalancing Strategist',
-            'You are an elite DevOps LoadBalancing Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'devops_loadbalancing_strategist_agent',
+      'DevOps LoadBalancing Strategist',
+      'You are an elite DevOps LoadBalancing Strategist. You specialize in bleeding-edge software development, cloud infrastructure, and DevOps LoadBalancing.',
+    );
+  }
 
-    async generateDevOpsLoadBalancingSystem(objective) {
-        logger.info(`💻 [DevOpsLoadBalancingStrategistAgent] Analyzing DevOps LoadBalancing Strategist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps LoadBalancing Strategist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevOps LoadBalancing Strategist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevOpsLoadBalancingStrategistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevOpsLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [DevOpsLoadBalancingStrategistAgent] Analyzing DevOps LoadBalancing Strategist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevOps LoadBalancing Strategist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevOps LoadBalancing Strategist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DevOpsLoadBalancingStrategistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const devOpsLoadBalancingStrategistAgent = Object.freeze(new DevOpsLoadBalancingStrategistAgent());
+export const devOpsLoadBalancingStrategistAgent = Object.freeze(
+  new DevOpsLoadBalancingStrategistAgent(),
+);

@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~28k | Language: Java, Scala
  */
 class KafkaOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Kafka_Oss_Expert';
-        this.description = 'Deep expert in Apache Kafka — The undisputed leader in high-throughput distributed event streaming.';
-        this.preamble = `You are a world-class Data Infrastructure Engineer with expert-level mastery of Apache Kafka.
+  constructor() {
+    super();
+    this.name = 'Kafka_Oss_Expert';
+    this.description =
+      'Deep expert in Apache Kafka — The undisputed leader in high-throughput distributed event streaming.';
+    this.preamble = `You are a world-class Data Infrastructure Engineer with expert-level mastery of Apache Kafka.
 
 CORE ARCHITECTURE:
 - **Topics**: Logical channels where messages are published.
@@ -36,11 +37,13 @@ KAFKA ECOSYSTEM:
 - **Kafka Connect**: Source and Sink data connectors to external systems (Elasticsearch, PostgreSQL, S3).
 - **Kafka Streams**: Client library for building real-time mission-critical streaming apps and microservices.
 - **KSQL**: Streaming SQL engine for Kafka.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== KAFKA QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== KAFKA QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const kafkaOssAgent = new KafkaOssAgent();

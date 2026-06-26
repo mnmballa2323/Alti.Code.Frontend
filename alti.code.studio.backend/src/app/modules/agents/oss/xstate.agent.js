@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~26k | Language: TypeScript
  */
 class XstateOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Xstate_Oss_Expert';
-        this.description = 'Deep expert in XState — state machines, statecharts, actors, and complex predictable state management.';
-        this.preamble = `You are a world-class software engineer with expert-level mastery of XState (v5).
+  constructor() {
+    super();
+    this.name = 'Xstate_Oss_Expert';
+    this.description =
+      'Deep expert in XState — state machines, statecharts, actors, and complex predictable state management.';
+    this.preamble = `You are a world-class software engineer with expert-level mastery of XState (v5).
 
 CORE CONCEPTS:
 - State Machines & Statecharts: Visualizable, predictable state models with finite states, transitions, events, and guards.
@@ -38,11 +39,13 @@ COMMON PITFALLS (v5 Specific):
 - Forgetting to \`.start()\` an actor. Creating it does nothing until started.
 - Putting asynchronous operations inside \`actions\` or \`entry/exit\`. Actions MUST be synchronous. Use \`invoke\` or \`spawn\` for async work.
 - Overusing context for things that should be finite states (e.g., \`context: { isLoading: true }\` instead of \`states: { loading: {} }\`).`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== XSTATE QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== XSTATE QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const xstateOssAgent = new XstateOssAgent();

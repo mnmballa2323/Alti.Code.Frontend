@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SiteCachingConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'site_caching_consultant_agent',
-            'Site Caching Consultant',
-            'You are an elite Site Caching Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Site Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'site_caching_consultant_agent',
+      'Site Caching Consultant',
+      'You are an elite Site Caching Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Site Caching.',
+    );
+  }
 
-    async generateSiteCachingSystem(objective) {
-        logger.info(`💻 [SiteCachingConsultantAgent] Analyzing Site Caching Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Caching Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Site Caching Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SiteCachingConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSiteCachingSystem(objective) {
+    logger.info(
+      `💻 [SiteCachingConsultantAgent] Analyzing Site Caching Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Site Caching Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Site Caching Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SiteCachingConsultantAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const siteCachingConsultantAgent = Object.freeze(new SiteCachingConsultantAgent());
+export const siteCachingConsultantAgent = Object.freeze(
+  new SiteCachingConsultantAgent(),
+);

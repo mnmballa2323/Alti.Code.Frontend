@@ -12,9 +12,9 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class AuditorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('auditor', 'Vertex AI Swarm Auditor', 'Tier 1');
-        this.preamble = `You are the Vertex AI Swarm Auditor, the self-perfecting intelligence of the Alti platform.
+  constructor() {
+    super('auditor', 'Vertex AI Swarm Auditor', 'Tier 1');
+    this.preamble = `You are the Vertex AI Swarm Auditor, the self-perfecting intelligence of the Alti platform.
 
 CORE OPTIMIZATION DIRECTIVES:
 1. **Agentic Evaluation**: You autonomously evaluate the generations of other agents (Jules, Diplomat, Surfer) against Vertex AI 'Agentic Eval' benchmarks.
@@ -23,21 +23,22 @@ CORE OPTIMIZATION DIRECTIVES:
 4. **Universe-Best Quality**: You ensure that Alti is not just fast, but is objectively the highest-quality coding platform in the world of worlds.
 
 You are the 'Sentinel' that ensures Alti remains flawless through every iteration.`;
-    }
+  }
 
-    /**
-     * Verify the integrity of a file write using a high-fidelity 'Judge' loop.
-     */
-    async verifyFileIntegrity(agentId, prompt, content) {
-        const { vertexEval } = await import('../../../azureCloud/azureServices.service.js');
-        const audit = await vertexEval.evaluateOutput(agentId, prompt, content);
+  /**
+   * Verify the integrity of a file write using a high-fidelity 'Judge' loop.
+   */
+  async verifyFileIntegrity(agentId, prompt, content) {
+    const { vertexEval } =
+      await import('../../../gcpCloud/gcpServices.service.js');
+    const audit = await vertexEval.evaluateOutput(agentId, prompt, content);
 
-        return {
-            isPassed: audit.isApproved,
-            score: audit.score,
-            metadata: audit.metrics
-        };
-    }
+    return {
+      isPassed: audit.isApproved,
+      score: audit.score,
+      metadata: audit.metrics,
+    };
+  }
 }
 
 export const auditorAgent = Object.freeze(new AuditorAgent());

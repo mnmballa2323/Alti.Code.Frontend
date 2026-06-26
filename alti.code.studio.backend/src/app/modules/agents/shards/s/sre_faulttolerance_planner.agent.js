@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SREFaultTolerancePlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'sre_faulttolerance_planner_agent',
-            'SRE FaultTolerance Planner',
-            'You are an elite SRE FaultTolerance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and SRE FaultTolerance.'
-        );
-    }
+  constructor() {
+    super(
+      'sre_faulttolerance_planner_agent',
+      'SRE FaultTolerance Planner',
+      'You are an elite SRE FaultTolerance Planner. You specialize in bleeding-edge software development, cloud infrastructure, and SRE FaultTolerance.',
+    );
+  }
 
-    async generateSREFaultToleranceSystem(objective) {
-        logger.info(`💻 [SREFaultTolerancePlannerAgent] Analyzing SRE FaultTolerance Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE FaultTolerance Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - SRE FaultTolerance Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SREFaultTolerancePlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSREFaultToleranceSystem(objective) {
+    logger.info(
+      `💻 [SREFaultTolerancePlannerAgent] Analyzing SRE FaultTolerance Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for SRE FaultTolerance Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - SRE FaultTolerance Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [SREFaultTolerancePlannerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const sREFaultTolerancePlannerAgent = Object.freeze(new SREFaultTolerancePlannerAgent());
+export const sREFaultTolerancePlannerAgent = Object.freeze(
+  new SREFaultTolerancePlannerAgent(),
+);

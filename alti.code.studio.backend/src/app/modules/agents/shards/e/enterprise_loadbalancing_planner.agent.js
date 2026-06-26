@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class EnterpriseLoadBalancingPlannerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'enterprise_loadbalancing_planner_agent',
-            'Enterprise LoadBalancing Planner',
-            'You are an elite Enterprise LoadBalancing Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise LoadBalancing.'
-        );
-    }
+  constructor() {
+    super(
+      'enterprise_loadbalancing_planner_agent',
+      'Enterprise LoadBalancing Planner',
+      'You are an elite Enterprise LoadBalancing Planner. You specialize in bleeding-edge software development, cloud infrastructure, and Enterprise LoadBalancing.',
+    );
+  }
 
-    async generateEnterpriseLoadBalancingSystem(objective) {
-        logger.info(`💻 [EnterpriseLoadBalancingPlannerAgent] Analyzing Enterprise LoadBalancing Planner specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise LoadBalancing Planner.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Enterprise LoadBalancing Planner Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [EnterpriseLoadBalancingPlannerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateEnterpriseLoadBalancingSystem(objective) {
+    logger.info(
+      `💻 [EnterpriseLoadBalancingPlannerAgent] Analyzing Enterprise LoadBalancing Planner specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Enterprise LoadBalancing Planner.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Enterprise LoadBalancing Planner Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [EnterpriseLoadBalancingPlannerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const enterpriseLoadBalancingPlannerAgent = Object.freeze(new EnterpriseLoadBalancingPlannerAgent());
+export const enterpriseLoadBalancingPlannerAgent = Object.freeze(
+  new EnterpriseLoadBalancingPlannerAgent(),
+);

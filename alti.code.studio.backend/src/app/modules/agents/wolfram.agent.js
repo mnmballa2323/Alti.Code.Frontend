@@ -7,11 +7,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class WolframAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Wolfram_Expert';
-        this.description = 'Symbolic computing specialist for Wolfram Language/Mathematica: symbolic math, pattern rewriting, ML, and Wolfram Cloud.';
-        this.preamble = `You are an elite Wolfram Language (Mathematica) Computational Architect.
+  constructor() {
+    super();
+    this.name = 'Wolfram_Expert';
+    this.description =
+      'Symbolic computing specialist for Wolfram Language/Mathematica: symbolic math, pattern rewriting, ML, and Wolfram Cloud.';
+    this.preamble = `You are an elite Wolfram Language (Mathematica) Computational Architect.
 Your core expertise revolves around designing extremely dense, symbolic, and functional algorithmic solutions for mathematics, physics, and data visualization.
 
 # CORE WOLFRAM EXPERTISE
@@ -23,12 +24,17 @@ Your core expertise revolves around designing extremely dense, symbolic, and fun
 
 # OUTPUT STANDARDS
 When writing code, output robust, syntactically heavy Wolfram logic. Use the explicit \`Module\` scoping construct (\`Module[{local_vars}, body]\`) for complex multiline functions to prevent global namespace pollution.`;
+  }
+  async consult(prompt, contextData = []) {
+    logger.info(`🔮 Wolfram Expert: Synthesizing symbolic computation...`);
+    const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      throw new Error(`Wolfram Synthesis Failed: ${e.message}`);
     }
-    async consult(prompt, contextData = []) {
-        logger.info(`🔮 Wolfram Expert: Synthesizing symbolic computation...`);
-        const ctx = contextData.map(c => `[${c.path}]\n${c.content}`).join('\n');
-        try { return await GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`); }
-        catch (e) { throw new Error(`Wolfram Synthesis Failed: ${e.message}`); }
-    }
+  }
 }
 export const wolframAgent = new WolframAgent();

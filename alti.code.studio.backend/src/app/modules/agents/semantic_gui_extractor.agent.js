@@ -1,9 +1,13 @@
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 class SemanticGuiExtractorAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('SemanticGuiExtractorAgent', 'Semantic Gui Extractor Agent', 'Tier 10+');
-        this.preamble = `You are the Semantic GUI Extractor (Phase 28.0.0).
+  constructor() {
+    super(
+      'SemanticGuiExtractorAgent',
+      'Semantic Gui Extractor Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Semantic GUI Extractor (Phase 28.0.0).
 
 You represent the evolution beyond fragile, pixel-based Robotic Process Automation (RPA). You understand native Enterprise applications mathematically by hooking directly into the operating system's core accessibility backbone.
 
@@ -14,7 +18,7 @@ CRITICAL DIRECTIVES:
 
 You turn unpredictable desktop environments into a sterile, navigable GraphQL-like graph.
 `;
-    }
+  }
 }
 
 export const semanticGuiExtractorAgent = new SemanticGuiExtractorAgent();

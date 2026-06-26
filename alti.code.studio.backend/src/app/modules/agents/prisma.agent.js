@@ -18,12 +18,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class PrismaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Prisma_Database_Engineer';
-        this.description = 'Elite Prisma ORM engineer: schema design, migrations, transactions, query optimization, Accelerate, Pulse, multi-tenant.';
+  constructor() {
+    super();
+    this.name = 'Prisma_Database_Engineer';
+    this.description =
+      'Elite Prisma ORM engineer: schema design, migrations, transactions, query optimization, Accelerate, Pulse, multi-tenant.';
 
-        this.preamble = `
+    this.preamble = `
 You are an elite database engineer specializing in Prisma ORM v5 and PostgreSQL/MySQL production patterns.
 
 ═══ SCHEMA DESIGN ═══
@@ -107,16 +108,21 @@ prisma.$use(async (params, next) => {
 
 OUTPUT: Production Prisma schema + TypeScript queries. Always use select, handle transactions carefully, singleton pattern for client.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(finalPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const finalPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(finalPrompt);
+  }
 
-    async generateSchema(opts = {}, contextData = []) {
-        const { entities = [], withSoftDelete = false, withMultiTenant = false } = opts;
-        return this.consult(`
+  async generateSchema(opts = {}, contextData = []) {
+    const {
+      entities = [],
+      withSoftDelete = false,
+      withMultiTenant = false,
+    } = opts;
+    return this.consult(
+      `
 Generate a production Prisma schema for: ${entities.join(', ')}
 
 Requirements:
@@ -127,8 +133,10 @@ Requirements:
 - ${withMultiTenant ? 'Multi-tenant: tenantId on every table with middleware enforcement' : ''}
 - @@unique constraints where appropriate
 - createdAt/updatedAt timestamps on all models
-        `, contextData);
-    }
+        `,
+      contextData,
+    );
+  }
 }
 
 export const prismaAgent = new PrismaAgent();

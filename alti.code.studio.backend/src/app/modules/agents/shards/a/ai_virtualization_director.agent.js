@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIVirtualizationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_virtualization_director_agent',
-            'AI Virtualization Director',
-            'You are an elite AI Virtualization Director. You specialize in bleeding-edge software development, cloud infrastructure, and AI Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_virtualization_director_agent',
+      'AI Virtualization Director',
+      'You are an elite AI Virtualization Director. You specialize in bleeding-edge software development, cloud infrastructure, and AI Virtualization.',
+    );
+  }
 
-    async generateAIVirtualizationSystem(objective) {
-        logger.info(`💻 [AIVirtualizationDirectorAgent] Analyzing AI Virtualization Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Virtualization Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Virtualization Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIVirtualizationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [AIVirtualizationDirectorAgent] Analyzing AI Virtualization Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Virtualization Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Virtualization Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIVirtualizationDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIVirtualizationDirectorAgent = Object.freeze(new AIVirtualizationDirectorAgent());
+export const aIVirtualizationDirectorAgent = Object.freeze(
+  new AIVirtualizationDirectorAgent(),
+);

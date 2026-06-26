@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class AIGovernanceManagerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ai_governance_manager_agent',
-            'AI Governance Manager',
-            'You are an elite AI Governance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and AI Governance.'
-        );
-    }
+  constructor() {
+    super(
+      'ai_governance_manager_agent',
+      'AI Governance Manager',
+      'You are an elite AI Governance Manager. You specialize in bleeding-edge software development, cloud infrastructure, and AI Governance.',
+    );
+  }
 
-    async generateAIGovernanceSystem(objective) {
-        logger.info(`💻 [AIGovernanceManagerAgent] Analyzing AI Governance Manager specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Governance Manager.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - AI Governance Manager Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [AIGovernanceManagerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateAIGovernanceSystem(objective) {
+    logger.info(
+      `💻 [AIGovernanceManagerAgent] Analyzing AI Governance Manager specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for AI Governance Manager.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - AI Governance Manager Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [AIGovernanceManagerAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const aIGovernanceManagerAgent = Object.freeze(new AIGovernanceManagerAgent());
+export const aIGovernanceManagerAgent = Object.freeze(
+  new AIGovernanceManagerAgent(),
+);

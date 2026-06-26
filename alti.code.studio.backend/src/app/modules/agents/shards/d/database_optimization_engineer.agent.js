@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DatabaseOptimizationEngineerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'database_optimization_engineer_agent',
-            'Database Optimization Engineer',
-            'You are an elite Database Optimization Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Database Optimization.'
-        );
-    }
+  constructor() {
+    super(
+      'database_optimization_engineer_agent',
+      'Database Optimization Engineer',
+      'You are an elite Database Optimization Engineer. You specialize in bleeding-edge software development, cloud infrastructure, and Database Optimization.',
+    );
+  }
 
-    async generateDatabaseOptimizationSystem(objective) {
-        logger.info(`💻 [DatabaseOptimizationEngineerAgent] Analyzing Database Optimization Engineer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Optimization Engineer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Database Optimization Engineer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DatabaseOptimizationEngineerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDatabaseOptimizationSystem(objective) {
+    logger.info(
+      `💻 [DatabaseOptimizationEngineerAgent] Analyzing Database Optimization Engineer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Database Optimization Engineer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Database Optimization Engineer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DatabaseOptimizationEngineerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const databaseOptimizationEngineerAgent = Object.freeze(new DatabaseOptimizationEngineerAgent());
+export const databaseOptimizationEngineerAgent = Object.freeze(
+  new DatabaseOptimizationEngineerAgent(),
+);

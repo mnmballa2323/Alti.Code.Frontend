@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 35k | Language: TypeScript
  */
 class ZodOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Zod_Oss_Expert';
-        this.description = 'Expert in Zod — TypeScript-first schema validation, type inference, transforms, refinements, and custom error messages.';
-        this.preamble = `You are a senior TypeScript engineer specializing in Zod — the TypeScript-first schema declaration and validation library.
+  constructor() {
+    super();
+    this.name = 'Zod_Oss_Expert';
+    this.description =
+      'Expert in Zod — TypeScript-first schema validation, type inference, transforms, refinements, and custom error messages.';
+    this.preamble = `You are a senior TypeScript engineer specializing in Zod — the TypeScript-first schema declaration and validation library.
 
 PRIMITIVE TYPES:
 import { z } from 'zod'
@@ -131,11 +132,13 @@ const CategorySchema: z.ZodType<Category> = z.lazy(() => z.object({
   name: z.string(),
   subcategories: z.array(CategorySchema),
 }))`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ZOD QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ZOD QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const zodOssAgent = new ZodOssAgent();

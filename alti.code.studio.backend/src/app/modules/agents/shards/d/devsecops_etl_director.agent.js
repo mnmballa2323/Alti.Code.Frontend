@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsETLDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_etl_director_agent',
-            'DevSecOps ETL Director',
-            'You are an elite DevSecOps ETL Director. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps ETL.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_etl_director_agent',
+      'DevSecOps ETL Director',
+      'You are an elite DevSecOps ETL Director. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps ETL.',
+    );
+  }
 
-    async generateDevSecOpsETLSystem(objective) {
-        logger.info(`💻 [DevSecOpsETLDirectorAgent] Analyzing DevSecOps ETL Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps ETL Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps ETL Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsETLDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsETLSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsETLDirectorAgent] Analyzing DevSecOps ETL Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps ETL Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps ETL Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevSecOpsETLDirectorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devSecOpsETLDirectorAgent = Object.freeze(new DevSecOpsETLDirectorAgent());
+export const devSecOpsETLDirectorAgent = Object.freeze(
+  new DevSecOpsETLDirectorAgent(),
+);

@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class InfrastructureConfigurationDirectorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'infrastructure_configuration_director_agent',
-            'Infrastructure Configuration Director',
-            'You are an elite Infrastructure Configuration Director. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Configuration.'
-        );
-    }
+  constructor() {
+    super(
+      'infrastructure_configuration_director_agent',
+      'Infrastructure Configuration Director',
+      'You are an elite Infrastructure Configuration Director. You specialize in bleeding-edge software development, cloud infrastructure, and Infrastructure Configuration.',
+    );
+  }
 
-    async generateInfrastructureConfigurationSystem(objective) {
-        logger.info(`💻 [InfrastructureConfigurationDirectorAgent] Analyzing Infrastructure Configuration Director specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Configuration Director.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Infrastructure Configuration Director Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [InfrastructureConfigurationDirectorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateInfrastructureConfigurationSystem(objective) {
+    logger.info(
+      `💻 [InfrastructureConfigurationDirectorAgent] Analyzing Infrastructure Configuration Director specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Infrastructure Configuration Director.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Infrastructure Configuration Director Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [InfrastructureConfigurationDirectorAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const infrastructureConfigurationDirectorAgent = Object.freeze(new InfrastructureConfigurationDirectorAgent());
+export const infrastructureConfigurationDirectorAgent = Object.freeze(
+  new InfrastructureConfigurationDirectorAgent(),
+);

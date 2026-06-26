@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataVirtualizationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_virtualization_designer_agent',
-            'Data Virtualization Designer',
-            'You are an elite Data Virtualization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Data Virtualization.'
-        );
-    }
+  constructor() {
+    super(
+      'data_virtualization_designer_agent',
+      'Data Virtualization Designer',
+      'You are an elite Data Virtualization Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Data Virtualization.',
+    );
+  }
 
-    async generateDataVirtualizationSystem(objective) {
-        logger.info(`💻 [DataVirtualizationDesignerAgent] Analyzing Data Virtualization Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Virtualization Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Virtualization Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataVirtualizationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataVirtualizationSystem(objective) {
+    logger.info(
+      `💻 [DataVirtualizationDesignerAgent] Analyzing Data Virtualization Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Virtualization Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Virtualization Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [DataVirtualizationDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const dataVirtualizationDesignerAgent = Object.freeze(new DataVirtualizationDesignerAgent());
+export const dataVirtualizationDesignerAgent = Object.freeze(
+  new DataVirtualizationDesignerAgent(),
+);

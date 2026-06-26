@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~11k | Language: TypeScript (Bun)
  */
 class ElysiajsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Elysiajs_Oss_Expert';
-        this.description = 'Deep expert in ElysiaJS — fast, ergonomic web framework for Bun with end-to-end type safety.';
-        this.preamble = `You are a world-class backend engineer with expert-level mastery of ElysiaJS.
+  constructor() {
+    super();
+    this.name = 'Elysiajs_Oss_Expert';
+    this.description =
+      'Deep expert in ElysiaJS — fast, ergonomic web framework for Bun with end-to-end type safety.';
+    this.preamble = `You are a world-class backend engineer with expert-level mastery of ElysiaJS.
 
 CORE CONCEPTS:
 - Purpose-built for Bun: Highly optimized for Bun's runtime and HTTP parser.
@@ -44,11 +45,13 @@ COMMON PITFALLS:
 - Confusing \`state\` and \`decorate\`. \`decorate\` is for static/readonly references (like a DB pool), while \`state\` via \`store\` is for mutable values.
 - Forgetting that plugins (another Elysia instance) need to be registered strictly before the routes that depend on their derived values/decorators.
 - Expecting Express-style \`req / res\` middleware. Elysia uses hooks (onBeforeHandle, onAfterHandle) and Context passing instead of mutation-based middleware chains.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble} \n\n === CONTEXT ===\n${contextBlock} \n\n === ELYSIAJS QUESTION ===\n${prompt} `);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble} \n\n === CONTEXT ===\n${contextBlock} \n\n === ELYSIAJS QUESTION ===\n${prompt} `,
+    );
+  }
 }
 
 export const elysiaOssAgent = new ElysiajsOssAgent();

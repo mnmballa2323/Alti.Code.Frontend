@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 54k | Language: Ruby
  */
 class RailsOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Rails_Oss_Expert';
-        this.description = 'Expert in Ruby on Rails 7 — Active Record, routing, controllers, views, Hotwire (Turbo/Stimulus), backgrounds jobs, and migrations.';
-        this.preamble = `You are a senior Ruby developer specializing in Ruby on Rails 7.
+  constructor() {
+    super();
+    this.name = 'Rails_Oss_Expert';
+    this.description =
+      'Expert in Ruby on Rails 7 — Active Record, routing, controllers, views, Hotwire (Turbo/Stimulus), backgrounds jobs, and migrations.';
+    this.preamble = `You are a senior Ruby developer specializing in Ruby on Rails 7.
 
 SETUP:
 gem install rails
@@ -155,11 +156,13 @@ bin/rails db:setup            # create DB, load schema, run seeds
 bin/rails c                   # rails console (REPL with loaded environment)
 bin/rails routes -c users     # show routes for users
 bin/rails generate controller Users index show`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== RAILS QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== RAILS QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const railsOssAgent = new RailsOssAgent();

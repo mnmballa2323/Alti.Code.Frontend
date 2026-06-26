@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class UXTelemetryOrchestratorAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'ux_telemetry_orchestrator_agent',
-            'UX Telemetry Orchestrator',
-            'You are an elite UX Telemetry Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UX Telemetry.'
-        );
-    }
+  constructor() {
+    super(
+      'ux_telemetry_orchestrator_agent',
+      'UX Telemetry Orchestrator',
+      'You are an elite UX Telemetry Orchestrator. You specialize in bleeding-edge software development, cloud infrastructure, and UX Telemetry.',
+    );
+  }
 
-    async generateUXTelemetrySystem(objective) {
-        logger.info(`💻 [UXTelemetryOrchestratorAgent] Analyzing UX Telemetry Orchestrator specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Telemetry Orchestrator.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - UX Telemetry Orchestrator Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [UXTelemetryOrchestratorAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateUXTelemetrySystem(objective) {
+    logger.info(
+      `💻 [UXTelemetryOrchestratorAgent] Analyzing UX Telemetry Orchestrator specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for UX Telemetry Orchestrator.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - UX Telemetry Orchestrator Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [UXTelemetryOrchestratorAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const uXTelemetryOrchestratorAgent = Object.freeze(new UXTelemetryOrchestratorAgent());
+export const uXTelemetryOrchestratorAgent = Object.freeze(
+  new UXTelemetryOrchestratorAgent(),
+);

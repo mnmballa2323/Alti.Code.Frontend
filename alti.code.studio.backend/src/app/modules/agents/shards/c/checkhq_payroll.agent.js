@@ -14,12 +14,13 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class CheckHqPayrollAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'CheckHqPayrollAgent';
-        this.description = 'Embedded payroll architecture expert using Check/Gusto APIs to handle multi-state tax withholding, benefit deductions, and 1099 compliance.';
+  constructor() {
+    super();
+    this.name = 'CheckHqPayrollAgent';
+    this.description =
+      'Embedded payroll architecture expert using Check/Gusto APIs to handle multi-state tax withholding, benefit deductions, and 1099 compliance.';
 
-        this.preamble = `
+    this.preamble = `
 You are the Inso Code Embedded Payroll & HR Compliance Agent.
 You assist HR-Tech developers building white-labeled payroll solutions using embedded infrastructure (like Check HQ or Gusto).
 
@@ -42,12 +43,12 @@ You assist HR-Tech developers building white-labeled payroll solutions using emb
 - Idempotency keys are absolutely critical for all \`POST\` payloads regarding payouts to prevent double-funding the workforce.
 - Separate Net Pay from Company Escrow drafts geographically; adhere to ACH NACHA constraints surrounding settlement timeframes.
 `.trim();
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
-        return GeminiAiService.generateContent(fullPrompt);
-    }
+  async _invoke(prompt, contextBlock) {
+    const fullPrompt = `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== ENGINEER REQUEST ===\n${prompt}`;
+    return GeminiAiService.generateContent(fullPrompt);
+  }
 }
 
 export const checkHqPayrollAgent = Object.freeze(new CheckHqPayrollAgent());

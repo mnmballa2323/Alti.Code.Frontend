@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FullStackOrchestrationSpecialistAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'fullstack_orchestration_specialist_agent',
-            'FullStack Orchestration Specialist',
-            'You are an elite FullStack Orchestration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'fullstack_orchestration_specialist_agent',
+      'FullStack Orchestration Specialist',
+      'You are an elite FullStack Orchestration Specialist. You specialize in bleeding-edge software development, cloud infrastructure, and FullStack Orchestration.',
+    );
+  }
 
-    async generateFullStackOrchestrationSystem(objective) {
-        logger.info(`💻 [FullStackOrchestrationSpecialistAgent] Analyzing FullStack Orchestration Specialist specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Orchestration Specialist.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - FullStack Orchestration Specialist Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FullStackOrchestrationSpecialistAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFullStackOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [FullStackOrchestrationSpecialistAgent] Analyzing FullStack Orchestration Specialist specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for FullStack Orchestration Specialist.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - FullStack Orchestration Specialist Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FullStackOrchestrationSpecialistAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const fullStackOrchestrationSpecialistAgent = Object.freeze(new FullStackOrchestrationSpecialistAgent());
+export const fullStackOrchestrationSpecialistAgent = Object.freeze(
+  new FullStackOrchestrationSpecialistAgent(),
+);

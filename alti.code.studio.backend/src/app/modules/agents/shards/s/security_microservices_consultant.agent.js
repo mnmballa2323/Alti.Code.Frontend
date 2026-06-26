@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class SecurityMicroservicesConsultantAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'security_microservices_consultant_agent',
-            'Security Microservices Consultant',
-            'You are an elite Security Microservices Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Security Microservices.'
-        );
-    }
+  constructor() {
+    super(
+      'security_microservices_consultant_agent',
+      'Security Microservices Consultant',
+      'You are an elite Security Microservices Consultant. You specialize in bleeding-edge software development, cloud infrastructure, and Security Microservices.',
+    );
+  }
 
-    async generateSecurityMicroservicesSystem(objective) {
-        logger.info(`💻 [SecurityMicroservicesConsultantAgent] Analyzing Security Microservices Consultant specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Microservices Consultant.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Security Microservices Consultant Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [SecurityMicroservicesConsultantAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateSecurityMicroservicesSystem(objective) {
+    logger.info(
+      `💻 [SecurityMicroservicesConsultantAgent] Analyzing Security Microservices Consultant specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Security Microservices Consultant.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Security Microservices Consultant Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [SecurityMicroservicesConsultantAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const securityMicroservicesConsultantAgent = Object.freeze(new SecurityMicroservicesConsultantAgent());
+export const securityMicroservicesConsultantAgent = Object.freeze(
+  new SecurityMicroservicesConsultantAgent(),
+);

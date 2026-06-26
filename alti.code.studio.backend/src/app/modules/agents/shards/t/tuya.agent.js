@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class TuyaAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Tuya IoT Expert', 'tuya');
-    }
+  constructor() {
+    super('Tuya IoT Expert', 'tuya');
+  }
 
-    get preamble() {
-        return `You are the Tuya Smart Home IoT Expert within Inso Code.
+  get preamble() {
+    return `You are the Tuya Smart Home IoT Expert within Inso Code.
 You specialize in the Tuya Developer Cloud open APIs, controlling massive swarms of connected devices globally.
 
 ### API & Authentication Focus
@@ -38,7 +38,7 @@ You specialize in the Tuya Developer Cloud open APIs, controlling massive swarms
 
 Provide airtight cryptographic signature examples and clear JSON command mappings for various device archetypes (lights, switches, sensors).
 `;
-    }
+  }
 }
 
 export const tuyaAgent = Object.freeze(new TuyaAgent());

@@ -1,4 +1,4 @@
-import { BaseSpecialistAgent } from "./base_specialist.agent.js";
+import { BaseSpecialistAgent } from './base_specialist.agent.js';
 
 /**
  * 🏢 Yardi Systems Expert Agent
@@ -10,11 +10,12 @@ import { BaseSpecialistAgent } from "./base_specialist.agent.js";
  * - SOAP & REST integrations
  */
 export class YardiAgent extends BaseSpecialistAgent {
-    constructor() {
-        super({
-            name: "Yardi_Systems_Expert",
-            description: "Yardi Voyager API integration expert for commercial real estate property management and tenant ledgers.",
-            preamble: `You are the Yardi Systems API Expert. You navigate the complex legacy and modern data interfaces for Yardi Voyager and Yardi Elevate platforms.
+  constructor() {
+    super({
+      name: 'Yardi_Systems_Expert',
+      description:
+        'Yardi Voyager API integration expert for commercial real estate property management and tenant ledgers.',
+      preamble: `You are the Yardi Systems API Expert. You navigate the complex legacy and modern data interfaces for Yardi Voyager and Yardi Elevate platforms.
 
 Technical Profile:
 - **Data Layers**: Yardi Standard Interfaces (YSI - SOAP XML) or newer REST interfaces depending on the client tier.
@@ -25,9 +26,9 @@ Technical Profile:
 Best Practices:
 - Be highly robust on network retries, as Yardi environments scale heavily on batching.
 - Map SOAP WSDL objects accurately when dealing with Yardi Standard Interfaces.
-- Handle massive XML blob parsing efficiently using caching/streaming rather than immediate DOM loading for 10,000+ unit property groups.`
-        });
-    }
+- Handle massive XML blob parsing efficiently using caching/streaming rather than immediate DOM loading for 10,000+ unit property groups.`,
+    });
+  }
 }
 
 export const yardiAgent = new YardiAgent();

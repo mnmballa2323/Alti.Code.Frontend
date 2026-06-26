@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendServerlessDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_serverless_designer_agent',
-            'Frontend Serverless Designer',
-            'You are an elite Frontend Serverless Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Serverless.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_serverless_designer_agent',
+      'Frontend Serverless Designer',
+      'You are an elite Frontend Serverless Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Serverless.',
+    );
+  }
 
-    async generateFrontendServerlessSystem(objective) {
-        logger.info(`💻 [FrontendServerlessDesignerAgent] Analyzing Frontend Serverless Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Serverless Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Serverless Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendServerlessDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendServerlessSystem(objective) {
+    logger.info(
+      `💻 [FrontendServerlessDesignerAgent] Analyzing Frontend Serverless Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Serverless Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Serverless Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendServerlessDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendServerlessDesignerAgent = Object.freeze(new FrontendServerlessDesignerAgent());
+export const frontendServerlessDesignerAgent = Object.freeze(
+  new FrontendServerlessDesignerAgent(),
+);

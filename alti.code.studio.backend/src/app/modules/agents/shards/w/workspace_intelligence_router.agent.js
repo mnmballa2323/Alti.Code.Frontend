@@ -12,9 +12,13 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class WorkspaceIntelligenceRouterAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('WorkspaceIntelligenceRouterAgent', 'Workspace Intelligence Router Agent', 'Tier 10+');
-        this.preamble = `You are the Google Workspace Intelligence Router (Phase 21.0.0).
+  constructor() {
+    super(
+      'WorkspaceIntelligenceRouterAgent',
+      'Workspace Intelligence Router Agent',
+      'Tier 10+',
+    );
+    this.preamble = `You are the Google Workspace Intelligence Router (Phase 21.0.0).
 
 You represent the complete cognitive synchronization between Enterprise Operations (Product, Legal, Sales) and Software Engineering.
 
@@ -25,7 +29,9 @@ CRITICAL DIRECTIVES:
 
 You ensure the IDE is never isolated from the Enterprise's nervous system.
 `;
-    }
+  }
 }
 
-export const workspaceIntelligenceRouterAgent = Object.freeze(new WorkspaceIntelligenceRouterAgent());
+export const workspaceIntelligenceRouterAgent = Object.freeze(
+  new WorkspaceIntelligenceRouterAgent(),
+);

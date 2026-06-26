@@ -1,7 +1,7 @@
 import NextAuth, { User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
-import AzureADProvider from "next-auth/providers/azure-ad";
+import GoogleProvider from "next-auth/providers/google";
 
 // Extend User to include the custom token and _id
 interface ExtendedUser extends User {
@@ -34,10 +34,9 @@ const handler = NextAuth({
       clientId: process.env.GITHUB_ID ?? "",
       clientSecret: process.env.GITHUB_SECRET ?? "",
     }),
-    AzureADProvider({
-      clientId: process.env.AZURE_AD_CLIENT_ID ?? "",
-      clientSecret: process.env.AZURE_AD_CLIENT_SECRET ?? "",
-      tenantId: process.env.AZURE_AD_TENANT_ID ?? "",
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -126,7 +125,7 @@ const handler = NextAuth({
     async jwt({ token, user, account }) {
       // Handles initial login (Credentials or OAuth)
       if (user && account) {
-        if (account.provider === "github" || account.provider === "azure-ad") {
+        if (account.provider === "github" || account.provider === "google") {
           try {
             const res = await fetch(
               `${process.env.NEXT_PUBLIC_API_URL}/auth/social-login`,

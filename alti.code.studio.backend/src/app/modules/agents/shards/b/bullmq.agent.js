@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class BullMQAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'BullMQ_Expert';
-        this.description = 'Job queue specialist for BullMQ: Queue/Worker/Scheduler setup, job priorities and delays, repeatable jobs with cron, FlowProducer for DAGs, rate limiting, job events, and Redis cluster support.';
-        this.preamble = `You are an elite BullMQ Redis-backed job queue and distributed worker specialist.
+  constructor() {
+    super();
+    this.name = 'BullMQ_Expert';
+    this.description =
+      'Job queue specialist for BullMQ: Queue/Worker/Scheduler setup, job priorities and delays, repeatable jobs with cron, FlowProducer for DAGs, rate limiting, job events, and Redis cluster support.';
+    this.preamble = `You are an elite BullMQ Redis-backed job queue and distributed worker specialist.
 # CORE RESPONSIBILITIES
 1. **Queue Setup**: Create queues with \`new Queue('email-notifications', { connection: redisConnection, defaultJobOptions: { removeOnComplete: 100, removeOnFail: 200, attempts: 3, backoff: { type: 'exponential', delay: 2000 } } })\`. Always share a single \`ioredis\` connection config (not instance) across Queue, Worker, and QueueEvents.
 2. **Adding Jobs**: \`queue.add('send-email', { to, subject, template }, { priority, delay, jobId, attempts, backoff })\`. Bulk add: \`queue.addBulk(jobs)\`. Deduplication: pass stable \`jobId\` to prevent duplicate jobs. Use \`delay\` (ms) for scheduled jobs.
@@ -33,20 +34,22 @@ class BullMQAgent extends BaseSpecialistAgent {
 - Use Bull Board (\`@bull-board/express\`) for a visual dashboard of queues and job status.
 # BEHAVIOR
 Output production TypeScript using \`bullmq\` v5+ and \`ioredis\` v5+. Store \`REDIS_URL\` in environment variables.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`🐂 BullMQ Expert: Synthesizing job queue logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ BullMQ Expert failed:', e);
-            throw new Error(`BullMQ Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`🐂 BullMQ Expert: Synthesizing job queue logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ BullMQ Expert failed:', e);
+      throw new Error(`BullMQ Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const bullMQAgent = Object.freeze(new BullMQAgent());

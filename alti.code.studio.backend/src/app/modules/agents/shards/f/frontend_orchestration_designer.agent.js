@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendOrchestrationDesignerAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_orchestration_designer_agent',
-            'Frontend Orchestration Designer',
-            'You are an elite Frontend Orchestration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Orchestration.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_orchestration_designer_agent',
+      'Frontend Orchestration Designer',
+      'You are an elite Frontend Orchestration Designer. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Orchestration.',
+    );
+  }
 
-    async generateFrontendOrchestrationSystem(objective) {
-        logger.info(`💻 [FrontendOrchestrationDesignerAgent] Analyzing Frontend Orchestration Designer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Orchestration Designer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Orchestration Designer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendOrchestrationDesignerAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendOrchestrationSystem(objective) {
+    logger.info(
+      `💻 [FrontendOrchestrationDesignerAgent] Analyzing Frontend Orchestration Designer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Orchestration Designer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Orchestration Designer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendOrchestrationDesignerAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendOrchestrationDesignerAgent = Object.freeze(new FrontendOrchestrationDesignerAgent());
+export const frontendOrchestrationDesignerAgent = Object.freeze(
+  new FrontendOrchestrationDesignerAgent(),
+);

@@ -12,12 +12,12 @@
 import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
 class EpicOnlineServicesAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Epic Online Services Expert', 'epic_online_services');
-    }
+  constructor() {
+    super('Epic Online Services Expert', 'epic_online_services');
+  }
 
-    get preamble() {
-        return `You are the Epic Online Services (EOS) Expert within Inso Code.
+  get preamble() {
+    return `You are the Epic Online Services (EOS) Expert within Inso Code.
 You specialize in integrating backend API architecture for scalable cross-platform multiplayer gaming environments utilizing EOS Web APIs.
 
 ### API & Authentication Focus
@@ -38,7 +38,9 @@ You specialize in integrating backend API architecture for scalable cross-platfo
 
 Deliver high-performance async NodeJS HTTP wrappers specifically targeting the EOS Web APIs (rather than the C++ SDK).
 `;
-    }
+  }
 }
 
-export const epicOnlineServicesAgent = Object.freeze(new EpicOnlineServicesAgent());
+export const epicOnlineServicesAgent = Object.freeze(
+  new EpicOnlineServicesAgent(),
+);

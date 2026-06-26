@@ -14,11 +14,12 @@ import { GeminiAiService } from '../gemini/gemini.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class MqttAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'MQTT_Expert';
-        this.description = 'IoT messaging specialist for MQTT v5: broker setup (Mosquitto/HiveMQ), MQTT.js client (Node.js), QoS 0/1/2 guarantees, retained messages, Last Will & Testament, shared subscriptions, TLS/auth, and IoT topic hierarchy design.';
-        this.preamble = `You are an elite MQTT v5 IoT messaging protocol specialist.
+  constructor() {
+    super();
+    this.name = 'MQTT_Expert';
+    this.description =
+      'IoT messaging specialist for MQTT v5: broker setup (Mosquitto/HiveMQ), MQTT.js client (Node.js), QoS 0/1/2 guarantees, retained messages, Last Will & Testament, shared subscriptions, TLS/auth, and IoT topic hierarchy design.';
+    this.preamble = `You are an elite MQTT v5 IoT messaging protocol specialist.
 # CORE RESPONSIBILITIES
 1. **MQTT.js Client Setup**: \`import mqtt from 'mqtt'\`. Connect: \`const client = mqtt.connect('mqtts://broker.example.com:8883', { clientId: 'device-001', username: 'user', password: 'pass', ca: fs.readFileSync('ca.crt'), rejectUnauthorized: true })\`. Event handlers: \`client.on('connect', ...) \`, \`client.on('message', (topic, payload) => ...)\`, \`client.on('error', ...)\`.
 2. **Publishing**: \`client.publish('sensors/room1/temperature', JSON.stringify({ temp: 22.5, ts: Date.now() }), { qos: 1, retain: false })\`.
@@ -33,20 +34,22 @@ class MqttAgent extends BaseSpecialistAgent {
 8. **Mosquitto Setup**: Install: \`apt install mosquitto\`. Config: \`/etc/mosquitto/mosquitto.conf\` — set \`listener 8883\`, \`cafile /etc/ssl/ca.crt\`, \`certfile /etc/ssl/server.crt\`, \`keyfile /etc/ssl/server.key\`, \`allow_anonymous false\`, \`password_file /etc/mosquitto/passwd\`. Add user: \`mosquitto_passwd -c /etc/mosquitto/passwd myuser\`.
 # BEHAVIOR
 Output TypeScript using \`mqtt\` npm package (MQTT.js). Use \`mqtts://\` (TLS on port 8883) for production — never plain \`mqtt://\` with credentials.`;
-    }
+  }
 
-    async consult(prompt, contextData = []) {
-        logger.info(`📡 MQTT Expert: Synthesizing IoT messaging protocol logic...`);
-        const ctx = contextData.map(c => `[File: ${c.path}]\n${c.content}`).join('\n');
-        try {
-            return await GeminiAiService.generateContent(
-                `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`
-            );
-        } catch (e) {
-            logger.error('❌ MQTT Expert failed:', e);
-            throw new Error(`MQTT Synthesis Failed: ${e.message}`);
-        }
+  async consult(prompt, contextData = []) {
+    logger.info(`📡 MQTT Expert: Synthesizing IoT messaging protocol logic...`);
+    const ctx = contextData
+      .map(c => `[File: ${c.path}]\n${c.content}`)
+      .join('\n');
+    try {
+      return await GeminiAiService.generateContent(
+        `${this.preamble}\n\n=== CONTEXT ===\n${ctx}\n\n=== REQUEST ===\n${prompt}`,
+      );
+    } catch (e) {
+      logger.error('❌ MQTT Expert failed:', e);
+      throw new Error(`MQTT Synthesis Failed: ${e.message}`);
     }
+  }
 }
 
 export const mqttAgent = Object.freeze(new MqttAgent());

@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DevSecOpsCachingLeadAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'devsecops_caching_lead_agent',
-            'DevSecOps Caching Lead',
-            'You are an elite DevSecOps Caching Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Caching.'
-        );
-    }
+  constructor() {
+    super(
+      'devsecops_caching_lead_agent',
+      'DevSecOps Caching Lead',
+      'You are an elite DevSecOps Caching Lead. You specialize in bleeding-edge software development, cloud infrastructure, and DevSecOps Caching.',
+    );
+  }
 
-    async generateDevSecOpsCachingSystem(objective) {
-        logger.info(`💻 [DevSecOpsCachingLeadAgent] Analyzing DevSecOps Caching Lead specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Caching Lead.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - DevSecOps Caching Lead Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DevSecOpsCachingLeadAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDevSecOpsCachingSystem(objective) {
+    logger.info(
+      `💻 [DevSecOpsCachingLeadAgent] Analyzing DevSecOps Caching Lead specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for DevSecOps Caching Lead.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - DevSecOps Caching Lead Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DevSecOpsCachingLeadAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const devSecOpsCachingLeadAgent = Object.freeze(new DevSecOpsCachingLeadAgent());
+export const devSecOpsCachingLeadAgent = Object.freeze(
+  new DevSecOpsCachingLeadAgent(),
+);

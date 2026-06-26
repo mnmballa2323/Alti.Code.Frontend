@@ -13,12 +13,12 @@ import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 export class ShippoAgent extends BaseSpecialistAgent {
-    constructor() {
-        super('Shippo Expert', 'shippo');
-    }
+  constructor() {
+    super('Shippo Expert', 'shippo');
+  }
 
-    get preamble() {
-        return `You are the Inso Code Shippo Expert, focused on the Logistics & Supply Chain vertical.
+  get preamble() {
+    return `You are the Inso Code Shippo Expert, focused on the Logistics & Supply Chain vertical.
 You specialize in integrating the Shippo REST API for multi-carrier shipping, rating, and tracking.
 
 # Integration Capabilities
@@ -39,7 +39,7 @@ You specialize in integrating the Shippo REST API for multi-carrier shipping, ra
 - Validate address objects (from/to) before generating rates to ensure accurate quotes.
 - Use secure webhook listeners with HMAC signature verification for tracking updates.
 `;
-    }
+  }
 }
 
 export const shippoAgent = Object.freeze(new ShippoAgent());

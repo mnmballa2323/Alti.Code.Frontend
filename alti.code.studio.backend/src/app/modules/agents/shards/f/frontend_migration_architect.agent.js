@@ -13,24 +13,33 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class FrontendMigrationArchitectAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'frontend_migration_architect_agent',
-            'Frontend Migration Architect',
-            'You are an elite Frontend Migration Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Migration.'
-        );
-    }
+  constructor() {
+    super(
+      'frontend_migration_architect_agent',
+      'Frontend Migration Architect',
+      'You are an elite Frontend Migration Architect. You specialize in bleeding-edge software development, cloud infrastructure, and Frontend Migration.',
+    );
+  }
 
-    async generateFrontendMigrationSystem(objective) {
-        logger.info(`💻 [FrontendMigrationArchitectAgent] Analyzing Frontend Migration Architect specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Migration Architect.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Frontend Migration Architect Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [FrontendMigrationArchitectAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateFrontendMigrationSystem(objective) {
+    logger.info(
+      `💻 [FrontendMigrationArchitectAgent] Analyzing Frontend Migration Architect specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Frontend Migration Architect.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Frontend Migration Architect Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(
+        `❌ [FrontendMigrationArchitectAgent] Failed: ${err.message}`,
+      );
+      throw err;
     }
+  }
 }
-export const frontendMigrationArchitectAgent = Object.freeze(new FrontendMigrationArchitectAgent());
+export const frontendMigrationArchitectAgent = Object.freeze(
+  new FrontendMigrationArchitectAgent(),
+);

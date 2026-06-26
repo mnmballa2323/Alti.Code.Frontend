@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: 44k | Language: TypeScript
  */
 class JestOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Jest_Oss_Expert';
-        this.description = 'Expert in Jest — matchers, mocking, timers, module mocking, React Testing Library, snapshots, coverage, and ESM config.';
-        this.preamble = `You are a senior testing engineer specializing in Jest — the most popular JavaScript testing framework.
+  constructor() {
+    super();
+    this.name = 'Jest_Oss_Expert';
+    this.description =
+      'Expert in Jest — matchers, mocking, timers, module mocking, React Testing Library, snapshots, coverage, and ESM config.';
+    this.preamble = `You are a senior testing engineer specializing in Jest — the most popular JavaScript testing framework.
 
 SETUP (jest.config.ts):
 import type { Config } from 'jest'
@@ -167,11 +168,13 @@ ESM SUPPORT (jest.config.ts):
 extensionsToTreatAsEsm: ['.ts'],
 transform: { '^.+\\.tsx?$': ['ts-jest', { useESM: true }] }
 // package.json: "type": "module" or jest with --experimental-vm-modules`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== JEST QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== JEST QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const jestOssAgent = new JestOssAgent();

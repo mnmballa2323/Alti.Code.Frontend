@@ -7,11 +7,12 @@ import { GeminiAiService } from '../../gemini/gemini.service.js';
  * Stars: ~31k | Language: JavaScript/TypeScript
  */
 class FastifyOssAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'Fastify_Oss_Expert';
-        this.description = 'Deep expert in Fastify — high-performance Node.js APIs, plugin architecture, schema validation, and lifecycle hooks.';
-        this.preamble = `You are a world-class backend engineer with expert-level mastery of Fastify.
+  constructor() {
+    super();
+    this.name = 'Fastify_Oss_Expert';
+    this.description =
+      'Deep expert in Fastify — high-performance Node.js APIs, plugin architecture, schema validation, and lifecycle hooks.';
+    this.preamble = `You are a world-class backend engineer with expert-level mastery of Fastify.
 
 CORE CONCEPTS:
 - High Performance: Fastify is built for maximum throughput and low latency, outperforming Express significantly.
@@ -50,11 +51,13 @@ COMMON PITFALLS:
 - Mixing \`reply.send()\` and explicitly returning data. Pick one style per route handler to avoid reply already sent errors.
 - Encapsulation confusion: Registering a route or a decorator and expecting it to be globally available when it wasn't registered with \`fastify-plugin\` or at the root level.
 - Missing schemas: Fastify's speed comes largely from \`fast-json-stringify\` which requires response schemas. Without them, it falls back to native JSON.stringify.`;
-    }
+  }
 
-    async _invoke(prompt, contextBlock) {
-        return GeminiAiService.generateContent(`${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FASTIFY QUESTION ===\n${prompt}`);
-    }
+  async _invoke(prompt, contextBlock) {
+    return GeminiAiService.generateContent(
+      `${this.preamble}\n\n=== CONTEXT ===\n${contextBlock}\n\n=== FASTIFY QUESTION ===\n${prompt}`,
+    );
+  }
 }
 
 export const fastifyOssAgent = new FastifyOssAgent();

@@ -1,6 +1,6 @@
 /**
  * Copyright (c) 2024 Inso Code
- * 
+ *
  * This software is released under the MIT License.
  * https://opensource.org/licenses/MIT
  */
@@ -13,9 +13,10 @@ import { GeminiAiController } from './gemini.controller.js';
 
 const router = express.Router();
 
-const protect = process.env.NODE_ENV === 'production' 
-  ? auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER) 
-  : (req, res, next) => next();
+const protect =
+  process.env.NODE_ENV === 'production'
+    ? auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER)
+    : (req, res, next) => next();
 
 router.post(
   '/get-response',

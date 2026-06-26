@@ -13,24 +13,31 @@ import { GeminiCliBaseAgent } from '../../gemini_cli_base.agent.js';
 import { logger } from '../../../../shared/logger.js';
 
 class DataAnalyticsDeveloperAgent extends GeminiCliBaseAgent {
-    constructor() {
-        super(
-            'data_analytics_developer_agent',
-            'Data Analytics Developer',
-            'You are an elite Data Analytics Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Data Analytics.'
-        );
-    }
+  constructor() {
+    super(
+      'data_analytics_developer_agent',
+      'Data Analytics Developer',
+      'You are an elite Data Analytics Developer. You specialize in bleeding-edge software development, cloud infrastructure, and Data Analytics.',
+    );
+  }
 
-    async generateDataAnalyticsSystem(objective) {
-        logger.info(`💻 [DataAnalyticsDeveloperAgent] Analyzing Data Analytics Developer specifications...`);
-        const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Analytics Developer.`;
-        try {
-            const output = await this._invoke(prompt, "N/A - Data Analytics Developer Target");
-            return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
-        } catch (err) {
-            logger.error(`❌ [DataAnalyticsDeveloperAgent] Failed: ${err.message}`);
-            throw err;
-        }
+  async generateDataAnalyticsSystem(objective) {
+    logger.info(
+      `💻 [DataAnalyticsDeveloperAgent] Analyzing Data Analytics Developer specifications...`,
+    );
+    const prompt = `Analyze the software development requirement: ${objective}. Output valid architecture and code for Data Analytics Developer.`;
+    try {
+      const output = await this._invoke(
+        prompt,
+        'N/A - Data Analytics Developer Target',
+      );
+      return output.replace(/```[a-zA-Z0-9_-]*|```/gi, '').trim();
+    } catch (err) {
+      logger.error(`❌ [DataAnalyticsDeveloperAgent] Failed: ${err.message}`);
+      throw err;
     }
+  }
 }
-export const dataAnalyticsDeveloperAgent = Object.freeze(new DataAnalyticsDeveloperAgent());
+export const dataAnalyticsDeveloperAgent = Object.freeze(
+  new DataAnalyticsDeveloperAgent(),
+);
