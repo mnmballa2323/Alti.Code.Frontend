@@ -1907,6 +1907,7 @@ export default function Sidebar() {
                     <Plus className="size-3.5" />
                   </div>
                 }
+                onPress={() => router.push("/connect-apps")}
                 onClick={() => router.push("/connect-apps")}
               >
                 <span className="text-xs font-semibold text-primary">
