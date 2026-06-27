@@ -2686,24 +2686,40 @@ export default function Sidebar() {
               <span className="text-[9px] font-bold text-default-400 dark:text-default-500 uppercase tracking-wider px-1">
                 Connections
               </span>
-              <div className="flex flex-col gap-0.5 w-full">
+              <div className="bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1 grid grid-cols-3 gap-1 w-full">
                 {filteredConnectorItems.map((item) => {
                   const IconComponent = item.icon;
                   const isActive = item.isActive;
                   return (
-                    <button
+                    <Tooltip
                       key={item.label}
-                      className={cn(
-                        "w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-[11px] font-medium transition-all duration-200 text-left",
-                        isActive
-                          ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
-                          : "text-gray-500 dark:text-gray-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-default-800 dark:hover:text-default-200"
-                      )}
-                      onClick={item.onClick}
+                      showArrow
+                      classNames={{
+                        content:
+                          "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                      }}
+                      closeDelay={0}
+                      content={item.label}
+                      delay={0}
+                      placement="top"
                     >
-                      <IconComponent className="size-3.5 flex-shrink-0" />
-                      <span>{item.label}</span>
-                    </button>
+                      <Button
+                        className={cn(
+                          "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
+                          "h-[30px] w-full rounded-md gap-1 px-1 text-[10px] font-semibold",
+                          isActive
+                            ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
+                            : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
+                        )}
+                        onClick={item.onClick}
+                        onMouseEnter={() => {
+                          router.prefetch(item.path);
+                        }}
+                      >
+                        <IconComponent className="size-3 flex-shrink-0" />
+                        <span className="truncate">{item.label}</span>
+                      </Button>
+                    </Tooltip>
                   );
                 })}
               </div>
