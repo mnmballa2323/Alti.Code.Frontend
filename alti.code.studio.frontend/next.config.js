@@ -2,7 +2,11 @@
 const nextConfig = {
   // Use standalone mode for optimized Docker builds, export for Desktop
   output: process.env.BUILD_TARGET === 'desktop' ? "export" : "standalone",
-  devIndicators: false,
+  devIndicators: {
+    appIsrStatus: false,
+    buildActivity: false,
+    overlay: false,
+  },
   images: {
     unoptimized: true,
     domains: ['images.unsplash.com'],

@@ -1259,13 +1259,13 @@ export default function Sidebar() {
   const [loadingEngines, setLoadingEngines] = useState(false);
 
   useEffect(() => {
-    if (pathname !== "/engines" || !token) return;
+    if (pathname !== "/engines") return;
     
     const loadEngines = async () => {
       setLoadingEngines(true);
       try {
         const res = await axios.get(`${API_URL}/engines/list`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         if (res.data && res.data.success) {
           setSidebarEngines(res.data.data);
@@ -2014,7 +2014,7 @@ export default function Sidebar() {
           </div>
         </div>
 
-        {/* Dedicated Workspace Engines Option Row */}
+        {/* Dedicated Workspace Engines Option Row - Hidden for Phase 2
         <div
           className={cn(
             "border-b border-default-200",
@@ -2058,6 +2058,7 @@ export default function Sidebar() {
             </button>
           </Tooltip>
         </div>
+        */}
 
         {/* Search bar and + icon on the same line below the main menu */}
         <div
