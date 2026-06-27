@@ -818,6 +818,8 @@ export default function Sidebar() {
         return "Licenses";
       case "/knowledge":
         return "Knowledge";
+      case "/functions":
+        return "Functions";
       case "/repositories":
         return "Repositories";
       case "/developer-api":
@@ -905,6 +907,15 @@ export default function Sidebar() {
       isActive: pathname === "/knowledge",
       onClick: () => {
         router.push("/knowledge");
+      },
+    },
+    {
+      label: "Functions",
+      icon: Code,
+      path: "/functions",
+      isActive: pathname === "/functions",
+      onClick: () => {
+        router.push("/functions");
       },
     },
     {
