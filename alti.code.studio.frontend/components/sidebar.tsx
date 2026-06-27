@@ -1051,6 +1051,7 @@ export default function Sidebar() {
     { id: string; name: string; prompt: string }[]
   >([]);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+  const [serverlessFunctions, setServerlessFunctions] = useState<any[]>([]);
 
   const searchParams = useSearchParams();
   const agentIdParam = searchParams?.get("agentId");
@@ -1217,6 +1218,37 @@ export default function Sidebar() {
 
     return () => {
       window.removeEventListener("sync-connect-apps", handleSync);
+    };
+  }, [pathname, token]);
+
+  useEffect(() => {
+    const fetchFunctionsList = async () => {
+      if (!token) return;
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/function`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (res.data?.success) {
+          setServerlessFunctions(res.data.data || []);
+        }
+      } catch (e) {}
+    };
+
+    if (pathname === "/functions") {
+      fetchFunctionsList();
+    }
+
+    const handleSyncFuncs = (e: any) => {
+      if (e.detail && Array.isArray(e.detail)) {
+        setServerlessFunctions(e.detail);
+      } else {
+        fetchFunctionsList();
+      }
+    };
+
+    window.addEventListener("sync-functions", handleSyncFuncs);
+    return () => {
+      window.removeEventListener("sync-functions", handleSyncFuncs);
     };
   }, [pathname, token]);
 
@@ -2031,6 +2063,63 @@ export default function Sidebar() {
                       <span>{stream.name}</span>
                       <Lock
                         className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                        size={14}
+                      />
+                    </button>
+                  ));
+                })()}
+              </div>
+            ) : pathname === "/functions" ? (
+              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                {(() => {
+                  const filtered = serverlessFunctions.filter((f) =>
+                    f.name
+                      .toLowerCase()
+                      .includes(leftSidebarSearch.toLowerCase()),
+                  );
+
+                  if (serverlessFunctions.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:code-file-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No functions created yet
+                        </span>
+                      </div>
+                    );
+                  }
+                  if (filtered.length === 0) {
+                    return (
+                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                        <Icon
+                          className="text-2xl text-default-400 mb-2"
+                          icon="solar:magnifer-linear"
+                        />
+                        <span className="text-xs text-default-400">
+                          No results found
+                        </span>
+                      </div>
+                    );
+                  }
+
+                  return filtered.map((func) => (
+                    <button
+                      key={func.id}
+                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group"
+                      onClick={() =>
+                        window.dispatchEvent(
+                          new CustomEvent("select-function", {
+                            detail: func,
+                          }),
+                        )
+                      }
+                    >
+                      <span className="truncate">{func.name}</span>
+                      <Terminal
+                        className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
                         size={14}
                       />
                     </button>
