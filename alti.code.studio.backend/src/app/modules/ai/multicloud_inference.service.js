@@ -44,6 +44,44 @@ class MultiCloudInferenceService {
     activeAgent = 'jules',
     options = {},
   ) {
+    let finalPrompt = prompt;
+    if (
+      typeof prompt === 'string' &&
+      !prompt.includes('=== CODEBASE SYSTEM RULES & GUARDRAILS ===') &&
+      !prompt.includes('=== CODEBASE RULES & GUARDRAILS ===') &&
+      !prompt.includes('=== STRICT SYSTEM INSTRUCTIONS FOR ISOLATED CHAT WORKSPACE ===')
+    ) {
+      let rulesContext = '';
+      try {
+        const { RulesService } = await import('../rules/rules.service.js');
+        const rules = await RulesService.parseRules();
+        if (
+          (rules.instructions && rules.instructions.length > 0) ||
+          (rules.guardrails && rules.guardrails.length > 0)
+        ) {
+          rulesContext += '=== CODEBASE SYSTEM RULES & GUARDRAILS ===\n';
+          if (rules.instructions && rules.instructions.length > 0) {
+            rulesContext += 'INSTRUCTIONS (Enforced system parameters):\n';
+            rules.instructions.forEach(inst => {
+              rulesContext += `- ${inst.name}\n`;
+            });
+          }
+          if (rules.guardrails && rules.guardrails.length > 0) {
+            rulesContext += '\nGUARDRAILS (Prohibited actions):\n';
+            rules.guardrails.forEach(gr => {
+              rulesContext += `- ${gr.name}\n`;
+            });
+          }
+          rulesContext += '==========================================\n\n';
+        }
+      } catch (err) {
+        // Non-blocking
+      }
+      if (rulesContext) {
+        finalPrompt = `${rulesContext}${prompt}`;
+      }
+    }
+
     const modelId = options.modelId || 'gemini-3.5-flash';
     const isGpt = modelId.includes('gpt');
     const primaryProvider = isGpt ? 'azure' : 'gcp-vertex';
@@ -52,7 +90,7 @@ class MultiCloudInferenceService {
       logger.warn(
         `🛡️ [Google Sovereign Inference] AIR_GAPPED_MODE is ON. Bypassing public clouds. Routing to local Ollama API.`,
       );
-      return await this._executeAirGapped(prompt, activeAgent, modelId);
+      return await this._executeAirGapped(finalPrompt, activeAgent, modelId);
     }
 
     logger.info(
@@ -67,7 +105,7 @@ class MultiCloudInferenceService {
       try {
         if (provider === 'gcp-vertex') {
           resultObj = await this._executeGoogleVertex(
-            prompt,
+            finalPrompt,
             activeAgent,
             modelId,
             options,
@@ -75,7 +113,7 @@ class MultiCloudInferenceService {
           break;
         } else if (provider === 'azure') {
           resultObj = await this._executeAzureFoundry(
-            prompt,
+            finalPrompt,
             activeAgent,
             modelId,
             options,
@@ -106,12 +144,12 @@ class MultiCloudInferenceService {
         swarmTraceService.recordGeneration(spanId, {
           name: `${activeAgent}_llm_call`,
           model: modelId,
-          input: prompt,
+          input: finalPrompt,
           output: resultObj.content,
           provider: resultObj.provider,
           latencyMs: resultObj.latencyMs,
           usage: resultObj.tokens || {
-            prompt: Math.max(1, Math.ceil(prompt.length / 4)),
+            prompt: Math.max(1, Math.ceil(finalPrompt.length / 4)),
             completion: Math.max(
               1,
               Math.ceil((resultObj.content || '').length / 4),

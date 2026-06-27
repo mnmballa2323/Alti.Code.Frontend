@@ -1468,7 +1468,7 @@ export default function Sidebar() {
     };
   }, [pathname, token]);
 
-  const { data: rulesData } = useQuery({
+  const { data: rulesData, refetch: refetchRules } = useQuery({
     queryKey: ["codebase-rules", token, selectedRepo],
     queryFn: async () => {
       if (!token) return { instructions: [], guardrails: [] };
@@ -1484,6 +1484,16 @@ export default function Sidebar() {
     enabled: !!token,
     staleTime: 1000 * 60 * 5, // Cache rules for 5 minutes to prevent blocking fetches on page transition
   });
+
+  useEffect(() => {
+    const handleRefresh = () => {
+      refetchRules();
+    };
+    window.addEventListener("refresh-rules-sidebar", handleRefresh);
+    return () => {
+      window.removeEventListener("refresh-rules-sidebar", handleRefresh);
+    };
+  }, [refetchRules]);
 
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
