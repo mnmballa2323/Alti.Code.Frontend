@@ -1768,9 +1768,9 @@ export default function Sidebar() {
             delay={0}
             placement={isSidebarOpen ? "top" : "right"}
           >
-            <Button
+            <button
               className={cn(
-                "w-full transition-all duration-200 flex items-center gap-2.5 min-w-0 min-h-0",
+                "w-full transition-all duration-200 flex items-center gap-2.5 min-w-0 min-h-0 cursor-pointer outline-none",
                 isSidebarOpen
                   ? "h-[36px] px-3 justify-start rounded-xl"
                   : "h-[30px] w-[30px] p-0 justify-center rounded-md",
@@ -1778,8 +1778,9 @@ export default function Sidebar() {
                   ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
                   : "bg-[#F4F4F6]/50 dark:bg-default-50/50 hover:bg-[#F4F4F6] dark:hover:bg-default-50 text-default-600 dark:text-gray-300 border border-transparent",
               )}
-              onClick={() => router.push("/engines")}
-              onPress={() => router.push("/engines")}
+              onClick={() => {
+                router.push("/engines");
+              }}
               onMouseEnter={() => {
                 router.prefetch("/engines");
               }}
@@ -1791,7 +1792,7 @@ export default function Sidebar() {
                   <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">216</span>
                 </>
               )}
-            </Button>
+            </button>
           </Tooltip>
         </div>
 
