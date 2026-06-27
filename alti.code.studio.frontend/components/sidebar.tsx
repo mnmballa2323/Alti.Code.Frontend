@@ -1779,6 +1779,10 @@ export default function Sidebar() {
                   : "bg-[#F4F4F6]/50 dark:bg-default-50/50 hover:bg-[#F4F4F6] dark:hover:bg-default-50 text-default-600 dark:text-gray-300 border border-transparent",
               )}
               onClick={() => router.push("/engines")}
+              onPress={() => router.push("/engines")}
+              onMouseEnter={() => {
+                router.prefetch("/engines");
+              }}
             >
               <Cpu className={isSidebarOpen ? "size-4 text-primary shrink-0" : "size-3.5 shrink-0"} />
               {isSidebarOpen && (
