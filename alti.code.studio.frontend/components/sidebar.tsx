@@ -24,6 +24,7 @@ import {
   ModalFooter,
   Tooltip,
   Input,
+  Divider,
 } from "@heroui/react";
 import { useCallback, useEffect, useState, useRef } from "react";
 import {
@@ -865,33 +866,6 @@ export default function Sidebar() {
       },
     },
     {
-      label: "Instructions",
-      icon: BookOpen,
-      path: "/instructions",
-      isActive: pathname === "/instructions",
-      onClick: () => {
-        router.push("/instructions");
-      },
-    },
-    {
-      label: "Guardrails",
-      icon: Shield,
-      path: "/guardrails",
-      isActive: pathname === "/guardrails",
-      onClick: () => {
-        router.push("/guardrails");
-      },
-    },
-    {
-      label: "Knowledge",
-      icon: Database,
-      path: "/knowledge",
-      isActive: pathname === "/knowledge",
-      onClick: () => {
-        router.push("/knowledge");
-      },
-    },
-    {
       label: "Functions",
       icon: Terminal,
       path: "/functions",
@@ -923,6 +897,39 @@ export default function Sidebar() {
         router.push("/vault");
       },
     },
+  ];
+
+  const policyNavigationItems = [
+    {
+      label: "Instructions",
+      icon: BookOpen,
+      path: "/instructions",
+      isActive: pathname === "/instructions",
+      onClick: () => {
+        router.push("/instructions");
+      },
+    },
+    {
+      label: "Guardrails",
+      icon: Shield,
+      path: "/guardrails",
+      isActive: pathname === "/guardrails",
+      onClick: () => {
+        router.push("/guardrails");
+      },
+    },
+    {
+      label: "Knowledge",
+      icon: Database,
+      path: "/knowledge",
+      isActive: pathname === "/knowledge",
+      onClick: () => {
+        router.push("/knowledge");
+      },
+    },
+  ];
+
+  const connectorNavigationItems = [
     {
       label: "Integrations",
       icon: LayoutGrid,
@@ -953,6 +960,14 @@ export default function Sidebar() {
   ];
 
   const filteredNavigationItems = navigationItems.filter((item) =>
+    item.label.toLowerCase().includes(leftSidebarSearch.toLowerCase()),
+  );
+
+  const filteredPolicyItems = policyNavigationItems.filter((item) =>
+    item.label.toLowerCase().includes(leftSidebarSearch.toLowerCase()),
+  );
+
+  const filteredConnectorItems = connectorNavigationItems.filter((item) =>
     item.label.toLowerCase().includes(leftSidebarSearch.toLowerCase()),
   );
 
@@ -1683,13 +1698,12 @@ export default function Sidebar() {
             className={cn(
               "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
               isSidebarOpen
-                ? "grid grid-cols-7 gap-0.5"
+                ? "grid grid-cols-6 gap-0.5"
                 : "flex flex-col items-center gap-2",
             )}
           >
-            {filteredNavigationItems.map((item, index) => {
+            {filteredNavigationItems.map((item) => {
               const IconComponent = item.icon;
-              const isSecondRow = index >= 7;
 
               return (
                 <Tooltip
@@ -1702,7 +1716,7 @@ export default function Sidebar() {
                   closeDelay={0}
                   content={item.label}
                   delay={0}
-                  placement={isSidebarOpen ? (isSecondRow ? "bottom" : "top") : "right"}
+                  placement={isSidebarOpen ? "top" : "right"}
                 >
                   <Button
                     isIconOnly
@@ -1727,10 +1741,66 @@ export default function Sidebar() {
               );
             })}
             {isSidebarOpen && filteredNavigationItems.length === 0 && (
-              <div className="col-span-8 text-center py-2 text-xs text-default-400 italic">
+              <div className="col-span-6 text-center py-2 text-xs text-default-400 italic">
                 No results found
               </div>
             )}
+          </div>
+
+          {/* Policy Parameters Row: Instructions - Guardrails - Knowledge */}
+          <div className="mt-2">
+            <div
+              className={cn(
+                "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
+                isSidebarOpen
+                  ? "grid grid-cols-3 gap-1"
+                  : "flex flex-col items-center gap-2 mt-2 pt-2 border-t border-default-100/50",
+              )}
+            >
+              {filteredPolicyItems.map((item) => {
+                const IconComponent = item.icon;
+
+                return (
+                  <Tooltip
+                    key={item.label}
+                    showArrow
+                    classNames={{
+                      content:
+                        "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                    }}
+                    closeDelay={0}
+                    content={item.label}
+                    delay={0}
+                    placement={isSidebarOpen ? "bottom" : "right"}
+                  >
+                    <Button
+                      isIconOnly={!isSidebarOpen}
+                      className={cn(
+                        "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
+                        isSidebarOpen
+                          ? "h-[30px] w-full rounded-md gap-1 px-1.5 text-[10px] font-semibold"
+                          : "h-[30px] w-[30px] rounded-md",
+                        item.isActive
+                          ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
+                          : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
+                      )}
+                      onClick={item.onClick}
+                      onMouseEnter={() => {
+                        router.prefetch(item.path);
+                      }}
+                    >
+                      <IconComponent className="size-3 flex-shrink-0" />
+                      {isSidebarOpen && <span className="truncate">{item.label}</span>}
+                    </Button>
+                  </Tooltip>
+                );
+              })}
+              {isSidebarOpen && filteredPolicyItems.length === 0 && (
+                <div className="col-span-3 text-center py-2 text-[10px] text-default-400 italic">
+                  No parameters found
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -2607,10 +2677,73 @@ export default function Sidebar() {
 
         <div
           className={cn(
-            "mt-auto border-t border-default-200",
+            "mt-auto border-t border-default-200 flex flex-col gap-2",
             isSidebarOpen ? "px-5 pb-5 pt-4" : "px-1 pb-4 pt-4",
           )}
         >
+          {isSidebarOpen ? (
+            <div className="flex flex-col gap-1.5 w-full pb-2">
+              <span className="text-[9px] font-bold text-default-400 dark:text-default-500 uppercase tracking-wider px-1">
+                Connections
+              </span>
+              <div className="flex flex-col gap-0.5 w-full">
+                {filteredConnectorItems.map((item) => {
+                  const IconComponent = item.icon;
+                  const isActive = item.isActive;
+                  return (
+                    <button
+                      key={item.label}
+                      className={cn(
+                        "w-full flex items-center gap-2.5 px-2 py-1.5 rounded-lg text-[11px] font-medium transition-all duration-200 text-left",
+                        isActive
+                          ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
+                          : "text-gray-500 dark:text-gray-400 hover:bg-black/5 dark:hover:bg-white/5 hover:text-default-800 dark:hover:text-default-200"
+                      )}
+                      onClick={item.onClick}
+                    >
+                      <IconComponent className="size-3.5 flex-shrink-0" />
+                      <span>{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-2 pb-2 w-full">
+              {filteredConnectorItems.map((item) => {
+                const IconComponent = item.icon;
+                return (
+                  <Tooltip
+                    key={item.label}
+                    showArrow
+                    classNames={{
+                      content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                    }}
+                    closeDelay={0}
+                    content={item.label}
+                    delay={0}
+                    placement="right"
+                  >
+                    <Button
+                      isIconOnly
+                      className={cn(
+                        "flex items-center justify-center transition-all duration-200 relative group h-[30px] w-[30px] rounded-md",
+                        item.isActive
+                          ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
+                          : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
+                      )}
+                      onClick={item.onClick}
+                    >
+                      <IconComponent className="size-3.5" />
+                    </Button>
+                  </Tooltip>
+                );
+              })}
+            </div>
+          )}
+
+          {isSidebarOpen && <Divider className="my-1" />}
+
           {status === "unauthenticated" ? (
             <div className={cn("flex gap-2", !isSidebarOpen && "hidden")}>
               <Button
