@@ -25,10 +25,11 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
   if (modelId.includes('claude')) {
     publisher = 'anthropic';
     isClaude = true;
+    // Map latest Claude 4.6 values to GCP Vertex AI registered model identifiers
     if (modelId.includes('sonnet')) {
-      vertexModelId = 'claude-3-5-sonnet';
+      vertexModelId = 'claude-3-5-sonnet'; // Claude 3.5 Sonnet v2 on Vertex
     } else {
-      vertexModelId = 'claude-3-opus';
+      vertexModelId = 'claude-3-opus'; // Claude 3 Opus on Vertex
     }
   } else {
     publisher = 'google';

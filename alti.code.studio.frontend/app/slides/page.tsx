@@ -35,8 +35,8 @@ const VISUAL_THEMES = [
 const AI_MODELS = [
   { value: "gemini-3.5-flash", label: "Gemini 3.5 Flash (Fast)" },
   { value: "gemini-3.1-pro", label: "Gemini 3.1 Pro (Deep)" },
-  { value: "claude-sonnet-4.6", label: "Claude 3.5 Sonnet (Precise)" },
-  { value: "claude-opus-4.6", label: "Claude 3 Opus (Strategy)" },
+  { value: "claude-sonnet-4.6", label: "Claude 3.5 Sonnet 4.6 (Precise)" },
+  { value: "claude-opus-4.6", label: "Claude 3 Opus 4.6 (Strategy)" },
 ];
 
 export default function SlidesPage() {
