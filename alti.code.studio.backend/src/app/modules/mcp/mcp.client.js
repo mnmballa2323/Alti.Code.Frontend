@@ -182,6 +182,12 @@ export const PRESETS = [
     args: ['-y', '@modelcontextprotocol/server-confluence'],
     envKey: 'MCP_ENABLE_CONFLUENCE',
   },
+  {
+    name: 'open_seo',
+    command: 'npx',
+    args: ['-y', 'open-seo'],
+    envKey: 'MCP_ENABLE_OPEN_SEO',
+  },
 
   // --- CLOUD & DEVOPS ---
   {

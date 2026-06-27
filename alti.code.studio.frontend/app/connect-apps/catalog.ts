@@ -804,4 +804,9 @@ export const SAAS_MOCKS = [
     slug: "mcp_shopify",
     icon: "logos:shopify",
   },
+  {
+    name: "OpenSEO",
+    slug: "mcp_open_seo",
+    icon: "solar:graph-bold-duotone",
+  },
 ];

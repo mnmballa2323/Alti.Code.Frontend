@@ -48,6 +48,10 @@ const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
     command: "npx",
     args: ["-y", "@modelcontextprotocol/server-github"],
   },
+  mcp_open_seo: {
+    command: "npx",
+    args: ["-y", "open-seo"],
+  },
   mcp_fetch: {
     command: "npx",
     args: ["-y", "@modelcontextprotocol/server-fetch"],
