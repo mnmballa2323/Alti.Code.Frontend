@@ -791,7 +791,6 @@ export default function Sidebar() {
     router.prefetch("/cloud");
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
-    router.prefetch("/licenses");
     router.prefetch("/repositories");
     router.prefetch("/developer-api");
     router.prefetch("/sdk");
@@ -815,8 +814,6 @@ export default function Sidebar() {
         return "Instructions";
       case "/guardrails":
         return "Guardrails";
-      case "/licenses":
-        return "Licenses";
       case "/knowledge":
         return "Knowledge";
       case "/functions":
@@ -890,15 +887,6 @@ export default function Sidebar() {
       isActive: pathname === "/guardrails",
       onClick: () => {
         router.push("/guardrails");
-      },
-    },
-    {
-      label: "Licenses",
-      icon: Scale,
-      path: "/licenses",
-      isActive: pathname === "/licenses",
-      onClick: () => {
-        router.push("/licenses");
       },
     },
     {
@@ -999,7 +987,6 @@ export default function Sidebar() {
     if (pathname === "/vault") return "New Vault";
     if (pathname === "/instructions") return "New Instruction";
     if (pathname === "/guardrails") return "New Guardrail";
-    if (pathname === "/licenses") return "New License";
     if (pathname === "/knowledge") return "New Knowledge";
     if (pathname === "/repositories") return "New Repository";
     if (pathname === "/developer-api") return "New API";
@@ -1022,23 +1009,6 @@ export default function Sidebar() {
   const sdks = useSelector((state: RootState) => state.system.sdks || []);
   const [guardrails, setGuardrails] = useState<{ id: string; name: string }[]>(
     [],
-  );
-  const [licenses, setLicenses] = useState<{ id: string; name: string }[]>(
-    () => {
-      if (typeof window !== "undefined") {
-        const saved = localStorage.getItem("selected_licenses");
-
-        if (saved) {
-          try {
-            return JSON.parse(saved);
-          } catch (e) {
-            console.error("Failed to parse selected_licenses", e);
-          }
-        }
-      }
-
-      return [];
-    },
   );
   const [knowledgeFolders, setKnowledgeFolders] = useState<
     { id: string; name: string }[]
@@ -1085,7 +1055,6 @@ export default function Sidebar() {
     router.prefetch("/agents");
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
-    router.prefetch("/licenses");
     router.prefetch("/knowledge");
     router.prefetch("/repositories");
     router.prefetch("/developer-api");
@@ -1313,32 +1282,7 @@ export default function Sidebar() {
     };
   }, [instructions, guardrails, token, isInitialLoad]);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("selected_licenses", JSON.stringify(licenses));
-      window.dispatchEvent(new CustomEvent("sync-licenses-page"));
-    }
-  }, [licenses]);
 
-  useEffect(() => {
-    const handleSyncLicenses = () => {
-      const saved = localStorage.getItem("selected_licenses");
-
-      if (saved) {
-        try {
-          setLicenses(JSON.parse(saved));
-        } catch (e) {
-          console.error("Failed to parse selected_licenses from sync", e);
-        }
-      }
-    };
-
-    window.addEventListener("sync-licenses", handleSyncLicenses);
-
-    return () => {
-      window.removeEventListener("sync-licenses", handleSyncLicenses);
-    };
-  }, []);
 
   const documents = useSelector(
     (state: RootState) => state.system.documents || [],
@@ -1356,7 +1300,7 @@ export default function Sidebar() {
   } = useDisclosure();
   const [itemToDelete, setItemToDelete] = useState<{
     id: string;
-    type: "instruction" | "guardrail" | "license";
+    type: "instruction" | "guardrail";
   } | null>(null);
 
   const {
@@ -1372,8 +1316,6 @@ export default function Sidebar() {
       setInstructions((prev) => prev.filter((i) => i.id !== itemToDelete.id));
     } else if (itemToDelete.type === "guardrail") {
       setGuardrails((prev) => prev.filter((i) => i.id !== itemToDelete.id));
-    } else if (itemToDelete.type === "license") {
-      setLicenses((prev) => prev.filter((i) => i.id !== itemToDelete.id));
     }
     closeDeleteModal();
     setItemToDelete(null);
@@ -1412,21 +1354,7 @@ export default function Sidebar() {
       openDeleteModal();
     };
 
-    const handleAddLicense = (e: any) =>
-      setLicenses((prev) => [
-        ...prev,
-        { id: "lic-" + Date.now(), name: e.detail },
-      ]);
-    const handleUpdateLicense = (e: any) =>
-      setLicenses((prev) =>
-        prev.map((i) =>
-          i.id === e.detail.id ? { ...i, name: e.detail.name } : i,
-        ),
-      );
-    const handleDeleteLicense = (e: any) => {
-      setItemToDelete({ id: e.detail, type: "license" });
-      openDeleteModal();
-    };
+
 
     const handleOpenKnowledgeModal = () => {
       setKnowledgeFolderName("");
@@ -1466,9 +1394,6 @@ export default function Sidebar() {
     window.addEventListener("add-guardrail", handleAddGuardrail);
     window.addEventListener("update-guardrail", handleUpdateGuardrail);
     window.addEventListener("delete-guardrail", handleDeleteGuardrail);
-    window.addEventListener("add-license", handleAddLicense);
-    window.addEventListener("update-license", handleUpdateLicense);
-    window.addEventListener("delete-license", handleDeleteLicense);
     window.addEventListener("open-knowledge-modal", handleOpenKnowledgeModal);
     window.addEventListener("create-agent", handleCreateAgent);
 
@@ -1479,9 +1404,6 @@ export default function Sidebar() {
       window.removeEventListener("add-guardrail", handleAddGuardrail);
       window.removeEventListener("update-guardrail", handleUpdateGuardrail);
       window.removeEventListener("delete-guardrail", handleDeleteGuardrail);
-      window.removeEventListener("add-license", handleAddLicense);
-      window.removeEventListener("update-license", handleUpdateLicense);
-      window.removeEventListener("delete-license", handleDeleteLicense);
       window.removeEventListener(
         "open-knowledge-modal",
         handleOpenKnowledgeModal,
@@ -2308,52 +2230,6 @@ export default function Sidebar() {
                           </DropdownItem>
                         </DropdownMenu>
                       </Dropdown>
-                    </div>
-                  ));
-                })()}
-              </div>
-            ) : pathname === "/licenses" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
-                {(() => {
-                  const filtered = licenses.filter((lic) =>
-                    lic.name
-                      .toLowerCase()
-                      .includes(leftSidebarSearch.toLowerCase()),
-                  );
-
-                  if (licenses.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:document-text-outline"
-                        />
-                        <span className="text-xs text-default-400">
-                          No license policies added yet
-                        </span>
-                      </div>
-                    );
-                  }
-                  if (filtered.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:document-text-outline"
-                        />
-                        <span className="text-xs text-default-400">
-                          No results found
-                        </span>
-                      </div>
-                    );
-                  }
-
-                  return filtered.map((lic) => (
-                    <div
-                      key={lic.id}
-                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-                    >
-                      <span className="truncate">{lic.name}</span>
                     </div>
                   ));
                 })()}
