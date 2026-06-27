@@ -492,3 +492,29 @@ model OkfConcept {
   updatedAt   DateTime @updatedAt
 }
 
+// -----------------------------------------------------------------
+// Knowledge Page Storage & RAG Ingestion
+// -----------------------------------------------------------------
+model KnowledgeFolder {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name      String
+  userId    String?  @db.Uuid
+  tenantId  String?  @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  files     KnowledgeFile[]
+}
+
+model KnowledgeFile {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  folderId  String   @db.Uuid
+  name      String
+  size      Int
+  type      String
+  filePath  String   // Storage bucket or local path
+  content   String?  @db.Text // Extracted text content for chunking
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  folder    KnowledgeFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+}
+
