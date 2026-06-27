@@ -1843,24 +1843,19 @@ export default function Sidebar() {
               disabledKeys={isRepoLoading ? ["searching"] : []}
             >
               <DropdownItem
-                key="search-section"
-                isReadOnly
-                className="cursor-default hover:bg-transparent p-0 mb-2"
+                key="connect-github-repo"
+                className="text-primary hover:bg-primary/10 rounded-lg py-2 mb-2 border-b border-default-100/50"
+                startContent={
+                  <div className="p-1 rounded-md bg-primary/10 text-primary">
+                    <Plus className="size-3.5" />
+                  </div>
+                }
+                onPress={() => router.push("/connect-apps")}
+                onClick={() => router.push("/connect-apps")}
               >
-                <div className="px-2 py-1 relative">
-                  <input
-                    autoFocus
-                    className="w-full bg-default-100 border border-default-200 rounded-lg px-8 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all"
-                    placeholder="Search repositories..."
-                    value={repoSearch}
-                    onChange={(e) => handleRepoSearch(e.target.value)}
-                    onClick={(e) => e.stopPropagation()}
-                  />
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
-                  {isRepoLoading && (
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 size-3 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                  )}
-                </div>
+                <span className="text-xs font-semibold text-primary">
+                  Connect GitHub Repository
+                </span>
               </DropdownItem>
 
               <DropdownItem
@@ -1898,22 +1893,6 @@ export default function Sidebar() {
                   No repositories found
                 </DropdownItem>
               )}
-
-              <DropdownItem
-                key="connect-github-repo"
-                className="text-primary hover:bg-primary/10 rounded-lg py-2 mt-1 border-t border-default-100/50"
-                startContent={
-                  <div className="p-1 rounded-md bg-primary/10 text-primary">
-                    <Plus className="size-3.5" />
-                  </div>
-                }
-                onPress={() => router.push("/connect-apps")}
-                onClick={() => router.push("/connect-apps")}
-              >
-                <span className="text-xs font-semibold text-primary">
-                  Connect GitHub Repository
-                </span>
-              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>
