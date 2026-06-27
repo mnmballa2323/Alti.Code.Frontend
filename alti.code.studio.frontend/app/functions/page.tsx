@@ -313,21 +313,22 @@ function FunctionsPageContent() {
         {/* Right Editor & Console Pane */}
         <div className="flex-1 flex flex-col h-full min-w-0">
           {/* Action Bar */}
-          <div className="px-6 py-4 bg-white dark:bg-[#161b22]/40 border-b border-default-200/50 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="flex-1 max-w-lg flex flex-col gap-1">
+          <div className="h-[56px] px-6 bg-white dark:bg-[#161b22]/40 border-b border-default-200/50 dark:border-gray-800 flex items-center justify-between gap-4 shrink-0">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
               <input
                 type="text"
                 placeholder="Function Name (e.g. formatPaymentLogs)..."
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="bg-transparent border-none outline-none font-bold text-base text-foreground placeholder-gray-400 w-full"
+                className="bg-transparent border-none outline-none font-semibold text-sm text-foreground placeholder-gray-400 w-52 shrink-0 focus:ring-0"
               />
+              <span className="text-default-200 dark:text-gray-800 shrink-0 select-none">|</span>
               <input
                 type="text"
                 placeholder="Add optional function description..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="bg-transparent border-none outline-none text-xs text-default-400 placeholder-gray-400 w-full"
+                className="bg-transparent border-none outline-none text-xs text-default-400 placeholder-gray-400 flex-1 min-w-0 focus:ring-0"
               />
             </div>
             <div className="flex items-center gap-2 shrink-0">
