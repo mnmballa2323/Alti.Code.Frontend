@@ -44,8 +44,9 @@ class MultiCloudInferenceService {
     activeAgent = 'jules',
     options = {},
   ) {
-    const primaryProvider = 'gcp-vertex';
     const modelId = options.modelId || 'gemini-3.5-flash';
+    const isGpt = modelId.includes('gpt');
+    const primaryProvider = isGpt ? 'azure' : 'gcp-vertex';
 
     if (process.env.AIR_GAPPED_MODE === 'true') {
       logger.warn(
@@ -55,10 +56,10 @@ class MultiCloudInferenceService {
     }
 
     logger.info(
-      `🌐 [Google Sovereign Inference] Initiating inference for Agent [${activeAgent}] on Google Cloud Vertex AI`,
+      `🌐 [Google Sovereign Inference] Initiating inference for Agent [${activeAgent}] on ${primaryProvider.toUpperCase()}`,
     );
 
-    const providersQueue = ['gcp-vertex'];
+    const providersQueue = isGpt ? ['azure'] : ['gcp-vertex'];
     let lastError = null;
     let resultObj = null;
 
@@ -72,10 +73,18 @@ class MultiCloudInferenceService {
             options,
           );
           break;
+        } else if (provider === 'azure') {
+          resultObj = await this._executeAzureFoundry(
+            prompt,
+            activeAgent,
+            modelId,
+            options,
+          );
+          break;
         }
       } catch (err) {
         logger.warn(
-          `⚠️ [Google Sovereign Inference] GCP Vertex provider failed: ${err.message}`,
+          `⚠️ [Google Sovereign Inference] ${provider.toUpperCase()} provider failed: ${err.message}`,
         );
         lastError = err;
       }
