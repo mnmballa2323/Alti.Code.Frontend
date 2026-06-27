@@ -22,4 +22,24 @@ export const SecurityController = {
       });
     }
   },
+
+  async verifyLedger(req, res) {
+    try {
+      const tenantId = req.query.tenantId || req.body.tenantId || null;
+      const { ledgerVerifierService } = await import('./ledgerVerifier.service.js');
+      const report = await ledgerVerifierService.verifyChain(tenantId);
+
+      res.status(200).json({
+        success: true,
+        ...report,
+      });
+    } catch (error) {
+      console.error('[SecurityController] verifyLedger error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Failed to verify ledger',
+        error: error.message,
+      });
+    }
+  },
 };
