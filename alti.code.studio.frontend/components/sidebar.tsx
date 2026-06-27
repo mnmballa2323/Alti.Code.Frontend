@@ -1698,7 +1698,7 @@ export default function Sidebar() {
             className={cn(
               "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
               isSidebarOpen
-                ? "grid grid-cols-6 gap-0.5"
+                ? "flex flex-row items-center justify-between gap-0.5 w-full"
                 : "flex flex-col items-center gap-2",
             )}
           >
@@ -1723,7 +1723,7 @@ export default function Sidebar() {
                     className={cn(
                       "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
                       isSidebarOpen
-                        ? "h-[30px] w-full rounded-md"
+                        ? "h-[30px] flex-1 rounded-md"
                         : "h-[30px] w-[30px] rounded-md",
                       item.isActive
                         ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
@@ -1741,7 +1741,7 @@ export default function Sidebar() {
               );
             })}
             {isSidebarOpen && filteredNavigationItems.length === 0 && (
-              <div className="col-span-6 text-center py-2 text-xs text-default-400 italic">
+              <div className="w-full text-center py-2 text-xs text-default-400 italic">
                 No results found
               </div>
             )}
