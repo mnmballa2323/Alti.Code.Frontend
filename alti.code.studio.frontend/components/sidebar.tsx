@@ -2002,7 +2002,7 @@ export default function Sidebar() {
                   return filtered.map((stream) => (
                     <button
                       key={stream.id}
-                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group"
+                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group cursor-pointer"
                       onClick={() =>
                         window.dispatchEvent(
                           new CustomEvent("select-secret", {
@@ -2059,7 +2059,7 @@ export default function Sidebar() {
                   return filtered.map((func) => (
                     <button
                       key={func.id}
-                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group"
+                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group cursor-pointer"
                       onClick={() =>
                         window.dispatchEvent(
                           new CustomEvent("select-function", {
@@ -2116,7 +2116,14 @@ export default function Sidebar() {
                   return filtered.map((inst) => (
                     <div
                       key={inst.id}
-                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      onClick={() =>
+                        window.dispatchEvent(
+                          new CustomEvent("edit-instruction", {
+                            detail: inst,
+                          }),
+                        )
+                      }
                     >
                       <span className="truncate">{inst.name}</span>
                       <Dropdown
@@ -2124,7 +2131,10 @@ export default function Sidebar() {
                         placement="bottom-end"
                       >
                         <DropdownTrigger>
-                          <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
+                          <button 
+                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <MoreHorizontal size={16} />
                           </button>
                         </DropdownTrigger>
@@ -2209,7 +2219,14 @@ export default function Sidebar() {
                   return filtered.map((gr) => (
                     <div
                       key={gr.id}
-                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      onClick={() =>
+                        window.dispatchEvent(
+                          new CustomEvent("edit-guardrail", {
+                            detail: gr,
+                          }),
+                        )
+                      }
                     >
                       <span className="truncate">{gr.name}</span>
                       <Dropdown
@@ -2217,7 +2234,10 @@ export default function Sidebar() {
                         placement="bottom-end"
                       >
                         <DropdownTrigger>
-                          <button className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors">
+                          <button 
+                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                            onClick={(e) => e.stopPropagation()}
+                          >
                             <MoreHorizontal size={16} />
                           </button>
                         </DropdownTrigger>
@@ -2666,7 +2686,7 @@ export default function Sidebar() {
                   return filtered.map((item) => (
                     <button
                       key={item?._id}
-                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate"
+                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate cursor-pointer"
                       onClick={() =>
                         item?.sessionId && submitForm(item?.sessionId)
                       }
