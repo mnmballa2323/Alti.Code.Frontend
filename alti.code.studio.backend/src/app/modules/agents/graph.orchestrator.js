@@ -136,6 +136,9 @@ import { BrowserUseAgentService } from '../browserUseAgent/browserUseAgent.servi
 import { FazmAgentService } from '../fazmAgent/fazmAgent.service.js';
 import { LangGraphAgentService } from '../langGraphAgent/langGraphAgent.service.js';
 import { OpenHandsAgentService } from '../openHandsAgent/openHandsAgent.service.js';
+import { OpenCodeAgentService } from '../openCodeAgent/openCodeAgent.service.js';
+import { OpenSpecAgentService } from '../openSpecAgent/openSpecAgent.service.js';
+import { AiWebsiteClonerService } from '../aiWebsiteCloner/aiWebsiteCloner.service.js';
 import { CrewAiAgentService } from '../crewAiAgent/crewAiAgent.service.js';
 import { DspyAgentService } from '../dspyAgent/dspyAgent.service.js';
 import { surgeonService as surgeonAgent } from '../surgeon/surgeon.service.js';
@@ -677,6 +680,9 @@ class GraphOrchestrator {
         agent_s:
           (await import('./agent_s.agent.js').catch(() => ({}))).agentSAgent ||
           {},
+        opencode: OpenCodeAgentService,
+        openspec: OpenSpecAgentService,
+        website_cloner: AiWebsiteClonerService,
         specialist: capabilityRouter,
         vulnerabilityHarness: vulnerabilityHarnessService,
         fileSearch:

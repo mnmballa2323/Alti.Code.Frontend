@@ -32,21 +32,41 @@ const executeCommand = (cmd, workspacePath) => {
 };
 
 const init = async (workspacePath) => {
-  return executeCommand('openspec init', workspacePath);
+  let workspaceVal = workspacePath;
+  if (typeof workspacePath === 'object' && workspacePath !== null) {
+    workspaceVal = workspacePath.workspace || workspacePath.workspacePath;
+  }
+  return executeCommand('openspec init', workspaceVal);
 };
 
 const propose = async (name, workspacePath) => {
-  if (!name) throw new ApiError(httpStatus.BAD_REQUEST, 'Proposal name is required.');
-  const sanitizedName = name.replace(/[^a-zA-Z0-9_-]/g, '');
-  return executeCommand(`openspec propose ${sanitizedName}`, workspacePath);
+  let nameVal = name;
+  let workspaceVal = workspacePath;
+
+  if (typeof name === 'object' && name !== null) {
+    nameVal = name.name || name.proposalName;
+    workspaceVal = name.workspace || name.workspacePath;
+  }
+
+  if (!nameVal) throw new ApiError(httpStatus.BAD_REQUEST, 'Proposal name is required.');
+  const sanitizedName = String(nameVal).replace(/[^a-zA-Z0-9_-]/g, '');
+  return executeCommand(`openspec propose ${sanitizedName}`, workspaceVal);
 };
 
 const list = async (workspacePath) => {
-  return executeCommand('openspec list', workspacePath);
+  let workspaceVal = workspacePath;
+  if (typeof workspacePath === 'object' && workspacePath !== null) {
+    workspaceVal = workspacePath.workspace || workspacePath.workspacePath;
+  }
+  return executeCommand('openspec list', workspaceVal);
 };
 
 const validate = async (workspacePath) => {
-  return executeCommand('openspec validate', workspacePath);
+  let workspaceVal = workspacePath;
+  if (typeof workspacePath === 'object' && workspacePath !== null) {
+    workspaceVal = workspacePath.workspace || workspacePath.workspacePath;
+  }
+  return executeCommand('openspec validate', workspaceVal);
 };
 
 export const OpenSpecAgentService = {

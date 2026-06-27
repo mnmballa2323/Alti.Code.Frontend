@@ -22,13 +22,23 @@ import { logger } from '../../../shared/logger.js';
  * @returns {Promise<object>} Status report of the setup and next steps
  */
 const prepareClonerTemplate = async (targetUrl, projectName, workspacePath) => {
-  if (!targetUrl) throw new ApiError(httpStatus.BAD_REQUEST, 'targetUrl is required.');
-  if (!projectName) throw new ApiError(httpStatus.BAD_REQUEST, 'projectName is required.');
+  let urlVal = targetUrl;
+  let nameVal = projectName;
+  let workspaceVal = workspacePath;
 
-  const rootPath = workspacePath || process.cwd();
+  if (typeof targetUrl === 'object' && targetUrl !== null) {
+    urlVal = targetUrl.targetUrl || targetUrl.url;
+    nameVal = targetUrl.projectName || targetUrl.name;
+    workspaceVal = targetUrl.workspace || targetUrl.workspacePath;
+  }
+
+  if (!urlVal) throw new ApiError(httpStatus.BAD_REQUEST, 'targetUrl is required.');
+  if (!nameVal) throw new ApiError(httpStatus.BAD_REQUEST, 'projectName is required.');
+
+  const rootPath = workspaceVal || process.cwd();
   // Ensure we output to a directory inside the user's active workspace
   const parentClonesDir = path.join(rootPath, 'website-clones');
-  const targetDir = path.join(parentClonesDir, projectName);
+  const targetDir = path.join(parentClonesDir, nameVal);
 
   try {
     // 1. Create parent clones directory if not exists
@@ -37,13 +47,13 @@ const prepareClonerTemplate = async (targetUrl, projectName, workspacePath) => {
     // Check if target directory already exists
     try {
       await fs.access(targetDir);
-      throw new ApiError(httpStatus.CONFLICT, `Directory website-clones/${projectName} already exists.`);
+      throw new ApiError(httpStatus.CONFLICT, `Directory website-clones/${nameVal} already exists.`);
     } catch (err) {
       if (err.statusCode === httpStatus.CONFLICT) throw err;
       // Otherwise it does not exist, safe to clone
     }
 
-    logger.info(`🌐 Cloner: Cloning JCodesMore/ai-website-cloner-template to website-clones/${projectName}...`);
+    logger.info(`🌐 Cloner: Cloning JCodesMore/ai-website-cloner-template to website-clones/${nameVal}...`);
     
     // 2. Clone the template repository
     await new Promise((resolve, reject) => {
@@ -56,7 +66,7 @@ const prepareClonerTemplate = async (targetUrl, projectName, workspacePath) => {
       });
     });
 
-    logger.info(`📦 Cloner: Running npm install in website-clones/${projectName}...`);
+    logger.info(`📦 Cloner: Running npm install in website-clones/${nameVal}...`);
     
     // 3. Install packages inside the cloned project
     await new Promise((resolve, reject) => {
@@ -69,20 +79,20 @@ const prepareClonerTemplate = async (targetUrl, projectName, workspacePath) => {
       });
     });
 
-    logger.info(`🚀 Cloner: Template setup complete. Website cloner project ready at website-clones/${projectName}`);
+    logger.info(`🚀 Cloner: Template setup complete. Website cloner project ready at website-clones/${nameVal}`);
     
     // 4. Return success status with setup details and instruct user how to start the agent cloning sweep
     return {
       success: true,
       message: 'AI Website Cloner project generated and initialized successfully.',
       details: {
-        projectName,
-        targetUrl,
-        location: `website-clones/${projectName}`,
+        projectName: nameVal,
+        targetUrl: urlVal,
+        location: `website-clones/${nameVal}`,
         nextSteps: [
-          `Navigate to the cloner folder: cd website-clones/${projectName}`,
+          `Navigate to the cloner folder: cd website-clones/${nameVal}`,
           `Launch your agentic cloner execution: npx openspec propose clone-task`,
-          `Or execute the /clone-website command to copy ${targetUrl} pixel-perfect.`
+          `Or execute the /clone-website command to copy ${urlVal} pixel-perfect.`
         ]
       }
     };
@@ -94,4 +104,5 @@ const prepareClonerTemplate = async (targetUrl, projectName, workspacePath) => {
 
 export const AiWebsiteClonerService = {
   prepareClonerTemplate,
+  clone: prepareClonerTemplate, // Alias for executeNode
 };
