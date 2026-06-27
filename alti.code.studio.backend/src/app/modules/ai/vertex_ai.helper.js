@@ -34,9 +34,9 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
   } else {
     publisher = 'google';
     if (modelId.includes('pro')) {
-      vertexModelId = 'gemini-2.5-pro';
+      vertexModelId = 'gemini-3.5-pro'; // Latest Gemini Pro model on Vertex
     } else {
-      vertexModelId = 'gemini-2.5-flash';
+      vertexModelId = 'gemini-3.5-flash'; // Latest Gemini Flash model on Vertex
     }
   }
 
