@@ -13,7 +13,8 @@ import {
   AlertCircle,
   FolderOpen,
   Shield,
-  FileText
+  FileText,
+  Cpu
 } from "lucide-react";
 import { Button, Select, SelectItem, Input, Textarea, Chip } from "@heroui/react";
 import ChatBotLayout from "@/components/ChatbotLayout";
@@ -31,15 +32,23 @@ const VISUAL_THEMES = [
   { value: "Sovereign Minimalist", label: "Sovereign Minimalist (Slate/White)" },
 ];
 
+const AI_MODELS = [
+  { value: "gemini-3.5-flash", label: "Gemini 3.5 Flash (Fast)" },
+  { value: "gemini-3.1-pro", label: "Gemini 3.1 Pro (Deep)" },
+  { value: "claude-sonnet-4.6", label: "Claude 3.5 Sonnet (Precise)" },
+  { value: "claude-opus-4.6", label: "Claude 3 Opus (Strategy)" },
+];
+
 export default function SlidesPage() {
   const [title, setTitle] = useState("System Architecture Review");
   const [subtitle, setSubtitle] = useState("Enterprise Swarms & Ingestion Context");
   const [prompt, setPrompt] = useState("");
   const [strategistMode, setStrategistMode] = useState("Technical Deep Dive");
   const [visualStyle, setVisualStyle] = useState("Sleek Dark Mode");
+  const [modelId, setModelId] = useState("gemini-3.5-flash");
   const [selectedContext, setSelectedContext] = useState<string[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [isGenerated, setIsGenerated] = useState(false);
+  const [generatedSlides, setGeneratedSlides] = useState<any[]>([]);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -55,17 +64,8 @@ export default function SlidesPage() {
 
   const handleGenerate = async () => {
     setIsGenerating(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsGenerating(false);
-    setIsGenerated(true);
-    setActiveSlideIndex(0);
-  };
-
-  const handleDownload = async () => {
-    if (isDownloading) return;
-    setIsDownloading(true);
     try {
-      const response = await fetch("/api/v1/presentation/generate", {
+      const response = await fetch("/api/v1/presentation/preview", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -75,10 +75,41 @@ export default function SlidesPage() {
           strategistMode,
           visualStyle,
           selectedContext,
+          modelId,
         }),
       });
 
-      if (!response.ok) throw new Error("Generation failed");
+      if (!response.ok) throw new Error("Failed to generate presentation layout");
+      
+      const data = await response.json();
+      if (data.slides) {
+        setGeneratedSlides(data.slides);
+        setActiveSlideIndex(0);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to build slide structure. Check console logs for detail.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleDownload = async () => {
+    if (isDownloading || generatedSlides.length === 0) return;
+    setIsDownloading(true);
+    try {
+      const response = await fetch("/api/v1/presentation/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          subtitle,
+          visualStyle,
+          slides: generatedSlides,
+        }),
+      });
+
+      if (!response.ok) throw new Error("PowerPoint compilation failed");
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -91,67 +122,18 @@ export default function SlidesPage() {
       window.URL.revokeObjectURL(url);
     } catch (err) {
       console.error(err);
-      alert("Failed to download presentation.");
+      alert("Failed to compile PowerPoint.");
     } finally {
       setIsDownloading(false);
     }
   };
 
-  // Static Mock slides to render based on the user's title/subtitle/prompt inputs
-  const mockSlides = [
-    {
-      title: title,
-      subtitle: subtitle,
-      tag: strategistMode.toUpperCase(),
-      layout: "title",
-    },
-    {
-      title: "Executive Overview",
-      layout: "two-column",
-      col1Title: "Core Objectives",
-      col1Content: prompt || "Synthesize technical project specs and compile actionable targets.",
-      col2Title: "Key Targets",
-      col2Content: [
-        "Deploy scalable infrastructure layers",
-        "Enforce enterprise security guardrails",
-        "Automate testing & release integrations"
-      ],
-    },
-    {
-      title: "Architecture & Connected Context",
-      layout: "context-list",
-      items: selectedContext.length > 0 ? selectedContext : [
-        "Default Workspace Project",
-        "Active Database Layer",
-        "Secure Sandbox API"
-      ],
-    },
-    {
-      title: "Operational Safety & Guardrails",
-      layout: "bullets-card",
-      bullets: [
-        "Programmatic input validation scrubs query scripts before compiler executions.",
-        "Strict sovereign boundary routes block foundational cloud data leaks.",
-        "Automated policy evaluations trigger container rolling updates on failure."
-      ],
-    },
-    {
-      title: "Implementation Roadmap",
-      layout: "roadmap-steps",
-      steps: [
-        { num: "01", title: "Compile & Test", desc: "Verify schemas and build mocks." },
-        { num: "02", title: "Stitch Visuals", desc: "Deploy visual token rules." },
-        { num: "03", title: "Provisioning", desc: "Configure cloud workloads." }
-      ],
-    }
-  ];
-
-  const currentSlide = mockSlides[activeSlideIndex];
   const isDark = visualStyle === "Sleek Dark Mode";
+  const currentSlide = generatedSlides[activeSlideIndex];
 
   // Navigation handlers
   const handlePrev = () => setActiveSlideIndex(prev => Math.max(0, prev - 1));
-  const handleNext = () => setActiveSlideIndex(prev => Math.min(mockSlides.length - 1, prev + 1));
+  const handleNext = () => setActiveSlideIndex(prev => Math.min(generatedSlides.length - 1, prev + 1));
 
   return (
     <ChatBotLayout>
@@ -160,7 +142,7 @@ export default function SlidesPage() {
           
           {/* Left Column: Form Controls */}
           <div className="w-full lg:w-[420px] bg-white dark:bg-[#111116] border border-default-200/50 p-6 rounded-3xl flex flex-col justify-between shrink-0 shadow-sm">
-            <div className="space-y-6">
+            <div className="space-y-5">
               <div className="flex items-center gap-3 pb-4 border-b border-default-100">
                 <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center">
                   <Presentation className="w-5 h-5 text-primary" />
@@ -172,9 +154,9 @@ export default function SlidesPage() {
               </div>
 
               {/* Title & Subtitle */}
-              <div className="space-y-4">
+              <div className="space-y-3.5">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-default-600 uppercase tracking-wider">Slide Title</label>
+                  <label className="text-[10px] font-bold text-default-600 uppercase tracking-wider">Slide Title</label>
                   <Input 
                     classNames={{ inputWrapper: "!bg-default-100 dark:!bg-default-50/5 hover:!bg-default-200/50" }} 
                     placeholder="Enter slide title..."
@@ -184,7 +166,7 @@ export default function SlidesPage() {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-default-600 uppercase tracking-wider">Subtitle</label>
+                  <label className="text-[10px] font-bold text-default-600 uppercase tracking-wider">Subtitle</label>
                   <Input 
                     classNames={{ inputWrapper: "!bg-default-100 dark:!bg-default-50/5 hover:!bg-default-200/50" }} 
                     placeholder="Enter subtitle..."
@@ -196,9 +178,9 @@ export default function SlidesPage() {
               </div>
 
               {/* Context Selector */}
-              <div className="flex flex-col gap-2">
-                <label className="text-[11px] font-bold text-default-600 uppercase tracking-wider">Attach Codebase Context</label>
-                <div className="flex flex-col gap-1.5 max-h-[140px] overflow-y-auto pr-1 select-none">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-default-600 uppercase tracking-wider">Attach Codebase Context</label>
+                <div className="flex flex-col gap-1.5 max-h-[120px] overflow-y-auto pr-1 select-none">
                   {repositories.map(repo => (
                     <button
                       key={repo.id}
@@ -245,7 +227,7 @@ export default function SlidesPage() {
 
               {/* Prompt/Summary input */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-bold text-default-600 uppercase tracking-wider">Slide Objective Prompt</label>
+                <label className="text-[10px] font-bold text-default-600 uppercase tracking-wider">Slide Objective Prompt</label>
                 <Textarea 
                   classNames={{ inputWrapper: "!bg-default-100 dark:!bg-default-50/5 hover:!bg-default-200/50" }} 
                   minRows={2.5}
@@ -256,10 +238,26 @@ export default function SlidesPage() {
                 />
               </div>
 
+              {/* AI Inference Model Selector */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[10px] font-bold text-default-600 uppercase tracking-wider flex items-center gap-1.5">
+                  <Cpu className="w-3 h-3 text-primary" /> Multi-Model Inference Engine
+                </label>
+                <select
+                  className="w-full bg-default-100 dark:bg-[#1C1C24] hover:bg-default-200/50 outline-none text-xs rounded-xl p-2.5 border border-default-200/50 text-default-800"
+                  value={modelId}
+                  onChange={(e) => setModelId(e.target.value)}
+                >
+                  {AI_MODELS.map(model => (
+                    <option key={model.value} value={model.value}>{model.label}</option>
+                  ))}
+                </select>
+              </div>
+
               {/* Strategist & Visual Theme Selectors */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-default-600 uppercase tracking-wider">Structure</label>
+                  <label className="text-[10px] font-bold text-default-600 uppercase tracking-wider">Structure</label>
                   <select
                     className="w-full bg-default-100 dark:bg-[#1C1C24] hover:bg-default-200/50 outline-none text-xs rounded-xl p-2.5 border border-default-200/50 text-default-800"
                     value={strategistMode}
@@ -271,7 +269,7 @@ export default function SlidesPage() {
                   </select>
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-[11px] font-bold text-default-600 uppercase tracking-wider">Visual Style</label>
+                  <label className="text-[10px] font-bold text-default-600 uppercase tracking-wider">Visual Style</label>
                   <select
                     className="w-full bg-default-100 dark:bg-[#1C1C24] hover:bg-default-200/50 outline-none text-xs rounded-xl p-2.5 border border-default-200/50 text-default-800"
                     value={visualStyle}
@@ -295,7 +293,7 @@ export default function SlidesPage() {
                 startContent={!isGenerating && <Sparkles size={14} />}
                 onClick={handleGenerate}
               >
-                {isGenerated ? "Regenerate Slides" : "Generate Slide Deck"}
+                {generatedSlides.length > 0 ? "Regenerate Slides" : "Generate Slide Deck"}
               </Button>
             </div>
           </div>
@@ -307,13 +305,13 @@ export default function SlidesPage() {
             <div className="flex items-center justify-between pb-4 border-b border-default-100 w-full mb-6">
               <div className="flex items-center gap-2">
                 <span className="text-sm font-bold text-gray-900 dark:text-gray-100">Slide Deck Preview</span>
-                {isGenerated && (
+                {generatedSlides.length > 0 && (
                   <Chip color="success" size="sm" variant="flat">
-                    Ready
+                    AI Compiled
                   </Chip>
                 )}
               </div>
-              {isGenerated && (
+              {generatedSlides.length > 0 && (
                 <Button
                   className="bg-black text-white dark:bg-white dark:text-black font-semibold text-xs h-8 px-4 rounded-xl"
                   isLoading={isDownloading}
@@ -328,7 +326,7 @@ export default function SlidesPage() {
 
             {/* Slide Body Canvas (16:9 Standard aspect ratio box) */}
             <div className="flex-grow flex items-center justify-center w-full">
-              {isGenerated ? (
+              {generatedSlides.length > 0 ? (
                 <div 
                   className={`w-full max-w-3xl aspect-[16/9] border rounded-2xl shadow-lg relative p-8 flex flex-col justify-between transition-all duration-300 ${
                     isDark 
@@ -349,7 +347,7 @@ export default function SlidesPage() {
                   />
 
                   {/* Render Slides layouts dynamically */}
-                  {currentSlide.layout === "title" && (
+                  {currentSlide.type === "title" && (
                     <div className="my-auto pl-6">
                       <span 
                         className="text-xs font-bold uppercase tracking-wider block mb-2"
@@ -361,116 +359,162 @@ export default function SlidesPage() {
                               : "#8B5CF6" 
                         }}
                       >
-                        {currentSlide.tag}
+                        {currentSlide.tag || strategistMode.toUpperCase()}
                       </span>
                       <h2 className="text-3xl font-extrabold tracking-tight mb-3 max-w-xl leading-tight">
-                        {currentSlide.title}
+                        {currentSlide.title || title}
                       </h2>
                       <p className="text-md opacity-70 max-w-lg">
-                        {currentSlide.subtitle}
+                        {currentSlide.subtitle || subtitle}
                       </p>
                     </div>
                   )}
 
-                  {currentSlide.layout === "two-column" && (
+                  {currentSlide.type === "two-column" && (
                     <div className="h-full flex flex-col justify-between pl-4">
-                      <h3 className="text-xl font-bold tracking-tight mb-4">{currentSlide.title}</h3>
-                      <div className="grid grid-cols-2 gap-6 flex-grow">
+                      <h3 className="text-lg font-bold tracking-tight mb-3">{currentSlide.title}</h3>
+                      <div className="grid grid-cols-3 gap-4 flex-grow items-stretch">
                         {/* Col 1 */}
-                        <div className={`p-4 rounded-xl border ${isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"}`}>
-                          <h4 
-                            className="text-sm font-bold mb-2"
-                            style={{ 
-                              color: visualStyle === "Corporate Grid" 
-                                ? "#2563EB" 
-                                : visualStyle === "Sovereign Minimalist" 
-                                  ? "#111827" 
-                                  : "#8B5CF6" 
-                            }}
-                          >
-                            {currentSlide.col1Title}
-                          </h4>
-                          <p className="text-xs opacity-80 leading-relaxed">{currentSlide.col1Content}</p>
-                        </div>
-                        {/* Col 2 */}
-                        <div className={`p-4 rounded-xl border ${isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"}`}>
-                          <h4 
-                            className="text-sm font-bold mb-2"
-                            style={{ 
-                              color: visualStyle === "Corporate Grid" 
-                                ? "#2563EB" 
-                                : visualStyle === "Sovereign Minimalist" 
-                                  ? "#111827" 
-                                  : "#8B5CF6" 
-                            }}
-                          >
-                            {currentSlide.col2Title}
-                          </h4>
-                          <ul className="list-disc pl-4 text-xs space-y-1.5 opacity-80 leading-relaxed">
-                            {Array.isArray(currentSlide.col2Content) && currentSlide.col2Content.map((bullet, i) => (
-                              <li key={i}>{bullet}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {currentSlide.layout === "context-list" && (
-                    <div className="h-full flex flex-col justify-between pl-4">
-                      <h3 className="text-xl font-bold tracking-tight mb-4">{currentSlide.title}</h3>
-                      <div className="space-y-2.5 flex-grow overflow-hidden">
-                        {currentSlide.items?.map((item, idx) => (
-                          <div 
-                            key={idx} 
-                            className={`flex items-center justify-between p-3 rounded-xl border relative overflow-hidden ${
-                              isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"
-                            }`}
-                          >
-                            <div 
-                              className="absolute left-0 top-0 bottom-0 w-1" 
+                        <div className={`p-3.5 rounded-xl border flex flex-col justify-between ${isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"}`}>
+                          <div>
+                            <h4 
+                              className="text-xs font-bold mb-1.5"
                               style={{ 
-                                backgroundColor: visualStyle === "Corporate Grid" 
+                                color: visualStyle === "Corporate Grid" 
                                   ? "#2563EB" 
                                   : visualStyle === "Sovereign Minimalist" 
                                     ? "#111827" 
                                     : "#8B5CF6" 
                               }}
-                            />
-                            <span className="text-xs font-bold pl-3">{item}</span>
-                            <span className="text-[10px] opacity-60 font-semibold uppercase tracking-wider">Active Configuration</span>
+                            >
+                              {currentSlide.col1Title}
+                            </h4>
+                            <p className="text-[11px] opacity-80 leading-relaxed">{currentSlide.col1Content}</p>
                           </div>
-                        ))}
+                        </div>
+                        {/* Col 2 */}
+                        <div className={`p-3.5 rounded-xl border flex flex-col justify-between ${isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"}`}>
+                          <div>
+                            <h4 
+                              className="text-xs font-bold mb-1.5"
+                              style={{ 
+                                color: visualStyle === "Corporate Grid" 
+                                  ? "#2563EB" 
+                                  : visualStyle === "Sovereign Minimalist" 
+                                    ? "#111827" 
+                                    : "#8B5CF6" 
+                              }}
+                            >
+                              {currentSlide.col2Title}
+                            </h4>
+                            <ul className="list-disc pl-3.5 text-[10px] space-y-1.5 opacity-80 leading-relaxed">
+                              {Array.isArray(currentSlide.col2Content) && currentSlide.col2Content.map((bullet, i) => (
+                                <li key={i}>{bullet}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                        {/* Col 3: Generated Imagen Visual Asset */}
+                        <div className={`rounded-xl border relative overflow-hidden flex items-center justify-center ${isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"}`}>
+                          {currentSlide.image ? (
+                            <img 
+                              alt="Generated Visual Asset" 
+                              className="absolute inset-0 w-full h-full object-cover" 
+                              src={currentSlide.image} 
+                            />
+                          ) : (
+                            <span className="text-[10px] text-default-400">Loading visual...</span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}
 
-                  {currentSlide.layout === "bullets-card" && (
+                  {currentSlide.type === "context-list" && (
                     <div className="h-full flex flex-col justify-between pl-4">
-                      <h3 className="text-xl font-bold tracking-tight mb-4">{currentSlide.title}</h3>
-                      <div className={`p-5 rounded-xl border flex-grow ${isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"}`}>
-                        <ul className="list-disc pl-5 text-xs space-y-3 opacity-90 leading-relaxed">
-                          {currentSlide.bullets?.map((bullet, i) => (
-                            <li key={i}>{bullet}</li>
+                      <h3 className="text-lg font-bold tracking-tight mb-3">{currentSlide.title}</h3>
+                      <div className="grid grid-cols-3 gap-4 flex-grow items-stretch">
+                        <div className="col-span-2 space-y-2.5">
+                          {currentSlide.items?.map((item, idx) => (
+                            <div 
+                              key={idx} 
+                              className={`flex items-center justify-between p-3 rounded-xl border relative overflow-hidden ${
+                                isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"
+                              }`}
+                            >
+                              <div 
+                                className="absolute left-0 top-0 bottom-0 w-1" 
+                                style={{ 
+                                  backgroundColor: visualStyle === "Corporate Grid" 
+                                    ? "#2563EB" 
+                                    : visualStyle === "Sovereign Minimalist" 
+                                      ? "#111827" 
+                                      : "#8B5CF6" 
+                                }}
+                              />
+                              <span className="text-[11px] font-bold pl-3 truncate max-w-[280px]">{item}</span>
+                              <span className="text-[8px] opacity-60 font-semibold uppercase tracking-wider shrink-0">Active Source</span>
+                            </div>
                           ))}
-                        </ul>
+                        </div>
+                        
+                        {/* Col 3: Generated Imagen Visual Asset */}
+                        <div className={`rounded-xl border relative overflow-hidden flex items-center justify-center ${isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"}`}>
+                          {currentSlide.image ? (
+                            <img 
+                              alt="Generated Visual Asset" 
+                              className="absolute inset-0 w-full h-full object-cover" 
+                              src={currentSlide.image} 
+                            />
+                          ) : (
+                            <span className="text-[10px] text-default-400">Loading visual...</span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}
 
-                  {currentSlide.layout === "roadmap-steps" && (
+                  {currentSlide.type === "bullets-card" && (
                     <div className="h-full flex flex-col justify-between pl-4">
-                      <h3 className="text-xl font-bold tracking-tight mb-4">{currentSlide.title}</h3>
-                      <div className="grid grid-cols-3 gap-4 flex-grow">
+                      <h3 className="text-lg font-bold tracking-tight mb-3">{currentSlide.title}</h3>
+                      <div className="grid grid-cols-3 gap-4 flex-grow items-stretch">
+                        <div className={`col-span-2 p-4 rounded-xl border ${isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"}`}>
+                          <ul className="list-disc pl-4 text-[11px] space-y-2.5 opacity-90 leading-relaxed">
+                            {currentSlide.bullets?.map((bullet, i) => (
+                              <li key={i}>{bullet}</li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        {/* Col 3: Generated Imagen Visual Asset */}
+                        <div className={`rounded-xl border relative overflow-hidden flex items-center justify-center ${isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"}`}>
+                          {currentSlide.image ? (
+                            <img 
+                              alt="Generated Visual Asset" 
+                              className="absolute inset-0 w-full h-full object-cover" 
+                              src={currentSlide.image} 
+                            />
+                          ) : (
+                            <span className="text-[10px] text-default-400">Loading visual...</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {currentSlide.type === "roadmap-steps" && (
+                    <div className="h-full flex flex-col justify-between pl-4">
+                      <h3 className="text-lg font-bold tracking-tight mb-3">{currentSlide.title}</h3>
+                      <div className="grid grid-cols-4 gap-3 flex-grow items-stretch">
                         {currentSlide.steps?.map((step, idx) => (
                           <div 
                             key={idx}
-                            className={`p-4 rounded-xl border flex flex-col justify-between ${
+                            className={`p-3 rounded-xl border flex flex-col justify-between ${
                               isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"
                             }`}
                           >
                             <span 
-                              className="text-2xl font-bold font-mono tracking-tight"
+                              className="text-xl font-bold font-mono tracking-tight"
                               style={{ 
                                 color: visualStyle === "Corporate Grid" 
                                   ? "#2563EB" 
@@ -482,11 +526,24 @@ export default function SlidesPage() {
                               {step.num}
                             </span>
                             <div>
-                              <h4 className="text-xs font-bold mb-1">{step.title}</h4>
-                              <p className="text-[10px] opacity-70 leading-relaxed">{step.desc}</p>
+                              <h4 className="text-[10px] font-bold mb-0.5 truncate">{step.title}</h4>
+                              <p className="text-[9px] opacity-70 leading-relaxed">{step.desc}</p>
                             </div>
                           </div>
                         ))}
+                        
+                        {/* Col 4: Generated Imagen Visual Asset */}
+                        <div className={`rounded-xl border relative overflow-hidden flex items-center justify-center ${isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"}`}>
+                          {currentSlide.image ? (
+                            <img 
+                              alt="Generated Visual Asset" 
+                              className="absolute inset-0 w-full h-full object-cover" 
+                              src={currentSlide.image} 
+                            />
+                          ) : (
+                            <span className="text-[10px] text-default-400">Loading visual...</span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}
@@ -494,7 +551,7 @@ export default function SlidesPage() {
                   {/* Brand signature on all slides */}
                   <div className="flex items-center justify-between text-[9px] opacity-50 pl-6 border-t border-white/5 pt-2">
                     <span>Alti Code Studio Presentation Swarm</span>
-                    <span>Slide {activeSlideIndex + 1} of {mockSlides.length}</span>
+                    <span>Slide {activeSlideIndex + 1} of {generatedSlides.length}</span>
                   </div>
                 </div>
               ) : (
@@ -504,14 +561,14 @@ export default function SlidesPage() {
                   </div>
                   <h3 className="text-md font-bold text-default-800 mb-1">Awaiting Generation</h3>
                   <p className="text-xs text-default-500 max-w-sm">
-                    Configure your slide options in the left panel and click "Generate Slide Deck" to render the presentation.
+                    Configure your slide options in the left panel and click "Generate Slide Deck" to compile the presentations with Google Vertex AI text and Imagen visuals.
                   </p>
                 </div>
               )}
             </div>
 
             {/* Bottom Slider Nav controls */}
-            {isGenerated && (
+            {generatedSlides.length > 0 && (
               <div className="flex items-center justify-between pt-6 border-t border-default-100 w-full mt-6">
                 <div className="flex gap-2">
                   <Button
@@ -528,7 +585,7 @@ export default function SlidesPage() {
                   <Button
                     isIconOnly
                     className="bg-default-100 dark:bg-[#1E1E24] hover:bg-default-200"
-                    isDisabled={activeSlideIndex === mockSlides.length - 1}
+                    isDisabled={activeSlideIndex === generatedSlides.length - 1}
                     radius="lg"
                     size="sm"
                     variant="flat"
@@ -538,7 +595,7 @@ export default function SlidesPage() {
                   </Button>
                 </div>
                 <span className="text-xs text-default-500 font-medium">
-                  Slide {activeSlideIndex + 1} of {mockSlides.length}
+                  Slide {activeSlideIndex + 1} of {generatedSlides.length}
                 </span>
               </div>
             )}
