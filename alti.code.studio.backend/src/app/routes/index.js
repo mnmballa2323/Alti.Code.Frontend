@@ -131,6 +131,8 @@ try {
                 basePath = '/oss-swarm/openhands';
               if (file === 'openCodeAgent.route.js')
                 basePath = '/oss-swarm/opencode';
+              if (file === 'openSpecAgent.route.js')
+                basePath = '/oss-swarm/openspec';
               if (file === 'browserUseAgent.route.js')
                 basePath = '/oss-swarm/browser-use';
               if (file === 'fazmAgent.route.js') basePath = '/oss-swarm/fazm';

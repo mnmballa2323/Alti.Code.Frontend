@@ -160,6 +160,12 @@ const initialNodes: Node[] = [
     data: { label: "OpenCode Agent" },
     style: nodeStyles.sandbox,
   },
+  {
+    id: "openspec",
+    position: { x: 750, y: 380 },
+    data: { label: "OpenSpec SDD" },
+    style: nodeStyles.sandbox,
+  },
 
   // Tier 5: Web & Tools
   {
@@ -270,6 +276,7 @@ const initialEdges: Edge[] = [
   { id: "e-openhands-swekit", source: "openhands", target: "swekit" },
   { id: "e-lang-interpreter", source: "langgraph", target: "openinterpreter" },
   { id: "e-lang-opencode", source: "langgraph", target: "opencode", animated: true },
+  { id: "e-lang-openspec", source: "langgraph", target: "openspec", animated: true },
 
   // Tool edges
   {

@@ -194,6 +194,12 @@ export const PRESETS = [
     args: ['serve', '--port', '4096', '--hostname', '127.0.0.1'],
     envKey: 'MCP_ENABLE_OPENCODE',
   },
+  {
+    name: 'openspec',
+    command: 'npx',
+    args: ['-y', '@fission-ai/openspec@latest', 'init'],
+    envKey: 'MCP_ENABLE_OPENSPEC',
+  },
 
   // --- CLOUD & DEVOPS ---
   {
