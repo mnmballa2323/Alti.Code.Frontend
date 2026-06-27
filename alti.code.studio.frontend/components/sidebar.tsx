@@ -1892,67 +1892,6 @@ export default function Sidebar() {
           </Dropdown>
         </div>
 
-        {/* Project Parameters (Instructions, Guardrails, Data) & Connections (Apps, Database, Cloud) - Unified 6-Icon Grid */}
-        <div
-          className={cn(
-            "border-b border-default-200",
-            isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
-          )}
-        >
-          <div
-            className={cn(
-              "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
-              isSidebarOpen
-                ? "flex flex-row items-center justify-between gap-0.5 w-full"
-                : "flex flex-col items-center gap-2",
-            )}
-          >
-            {[...filteredPolicyItems, ...filteredConnectorItems].map((item) => {
-              const IconComponent = item.icon;
-
-              return (
-                <Tooltip
-                  key={item.label}
-                  showArrow
-                  classNames={{
-                    content:
-                      "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-                  }}
-                  closeDelay={0}
-                  content={item.label}
-                  delay={0}
-                  placement={isSidebarOpen ? "top" : "right"}
-                >
-                  <Button
-                    isIconOnly
-                    className={cn(
-                      "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
-                      isSidebarOpen
-                        ? "h-[30px] flex-1 rounded-md"
-                        : "h-[30px] w-[30px] rounded-md",
-                      item.isActive
-                        ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
-                        : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
-                    )}
-                    onClick={item.onClick}
-                    onMouseEnter={() => {
-                      router.prefetch(item.path);
-                    }}
-                  >
-                    <IconComponent className="size-3.5" />
-                    <span className="sr-only">{item.label}</span>
-                  </Button>
-                </Tooltip>
-              );
-            })}
-            {isSidebarOpen && filteredPolicyItems.length === 0 && filteredConnectorItems.length === 0 && (
-              <div className="w-full text-center py-2 text-xs text-default-400 italic">
-                No items found
-              </div>
-            )}
-          </div>
-        </div>
-
         {/* 6 navigation icons toggle container (Main Menu) */}
         <div
           className={cn(
@@ -2009,6 +1948,67 @@ export default function Sidebar() {
             {isSidebarOpen && filteredNavigationItems.length === 0 && (
               <div className="w-full text-center py-2 text-xs text-default-400 italic">
                 No results found
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Project Parameters (Instructions, Guardrails, Data) & Connections (Apps, Database, Cloud) - Unified 6-Icon Grid */}
+        <div
+          className={cn(
+            "border-b border-default-200",
+            isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
+          )}
+        >
+          <div
+            className={cn(
+              "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
+              isSidebarOpen
+                ? "flex flex-row items-center justify-between gap-0.5 w-full"
+                : "flex flex-col items-center gap-2",
+            )}
+          >
+            {[...filteredPolicyItems, ...filteredConnectorItems].map((item) => {
+              const IconComponent = item.icon;
+
+              return (
+                <Tooltip
+                  key={item.label}
+                  showArrow
+                  classNames={{
+                    content:
+                      "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                  }}
+                  closeDelay={0}
+                  content={item.label}
+                  delay={0}
+                  placement={isSidebarOpen ? "top" : "right"}
+                >
+                  <Button
+                    isIconOnly
+                    className={cn(
+                      "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
+                      isSidebarOpen
+                        ? "h-[30px] flex-1 rounded-md"
+                        : "h-[30px] w-[30px] rounded-md",
+                      item.isActive
+                        ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
+                        : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
+                    )}
+                    onClick={item.onClick}
+                    onMouseEnter={() => {
+                      router.prefetch(item.path);
+                    }}
+                  >
+                    <IconComponent className="size-3.5" />
+                    <span className="sr-only">{item.label}</span>
+                  </Button>
+                </Tooltip>
+              );
+            })}
+            {isSidebarOpen && filteredPolicyItems.length === 0 && filteredConnectorItems.length === 0 && (
+              <div className="w-full text-center py-2 text-xs text-default-400 italic">
+                No items found
               </div>
             )}
           </div>
