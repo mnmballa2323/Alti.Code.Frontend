@@ -1778,7 +1778,7 @@ export default function Sidebar() {
                       className={cn(
                         "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
                         isSidebarOpen
-                          ? "h-[30px] w-full rounded-md gap-1 px-1.5 text-[10px] font-semibold"
+                          ? "h-[30px] w-full rounded-md gap-0.5 px-0.5 text-[9px] font-bold tracking-tighter"
                           : "h-[30px] w-[30px] rounded-md",
                         item.isActive
                           ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
@@ -1789,7 +1789,7 @@ export default function Sidebar() {
                         router.prefetch(item.path);
                       }}
                     >
-                      <IconComponent className="size-3 flex-shrink-0" />
+                      <IconComponent className="size-2.5 flex-shrink-0" />
                       {isSidebarOpen && <span className="truncate">{item.label}</span>}
                     </Button>
                   </Tooltip>
@@ -1834,7 +1834,7 @@ export default function Sidebar() {
                       className={cn(
                         "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
                         isSidebarOpen
-                          ? "h-[30px] w-full rounded-md gap-1 px-1.5 text-[10px] font-semibold"
+                          ? "h-[30px] w-full rounded-md gap-0.5 px-0.5 text-[9px] font-bold tracking-tighter"
                           : "h-[30px] w-[30px] rounded-md",
                         item.isActive
                           ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
@@ -1845,7 +1845,7 @@ export default function Sidebar() {
                         router.prefetch(item.path);
                       }}
                     >
-                      <IconComponent className="size-3 flex-shrink-0" />
+                      <IconComponent className="size-2.5 flex-shrink-0" />
                       {isSidebarOpen && <span className="truncate">{item.label}</span>}
                     </Button>
                   </Tooltip>
