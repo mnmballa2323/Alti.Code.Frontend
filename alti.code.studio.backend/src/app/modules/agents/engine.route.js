@@ -1,13 +1,16 @@
+/**
+ * Copyright (c) 2026 Alti.Code.Studio
+ *
+ * Engine Routes
+ * Maps REST paths to EngineController.
+ */
+
 import express from 'express';
-import { engineController } from './engine.controller.js';
-import upload from '../../../shared/upload.js'; // Assuming a multer wrapper exists, or I will use a simple middleware
+import { EngineController } from './engine.controller.js';
 
 const router = express.Router();
 
-router.get('/health', engineController.healthCheck);
-router.post('/ingest', upload.single('file'), engineController.ingestFile);
-router.post('/graph', engineController.analyzeGraph);
-router.post('/rag/index', engineController.indexDocs);
-router.post('/rag/query', engineController.askOracle);
+router.get('/list', EngineController.listRegisteredEngines);
+router.post('/:engineId/run', EngineController.triggerEngineTask);
 
 export const engineRoutes = router;

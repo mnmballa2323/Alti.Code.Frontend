@@ -53,6 +53,7 @@ import {
   Compass,
   Terminal,
   Presentation,
+  Cpu,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -1748,6 +1749,46 @@ export default function Sidebar() {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Dedicated Workspace Engines Option Row */}
+        <div
+          className={cn(
+            "border-b border-default-200",
+            isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
+          )}
+        >
+          <Tooltip
+            showArrow
+            classNames={{
+              content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+            }}
+            closeDelay={0}
+            content="Workspace Engines"
+            delay={0}
+            placement={isSidebarOpen ? "top" : "right"}
+          >
+            <Button
+              className={cn(
+                "w-full transition-all duration-200 flex items-center gap-2.5 min-w-0 min-h-0",
+                isSidebarOpen
+                  ? "h-[36px] px-3 justify-start rounded-xl"
+                  : "h-[30px] w-[30px] p-0 justify-center rounded-md",
+                pathname === "/engines"
+                  ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
+                  : "bg-[#F4F4F6]/50 dark:bg-default-50/50 hover:bg-[#F4F4F6] dark:hover:bg-default-50 text-default-600 dark:text-gray-300 border border-transparent",
+              )}
+              onClick={() => router.push("/engines")}
+            >
+              <Cpu className={isSidebarOpen ? "size-4 text-primary shrink-0" : "size-3.5 shrink-0"} />
+              {isSidebarOpen && (
+                <>
+                  <span className="text-xs font-semibold flex-1 text-left">Engines</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">216</span>
+                </>
+              )}
+            </Button>
+          </Tooltip>
         </div>
 
         {/* Search bar and + icon on the same line below the main menu */}

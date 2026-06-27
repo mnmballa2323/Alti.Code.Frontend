@@ -114,6 +114,7 @@ try {
               if (file === 'diagnostics.route.js') basePath = '/diagnostics';
               if (file === 'metrics.route.js') basePath = '/metrics';
               if (file === 'agent.route.js') basePath = '/agents';
+              if (file === 'engine.route.js') basePath = '/engines';
               if (file === 'omni_polyglot.route.js')
                 basePath = '/agents/polyglot';
               if (file === 'openclaw.config.route.js') basePath = '/openclaw';
