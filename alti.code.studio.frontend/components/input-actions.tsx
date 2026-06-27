@@ -298,14 +298,16 @@ function PromptInputFullLineComponent({
         return "Select Model";
       case "claude-sonnet-4.6":
         return "Claude Sonnet 4.6";
-      case "claude-opus-4.6":
-        return "Claude Opus 4.6";
+      case "claude-opus-4.8":
+        return "Claude Opus 4.8";
+      case "claude-fable-5":
+        return "Claude Fable 5";
       case "gemini-3.5-flash":
         return "Gemini 3.5 Flash";
-      case "gemini-3.1-pro":
-        return "Gemini 3.1 Pro";
+      case "gemini-3.5-pro":
+        return "Gemini 3.5 Pro";
       default:
-        return "Claude Sonnet 4.6";
+        return "Gemini 3.5 Flash";
     }
   };
 
@@ -951,10 +953,10 @@ function PromptInputFullLineComponent({
                     </div>
                   </DropdownItem>
                   <DropdownItem
-                    key="gemini-3.1-pro"
+                    key="gemini-3.5-pro"
                     className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="Gemini 3.1 Pro"
-                    onPress={() => setDefaultModel("gemini-3.1-pro")}
+                    textValue="Gemini 3.5 Pro"
+                    onPress={() => setDefaultModel("gemini-3.5-pro")}
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
@@ -962,7 +964,7 @@ function PromptInputFullLineComponent({
                         icon="simple-icons:googlegemini"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
-                        Gemini 3.1 Pro
+                        Gemini 3.5 Pro
                       </span>
                     </div>
                   </DropdownItem>
