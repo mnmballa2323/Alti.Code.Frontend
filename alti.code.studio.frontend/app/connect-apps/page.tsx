@@ -60,6 +60,10 @@ const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
     command: "npx",
     args: ["-y", "@fission-ai/openspec@latest", "init"],
   },
+  mcp_website_cloner: {
+    command: "git",
+    args: ["clone", "https://github.com/JCodesMore/ai-website-cloner-template.git"],
+  },
   mcp_fetch: {
     command: "npx",
     args: ["-y", "@modelcontextprotocol/server-fetch"],

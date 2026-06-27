@@ -133,6 +133,8 @@ try {
                 basePath = '/oss-swarm/opencode';
               if (file === 'openSpecAgent.route.js')
                 basePath = '/oss-swarm/openspec';
+              if (file === 'aiWebsiteCloner.route.js')
+                basePath = '/website-cloner';
               if (file === 'browserUseAgent.route.js')
                 basePath = '/oss-swarm/browser-use';
               if (file === 'fazmAgent.route.js') basePath = '/oss-swarm/fazm';

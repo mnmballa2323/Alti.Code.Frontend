@@ -166,6 +166,12 @@ const initialNodes: Node[] = [
     data: { label: "OpenSpec SDD" },
     style: nodeStyles.sandbox,
   },
+  {
+    id: "website_cloner",
+    position: { x: 850, y: 485 },
+    data: { label: "Website Cloner" },
+    style: nodeStyles.sandbox,
+  },
 
   // Tier 5: Web & Tools
   {
@@ -277,6 +283,7 @@ const initialEdges: Edge[] = [
   { id: "e-lang-interpreter", source: "langgraph", target: "openinterpreter" },
   { id: "e-lang-opencode", source: "langgraph", target: "opencode", animated: true },
   { id: "e-lang-openspec", source: "langgraph", target: "openspec", animated: true },
+  { id: "e-lang-cloner", source: "langgraph", target: "website_cloner", animated: true },
 
   // Tool edges
   {

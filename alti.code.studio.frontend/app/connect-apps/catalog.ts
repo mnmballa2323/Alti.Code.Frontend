@@ -819,4 +819,9 @@ export const SAAS_MOCKS = [
     slug: "mcp_openspec",
     icon: "solar:document-bold-duotone",
   },
+  {
+    name: "AI Website Cloner",
+    slug: "mcp_website_cloner",
+    icon: "solar:window-frame-bold-duotone",
+  },
 ];

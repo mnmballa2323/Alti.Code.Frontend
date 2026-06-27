@@ -200,6 +200,12 @@ export const PRESETS = [
     args: ['-y', '@fission-ai/openspec@latest', 'init'],
     envKey: 'MCP_ENABLE_OPENSPEC',
   },
+  {
+    name: 'website-cloner',
+    command: 'git',
+    args: ['clone', 'https://github.com/JCodesMore/ai-website-cloner-template.git'],
+    envKey: 'MCP_ENABLE_WEBSITE_CLONER',
+  },
 
   // --- CLOUD & DEVOPS ---
   {
