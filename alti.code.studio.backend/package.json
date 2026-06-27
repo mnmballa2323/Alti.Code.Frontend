@@ -437,6 +437,7 @@
     "pkg-conf": "^5.0.0",
     "pkg-dir": "^8.0.0",
     "pkg-up": "^5.0.0",
+    "pptxgenjs": "^4.0.1",
     "prettier": "^3.8.1",
     "pretty-bytes": "^6.1.1",
     "pretty-ms": "^9.3.0",

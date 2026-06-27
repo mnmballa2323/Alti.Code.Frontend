@@ -51,6 +51,7 @@ import {
   Blocks,
   Compass,
   Terminal,
+  Presentation,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -61,8 +62,6 @@ import {
   removeRepository,
   removeDocument,
   setActiveWorkspace,
-  removeApi,
-  removeSdk,
 } from "@/store/systemSlice";
 import { RootState } from "@/store";
 import { useModalStore } from "@/store/useModalStore";
@@ -792,6 +791,7 @@ export default function Sidebar() {
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
     router.prefetch("/repositories");
+    router.prefetch("/slides");
     router.prefetch("/documents");
     router.prefetch("/connect-apps");
   }, [router]);
@@ -818,6 +818,8 @@ export default function Sidebar() {
         return "Functions";
       case "/repositories":
         return "Repositories";
+      case "/slides":
+        return "Slides";
       case "/connect-apps":
       case "/integrations":
         return "Integrations";
@@ -910,7 +912,15 @@ export default function Sidebar() {
         router.push("/repositories");
       },
     },
-
+    {
+      label: "Slides",
+      icon: Presentation,
+      path: "/slides",
+      isActive: pathname === "/slides",
+      onClick: () => {
+        router.push("/slides");
+      },
+    },
     {
       label: "Vault",
       icon: Lock,
@@ -1030,6 +1040,7 @@ export default function Sidebar() {
     router.prefetch("/guardrails");
     router.prefetch("/knowledge");
     router.prefetch("/repositories");
+    router.prefetch("/slides");
     router.prefetch("/vault");
     router.prefetch("/connect-apps");
     router.prefetch("/database");
