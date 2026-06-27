@@ -1628,66 +1628,127 @@ export default function Sidebar() {
           </Dropdown>
         </div>
 
-        {/* Search bar and + icon on the same line below the line */}
+        {/* Policy Parameters Row: Instructions - Guardrails - Knowledge & Connections Row: Apps - Database - Cloud */}
         <div
           className={cn(
-            "px-3 py-3 flex items-center gap-2 border-b border-default-200",
-            !isSidebarOpen && "hidden",
+            "border-b border-default-200",
+            isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
           )}
         >
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
-            <input
-              className="w-full bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
-              placeholder="Search..."
-              value={leftSidebarSearch}
-              onChange={(e) => setLeftSidebarSearch(e.target.value)}
-            />
-          </div>
-          <Tooltip
-            showArrow
-            classNames={{
-              content:
-                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-            }}
-            closeDelay={0}
-            content={getPlusTooltipContent()}
-            delay={0}
-            placement="top"
-          >
-            <Button
-              isIconOnly
-              className="bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
-              size="sm"
-              variant="flat"
-              onClick={() => {
-                if (pathname === "/vault") {
-                  window.dispatchEvent(new CustomEvent("open-vault-modal"));
-                } else if (pathname === "/documents") {
-                  window.dispatchEvent(new CustomEvent("open-document-modal"));
-                } else if (pathname === "/knowledge") {
-                  window.dispatchEvent(new CustomEvent("open-knowledge-modal"));
-                } else {
-                  dispatch(startNewChat());
-                  router.push("/new-chat");
-                }
-              }}
-              onMouseEnter={() => {
-                if (pathname === "/vault") {
-                  router.prefetch("/vault");
-                } else if (pathname === "/documents") {
-                  router.prefetch("/documents");
-                } else {
-                  router.prefetch("/new-chat");
-                }
-              }}
+          {/* Policy Parameters Row */}
+          <div>
+            <div
+              className={cn(
+                "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
+                isSidebarOpen
+                  ? "grid grid-cols-3 gap-1"
+                  : "flex flex-col items-center gap-2",
+              )}
             >
-              <Plus className="size-3.5" />
-            </Button>
-          </Tooltip>
+              {filteredPolicyItems.map((item) => {
+                const IconComponent = item.icon;
+
+                return (
+                  <Tooltip
+                    key={item.label}
+                    showArrow
+                    classNames={{
+                      content:
+                        "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                    }}
+                    closeDelay={0}
+                    content={item.label}
+                    delay={0}
+                    placement={isSidebarOpen ? "bottom" : "right"}
+                  >
+                    <Button
+                      isIconOnly={!isSidebarOpen}
+                      className={cn(
+                        "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
+                        isSidebarOpen
+                          ? "h-[30px] w-full rounded-md gap-0.5 px-0.5 text-[9px] font-bold tracking-tighter"
+                          : "h-[30px] w-[30px] rounded-md",
+                        item.isActive
+                          ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
+                          : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
+                      )}
+                      onClick={item.onClick}
+                      onMouseEnter={() => {
+                        router.prefetch(item.path);
+                      }}
+                    >
+                      <IconComponent className="size-2.5 flex-shrink-0" />
+                      {isSidebarOpen && <span className="truncate">{item.label}</span>}
+                    </Button>
+                  </Tooltip>
+                );
+              })}
+              {isSidebarOpen && filteredPolicyItems.length === 0 && (
+                <div className="col-span-3 text-center py-2 text-[10px] text-default-400 italic">
+                  No parameters found
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Connections Row */}
+          <div className={cn(isSidebarOpen ? "mt-2" : "mt-2 pt-2 border-t border-default-100/50")}>
+            <div
+              className={cn(
+                "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
+                isSidebarOpen
+                  ? "grid grid-cols-3 gap-1"
+                  : "flex flex-col items-center gap-2",
+              )}
+            >
+              {filteredConnectorItems.map((item) => {
+                const IconComponent = item.icon;
+
+                return (
+                  <Tooltip
+                    key={item.label}
+                    showArrow
+                    classNames={{
+                      content:
+                        "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                    }}
+                    closeDelay={0}
+                    content={item.label}
+                    delay={0}
+                    placement={isSidebarOpen ? "bottom" : "right"}
+                  >
+                    <Button
+                      isIconOnly={!isSidebarOpen}
+                      className={cn(
+                        "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
+                        isSidebarOpen
+                          ? "h-[30px] w-full rounded-md gap-0.5 px-0.5 text-[9px] font-bold tracking-tighter"
+                          : "h-[30px] w-[30px] rounded-md",
+                        item.isActive
+                          ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
+                          : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
+                      )}
+                      onClick={item.onClick}
+                      onMouseEnter={() => {
+                        router.prefetch(item.path);
+                      }}
+                    >
+                      <IconComponent className="size-2.5 flex-shrink-0" />
+                      {isSidebarOpen && <span className="truncate">{item.label}</span>}
+                    </Button>
+                  </Tooltip>
+                );
+              })}
+              {isSidebarOpen && filteredConnectorItems.length === 0 && (
+                <div className="col-span-3 text-center py-2 text-[10px] text-default-400 italic">
+                  No connections found
+                </div>
+              )}
+            </div>
+          </div>
         </div>
 
-        {/* 6 navigation icons toggle container */}
+        {/* 6 navigation icons toggle container (Main Menu) */}
         <div
           className={cn(
             "border-b border-default-200",
@@ -1746,118 +1807,65 @@ export default function Sidebar() {
               </div>
             )}
           </div>
+        </div>
 
-          {/* Policy Parameters Row: Instructions - Guardrails - Knowledge */}
-          <div className="mt-2">
-            <div
-              className={cn(
-                "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
-                isSidebarOpen
-                  ? "grid grid-cols-3 gap-1"
-                  : "flex flex-col items-center gap-2 mt-2 pt-2 border-t border-default-100/50",
-              )}
-            >
-              {filteredPolicyItems.map((item) => {
-                const IconComponent = item.icon;
-
-                return (
-                  <Tooltip
-                    key={item.label}
-                    showArrow
-                    classNames={{
-                      content:
-                        "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-                    }}
-                    closeDelay={0}
-                    content={item.label}
-                    delay={0}
-                    placement={isSidebarOpen ? "bottom" : "right"}
-                  >
-                    <Button
-                      isIconOnly={!isSidebarOpen}
-                      className={cn(
-                        "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
-                        isSidebarOpen
-                          ? "h-[30px] w-full rounded-md gap-0.5 px-0.5 text-[9px] font-bold tracking-tighter"
-                          : "h-[30px] w-[30px] rounded-md",
-                        item.isActive
-                          ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
-                          : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
-                      )}
-                      onClick={item.onClick}
-                      onMouseEnter={() => {
-                        router.prefetch(item.path);
-                      }}
-                    >
-                      <IconComponent className="size-2.5 flex-shrink-0" />
-                      {isSidebarOpen && <span className="truncate">{item.label}</span>}
-                    </Button>
-                  </Tooltip>
-                );
-              })}
-              {isSidebarOpen && filteredPolicyItems.length === 0 && (
-                <div className="col-span-3 text-center py-2 text-[10px] text-default-400 italic">
-                  No parameters found
-                </div>
-              )}
-            </div>
+        {/* Search bar and + icon on the same line below the main menu */}
+        <div
+          className={cn(
+            "px-3 py-3 flex items-center gap-2 border-b border-default-200",
+            !isSidebarOpen && "hidden",
+          )}
+        >
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
+            <input
+              className="w-full bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
+              placeholder="Search..."
+              value={leftSidebarSearch}
+              onChange={(e) => setLeftSidebarSearch(e.target.value)}
+            />
           </div>
-
-          {/* Connections Row: Apps - Database - Cloud */}
-          <div className="mt-2">
-            <div
-              className={cn(
-                "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
-                isSidebarOpen
-                  ? "grid grid-cols-3 gap-1"
-                  : "flex flex-col items-center gap-2 mt-2 pt-2 border-t border-default-100/50",
-              )}
+          <Tooltip
+            showArrow
+            classNames={{
+              content:
+                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+            }}
+            closeDelay={0}
+            content={getPlusTooltipContent()}
+            delay={0}
+            placement="top"
+          >
+            <Button
+              isIconOnly
+              className="bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
+              size="sm"
+              variant="flat"
+              onClick={() => {
+                if (pathname === "/vault") {
+                  window.dispatchEvent(new CustomEvent("open-vault-modal"));
+                } else if (pathname === "/documents") {
+                  window.dispatchEvent(new CustomEvent("open-document-modal"));
+                } else if (pathname === "/knowledge") {
+                  window.dispatchEvent(new CustomEvent("open-knowledge-modal"));
+                } else {
+                  dispatch(startNewChat());
+                  router.push("/new-chat");
+                }
+              }}
+              onMouseEnter={() => {
+                if (pathname === "/vault") {
+                  router.prefetch("/vault");
+                } else if (pathname === "/documents") {
+                  router.prefetch("/documents");
+                } else {
+                  router.prefetch("/new-chat");
+                }
+              }}
             >
-              {filteredConnectorItems.map((item) => {
-                const IconComponent = item.icon;
-
-                return (
-                  <Tooltip
-                    key={item.label}
-                    showArrow
-                    classNames={{
-                      content:
-                        "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-                    }}
-                    closeDelay={0}
-                    content={item.label}
-                    delay={0}
-                    placement={isSidebarOpen ? "bottom" : "right"}
-                  >
-                    <Button
-                      isIconOnly={!isSidebarOpen}
-                      className={cn(
-                        "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
-                        isSidebarOpen
-                          ? "h-[30px] w-full rounded-md gap-0.5 px-0.5 text-[9px] font-bold tracking-tighter"
-                          : "h-[30px] w-[30px] rounded-md",
-                        item.isActive
-                          ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
-                          : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
-                      )}
-                      onClick={item.onClick}
-                      onMouseEnter={() => {
-                        router.prefetch(item.path);
-                      }}
-                    >
-                      <IconComponent className="size-2.5 flex-shrink-0" />
-                      {isSidebarOpen && <span className="truncate">{item.label}</span>}
-                    </Button>
-                  </Tooltip>
-                );
-              })}
-              {isSidebarOpen && filteredConnectorItems.length === 0 && (
-                <div className="col-span-3 text-center py-2 text-[10px] text-default-400 italic">
-                  No connections found
-                </div>
-              )}
-            </div>
-          </div>
+              <Plus className="size-3.5" />
+            </Button>
+          </Tooltip>
         </div>
 
         {!isSidebarOpen && <div className="flex-1" />}
