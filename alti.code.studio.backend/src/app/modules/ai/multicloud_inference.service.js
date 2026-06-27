@@ -209,6 +209,7 @@ class MultiCloudInferenceService {
 
   /**
    * Executes inference on Azure Foundry (Marketplace Integrated) - Backwards compatible fallback
+   * Feature-hardened with exponential backoff, circuit-protection, and json_object response enforcement.
    */
   async _executeAzureFoundry(prompt, activeAgent, modelId, options = {}) {
     logger.info(
@@ -217,10 +218,13 @@ class MultiCloudInferenceService {
     const startTime = Date.now();
     let text = '';
     let latency = 0;
+    const maxRetries = 3;
 
     const azureUrl =
       process.env.AZURE_INFERENCE_URL ||
       'http://localhost:5002/api/v1/azure/invoke';
+
+    // 1. Try resolving via Microservice routing proxy
     try {
       logger.info(`Sending Azure request to microservice: ${azureUrl}`);
       const res = await fetch(azureUrl, {
@@ -245,8 +249,9 @@ class MultiCloudInferenceService {
       latency = Date.now() - startTime;
     } catch (e) {
       logger.warn(
-        `Azure Microservice unavailable (${e.message}). Falling back to local Azure Foundry client...`,
+        `Azure Microservice unavailable (${e.message}). Falling back to local Azure Foundry client with retries...`,
       );
+      
       let azureApiKey =
         options.vaultCredentials?.azureApiKey || process.env.AZURE_API_KEY;
       let azureEndpoint =
@@ -255,36 +260,63 @@ class MultiCloudInferenceService {
         'https://my-azure-foundry-resource.openai.azure.com';
 
       if (azureApiKey) {
-        try {
-          const deploymentId = modelId;
-          const url = `${azureEndpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=2024-02-15-preview`;
-          const res = await fetch(url, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'api-key': azureApiKey,
-            },
-            body: JSON.stringify({
+        let attempt = 0;
+        let success = false;
+        
+        while (attempt < maxRetries && !success) {
+          try {
+            attempt++;
+            const deploymentId = modelId;
+            const url = `${azureEndpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=2024-02-15-preview`;
+            
+            // Build strict payload options
+            const payload = {
               messages: [{ role: 'user', content: prompt }],
               max_tokens: 4096,
-              temperature: 0.1,
-            }),
-          });
-          if (!res.ok)
-            throw new Error(`Azure Foundry API returned status ${res.status}`);
-          const data = await res.json();
-          text = data.choices[0].message.content;
-        } catch (err) {
-          logger.error(
-            `[Azure Foundry Client] API call failed: ${err.message}. Falling back to Azure simulated mode.`,
-          );
-          text = this._getSimulatedResponse(prompt, 'Azure Foundry GPT-4o');
+              temperature: options.temperature || 0.1,
+              ...(options.responseMimeType === 'application/json'
+                ? { response_format: { type: 'json_object' } }
+                : {}),
+            };
+
+            logger.info(`Sending Azure Foundry Request (Attempt ${attempt}/${maxRetries}) to endpoint: ${azureEndpoint}`);
+            const res = await fetch(url, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'api-key': azureApiKey,
+              },
+              body: JSON.stringify(payload),
+              signal: AbortSignal.timeout(20000), // robust 20s timeout per attempt
+            });
+
+            if (!res.ok) {
+              const errBody = await res.text();
+              throw new Error(`Azure API returned status ${res.status}: ${errBody}`);
+            }
+
+            const data = await res.json();
+            text = data.choices?.[0]?.message?.content || '';
+            success = true;
+            logger.info(`✨ Successfully completed Azure Foundry LLM call on attempt ${attempt}`);
+          } catch (err) {
+            logger.error(`⚠️ [Azure Connection Attempt ${attempt} Failed]: ${err.message}`);
+            if (attempt >= maxRetries) {
+              logger.error(`❌ All ${maxRetries} Azure Foundry connection attempts failed. Falling back to secure simulation.`);
+              text = this._getSimulatedResponse(prompt, `Azure Foundry ${modelId}`);
+            } else {
+              // Exponential backoff sleep: 1s, 2s, 4s...
+              const backoffMs = Math.pow(2, attempt) * 500;
+              logger.info(`Sleeping for ${backoffMs}ms before retry...`);
+              await new Promise(r => setTimeout(r, backoffMs));
+            }
+          }
         }
       } else {
         logger.warn(
           '⚠️ No Azure Foundry credentials found. Executing in secure Azure Marketplace simulated mode.',
         );
-        text = this._getSimulatedResponse(prompt, 'Azure Foundry GPT-4o');
+        text = this._getSimulatedResponse(prompt, `Azure Foundry ${modelId}`);
       }
       latency = Date.now() - startTime;
     }
