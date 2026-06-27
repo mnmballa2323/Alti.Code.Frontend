@@ -139,6 +139,7 @@ try {
               if (file === 'dspyAgent.route.js') basePath = '/oss-swarm/dspy';
               if (file === 'engine.route.js') basePath = '/engine';
               if (file === 'integration.route.js') basePath = '/integrations';
+              if (file === 'userConnection.route.js') basePath = '/integrations';
               if (file === 'cloudRun.route.js') basePath = '/cloud-run';
               if (file === 'tts.route.js') basePath = '/tts';
               if (file === 'asset.route.js') basePath = '/assets';

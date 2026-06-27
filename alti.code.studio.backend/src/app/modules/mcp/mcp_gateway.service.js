@@ -293,14 +293,62 @@ You must strictly format your outputs to match the expected schema of the MCP to
     userToken = null,
   ) {
     const token = userToken || mcpTokenContext.getStore();
+    let finalToken = token;
+
     if (token) {
-      args.accessToken = token;
-      args.authToken = token;
-      args._oauthToken = token;
-      logger.info(
-        `🔑 MCP Gateway: Propagated user OAuth2 access token to tool execution context of server '${serverName}'.`,
-      );
+      try {
+        let userId = null;
+        if (token.startsWith('ey')) {
+          // It's a JWT access token, decode it
+          const { jwtHelpers } = await import('../../helpers/jwtHelpers.js');
+          const configObject = (await import('../../../../config/index.js')).default;
+          try {
+            const decoded = jwtHelpers.verifyToken(token, configObject.jwt.access_token);
+            userId = decoded.userId || decoded.id;
+          } catch (e) {
+            // fallback: try direct decode without verification if expired or custom signature
+            const jwt = (await import('jsonwebtoken')).default;
+            const decoded = jwt.decode(token);
+            if (decoded) userId = decoded.userId || decoded.id;
+          }
+        } else if (token.length === 24) {
+          // Direct userId
+          userId = token;
+        }
+
+        if (userId) {
+          const UserConnectionModel = (await import('../integrations/userConnection.model.js')).default;
+          const { encryptionService } = await import('../security/encryption.service.js');
+          
+          const connection = await UserConnectionModel.findOne({
+            userId,
+            provider: `mcp_${serverName.replace('_agent', '')}`,
+            status: 'connected',
+          });
+
+          if (connection && connection.credentials) {
+            const decryptedText = await encryptionService.decrypt(connection.credentials);
+            const creds = JSON.parse(decryptedText);
+            const decryptedToken = creds.access_token || creds.authed_user?.access_token;
+            if (decryptedToken) {
+              finalToken = decryptedToken;
+              logger.info(
+                `🔑 MCP Gateway: Successfully resolved user-scoped OAuth token for '${serverName}' from database.`,
+              );
+            }
+          }
+        }
+      } catch (err) {
+        logger.error(`⚠️ MCP Gateway: Failed to resolve user connection credentials: ${err.message}`);
+      }
     }
+
+    if (finalToken) {
+      args.accessToken = finalToken;
+      args.authToken = finalToken;
+      args._oauthToken = finalToken;
+    }
+
     const { mcpBridgeService } = await import('../agents/mcp.service.js');
     return await mcpBridgeService.executeTool(serverName, toolName, args);
   }
