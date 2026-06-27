@@ -71,6 +71,230 @@ import useFetchChatHistory from "@/hooks/useFetchChatHistory";
 import { startNewChat } from "@/store/messagesSlice";
 import { SAAS_MOCKS } from "@/app/connect-apps/catalog";
 
+const ENGINE_DISPLAY_NAMES: Record<string, string> = {
+  jules: "Digital Swarm Dispatch Assistant",
+  licenseGuardian: "Compliance Licensing Guard",
+  diplomat: "Multi-Agent Protocol Negotiator",
+  auditor: "Financial Activity Verifier",
+  architect: "Systems Structure Planner",
+  conductor: "Swarm Workflow Orchestrator",
+  devops: "Systems Infrastructure Automation",
+  zx: "Terminal Process Runner",
+  octopus: "Multi-Task Pipeline Coordinator",
+  specter: "Performance Footprint Monitor",
+  centurion: "Deployment Gatekeeper",
+  titan: "Compute Resource Allocator",
+  nomad: "Workload Scheduler",
+  audit: "Cryptographic Ledger Verifier",
+  git: "Repository Version Control",
+  refactor: "Codebase Structural Optimizer",
+  security: "Systems Vulnerability Inspector",
+  sandyaa: "Sandbox Environment Runner",
+  qa: "Automated Test Validator",
+  monitoring: "Live Health Telemetry",
+  iac: "Infrastructure Configuration Designer",
+  cicd: "Automated Delivery Pipeline",
+  notification: "Real-Time Alerts Dispatcher",
+  codeReview: "Architectural Code Evaluator",
+  documentation: "Project Document Generator",
+  debug: "Error Stack Tracer",
+  architecture: "Component Design Advisor",
+  database: "Query Tuning Manager",
+  migration: "Database Schema Updates",
+  performance: "Runtime Latency Analyzer",
+  cost: "Cloud Budget Estimator",
+  compliance: "Standard Security Checker",
+  accessibility: "Inclusive Design Validator",
+  dependency: "External Package Auditor",
+  e2eTest: "User Flow Validator",
+  release: "Deployment Package Builder",
+  overseer: "Swarm Activity Supervisor",
+  incident: "System Outage Responder",
+  analytics: "Swarm Health Reporter",
+  knowledge: "Enterprise Data Indexer",
+  seo: "Search Visibility Optimizer",
+  opencode: "Autonomous Code Generator",
+  openspec: "Specification Design Planner",
+  website_cloner: "Layout Template Generator",
+  translation: "Multi-Language Localizer",
+  onboarding: "Workspace Setup Assistant",
+  apiDesign: "Endpoint Architecture Planner",
+  gcp: "Cloud Compute Provider",
+  python: "Scripting Execution Engine",
+  typescript: "Typed Code Generator",
+  rust: "Systems Safety Validator",
+  golang: "Microservice Build Engine",
+  linter: "Static Rules Evaluator",
+  formatter: "Style Layout Adjuster",
+  "background-agents": "Worker Loop Dispatcher",
+  pentagi: "External Assessment Agent",
+  fossflow: "Open Source Auditor",
+  envValidator: "Secret Values Inspector",
+  secretScanner: "Secret Token Detector",
+  deadCode: "Redundant Logic Cleaner",
+  importSorter: "Import Ordering Formatter",
+  gcpSearch: "Cloud Documentation Indexer",
+  surfer: "Web Research Explorer",
+  siren: "Voice Telemetry Synthesizer",
+  vector: "Semantic Memory Manager",
+  engine: "Core Swarm Processor",
+  strategist: "Logical Step Planner",
+  critic: "Reasoning Quality Checker",
+  regex: "Pattern Matching Evaluator",
+  docker: "Isolated Container Manager",
+  kubernetes: "Container Swarm Orchestrator",
+  nginx: "Reverse Proxy Router",
+  graphql: "Query Endpoint Designer",
+  bash: "System Command Executor",
+  cron: "Scheduled Job Runner",
+  ffmpeg: "Multimedia Processing Tool",
+  jwt: "Token Authentication Builder",
+  threejs: "3D Render Engine",
+  stripe: "Financial Payment Gateway",
+  redis: "Memory Cache Manager",
+  supabase: "Database Platform Assistant",
+  chairman: "Swarm Governance Director",
+  ceo: "Strategic Decision Authority",
+  coo: "Operations Process Manager",
+  cfo: "Financial Budget Director",
+  cmo: "Marketing Campaign Manager",
+  cro: "Revenue Stream Optimizer",
+  lawyer: "Contract Agreement Reviewer",
+  accountant: "Ledger Balance Auditor",
+  pm: "Product Lifecycle Planner",
+  scrum: "Scrum Cycle Organizer",
+  designer: "Visual Interface Planner",
+  frontend: "Visual Component Builder",
+  backend: "Server Side Developer",
+  dba: "Database Administrator",
+  ai: "Model Tuning Advisor",
+  writer: "Professional Content Copywriter",
+  support: "Customer Service Agent",
+  cto: "Technology Systems Director",
+  ciso: "Information Security Officer",
+  prisma: "Database Integration Mapper",
+  webrtc: "Live Connection Streamer",
+  solidity: "Smart Contract Developer",
+  svelte: "Client Side Compiler",
+  vue: "Reactive Interface Builder",
+  storybook: "Design System Reviewer",
+  opentelemetry: "Distributed Telemetry Collector",
+  ansible: "Infrastructure Provisioning Manager",
+  terraform: "Cloud Resource Configurator",
+  langchain: "Model Swarm Builder",
+  mlops: "Model Pipeline Manager",
+  prompteng: "Prompt Design Specialist",
+  reactnative: "Multi-Platform App Developer",
+  flutter: "Client Layout Compiler",
+  pwa: "Desktop Web Builder",
+  vitest: "Fast Test Runner",
+  playwright: "Browser Automation Tester",
+  sql: "Database Query Generator",
+  elasticsearch: "Fast Search Indexer",
+  kafka: "Real-Time Event Streamer",
+  pentest: "Security Penetration Tester",
+  githubactions: "Workflow Pipeline Automator",
+  figma: "Graphic Layout Importer",
+  wasm: "Assembly Compiler Runner",
+  deno: "Safe Runtime Processor",
+  mongodb: "Document Storage Database",
+  grpc: "High-Speed API Connector",
+  tailwind: "Style Sheet Utility Compiler",
+  i18n: "Language Translation Manager",
+  websocket: "Real-Time Socket Connection",
+  cloudflare: "Edge Protection Network",
+  vercel: "Front-End Deployment Platform",
+  netlify: "Static Site Deployer",
+  digitalocean: "Virtual Server Cloud",
+  oracle: "Database Platform Manager",
+  ibmcloud: "Enterprise Cloud Provider",
+  alibaba: "International Cloud Provider",
+  hetzner: "Dedicated Server Cloud",
+  flyio: "Global Microservice Deployer",
+  railway: "Dynamic Deploy Hosting",
+  render: "Fast App Deployer",
+  linode: "Cloud Host Server",
+  vultr: "High-Speed Virtual Servers",
+  scaleway: "European Cloud Server",
+  ovhcloud: "Dedicated Cloud Hosting",
+  neon: "Serverless Database Provider",
+  fastly: "Edge Delivery Cache",
+  backblaze: "Secure Object Storage",
+  heroku: "Managed Application Host",
+  planetscale: "Scalable Database Platform",
+  upcloud: "Premium Virtual Cloud",
+  exoscale: "Swiss Cloud Server",
+  civo: "Managed Kubernetes Cloud",
+  coreweave: "High-Performance Compute Cloud",
+  lambdalabs: "Model Training Cloud",
+  runpod: "Model Container Cloud",
+  paperspace: "Machine Learning Workspace",
+  tencent: "Asian Cloud Platform",
+  huawei: "Enterprise Cloud Service",
+  baidu: "AI Search Cloud",
+  yandex: "Search Infrastructure Cloud",
+  equinix: "Bare Metal Cloud",
+  cloudinary: "Media Asset Optimizer",
+  snowflake: "Data Warehouse Analyzer",
+  databricks: "Data Lakehouse Platform",
+  denodeploy: "Global Edge Runner",
+  turso: "Edge SQLite Database",
+  akamai: "Global Content Guard",
+  supabasecloud: "Managed Database Cloud",
+  apprunner: "Containerized Application Host",
+  contextEngineering: "Context Optimizer",
+  deepResearch: "Web Neural Searcher",
+  pageIndexRAG: "Local Documentation Searcher",
+  nanoCodeAgent: "Micro Task SWE Agent",
+  product_manager: "Product Requirement Planner",
+  system_architect: "Systems Architecture Planner",
+  gemini_coder: "Swarm Code Builder",
+  cloud_run_deployer: "Serverless Container Deployer",
+  stackdriver_analyst: "Cloud Log Telemetry Monitor",
+  "videoGenerationAgent.name": "Video Clip Animator",
+  "spatial3DNerfAgent.name": "3D Scene Reconstruction",
+  "neuralBciParserAgent.name": "Brain Signal Decoder",
+  "hapticKinematicsAgent.name": "Robotics Motion Controller",
+  "omniAudioSynthesisAgent.name": "Voice Waveform Generator",
+  "agentSAgent.name": "OS Action Agent",
+  "browserUseAgent.name": "Web Automation Swarm",
+  "fazmAgent.name": "Low-Code Logic Engine",
+  "figmaExporterAgent.name": "Visual Design Asset Converter",
+  "researchPaperScraperAgent.name": "Academic Document Harvester",
+  "voiceDesktopLauncherAgent.name": "Voice Command System Controller",
+  "spreadsheetFormatterAgent.name": "Automated Data Sheet Organizer",
+  "socialMediaMonitorAgent.name": "Social Sentiment Analyst",
+  "voiceMeetingMinuterAgent.name": "Meeting Transcript Summarizer",
+  "desktopFileOrganizerAgent.name": "System Directory Cleaner",
+  "webDependencyAuditorAgent.name": "Third-Party Package Inspector",
+  "voiceEmailDictatorAgent.name": "Email Draft Dictation Assistant",
+  "systemPreferencesTunerAgent.name": "OS Environment Tuner",
+  "webPriceTrackerAgent.name": "Online Catalog Monitor",
+  "voiceCalendarSchedulerAgent.name": "Voice Meeting Planner",
+  "mulesoftAnypointAgent.name": "Enterprise Integration Connector",
+  "servicenowItsmAgent.name": "IT Workflows Automator",
+  "soxItgcComplianceAgent.name": "Security Control Auditor",
+  "as400RpgleModernizerAgent.name": "Legacy Code Modernizer",
+  "paloAltoPanosAgent.name": "Network Firewall Rule Administrator",
+  "dynamics365ErpAgent.name": "Business Resource Planner",
+  "databricksSparkAgent.name": "Large Scale Data Processor",
+  "uipathRpaBotAgent.name": "Desktop Action Bot",
+  "intuneMdmPolicyAgent.name": "Device Policy Administrator",
+  "peoplesoftHcmBridgeAgent.name": "Corporate Directory Sync Connector",
+  "cicero_law_enforcement": "Municipal Policy Legal Verifier",
+};
+
+const getEngineDisplayName = (name: string): string => {
+  return ENGINE_DISPLAY_NAMES[name] || name.replace(/_|-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+};
+
+const FALLBACK_ENGINES_SIDEBAR = [
+  { name: "opencode", description: "Autonomous SWE Coding Agent", capabilities: ["opencode"] },
+  { name: "openspec", description: "Spec-Driven Development Planner", capabilities: ["openspec"] },
+  { name: "website_cloner", description: "AI Website Cloner", capabilities: ["website-cloning"] },
+  { name: "auditor", description: "Cloud FinOps Auditor", capabilities: ["cost-audit"] },
+];
+
 type AppIntegration = {
   id: string;
   name: string;
@@ -1029,6 +1253,45 @@ export default function Sidebar() {
     }
   }, [agentIdParam, agentNameParam]);
 
+  // States and fetchers for engines
+  const [sidebarEngines, setSidebarEngines] = useState<any[]>([]);
+  const [selectedEngineName, setSelectedEngineName] = useState<string | null>(null);
+  const [loadingEngines, setLoadingEngines] = useState(false);
+
+  useEffect(() => {
+    if (pathname !== "/engines") return;
+    
+    const loadEngines = async () => {
+      setLoadingEngines(true);
+      try {
+        const res = await axios.get(`${API_URL}/engines/list`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (res.data && res.data.success) {
+          setSidebarEngines(res.data.data);
+        } else {
+          setSidebarEngines(FALLBACK_ENGINES_SIDEBAR);
+        }
+      } catch (err) {
+        setSidebarEngines(FALLBACK_ENGINES_SIDEBAR);
+      } finally {
+        setLoadingEngines(false);
+      }
+    };
+    
+    loadEngines();
+  }, [pathname, token]);
+
+  useEffect(() => {
+    const handleSelect = (e: any) => {
+      if (e.detail) {
+        setSelectedEngineName(e.detail.name);
+      }
+    };
+    window.addEventListener("select-engine", handleSelect);
+    return () => window.removeEventListener("select-engine", handleSelect);
+  }, []);
+
   // States and dynamic handlers for integrations / connect-apps catalog
   const [apps, setApps] = useState<AppIntegration[]>([]);
   const [loadingApps, setLoadingApps] = useState(true);
@@ -1862,7 +2125,92 @@ export default function Sidebar() {
             hideScrollBar
             className="flex-1 px-2 mt-1 min-h-0 w-full scrollbar-hide overflow-y-auto"
           >
-            {pathname === "/connect-apps" ? (
+            {pathname === "/engines" ? (
+              <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
+                {loadingEngines ? (
+                  <div className="flex flex-col items-center justify-center py-20 gap-3">
+                    <Icon
+                      className="text-2xl text-primary animate-spin"
+                      icon="line-md:loading-twotone-loop"
+                    />
+                    <span className="text-xs text-default-400">
+                      Loading engines...
+                    </span>
+                  </div>
+                ) : (
+                  (() => {
+                    const filtered = sidebarEngines.filter(
+                      (e) =>
+                        getEngineDisplayName(e.name)
+                          .toLowerCase()
+                          .includes(leftSidebarSearch.toLowerCase()) ||
+                        e.description
+                          .toLowerCase()
+                          .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (filtered.length === 0) {
+                      return (
+                        <span className="text-xs text-default-400 text-center py-12">
+                          No engines found
+                        </span>
+                      );
+                    }
+
+                    return filtered.map((e) => {
+                      const isActive = selectedEngineName === e.name;
+                      const displayName = getEngineDisplayName(e.name);
+
+                      return (
+                        <button
+                          key={e.name}
+                          className={cn(
+                            "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
+                            isActive
+                              ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
+                              : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300",
+                          )}
+                          onClick={() => {
+                            setSelectedEngineName(e.name);
+                            window.dispatchEvent(
+                              new CustomEvent("select-engine", {
+                                detail: e,
+                              }),
+                            );
+                          }}
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div
+                              className={cn(
+                                "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50",
+                                isActive
+                                  ? "bg-white dark:bg-black"
+                                  : "bg-[#f4f4f5] dark:bg-[#27272a]",
+                              )}
+                            >
+                              <Cpu className="size-4 text-default-500" />
+                            </div>
+                            <span className="text-xs text-left truncate pr-2">
+                              {displayName}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <Icon
+                              className={cn(
+                                "text-xs text-default-400 transition-transform",
+                                isActive ? "translate-x-0.5 text-primary" : "",
+                              )}
+                              icon="solar:alt-arrow-right-linear"
+                            />
+                          </div>
+                        </button>
+                      );
+                    });
+                  })()
+                )}
+              </div>
+            ) : pathname === "/connect-apps" ? (
               <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
                 {loadingApps ? (
                   <div className="flex flex-col items-center justify-center py-20 gap-3">
