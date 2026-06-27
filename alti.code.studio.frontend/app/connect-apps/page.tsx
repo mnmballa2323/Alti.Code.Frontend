@@ -52,6 +52,10 @@ const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
     command: "npx",
     args: ["-y", "open-seo"],
   },
+  mcp_opencode: {
+    command: "opencode",
+    args: ["serve", "--port", "4096", "--hostname", "127.0.0.1"],
+  },
   mcp_fetch: {
     command: "npx",
     args: ["-y", "@modelcontextprotocol/server-fetch"],

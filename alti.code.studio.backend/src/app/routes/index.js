@@ -129,6 +129,8 @@ try {
               if (file === 'oss.agents.route.js') basePath = '/oss-agents';
               if (file === 'openHandsAgent.route.js')
                 basePath = '/oss-swarm/openhands';
+              if (file === 'openCodeAgent.route.js')
+                basePath = '/oss-swarm/opencode';
               if (file === 'browserUseAgent.route.js')
                 basePath = '/oss-swarm/browser-use';
               if (file === 'fazmAgent.route.js') basePath = '/oss-swarm/fazm';

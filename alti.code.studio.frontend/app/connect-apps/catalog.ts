@@ -809,4 +809,9 @@ export const SAAS_MOCKS = [
     slug: "mcp_open_seo",
     icon: "solar:graph-bold-duotone",
   },
+  {
+    name: "OpenCode",
+    slug: "mcp_opencode",
+    icon: "solar:code-square-bold-duotone",
+  },
 ];

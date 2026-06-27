@@ -188,6 +188,12 @@ export const PRESETS = [
     args: ['-y', 'open-seo'],
     envKey: 'MCP_ENABLE_OPEN_SEO',
   },
+  {
+    name: 'opencode',
+    command: 'opencode',
+    args: ['serve', '--port', '4096', '--hostname', '127.0.0.1'],
+    envKey: 'MCP_ENABLE_OPENCODE',
+  },
 
   // --- CLOUD & DEVOPS ---
   {
