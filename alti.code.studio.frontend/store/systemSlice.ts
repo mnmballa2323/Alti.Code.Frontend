@@ -18,26 +18,6 @@ export interface RepositoryRule {
   isActive: boolean;
 }
 
-export interface ApiRule {
-  id: string;
-  url: string;
-  name: string;
-  licenseType: string;
-  customInstructions: string;
-  guardrails: string;
-  isActive: boolean;
-}
-
-export interface SdkRule {
-  id: string;
-  url: string;
-  name: string;
-  licenseType: string;
-  customInstructions: string;
-  guardrails: string;
-  isActive: boolean;
-}
-
 export interface DocumentRule {
   id: string;
   url: string;
@@ -63,8 +43,6 @@ interface SystemState {
   connectedClouds: string[];
   repositories: RepositoryRule[];
   documents: DocumentRule[];
-  apis: ApiRule[];
-  sdks: SdkRule[];
   activeWorkspace: string | null;
 }
 
@@ -93,8 +71,6 @@ const initialState: SystemState = {
   connectedClouds: [],
   repositories: [],
   documents: [],
-  apis: [],
-  sdks: [],
   activeWorkspace: "alti.code.studio",
 };
 
@@ -167,52 +143,6 @@ export const systemSlice = createSlice({
         repo.isActive = !repo.isActive;
       }
     },
-    addApi: (state, action: PayloadAction<Omit<ApiRule, "id">>) => {
-      state.apis.push({
-        ...action.payload,
-        id: Math.random().toString(36).substr(2, 9),
-      });
-    },
-    updateApi: (state, action: PayloadAction<ApiRule>) => {
-      const index = state.apis.findIndex((r) => r.id === action.payload.id);
-
-      if (index !== -1) {
-        state.apis[index] = action.payload;
-      }
-    },
-    removeApi: (state, action: PayloadAction<string>) => {
-      state.apis = state.apis.filter((r) => r.id !== action.payload);
-    },
-    toggleApi: (state, action: PayloadAction<string>) => {
-      const api = state.apis.find((r) => r.id === action.payload);
-
-      if (api) {
-        api.isActive = !api.isActive;
-      }
-    },
-    addSdk: (state, action: PayloadAction<Omit<SdkRule, "id">>) => {
-      state.sdks.push({
-        ...action.payload,
-        id: Math.random().toString(36).substr(2, 9),
-      });
-    },
-    updateSdk: (state, action: PayloadAction<SdkRule>) => {
-      const index = state.sdks.findIndex((r) => r.id === action.payload.id);
-
-      if (index !== -1) {
-        state.sdks[index] = action.payload;
-      }
-    },
-    removeSdk: (state, action: PayloadAction<string>) => {
-      state.sdks = state.sdks.filter((r) => r.id !== action.payload);
-    },
-    toggleSdk: (state, action: PayloadAction<string>) => {
-      const sdk = state.sdks.find((r) => r.id === action.payload);
-
-      if (sdk) {
-        sdk.isActive = !sdk.isActive;
-      }
-    },
     addDocument: (state, action: PayloadAction<Omit<DocumentRule, "id">>) => {
       state.documents.push({
         ...action.payload,
@@ -258,14 +188,6 @@ export const {
   updateRepository,
   removeRepository,
   toggleRepository,
-  addApi,
-  updateApi,
-  removeApi,
-  toggleApi,
-  addSdk,
-  updateSdk,
-  removeSdk,
-  toggleSdk,
   addDocument,
   updateDocument,
   removeDocument,
