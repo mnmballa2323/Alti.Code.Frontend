@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { Plus, Server } from "lucide-react";
 import { Input, Chip, cn } from "@heroui/react";
+import { useSearchParams } from "next/navigation";
 
 import { SAAS_MOCKS } from "./catalog";
 
@@ -390,7 +391,7 @@ const AppIcon = ({
   );
 };
 
-export default function ConnectAppsPage() {
+function ConnectAppsContent() {
   const { data: session } = useSession();
   const accessToken = session?.user?.accessToken;
 
@@ -398,7 +399,31 @@ export default function ConnectAppsPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
 
+  const searchParams = useSearchParams();
+
   // States
+  const [notification, setNotification] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+
+  useEffect(() => {
+    const status = searchParams.get("status");
+    const provider = searchParams.get("provider");
+    const msg = searchParams.get("message");
+
+    if (status === "success") {
+      setNotification({
+        type: "success",
+        message: `Successfully connected to ${provider ? provider.toUpperCase() : "integration"}!`,
+      });
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (status === "error") {
+      setNotification({
+        type: "danger",
+        message: msg || "Failed to authenticate connection. Please try again.",
+      });
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, [searchParams]);
+
   const [activeTab, setActiveTab] = useState("all");
   const [selectedApp, setSelectedApp] = useState<AppIntegration | null>(null);
   const [appTriggers, setAppTriggers] = useState<any[]>([]);
@@ -979,6 +1004,21 @@ export default function ConnectAppsPage() {
         <div className="flex flex-1 w-full overflow-hidden bg-white dark:bg-[#0A0A0A]">
           {/* Right Column: Center Presentation Area */}
           <div className="flex-1 bg-white dark:bg-[#0A0A0A] flex flex-col h-full overflow-y-auto relative">
+            {notification && (
+              <div className="p-6 pb-0 w-full max-w-xl mx-auto shrink-0">
+                <AlertWrapper className="w-full" variant={notification.type}>
+                  <div className="flex items-center justify-between w-full">
+                    <div className="flex items-center gap-2 text-xs">
+                      <Icon className="text-base" icon={notification.type === "success" ? "solar:check-circle-bold" : "solar:danger-triangle-bold"} />
+                      <span>{notification.message}</span>
+                    </div>
+                    <button onClick={() => setNotification(null)} className="hover:opacity-75 transition-opacity" type="button">
+                      <Icon icon="solar:close-circle-bold" className="text-lg" />
+                    </button>
+                  </div>
+                </AlertWrapper>
+              </div>
+            )}
             <AnimatePresence mode="wait">
               {!selectedApp ? (
                 /* Idle Hub View */
@@ -1504,5 +1544,17 @@ export default function ConnectAppsPage() {
         </div>
       </div>
     </ChatBotLayout>
+  );
+}
+
+export default function ConnectAppsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex-1 flex items-center justify-center bg-white dark:bg-[#0A0A0A] h-screen">
+        <Icon className="text-3xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
+      </div>
+    }>
+      <ConnectAppsContent />
+    </Suspense>
   );
 }
