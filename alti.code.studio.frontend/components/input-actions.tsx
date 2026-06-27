@@ -296,14 +296,16 @@ function PromptInputFullLineComponent({
     switch (modelKey) {
       case "":
         return "Select Model";
-      case "gpt-5.5":
-        return "GPT-5.5";
       case "claude-sonnet-4.6":
         return "Claude Sonnet 4.6";
       case "claude-opus-4.6":
         return "Claude Opus 4.6";
+      case "gemini-3.5-flash":
+        return "Gemini 3.5 Flash";
+      case "gemini-3.1-pro":
+        return "Gemini 3.1 Pro";
       default:
-        return "GPT-5.5";
+        return "Claude Sonnet 4.6";
     }
   };
 
@@ -926,54 +928,84 @@ function PromptInputFullLineComponent({
                 className="p-1 overflow-hidden"
                 variant="flat"
               >
-                <DropdownItem
-                  key="gpt-5.5"
-                  className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="GPT-5.5"
-                  onPress={() => setDefaultModel("gpt-5.5")}
+                <DropdownSection
+                  title="Google Gemini"
+                  classNames={{
+                    heading: "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
+                  }}
                 >
-                  <div className="flex items-center gap-3 text-left">
-                    <Icon
-                      className="size-4 text-black dark:text-white shrink-0"
-                      icon="simple-icons:openai"
-                    />
-                    <span className="text-xs font-medium text-foreground text-[12px]">
-                      GPT-5.5
-                    </span>
-                  </div>
-                </DropdownItem>
-                <DropdownItem
-                  key="claude-sonnet-4.6"
-                  className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Claude Sonnet 4.6"
-                  onPress={() => setDefaultModel("claude-sonnet-4.6")}
+                  <DropdownItem
+                    key="gemini-3.5-flash"
+                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Gemini 3.5 Flash"
+                    onPress={() => setDefaultModel("gemini-3.5-flash")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-[#1A73E8] shrink-0"
+                        icon="simple-icons:googlegemini"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Gemini 3.5 Flash
+                      </span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gemini-3.1-pro"
+                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Gemini 3.1 Pro"
+                    onPress={() => setDefaultModel("gemini-3.1-pro")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-[#1A73E8] shrink-0"
+                        icon="simple-icons:googlegemini"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Gemini 3.1 Pro
+                      </span>
+                    </div>
+                  </DropdownItem>
+                </DropdownSection>
+                <DropdownSection
+                  title="Anthropic Claude"
+                  classNames={{
+                    heading: "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
+                  }}
                 >
-                  <div className="flex items-center gap-3 text-left">
-                    <Icon
-                      className="size-4 text-[#CC9980] shrink-0"
-                      icon="simple-icons:claude"
-                    />
-                    <span className="text-xs font-medium text-foreground text-[12px]">
-                      Claude Sonnet 4.6
-                    </span>
-                  </div>
-                </DropdownItem>
-                <DropdownItem
-                  key="claude-opus-4.6"
-                  className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Claude Opus 4.6"
-                  onPress={() => setDefaultModel("claude-opus-4.6")}
-                >
-                  <div className="flex items-center gap-3 text-left">
-                    <Icon
-                      className="size-4 text-[#CC9980] shrink-0"
-                      icon="simple-icons:claude"
-                    />
-                    <span className="text-xs font-medium text-foreground text-[12px]">
-                      Claude Opus 4.6
-                    </span>
-                  </div>
-                </DropdownItem>
+                  <DropdownItem
+                    key="claude-sonnet-4.6"
+                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Claude Sonnet 4.6"
+                    onPress={() => setDefaultModel("claude-sonnet-4.6")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-[#CC9980] shrink-0"
+                        icon="simple-icons:claude"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Claude Sonnet 4.6
+                      </span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="claude-opus-4.6"
+                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Claude Opus 4.6"
+                    onPress={() => setDefaultModel("claude-opus-4.6")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-[#CC9980] shrink-0"
+                        icon="simple-icons:claude"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Claude Opus 4.6
+                      </span>
+                    </div>
+                  </DropdownItem>
+                </DropdownSection>
               </DropdownMenu>
             </Dropdown>
           )}

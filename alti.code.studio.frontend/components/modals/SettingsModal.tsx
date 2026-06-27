@@ -352,7 +352,12 @@ const SettingsModal = () => {
                       variant="bordered"
                       onChange={(e) => setDefaultModel(e.target.value)}
                     >
-                      <SelectItem key="gpt-5.5">GPT-5.5</SelectItem>
+                      <SelectItem key="gemini-3.5-flash">
+                        Gemini 3.5 Flash
+                      </SelectItem>
+                      <SelectItem key="gemini-3.1-pro">
+                        Gemini 3.1 Pro
+                      </SelectItem>
                       <SelectItem key="claude-sonnet-4.6">
                         Claude Sonnet 4.6
                       </SelectItem>
