@@ -26,6 +26,23 @@ Your core expertise revolves around rendering websites discoverable, indexable, 
 3. Prioritize Core Web Vitals. Specifically call out Largest Contentful Paint (LCP) and Cumulative Layout Shift (CLS) optimizations (e.g., explicit width/height on images).
 4. For Next.js/React applications: Recommend Server-Side Rendering (SSR) or Static Site Generation (SSG) to ensure search crawler indexability over pure Client-Side logic.
 
+# REAL-TIME SEO TOOLS (OpenSEO)
+If the user asks for real-time search engine optimization data (like live Google keyword volumes, competitor backlinks, search rankings, or audit metrics), you must use the OpenSEO MCP server tools.
+To invoke an OpenSEO tool, output exactly:
+\`\`\`json
+{
+  "__MCP_CALL__": {
+    "tool": "tool_name",
+    "params": { ... }
+  }
+}
+\`\`\`
+The tools available on the OpenSEO MCP server are:
+- "keyword_ideas": params: { "keyword": "target term string" } - Generate keyword opportunities and metrics.
+- "serp_analysis": params: { "keyword": "string", "location": "optional country string" } - Inspect Google search engine results.
+- "competitor_insights": params: { "domain": "domain string" } - Analyze domain backlinks and ranking stats.
+- "search_console_performance": params: { "site_url": "url string" } - Analyze striking-distance ranking queries.
+
 # BEHAVIOR
 When auditing code or providing blueprints, provide pure HTML snippets or Next.js \`generateMetadata\` configurations. Do not provide generic marketing advice; provide concrete, programmatic SEO implementations.
 `;
@@ -43,16 +60,62 @@ When auditing code or providing blueprints, provide pure HTML snippets or Next.j
       .map(c => `[Context File: ${c.path}]\n${c.content}\n`)
       .join('\n');
 
-    let finalPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
+    let chatHistory = [];
+    let iterations = 0;
+    const maxIterations = 3;
 
-    try {
-      const response = await GeminiAiService.generateContent(finalPrompt);
+    let currentPrompt = `${this.preamble}\n\n=== PROJECT CONTEXT ===\n${combinedContext}\n\n=== USER REQUEST ===\n${prompt}`;
+
+    while (iterations < maxIterations) {
+      iterations++;
+      logger.info(`📈 SEO Expert: Invoking Gemini iteration ${iterations}/${maxIterations}...`);
+      
+      const response = await GeminiAiService.generateContent(
+        chatHistory.length > 0 
+          ? `${currentPrompt}\n\n=== TOOL EXECUTION HISTORY ===\n${chatHistory.join('\n')}\n\nContinue execution.`
+          : currentPrompt
+      );
+
+      // Check if response contains a tool call block
+      const jsonMatch = response.match(/\{[\s\S]*"__MCP_CALL__"[\s\S]*\}/);
+      if (jsonMatch) {
+        try {
+          const parsed = JSON.parse(jsonMatch[0]);
+          const callData = parsed.__MCP_CALL__;
+          if (callData && callData.tool) {
+            logger.info(`🔌 SEO Expert: Intercepted tool call to "${callData.tool}"`);
+            
+            // Execute the tool dynamically via the MCP Gateway
+            const { mcpGateway } = await import('../mcp/mcp_gateway.service.js');
+            
+            let toolResult;
+            try {
+              toolResult = await mcpGateway.executeToolWithContext(
+                'open_seo',
+                callData.tool,
+                callData.params || {}
+              );
+            } catch (err) {
+              toolResult = { error: `Failed to execute tool ${callData.tool}: ${err.message}` };
+            }
+
+            logger.info(`🔌 SEO Expert: Tool execution completed successfully.`);
+            chatHistory.push(`Tool Call: ${JSON.stringify(callData)}\nResult: ${JSON.stringify(toolResult)}`);
+            continue; // Go to next iteration to let Gemini consume the tool output
+          }
+        } catch (parseErr) {
+          logger.warn(`⚠️ SEO Expert: Failed to parse tool call JSON block: ${parseErr.message}`);
+        }
+      }
+
+      // No tool calls requested, return the final text
       return response;
-    } catch (e) {
-      logger.error(`❌ SEO Expert: Consultation failed.`, e);
-      throw new Error(`SEO Synthesis Failed: ${e.message}`);
     }
+
+    // Fallback if max iterations exceeded
+    return `Max execution loop limit reached. Try narrowing down the request.`;
   }
 }
 
 export const seoAgent = new SeoAgent();
+export default seoAgent;
