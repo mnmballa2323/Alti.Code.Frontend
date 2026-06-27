@@ -54,6 +54,7 @@ import {
 import { useSession } from "next-auth/react";
 
 import MyAccountDropdown from "./MyAccountDropdown";
+import NotificationBell from "./NotificationBell";
 
 import {
   removeRepository,
@@ -2941,8 +2942,11 @@ export default function Sidebar() {
               </Button>
             </div>
           ) : (
-            <div className={cn("flex w-full", !isSidebarOpen && "hidden")}>
-              <MyAccountDropdown />
+            <div className={cn("flex w-full items-center gap-2", !isSidebarOpen && "hidden")}>
+              <div className="flex-1">
+                <MyAccountDropdown />
+              </div>
+              <NotificationBell />
             </div>
           )}
         </div>

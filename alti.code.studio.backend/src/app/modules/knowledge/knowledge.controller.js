@@ -8,13 +8,23 @@ import httpStatus from 'http-status';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { KnowledgeService } from './knowledge.service.js';
+import { NotificationService } from '../notification/notification.service.js';
 
 const createFolder = catchAsync(async (req, res) => {
   const { name } = req.body;
   const userId = req.user?._id || req.user?.id;
   const tenantId = req.user?.tenantId;
-
   const folder = await KnowledgeService.createFolder(name, userId, tenantId);
+
+  // Send real-time notification for folder creation
+  if (userId) {
+    await NotificationService.createNotification({
+      userId,
+      title: 'New Folder Created',
+      message: `Folder "${name}" was successfully created in your Knowledge Catalog.`,
+      type: 'info',
+    });
+  }
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
@@ -63,6 +73,18 @@ const uploadFile = catchAsync(async (req, res) => {
   }
 
   const result = await KnowledgeService.ingestUploadedFile(file, folderId);
+  const userId = req.user?._id || req.user?.id;
+
+  // Send real-time notification for successful file parsing & ingestion
+  if (userId) {
+    await NotificationService.createNotification({
+      userId,
+      title: 'Document Ingestion Complete',
+      message: `"${file.originalname}" has been successfully parsed and indexed into your RAG memory.`,
+      type: 'success',
+      actionUrl: `/knowledge?folderId=${folderId}`,
+    });
+  }
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

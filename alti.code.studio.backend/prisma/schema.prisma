@@ -135,6 +135,7 @@ model User {
   subscriptions Subscription[]
   forums        Forum[]
   vault         Vault?
+  notifications Notification[]
 }
 
 // -----------------------------------------------------------------
@@ -516,5 +517,21 @@ model KnowledgeFile {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   folder    KnowledgeFolder @relation(fields: [folderId], references: [id], onDelete: Cascade)
+}
+
+// -----------------------------------------------------------------
+// In-App Notification Center
+// -----------------------------------------------------------------
+model Notification {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
+  title     String
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  type      String   @default("info") // info, success, warning, error
+  actionUrl String?  // Optional redirection link
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
