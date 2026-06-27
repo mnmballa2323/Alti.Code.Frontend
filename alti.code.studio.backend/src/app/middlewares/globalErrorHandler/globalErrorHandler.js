@@ -40,6 +40,10 @@ const globalErrorHandler = (error, req, res, next) => {
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessages = simplifiedError.errorMessages;
+  } else if (error && (error.name === 'TokenExpiredError' || error.name === 'JsonWebTokenError')) {
+    statusCode = 401;
+    message = error.name === 'TokenExpiredError' ? 'Unauthorized: Token expired.' : 'Unauthorized: Invalid token.';
+    errorMessages = [{ path: '', message: error.message }];
   } else if (error instanceof ApiError) {
     statusCode = error ? error.statusCode : statusCode;
     message = error ? error.message : message;
