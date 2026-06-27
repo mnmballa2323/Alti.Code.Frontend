@@ -38,6 +38,9 @@ const AI_MODELS = [
   { value: "claude-sonnet-4.6", label: "Claude Sonnet 4.6 (Precise)" },
   { value: "claude-opus-4.8", label: "Claude Opus 4.8 (High-Stakes)" },
   { value: "claude-fable-5", label: "Claude Fable 5 (Latest)" },
+  { value: "gpt-5.4-mini", label: "GPT-5.4 Mini (Fast)" },
+  { value: "gpt-5.5-pro", label: "GPT-5.5 Pro (Deep)" },
+  { value: "gpt-5.5-thinking", label: "GPT-5.5 Thinking (Audit)" },
 ];
 
 export default function SlidesPage() {

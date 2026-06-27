@@ -367,6 +367,15 @@ const SettingsModal = () => {
                       <SelectItem key="claude-fable-5">
                         Claude Fable 5
                       </SelectItem>
+                      <SelectItem key="gpt-5.4-mini">
+                        GPT-5.4 Mini
+                      </SelectItem>
+                      <SelectItem key="gpt-5.5-pro">
+                        GPT-5.5 Pro
+                      </SelectItem>
+                      <SelectItem key="gpt-5.5-thinking">
+                        GPT-5.5 Thinking
+                      </SelectItem>
                     </Select>
                   </div>
 
