@@ -5,8 +5,11 @@ import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service
 import { fileSearchService } from '../fileSearch/fileSearch.service.js';
 import { ragCacheService } from '../gcpCloud/gcpCache.service.js';
 import { vectorStoreService } from '../memory/vector.store.js';
+import { prismaClient } from '../../platform/db/prismaClient.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
+
+const prisma = prismaClient.prisma;
 
 /**
  * The Ultimate Google Cloud RAG Engine — v2.0
@@ -100,15 +103,17 @@ Example: ["original query", "specific technical term query", "architectural patt
    *
    * @param {string} query - Primary user query
    * @param {string[]} expandedQueries - All query variants (from _expandQuery)
+   * @param {string} userId - Target User ID for catalog filters
+   * @param {string} tenantId - Tenant ID for vector queries
    * @returns {Promise<{combinedContext: string, pipeline: Object[]}>}
    */
-  async executeRetrieval(query, expandedQueries) {
+  async executeRetrieval(query, expandedQueries, userId, tenantId) {
     const pipelineStart = Date.now();
     const allQueries = expandedQueries || [query];
     const primaryQuery = allQueries[0];
 
     logger.info(
-      `🌐 [Ultimate RAG] Initiating retrieval for ${allQueries.length} query variant(s)`,
+      `🌐 [Ultimate RAG] Initiating retrieval for ${allQueries.length} query variant(s) (Tenant: ${tenantId || 'None'})`,
     );
 
     // ─── Timed source wrappers ──────────────────
@@ -136,7 +141,7 @@ Example: ["original query", "specific technical term query", "architectural patt
       }
     };
 
-    // ─── 4 parallel retrieval sources (multi-query for Discovery Engine) ───
+    // ─── 5 parallel retrieval sources (multi-query for Discovery Engine) ───
     const sources = await Promise.all([
       // 1. Google Vertex AI Discovery Engine — fan out all expanded queries
       timedSource('vertex', 'Vertex AI Discovery Engine', async () => {
@@ -176,6 +181,53 @@ Example: ["original query", "specific technical term query", "architectural patt
       timedSource('filesearch', 'Gemini File Search', () =>
         this._executeFileSearchRetrieval(primaryQuery),
       ),
+
+      // 5. User Uploaded Knowledge Files (PostgreSQL / Vector DB)
+      timedSource('knowledge_hub', 'Knowledge Catalog Ingestion', async () => {
+        const docs = [];
+        // A. Search via high-dimensional vectorStoreService
+        if (tenantId) {
+          try {
+            const vectorMatches = await vectorStoreService.search(primaryQuery, 5, tenantId);
+            if (vectorMatches && vectorMatches.length > 0) {
+              docs.push(...vectorMatches.map(m => ({
+                name: m.metadata?.fileName || 'Knowledge Vector Chunk',
+                content: m.document
+              })));
+            }
+          } catch (err) {
+            logger.warn(`[Ultimate RAG] Vector store retrieval failed: ${err.message}`);
+          }
+        }
+
+        // B. Keyword fallback directly from Postgres KnowledgeFile table
+        try {
+          const dbMatches = await prisma.knowledgeFile.findMany({
+            where: {
+              OR: [
+                { folder: { userId: userId || undefined } },
+                { folder: { tenantId: tenantId || undefined } }
+              ],
+              content: {
+                contains: primaryQuery,
+                mode: 'insensitive'
+              }
+            },
+            take: 3,
+            select: { name: true, content: true }
+          });
+          if (dbMatches && dbMatches.length > 0) {
+            docs.push(...dbMatches.map(m => ({
+              name: m.name,
+              content: m.content
+            })));
+          }
+        } catch (err) {
+          // Non-blocking fallback
+        }
+
+        return docs;
+      })
     ]);
 
     // ─── Assemble context ───────────────────────
@@ -227,6 +279,14 @@ Example: ["original query", "specific technical term query", "architectural patt
           combinedContext += `• ${title}${page}: ${citation.text || ''}\n`;
         }
       }
+    }
+
+    const knowledgeResult = sources.find(s => s.id === 'knowledge_hub')?.result;
+    if (knowledgeResult && Array.isArray(knowledgeResult) && knowledgeResult.length > 0) {
+      combinedContext += `\n\n[KNOWLEDGE CATALOG UPLOADS]\n`;
+      knowledgeResult.forEach((doc) => {
+        combinedContext += `\n--- DOCUMENT: ${doc.name} ---\n${doc.content}\n`;
+      });
     }
 
     const totalDurationMs = Date.now() - pipelineStart;
@@ -304,7 +364,7 @@ Example: ["original query", "specific technical term query", "architectural patt
    * Synthesizes the RAG context using Google Gemini 3.1 Pro.
    * Includes cache check (#1), query expansion (#2), and feedback loop (#3).
    */
-  async synthesize(query, mode, domain, language) {
+  async synthesize(query, mode, domain, language, userId, tenantId) {
     const synthesisStart = Date.now();
 
     // ── #1: RAG Cache Check ──────────────────────────────────────
@@ -335,7 +395,7 @@ Example: ["original query", "specific technical term query", "architectural patt
       combinedContext,
       pipeline,
       totalDurationMs: retrievalMs,
-    } = await this.executeRetrieval(query, expandedQueries);
+    } = await this.executeRetrieval(query, expandedQueries, userId, tenantId);
 
     // ── Synthesis Prompt ─────────────────────────────────────────
     let systemPrompt = `You are the world's most advanced RAG Synthesizer. 

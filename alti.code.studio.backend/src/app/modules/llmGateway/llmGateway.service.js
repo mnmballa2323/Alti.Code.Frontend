@@ -262,11 +262,18 @@ Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
         logger.info(
           `🤖 [LlmGateway] Master Router Decision: RAG (Codebase search). Redirecting to Ultimate RAG Pipeline.`,
         );
+        const user = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { tenantId: true }
+        });
+        const tenantId = user?.tenantId;
         const ragResult = await ultimateRagService.synthesize(
           scrubbedPrompt,
           'gemini-3.1-pro',
           'Chat',
           undefined,
+          userId,
+          tenantId,
         );
         await saveChatResponse(
           userId,
@@ -351,11 +358,18 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
         logger.info(
           `🤖 [LlmGateway] Agentic Route: Detected codebase query. Redirecting to Ultimate RAG Pipeline.`,
         );
+        const user = await prisma.user.findUnique({
+          where: { id: userId },
+          select: { tenantId: true }
+        });
+        const tenantId = user?.tenantId;
         const ragResult = await ultimateRagService.synthesize(
           scrubbedPrompt,
           actualModelName,
           'Chat',
           undefined,
+          userId,
+          tenantId,
         );
 
         // Persist chat response to Postgres ChatHistory (JSONB)
