@@ -1031,7 +1031,7 @@ function PromptInputFullLineComponent({
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection
-                  title="Microsoft OpenAI"
+                  title="OpenAI GPT"
                   classNames={{
                     heading: "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
                   }}
