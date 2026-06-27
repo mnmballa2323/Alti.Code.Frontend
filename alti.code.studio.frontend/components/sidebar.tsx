@@ -3354,45 +3354,48 @@ export default function Sidebar() {
           </ModalHeader>
           <ModalBody className="py-4">
             <div className="flex flex-col gap-4">
-              <div className="flex gap-2">
-                <Input
-                  autoFocus
-                  label="Local Folder Path"
-                  placeholder="/path/to/your/project"
-                  variant="bordered"
-                  value={localWorkspacePath}
-                  onChange={(e) => setLocalWorkspacePath(e.target.value)}
-                  className="flex-1"
-                  classNames={{
-                    inputWrapper: "h-11 rounded-xl border-default-200 focus-within:border-primary",
-                    label: "text-xs font-semibold text-default-600",
-                    input: "text-xs",
-                  }}
-                />
-                {isTauri && (
-                  <Button
-                    isIconOnly
-                    variant="flat"
-                    color="primary"
-                    className="h-11 w-11 rounded-xl shrink-0 mt-6"
-                    onPress={async () => {
-                      try {
-                        const tauri = (window as any).__TAURI__;
-                        const invokeFn = tauri.core?.invoke || tauri.tauri?.invoke;
-                        if (invokeFn) {
-                          const selected = await invokeFn("select_directory");
-                          if (selected) {
-                            setLocalWorkspacePath(selected);
-                          }
-                        }
-                      } catch (err) {
-                        console.error("Browse click error:", err);
-                      }
+              <div className="flex flex-col gap-1.5 text-left">
+                <label className="text-xs font-semibold text-default-600">
+                  Local Folder Path
+                </label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    autoFocus
+                    placeholder="/path/to/your/project"
+                    variant="bordered"
+                    value={localWorkspacePath}
+                    onChange={(e) => setLocalWorkspacePath(e.target.value)}
+                    className="flex-1"
+                    classNames={{
+                      inputWrapper: "h-11 rounded-xl border-default-200 focus-within:border-primary bg-transparent",
+                      input: "text-xs",
                     }}
-                  >
-                    <Icon icon="solar:folder-with-files-bold" className="size-5" />
-                  </Button>
-                )}
+                  />
+                  {isTauri && (
+                    <Button
+                      isIconOnly
+                      variant="flat"
+                      color="primary"
+                      className="h-11 w-11 rounded-xl shrink-0"
+                      onPress={async () => {
+                        try {
+                          const tauri = (window as any).__TAURI__;
+                          const invokeFn = tauri.core?.invoke || tauri.tauri?.invoke;
+                          if (invokeFn) {
+                            const selected = await invokeFn("select_directory");
+                            if (selected) {
+                              setLocalWorkspacePath(selected);
+                            }
+                          }
+                        } catch (err) {
+                          console.error("Browse click error:", err);
+                        }
+                      }}
+                    >
+                      <Icon icon="solar:folder-with-files-bold" className="size-5" />
+                    </Button>
+                  )}
+                </div>
               </div>
               <p className="text-[10px] text-default-400 italic">
                 Tip: Connecting a local directory sets up the active environment so our agent swarm can index, read, write files, and run tests.
