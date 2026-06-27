@@ -31,17 +31,19 @@ import {
   featureStoreService,
   vertexEval,
   sccService,
-  cloudRunJobsService,
   workspaceAdminService,
   cloudWorkstationsService,
   dynamicSessionsService,
   recommenderService,
-  cloudBuildService,
-  SecretManagerService,
-  tpuOrchestratorService,
   videoEyeService,
   workspaceService,
 } from '../gcpCloud/gcpServices.service.js';
+import { SecretManagerService } from '../gcpCloud/gcpSecretManager.service.js';
+import {
+  cloudRunJobsService,
+  cloudBuildService,
+  tpuOrchestratorService,
+} from '../gcpCloud/gcpBatch.service.js';
 import { CloudLoggingService } from '../gcpCloud/gcpLogging.service.js';
 import { spannerGraphService } from '../gcpCloud/gcpSpannerGraph.service.js';
 import { FirestoreSyncService } from '../gcpCloud/gcpFirestore.service.js';

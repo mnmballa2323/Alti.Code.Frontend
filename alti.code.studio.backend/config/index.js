@@ -111,14 +111,31 @@ export const loadEnterpriseSecrets = async () => {
     DATABASE_LOCAL: val => {
       configObject.database_local = val;
     },
+    DATABASE_URL: val => {
+      process.env.DATABASE_URL = val;
+    },
     REDIS_URL: val => {
       configObject.redis.url = val;
+      process.env.REDIS_URL = val;
     },
     JWT_ACCESS_TOKEN: val => {
       configObject.jwt.access_token = val;
+      process.env.JWT_ACCESS_TOKEN = val;
     },
     GITHUB_CLIENT_SECRET: val => {
       configObject.github.clientSecret = val;
+    },
+    GEMINI_API_KEY: val => {
+      configObject.gemini_secret_key = val;
+      process.env.GEMINI_API_KEY = val;
+    },
+    STRIPE_SECRET_KEY: val => {
+      configObject.stripe.stripe_secret_key = val;
+      process.env.STRIPE_SECRET_KEY = val;
+    },
+    STRIPE_WEBHOOK_SECRET: val => {
+      configObject.stripe.stripe_webhook_secret_key = val;
+      process.env.STRIPE_WEBHOOK_SECRET = val;
     },
   };
 

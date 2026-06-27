@@ -4,7 +4,7 @@ import { multiCloudInferenceService } from './multicloud_inference.service.js';
 class AzureSovereignCompatService {
   constructor() {
     this.isMockMode = false;
-    this.modelName = 'gpt-5.5';
+    this.modelName = 'gemini-3.5-flash';
     this.generativeModel = {
       generateContent: async prompt => {
         return {
@@ -22,7 +22,7 @@ class AzureSovereignCompatService {
         await multiCloudInferenceService.executeMultiCloudInference(
           prompt,
           metadata.agentName || 'vertex_compat',
-          { modelId: 'gpt-5.5' },
+          { modelId: 'gemini-3.5-flash' },
         );
       return result.content;
     } catch (error) {

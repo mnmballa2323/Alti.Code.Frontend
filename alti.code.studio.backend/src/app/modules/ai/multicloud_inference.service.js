@@ -6,6 +6,7 @@
  */
 
 import { VercelAiService } from './vercel_ai.service.js';
+import { executeVertexInference } from './vertex_ai.helper.js';
 import { logger } from '../../../shared/logger.js';
 import { swarmTraceService } from '../telemetry/trace.service.js';
 import fs from 'fs/promises';
@@ -26,49 +27,55 @@ class MultiCloudInferenceService {
         pricePerKCompletion: 0.01,
         contractId: 'az-ea-foundry-3882',
       },
+      gcp: {
+        sku: 'GCP-VERTEX-ALTI-SAAS-201',
+        pricePerKPrompt: 0.0015,
+        pricePerKCompletion: 0.005,
+        contractId: 'gcp-ea-vertex-4882',
+      },
     };
   }
 
   /**
-   * Executes robust Azure Sovereign Cloud inference.
-   * Supports Azure Commercial (IL2), Azure Government (IL4/IL5), Azure Government Secret (IL6), and Azure Government Top Secret (IL6 Air-Gap).
+   * Executes robust Google Sovereign Cloud inference.
    */
   async executeMultiCloudInference(
     prompt,
     activeAgent = 'jules',
     options = {},
   ) {
-    const primaryProvider = 'azure';
-    const modelId = options.modelId || 'gpt-5.5';
+    const primaryProvider = 'gcp-vertex';
+    const modelId = options.modelId || 'gemini-3.5-flash';
 
     if (process.env.AIR_GAPPED_MODE === 'true') {
       logger.warn(
-        `🛡️ [Azure Sovereign Inference] AIR_GAPPED_MODE is ON. Bypassing public clouds. Routing to local Ollama API.`,
+        `🛡️ [Google Sovereign Inference] AIR_GAPPED_MODE is ON. Bypassing public clouds. Routing to local Ollama API.`,
       );
       return await this._executeAirGapped(prompt, activeAgent, modelId);
     }
 
     logger.info(
-      `🌐 [Azure Sovereign Inference] Initiating inference for Agent [${activeAgent}] on Microsoft Azure OpenAI Foundry`,
+      `🌐 [Google Sovereign Inference] Initiating inference for Agent [${activeAgent}] on Google Cloud Vertex AI`,
     );
 
-    const providersQueue = ['azure'];
+    const providersQueue = ['gcp-vertex'];
     let lastError = null;
     let resultObj = null;
 
     for (const provider of providersQueue) {
       try {
-        if (provider === 'azure') {
-          resultObj = await this._executeAzureFoundry(
+        if (provider === 'gcp-vertex') {
+          resultObj = await this._executeGoogleVertex(
             prompt,
             activeAgent,
             modelId,
+            options,
           );
           break;
         }
       } catch (err) {
         logger.warn(
-          `⚠️ [Azure Sovereign Inference] Azure provider failed: ${err.message}`,
+          `⚠️ [Google Sovereign Inference] GCP Vertex provider failed: ${err.message}`,
         );
         lastError = err;
       }
@@ -76,10 +83,10 @@ class MultiCloudInferenceService {
 
     if (!resultObj) {
       logger.error(
-        `❌ [Azure Sovereign Inference] Azure provider exhausted. Inference has failed completely.`,
+        `❌ [Google Sovereign Inference] GCP Vertex provider exhausted. Inference has failed completely.`,
       );
       throw new Error(
-        `Azure Sovereign Inference failed. Last error: ${lastError?.message}`,
+        `Google Sovereign Inference failed. Last error: ${lastError?.message}`,
       );
     }
 
@@ -115,7 +122,7 @@ class MultiCloudInferenceService {
    */
   async _executeAirGapped(prompt, activeAgent, modelId) {
     logger.info(
-      `🔒 [Azure Sovereign Inference] Executing Air-Gapped Local Inference on Ollama...`,
+      `🔒 [Google Sovereign Inference] Executing Air-Gapped Local Inference on Ollama...`,
     );
     const startTime = Date.now();
     let text = '';
@@ -139,7 +146,7 @@ class MultiCloudInferenceService {
       latency = Date.now() - startTime;
     } catch (e) {
       logger.error(
-        `❌ [Azure Sovereign Inference] Air-gapped local model failed: ${e.message}`,
+        `❌ [Google Sovereign Inference] Air-gapped local model failed: ${e.message}`,
       );
       throw new Error(
         'Critical failure: Air-gapped fallback is unavailable and public clouds are disabled.',
@@ -158,7 +165,41 @@ class MultiCloudInferenceService {
   }
 
   /**
-   * Executes inference on Azure Foundry (Marketplace Integrated)
+   * Executes inference exclusively on Google Vertex AI (Sovereign Cloud Integrated)
+   */
+  async _executeGoogleVertex(prompt, activeAgent, modelId, options = {}) {
+    logger.info(
+      `☁️ [Google Vertex AI Sovereign Inference] Executing on Google Cloud Vertex AI using model ${modelId}...`,
+    );
+    const startTime = Date.now();
+    
+    const result = await executeVertexInference(prompt, modelId, options);
+    const latency = Date.now() - startTime;
+
+    const promptTokens = result.usage.promptTokens;
+    const completionTokens = result.usage.completionTokens;
+
+    // Record billing transaction mapped to the Google Cloud Marketplace SKU
+    await this._recordMarketplaceBilling(
+      'gcp',
+      promptTokens,
+      completionTokens,
+      modelId,
+      latency,
+    );
+
+    return {
+      content: result.text,
+      venue: 'GOOGLE_VERTEX_SOVEREIGN_CLOUD',
+      provider: result.provider,
+      model: modelId,
+      latencyMs: latency,
+      tokens: { prompt: promptTokens, completion: completionTokens },
+    };
+  }
+
+  /**
+   * Executes inference on Azure Foundry (Marketplace Integrated) - Backwards compatible fallback
    */
   async _executeAzureFoundry(prompt, activeAgent, modelId, options = {}) {
     logger.info(
@@ -259,11 +300,11 @@ class MultiCloudInferenceService {
   }
 
   /**
-   * Executes inference using Vercel AI SDK
+   * Executes inference using Vercel AI SDK (GCP Vertex Mode)
    */
   async _executeVercelAi(prompt, activeAgent, modelId, options = {}) {
     logger.info(
-      `⚡ [Sovereign Inference] Executing via Azure OpenAI using model ${modelId}...`,
+      `⚡ [Sovereign Inference] Executing via Google Cloud Vertex AI using model ${modelId}...`,
     );
     const startTime = Date.now();
     const res = await VercelAiService.generate(prompt, { model: modelId });
@@ -275,7 +316,7 @@ class MultiCloudInferenceService {
       res.usage?.completionTokens ||
       Math.max(1, Math.ceil(res.text.length / 4));
     await this._recordMarketplaceBilling(
-      'azure',
+      'gcp',
       promptTokens,
       completionTokens,
       modelId,
@@ -284,8 +325,8 @@ class MultiCloudInferenceService {
 
     return {
       content: res.text,
-      venue: 'AZURE_OPENAI',
-      provider: 'azure-openai',
+      venue: 'GOOGLE_VERTEX_SOVEREIGN_CLOUD',
+      provider: 'gcp-vertex',
       model: modelId,
       latencyMs: latency,
       tokens: { prompt: promptTokens, completion: completionTokens },
@@ -353,6 +394,7 @@ class MultiCloudInferenceService {
   async getMarketplaceProcurementStats() {
     const stats = {
       azure: { totalBilledUsd: 0, totalTokens: 0, transactionCount: 0 },
+      gcp: { totalBilledUsd: 0, totalTokens: 0, transactionCount: 0 },
       global: { totalBilledUsd: 0, totalTokens: 0, totalTransactions: 0 },
     };
 
@@ -381,6 +423,9 @@ class MultiCloudInferenceService {
     stats.azure.totalBilledUsd = parseFloat(
       stats.azure.totalBilledUsd.toFixed(4),
     );
+    stats.gcp.totalBilledUsd = parseFloat(
+      stats.gcp.totalBilledUsd.toFixed(4),
+    );
     stats.global.totalBilledUsd = parseFloat(
       stats.global.totalBilledUsd.toFixed(4),
     );
@@ -406,7 +451,7 @@ class MultiCloudInferenceService {
     return `[SIMULATED COMPLIANT RESPONSE FROM ${modelDesc.toUpperCase()}]
 This response was processed securely via multi-cloud model endpoints and recorded in the respective Cloud Marketplace dashboard for billing and procurement transparency.
 Your prompt snippet: "${prompt.substring(0, 80)}..."`;
-  }
+}
 }
 
 export const multiCloudInferenceService = new MultiCloudInferenceService();

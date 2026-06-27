@@ -1,7 +1,7 @@
 import { multiCloudInferenceService } from './multicloud_inference.service.js';
 import { logger } from '../../../shared/logger.js';
 
-const PRIMARY_MODEL = 'gpt-5.5';
+const PRIMARY_MODEL = 'gemini-3.5-flash';
 
 const generateContent = async (
   prompt,

@@ -17,7 +17,7 @@ class CompletionService {
         await multiCloudInferenceService.executeMultiCloudInference(
           prompt,
           'completion',
-          { modelId: 'gpt-5.5' },
+          { modelId: 'gemini-3.5-flash' },
         );
       return result.content;
     } catch (error) {

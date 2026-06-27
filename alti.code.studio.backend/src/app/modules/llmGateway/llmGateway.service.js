@@ -254,7 +254,7 @@ Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
         await multiCloudInferenceService.executeMultiCloudInference(
           classificationPrompt,
           'gateway_router',
-          { modelId: 'gpt-5.5' },
+          { modelId: 'gemini-3.5-flash' },
         );
       const decision = classificationResult.content.trim().toUpperCase();
 
@@ -343,7 +343,7 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
         await multiCloudInferenceService.executeMultiCloudInference(
           classificationPrompt,
           'gateway_router',
-          { modelId: 'gpt-5.5' },
+          { modelId: 'gemini-3.5-flash' },
         );
       const decision = classificationResult.content.trim().toUpperCase();
 
@@ -434,25 +434,29 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
   // Secure key loading from Vault
   const creds = await VaultService.getRawCredentials(userId);
 
-  // Force Azure OpenAI Foundry Proxy Connection for all model requests (Sovereign Mode)
+  // Force Google Vertex AI Sovereign Cloud connection for all model requests (Sovereign Mode)
   logger.info(
-    '🧠 [LlmGateway] Delegating inference strictly to Azure OpenAI (Sovereign mode)...',
+    '🧠 [LlmGateway] Delegating inference strictly to Google Vertex AI (Sovereign mode)...',
   );
   try {
     const cleanModelName = actualModelName.startsWith('azure/')
       ? actualModelName.replace(/^azure\//, '')
-      : 'gpt-5.5';
+      : actualModelName.startsWith('gcp-vertex/')
+      ? actualModelName.replace(/^gcp-vertex\//, '')
+      : ['gemini-3.5-flash', 'gemini-3.1-pro', 'claude-sonnet-4.6', 'claude-opus-4.6'].includes(actualModelName)
+      ? actualModelName
+      : 'gemini-3.5-flash';
     const result = await multiCloudInferenceService.executeMultiCloudInference(
       finalPrompt,
       'gateway',
       {
-        preferredProvider: 'azure',
+        preferredProvider: 'gcp-vertex',
         modelId: cleanModelName,
         vaultCredentials: creds,
       },
     );
     reply = result.content;
-    usedModelName = `azure/${result.model}`;
+    usedModelName = `gcp-vertex/${result.model}`;
   } catch (err) {
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,

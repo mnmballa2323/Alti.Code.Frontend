@@ -374,7 +374,7 @@ function PromptInputFullLineComponent({
 
   const handleSubmit = useCallback(() => {
     if (!prompt.trim()) return;
-    const mode = "Agent";
+    const mode = defaultModel || "Agent";
     const domain = "Full Stack";
     const language = undefined;
 
@@ -394,7 +394,7 @@ function PromptInputFullLineComponent({
     }
     setPrompt("");
     inputRef.current?.focus();
-  }, [prompt, setPrompt, dispatch, sessionId, token, onSend]);
+  }, [prompt, setPrompt, defaultModel, dispatch, sessionId, token, onSend]);
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {

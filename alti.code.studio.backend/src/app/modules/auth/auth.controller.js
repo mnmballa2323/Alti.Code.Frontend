@@ -364,6 +364,23 @@ const sendMailWithAzureController = async (req, res) => {
   }
 };
 
+const googleAuthCallback = catchAsync(async (req, res) => {
+  const user = req.user;
+  const { accessToken, refreshToken } = authService.generateUserTokens(user);
+
+  // Set Refresh Token into cookie
+  const cookieOption = {
+    secure: config.env === 'production',
+    httpOnly: true,
+    sameSite: 'strict',
+  };
+  res.cookie('refreshToken', refreshToken, cookieOption);
+
+  // Redirect to frontend
+  const frontendUrl = config.client_url || 'http://localhost:3001';
+  res.redirect(`${frontendUrl}/auth/success?accessToken=${accessToken}`);
+});
+
 const azureAuthCallback = catchAsync(async (req, res) => {
   const user = req.user;
   const { accessToken, refreshToken } = authService.generateUserTokens(user);
@@ -514,6 +531,7 @@ export const authController = {
   deleteUserAccountOTP,
   changePassword,
   sendMailWithAzureController,
+  googleAuthCallback,
   azureAuthCallback,
   githubAuthCallback,
   ssoAuthCallback,
