@@ -50,6 +50,7 @@ import {
   Webhook,
   Blocks,
   Compass,
+  Terminal,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -911,7 +912,7 @@ export default function Sidebar() {
     },
     {
       label: "Functions",
-      icon: Code,
+      icon: Terminal,
       path: "/functions",
       isActive: pathname === "/functions",
       onClick: () => {
