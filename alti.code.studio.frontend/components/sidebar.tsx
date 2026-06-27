@@ -702,7 +702,7 @@ const FALLBACK_APPS: AppIntegration[] = [
 import { AppDispatch } from "@/store";
 
 const API_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
 // Define types for the responses
 type AiItem = {
