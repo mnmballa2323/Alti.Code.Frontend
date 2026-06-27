@@ -321,10 +321,12 @@ export default function EnginesPage() {
 
   // Set default engine on page load
   useEffect(() => {
+    if (!accessToken) return;
+    
     const initDefault = async () => {
       try {
         const res = await axios.get(`${API_URL}/engines/list`, {
-          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+          headers: { Authorization: `Bearer ${accessToken}` },
         });
         if (res.data && res.data.success && res.data.data.length > 0) {
           const defaultEngine = res.data.data[0];

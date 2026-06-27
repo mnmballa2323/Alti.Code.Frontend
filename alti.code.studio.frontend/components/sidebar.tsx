@@ -1259,13 +1259,13 @@ export default function Sidebar() {
   const [loadingEngines, setLoadingEngines] = useState(false);
 
   useEffect(() => {
-    if (pathname !== "/engines") return;
+    if (pathname !== "/engines" || !token) return;
     
     const loadEngines = async () => {
       setLoadingEngines(true);
       try {
         const res = await axios.get(`${API_URL}/engines/list`, {
-          headers: token ? { Authorization: `Bearer ${token}` } : {},
+          headers: { Authorization: `Bearer ${token}` },
         });
         if (res.data && res.data.success) {
           setSidebarEngines(res.data.data);

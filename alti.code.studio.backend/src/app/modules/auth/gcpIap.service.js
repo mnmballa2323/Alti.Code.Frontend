@@ -30,6 +30,7 @@ export const verifyGcpIapToken = async (req, res, next) => {
   if (!authHeader) {
     if (
       process.env.NODE_ENV === 'development' ||
+      process.env.NODE_ENV !== 'production' ||
       req.query.devBypass === 'true'
     ) {
       logger.warn('⚠️ [GcpIAP] Bypassing auth header for local development.');
