@@ -32,6 +32,11 @@ router.get(
   authMiddleware('user', 'developer', 'admin', 'owner', 'super_admin'),
   GitAgentController.listRepositories,
 );
+router.post(
+  '/change-directory',
+  authMiddleware('user', 'developer', 'admin', 'owner', 'super_admin'),
+  GitAgentController.changeDirectory,
+);
 
 // Unprotected Webhook route
 

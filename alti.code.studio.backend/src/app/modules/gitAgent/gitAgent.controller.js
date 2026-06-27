@@ -5,6 +5,8 @@
  * https://opensource.org/licenses/MIT
  */
 
+import path from 'path';
+import fs from 'fs';
 import httpStatus from 'http-status';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
@@ -133,6 +135,44 @@ const listRepositories = catchAsync(async (req, res) => {
   });
 });
 
+const changeDirectory = catchAsync(async (req, res) => {
+  const { path: newPath } = req.body;
+  if (!newPath) {
+    return sendResponse(res, {
+      statusCode: httpStatus.BAD_REQUEST,
+      success: false,
+      message: 'Path is required',
+    });
+  }
+
+  try {
+    const resolvedPath = path.resolve(newPath);
+    const stats = await fs.promises.stat(resolvedPath);
+    if (!stats.isDirectory()) {
+      throw new Error('Target path is not a directory');
+    }
+
+    process.chdir(resolvedPath);
+    console.log(`📁 [Workspace] Successfully changed active working directory to: ${resolvedPath}`);
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: `Active workspace changed to ${resolvedPath}`,
+      data: {
+        path: resolvedPath,
+      },
+    });
+  } catch (err) {
+    console.error(`❌ [Workspace] Failed to change directory to ${newPath}: ${err.message}`);
+    sendResponse(res, {
+      statusCode: httpStatus.INTERNAL_SERVER_ERROR,
+      success: false,
+      message: `Failed to change directory: ${err.message}`,
+    });
+  }
+});
+
 export const GitAgentController = {
   commit,
   push,
@@ -143,4 +183,5 @@ export const GitAgentController = {
   initializeRepository,
   handleGithubWebhook,
   listRepositories,
+  changeDirectory,
 };

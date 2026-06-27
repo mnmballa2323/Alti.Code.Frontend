@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import axios from "axios";
+import { toast } from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
@@ -957,6 +958,9 @@ export default function Sidebar() {
   const token = session?.user?.accessToken ?? null;
   const [repoSearch, setRepoSearch] = useState("");
   const [isTauri, setIsTauri] = useState(false);
+  const [isWorkspaceModalOpen, setIsWorkspaceModalOpen] = useState(false);
+  const [localWorkspacePath, setLocalWorkspacePath] = useState("");
+  const [isConnectingWorkspace, setIsConnectingWorkspace] = useState(false);
 
   useEffect(() => {
     if (
@@ -966,6 +970,55 @@ export default function Sidebar() {
       setIsTauri(true);
     }
   }, []);
+
+  const handleOpenLocalWorkspace = async () => {
+    if (typeof window !== "undefined" && (window as any).__TAURI__) {
+      try {
+        const tauri = (window as any).__TAURI__;
+        const invokeFn = tauri.core?.invoke || tauri.tauri?.invoke;
+        if (invokeFn) {
+          const selectedPath = await invokeFn("select_directory");
+          if (selectedPath) {
+            await connectWorkspaceDirectory(selectedPath);
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Tauri workspace directory invoke error:", e);
+      }
+    }
+    setIsWorkspaceModalOpen(true);
+  };
+
+  const connectWorkspaceDirectory = async (directoryPath: string) => {
+    setIsConnectingWorkspace(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/git/change-directory`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ path: directoryPath }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        const parts = directoryPath.split(/[/\\]/);
+        const folderName = parts.pop() || parts.pop() || "local-workspace";
+        dispatch(setActiveWorkspace(folderName));
+        toast.success(`Successfully connected workspace: ${folderName}`);
+        setIsWorkspaceModalOpen(false);
+      } else {
+        toast.error(data.message || "Failed to switch workspace directory");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Network error while connecting workspace directory");
+    } finally {
+      setIsConnectingWorkspace(false);
+    }
+  };
+
   const selectedRepo =
     useSelector((state: RootState) => state.system.activeWorkspace) ||
     "alti.code.studio";
@@ -1843,18 +1896,32 @@ export default function Sidebar() {
               disabledKeys={isRepoLoading ? ["searching"] : []}
             >
               <DropdownItem
-                key="connect-github-repo"
-                className="text-primary hover:bg-primary/10 rounded-lg py-2 mb-2 border-b border-default-100/50"
+                key="open-local-folder"
+                className="text-primary hover:bg-primary/10 rounded-lg py-2"
                 startContent={
                   <div className="p-1 rounded-md bg-primary/10 text-primary">
-                    <Plus className="size-3.5" />
+                    <Icon className="size-3.5" icon="solar:folder-opened-bold" />
+                  </div>
+                }
+                onPress={handleOpenLocalWorkspace}
+              >
+                <span className="text-xs font-semibold text-primary">
+                  Open Local Folder...
+                </span>
+              </DropdownItem>
+
+              <DropdownItem
+                key="connect-github-repo"
+                className="text-primary/70 hover:bg-primary/5 rounded-lg py-2 mb-2 border-b border-default-100/50"
+                startContent={
+                  <div className="p-1 rounded-md bg-primary/5 text-primary/70">
+                    <Icon className="size-3.5" icon="solar:cloud-download-linear" />
                   </div>
                 }
                 onPress={() => router.push("/connect-apps")}
-                onClick={() => router.push("/connect-apps")}
               >
-                <span className="text-xs font-semibold text-primary">
-                  Connect GitHub Repository
+                <span className="text-xs font-semibold text-primary/70">
+                  Connect Apps Catalog
                 </span>
               </DropdownItem>
 
@@ -3260,6 +3327,96 @@ export default function Sidebar() {
               Create
             </Button>
           </div>
+        </ModalContent>
+      </Modal>
+
+      {/* Local Workspace Connection Modal */}
+      <Modal 
+        isOpen={isWorkspaceModalOpen} 
+        onClose={() => setIsWorkspaceModalOpen(false)}
+        backdrop="blur"
+        classNames={{
+          backdrop: "bg-background/40 backdrop-blur-md",
+          base: "border border-default-100 bg-background/90 text-foreground dark:bg-default-50/90",
+        }}
+      >
+        <ModalContent className="rounded-2xl p-2 shadow-2xl">
+          <ModalHeader className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
+                <Icon icon="solar:folder-opened-bold" className="size-5" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-sm font-semibold">Open Local Workspace</h3>
+                <p className="text-[10px] text-default-400 font-normal">Connect any codebase folder from your local machine</p>
+              </div>
+            </div>
+          </ModalHeader>
+          <ModalBody className="py-4">
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-2">
+                <Input
+                  autoFocus
+                  label="Local Folder Path"
+                  placeholder="/path/to/your/project"
+                  variant="bordered"
+                  value={localWorkspacePath}
+                  onChange={(e) => setLocalWorkspacePath(e.target.value)}
+                  className="flex-1"
+                  classNames={{
+                    inputWrapper: "h-11 rounded-xl border-default-200 focus-within:border-primary",
+                    label: "text-xs font-semibold text-default-600",
+                    input: "text-xs",
+                  }}
+                />
+                {isTauri && (
+                  <Button
+                    isIconOnly
+                    variant="flat"
+                    color="primary"
+                    className="h-11 w-11 rounded-xl shrink-0 mt-6"
+                    onPress={async () => {
+                      try {
+                        const tauri = (window as any).__TAURI__;
+                        const invokeFn = tauri.core?.invoke || tauri.tauri?.invoke;
+                        if (invokeFn) {
+                          const selected = await invokeFn("select_directory");
+                          if (selected) {
+                            setLocalWorkspacePath(selected);
+                          }
+                        }
+                      } catch (err) {
+                        console.error("Browse click error:", err);
+                      }
+                    }}
+                  >
+                    <Icon icon="solar:folder-with-files-bold" className="size-5" />
+                  </Button>
+                )}
+              </div>
+              <p className="text-[10px] text-default-400 italic">
+                Tip: Connecting a local directory sets up the active environment so our agent swarm can index, read, write files, and run tests.
+              </p>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button 
+              variant="light" 
+              className="rounded-xl px-4 text-xs font-medium"
+              onPress={() => setIsWorkspaceModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              color="primary"
+              className="rounded-xl px-4 text-xs font-semibold shadow-lg shadow-primary/20"
+              isLoading={isConnectingWorkspace}
+              onPress={() => connectWorkspaceDirectory(localWorkspacePath)}
+              isDisabled={!localWorkspacePath.trim()}
+            >
+              Open Folder
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </div>
