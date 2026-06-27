@@ -44,7 +44,14 @@ const getAgentStatus = catchAsync(async (req, res) => {
     message: 'Agent System Operational',
     data: {
       orchestrator: 'active',
-      tools: ['surfer', 'vector', 'siren'],
+      tools: [
+        'surfer',
+        'vector',
+        'siren',
+        'opencode',
+        'openspec',
+        'website_cloner',
+      ],
     },
   });
 });
