@@ -123,7 +123,8 @@ const handleGithubWebhook = catchAsync(async (req, res) => {
 
 const listRepositories = catchAsync(async (req, res) => {
   const { q } = req.query;
-  const result = await GitAgentService.searchRepositories(q);
+  const userId = req.user?.userId || req.user?.id;
+  const result = await GitAgentService.searchRepositories(q, userId);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

@@ -27,7 +27,11 @@ router.get('/diff', adminOnly, GitAgentController.getDiff);
 router.post('/generate-pr', adminOnly, GitAgentController.generatePR);
 router.post('/branch', adminOnly, GitAgentController.createBranch);
 router.post('/initialize', adminOnly, GitAgentController.initializeRepository);
-router.get('/repositories', adminOnly, GitAgentController.listRepositories);
+router.get(
+  '/repositories',
+  authMiddleware('user', 'developer', 'admin', 'owner', 'super_admin'),
+  GitAgentController.listRepositories,
+);
 
 // Unprotected Webhook route
 

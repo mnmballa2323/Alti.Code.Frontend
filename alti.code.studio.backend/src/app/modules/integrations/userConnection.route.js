@@ -26,5 +26,7 @@ router.get('/callback/:provider', UserConnectionController.oauthCallback);
 // User-scoped connections management
 router.get('/active', requireAuth, UserConnectionController.getActiveConnections);
 router.delete('/disconnect/:provider', requireAuth, UserConnectionController.disconnectProvider);
+router.post('/custom', requireAuth, UserConnectionController.saveCustomConnection);
+router.post('/test-db', requireAuth, UserConnectionController.testDatabaseConnection);
 
 export const userConnectionRoutes = router;

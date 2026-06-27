@@ -1898,6 +1898,21 @@ export default function Sidebar() {
                   No repositories found
                 </DropdownItem>
               )}
+
+              <DropdownItem
+                key="connect-github-repo"
+                className="text-primary hover:bg-primary/10 rounded-lg py-2 mt-1 border-t border-default-100/50"
+                startContent={
+                  <div className="p-1 rounded-md bg-primary/10 text-primary">
+                    <Plus className="size-3.5" />
+                  </div>
+                }
+                onClick={() => router.push("/connect-apps")}
+              >
+                <span className="text-xs font-semibold text-primary">
+                  Connect GitHub Repository
+                </span>
+              </DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </div>

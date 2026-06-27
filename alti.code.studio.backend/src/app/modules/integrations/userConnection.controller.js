@@ -115,7 +115,7 @@ const oauthCallback = catchAsync(async (req, res) => {
 // Get user connections list
 const getActiveConnections = catchAsync(async (req, res) => {
   const userId = req.user._id.toString();
-  const connections = await UserConnectionModel.find({ userId, status: 'connected' }).select('provider status createdAt');
+  const connections = await UserConnectionModel.find({ userId, status: 'connected' }).select('provider status connectionId createdAt');
 
   sendResponse(res, {
     statusCode: 200,
@@ -130,7 +130,7 @@ const disconnectProvider = catchAsync(async (req, res) => {
   const userId = req.user._id.toString();
   const { provider } = req.params;
 
-  await UserConnectionModel.findOneAndDelete({ userId, provider: `mcp_${provider}` });
+  await UserConnectionModel.findOneAndDelete({ userId, provider: provider.startsWith('db_') ? provider : `mcp_${provider}` });
 
   sendResponse(res, {
     statusCode: 200,
@@ -139,9 +139,118 @@ const disconnectProvider = catchAsync(async (req, res) => {
   });
 });
 
+// Add or update custom credentials connection (e.g. database configs)
+const saveCustomConnection = catchAsync(async (req, res) => {
+  const userId = req.user._id.toString();
+  const { provider, details } = req.body; // e.g. provider = 'db_postgresql', details = { host, port, database, user, password, name, connectionString, ssl }
+
+  if (!provider || !details) {
+    return res.status(400).json({ success: false, message: 'Provider and details are required' });
+  }
+
+  // Envelope encrypt details
+  const encryptedCredentials = await encryptionService.encrypt(JSON.stringify(details));
+
+  const result = await UserConnectionModel.findOneAndUpdate(
+    { userId, provider },
+    {
+      status: 'connected',
+      credentials: encryptedCredentials,
+      connectionId: details.name || 'Default Connection',
+    },
+    { upsert: true, new: true }
+  );
+
+  sendResponse(res, {
+    statusCode: 200,
+    success: true,
+    message: 'Database connection saved successfully',
+    data: {
+      provider: result.provider,
+      status: result.status,
+      name: result.connectionId,
+    },
+  });
+});
+
+// Test dynamic database connections (SSL & timeout supported)
+const testDatabaseConnection = catchAsync(async (req, res) => {
+  const { provider, details } = req.body;
+
+  if (!provider || !details) {
+    return res.status(400).json({ success: false, message: 'Provider and details are required' });
+  }
+
+  const connString = details.connectionString || 
+    (provider === 'db_mongodb'
+      ? `mongodb://${details.user ? `${details.user}:${details.password}@` : ''}${details.host}:${details.port || 27017}/${details.database || ''}`
+      : provider === 'db_redis'
+      ? `redis://${details.user ? `${details.user}:${details.password}@` : ''}${details.host}:${details.port || 6379}`
+      : `postgresql://${details.user ? `${details.user}:${details.password}@` : ''}${details.host}:${details.port || 5432}/${details.database || ''}`);
+
+  try {
+    if (provider.includes('postgresql') || provider.includes('neon') || provider.includes('supabase')) {
+      const pg = (await import('pg')).default;
+      const client = new pg.Client({
+        connectionString: connString,
+        ssl: details.ssl ? { rejectUnauthorized: false } : false,
+        connectionTimeoutMillis: 5000,
+      });
+      await client.connect();
+      await client.end();
+    } else if (provider.includes('mongodb')) {
+      const mongoose = (await import('mongoose')).default;
+      const conn = await mongoose.createConnection(connString, { serverSelectionTimeoutMS: 5000 }).asPromise();
+      await conn.close();
+    } else if (provider.includes('redis')) {
+      const Redis = (await import('ioredis')).default;
+      const redis = new Redis(connString, { maxRetriesPerRequest: 0, connectTimeout: 5000 });
+      await redis.ping();
+      await redis.quit();
+    } else {
+      // Default fallback: TCP connection check
+      const net = await import('net');
+      await new Promise((resolve, reject) => {
+        const socket = new net.Socket();
+        const host = details.host || 'localhost';
+        const port = parseInt(details.port || '5432');
+        socket.setTimeout(5000);
+        socket.on('connect', () => {
+          socket.destroy();
+          resolve();
+        });
+        socket.on('timeout', () => {
+          socket.destroy();
+          reject(new Error('Connection timed out'));
+        });
+        socket.on('error', (err) => {
+          socket.destroy();
+          reject(err);
+        });
+        socket.connect(port, host);
+      });
+    }
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message: 'Connection test passed successfully!',
+    });
+  } catch (err) {
+    logger.error('Database connection test failed:', err);
+    sendResponse(res, {
+      statusCode: 400,
+      success: false,
+      message: `Connection test failed: ${err.message}`,
+    });
+  }
+});
+
 export const UserConnectionController = {
   initiateOAuth,
   oauthCallback,
   getActiveConnections,
   disconnectProvider,
+  saveCustomConnection,
+  testDatabaseConnection,
 };

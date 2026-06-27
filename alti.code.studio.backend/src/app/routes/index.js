@@ -96,7 +96,10 @@ try {
               // Custom path overrides matching frontend configurations
               if (file === 'cloud_marketplace.route.js')
                 basePath = '/marketplace/cloud';
-              if (file === 'gitAgent.route.js') basePath = '/git-agent';
+              if (file === 'gitAgent.route.js') {
+                basePath = '/git';
+                router.use('/git-agent', routeModule[routerKey]);
+              }
               if (file === 'dyad.route.js') basePath = '/dyad/claude';
               if (file === 'gemini.route.js') basePath = '/gemini';
               if (file === 'codeEditor.route.js') basePath = '/code-editor';
