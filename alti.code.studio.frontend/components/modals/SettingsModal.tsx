@@ -361,6 +361,9 @@ const SettingsModal = () => {
                       <SelectItem key="claude-fable-5">
                         Claude Fable 5
                       </SelectItem>
+                      <SelectItem key="claude-sonnet-4.6">
+                        Claude Sonnet 4.6
+                      </SelectItem>
                       <SelectItem key="claude-opus-4.8">
                         Claude Opus 4.8
                       </SelectItem>

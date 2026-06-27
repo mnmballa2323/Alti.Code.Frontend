@@ -990,6 +990,22 @@ function PromptInputFullLineComponent({
                     </div>
                   </DropdownItem>
                   <DropdownItem
+                    key="claude-sonnet-4.6"
+                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Claude Sonnet 4.6"
+                    onPress={() => setDefaultModel("claude-sonnet-4.6")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-[#CC9980] shrink-0"
+                        icon="simple-icons:claude"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        Claude Sonnet 4.6
+                      </span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
                     key="claude-opus-4.8"
                     className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
                     textValue="Claude Opus 4.8"
