@@ -974,10 +974,10 @@ function PromptInputFullLineComponent({
                   }}
                 >
                   <DropdownItem
-                    key="claude-sonnet-4.6"
+                    key="claude-fable-5"
                     className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="Claude Sonnet 4.6"
-                    onPress={() => setDefaultModel("claude-sonnet-4.6")}
+                    textValue="Claude Fable 5"
+                    onPress={() => setDefaultModel("claude-fable-5")}
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
@@ -985,15 +985,15 @@ function PromptInputFullLineComponent({
                         icon="simple-icons:claude"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
-                        Claude Sonnet 4.6
+                        Claude Fable 5
                       </span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
-                    key="claude-opus-4.6"
+                    key="claude-opus-4.8"
                     className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="Claude Opus 4.6"
-                    onPress={() => setDefaultModel("claude-opus-4.6")}
+                    textValue="Claude Opus 4.8"
+                    onPress={() => setDefaultModel("claude-opus-4.8")}
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
@@ -1001,7 +1001,7 @@ function PromptInputFullLineComponent({
                         icon="simple-icons:claude"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
-                        Claude Opus 4.6
+                        Claude Opus 4.8
                       </span>
                     </div>
                   </DropdownItem>
