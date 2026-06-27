@@ -292,7 +292,7 @@ export default function SlidesPage() {
               <Button
                 className="w-full font-bold bg-primary text-white"
                 isLoading={isGenerating}
-                radius="xl"
+                radius="lg"
                 size="md"
                 startContent={!isGenerating && <Sparkles size={14} />}
                 onClick={handleGenerate}
@@ -412,7 +412,7 @@ export default function SlidesPage() {
                               {currentSlide.col2Title}
                             </h4>
                             <ul className="list-disc pl-3.5 text-[10px] space-y-1.5 opacity-80 leading-relaxed">
-                              {Array.isArray(currentSlide.col2Content) && currentSlide.col2Content.map((bullet, i) => (
+                              {Array.isArray(currentSlide.col2Content) && currentSlide.col2Content.map((bullet: string, i: number) => (
                                 <li key={i}>{bullet}</li>
                               ))}
                             </ul>
@@ -439,7 +439,7 @@ export default function SlidesPage() {
                       <h3 className="text-lg font-bold tracking-tight mb-3">{currentSlide.title}</h3>
                       <div className="grid grid-cols-3 gap-4 flex-grow items-stretch">
                         <div className="col-span-2 space-y-2.5">
-                          {currentSlide.items?.map((item, idx) => (
+                          {currentSlide.items?.map((item: any, idx: number) => (
                             <div 
                               key={idx} 
                               className={`flex items-center justify-between p-3 rounded-xl border relative overflow-hidden ${
@@ -484,7 +484,7 @@ export default function SlidesPage() {
                       <div className="grid grid-cols-3 gap-4 flex-grow items-stretch">
                         <div className={`col-span-2 p-4 rounded-xl border ${isDark ? "bg-[#13131c]/50 border-white/5" : "bg-white border-slate-200"}`}>
                           <ul className="list-disc pl-4 text-[11px] space-y-2.5 opacity-90 leading-relaxed">
-                            {currentSlide.bullets?.map((bullet, i) => (
+                            {currentSlide.bullets?.map((bullet: string, i: number) => (
                               <li key={i}>{bullet}</li>
                             ))}
                           </ul>
@@ -510,7 +510,7 @@ export default function SlidesPage() {
                     <div className="h-full flex flex-col justify-between pl-4">
                       <h3 className="text-lg font-bold tracking-tight mb-3">{currentSlide.title}</h3>
                       <div className="grid grid-cols-4 gap-3 flex-grow items-stretch">
-                        {currentSlide.steps?.map((step, idx) => (
+                        {currentSlide.steps?.map((step: any, idx: number) => (
                           <div 
                             key={idx}
                             className={`p-3 rounded-xl border flex flex-col justify-between ${

@@ -790,7 +790,6 @@ export default function Sidebar() {
     router.prefetch("/cloud");
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
-    router.prefetch("/repositories");
     router.prefetch("/slides");
     router.prefetch("/documents");
     router.prefetch("/connect-apps");
@@ -816,8 +815,6 @@ export default function Sidebar() {
         return "Knowledge";
       case "/functions":
         return "Functions";
-      case "/repositories":
-        return "Repositories";
       case "/slides":
         return "Slides";
       case "/connect-apps":
@@ -904,15 +901,6 @@ export default function Sidebar() {
       },
     },
     {
-      label: "Repositories",
-      icon: GitBranch,
-      path: "/repositories",
-      isActive: pathname === "/repositories",
-      onClick: () => {
-        router.push("/repositories");
-      },
-    },
-    {
       label: "Slides",
       icon: Presentation,
       path: "/slides",
@@ -975,7 +963,6 @@ export default function Sidebar() {
     if (pathname === "/instructions") return "New Instruction";
     if (pathname === "/guardrails") return "New Guardrail";
     if (pathname === "/knowledge") return "New Knowledge";
-    if (pathname === "/repositories") return "New Repository";
     if (pathname === "/documents") return "New Documentation";
 
     return "New";
@@ -1039,7 +1026,6 @@ export default function Sidebar() {
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
     router.prefetch("/knowledge");
-    router.prefetch("/repositories");
     router.prefetch("/slides");
     router.prefetch("/vault");
     router.prefetch("/connect-apps");
@@ -1662,10 +1648,6 @@ export default function Sidebar() {
               onClick={() => {
                 if (pathname === "/vault") {
                   window.dispatchEvent(new CustomEvent("open-vault-modal"));
-                } else if (pathname === "/repositories") {
-                  window.dispatchEvent(
-                    new CustomEvent("open-repository-modal"),
-                  );
                 } else if (pathname === "/documents") {
                   window.dispatchEvent(new CustomEvent("open-document-modal"));
                 } else if (pathname === "/knowledge") {
@@ -1678,8 +1660,6 @@ export default function Sidebar() {
               onMouseEnter={() => {
                 if (pathname === "/vault") {
                   router.prefetch("/vault");
-                } else if (pathname === "/repositories") {
-                  router.prefetch("/repositories");
                 } else if (pathname === "/documents") {
                   router.prefetch("/documents");
                 } else {
@@ -2308,88 +2288,6 @@ export default function Sidebar() {
                     >
                       <span className="truncate">{agent.name}</span>
                     </button>
-                  ));
-                })()}
-              </div>
-            ) : pathname === "/repositories" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
-                {(() => {
-                  const filtered = repositories.filter((repo) =>
-                    repo.name
-                      .toLowerCase()
-                      .includes(leftSidebarSearch.toLowerCase()),
-                  );
-
-                  if (repositories.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:folder-2-linear"
-                        />
-                        <span className="text-xs text-default-400">
-                          No repositories added yet
-                        </span>
-                      </div>
-                    );
-                  }
-                  if (filtered.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:folder-2-linear"
-                        />
-                        <span className="text-xs text-default-400">
-                          No results found
-                        </span>
-                      </div>
-                    );
-                  }
-
-                  return filtered.map((repo) => (
-                    <div
-                      key={repo.id}
-                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                      onClick={() =>
-                        window.dispatchEvent(
-                          new CustomEvent("edit-repository", { detail: repo }),
-                        )
-                      }
-                    >
-                      <span className="truncate">{repo.name}</span>
-                      <Dropdown
-                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                        placement="bottom-end"
-                      >
-                        <DropdownTrigger>
-                          <button
-                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <MoreHorizontal size={16} />
-                          </button>
-                        </DropdownTrigger>
-                        <DropdownMenu
-                          aria-label="Repository options"
-                          className="p-0"
-                          variant="flat"
-                        >
-                          <DropdownItem
-                            key="delete"
-                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                            color="danger"
-                            startContent={<Trash2 size={14} />}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              dispatch(removeRepository(repo.id));
-                            }}
-                          >
-                            Delete
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
                   ));
                 })()}
               </div>

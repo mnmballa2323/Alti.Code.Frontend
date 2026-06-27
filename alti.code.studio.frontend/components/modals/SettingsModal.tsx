@@ -18,10 +18,17 @@ import {
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
 
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { removeRepository } from "@/store/systemSlice";
 import { useModalStore } from "@/store/useModalStore";
 import { useSettingsStore } from "@/store/useSettingsStore";
 
 const SettingsModal = () => {
+  const dispatch = useDispatch();
+  const repositories = useSelector(
+    (state: RootState) => state.system.repositories || [],
+  );
   const { theme, setTheme } = useTheme();
   const { isOpen, onClose } = useModalStore();
   const {
@@ -468,6 +475,45 @@ const SettingsModal = () => {
                         }
                       />
                     </div>
+                  </div>
+
+                  <Divider />
+
+                  {/* Managed Codebases (Ingested Repositories) */}
+                  <div className="flex flex-col gap-4">
+                    <h3 className="text-sm font-semibold text-primary uppercase tracking-wider">
+                      Managed Codebases
+                    </h3>
+                    {repositories.length === 0 ? (
+                      <p className="text-xs text-default-400">
+                        No external repositories ingested yet. Paste a GitHub link in the chat to automatically clone and index it.
+                      </p>
+                    ) : (
+                      <div className="flex flex-col gap-2 max-h-[160px] overflow-y-auto pr-1">
+                        {repositories.map((repo: any) => (
+                          <div
+                            key={repo.id}
+                            className="flex items-center justify-between p-2 rounded-xl bg-black/5 dark:bg-white/5 border border-default-100/30"
+                          >
+                            <div className="flex items-center gap-2 truncate">
+                              <Icon icon="solar:git-repository-linear" className="text-lg text-default-400 flex-shrink-0" />
+                              <span className="text-xs font-medium dark:text-gray-200 text-gray-700 truncate">
+                                {repo.name}
+                              </span>
+                            </div>
+                            <Button
+                              isIconOnly
+                              className="size-7 min-w-7 rounded-lg hover:bg-danger/10 text-default-400 hover:text-danger"
+                              size="sm"
+                              variant="light"
+                              onPress={() => dispatch(removeRepository(repo.id))}
+                            >
+                              <Icon icon="solar:trash-bin-trash-linear" className="text-sm" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </ModalBody>
