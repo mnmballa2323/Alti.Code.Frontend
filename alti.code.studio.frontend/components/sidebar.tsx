@@ -813,14 +813,14 @@ export default function Sidebar() {
       case "/guardrails":
         return "Guardrails";
       case "/knowledge":
-        return "Knowledge";
+        return "Data";
       case "/functions":
         return "Functions";
       case "/slides":
         return "Slides";
       case "/connect-apps":
       case "/integrations":
-        return "Integrations";
+        return "Apps";
 
       case "/vault":
         return "Vault";
@@ -919,7 +919,7 @@ export default function Sidebar() {
       },
     },
     {
-      label: "Knowledge",
+      label: "Data",
       icon: Database,
       path: "/knowledge",
       isActive: pathname === "/knowledge",
@@ -931,7 +931,7 @@ export default function Sidebar() {
 
   const connectorNavigationItems = [
     {
-      label: "Integrations",
+      label: "Apps",
       icon: LayoutGrid,
       path: "/connect-apps",
       isActive: pathname === "/connect-apps",
@@ -977,7 +977,7 @@ export default function Sidebar() {
     if (pathname === "/vault") return "New Vault";
     if (pathname === "/instructions") return "New Instruction";
     if (pathname === "/guardrails") return "New Guardrail";
-    if (pathname === "/knowledge") return "New Knowledge";
+    if (pathname === "/knowledge") return "New Data";
     if (pathname === "/documents") return "New Documentation";
 
     return "New";
