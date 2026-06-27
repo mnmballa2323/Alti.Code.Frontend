@@ -425,8 +425,9 @@ export default function ConnectAppsPage() {
   const cleanSlug = selectedApp
     ? selectedApp.id.replace("app-", "").toLowerCase()
     : "";
+  const isOauthProvider = ["mcp_github", "mcp_gitlab", "mcp_slack", "mcp_jira"].includes(cleanSlug);
   const isMcp =
-    cleanSlug.startsWith("mcp_") ||
+    (cleanSlug.startsWith("mcp_") && !isOauthProvider) ||
     selectedApp?.type === "custom";
   const isServerActive = activeTools.some((t) => t.server === cleanSlug);
 
@@ -563,18 +564,27 @@ export default function ConnectAppsPage() {
 
         // Fetch custom registered MCP servers
         let customServers: any[] = [];
+        let activeOauthProviders: string[] = [];
 
         try {
-          const customRes = await axios.get(`${API_URL}/mcp/custom`, {
-            headers: { Authorization: `Bearer ${accessToken}` },
-          });
+          const [customRes, activeRes] = await Promise.all([
+            axios.get(`${API_URL}/mcp/custom`, {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }),
+            axios.get(`${API_URL}/integrations/active`, {
+              headers: { Authorization: `Bearer ${accessToken}` },
+            }),
+          ]);
 
           if (customRes.data && customRes.data.success) {
             customServers = customRes.data.data || [];
             setCustomServersList(customServers);
           }
+          if (activeRes.data && activeRes.data.success) {
+            activeOauthProviders = (activeRes.data.data || []).map((conn: any) => conn.provider);
+          }
         } catch (e) {
-          console.error("Failed to fetch custom servers", e);
+          console.error("Failed to fetch custom servers or active OAuth connections", e);
         }
 
         // Custom MCP Apps
@@ -593,7 +603,8 @@ export default function ConnectAppsPage() {
         // Standard SaaS & Presets
         const standardAppsMapped = FALLBACK_APPS.map((app) => {
           const slug = app.id.replace("app-", "").toLowerCase();
-          const active = activeTools.some((t: any) => t.server === slug);
+          const isOauthConnected = activeOauthProviders.includes(slug) || activeOauthProviders.includes(`mcp_${slug}`);
+          const active = isOauthConnected || activeTools.some((t: any) => t.server === slug);
 
           return {
             ...app,
@@ -634,6 +645,22 @@ export default function ConnectAppsPage() {
   ]);
 
   const handleConnect = async (id: string) => {
+    const slug = id.replace("app-", "");
+    const providerMap: Record<string, string> = {
+      mcp_github: "github",
+      mcp_gitlab: "gitlab",
+      mcp_slack: "slack",
+      mcp_jira: "jira",
+    };
+
+    const oauthProvider = providerMap[slug];
+    if (oauthProvider) {
+      // Redirect directly to native user-scoped OAuth connection endpoint
+      const connectUrl = `${API_URL}/integrations/connect/${oauthProvider}?token=${accessToken || ""}`;
+      window.location.href = connectUrl;
+      return;
+    }
+
     setApps((prev) => {
       const next = prev.map((app) =>
         app.id === id ? { ...app, status: "connecting" as const } : app,
@@ -645,7 +672,6 @@ export default function ConnectAppsPage() {
     });
 
     try {
-      const slug = id.replace("app-", "");
       const preset = COMMAND_PRESETS[slug] || {
         command: "npx",
         args: ["-y", `@modelcontextprotocol/server-${slug.replace("mcp_", "")}`],
@@ -874,6 +900,16 @@ export default function ConnectAppsPage() {
   };
 
   const handleDisconnect = async (id: string) => {
+    const slug = id.replace("app-", "");
+    const providerMap: Record<string, string> = {
+      mcp_github: "github",
+      mcp_gitlab: "gitlab",
+      mcp_slack: "slack",
+      mcp_jira: "jira",
+    };
+
+    const oauthProvider = providerMap[slug];
+
     setApps((prev) => {
       const next = prev.map((app) =>
         app.id === id ? { ...app, status: "connecting" as const } : app,
@@ -884,17 +920,21 @@ export default function ConnectAppsPage() {
       return next;
     });
     try {
-      const slug = id.replace("app-", "");
-
-      await axios.post(
-        `${API_URL}/mcp/disconnect`,
-        { name: slug },
-        {
-          headers: accessToken
-            ? { Authorization: `Bearer ${accessToken}` }
-            : {},
-        },
-      );
+      if (oauthProvider) {
+        await axios.delete(`${API_URL}/integrations/disconnect/${oauthProvider}`, {
+          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+        });
+      } else {
+        await axios.post(
+          `${API_URL}/mcp/disconnect`,
+          { name: slug },
+          {
+            headers: accessToken
+              ? { Authorization: `Bearer ${accessToken}` }
+              : {},
+          },
+        );
+      }
       setApps((prev) => {
         const next = prev.map((app) =>
           app.id === id ? { ...app, status: "disconnected" as const } : app,
