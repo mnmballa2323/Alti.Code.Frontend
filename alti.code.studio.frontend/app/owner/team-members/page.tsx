@@ -207,18 +207,18 @@ export default function TeamMembersPage() {
                         }
                       >
                         <div className="col-span-6 flex items-center gap-2 min-w-0">
-                          <span className="text-neutral-900 dark:text-white font-medium truncate flex-1">
+                          <span className="text-neutral-900 dark:text-white font-normal truncate flex-1">
                             {member.email}
                           </span>
                         </div>
-                        <div className="col-span-2 flex items-center text-neutral-500 dark:text-neutral-400 capitalize">
+                        <div className="col-span-2 flex items-center text-neutral-500 dark:text-neutral-400 capitalize font-normal">
                           {member.role || "user"}
                         </div>
-                        <div className="col-span-2 text-right text-neutral-600 dark:text-neutral-400 font-semibold pr-2">
+                        <div className="col-span-2 text-right text-neutral-600 dark:text-neutral-400 font-normal pr-2">
                           1 member
                         </div>
                         <div className="col-span-2 flex items-center justify-end gap-2 pr-1">
-                          <span className="text-neutral-800 dark:text-neutral-200 font-medium text-sm">
+                          <span className="text-neutral-800 dark:text-neutral-200 font-normal text-sm">
                             {prices[member.id] || "$1,000"}
                           </span>
                           <button

@@ -100,30 +100,30 @@ export default function EnterprisePage() {
                 onClick={() => router.push(`/owner/enterprise/${tenant.id}`)}
               >
                 <div className="col-span-5 flex flex-col gap-0.5">
-                  <span className="text-neutral-900 dark:text-white font-semibold overflow-hidden text-ellipsis whitespace-nowrap">
+                  <span className="text-neutral-900 dark:text-white font-normal overflow-hidden text-ellipsis whitespace-nowrap">
                     {tenant.name}
                   </span>
                   {tenant.domain && (
-                    <div className="flex items-center gap-1 text-[11px] text-neutral-400 dark:text-neutral-500">
+                    <div className="flex items-center gap-1 text-[11px] text-neutral-455 dark:text-neutral-500 font-normal">
                       <Globe className="w-3 h-3" />
                       <span>{tenant.domain}</span>
                     </div>
                   )}
                 </div>
 
-                <div className="col-span-3 flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
+                <div className="col-span-3 flex items-center gap-2 text-neutral-500 dark:text-neutral-400 font-normal">
                   <User className="w-3.5 h-3.5" />
                   <span className="truncate">{tenant.owner || "No owner assigned"}</span>
                 </div>
 
-                <div className="col-span-2 text-right text-neutral-600 dark:text-neutral-400 font-semibold pr-2">
+                <div className="col-span-2 text-right text-neutral-600 dark:text-neutral-400 font-normal pr-2">
                   {tenant.userCount === 1
                     ? "1 member"
                     : `${tenant.userCount} members`}
                 </div>
 
                 <div className="col-span-2 flex items-center justify-end gap-2 pr-1">
-                  <span className="text-neutral-800 dark:text-neutral-200 font-medium text-sm">
+                  <span className="text-neutral-800 dark:text-neutral-200 font-normal text-sm">
                     $5,000/mo
                   </span>
                   <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors" />
