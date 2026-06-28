@@ -1,7 +1,10 @@
 /**
  * Google Cloud Identity-Aware Proxy (IAP) Authentication Service
  */
+import { OAuth2Client } from 'google-auth-library';
 import { logger } from '../../../shared/logger.js';
+
+const oAuth2Client = new OAuth2Client();
 
 export const authenticateGcpIAP = async (email, password) => {
   logger.info(`🔑 GCP IAP: Attempting authentication for user "${email}"`);
@@ -25,6 +28,49 @@ export const authenticateGcpIAP = async (email, password) => {
 };
 
 export const verifyGcpIapToken = async (req, res, next) => {
+  // 🛡️ ENFORCE ZERO-TRUST JWT VERIFICATION IN PRODUCTION
+  if (process.env.NODE_ENV === 'production') {
+    const iapAssertion = req.headers['x-goog-iap-jwt-assertion'];
+    
+    if (!iapAssertion) {
+      logger.error('❌ [GcpIAP] Missing x-goog-iap-jwt-assertion header in production');
+      return res.status(401).json({
+        error: 'Google Cloud Identity-Aware Proxy JWT Assertion Required.',
+      });
+    }
+
+    try {
+      // Validate expected IAP audience from env variable (e.g. /projects/PROJECT_NUMBER/global/backendServices/SERVICE_ID)
+      const expectedAudience = process.env.GCP_IAP_AUDIENCE;
+      
+      const ticket = await oAuth2Client.verifySignedJwtWithCertsAsync({
+        jwt: iapAssertion,
+        certsUrl: 'https://www.gstatic.com/iap/verify/public_key',
+        requiredAudience: expectedAudience,
+      });
+
+      const payload = ticket.getPayload();
+      if (!payload || !payload.email) {
+        throw new Error('Invalid assertion payload or missing email claim');
+      }
+
+      req.user = {
+        email: payload.email,
+        role: payload.email.startsWith('admin') ? 'ADMIN' : 'USER',
+        subject: payload.sub,
+      };
+      
+      logger.info(`✅ [GcpIAP] Zero-Trust Verified User: ${payload.email}`);
+      return next();
+    } catch (err) {
+      logger.error(`❌ [GcpIAP] Cryptographic validation failed: ${err.message}`);
+      return res.status(401).json({
+        error: `Google Cloud Identity-Aware Proxy Verification Failed: ${err.message}`,
+      });
+    }
+  }
+
+  // Development bypass logic
   const authHeader =
     req.headers['x-goog-authenticated-user-email'] || req.headers['authorization'];
   if (!authHeader) {
