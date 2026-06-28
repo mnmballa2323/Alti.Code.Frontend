@@ -87,7 +87,9 @@ export default function OwnerLayout({
         )}
         <nav className="flex flex-col gap-1">
           {items.map((item) => {
-            const isActive = pathname.startsWith(item.href);
+            const isActive =
+              pathname === item.href ||
+              pathname.startsWith(item.href + "/");
 
             return (
               <a
