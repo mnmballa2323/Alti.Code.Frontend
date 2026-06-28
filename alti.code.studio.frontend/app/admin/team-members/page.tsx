@@ -55,7 +55,7 @@ export default function MembersPage() {
               <div>{member.firstName}</div>
               <div>{member.lastName}</div>
               <div>{member.email}</div>
-              <div className="flex items-center justify-between w-full pr-4 relative">
+              <div className="flex items-center justify-between w-full pr-0 relative">
                 <div className="relative">
                   {member.isYou ? (
                     <span className="font-medium text-neutral-700 dark:text-neutral-300">
