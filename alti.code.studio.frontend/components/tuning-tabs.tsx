@@ -13,16 +13,18 @@ export function TuningTabs() {
       <Tabs
         aria-label="Tuning Options"
         classNames={{
-          tabList: "bg-default-100 dark:bg-default-50 p-1 rounded-lg border-none shadow-inner",
+          tabList:
+            "bg-default-100 dark:bg-default-50 p-1 rounded-lg border-none shadow-inner",
           cursor: "bg-white dark:bg-default-200 shadow-sm rounded-md",
           tab: "h-8 px-4",
-          tabContent: "group-data-[selected=true]:text-foreground text-default-500 font-medium text-sm",
+          tabContent:
+            "group-data-[selected=true]:text-foreground text-default-500 font-medium text-sm",
         }}
         selectedKey={pathname}
-        onSelectionChange={(key) => router.push(key as string)}
       >
         <Tab
           key="/instructions"
+          href="/instructions"
           title={
             <div className="flex items-center space-x-2">
               <BookOpen className="w-4 h-4" />
@@ -32,6 +34,7 @@ export function TuningTabs() {
         />
         <Tab
           key="/guardrails"
+          href="/guardrails"
           title={
             <div className="flex items-center space-x-2">
               <Shield className="w-4 h-4" />
@@ -41,6 +44,7 @@ export function TuningTabs() {
         />
         <Tab
           key="/knowledge"
+          href="/knowledge"
           title={
             <div className="flex items-center space-x-2">
               <Database className="w-4 h-4" />

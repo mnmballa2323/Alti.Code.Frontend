@@ -424,397 +424,407 @@ export default function CloudPage() {
 
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-y-auto bg-default-50 dark:bg-[#0A0A0A] p-8 font-sans scrollbar-hide">
-        <ConnectorTabs />
-        <div className="flex flex-col items-center justify-start min-h-full w-full py-6">
-          {selectedProvider ? (
-            <div className="w-full max-w-4xl text-left bg-white dark:bg-[#111111] p-8 rounded-3xl border border-default-200 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500 my-auto">
-              {/* Header section */}
-              <div className="flex items-start justify-between mb-8 pb-6 border-b border-default-200">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
-                    <Cloud className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 tracking-tight">
-                      {selectedProvider}
-                    </h1>
-                    <Chip
-                      className="mt-2 font-medium"
-                      color={isAuthenticated ? "success" : "default"}
-                      size="sm"
-                      startContent={
-                        <div
-                          className={`w-1.5 h-1.5 rounded-full ${isAuthenticated ? "bg-success" : "bg-gray-400"} ml-1`}
-                        />
-                      }
-                      variant="flat"
-                    >
-                      {isAuthenticated ? "Connected" : "Not Connected"}
-                    </Chip>
-                  </div>
-                </div>
-                <Button
-                  className="bg-black text-white dark:bg-white dark:text-black font-medium"
-                  isDisabled={isAuthenticated}
-                  isLoading={isAuthenticating}
-                  size="sm"
-                  startContent={<Lock size={14} />}
-                  onClick={initiateAuthentication}
-                >
-                  {isAuthenticated ? "Authenticated" : "Authenticate"}
-                </Button>
-              </div>
-
-              <div className="space-y-8">
-                {isAuthenticated && telemetry ? (
-                  <div className="animate-in fade-in zoom-in duration-500">
-                    <div className="grid grid-cols-3 gap-4 mb-8 relative z-10">
-                      <div className="bg-default-50 dark:bg-black/40 p-4 rounded-2xl border border-default-100">
-                        <div className="flex items-center gap-2 text-gray-500 mb-2">
-                          <Server size={14} />
-                          <span className="text-xs font-medium uppercase tracking-wider">
-                            Compute
-                          </span>
-                        </div>
-                        <div className="text-xl font-semibold text-gray-900 dark:text-gray-100 font-mono">
-                          {telemetry.nodes} Nodes
-                        </div>
-                      </div>
-                      <div className="bg-default-50 dark:bg-black/40 p-4 rounded-2xl border border-default-100">
-                        <div className="flex items-center gap-2 text-gray-500 mb-2">
-                          <Database size={14} />
-                          <span className="text-xs font-medium uppercase tracking-wider">
-                            Storage
-                          </span>
-                        </div>
-                        <div className="text-xl font-semibold text-gray-900 dark:text-gray-100 font-mono">
-                          {telemetry.storage}
-                        </div>
-                      </div>
-                      <div className="bg-default-50 dark:bg-black/40 p-4 rounded-2xl border border-default-100">
-                        <div className="flex items-center gap-2 text-gray-500 mb-2">
-                          <Network size={14} />
-                          <span className="text-xs font-medium uppercase tracking-wider">
-                            Egress
-                          </span>
-                        </div>
-                        <div className="text-xl font-semibold text-gray-900 dark:text-gray-100 font-mono">
-                          {telemetry.egress}
-                        </div>
-                      </div>
+      <div className="flex flex-col h-full bg-default-50 dark:bg-[#0A0A0A] w-full">
+        {/* Top Navbar */}
+        <div className="flex items-center w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111] shrink-0">
+          <ConnectorTabs />
+        </div>
+        <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide">
+          <div className="flex flex-col items-center justify-start min-h-full w-full py-6">
+            {selectedProvider ? (
+              <div className="w-full max-w-4xl text-left bg-white dark:bg-[#111111] p-8 rounded-3xl border border-default-200 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500 my-auto">
+                {/* Header section */}
+                <div className="flex items-start justify-between mb-8 pb-6 border-b border-default-200">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center">
+                      <Cloud className="w-6 h-6 text-primary" />
                     </div>
-
-                    {/* Azure Sovereign AI Gateway Endpoint Section */}
-                    {["GCP", "Azure"].some((x) =>
-                      selectedProvider?.includes(x),
-                    ) && (
-                      <div className="mb-8 bg-default-50 dark:bg-black/40 border border-default-100 rounded-2xl p-5 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full pointer-events-none" />
-                        <div className="flex items-center gap-3 mb-4">
-                          <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                            <Shield className="w-4 h-4" />
-                          </div>
-                          <div>
-                            <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                              GCP Sovereign AI Gateway Routing (Sovereign Azure
-                              Inference)
-                            </h4>
-                            <p className="text-[10px] text-gray-400">
-                              Sovereign proxy path enforced for foundational
-                              model inference.
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4">
-                          <div className="bg-white dark:bg-[#111] p-3 rounded-xl border border-default-200/50">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                              Active Gateway
-                            </span>
-                            <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
-                              {selectedProvider === "GCP Government"
-                                ? "Azure OpenAI Government (IL5 Proxy)"
-                                : selectedProvider === "GCP Dedicated"
-                                  ? "Azure OpenAI Dedicated (IL2 Proxy)"
-                                  : "Azure OpenAI Foundry Proxy"}
-                            </div>
-                          </div>
-
-                          <div className="bg-white dark:bg-[#111] p-3 rounded-xl border border-default-200/50">
-                            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
-                              Active Model
-                            </span>
-                            <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
-                              {selectedProvider === "GCP Government"
-                                ? "GPT-4o (Gov/IL5)"
-                                : selectedProvider === "GCP Dedicated"
-                                  ? "GPT-4o (Dedicated/IL2)"
-                                  : "GPT-4o (Commercial)"}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    <div className="mb-8">
-                      <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4 tracking-tight flex items-center justify-between">
-                        Active Workloads
-                      </h3>
-                      <div className="flex flex-col gap-3">
-                        {telemetry.workloads?.map((wk: any) => (
-                          <div
-                            key={wk.id}
-                            className="bg-default-50 dark:bg-black/40 border border-default-100 rounded-xl p-4 flex items-center justify-between hover:border-default-300 transition-colors cursor-pointer group"
-                          >
-                            <div className="flex items-center gap-4">
-                              <div className="w-10 h-10 rounded-xl bg-white dark:bg-[#111] border border-default-200 flex items-center justify-center shrink-0">
-                                <Server
-                                  className="text-gray-500 group-hover:text-primary transition-colors"
-                                  size={16}
-                                />
-                              </div>
-                              <div>
-                                <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-0.5">
-                                  {wk.name}
-                                </p>
-                                <div className="flex items-center gap-3 text-[11px] text-gray-500 font-medium">
-                                  <span className="flex items-center gap-1">
-                                    <Globe2 size={10} /> {wk.region}
-                                  </span>
-                                  <span className="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700" />
-                                  <span className="font-mono text-[10px]">
-                                    {wk.id}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-6">
-                              <div className="w-24 flex flex-col gap-1.5">
-                                <div className="flex items-center justify-between text-[10px] font-medium text-gray-500">
-                                  <span className="flex items-center gap-1">
-                                    <Cpu size={10} /> CPU
-                                  </span>
-                                  <span>{wk.cpu}</span>
-                                </div>
-                                <Progress
-                                  classNames={{ track: "bg-default-200" }}
-                                  color={
-                                    parseInt(wk.cpu || "0") > 75
-                                      ? "danger"
-                                      : "primary"
-                                  }
-                                  size="sm"
-                                  value={parseInt(wk.cpu || "0")}
-                                />
-                              </div>
-                              <Chip
-                                className="border-none px-0 text-xs font-medium"
-                                color="success"
-                                size="sm"
-                                variant="dot"
-                              >
-                                {wk.status}
-                              </Chip>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div>
-                    <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
-                      Integration Status
-                    </h3>
-                    <div className="bg-default-50 dark:bg-black/50 p-5 rounded-xl border border-default-200 flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-full bg-default-200 flex items-center justify-center shrink-0">
-                        <Activity className="w-5 h-5 text-gray-500" />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
-                          Awaiting Telemetry
-                        </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          Authenticate via IAM role or Service Account Key to
-                          begin synchronizing workloads from {selectedProvider}.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* ──── DEDICATED SPECIALIST AGENTS GRID ──── */}
-                <div className="border-t border-default-200 pt-8">
-                  <div className="flex items-center justify-between mb-6">
                     <div>
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-2">
-                        <Zap className="w-5 h-5 text-primary" /> Dedicated
-                        Specialist Agent Swarm
-                      </h3>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Fully specialized autonomous agent nodes running
-                        dedicated telemetry microservices for every core
-                        function of {selectedProvider}.
-                      </p>
-                    </div>
-                    <Chip
-                      className="font-semibold uppercase tracking-wider"
-                      color="primary"
-                      size="sm"
-                      variant="flat"
-                    >
-                      6 Specializations Active
-                    </Chip>
-                  </div>
-
-                  {/* Dynamic console monitor drawer */}
-                  {deployingAgentId && (
-                    <div className="mb-6 bg-black text-lime-400 p-4 rounded-2xl border border-default-800 font-mono text-xs shadow-inner animate-pulse">
-                      <div className="flex items-center gap-2 mb-2 pb-2 border-b border-default-800 text-lime-500">
-                        <Terminal size={14} />
-                        <span>CLOUD DEPLOYMENT STREAM MONITOR</span>
-                      </div>
-                      <div className="space-y-1 select-none">
-                        {agentLogs.map((log, i) => (
+                      <h1 className="text-2xl font-semibold text-gray-900 dark:text-gray-100 tracking-tight">
+                        {selectedProvider}
+                      </h1>
+                      <Chip
+                        className="mt-2 font-medium"
+                        color={isAuthenticated ? "success" : "default"}
+                        size="sm"
+                        startContent={
                           <div
-                            key={i}
-                            className="animate-in slide-in-from-left duration-300"
-                          >
-                            {log}
+                            className={`w-1.5 h-1.5 rounded-full ${isAuthenticated ? "bg-success" : "bg-gray-400"} ml-1`}
+                          />
+                        }
+                        variant="flat"
+                      >
+                        {isAuthenticated ? "Connected" : "Not Connected"}
+                      </Chip>
+                    </div>
+                  </div>
+                  <Button
+                    className="bg-black text-white dark:bg-white dark:text-black font-medium"
+                    isDisabled={isAuthenticated}
+                    isLoading={isAuthenticating}
+                    size="sm"
+                    startContent={<Lock size={14} />}
+                    onClick={initiateAuthentication}
+                  >
+                    {isAuthenticated ? "Authenticated" : "Authenticate"}
+                  </Button>
+                </div>
+
+                <div className="space-y-8">
+                  {isAuthenticated && telemetry ? (
+                    <div className="animate-in fade-in zoom-in duration-500">
+                      <div className="grid grid-cols-3 gap-4 mb-8 relative z-10">
+                        <div className="bg-default-50 dark:bg-black/40 p-4 rounded-2xl border border-default-100">
+                          <div className="flex items-center gap-2 text-gray-500 mb-2">
+                            <Server size={14} />
+                            <span className="text-xs font-medium uppercase tracking-wider">
+                              Compute
+                            </span>
                           </div>
-                        ))}
+                          <div className="text-xl font-semibold text-gray-900 dark:text-gray-100 font-mono">
+                            {telemetry.nodes} Nodes
+                          </div>
+                        </div>
+                        <div className="bg-default-50 dark:bg-black/40 p-4 rounded-2xl border border-default-100">
+                          <div className="flex items-center gap-2 text-gray-500 mb-2">
+                            <Database size={14} />
+                            <span className="text-xs font-medium uppercase tracking-wider">
+                              Storage
+                            </span>
+                          </div>
+                          <div className="text-xl font-semibold text-gray-900 dark:text-gray-100 font-mono">
+                            {telemetry.storage}
+                          </div>
+                        </div>
+                        <div className="bg-default-50 dark:bg-black/40 p-4 rounded-2xl border border-default-100">
+                          <div className="flex items-center gap-2 text-gray-500 mb-2">
+                            <Network size={14} />
+                            <span className="text-xs font-medium uppercase tracking-wider">
+                              Egress
+                            </span>
+                          </div>
+                          <div className="text-xl font-semibold text-gray-900 dark:text-gray-100 font-mono">
+                            {telemetry.egress}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Azure Sovereign AI Gateway Endpoint Section */}
+                      {["GCP", "Azure"].some((x) =>
+                        selectedProvider?.includes(x),
+                      ) && (
+                        <div className="mb-8 bg-default-50 dark:bg-black/40 border border-default-100 rounded-2xl p-5 relative overflow-hidden">
+                          <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full pointer-events-none" />
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                              <Shield className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
+                                GCP Sovereign AI Gateway Routing (Sovereign
+                                Azure Inference)
+                              </h4>
+                              <p className="text-[10px] text-gray-400">
+                                Sovereign proxy path enforced for foundational
+                                model inference.
+                              </p>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="bg-white dark:bg-[#111] p-3 rounded-xl border border-default-200/50">
+                              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                                Active Gateway
+                              </span>
+                              <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
+                                {selectedProvider === "GCP Government"
+                                  ? "Azure OpenAI Government (IL5 Proxy)"
+                                  : selectedProvider === "GCP Dedicated"
+                                    ? "Azure OpenAI Dedicated (IL2 Proxy)"
+                                    : "Azure OpenAI Foundry Proxy"}
+                              </div>
+                            </div>
+
+                            <div className="bg-white dark:bg-[#111] p-3 rounded-xl border border-default-200/50">
+                              <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+                                Active Model
+                              </span>
+                              <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
+                                {selectedProvider === "GCP Government"
+                                  ? "GPT-4o (Gov/IL5)"
+                                  : selectedProvider === "GCP Dedicated"
+                                    ? "GPT-4o (Dedicated/IL2)"
+                                    : "GPT-4o (Commercial)"}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="mb-8">
+                        <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4 tracking-tight flex items-center justify-between">
+                          Active Workloads
+                        </h3>
+                        <div className="flex flex-col gap-3">
+                          {telemetry.workloads?.map((wk: any) => (
+                            <div
+                              key={wk.id}
+                              className="bg-default-50 dark:bg-black/40 border border-default-100 rounded-xl p-4 flex items-center justify-between hover:border-default-300 transition-colors cursor-pointer group"
+                            >
+                              <div className="flex items-center gap-4">
+                                <div className="w-10 h-10 rounded-xl bg-white dark:bg-[#111] border border-default-200 flex items-center justify-center shrink-0">
+                                  <Server
+                                    className="text-gray-500 group-hover:text-primary transition-colors"
+                                    size={16}
+                                  />
+                                </div>
+                                <div>
+                                  <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-0.5">
+                                    {wk.name}
+                                  </p>
+                                  <div className="flex items-center gap-3 text-[11px] text-gray-500 font-medium">
+                                    <span className="flex items-center gap-1">
+                                      <Globe2 size={10} /> {wk.region}
+                                    </span>
+                                    <span className="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700" />
+                                    <span className="font-mono text-[10px]">
+                                      {wk.id}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-6">
+                                <div className="w-24 flex flex-col gap-1.5">
+                                  <div className="flex items-center justify-between text-[10px] font-medium text-gray-500">
+                                    <span className="flex items-center gap-1">
+                                      <Cpu size={10} /> CPU
+                                    </span>
+                                    <span>{wk.cpu}</span>
+                                  </div>
+                                  <Progress
+                                    classNames={{ track: "bg-default-200" }}
+                                    color={
+                                      parseInt(wk.cpu || "0") > 75
+                                        ? "danger"
+                                        : "primary"
+                                    }
+                                    size="sm"
+                                    value={parseInt(wk.cpu || "0")}
+                                  />
+                                </div>
+                                <Chip
+                                  className="border-none px-0 text-xs font-medium"
+                                  color="success"
+                                  size="sm"
+                                  variant="dot"
+                                >
+                                  {wk.status}
+                                </Chip>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div>
+                      <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+                        Integration Status
+                      </h3>
+                      <div className="bg-default-50 dark:bg-black/50 p-5 rounded-xl border border-default-200 flex items-center gap-4">
+                        <div className="w-10 h-10 rounded-full bg-default-200 flex items-center justify-center shrink-0">
+                          <Activity className="w-5 h-5 text-gray-500" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                            Awaiting Telemetry
+                          </p>
+                          <p className="text-xs text-gray-500 mt-1">
+                            Authenticate via IAM role or Service Account Key to
+                            begin synchronizing workloads from{" "}
+                            {selectedProvider}.
+                          </p>
+                        </div>
                       </div>
                     </div>
                   )}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {currentAgents.map((agent) => {
-                      const isDeployed = deployedAgents.includes(agent.agentId);
-                      const isDeploying = deployingAgentId === agent.agentId;
-                      const activeStatus = isDeployed ? "ACTIVE" : agent.status;
+                  {/* ──── DEDICATED SPECIALIST AGENTS GRID ──── */}
+                  <div className="border-t border-default-200 pt-8">
+                    <div className="flex items-center justify-between mb-6">
+                      <div>
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 tracking-tight flex items-center gap-2">
+                          <Zap className="w-5 h-5 text-primary" /> Dedicated
+                          Specialist Agent Swarm
+                        </h3>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Fully specialized autonomous agent nodes running
+                          dedicated telemetry microservices for every core
+                          function of {selectedProvider}.
+                        </p>
+                      </div>
+                      <Chip
+                        className="font-semibold uppercase tracking-wider"
+                        color="primary"
+                        size="sm"
+                        variant="flat"
+                      >
+                        6 Specializations Active
+                      </Chip>
+                    </div>
 
-                      return (
-                        <div
-                          key={agent.agentId}
-                          className="bg-default-50 dark:bg-black/30 border border-default-100 hover:border-default-300 rounded-2xl p-5 transition-all flex flex-col justify-between group"
-                        >
-                          <div>
-                            <div className="flex items-start justify-between mb-3">
-                              <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-xl bg-white dark:bg-[#151515] border border-default-200 flex items-center justify-center shrink-0">
-                                  {getAgentIcon(agent.icon)}
+                    {/* Dynamic console monitor drawer */}
+                    {deployingAgentId && (
+                      <div className="mb-6 bg-black text-lime-400 p-4 rounded-2xl border border-default-800 font-mono text-xs shadow-inner animate-pulse">
+                        <div className="flex items-center gap-2 mb-2 pb-2 border-b border-default-800 text-lime-500">
+                          <Terminal size={14} />
+                          <span>CLOUD DEPLOYMENT STREAM MONITOR</span>
+                        </div>
+                        <div className="space-y-1 select-none">
+                          {agentLogs.map((log, i) => (
+                            <div
+                              key={i}
+                              className="animate-in slide-in-from-left duration-300"
+                            >
+                              {log}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {currentAgents.map((agent) => {
+                        const isDeployed = deployedAgents.includes(
+                          agent.agentId,
+                        );
+                        const isDeploying = deployingAgentId === agent.agentId;
+                        const activeStatus = isDeployed
+                          ? "ACTIVE"
+                          : agent.status;
+
+                        return (
+                          <div
+                            key={agent.agentId}
+                            className="bg-default-50 dark:bg-black/30 border border-default-100 hover:border-default-300 rounded-2xl p-5 transition-all flex flex-col justify-between group"
+                          >
+                            <div>
+                              <div className="flex items-start justify-between mb-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-10 h-10 rounded-xl bg-white dark:bg-[#151515] border border-default-200 flex items-center justify-center shrink-0">
+                                    {getAgentIcon(agent.icon)}
+                                  </div>
+                                  <div>
+                                    <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+                                      {agent.name}
+                                    </h4>
+                                    <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
+                                      {agent.functionName}
+                                    </span>
+                                  </div>
                                 </div>
-                                <div>
-                                  <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100 tracking-tight">
-                                    {agent.name}
-                                  </h4>
-                                  <span className="text-[10px] text-gray-400 uppercase tracking-wider font-semibold">
-                                    {agent.functionName}
-                                  </span>
-                                </div>
+
+                                <Chip
+                                  className="text-[10px] font-bold border-none"
+                                  color={
+                                    activeStatus === "ACTIVE"
+                                      ? "success"
+                                      : activeStatus === "SWARMING"
+                                        ? "secondary"
+                                        : activeStatus === "OPTIMIZING"
+                                          ? "warning"
+                                          : "default"
+                                  }
+                                  size="sm"
+                                  startContent={
+                                    <div
+                                      className={`w-1 h-1 rounded-full ${
+                                        activeStatus === "ACTIVE"
+                                          ? "bg-success"
+                                          : activeStatus === "SWARMING"
+                                            ? "bg-secondary"
+                                            : activeStatus === "OPTIMIZING"
+                                              ? "bg-warning"
+                                              : "bg-gray-400"
+                                      } mr-1`}
+                                    />
+                                  }
+                                  variant="flat"
+                                >
+                                  {activeStatus}
+                                </Chip>
                               </div>
 
-                              <Chip
-                                className="text-[10px] font-bold border-none"
-                                color={
-                                  activeStatus === "ACTIVE"
-                                    ? "success"
-                                    : activeStatus === "SWARMING"
-                                      ? "secondary"
-                                      : activeStatus === "OPTIMIZING"
-                                        ? "warning"
-                                        : "default"
-                                }
+                              <p className="text-xs text-gray-500 leading-relaxed mb-4">
+                                {agent.description}
+                              </p>
+
+                              <div className="flex flex-wrap gap-1.5 mb-4">
+                                {agent.capabilities.map((cap) => (
+                                  <Chip
+                                    key={cap}
+                                    className="text-[9px] font-mono border-default-200 px-1 hover:bg-default-100 transition-colors"
+                                    size="sm"
+                                    variant="bordered"
+                                  >
+                                    {cap}
+                                  </Chip>
+                                ))}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between border-t border-default-100 pt-3 mt-auto">
+                              <span className="text-[11px] font-medium text-gray-400 dark:text-gray-500 truncate max-w-[150px]">
+                                {agent.agentName}
+                              </span>
+                              <Button
+                                className={`h-8 rounded-full px-4 text-xs font-semibold ${
+                                  isDeployed
+                                    ? "bg-success/10 text-success border border-success/20 hover:bg-success/20"
+                                    : "bg-black text-white dark:bg-white dark:text-black hover:opacity-90"
+                                }`}
+                                isDisabled={isDeploying || isDeployed}
+                                isLoading={isDeploying}
                                 size="sm"
                                 startContent={
-                                  <div
-                                    className={`w-1 h-1 rounded-full ${
-                                      activeStatus === "ACTIVE"
-                                        ? "bg-success"
-                                        : activeStatus === "SWARMING"
-                                          ? "bg-secondary"
-                                          : activeStatus === "OPTIMIZING"
-                                            ? "bg-warning"
-                                            : "bg-gray-400"
-                                    } mr-1`}
-                                  />
+                                  isDeployed ? (
+                                    <Check size={12} />
+                                  ) : (
+                                    <Play fill="currentColor" size={12} />
+                                  )
                                 }
-                                variant="flat"
+                                onClick={() => deploySpecialistAgent(agent)}
                               >
-                                {activeStatus}
-                              </Chip>
-                            </div>
-
-                            <p className="text-xs text-gray-500 leading-relaxed mb-4">
-                              {agent.description}
-                            </p>
-
-                            <div className="flex flex-wrap gap-1.5 mb-4">
-                              {agent.capabilities.map((cap) => (
-                                <Chip
-                                  key={cap}
-                                  className="text-[9px] font-mono border-default-200 px-1 hover:bg-default-100 transition-colors"
-                                  size="sm"
-                                  variant="bordered"
-                                >
-                                  {cap}
-                                </Chip>
-                              ))}
+                                {isDeployed ? "Bound & Ready" : "Deploy Agent"}
+                              </Button>
                             </div>
                           </div>
-
-                          <div className="flex items-center justify-between border-t border-default-100 pt-3 mt-auto">
-                            <span className="text-[11px] font-medium text-gray-400 dark:text-gray-500 truncate max-w-[150px]">
-                              {agent.agentName}
-                            </span>
-                            <Button
-                              className={`h-8 rounded-full px-4 text-xs font-semibold ${
-                                isDeployed
-                                  ? "bg-success/10 text-success border border-success/20 hover:bg-success/20"
-                                  : "bg-black text-white dark:bg-white dark:text-black hover:opacity-90"
-                              }`}
-                              isDisabled={isDeploying || isDeployed}
-                              isLoading={isDeploying}
-                              size="sm"
-                              startContent={
-                                isDeployed ? (
-                                  <Check size={12} />
-                                ) : (
-                                  <Play fill="currentColor" size={12} />
-                                )
-                              }
-                              onClick={() => deploySpecialistAgent(agent)}
-                            >
-                              {isDeployed ? "Bound & Ready" : "Deploy Agent"}
-                            </Button>
-                          </div>
-                        </div>
-                      );
-                    })}
+                        );
+                      })}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-start w-full max-w-4xl gap-8 my-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-              <div className="flex flex-col items-center justify-center text-center w-full max-w-2xl bg-white dark:bg-[#111111] p-12 rounded-3xl border border-default-200 shadow-sm border-dashed">
-                <div className="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center mb-6 relative">
-                  <div className="absolute inset-0 rounded-full border border-primary/20 animate-ping opacity-30" />
-                  <Cloud className="w-10 h-10 text-primary" />
+            ) : (
+              <div className="flex flex-col items-center justify-start w-full max-w-4xl gap-8 my-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="flex flex-col items-center justify-center text-center w-full max-w-2xl bg-white dark:bg-[#111111] p-12 rounded-3xl border border-default-200 shadow-sm border-dashed">
+                  <div className="w-20 h-20 bg-primary/5 rounded-full flex items-center justify-center mb-6 relative">
+                    <div className="absolute inset-0 rounded-full border border-primary/20 animate-ping opacity-30" />
+                    <Cloud className="w-10 h-10 text-primary" />
+                  </div>
+                  <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3 tracking-tight">
+                    Global Cloud Infrastructure
+                  </h1>
+                  <p className="text-sm text-gray-500 max-w-md leading-relaxed">
+                    Select a cloud provider from the sidebar to configure IAM
+                    roles, sync workloads, and deploy agentic services securely
+                    across your infrastructure.
+                  </p>
                 </div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-3 tracking-tight">
-                  Global Cloud Infrastructure
-                </h1>
-                <p className="text-sm text-gray-500 max-w-md leading-relaxed">
-                  Select a cloud provider from the sidebar to configure IAM
-                  roles, sync workloads, and deploy agentic services securely
-                  across your infrastructure.
-                </p>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
 

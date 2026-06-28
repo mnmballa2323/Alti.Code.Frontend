@@ -19,17 +19,17 @@ export function ConnectorTabs() {
         aria-label="Connector Options"
         classNames={{
           tabList:
-            "gap-6 w-full relative rounded-none p-0 border-b border-divider",
-          cursor: "w-full bg-primary",
-          tab: "max-w-fit px-0 h-12",
-          tabContent: "group-data-[selected=true]:text-primary",
+            "bg-default-100 dark:bg-default-50 p-1 rounded-lg border-none shadow-inner",
+          cursor: "bg-white dark:bg-default-200 shadow-sm rounded-md",
+          tab: "h-8 px-4",
+          tabContent:
+            "group-data-[selected=true]:text-foreground text-default-500 font-medium text-sm",
         }}
         selectedKey={selectedKey}
-        variant="underlined"
-        onSelectionChange={(key) => router.push(key as string)}
       >
         <Tab
           key="/connect-apps"
+          href="/connect-apps"
           title={
             <div className="flex items-center space-x-2">
               <LayoutGrid className="w-4 h-4" />
@@ -39,6 +39,7 @@ export function ConnectorTabs() {
         />
         <Tab
           key="/database"
+          href="/database"
           title={
             <div className="flex items-center space-x-2">
               <Server className="w-4 h-4" />
@@ -48,6 +49,7 @@ export function ConnectorTabs() {
         />
         <Tab
           key="/cloud"
+          href="/cloud"
           title={
             <div className="flex items-center space-x-2">
               <Cloud className="w-4 h-4" />

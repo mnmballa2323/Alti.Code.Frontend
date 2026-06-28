@@ -1031,285 +1031,181 @@ function ConnectAppsContent() {
 
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-hidden bg-default-50 dark:bg-background flex flex-col h-full font-sans w-full">
-        <div className="px-6 pt-4">
+      <div className="flex flex-col h-full bg-default-50 dark:bg-background w-full">
+        {/* Top Navbar */}
+        <div className="flex items-center w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111] shrink-0">
           <ConnectorTabs />
         </div>
-        {/* Master-Detail Split Screen Container */}
-        <div className="flex flex-1 w-full overflow-hidden bg-white dark:bg-[#0A0A0A]">
-          {/* Right Column: Center Presentation Area */}
-          <div className="flex-1 bg-white dark:bg-[#0A0A0A] flex flex-col h-full overflow-y-auto relative">
-            {notification && (
-              <div className="p-6 pb-0 w-full max-w-xl mx-auto shrink-0">
-                <AlertWrapper className="w-full" variant={notification.type}>
-                  <div className="flex items-center justify-between w-full">
-                    <div className="flex items-center gap-2 text-xs">
-                      <Icon
-                        className="text-base"
-                        icon={
-                          notification.type === "success"
-                            ? "solar:check-circle-bold"
-                            : "solar:danger-triangle-bold"
-                        }
-                      />
-                      <span>{notification.message}</span>
-                    </div>
-                    <button
-                      className="hover:opacity-75 transition-opacity"
-                      type="button"
-                      onClick={() => setNotification(null)}
-                    >
-                      <Icon
-                        className="text-lg"
-                        icon="solar:close-circle-bold"
-                      />
-                    </button>
-                  </div>
-                </AlertWrapper>
-              </div>
-            )}
-            <AnimatePresence mode="wait">
-              {!selectedApp ? (
-                /* Idle Hub View */
-                <motion.div
-                  key="idle"
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex-1 flex flex-col items-center justify-center p-8 max-w-2xl mx-auto text-center gap-8 min-h-full w-full"
-                  exit={{ opacity: 0, scale: 0.98 }}
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <div className="flex flex-col items-center gap-4">
-                    {/* Blue Spars Circle Icon */}
-                    <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 text-white bg-gradient-to-br from-primary to-indigo-600 shrink-0">
-                      <Icon className="text-3xl" icon="solar:stars-line-bold" />
-                    </div>
-
-                    <h2 className="text-2xl font-bold text-default-900 tracking-tight">
-                      Isolated Action Hub
-                    </h2>
-                    <p className="text-sm text-default-500 max-w-md leading-relaxed">
-                      Connect and prompt individual web applications securely.
-                      Select an application in the sidebar to configure
-                      authentication and interact with its tools in a focused,
-                      zero-hallucination agent session.
-                    </p>
-                  </div>
-                </motion.div>
-              ) : isMcp ? (
-                /* MCP Server Details Panel (Studio Presets + Stdio Transport Configs) */
-                <motion.div
-                  key={selectedApp.id}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex-1 flex flex-col items-center justify-start p-8 max-w-xl mx-auto w-full gap-6 min-h-full py-12"
-                  exit={{ opacity: 0, y: 8 }}
-                  initial={{ opacity: 0, y: 8 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {mcpError && (
-                    <AlertWrapper className="w-full" variant="danger">
+        <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans w-full">
+          {/* Master-Detail Split Screen Container */}
+          <div className="flex flex-1 w-full overflow-hidden bg-white dark:bg-[#0A0A0A]">
+            {/* Right Column: Center Presentation Area */}
+            <div className="flex-1 bg-white dark:bg-[#0A0A0A] flex flex-col h-full overflow-y-auto relative">
+              {notification && (
+                <div className="p-6 pb-0 w-full max-w-xl mx-auto shrink-0">
+                  <AlertWrapper className="w-full" variant={notification.type}>
+                    <div className="flex items-center justify-between w-full">
                       <div className="flex items-center gap-2 text-xs">
-                        <Icon icon="solar:danger-triangle-bold" />
-                        <span>{mcpError}</span>
-                      </div>
-                    </AlertWrapper>
-                  )}
-
-                  {selectedApp.id === "custom-mcp-launcher" ? (
-                    /* 🆕 ADD CUSTOM MCP SERVER FORM */
-                    <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col gap-6">
-                      <div className="flex flex-col items-center gap-4 text-center">
-                        <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shadow-inner">
-                          <Icon
-                            className="text-2xl animate-pulse"
-                            icon="solar:add-circle-bold"
-                          />
-                        </div>
-                        <div className="flex flex-col gap-1">
-                          <h2 className="text-xl font-bold text-default-900">
-                            Add Custom MCP Server
-                          </h2>
-                          <p className="text-xs text-default-500 max-w-sm">
-                            Configure standard input/output transport parameters
-                            to launch and dynamically register any local or
-                            community MCP server.
-                          </p>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col gap-4">
-                        <Input
-                          isRequired
-                          label="Display Title"
-                          placeholder="e.g. Local Database SQLite"
-                          value={mcpTitle}
-                          variant="bordered"
-                          onValueChange={setMcpTitle}
+                        <Icon
+                          className="text-base"
+                          icon={
+                            notification.type === "success"
+                              ? "solar:check-circle-bold"
+                              : "solar:danger-triangle-bold"
+                          }
                         />
-
-                        <div className="flex gap-4">
-                          <Input
-                            isRequired
-                            className="w-1/2"
-                            label="Server Slug ID"
-                            placeholder="e.g. local_sqlite"
-                            value={mcpName}
-                            variant="bordered"
-                            onValueChange={setMcpName}
-                          />
-                          <Input
-                            isRequired
-                            className="w-1/2"
-                            label="Command"
-                            placeholder="npx"
-                            value={command}
-                            variant="bordered"
-                            onValueChange={setCommand}
-                          />
-                        </div>
-
-                        <Input
-                          label="Description"
-                          placeholder="Brief description of capabilities exposed by this server"
-                          value={mcpDescription}
-                          variant="bordered"
-                          onValueChange={setMcpDescription}
-                        />
-
-                        <Input
-                          label="Arguments"
-                          placeholder="e.g. -y @modelcontextprotocol/server-sqlite --file db.sqlite"
-                          value={argsInput}
-                          variant="bordered"
-                          onValueChange={setArgsInput}
-                        />
-
-                        <div className="flex flex-col gap-1.5">
-                          <label className="text-[11px] font-semibold text-default-600 pl-1">
-                            Environment Variables (Optional)
-                          </label>
-                          <textarea
-                            className="w-full h-24 p-3 bg-transparent border border-default-200 dark:border-default-100 rounded-xl font-mono text-[10px] text-default-800 focus:outline-none focus:border-primary placeholder:text-default-400"
-                            placeholder="KEY=VALUE&#10;GITHUB_TOKEN=token123"
-                            value={envInput}
-                            onChange={(e) => setEnvInput(e.target.value)}
-                          />
-                        </div>
-
-                        <button
-                          className="w-full font-bold text-sm h-12 rounded-xl bg-primary text-white hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-md shadow-primary/10 mt-2"
-                          disabled={isMcpConnecting}
-                          type="button"
-                          onClick={handleRegisterCustomMcp}
-                        >
-                          {isMcpConnecting ? (
-                            <Icon
-                              className="text-base animate-spin"
-                              icon="line-md:loading-twotone-loop"
-                            />
-                          ) : (
-                            <Icon
-                              className="text-base"
-                              icon="solar:disk-bold"
-                            />
-                          )}
-                          Register & Launch Server
-                        </button>
+                        <span>{notification.message}</span>
                       </div>
+                      <button
+                        className="hover:opacity-75 transition-opacity"
+                        type="button"
+                        onClick={() => setNotification(null)}
+                      >
+                        <Icon
+                          className="text-lg"
+                          icon="solar:close-circle-bold"
+                        />
+                      </button>
                     </div>
-                  ) : (
-                    /* EXISTING PRESETS OR CUSTOM SERVERS */
-                    <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col items-center gap-6">
-                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white dark:bg-black border border-default-200 dark:border-default-100/50 shadow-sm shrink-0 overflow-hidden">
-                        <AppIcon
-                          app={selectedApp}
-                          className="w-full h-full object-contain"
+                  </AlertWrapper>
+                </div>
+              )}
+              <AnimatePresence mode="wait">
+                {!selectedApp ? (
+                  /* Idle Hub View */
+                  <motion.div
+                    key="idle"
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex-1 flex flex-col items-center justify-center p-8 max-w-2xl mx-auto text-center gap-8 min-h-full w-full"
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="flex flex-col items-center gap-4">
+                      {/* Blue Spars Circle Icon */}
+                      <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 text-white bg-gradient-to-br from-primary to-indigo-600 shrink-0">
+                        <Icon
+                          className="text-3xl"
+                          icon="solar:stars-line-bold"
                         />
                       </div>
 
-                      <div className="flex flex-col gap-1 text-center">
-                        <div className="flex items-center justify-center gap-2">
-                          <h2 className="text-xl font-bold text-default-900">
-                            {selectedApp.name}
-                          </h2>
-                          {isServerActive && (
-                            <Chip
-                              className="h-5 text-[10px] font-semibold"
-                              color="success"
-                              size="sm"
-                              variant="flat"
-                            >
-                              Active
-                            </Chip>
-                          )}
+                      <h2 className="text-2xl font-bold text-default-900 tracking-tight">
+                        Isolated Action Hub
+                      </h2>
+                      <p className="text-sm text-default-500 max-w-md leading-relaxed">
+                        Connect and prompt individual web applications securely.
+                        Select an application in the sidebar to configure
+                        authentication and interact with its tools in a focused,
+                        zero-hallucination agent session.
+                      </p>
+                    </div>
+                  </motion.div>
+                ) : isMcp ? (
+                  /* MCP Server Details Panel (Studio Presets + Stdio Transport Configs) */
+                  <motion.div
+                    key={selectedApp.id}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex-1 flex flex-col items-center justify-start p-8 max-w-xl mx-auto w-full gap-6 min-h-full py-12"
+                    exit={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {mcpError && (
+                      <AlertWrapper className="w-full" variant="danger">
+                        <div className="flex items-center gap-2 text-xs">
+                          <Icon icon="solar:danger-triangle-bold" />
+                          <span>{mcpError}</span>
                         </div>
-                        <p className="text-xs text-default-400 font-mono">
-                          source: {cleanSlug}
-                        </p>
-                        <p className="text-xs text-default-500 leading-relaxed px-2 mt-2">
-                          {selectedApp.description}
-                        </p>
-                      </div>
+                      </AlertWrapper>
+                    )}
 
-                      {/* Stdio Transport Parameters input fields */}
-                      <div className="w-full flex flex-col gap-3">
-                        <div className="flex gap-3">
+                    {selectedApp.id === "custom-mcp-launcher" ? (
+                      /* 🆕 ADD CUSTOM MCP SERVER FORM */
+                      <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col gap-6">
+                        <div className="flex flex-col items-center gap-4 text-center">
+                          <div className="w-12 h-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center shadow-inner">
+                            <Icon
+                              className="text-2xl animate-pulse"
+                              icon="solar:add-circle-bold"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-1">
+                            <h2 className="text-xl font-bold text-default-900">
+                              Add Custom MCP Server
+                            </h2>
+                            <p className="text-xs text-default-500 max-w-sm">
+                              Configure standard input/output transport
+                              parameters to launch and dynamically register any
+                              local or community MCP server.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col gap-4">
                           <Input
-                            className="w-1/3"
-                            label="Command"
-                            placeholder="npx"
-                            value={command}
+                            isRequired
+                            label="Display Title"
+                            placeholder="e.g. Local Database SQLite"
+                            value={mcpTitle}
                             variant="bordered"
-                            onValueChange={setCommand}
+                            onValueChange={setMcpTitle}
                           />
+
+                          <div className="flex gap-4">
+                            <Input
+                              isRequired
+                              className="w-1/2"
+                              label="Server Slug ID"
+                              placeholder="e.g. local_sqlite"
+                              value={mcpName}
+                              variant="bordered"
+                              onValueChange={setMcpName}
+                            />
+                            <Input
+                              isRequired
+                              className="w-1/2"
+                              label="Command"
+                              placeholder="npx"
+                              value={command}
+                              variant="bordered"
+                              onValueChange={setCommand}
+                            />
+                          </div>
+
                           <Input
-                            className="w-2/3"
+                            label="Description"
+                            placeholder="Brief description of capabilities exposed by this server"
+                            value={mcpDescription}
+                            variant="bordered"
+                            onValueChange={setMcpDescription}
+                          />
+
+                          <Input
                             label="Arguments"
-                            placeholder="-y @modelcontextprotocol/server-sqlite"
+                            placeholder="e.g. -y @modelcontextprotocol/server-sqlite --file db.sqlite"
                             value={argsInput}
                             variant="bordered"
                             onValueChange={setArgsInput}
                           />
-                        </div>
 
-                        <div className="flex flex-col gap-1.5 mt-1">
-                          <label className="text-[11px] font-semibold text-default-600 pl-1">
-                            Environment Variables (Optional)
-                          </label>
-                          <textarea
-                            className="w-full h-20 p-2.5 bg-transparent border border-default-200 dark:border-default-100 rounded-xl font-mono text-[10px] text-default-800 focus:outline-none focus:border-primary placeholder:text-default-400"
-                            placeholder="KEY=VALUE&#10;GITHUB_TOKEN=token123"
-                            value={envInput}
-                            onChange={(e) => setEnvInput(e.target.value)}
-                          />
-                        </div>
+                          <div className="flex flex-col gap-1.5">
+                            <label className="text-[11px] font-semibold text-default-600 pl-1">
+                              Environment Variables (Optional)
+                            </label>
+                            <textarea
+                              className="w-full h-24 p-3 bg-transparent border border-default-200 dark:border-default-100 rounded-xl font-mono text-[10px] text-default-800 focus:outline-none focus:border-primary placeholder:text-default-400"
+                              placeholder="KEY=VALUE&#10;GITHUB_TOKEN=token123"
+                              value={envInput}
+                              onChange={(e) => setEnvInput(e.target.value)}
+                            />
+                          </div>
 
-                        {isServerActive ? (
-                          <button
-                            className="w-full font-bold text-sm h-12 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 active:scale-95 transition-all flex items-center justify-center gap-2 border border-danger/20 mt-2"
-                            disabled={isMcpConnecting}
-                            type="button"
-                            onClick={handleDisconnectMcpServer}
-                          >
-                            {isMcpConnecting ? (
-                              <Icon
-                                className="text-base animate-spin"
-                                icon="line-md:loading-twotone-loop"
-                              />
-                            ) : (
-                              <Icon
-                                className="text-base"
-                                icon="solar:stop-circle-bold"
-                              />
-                            )}
-                            Stop MCP Server
-                          </button>
-                        ) : (
                           <button
                             className="w-full font-bold text-sm h-12 rounded-xl bg-primary text-white hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-md shadow-primary/10 mt-2"
                             disabled={isMcpConnecting}
                             type="button"
-                            onClick={handleLaunchMcpServer}
+                            onClick={handleRegisterCustomMcp}
                           >
                             {isMcpConnecting ? (
                               <Icon
@@ -1319,225 +1215,173 @@ function ConnectAppsContent() {
                             ) : (
                               <Icon
                                 className="text-base"
-                                icon="solar:play-circle-bold"
+                                icon="solar:disk-bold"
                               />
                             )}
-                            Launch MCP Server
+                            Register & Launch Server
                           </button>
-                        )}
+                        </div>
+                      </div>
+                    ) : (
+                      /* EXISTING PRESETS OR CUSTOM SERVERS */
+                      <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col items-center gap-6">
+                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white dark:bg-black border border-default-200 dark:border-default-100/50 shadow-sm shrink-0 overflow-hidden">
+                          <AppIcon
+                            app={selectedApp}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
 
-                        {selectedApp.type === "custom" && (
-                          <button
-                            className="w-full font-bold text-xs h-10 rounded-xl bg-default-100 hover:bg-danger/10 hover:text-danger active:scale-95 transition-all flex items-center justify-center gap-2 border border-transparent hover:border-danger/20 mt-1"
-                            disabled={isMcpConnecting}
-                            type="button"
-                            onClick={handleDeleteCustomMcpServer}
-                          >
-                            <Icon
-                              className="text-sm"
-                              icon="solar:trash-bin-trash-bold"
+                        <div className="flex flex-col gap-1 text-center">
+                          <div className="flex items-center justify-center gap-2">
+                            <h2 className="text-xl font-bold text-default-900">
+                              {selectedApp.name}
+                            </h2>
+                            {isServerActive && (
+                              <Chip
+                                className="h-5 text-[10px] font-semibold"
+                                color="success"
+                                size="sm"
+                                variant="flat"
+                              >
+                                Active
+                              </Chip>
+                            )}
+                          </div>
+                          <p className="text-xs text-default-400 font-mono">
+                            source: {cleanSlug}
+                          </p>
+                          <p className="text-xs text-default-500 leading-relaxed px-2 mt-2">
+                            {selectedApp.description}
+                          </p>
+                        </div>
+
+                        {/* Stdio Transport Parameters input fields */}
+                        <div className="w-full flex flex-col gap-3">
+                          <div className="flex gap-3">
+                            <Input
+                              className="w-1/3"
+                              label="Command"
+                              placeholder="npx"
+                              value={command}
+                              variant="bordered"
+                              onValueChange={setCommand}
                             />
-                            Delete Custom Integration
-                          </button>
-                        )}
-                      </div>
+                            <Input
+                              className="w-2/3"
+                              label="Arguments"
+                              placeholder="-y @modelcontextprotocol/server-sqlite"
+                              value={argsInput}
+                              variant="bordered"
+                              onValueChange={setArgsInput}
+                            />
+                          </div>
 
-                      <div className="flex items-center gap-1.5 text-[10px] text-default-400 font-medium">
-                        <Icon
-                          className="text-xs text-primary"
-                          icon="solar:server-square-bold"
-                        />
-                        Ingested seamlessly via secure Stdio pipeline
-                      </div>
-                    </div>
-                  )}
+                          <div className="flex flex-col gap-1.5 mt-1">
+                            <label className="text-[11px] font-semibold text-default-600 pl-1">
+                              Environment Variables (Optional)
+                            </label>
+                            <textarea
+                              className="w-full h-20 p-2.5 bg-transparent border border-default-200 dark:border-default-100 rounded-xl font-mono text-[10px] text-default-800 focus:outline-none focus:border-primary placeholder:text-default-400"
+                              placeholder="KEY=VALUE&#10;GITHUB_TOKEN=token123"
+                              value={envInput}
+                              onChange={(e) => setEnvInput(e.target.value)}
+                            />
+                          </div>
 
-                  {/* Ingested Server Tools Tab list */}
-                  <div className="w-full flex flex-col gap-4 mt-2">
-                    <div className="flex border-b border-default-200 dark:border-default-100/50">
-                      <button
-                        className="pb-2.5 text-xs font-bold border-b-2 border-primary text-primary px-1"
-                        type="button"
-                      >
-                        Ingested Capabilities ({activeMcpTools.length})
-                      </button>
-                    </div>
-
-                    <div className="w-full">
-                      {activeMcpTools.length === 0 ? (
-                        <div className="text-center py-10 border border-dashed border-default-200 dark:border-default-100 rounded-2xl">
-                          <span className="text-xs text-default-400 italic">
-                            {isServerActive
-                              ? "No tools registered for this active server."
-                              : "Launch the MCP server to dynamically ingest its standard capabilities."}
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex flex-col gap-2">
-                          {activeMcpTools.map((tool) => (
-                            <div
-                              key={tool.name}
-                              className="flex flex-col p-3.5 rounded-2xl border border-default-200 dark:border-default-100 bg-[#F9F9FB]/30 dark:bg-default-50/5 hover:border-primary/20 transition-all"
+                          {isServerActive ? (
+                            <button
+                              className="w-full font-bold text-sm h-12 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 active:scale-95 transition-all flex items-center justify-center gap-2 border border-danger/20 mt-2"
+                              disabled={isMcpConnecting}
+                              type="button"
+                              onClick={handleDisconnectMcpServer}
                             >
-                              <div className="flex items-center gap-2 mb-1">
+                              {isMcpConnecting ? (
                                 <Icon
-                                  className="text-primary text-base shrink-0"
-                                  icon="solar:bolt-circle-bold"
+                                  className="text-base animate-spin"
+                                  icon="line-md:loading-twotone-loop"
                                 />
-                                <p className="font-bold text-xs text-default-800 truncate">
-                                  {tool.name}
-                                </p>
-                              </div>
-                              <p className="text-[11px] text-default-500 leading-normal pl-6">
-                                {tool.description}
-                              </p>
-                              {tool.inputSchema?.required && (
-                                <div className="flex gap-1.5 flex-wrap mt-2 pl-6">
-                                  {tool.inputSchema.required.map(
-                                    (req: string) => (
-                                      <Chip
-                                        key={req}
-                                        className="h-4 text-[8px] px-1.5 font-mono"
-                                        color="danger"
-                                        size="sm"
-                                        variant="flat"
-                                      >
-                                        {req}*
-                                      </Chip>
-                                    ),
-                                  )}
-                                </div>
+                              ) : (
+                                <Icon
+                                  className="text-base"
+                                  icon="solar:stop-circle-bold"
+                                />
                               )}
-                            </div>
-                          ))}
+                              Stop MCP Server
+                            </button>
+                          ) : (
+                            <button
+                              className="w-full font-bold text-sm h-12 rounded-xl bg-primary text-white hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-md shadow-primary/10 mt-2"
+                              disabled={isMcpConnecting}
+                              type="button"
+                              onClick={handleLaunchMcpServer}
+                            >
+                              {isMcpConnecting ? (
+                                <Icon
+                                  className="text-base animate-spin"
+                                  icon="line-md:loading-twotone-loop"
+                                />
+                              ) : (
+                                <Icon
+                                  className="text-base"
+                                  icon="solar:play-circle-bold"
+                                />
+                              )}
+                              Launch MCP Server
+                            </button>
+                          )}
+
+                          {selectedApp.type === "custom" && (
+                            <button
+                              className="w-full font-bold text-xs h-10 rounded-xl bg-default-100 hover:bg-danger/10 hover:text-danger active:scale-95 transition-all flex items-center justify-center gap-2 border border-transparent hover:border-danger/20 mt-1"
+                              disabled={isMcpConnecting}
+                              type="button"
+                              onClick={handleDeleteCustomMcpServer}
+                            >
+                              <Icon
+                                className="text-sm"
+                                icon="solar:trash-bin-trash-bold"
+                              />
+                              Delete Custom Integration
+                            </button>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </div>
-                </motion.div>
-              ) : (
-                /* Selected App Connection details & Capabilities */
-                <motion.div
-                  key={selectedApp.id}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex-1 flex flex-col items-center justify-start p-8 max-w-xl mx-auto w-full gap-6 min-h-full py-12"
-                  exit={{ opacity: 0, y: 8 }}
-                  initial={{ opacity: 0, y: 8 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {/* Connect App Card Wrapper */}
-                  <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col items-center text-center gap-6">
-                    {/* App logo inside custom box */}
-                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white dark:bg-black border border-default-200 dark:border-default-100/50 shadow-sm shrink-0 overflow-hidden">
-                      <AppIcon
-                        app={selectedApp}
-                        className="w-full h-full object-contain"
-                      />
-                    </div>
 
-                    <div className="flex flex-col gap-1.5">
-                      <h2 className="text-xl font-bold text-default-900">
-                        Connect {selectedApp.name}
-                      </h2>
-                      <p className="text-xs text-default-500 leading-relaxed px-2">
-                        Integrate {selectedApp.name} to seamlessly execute
-                        automated workflows, synchronize data, and orchestrate{" "}
-                        {selectedApp.name} actions directly within Inso Code.
-                      </p>
-                    </div>
-
-                    {/* Authorize button triggers */}
-                    <div className="w-full">
-                      {selectedApp.status === "disconnected" ? (
-                        <button
-                          className="w-full font-bold text-sm h-12 rounded-xl bg-primary text-white hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-md shadow-primary/10"
-                          type="button"
-                          onClick={() => handleConnect(selectedApp.id)}
-                        >
-                          <Icon className="text-base" icon="solar:key-bold" />
-                          Authorize Connection
-                        </button>
-                      ) : selectedApp.status === "connecting" ? (
-                        <button
-                          disabled
-                          className="w-full font-bold text-sm h-12 rounded-xl bg-default-100 dark:bg-default-200 text-default-400 flex items-center justify-center gap-2 cursor-wait"
-                          type="button"
-                        >
+                        <div className="flex items-center gap-1.5 text-[10px] text-default-400 font-medium">
                           <Icon
-                            className="text-base"
-                            icon="line-md:loading-twotone-loop"
+                            className="text-xs text-primary"
+                            icon="solar:server-square-bold"
                           />
-                          Authenticating Connection...
-                        </button>
-                      ) : (
-                        <button
-                          className="w-full font-bold text-sm h-12 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 active:scale-95 transition-all flex items-center justify-center gap-2 border border-danger/20"
-                          type="button"
-                          onClick={() => handleDisconnect(selectedApp.id)}
-                        >
-                          Disconnect Connection
-                        </button>
-                      )}
-                    </div>
-
-                    {/* Footnote */}
-                    <div className="flex items-center gap-1.5 text-[10px] text-default-400 font-medium">
-                      <Icon className="text-xs" icon="solar:lock-bold" />
-                      Authenticated securely via local protocol
-                    </div>
-                  </div>
-
-                  {/* Capabilities Accordion Tab Views inside the details page */}
-                  <div className="w-full flex flex-col gap-4 mt-2">
-                    <div className="flex border-b border-default-200 dark:border-default-100/50">
-                      <button
-                        className={`pb-2.5 text-xs font-bold border-b-2 transition-colors px-1 ${
-                          modalTab === "tools"
-                            ? "border-primary text-primary"
-                            : "border-transparent text-default-400 hover:text-default-700"
-                        }`}
-                        type="button"
-                        onClick={() => setModalTab("tools")}
-                      >
-                        Capabilities (Tools)
-                      </button>
-                      <button
-                        className={`ml-6 pb-2.5 text-xs font-bold border-b-2 transition-colors px-1 ${
-                          modalTab === "triggers"
-                            ? "border-primary text-primary"
-                            : "border-transparent text-default-400 hover:text-default-700"
-                        }`}
-                        type="button"
-                        onClick={() => setModalTab("triggers")}
-                      >
-                        Webhooks (Triggers)
-                      </button>
-                    </div>
-
-                    {/* Tab contents list */}
-                    <div className="w-full">
-                      {loadingDetails ? (
-                        <div className="flex flex-col items-center py-8 gap-3">
-                          <Icon
-                            className="text-xl text-primary animate-spin"
-                            icon="line-md:loading-twotone-loop"
-                          />
-                          <span className="text-[11px] text-default-400">
-                            Syncing connection...
-                          </span>
+                          Ingested seamlessly via secure Stdio pipeline
                         </div>
-                      ) : modalTab === "tools" ? (
-                        appTools.length === 0 ? (
+                      </div>
+                    )}
+
+                    {/* Ingested Server Tools Tab list */}
+                    <div className="w-full flex flex-col gap-4 mt-2">
+                      <div className="flex border-b border-default-200 dark:border-default-100/50">
+                        <button
+                          className="pb-2.5 text-xs font-bold border-b-2 border-primary text-primary px-1"
+                          type="button"
+                        >
+                          Ingested Capabilities ({activeMcpTools.length})
+                        </button>
+                      </div>
+
+                      <div className="w-full">
+                        {activeMcpTools.length === 0 ? (
                           <div className="text-center py-10 border border-dashed border-default-200 dark:border-default-100 rounded-2xl">
-                            <span className="text-xs text-default-400">
-                              No capabilities found
+                            <span className="text-xs text-default-400 italic">
+                              {isServerActive
+                                ? "No tools registered for this active server."
+                                : "Launch the MCP server to dynamically ingest its standard capabilities."}
                             </span>
                           </div>
                         ) : (
                           <div className="flex flex-col gap-2">
-                            {appTools.map((tool) => (
+                            {activeMcpTools.map((tool) => (
                               <div
-                                key={tool.id}
+                                key={tool.name}
                                 className="flex flex-col p-3.5 rounded-2xl border border-default-200 dark:border-default-100 bg-[#F9F9FB]/30 dark:bg-default-50/5 hover:border-primary/20 transition-all"
                               >
                                 <div className="flex items-center gap-2 mb-1">
@@ -1552,43 +1396,205 @@ function ConnectAppsContent() {
                                 <p className="text-[11px] text-default-500 leading-normal pl-6">
                                   {tool.description}
                                 </p>
+                                {tool.inputSchema?.required && (
+                                  <div className="flex gap-1.5 flex-wrap mt-2 pl-6">
+                                    {tool.inputSchema.required.map(
+                                      (req: string) => (
+                                        <Chip
+                                          key={req}
+                                          className="h-4 text-[8px] px-1.5 font-mono"
+                                          color="danger"
+                                          size="sm"
+                                          variant="flat"
+                                        >
+                                          {req}*
+                                        </Chip>
+                                      ),
+                                    )}
+                                  </div>
+                                )}
                               </div>
                             ))}
                           </div>
-                        )
-                      ) : appTriggers.length === 0 ? (
-                        <div className="text-center py-10 border border-dashed border-default-200 dark:border-default-100 rounded-2xl">
-                          <span className="text-xs text-default-400">
-                            No webhooks found
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="flex flex-col gap-2">
-                          {appTriggers.map((trigger) => (
-                            <div
-                              key={trigger.id}
-                              className="flex items-center justify-between p-3.5 rounded-2xl border border-default-200 dark:border-default-100 bg-[#F9F9FB]/30 dark:bg-default-50/5 hover:border-primary/20 transition-all"
-                            >
-                              <div className="min-w-0 pr-3">
-                                <p className="font-bold text-xs text-default-800 truncate mb-0.5">
-                                  {trigger.name}
-                                </p>
-                                <p className="text-[9px] text-default-400 font-mono truncate">
-                                  {trigger.id}
-                                </p>
-                              </div>
-                              <button className="px-3 h-7 bg-default-100 hover:bg-success hover:text-white rounded-lg text-[10px] font-bold transition-colors uppercase tracking-wider shrink-0">
-                                Enable
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  </motion.div>
+                ) : (
+                  /* Selected App Connection details & Capabilities */
+                  <motion.div
+                    key={selectedApp.id}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex-1 flex flex-col items-center justify-start p-8 max-w-xl mx-auto w-full gap-6 min-h-full py-12"
+                    exit={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {/* Connect App Card Wrapper */}
+                    <div className="w-full p-8 border border-default-200 dark:border-default-100/50 bg-[#F9F9FB]/50 dark:bg-[#0E0E10]/30 rounded-3xl shadow-sm flex flex-col items-center text-center gap-6">
+                      {/* App logo inside custom box */}
+                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-white dark:bg-black border border-default-200 dark:border-default-100/50 shadow-sm shrink-0 overflow-hidden">
+                        <AppIcon
+                          app={selectedApp}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <h2 className="text-xl font-bold text-default-900">
+                          Connect {selectedApp.name}
+                        </h2>
+                        <p className="text-xs text-default-500 leading-relaxed px-2">
+                          Integrate {selectedApp.name} to seamlessly execute
+                          automated workflows, synchronize data, and orchestrate{" "}
+                          {selectedApp.name} actions directly within Inso Code.
+                        </p>
+                      </div>
+
+                      {/* Authorize button triggers */}
+                      <div className="w-full">
+                        {selectedApp.status === "disconnected" ? (
+                          <button
+                            className="w-full font-bold text-sm h-12 rounded-xl bg-primary text-white hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2 shadow-md shadow-primary/10"
+                            type="button"
+                            onClick={() => handleConnect(selectedApp.id)}
+                          >
+                            <Icon className="text-base" icon="solar:key-bold" />
+                            Authorize Connection
+                          </button>
+                        ) : selectedApp.status === "connecting" ? (
+                          <button
+                            disabled
+                            className="w-full font-bold text-sm h-12 rounded-xl bg-default-100 dark:bg-default-200 text-default-400 flex items-center justify-center gap-2 cursor-wait"
+                            type="button"
+                          >
+                            <Icon
+                              className="text-base"
+                              icon="line-md:loading-twotone-loop"
+                            />
+                            Authenticating Connection...
+                          </button>
+                        ) : (
+                          <button
+                            className="w-full font-bold text-sm h-12 rounded-xl bg-danger/10 text-danger hover:bg-danger/20 active:scale-95 transition-all flex items-center justify-center gap-2 border border-danger/20"
+                            type="button"
+                            onClick={() => handleDisconnect(selectedApp.id)}
+                          >
+                            Disconnect Connection
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Footnote */}
+                      <div className="flex items-center gap-1.5 text-[10px] text-default-400 font-medium">
+                        <Icon className="text-xs" icon="solar:lock-bold" />
+                        Authenticated securely via local protocol
+                      </div>
+                    </div>
+
+                    {/* Capabilities Accordion Tab Views inside the details page */}
+                    <div className="w-full flex flex-col gap-4 mt-2">
+                      <div className="flex border-b border-default-200 dark:border-default-100/50">
+                        <button
+                          className={`pb-2.5 text-xs font-bold border-b-2 transition-colors px-1 ${
+                            modalTab === "tools"
+                              ? "border-primary text-primary"
+                              : "border-transparent text-default-400 hover:text-default-700"
+                          }`}
+                          type="button"
+                          onClick={() => setModalTab("tools")}
+                        >
+                          Capabilities (Tools)
+                        </button>
+                        <button
+                          className={`ml-6 pb-2.5 text-xs font-bold border-b-2 transition-colors px-1 ${
+                            modalTab === "triggers"
+                              ? "border-primary text-primary"
+                              : "border-transparent text-default-400 hover:text-default-700"
+                          }`}
+                          type="button"
+                          onClick={() => setModalTab("triggers")}
+                        >
+                          Webhooks (Triggers)
+                        </button>
+                      </div>
+
+                      {/* Tab contents list */}
+                      <div className="w-full">
+                        {loadingDetails ? (
+                          <div className="flex flex-col items-center py-8 gap-3">
+                            <Icon
+                              className="text-xl text-primary animate-spin"
+                              icon="line-md:loading-twotone-loop"
+                            />
+                            <span className="text-[11px] text-default-400">
+                              Syncing connection...
+                            </span>
+                          </div>
+                        ) : modalTab === "tools" ? (
+                          appTools.length === 0 ? (
+                            <div className="text-center py-10 border border-dashed border-default-200 dark:border-default-100 rounded-2xl">
+                              <span className="text-xs text-default-400">
+                                No capabilities found
+                              </span>
+                            </div>
+                          ) : (
+                            <div className="flex flex-col gap-2">
+                              {appTools.map((tool) => (
+                                <div
+                                  key={tool.id}
+                                  className="flex flex-col p-3.5 rounded-2xl border border-default-200 dark:border-default-100 bg-[#F9F9FB]/30 dark:bg-default-50/5 hover:border-primary/20 transition-all"
+                                >
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <Icon
+                                      className="text-primary text-base shrink-0"
+                                      icon="solar:bolt-circle-bold"
+                                    />
+                                    <p className="font-bold text-xs text-default-800 truncate">
+                                      {tool.name}
+                                    </p>
+                                  </div>
+                                  <p className="text-[11px] text-default-500 leading-normal pl-6">
+                                    {tool.description}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          )
+                        ) : appTriggers.length === 0 ? (
+                          <div className="text-center py-10 border border-dashed border-default-200 dark:border-default-100 rounded-2xl">
+                            <span className="text-xs text-default-400">
+                              No webhooks found
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col gap-2">
+                            {appTriggers.map((trigger) => (
+                              <div
+                                key={trigger.id}
+                                className="flex items-center justify-between p-3.5 rounded-2xl border border-default-200 dark:border-default-100 bg-[#F9F9FB]/30 dark:bg-default-50/5 hover:border-primary/20 transition-all"
+                              >
+                                <div className="min-w-0 pr-3">
+                                  <p className="font-bold text-xs text-default-800 truncate mb-0.5">
+                                    {trigger.name}
+                                  </p>
+                                  <p className="text-[9px] text-default-400 font-mono truncate">
+                                    {trigger.id}
+                                  </p>
+                                </div>
+                                <button className="px-3 h-7 bg-default-100 hover:bg-success hover:text-white rounded-lg text-[10px] font-bold transition-colors uppercase tracking-wider shrink-0">
+                                  Enable
+                                </button>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>
