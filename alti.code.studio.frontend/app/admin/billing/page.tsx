@@ -1,38 +1,41 @@
 "use client";
 
 import React from "react";
-import { Users, CreditCard, Landmark } from "lucide-react";
+import { Users, CreditCard, Landmark, ChevronDown } from "lucide-react";
 
 export function CardBrandLogo({ brand }: { brand: string }) {
   const b = brand.toLowerCase();
   if (b === "visa") {
     return (
-      <svg viewBox="0 0 24 15" className="h-4.5 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10.1 14.5L12.2 2H10.1L8.0 14.5H10.1ZM21.5 2H19.5c-.6 0-1.1.4-1.4 1.0L15.3 14.5h2.2l.4-1.2h2.7l.3 1.2h2.0l-1.4-12.5zm-3.0 7.2l.9-2.5.5 2.5h-1.4ZM6.3 2H4.2c-.2 0-.4.1-.5.3L.3 14.5H2.5l.4-1.2h2.7c.0.2.1.4.1.6l.2.6h2.2L6.8 2.0c0-.1-.1-.1-.5 0zm.3 4.3l-.3 1.2H4.1L5.1 4.5l1.5 1.8z" fill="#1A1F71" className="dark:fill-white" />
+      <svg viewBox="0 0 36 24" className="h-5.5 w-auto shrink-0 shadow-sm rounded" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="24" rx="3" fill="#1A1F71" />
+        <path d="M12.1 16.5l.8-4.9h1.7l-.8 4.9h-1.7zm5.2-4.9h-1.6c-.4 0-.8.2-1 .6L12.3 16.5h1.9l.4-.9h2.3c.0.2.1.4.1.7.0.2.1.2.3.2h1.7l-1.5-4.9zm-2.1 2.7l.7-1.7.4 1.7h-1.1zm-8.1-2.7H4.8l2.9 4.9H9.4l2.2-4.9H9.9L8.4 14.8l-1-3.2v-.1zm13-.02c-.8 0-1.4.3-1.7.8l-.1.2 1.6.4c.2-.3.5-.5.9-.5.5 0 .8.2.8.5 0 .3-.4.5-.8.6-.9.3-1.5.5-1.5 1.4 0 .8.7 1.4 1.8 1.4.9 0 1.6-.3 1.9-.8l.1-.3-1.6-.4c-.2.3-.5.5-.9.5-.5 0-.8-.2-.8-.5 0-.3.4-.5.8-.6.9-.3 1.5-.5 1.5-1.4 0-.8-.7-1.4-1.8-1.4z" fill="white" />
+        <path d="M4.5 10.7l.2-.7c.1-.2.3-.4.5-.4h3.6l.1.3-3.1 6.3L4.5 10.7z" fill="#F79E1B" />
       </svg>
     );
   }
   if (b === "mastercard" || b === "master") {
     return (
-      <svg viewBox="0 0 24 15" className="h-4.5 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="8" cy="7.5" r="7" fill="#EB001B" />
-        <circle cx="16" cy="7.5" r="7" fill="#F79E1B" fillOpacity="0.8" />
+      <svg viewBox="0 0 36 24" className="h-5.5 w-auto shrink-0 shadow-sm rounded" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="24" rx="3" fill="#1A1A1A" />
+        <circle cx="14" cy="12" r="6" fill="#EB001B" />
+        <circle cx="22" cy="12" r="6" fill="#F79E1B" fillOpacity="0.85" />
       </svg>
     );
   }
   if (b === "amex" || b === "american express") {
     return (
-      <svg viewBox="0 0 24 15" className="h-4.5 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="24" height="15" rx="2" fill="#0070D2" />
-        <text x="3" y="10" fill="white" fontSize="6.5" fontWeight="bold" fontFamily="sans-serif">AMEX</text>
+      <svg viewBox="0 0 36 24" className="h-5.5 w-auto shrink-0 shadow-sm rounded" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="24" rx="3" fill="#0070D2" />
+        <text x="5" y="15" fill="white" fontSize="9" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.5">AMEX</text>
       </svg>
     );
   }
   if (b === "discover") {
     return (
-      <svg viewBox="0 0 24 15" className="h-4.5 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="24" height="15" rx="2" fill="#F68220" />
-        <text x="2" y="10" fill="white" fontSize="5.5" fontWeight="bold" fontFamily="sans-serif">DISCOVER</text>
+      <svg viewBox="0 0 36 24" className="h-5.5 w-auto shrink-0 shadow-sm rounded" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="24" rx="3" fill="#F68220" />
+        <text x="3" y="14" fill="white" fontSize="7" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.5">DISCOVER</text>
       </svg>
     );
   }
@@ -57,6 +60,9 @@ export default function BillingPage() {
 
   const [holderType, setHolderType] = React.useState("");
   const [accountType, setAccountType] = React.useState("");
+
+  const [isHolderOpen, setIsHolderOpen] = React.useState(false);
+  const [isAccountOpen, setIsAccountOpen] = React.useState(false);
 
   const handleSaveCard = () => {
     setActivePaymentMethod({
@@ -211,29 +217,75 @@ export default function BillingPage() {
                     className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
                   />
                 </div>
-                <div>
-                  <select
-                    value={holderType}
-                    onChange={(e) => setHolderType(e.target.value)}
-                    className={`w-full h-11 px-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none shadow-sm appearance-none cursor-pointer ${holderType === "" ? "text-neutral-400" : "text-neutral-800 dark:text-neutral-200"}`}
-                    style={{ backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`, backgroundPosition: 'right 0.75rem center', backgroundSize: '1.25em 1.25em', backgroundRepeat: 'no-repeat' }}
+                
+                {/* Custom Holder Type Dropdown */}
+                <div className="relative">
+                  {isHolderOpen && (
+                    <div className="fixed inset-0 z-40" onClick={() => setIsHolderOpen(false)} />
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setIsHolderOpen(!isHolderOpen)}
+                    className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm text-left flex items-center justify-between shadow-sm focus:outline-none"
                   >
-                    <option value="" disabled hidden>Select Holder Type</option>
-                    <option value="company" className="text-neutral-800 dark:text-neutral-200">Company</option>
-                    <option value="individual" className="text-neutral-800 dark:text-neutral-200">Individual</option>
-                  </select>
+                    <span className={holderType === "" ? "text-neutral-400" : "text-neutral-800 dark:text-neutral-200"}>
+                      {holderType === "" ? "Select Holder Type" : holderType === "company" ? "Company" : "Individual"}
+                    </span>
+                    <ChevronDown className="w-4 h-4 text-neutral-400 shrink-0" />
+                  </button>
+                  {isHolderOpen && (
+                    <div className="absolute left-0 right-0 mt-1.5 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-xl shadow-lg py-1.5 z-50 overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => { setHolderType("company"); setIsHolderOpen(false); }}
+                        className="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300 transition-colors"
+                      >
+                        Company
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { setHolderType("individual"); setIsHolderOpen(false); }}
+                        className="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300 transition-colors"
+                      >
+                        Individual
+                      </button>
+                    </div>
+                  )}
                 </div>
-                <div>
-                  <select
-                    value={accountType}
-                    onChange={(e) => setAccountType(e.target.value)}
-                    className={`w-full h-11 px-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none shadow-sm appearance-none cursor-pointer ${accountType === "" ? "text-neutral-400" : "text-neutral-800 dark:text-neutral-200"}`}
-                    style={{ backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`, backgroundPosition: 'right 0.75rem center', backgroundSize: '1.25em 1.25em', backgroundRepeat: 'no-repeat' }}
+
+                {/* Custom Account Type Dropdown */}
+                <div className="relative">
+                  {isAccountOpen && (
+                    <div className="fixed inset-0 z-40" onClick={() => setIsAccountOpen(false)} />
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setIsAccountOpen(!isAccountOpen)}
+                    className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm text-left flex items-center justify-between shadow-sm focus:outline-none"
                   >
-                    <option value="" disabled hidden>Select Account Type</option>
-                    <option value="checking" className="text-neutral-800 dark:text-neutral-200">Checking</option>
-                    <option value="savings" className="text-neutral-800 dark:text-neutral-200">Savings</option>
-                  </select>
+                    <span className={accountType === "" ? "text-neutral-400" : "text-neutral-800 dark:text-neutral-200"}>
+                      {accountType === "" ? "Select Account Type" : accountType === "checking" ? "Checking" : "Savings"}
+                    </span>
+                    <ChevronDown className="w-4 h-4 text-neutral-400 shrink-0" />
+                  </button>
+                  {isAccountOpen && (
+                    <div className="absolute left-0 right-0 mt-1.5 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-xl shadow-lg py-1.5 z-50 overflow-hidden">
+                      <button
+                        type="button"
+                        onClick={() => { setAccountType("checking"); setIsAccountOpen(false); }}
+                        className="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300 transition-colors"
+                      >
+                        Checking
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { setAccountType("savings"); setIsAccountOpen(false); }}
+                        className="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300 transition-colors"
+                      >
+                        Savings
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>
 
