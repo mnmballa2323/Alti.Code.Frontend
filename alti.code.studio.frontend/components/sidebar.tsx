@@ -2155,7 +2155,7 @@ export default function Sidebar() {
             </div>
 
             {/* Divider */}
-            <div className="w-[1px] h-[40px] -my-1 bg-white/10 shrink-0" />
+            <div className="w-[1px] h-6 bg-white/10 shrink-0 mx-1" />
 
             {/* Plus Button */}
             <Tooltip
