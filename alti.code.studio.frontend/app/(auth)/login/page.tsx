@@ -288,7 +288,7 @@ export default function LoginPage() {
               classNames={{
                 inputWrapper:
                   "h-12 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
-                input: "text-black font-medium",
+                input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               name="email"
               placeholder="Enter Email"
@@ -303,7 +303,7 @@ export default function LoginPage() {
               classNames={{
                 inputWrapper:
                   "h-12 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
-                input: "text-black font-medium",
+                input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               endContent={
                 passwordValue.length > 0 && (
@@ -395,12 +395,13 @@ export default function LoginPage() {
         {!isDesktopApp && (
           <p className="text-center text-sm text-gray-500 font-medium mt-4">
             Don&apos;t have an account?{" "}
-            <Link
-              className="font-semibold text-black hover:underline transition-all"
-              href="/register"
+            <button
+              className="font-semibold text-black hover:underline transition-all cursor-pointer bg-transparent border-none p-0 inline-block font-sans text-sm"
+              type="button"
+              onClick={() => router.push("/register")}
             >
               Register
-            </Link>
+            </button>
           </p>
         )}
       </div>
