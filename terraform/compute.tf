@@ -38,6 +38,10 @@ resource "google_compute_instance" "commercial_node" {
     enable_integrity_monitoring = true
   }
 
+  confidential_instance_config {
+    enable_confidential_compute = var.enable_confidential_compute
+  }
+
   service_account {
     scopes = ["cloud-platform"]
   }
@@ -84,7 +88,7 @@ resource "google_compute_instance" "government_node" {
   }
 
   confidential_instance_config {
-    enable_confidential_compute = true
+    enable_confidential_compute = var.enable_confidential_compute
   }
 
   service_account {
@@ -152,6 +156,10 @@ resource "google_compute_instance" "dedicated_node" {
     enable_secure_boot          = true
     enable_vtpm                 = true
     enable_integrity_monitoring = true
+  }
+
+  confidential_instance_config {
+    enable_confidential_compute = var.enable_confidential_compute
   }
 
   service_account {

@@ -116,13 +116,13 @@ variable "machine_type_commercial" {
 variable "machine_type_dedicated" {
   description = "GCP Machine Type for Dedicated VM"
   type        = string
-  default     = "e2-standard-8"
+  default     = "n2d-standard-8"
 }
 
 variable "machine_type_government" {
   description = "GCP Machine Type for Government VM"
   type        = string
-  default     = "e2-standard-8"
+  default     = "n2d-standard-8"
 }
 
 variable "sole_tenant_node_type" {
@@ -159,4 +159,10 @@ variable "waf_rate_limit_interval" {
   description = "The time window in seconds for the WAF rate limit"
   type        = number
   default     = 60
+}
+
+variable "enable_confidential_compute" {
+  description = "Toggle Google Cloud Confidential VM technology (AMD SEV memory encryption)"
+  type        = bool
+  default     = false
 }
