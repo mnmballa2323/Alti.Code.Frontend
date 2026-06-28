@@ -2,7 +2,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Search, Microscope } from "lucide-react";
+import { Microscope } from "lucide-react";
 import { cn } from "@heroui/react";
 
 import {
@@ -113,7 +113,7 @@ export default function ChatHome() {
                   className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80 animate-in fade-in duration-300"
                   style={{ fontFamily: "var(--font-secondary)" }}
                 >
-                  {isResearchMode ? "Deep Research" : "Build The Future"}
+                  {isResearchMode ? "Deep Research" : "Let's Chat"}
                 </h1>
               </div>
               <div className="flex w-full flex-col gap-4 max-w-2xl">
