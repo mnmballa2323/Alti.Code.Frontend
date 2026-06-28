@@ -3,6 +3,7 @@
 import type { ComponentProps } from "react";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
@@ -25,14 +26,11 @@ import {
   ModalFooter,
   Tooltip,
   Input,
-  Divider,
 } from "@heroui/react";
 import { useCallback, useEffect, useState, useRef } from "react";
 import {
   Search,
   ChevronDown,
-  BookOpen,
-  Shield,
   Plus,
   Code,
   MessageSquare,
@@ -44,28 +42,18 @@ import {
   Lock,
   Cloud,
   Server,
-  LayoutGrid,
   Bot,
-  Database,
-  GitBranch,
-  Scale,
-  Webhook,
-  Blocks,
-  Compass,
   Terminal,
-  Presentation,
   Cpu,
+  SlidersHorizontal,
+  Cable,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import MyAccountDropdown from "./MyAccountDropdown";
 import NotificationBell from "./NotificationBell";
 
-import {
-  removeRepository,
-  removeDocument,
-  setActiveWorkspace,
-} from "@/store/systemSlice";
+import { removeDocument, setActiveWorkspace } from "@/store/systemSlice";
 import { RootState } from "@/store";
 import { useModalStore } from "@/store/useModalStore";
 import useFetchChatHistory from "@/hooks/useFetchChatHistory";
@@ -282,18 +270,37 @@ const ENGINE_DISPLAY_NAMES: Record<string, string> = {
   "uipathRpaBotAgent.name": "Desktop Action Bot",
   "intuneMdmPolicyAgent.name": "Device Policy Administrator",
   "peoplesoftHcmBridgeAgent.name": "Corporate Directory Sync Connector",
-  "cicero_law_enforcement": "Municipal Policy Legal Verifier",
+  cicero_law_enforcement: "Municipal Policy Legal Verifier",
 };
 
 const getEngineDisplayName = (name: string): string => {
-  return ENGINE_DISPLAY_NAMES[name] || name.replace(/_|-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  return (
+    ENGINE_DISPLAY_NAMES[name] ||
+    name.replace(/_|-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+  );
 };
 
 const FALLBACK_ENGINES_SIDEBAR = [
-  { name: "opencode", description: "Autonomous SWE Coding Agent", capabilities: ["opencode"] },
-  { name: "openspec", description: "Spec-Driven Development Planner", capabilities: ["openspec"] },
-  { name: "website_cloner", description: "AI Website Cloner", capabilities: ["website-cloning"] },
-  { name: "auditor", description: "Cloud FinOps Auditor", capabilities: ["cost-audit"] },
+  {
+    name: "opencode",
+    description: "Autonomous SWE Coding Agent",
+    capabilities: ["opencode"],
+  },
+  {
+    name: "openspec",
+    description: "Spec-Driven Development Planner",
+    capabilities: ["openspec"],
+  },
+  {
+    name: "website_cloner",
+    description: "AI Website Cloner",
+    capabilities: ["website-cloning"],
+  },
+  {
+    name: "auditor",
+    description: "Cloud FinOps Auditor",
+    capabilities: ["cost-audit"],
+  },
 ];
 
 type AppIntegration = {
@@ -523,8 +530,6 @@ const AppIcon = ({
       `https://unpkg.com/simple-icons@latest/icons/${simpleIconBrand}.svg`,
     );
     addUrl(`https://cdn.simpleicons.org/${simpleIconBrand}`);
-
-
 
     // 5. Try Clearbit Logo API
     addUrl(`https://logo.clearbit.com/${simpleIconBrand}.com`);
@@ -976,10 +981,13 @@ export default function Sidebar() {
       try {
         const tauri = (window as any).__TAURI__;
         const invokeFn = tauri.core?.invoke || tauri.tauri?.invoke;
+
         if (invokeFn) {
           const selectedPath = await invokeFn("select_directory");
+
           if (selectedPath) {
             await connectWorkspaceDirectory(selectedPath);
+
             return;
           }
         }
@@ -993,19 +1001,24 @@ export default function Sidebar() {
   const connectWorkspaceDirectory = async (directoryPath: string) => {
     setIsConnectingWorkspace(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/git/change-directory`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/git/change-directory`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ path: directoryPath }),
         },
-        body: JSON.stringify({ path: directoryPath }),
-      });
+      );
 
       const data = await response.json();
+
       if (data.success) {
         const parts = directoryPath.split(/[/\\]/);
         const folderName = parts.pop() || parts.pop() || "local-workspace";
+
         dispatch(setActiveWorkspace(folderName));
         toast.success(`Successfully connected workspace: ${folderName}`);
         setIsWorkspaceModalOpen(false);
@@ -1013,7 +1026,9 @@ export default function Sidebar() {
         toast.error(data.message || "Failed to switch workspace directory");
       }
     } catch (error: any) {
-      toast.error(error.message || "Network error while connecting workspace directory");
+      toast.error(
+        error.message || "Network error while connecting workspace directory",
+      );
     } finally {
       setIsConnectingWorkspace(false);
     }
@@ -1119,7 +1134,6 @@ export default function Sidebar() {
       isActive: pathname === "/new-chat" || pathname === "/code",
       onClick: () => {
         dispatch(startNewChat());
-        router.push("/new-chat");
       },
     },
     {
@@ -1127,27 +1141,21 @@ export default function Sidebar() {
       icon: MessageSquare,
       path: "/chat",
       isActive: pathname?.startsWith("/chat"),
-      onClick: () => {
-        router.push("/chat");
-      },
+      onClick: () => {},
     },
     {
       label: "Agents",
       icon: Bot,
       path: "/agents",
       isActive: pathname === "/agents" || pathname?.startsWith("/agents/"),
-      onClick: () => {
-        router.push("/agents");
-      },
+      onClick: () => {},
     },
     {
       label: "Functions",
       icon: Terminal,
       path: "/functions",
       isActive: pathname === "/functions",
-      onClick: () => {
-        router.push("/functions");
-      },
+      onClick: () => {},
     },
     {
       label: "Vault",
@@ -1160,80 +1168,31 @@ export default function Sidebar() {
             new CustomEvent("select-secret", { detail: null }),
           );
         }
-        router.push("/vault");
       },
     },
-  ];
-
-  const policyNavigationItems = [
     {
-      label: "Instructions",
-      icon: BookOpen,
+      label: "Tuning",
+      icon: SlidersHorizontal,
       path: "/instructions",
-      isActive: pathname === "/instructions",
-      onClick: () => {
-        router.push("/instructions");
-      },
+      isActive:
+        pathname === "/instructions" ||
+        pathname === "/guardrails" ||
+        pathname === "/knowledge",
+      onClick: () => {},
     },
     {
-      label: "Guardrails",
-      icon: Shield,
-      path: "/guardrails",
-      isActive: pathname === "/guardrails",
-      onClick: () => {
-        router.push("/guardrails");
-      },
-    },
-    {
-      label: "Data",
-      icon: Database,
-      path: "/knowledge",
-      isActive: pathname === "/knowledge",
-      onClick: () => {
-        router.push("/knowledge");
-      },
-    },
-  ];
-
-  const connectorNavigationItems = [
-    {
-      label: "Apps",
-      icon: LayoutGrid,
+      label: "Connectors",
+      icon: Cable,
       path: "/connect-apps",
-      isActive: pathname === "/connect-apps",
-      onClick: () => {
-        router.push("/connect-apps");
-      },
-    },
-    {
-      label: "Database",
-      icon: Server,
-      path: "/database",
-      isActive: pathname?.startsWith("/database"),
-      onClick: () => {
-        router.push("/database");
-      },
-    },
-    {
-      label: "Cloud",
-      icon: Cloud,
-      path: "/cloud",
-      isActive: pathname === "/cloud",
-      onClick: () => {
-        router.push("/cloud");
-      },
+      isActive:
+        pathname === "/connect-apps" ||
+        pathname?.startsWith("/database") ||
+        pathname === "/cloud",
+      onClick: () => {},
     },
   ];
 
   const filteredNavigationItems = navigationItems.filter((item) =>
-    item.label.toLowerCase().includes(leftSidebarSearch.toLowerCase()),
-  );
-
-  const filteredPolicyItems = policyNavigationItems.filter((item) =>
-    item.label.toLowerCase().includes(leftSidebarSearch.toLowerCase()),
-  );
-
-  const filteredConnectorItems = connectorNavigationItems.filter((item) =>
     item.label.toLowerCase().includes(leftSidebarSearch.toLowerCase()),
   );
 
@@ -1296,18 +1255,21 @@ export default function Sidebar() {
 
   // States and fetchers for engines
   const [sidebarEngines, setSidebarEngines] = useState<any[]>([]);
-  const [selectedEngineName, setSelectedEngineName] = useState<string | null>(null);
+  const [selectedEngineName, setSelectedEngineName] = useState<string | null>(
+    null,
+  );
   const [loadingEngines, setLoadingEngines] = useState(false);
 
   useEffect(() => {
     if (pathname !== "/engines") return;
-    
+
     const loadEngines = async () => {
       setLoadingEngines(true);
       try {
         const res = await axios.get(`${API_URL}/engines/list`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
+
         if (res.data && res.data.success) {
           setSidebarEngines(res.data.data);
         } else {
@@ -1319,7 +1281,7 @@ export default function Sidebar() {
         setLoadingEngines(false);
       }
     };
-    
+
     loadEngines();
   }, [pathname, token]);
 
@@ -1329,7 +1291,9 @@ export default function Sidebar() {
         setSelectedEngineName(e.detail.name);
       }
     };
+
     window.addEventListener("select-engine", handleSelect);
+
     return () => window.removeEventListener("select-engine", handleSelect);
   }, []);
 
@@ -1481,9 +1445,13 @@ export default function Sidebar() {
     const fetchFunctionsList = async () => {
       if (!token) return;
       try {
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/function`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL}/function`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+
         if (res.data?.success) {
           setServerlessFunctions(res.data.data || []);
         }
@@ -1503,6 +1471,7 @@ export default function Sidebar() {
     };
 
     window.addEventListener("sync-functions", handleSyncFuncs);
+
     return () => {
       window.removeEventListener("sync-functions", handleSyncFuncs);
     };
@@ -1529,7 +1498,9 @@ export default function Sidebar() {
     const handleRefresh = () => {
       refetchRules();
     };
+
     window.addEventListener("refresh-rules-sidebar", handleRefresh);
+
     return () => {
       window.removeEventListener("refresh-rules-sidebar", handleRefresh);
     };
@@ -1578,8 +1549,6 @@ export default function Sidebar() {
       }
     };
   }, [instructions, guardrails, token, isInitialLoad]);
-
-
 
   const documents = useSelector(
     (state: RootState) => state.system.documents || [],
@@ -1650,8 +1619,6 @@ export default function Sidebar() {
       setItemToDelete({ id: e.detail, type: "guardrail" });
       openDeleteModal();
     };
-
-
 
     const handleOpenKnowledgeModal = () => {
       setKnowledgeFolderName("");
@@ -1780,299 +1747,245 @@ export default function Sidebar() {
             isSidebarOpen ? "w-72" : "w-10",
           )}
         >
-        {/* Top Section - Brand & Toggle */}
-        <div
-          className={cn(
-            "h-[56px] flex items-center justify-between border-b border-default-200",
-            isSidebarOpen ? "pl-4 pr-4" : "px-0 justify-center",
-          )}
-        >
+          {/* Top Section - Brand & Toggle */}
           <div
             className={cn(
-              "flex-1 min-w-0 flex items-center justify-start",
+              "h-[56px] flex items-center justify-between border-b border-default-200",
+              isSidebarOpen ? "pl-4 pr-4" : "px-0 justify-center",
+            )}
+          >
+            <div
+              className={cn(
+                "flex-1 min-w-0 flex items-center justify-start",
+                !isSidebarOpen && "hidden",
+              )}
+            >
+              {/* Light Mode: Icon + Text */}
+              <div className="flex items-center gap-2 dark:hidden">
+                <Image
+                  alt="Inso Logo Icon"
+                  className={cn(
+                    "w-auto object-contain",
+                    isTauri ? "h-[18px]" : "h-6",
+                  )}
+                  height={24}
+                  src="/assets/logo-icon-black.png?v=2"
+                  width={28}
+                />
+                {!isTauri && (
+                  <Image
+                    alt="Inso Code"
+                    className="h-4 w-auto object-contain"
+                    height={16}
+                    src="/inso-logo-black.png"
+                    width={80}
+                  />
+                )}
+              </div>
+              {/* Dark Mode: Icon + Text */}
+              <div className="hidden dark:flex items-center gap-2">
+                <Image
+                  alt="Inso Logo Icon"
+                  className={cn(
+                    "w-auto object-contain",
+                    isTauri ? "h-[18px]" : "h-6",
+                  )}
+                  height={24}
+                  src="/assets/logo-icon-white.png?v=2"
+                  width={28}
+                />
+                {!isTauri && (
+                  <Image
+                    alt="Inso Code"
+                    className="h-4 w-auto object-contain"
+                    height={16}
+                    src="/inso-logo-white.png"
+                    width={80}
+                  />
+                )}
+              </div>
+            </div>
+            <Button
+              isIconOnly
+              className="-mr-2 text-default-400 hover:text-default-600"
+              size="sm"
+              variant="light"
+              onClick={toggleLeftSidebar}
+            >
+              {isSidebarOpen ? (
+                <PanelLeftClose className="size-4" />
+              ) : (
+                <PanelLeftOpen className="size-4" />
+              )}
+            </Button>
+          </div>
+
+          {/* Repository Dropdown Section */}
+          <div
+            className={cn(
+              "border-b border-default-200 px-3 py-2",
               !isSidebarOpen && "hidden",
             )}
           >
-            {/* Light Mode: Icon + Text */}
-            <div className="flex items-center gap-2 dark:hidden">
-              <Image
-                alt="Inso Logo Icon"
-                className={cn(
-                  "w-auto object-contain",
-                  isTauri ? "h-[18px]" : "h-6",
-                )}
-                height={24}
-                src="/assets/logo-icon-black.png?v=2"
-                width={28}
-              />
-              {!isTauri && (
-                <Image
-                  alt="Inso Code"
-                  className="h-4 w-auto object-contain"
-                  height={16}
-                  src="/inso-logo-black.png"
-                  width={80}
-                />
-              )}
-            </div>
-            {/* Dark Mode: Icon + Text */}
-            <div className="hidden dark:flex items-center gap-2">
-              <Image
-                alt="Inso Logo Icon"
-                className={cn(
-                  "w-auto object-contain",
-                  isTauri ? "h-[18px]" : "h-6",
-                )}
-                height={24}
-                src="/assets/logo-icon-white.png?v=2"
-                width={28}
-              />
-              {!isTauri && (
-                <Image
-                  alt="Inso Code"
-                  className="h-4 w-auto object-contain"
-                  height={16}
-                  src="/inso-logo-white.png"
-                  width={80}
-                />
-              )}
-            </div>
-          </div>
-          <Button
-            isIconOnly
-            className="-mr-2 text-default-400 hover:text-default-600"
-            size="sm"
-            variant="light"
-            onClick={toggleLeftSidebar}
-          >
-            {isSidebarOpen ? (
-              <PanelLeftClose className="size-4" />
-            ) : (
-              <PanelLeftOpen className="size-4" />
-            )}
-          </Button>
-        </div>
-
-        {/* Repository Dropdown Section */}
-        <div
-          className={cn(
-            "border-b border-default-200 px-3 py-2",
-            !isSidebarOpen && "hidden",
-          )}
-        >
-          <Dropdown
-            className="w-[240px] min-w-[240px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-2xl p-1"
-            placement="bottom-start"
-          >
-            <DropdownTrigger>
-              <div className="relative">
-                <div className="flex w-full items-center gap-2 px-2 py-2 rounded-xl hover:bg-default-200 dark:hover:bg-default-300 transition-all border-none group cursor-pointer bg-transparent">
-                  <div className="flex flex-col items-start min-w-0 flex-1">
-                    <div className="flex items-center w-full">
-                      <span className="text-[14px] font-semibold tracking-tight text-default-900 truncate">
-                        {selectedRepo}
-                      </span>
-                      <ChevronDown className="size-3 text-default-400 ml-auto shrink-0" />
+            <Dropdown
+              className="w-[240px] min-w-[240px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-2xl p-1"
+              placement="bottom-start"
+            >
+              <DropdownTrigger>
+                <div className="relative">
+                  <div className="flex w-full items-center gap-2 px-2 py-2 rounded-xl hover:bg-default-200 dark:hover:bg-default-300 transition-all border-none group cursor-pointer bg-transparent">
+                    <div className="flex flex-col items-start min-w-0 flex-1">
+                      <div className="flex items-center w-full">
+                        <span className="text-[14px] font-semibold tracking-tight text-default-900 truncate">
+                          {selectedRepo}
+                        </span>
+                        <ChevronDown className="size-3 text-default-400 ml-auto shrink-0" />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </DropdownTrigger>
-            <DropdownMenu
-              aria-label="Select Workspace"
-              className="p-2"
-              disabledKeys={isRepoLoading ? ["searching"] : []}
-            >
-              <DropdownItem
-                key="open-local-folder"
-                className="text-primary hover:bg-primary/10 rounded-lg py-2"
-                startContent={
-                  <div className="p-1 rounded-md bg-primary/10 text-primary">
-                    <Icon className="size-3.5" icon="solar:folder-opened-bold" />
-                  </div>
-                }
-                onPress={handleOpenLocalWorkspace}
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="Select Workspace"
+                className="p-2"
+                disabledKeys={isRepoLoading ? ["searching"] : []}
               >
-                <span className="text-xs font-semibold text-primary">
-                  Open Local Folder...
-                </span>
-              </DropdownItem>
-
-              <DropdownItem
-                key="connect-github-repo"
-                className="text-primary/70 hover:bg-primary/5 rounded-lg py-2 mb-2 border-b border-default-100/50"
-                startContent={
-                  <div className="p-1 rounded-md bg-primary/5 text-primary/70">
-                    <Icon className="size-3.5" icon="solar:cloud-download-linear" />
-                  </div>
-                }
-                onPress={() => router.push("/connect-apps")}
-              >
-                <span className="text-xs font-semibold text-primary/70">
-                  Connect Apps Catalog
-                </span>
-              </DropdownItem>
-
-              <DropdownItem
-                key="current-header"
-                isReadOnly
-                className="text-[10px] font-bold text-default-400 uppercase tracking-widest px-2 mb-1"
-              >
-                Available Repositories
-              </DropdownItem>
-
-              {repos.map((repo: any) => (
                 <DropdownItem
-                  key={repo.fullName}
-                  className="rounded-lg h-10 px-2 hover:bg-primary/5 transition-colors"
-                  description={repo.private ? "Private" : "Public"}
+                  key="open-local-folder"
+                  className="text-primary hover:bg-primary/10 rounded-lg py-2"
                   startContent={
-                    <div className="p-1.5 rounded-md bg-default-100 text-default-500">
-                      <Icon className="size-3.5" icon="solar:folder-2-linear" />
+                    <div className="p-1 rounded-md bg-primary/10 text-primary">
+                      <Icon
+                        className="size-3.5"
+                        icon="solar:folder-opened-bold"
+                      />
                     </div>
                   }
-                  onClick={() => dispatch(setActiveWorkspace(repo.name))}
+                  onPress={handleOpenLocalWorkspace}
                 >
-                  <span className="text-xs font-medium text-default-700">
-                    {repo.name}
+                  <span className="text-xs font-semibold text-primary">
+                    Open Local Folder...
                   </span>
                 </DropdownItem>
-              ))}
 
-              {repos.length === 0 && !isRepoLoading && (
                 <DropdownItem
-                  key="no-repos"
-                  isReadOnly
-                  className="text-center py-4 text-xs text-default-400 italic"
+                  key="connect-github-repo"
+                  className="text-primary/70 hover:bg-primary/5 rounded-lg py-2 mb-2 border-b border-default-100/50"
+                  startContent={
+                    <div className="p-1 rounded-md bg-primary/5 text-primary/70">
+                      <Icon
+                        className="size-3.5"
+                        icon="solar:cloud-download-linear"
+                      />
+                    </div>
+                  }
+                  onPress={() => router.push("/connect-apps")}
                 >
-                  No repositories found
+                  <span className="text-xs font-semibold text-primary/70">
+                    Connect Apps Catalog
+                  </span>
                 </DropdownItem>
+
+                <DropdownItem
+                  key="current-header"
+                  isReadOnly
+                  className="text-[10px] font-bold text-default-400 uppercase tracking-widest px-2 mb-1"
+                >
+                  Available Repositories
+                </DropdownItem>
+
+                {repos.map((repo: any) => (
+                  <DropdownItem
+                    key={repo.fullName}
+                    className="rounded-lg h-10 px-2 hover:bg-primary/5 transition-colors"
+                    description={repo.private ? "Private" : "Public"}
+                    startContent={
+                      <div className="p-1.5 rounded-md bg-default-100 text-default-500">
+                        <Icon
+                          className="size-3.5"
+                          icon="solar:folder-2-linear"
+                        />
+                      </div>
+                    }
+                    onClick={() => dispatch(setActiveWorkspace(repo.name))}
+                  >
+                    <span className="text-xs font-medium text-default-700">
+                      {repo.name}
+                    </span>
+                  </DropdownItem>
+                ))}
+
+                {repos.length === 0 && !isRepoLoading && (
+                  <DropdownItem
+                    key="no-repos"
+                    isReadOnly
+                    className="text-center py-4 text-xs text-default-400 italic"
+                  >
+                    No repositories found
+                  </DropdownItem>
+                )}
+              </DropdownMenu>
+            </Dropdown>
+          </div>
+
+          {/* 6 navigation icons toggle container (Main Menu) */}
+          <div className={cn(isSidebarOpen ? "px-3 py-2" : "py-2 px-1")}>
+            <div
+              className={cn(
+                "bg-white/5 border border-white/5 rounded-xl p-1",
+                isSidebarOpen
+                  ? "flex flex-row items-center justify-between gap-0.5 w-full"
+                  : "flex flex-col items-center gap-2",
               )}
-            </DropdownMenu>
-          </Dropdown>
-        </div>
+            >
+              {filteredNavigationItems.map((item) => {
+                const IconComponent = item.icon;
 
-        {/* 6 navigation icons toggle container (Main Menu) */}
-        <div
-          className={cn(
-            isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
-          )}
-        >
-          <div
-            className={cn(
-              "bg-white/5 border border-white/5 rounded-xl p-1",
-              isSidebarOpen
-                ? "flex flex-row items-center justify-between gap-0.5 w-full"
-                : "flex flex-col items-center gap-2",
-            )}
-          >
-            {filteredNavigationItems.map((item) => {
-              const IconComponent = item.icon;
-
-              return (
-                <Tooltip
-                  key={item.label}
-                  showArrow
-                  classNames={{
-                    content:
-                      "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-                  }}
-                  closeDelay={0}
-                  content={item.label}
-                  delay={0}
-                  placement={isSidebarOpen ? "top" : "right"}
-                >
-                  <Button
-                    isIconOnly
-                    className={cn(
-                      "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
-                      isSidebarOpen
-                        ? "h-[30px] flex-1 rounded-md"
-                        : "h-[30px] w-[30px] rounded-md",
-                      item.isActive
-                        ? "bg-white/10 text-white shadow-sm"
-                        : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
-                    )}
-                    onClick={item.onClick}
-                    onMouseEnter={() => {
-                      router.prefetch(item.path);
+                return (
+                  <Tooltip
+                    key={item.label}
+                    showArrow
+                    classNames={{
+                      content:
+                        "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
                     }}
+                    closeDelay={0}
+                    content={item.label}
+                    delay={0}
+                    placement={isSidebarOpen ? "top" : "right"}
                   >
-                    <IconComponent className="size-3.5" />
-                    <span className="sr-only">{item.label}</span>
-                  </Button>
-                </Tooltip>
-              );
-            })}
-            {isSidebarOpen && filteredNavigationItems.length === 0 && (
-              <div className="w-full text-center py-2 text-xs text-default-400 italic">
-                No results found
-              </div>
-            )}
+                    <Link
+                      className={cn(
+                        "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
+                        isSidebarOpen
+                          ? "h-[30px] flex-1 rounded-md"
+                          : "h-[30px] w-[30px] rounded-md",
+                        item.isActive
+                          ? "bg-white/10 text-white shadow-sm"
+                          : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
+                      )}
+                      href={item.path}
+                      onClick={(e) => {
+                        if (item.onClick) {
+                          item.onClick();
+                        }
+                      }}
+                    >
+                      <IconComponent className="size-3.5" />
+                      <span className="sr-only">{item.label}</span>
+                    </Link>
+                  </Tooltip>
+                );
+              })}
+              {isSidebarOpen && filteredNavigationItems.length === 0 && (
+                <div className="w-full text-center py-2 text-xs text-default-400 italic">
+                  No results found
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* Project Parameters (Instructions, Guardrails, Data) & Connections (Apps, Database, Cloud) - Unified 6-Icon Grid */}
-        <div
-          className={cn(
-            isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
-          )}
-        >
-          <div
-            className={cn(
-              "bg-white/5 border border-white/5 rounded-xl p-1",
-              isSidebarOpen
-                ? "flex flex-row items-center justify-between gap-0.5 w-full"
-                : "flex flex-col items-center gap-2",
-            )}
-          >
-            {[...filteredPolicyItems, ...filteredConnectorItems].map((item) => {
-              const IconComponent = item.icon;
-
-              return (
-                <Tooltip
-                  key={item.label}
-                  showArrow
-                  classNames={{
-                    content:
-                      "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-                  }}
-                  closeDelay={0}
-                  content={item.label}
-                  delay={0}
-                  placement={isSidebarOpen ? "top" : "right"}
-                >
-                  <Button
-                    isIconOnly
-                    className={cn(
-                      "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
-                      isSidebarOpen
-                        ? "h-[30px] flex-1 rounded-md"
-                        : "h-[30px] w-[30px] rounded-md",
-                      item.isActive
-                        ? "bg-white/10 text-white shadow-sm"
-                        : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
-                    )}
-                    onClick={item.onClick}
-                    onMouseEnter={() => {
-                      router.prefetch(item.path);
-                    }}
-                  >
-                    <IconComponent className="size-3.5" />
-                    <span className="sr-only">{item.label}</span>
-                  </Button>
-                </Tooltip>
-              );
-            })}
-            {isSidebarOpen && filteredPolicyItems.length === 0 && filteredConnectorItems.length === 0 && (
-              <div className="w-full text-center py-2 text-xs text-default-400 italic">
-                No items found
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Dedicated Workspace Engines Option Row - Hidden for Phase 2
+          {/* Dedicated Workspace Engines Option Row - Hidden for Phase 2
         <div
           className={cn(
             "border-b border-default-200",
@@ -2118,207 +2031,291 @@ export default function Sidebar() {
         </div>
         */}
 
-        {/* Search bar and + icon on the same line below the main menu */}
-        <div
-          className={cn(
-            isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
-            !isSidebarOpen && "hidden",
-          )}
-        >
+          {/* Search bar and + icon on the same line below the main menu */}
           <div
             className={cn(
-              "bg-white/5 border border-white/5 rounded-xl p-1 flex flex-row items-center justify-between gap-1 w-full"
+              isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
+              !isSidebarOpen && "hidden",
             )}
           >
-            {/* Search Input */}
-            <div className="relative flex-1 h-[32px]">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-default-400 z-10" />
-              <input
-                className="w-full h-full bg-transparent hover:bg-white/5 border-none rounded-lg pl-8 pr-2 py-0 text-xs focus:outline-none focus:ring-0 transition-all text-default-300 placeholder:text-default-500"
-                placeholder="Search..."
-                value={leftSidebarSearch}
-                onChange={(e) => setLeftSidebarSearch(e.target.value)}
-              />
-            </div>
-
-            {/* Divider */}
-            <div className="w-[1px] h-7 bg-white/10 shrink-0 mx-1" />
-
-            {/* Plus Button */}
-            <Tooltip
-              showArrow
-              classNames={{
-                content:
-                  "bg-[#1E293B] text-white px-2 py-1 text-xs rounded-md shadow-lg",
-              }}
-              closeDelay={0}
-              content={getPlusTooltipContent()}
-              delay={0}
-              placement="top"
+            <div
+              className={cn(
+                "bg-white/5 border border-white/5 rounded-xl p-1 flex flex-row items-center justify-between gap-1 w-full",
+              )}
             >
-              <Button
-                isIconOnly
-                className="bg-transparent hover:bg-white/5 border-none rounded-lg text-default-500 hover:text-white flex-shrink-0 shadow-none h-[32px] w-[32px] min-w-[32px]"
-                size="sm"
-                variant="flat"
-              onClick={() => {
-                if (pathname === "/vault") {
-                  window.dispatchEvent(new CustomEvent("open-vault-modal"));
-                } else if (pathname === "/documents") {
-                  window.dispatchEvent(new CustomEvent("open-document-modal"));
-                } else if (pathname === "/knowledge") {
-                  window.dispatchEvent(new CustomEvent("open-knowledge-modal"));
-                } else {
-                  dispatch(startNewChat());
-                  router.push("/new-chat");
-                }
-              }}
-              onMouseEnter={() => {
-                if (pathname === "/vault") {
-                  router.prefetch("/vault");
-                } else if (pathname === "/documents") {
-                  router.prefetch("/documents");
-                } else {
-                  router.prefetch("/new-chat");
-                }
-              }}
-            >
-              <Plus className="size-3.5" />
-            </Button>
-          </Tooltip>
-        </div>
-        </div>
-
-        {!isSidebarOpen && <div className="flex-1" />}
-
-        {isSidebarOpen && (
-          <ScrollShadow
-            hideScrollBar
-            className="flex-1 px-2 mt-1 min-h-0 w-full scrollbar-hide overflow-y-auto"
-          >
-            {pathname === "/engines" ? (
-              <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
-                {loadingEngines ? (
-                  <div className="flex flex-col items-center justify-center py-20 gap-3">
-                    <Icon
-                      className="text-2xl text-primary animate-spin"
-                      icon="line-md:loading-twotone-loop"
-                    />
-                    <span className="text-xs text-default-400">
-                      Loading engines...
-                    </span>
-                  </div>
-                ) : (
-                  (() => {
-                    const filtered = sidebarEngines.filter(
-                      (e) =>
-                        getEngineDisplayName(e.name)
-                          .toLowerCase()
-                          .includes(leftSidebarSearch.toLowerCase()) ||
-                        e.description
-                          .toLowerCase()
-                          .includes(leftSidebarSearch.toLowerCase()),
-                    );
-
-                    if (filtered.length === 0) {
-                      return (
-                        <span className="text-xs text-default-400 text-center py-12">
-                          No engines found
-                        </span>
-                      );
-                    }
-
-                    return filtered.map((e) => {
-                      const isActive = selectedEngineName === e.name;
-                      const displayName = getEngineDisplayName(e.name);
-
-                      return (
-                        <button
-                          key={e.name}
-                          className={cn(
-                            "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
-                            isActive
-                              ? "bg-primary/20 text-white font-semibold"
-                              : "hover:bg-white/5 text-default-400 hover:text-default-200",
-                          )}
-                          onClick={() => {
-                            setSelectedEngineName(e.name);
-                            window.dispatchEvent(
-                              new CustomEvent("select-engine", {
-                                detail: e,
-                              }),
-                            );
-                          }}
-                        >
-                          <div className="flex items-center gap-3 min-w-0">
-                            <div
-                              className={cn(
-                                "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50",
-                                isActive
-                                  ? "bg-white dark:bg-black"
-                                  : "bg-[#1E293B] border-white/5",
-                              )}
-                            >
-                              <Cpu className="size-4 text-default-500" />
-                            </div>
-                            <span className="text-xs text-left truncate pr-2">
-                              {displayName}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-1.5 shrink-0">
-                            <Icon
-                              className={cn(
-                                "text-xs text-default-400 transition-transform",
-                                isActive ? "translate-x-0.5 text-primary" : "",
-                              )}
-                              icon="solar:alt-arrow-right-linear"
-                            />
-                          </div>
-                        </button>
-                      );
-                    });
-                  })()
-                )}
+              {/* Search Input */}
+              <div className="relative flex-1 h-[32px]">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-default-400 z-10" />
+                <input
+                  className="w-full h-full bg-transparent hover:bg-white/5 border-none rounded-lg pl-8 pr-2 py-0 text-xs focus:outline-none focus:ring-0 transition-all text-default-300 placeholder:text-default-500"
+                  placeholder="Search..."
+                  value={leftSidebarSearch}
+                  onChange={(e) => setLeftSidebarSearch(e.target.value)}
+                />
               </div>
-            ) : pathname === "/connect-apps" ? (
-              <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
-                {loadingApps ? (
-                  <div className="flex flex-col items-center justify-center py-20 gap-3">
-                    <Icon
-                      className="text-2xl text-primary animate-spin"
-                      icon="line-md:loading-twotone-loop"
-                    />
-                    <span className="text-xs text-default-400">
-                      Loading catalog...
-                    </span>
-                  </div>
-                ) : (
-                  (() => {
-                    const filtered = apps.filter(
-                      (app) =>
-                        app.name
-                          .toLowerCase()
-                          .includes(leftSidebarSearch.toLowerCase()) ||
-                        app.description
-                          .toLowerCase()
-                          .includes(leftSidebarSearch.toLowerCase()),
+
+              {/* Divider */}
+              <div className="w-[1px] h-7 bg-white/10 shrink-0 mx-1" />
+
+              {/* Plus Button */}
+              <Tooltip
+                showArrow
+                classNames={{
+                  content:
+                    "bg-[#1E293B] text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                }}
+                closeDelay={0}
+                content={getPlusTooltipContent()}
+                delay={0}
+                placement="top"
+              >
+                <Button
+                  isIconOnly
+                  className="bg-transparent hover:bg-white/5 border-none rounded-lg text-default-500 hover:text-white flex-shrink-0 shadow-none h-[32px] w-[32px] min-w-[32px]"
+                  size="sm"
+                  variant="flat"
+                  onClick={() => {
+                    if (pathname === "/vault") {
+                      window.dispatchEvent(new CustomEvent("open-vault-modal"));
+                    } else if (pathname === "/documents") {
+                      window.dispatchEvent(
+                        new CustomEvent("open-document-modal"),
+                      );
+                    } else if (pathname === "/knowledge") {
+                      window.dispatchEvent(
+                        new CustomEvent("open-knowledge-modal"),
+                      );
+                    } else {
+                      dispatch(startNewChat());
+                      router.push("/new-chat");
+                    }
+                  }}
+                  onMouseEnter={() => {
+                    if (pathname === "/vault") {
+                      router.prefetch("/vault");
+                    } else if (pathname === "/documents") {
+                      router.prefetch("/documents");
+                    } else {
+                      router.prefetch("/new-chat");
+                    }
+                  }}
+                >
+                  <Plus className="size-3.5" />
+                </Button>
+              </Tooltip>
+            </div>
+          </div>
+
+          {!isSidebarOpen && <div className="flex-1" />}
+
+          {isSidebarOpen && (
+            <ScrollShadow
+              hideScrollBar
+              className="flex-1 px-2 mt-1 min-h-0 w-full scrollbar-hide overflow-y-auto"
+            >
+              {pathname === "/engines" ? (
+                <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
+                  {loadingEngines ? (
+                    <div className="flex flex-col items-center justify-center py-20 gap-3">
+                      <Icon
+                        className="text-2xl text-primary animate-spin"
+                        icon="line-md:loading-twotone-loop"
+                      />
+                      <span className="text-xs text-default-400">
+                        Loading engines...
+                      </span>
+                    </div>
+                  ) : (
+                    (() => {
+                      const filtered = sidebarEngines.filter(
+                        (e) =>
+                          getEngineDisplayName(e.name)
+                            .toLowerCase()
+                            .includes(leftSidebarSearch.toLowerCase()) ||
+                          e.description
+                            .toLowerCase()
+                            .includes(leftSidebarSearch.toLowerCase()),
+                      );
+
+                      if (filtered.length === 0) {
+                        return (
+                          <span className="text-xs text-default-400 text-center py-12">
+                            No engines found
+                          </span>
+                        );
+                      }
+
+                      return filtered.map((e) => {
+                        const isActive = selectedEngineName === e.name;
+                        const displayName = getEngineDisplayName(e.name);
+
+                        return (
+                          <button
+                            key={e.name}
+                            className={cn(
+                              "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
+                              isActive
+                                ? "bg-primary/20 text-white font-semibold"
+                                : "hover:bg-white/5 text-default-400 hover:text-default-200",
+                            )}
+                            onClick={() => {
+                              setSelectedEngineName(e.name);
+                              window.dispatchEvent(
+                                new CustomEvent("select-engine", {
+                                  detail: e,
+                                }),
+                              );
+                            }}
+                          >
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div
+                                className={cn(
+                                  "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50",
+                                  isActive
+                                    ? "bg-white dark:bg-black"
+                                    : "bg-[#1E293B] border-white/5",
+                                )}
+                              >
+                                <Cpu className="size-4 text-default-500" />
+                              </div>
+                              <span className="text-xs text-left truncate pr-2">
+                                {displayName}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <Icon
+                                className={cn(
+                                  "text-xs text-default-400 transition-transform",
+                                  isActive
+                                    ? "translate-x-0.5 text-primary"
+                                    : "",
+                                )}
+                                icon="solar:alt-arrow-right-linear"
+                              />
+                            </div>
+                          </button>
+                        );
+                      });
+                    })()
+                  )}
+                </div>
+              ) : pathname === "/connect-apps" ? (
+                <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
+                  {loadingApps ? (
+                    <div className="flex flex-col items-center justify-center py-20 gap-3">
+                      <Icon
+                        className="text-2xl text-primary animate-spin"
+                        icon="line-md:loading-twotone-loop"
+                      />
+                      <span className="text-xs text-default-400">
+                        Loading catalog...
+                      </span>
+                    </div>
+                  ) : (
+                    (() => {
+                      const filtered = apps.filter(
+                        (app) =>
+                          app.name
+                            .toLowerCase()
+                            .includes(leftSidebarSearch.toLowerCase()) ||
+                          app.description
+                            .toLowerCase()
+                            .includes(leftSidebarSearch.toLowerCase()),
+                      );
+
+                      if (filtered.length === 0) {
+                        return (
+                          <span className="text-xs text-default-400 text-center py-12">
+                            No apps found
+                          </span>
+                        );
+                      }
+
+                      return filtered.map((app) => {
+                        const isActive = selectedAppId === app.id;
+
+                        return (
+                          <button
+                            key={app.id}
+                            className={cn(
+                              "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
+                              isActive
+                                ? "bg-primary/20 text-white font-semibold"
+                                : "hover:bg-white/5 text-default-400 hover:text-default-200",
+                            )}
+                            onClick={() => {
+                              setSelectedAppId(app.id);
+                              window.dispatchEvent(
+                                new CustomEvent("select-connect-app", {
+                                  detail: app,
+                                }),
+                              );
+                            }}
+                          >
+                            <div className="flex items-center gap-3 min-w-0">
+                              {/* Dynamic Mini App Logo/Icon */}
+                              <div
+                                className={cn(
+                                  "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
+                                  isActive
+                                    ? "bg-white dark:bg-black"
+                                    : "bg-[#1E293B] border-white/5",
+                                )}
+                              >
+                                <AppIcon
+                                  app={app}
+                                  className="w-full h-full object-contain"
+                                />
+                              </div>
+                              <span className="text-xs text-left truncate pr-2">
+                                {app.name}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              {app.status === "connected" && (
+                                <div className="w-1.5 h-1.5 rounded-full bg-success" />
+                              )}
+                              <Icon
+                                className={cn(
+                                  "text-xs text-default-400 transition-transform",
+                                  isActive
+                                    ? "translate-x-0.5 text-primary"
+                                    : "",
+                                )}
+                                icon="solar:alt-arrow-right-linear"
+                              />
+                            </div>
+                          </button>
+                        );
+                      });
+                    })()
+                  )}
+                </div>
+              ) : pathname?.startsWith("/database") ? (
+                <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
+                  {(() => {
+                    const filtered = SUPPORTED_DATABASES.filter((db) =>
+                      db.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
                     );
 
                     if (filtered.length === 0) {
                       return (
                         <span className="text-xs text-default-400 text-center py-12">
-                          No apps found
+                          No databases found
                         </span>
                       );
                     }
 
-                    return filtered.map((app) => {
-                      const isActive = selectedAppId === app.id;
+                    return filtered.map((db) => {
+                      const isActive = pathname === `/database/${db.id}`;
 
                       return (
                         <button
-                          key={app.id}
+                          key={db.id}
                           className={cn(
                             "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
                             isActive
@@ -2326,16 +2323,12 @@ export default function Sidebar() {
                               : "hover:bg-white/5 text-default-400 hover:text-default-200",
                           )}
                           onClick={() => {
-                            setSelectedAppId(app.id);
-                            window.dispatchEvent(
-                              new CustomEvent("select-connect-app", {
-                                detail: app,
-                              }),
-                            );
+                            router.push(`/database/${db.id}`, {
+                              scroll: false,
+                            });
                           }}
                         >
                           <div className="flex items-center gap-3 min-w-0">
-                            {/* Dynamic Mini App Logo/Icon */}
                             <div
                               className={cn(
                                 "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
@@ -2344,20 +2337,18 @@ export default function Sidebar() {
                                   : "bg-[#1E293B] border-white/5",
                               )}
                             >
-                              <AppIcon
-                                app={app}
-                                className="w-full h-full object-contain"
+                              <img
+                                alt={db.name}
+                                className="w-5 h-5 object-contain"
+                                src={`/database-logos/${db.id}.${db.id === "alloydb" ? "png" : "svg"}`}
                               />
                             </div>
                             <span className="text-xs text-left truncate pr-2">
-                              {app.name}
+                              {db.name}
                             </span>
                           </div>
 
                           <div className="flex items-center gap-1.5 shrink-0">
-                            {app.status === "connected" && (
-                              <div className="w-1.5 h-1.5 rounded-full bg-success" />
-                            )}
                             <Icon
                               className={cn(
                                 "text-xs text-default-400 transition-transform",
@@ -2369,836 +2360,710 @@ export default function Sidebar() {
                         </button>
                       );
                     });
-                  })()
-                )}
-              </div>
-            ) : pathname?.startsWith("/database") ? (
-              <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
-                {(() => {
-                  const filtered = SUPPORTED_DATABASES.filter((db) =>
-                    db.name
-                      .toLowerCase()
-                      .includes(leftSidebarSearch.toLowerCase()),
-                  );
-
-                  if (filtered.length === 0) {
-                    return (
-                      <span className="text-xs text-default-400 text-center py-12">
-                        No databases found
-                      </span>
+                  })()}
+                </div>
+              ) : pathname === "/vault" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = vaultSecrets.filter((stream) =>
+                      stream.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
                     );
-                  }
 
-                  return filtered.map((db) => {
-                    const isActive = pathname === `/database/${db.id}`;
-
-                    return (
-                      <button
-                        key={db.id}
-                        className={cn(
-                          "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
-                          isActive
-                            ? "bg-primary/20 text-white font-semibold"
-                            : "hover:bg-white/5 text-default-400 hover:text-default-200",
-                        )}
-                        onClick={() => {
-                          router.push(`/database/${db.id}`, { scroll: false });
-                        }}
-                      >
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div
-                            className={cn(
-                              "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
-                              isActive
-                                ? "bg-white dark:bg-black"
-                                : "bg-[#1E293B] border-white/5",
-                            )}
-                          >
-                            <img
-                              alt={db.name}
-                              className="w-5 h-5 object-contain"
-                              src={`/database-logos/${db.id}.${db.id === "alloydb" ? "png" : "svg"}`}
-                            />
-                          </div>
-                          <span className="text-xs text-left truncate pr-2">
-                            {db.name}
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:lock-keyhole-minimalistic-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            {leftSidebarSearch
+                              ? "No results found"
+                              : "No secrets added yet"}
                           </span>
                         </div>
-
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <Icon
-                            className={cn(
-                              "text-xs text-default-400 transition-transform",
-                              isActive ? "translate-x-0.5 text-primary" : "",
-                            )}
-                            icon="solar:alt-arrow-right-linear"
-                          />
-                        </div>
-                      </button>
-                    );
-                  });
-                })()}
-              </div>
-            ) : pathname === "/vault" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
-                {(() => {
-                  const filtered = vaultSecrets.filter((stream) =>
-                    stream.name
-                      .toLowerCase()
-                      .includes(leftSidebarSearch.toLowerCase()),
-                  );
-
-                  if (filtered.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:lock-keyhole-minimalistic-linear"
-                        />
-                        <span className="text-xs text-default-400">
-                          {leftSidebarSearch
-                            ? "No results found"
-                            : "No secrets added yet"}
-                        </span>
-                      </div>
-                    );
-                  }
-
-                  return filtered.map((stream) => (
-                    <button
-                      key={stream.id}
-                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group cursor-pointer"
-                      onClick={() =>
-                        window.dispatchEvent(
-                          new CustomEvent("select-secret", {
-                            detail: stream.id,
-                          }),
-                        )
-                      }
-                    >
-                      <span>{stream.name}</span>
-                      <Lock
-                        className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
-                        size={14}
-                      />
-                    </button>
-                  ));
-                })()}
-              </div>
-            ) : pathname === "/functions" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
-                {(() => {
-                  const filtered = serverlessFunctions.filter((f) =>
-                    f.name
-                      .toLowerCase()
-                      .includes(leftSidebarSearch.toLowerCase()),
-                  );
-
-                  if (serverlessFunctions.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:code-file-linear"
-                        />
-                        <span className="text-xs text-default-400">
-                          No functions created yet
-                        </span>
-                      </div>
-                    );
-                  }
-                  if (filtered.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:magnifer-linear"
-                        />
-                        <span className="text-xs text-default-400">
-                          No results found
-                        </span>
-                      </div>
-                    );
-                  }
-
-                  return filtered.map((func) => (
-                    <button
-                      key={func.id}
-                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group cursor-pointer"
-                      onClick={() =>
-                        window.dispatchEvent(
-                          new CustomEvent("select-function", {
-                            detail: func,
-                          }),
-                        )
-                      }
-                    >
-                      <span className="truncate">{func.name}</span>
-                      <Terminal
-                        className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
-                        size={14}
-                      />
-                    </button>
-                  ));
-                })()}
-              </div>
-            ) : pathname === "/instructions" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
-                {(() => {
-                  const filtered = instructions.filter((inst) =>
-                    inst.name
-                      .toLowerCase()
-                      .includes(leftSidebarSearch.toLowerCase()),
-                  );
-
-                  if (instructions.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:document-text-linear"
-                        />
-                        <span className="text-xs text-default-400">
-                          No instructions added yet
-                        </span>
-                      </div>
-                    );
-                  }
-                  if (filtered.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:document-text-linear"
-                        />
-                        <span className="text-xs text-default-400">
-                          No results found
-                        </span>
-                      </div>
-                    );
-                  }
-
-                  return filtered.map((inst) => (
-                    <div
-                      key={inst.id}
-                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                      onClick={() =>
-                        window.dispatchEvent(
-                          new CustomEvent("edit-instruction", {
-                            detail: inst,
-                          }),
-                        )
-                      }
-                    >
-                      <span className="truncate">{inst.name}</span>
-                      <Dropdown
-                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                        placement="bottom-end"
-                      >
-                        <DropdownTrigger>
-                          <button 
-                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <MoreHorizontal size={16} />
-                          </button>
-                        </DropdownTrigger>
-                        <DropdownMenu
-                          aria-label="Instruction options"
-                          className="p-0"
-                          variant="flat"
-                        >
-                          <DropdownItem
-                            key="edit"
-                            className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
-                            startContent={
-                              <Edit2 className="text-default-500" size={14} />
-                            }
-                            onClick={() =>
-                              window.dispatchEvent(
-                                new CustomEvent("edit-instruction", {
-                                  detail: inst,
-                                }),
-                              )
-                            }
-                          >
-                            Edit
-                          </DropdownItem>
-                          <DropdownItem
-                            key="delete"
-                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                            color="danger"
-                            startContent={<Trash2 size={14} />}
-                            onClick={() =>
-                              window.dispatchEvent(
-                                new CustomEvent("delete-instruction", {
-                                  detail: inst.id,
-                                }),
-                              )
-                            }
-                          >
-                            Delete
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
-                  ));
-                })()}
-              </div>
-            ) : pathname === "/guardrails" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
-                {(() => {
-                  const filtered = guardrails.filter((gr) =>
-                    gr.name
-                      .toLowerCase()
-                      .includes(leftSidebarSearch.toLowerCase()),
-                  );
-
-                  if (guardrails.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:shield-warning-linear"
-                        />
-                        <span className="text-xs text-default-400">
-                          No guardrails added yet
-                        </span>
-                      </div>
-                    );
-                  }
-                  if (filtered.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:shield-warning-linear"
-                        />
-                        <span className="text-xs text-default-400">
-                          No results found
-                        </span>
-                      </div>
-                    );
-                  }
-
-                  return filtered.map((gr) => (
-                    <div
-                      key={gr.id}
-                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                      onClick={() =>
-                        window.dispatchEvent(
-                          new CustomEvent("edit-guardrail", {
-                            detail: gr,
-                          }),
-                        )
-                      }
-                    >
-                      <span className="truncate">{gr.name}</span>
-                      <Dropdown
-                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                        placement="bottom-end"
-                      >
-                        <DropdownTrigger>
-                          <button 
-                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <MoreHorizontal size={16} />
-                          </button>
-                        </DropdownTrigger>
-                        <DropdownMenu
-                          aria-label="Guardrail options"
-                          className="p-0"
-                          variant="flat"
-                        >
-                          <DropdownItem
-                            key="edit"
-                            className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
-                            startContent={
-                              <Edit2 className="text-default-500" size={14} />
-                            }
-                            onClick={() =>
-                              window.dispatchEvent(
-                                new CustomEvent("edit-guardrail", {
-                                  detail: gr,
-                                }),
-                              )
-                            }
-                          >
-                            Edit
-                          </DropdownItem>
-                          <DropdownItem
-                            key="delete"
-                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                            color="danger"
-                            startContent={<Trash2 size={14} />}
-                            onClick={() =>
-                              window.dispatchEvent(
-                                new CustomEvent("delete-guardrail", {
-                                  detail: gr.id,
-                                }),
-                              )
-                            }
-                          >
-                            Delete
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
-                  ));
-                })()}
-              </div>
-            ) : pathname === "/knowledge" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
-                {(() => {
-                  const filtered = knowledgeFolders.filter((kf) =>
-                    kf.name
-                      .toLowerCase()
-                      .includes(leftSidebarSearch.toLowerCase()),
-                  );
-
-                  if (knowledgeFolders.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 h-full text-center w-full">
-                        <span className="text-xs text-default-500 font-medium">
-                          No knowledge folders yet
-                        </span>
-                      </div>
-                    );
-                  }
-                  if (filtered.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 h-full text-center w-full">
-                        <span className="text-xs text-default-500 font-medium">
-                          No results found
-                        </span>
-                      </div>
-                    );
-                  }
-
-                  return filtered.map((kf) => (
-                    <button
-                      key={kf.id}
-                      className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
-                        kf.id === selectedKnowledgeFolderId
-                          ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white"
-                          : ""
-                      }`}
-                      type="button"
-                      onClick={() => {
-                        setSelectedKnowledgeFolderId(kf.id);
-                        router.push(
-                          `/knowledge?folderId=${kf.id}&folderName=${encodeURIComponent(kf.name)}`,
-                        );
-                        window.dispatchEvent(
-                          new CustomEvent("select-knowledge-folder", {
-                            detail: kf,
-                          }),
-                        );
-                      }}
-                    >
-                      <span className="truncate">{kf.name}</span>
-                    </button>
-                  ));
-                })()}
-              </div>
-            ) : pathname === "/agents" || pathname?.startsWith("/agents/") ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
-                {(() => {
-                  const filtered = customAgents.filter((agent) =>
-                    agent.name
-                      .toLowerCase()
-                      .includes(leftSidebarSearch.toLowerCase()),
-                  );
-
-                  if (customAgents.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <span className="text-xs text-default-400">
-                          No agents created yet
-                        </span>
-                      </div>
-                    );
-                  }
-                  if (filtered.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <span className="text-xs text-default-400">
-                          No results found
-                        </span>
-                      </div>
-                    );
-                  }
-
-                  return filtered.map((agent) => (
-                    <button
-                      key={agent.id}
-                      className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
-                        agent.id === selectedAgentId
-                          ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white"
-                          : ""
-                      }`}
-                      type="button"
-                      onClick={() => {
-                        setSelectedAgentId(agent.id);
-                        router.push(
-                          `/agents?agentId=${agent.id}&name=${encodeURIComponent(agent.name)}`,
-                        );
-                      }}
-                    >
-                      <span className="truncate">{agent.name}</span>
-                    </button>
-                  ));
-                })()}
-              </div>
-            ) : pathname === "/documents" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
-                {(() => {
-                  const filtered = documents.filter((doc) =>
-                    doc.name
-                      .toLowerCase()
-                      .includes(leftSidebarSearch.toLowerCase()),
-                  );
-
-                  if (documents.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:book-open-linear"
-                        />
-                        <span className="text-xs text-default-400">
-                          No documents added yet
-                        </span>
-                      </div>
-                    );
-                  }
-                  if (filtered.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:book-open-linear"
-                        />
-                        <span className="text-xs text-default-400">
-                          No results found
-                        </span>
-                      </div>
-                    );
-                  }
-
-                  return filtered.map((doc) => (
-                    <div
-                      key={doc.id}
-                      className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
-                      onClick={() =>
-                        window.dispatchEvent(
-                          new CustomEvent("edit-document", { detail: doc }),
-                        )
-                      }
-                    >
-                      <span className="truncate">{doc.name}</span>
-                      <Dropdown
-                        className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
-                        placement="bottom-end"
-                      >
-                        <DropdownTrigger>
-                          <button
-                            className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <MoreHorizontal size={16} />
-                          </button>
-                        </DropdownTrigger>
-                        <DropdownMenu
-                          aria-label="Document options"
-                          className="p-0"
-                          variant="flat"
-                        >
-                          <DropdownItem
-                            key="delete"
-                            className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
-                            color="danger"
-                            startContent={<Trash2 size={14} />}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              dispatch(removeDocument(doc.id));
-                            }}
-                          >
-                            Delete
-                          </DropdownItem>
-                        </DropdownMenu>
-                      </Dropdown>
-                    </div>
-                  ));
-                })()}
-              </div>
-            ) : pathname === "/cloud" ? (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 pb-6 w-full">
-                {(() => {
-                  const groups = [
-                    {
-                      category: "GCP Sovereign Cloud",
-                      providers: [
-                        "GCP Commercial",
-                        "GCP Dedicated",
-                        "GCP Government",
-                      ],
-                    },
-                    {
-                      category: "PaaS & Deployment",
-                      providers: [
-                        "Vercel",
-                        "Heroku",
-                        "Netlify",
-                        "Render",
-                        "DigitalOcean",
-                        "Fly.io",
-                        "Railway",
-                        "Porter",
-                        "Zeet",
-                      ],
-                    },
-                    {
-                      category: "Databases & BaaS",
-                      providers: [
-                        "Supabase",
-                        "MongoDB Atlas",
-                        "Neon",
-                        "PlanetScale",
-                        "Upstash",
-                        "Redis Enterprise Cloud",
-                        "Snowflake",
-                        "Databricks",
-                        "SingleStore",
-                        "CockroachLabs",
-                        "Fauna",
-                        "Xata",
-                        "Convex",
-                        "Turso",
-                        "Appwrite",
-                      ],
-                    },
-                    {
-                      category: "Vector Databases",
-                      providers: [
-                        "Pinecone",
-                        "Weaviate",
-                        "Qdrant",
-                        "Milvus",
-                        "Chroma",
-                      ],
-                    },
-                    {
-                      category: "Edge, CDN & Networking",
-                      providers: [
-                        "Cloudflare",
-                        "Fastly",
-                        "Akamai",
-                        "GCP Cloud Armor",
-                        "Edgio",
-                        "Tailscale",
-                        "Ngrok",
-                      ],
-                    },
-                    {
-                      category: "Containers & Orchestration",
-                      providers: [
-                        "Docker Hub",
-                        "Kubernetes",
-                        "Google Cloud Run",
-                        "Google Kubernetes Engine (GKE)",
-                        "HashiCorp Nomad",
-                      ],
-                    },
-                    {
-                      category: "Serverless & Compute",
-                      providers: [
-                        "Google Cloud Functions (Commercial)",
-                        "Google Cloud Functions (Dedicated)",
-                        "Google Cloud Functions (Government)",
-                        "Cloudflare Workers",
-                        "Deno Deploy",
-                      ],
-                    },
-                    {
-                      category: "CI/CD & DevOps",
-                      providers: [
-                        "GitHub Actions",
-                        "GitLab CI",
-                        "Bitbucket Pipelines",
-                        "CircleCI",
-                        "Travis CI",
-                        "Google Cloud Build",
-                        "ArgoCD",
-                        "Spinnaker",
-                      ],
-                    },
-                    {
-                      category: "Event Streaming",
-                      providers: [
-                        "Confluent",
-                        "RabbitMQ Cloud",
-                        "Google Cloud Pub/Sub",
-                        "Google Cloud Eventarc",
-                      ],
-                    },
-                  ];
-
-                  const groupRenderData = groups
-                    .map((group) => {
-                      const filteredProviders = group.providers.filter(
-                        (provider) =>
-                          provider
-                            .toLowerCase()
-                            .includes(leftSidebarSearch.toLowerCase()),
                       );
+                    }
 
-                      return { ...group, providers: filteredProviders };
-                    })
-                    .filter((group) => group.providers.length > 0);
-
-                  if (groupRenderData.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon="solar:cloud-linear"
+                    return filtered.map((stream) => (
+                      <button
+                        key={stream.id}
+                        className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group cursor-pointer"
+                        onClick={() =>
+                          window.dispatchEvent(
+                            new CustomEvent("select-secret", {
+                              detail: stream.id,
+                            }),
+                          )
+                        }
+                      >
+                        <span>{stream.name}</span>
+                        <Lock
+                          className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                          size={14}
                         />
-                        <span className="text-xs text-default-400">
-                          {leftSidebarSearch
-                            ? "No results found"
-                            : "No cloud nodes added yet"}
-                        </span>
-                      </div>
+                      </button>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/instructions" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = instructions.filter((inst) =>
+                      inst.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
                     );
-                  }
 
-                  return groupRenderData.map((group) => (
-                    <div key={group.category} className="mb-4 last:mb-0">
-                      <div className="px-3 py-1.5 text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
-                        {group.category}
-                      </div>
-                      {group.providers.map((provider) => (
-                        <button
-                          key={provider}
-                          className="w-full text-left px-3 py-2 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center gap-2 truncate"
-                          onClick={() =>
-                            window.dispatchEvent(
-                              new CustomEvent("select-cloud-provider", {
-                                detail: provider,
-                              }),
-                            )
-                          }
-                        >
-                          <Cloud
-                            className="text-gray-400 flex-shrink-0"
-                            size={14}
+                    if (instructions.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:document-text-linear"
                           />
-                          <span className="truncate">{provider}</span>
-                        </button>
-                      ))}
-                    </div>
-                  ));
-                })()}
-              </div>
-            ) : isLoading ? (
-              <div className="space-y-4 px-4 mt-2">
-                {[1, 2, 3, 4, 5, 6].map((i) => (
-                  <div
-                    key={i}
-                    className="h-4 w-full bg-default-100 animate-pulse rounded"
-                  />
-                ))}
+                          <span className="text-xs text-default-400">
+                            No instructions added yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:document-text-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((inst) => (
+                      <div
+                        key={inst.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                        onClick={() =>
+                          window.dispatchEvent(
+                            new CustomEvent("edit-instruction", {
+                              detail: inst,
+                            }),
+                          )
+                        }
+                      >
+                        <span className="truncate">{inst.name}</span>
+                        <Dropdown
+                          className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                          placement="bottom-end"
+                        >
+                          <DropdownTrigger>
+                            <button
+                              className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <MoreHorizontal size={16} />
+                            </button>
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Instruction options"
+                            className="p-0"
+                            variant="flat"
+                          >
+                            <DropdownItem
+                              key="edit"
+                              className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
+                              startContent={
+                                <Edit2 className="text-default-500" size={14} />
+                              }
+                              onClick={() =>
+                                window.dispatchEvent(
+                                  new CustomEvent("edit-instruction", {
+                                    detail: inst,
+                                  }),
+                                )
+                              }
+                            >
+                              Edit
+                            </DropdownItem>
+                            <DropdownItem
+                              key="delete"
+                              className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                              color="danger"
+                              startContent={<Trash2 size={14} />}
+                              onClick={() =>
+                                window.dispatchEvent(
+                                  new CustomEvent("delete-instruction", {
+                                    detail: inst.id,
+                                  }),
+                                )
+                              }
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/guardrails" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = guardrails.filter((gr) =>
+                      gr.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (guardrails.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:shield-warning-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No guardrails added yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:shield-warning-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((gr) => (
+                      <div
+                        key={gr.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                        onClick={() =>
+                          window.dispatchEvent(
+                            new CustomEvent("edit-guardrail", {
+                              detail: gr,
+                            }),
+                          )
+                        }
+                      >
+                        <span className="truncate">{gr.name}</span>
+                        <Dropdown
+                          className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                          placement="bottom-end"
+                        >
+                          <DropdownTrigger>
+                            <button
+                              className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <MoreHorizontal size={16} />
+                            </button>
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Guardrail options"
+                            className="p-0"
+                            variant="flat"
+                          >
+                            <DropdownItem
+                              key="edit"
+                              className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
+                              startContent={
+                                <Edit2 className="text-default-500" size={14} />
+                              }
+                              onClick={() =>
+                                window.dispatchEvent(
+                                  new CustomEvent("edit-guardrail", {
+                                    detail: gr,
+                                  }),
+                                )
+                              }
+                            >
+                              Edit
+                            </DropdownItem>
+                            <DropdownItem
+                              key="delete"
+                              className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                              color="danger"
+                              startContent={<Trash2 size={14} />}
+                              onClick={() =>
+                                window.dispatchEvent(
+                                  new CustomEvent("delete-guardrail", {
+                                    detail: gr.id,
+                                  }),
+                                )
+                              }
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/knowledge" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = knowledgeFolders.filter((kf) =>
+                      kf.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (knowledgeFolders.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 h-full text-center w-full">
+                          <span className="text-xs text-default-500 font-medium">
+                            No knowledge folders yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 h-full text-center w-full">
+                          <span className="text-xs text-default-500 font-medium">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((kf) => (
+                      <button
+                        key={kf.id}
+                        className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
+                          kf.id === selectedKnowledgeFolderId
+                            ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white"
+                            : ""
+                        }`}
+                        type="button"
+                        onClick={() => {
+                          setSelectedKnowledgeFolderId(kf.id);
+                          router.push(
+                            `/knowledge?folderId=${kf.id}&folderName=${encodeURIComponent(kf.name)}`,
+                          );
+                          window.dispatchEvent(
+                            new CustomEvent("select-knowledge-folder", {
+                              detail: kf,
+                            }),
+                          );
+                        }}
+                      >
+                        <span className="truncate">{kf.name}</span>
+                      </button>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/agents" || pathname?.startsWith("/agents/") ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = customAgents.filter((agent) =>
+                      agent.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (customAgents.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <span className="text-xs text-default-400">
+                            No agents created yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((agent) => (
+                      <button
+                        key={agent.id}
+                        className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
+                          agent.id === selectedAgentId
+                            ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white"
+                            : ""
+                        }`}
+                        type="button"
+                        onClick={() => {
+                          setSelectedAgentId(agent.id);
+                          router.push(
+                            `/agents?agentId=${agent.id}&name=${encodeURIComponent(agent.name)}`,
+                          );
+                        }}
+                      >
+                        <span className="truncate">{agent.name}</span>
+                      </button>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/documents" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = documents.filter((doc) =>
+                      doc.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (documents.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:book-open-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No documents added yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:book-open-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((doc) => (
+                      <div
+                        key={doc.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                        onClick={() =>
+                          window.dispatchEvent(
+                            new CustomEvent("edit-document", { detail: doc }),
+                          )
+                        }
+                      >
+                        <span className="truncate">{doc.name}</span>
+                        <Dropdown
+                          className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                          placement="bottom-end"
+                        >
+                          <DropdownTrigger>
+                            <button
+                              className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <MoreHorizontal size={16} />
+                            </button>
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Document options"
+                            className="p-0"
+                            variant="flat"
+                          >
+                            <DropdownItem
+                              key="delete"
+                              className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                              color="danger"
+                              startContent={<Trash2 size={14} />}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                dispatch(removeDocument(doc.id));
+                              }}
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/cloud" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 pb-6 w-full">
+                  {(() => {
+                    const groups = [
+                      {
+                        category: "GCP Sovereign Cloud",
+                        providers: [
+                          "GCP Commercial",
+                          "GCP Dedicated",
+                          "GCP Government",
+                        ],
+                      },
+                      {
+                        category: "PaaS & Deployment",
+                        providers: [
+                          "Vercel",
+                          "Heroku",
+                          "Netlify",
+                          "Render",
+                          "DigitalOcean",
+                          "Fly.io",
+                          "Railway",
+                          "Porter",
+                          "Zeet",
+                        ],
+                      },
+                      {
+                        category: "Databases & BaaS",
+                        providers: [
+                          "Supabase",
+                          "MongoDB Atlas",
+                          "Neon",
+                          "PlanetScale",
+                          "Upstash",
+                          "Redis Enterprise Cloud",
+                          "Snowflake",
+                          "Databricks",
+                          "SingleStore",
+                          "CockroachLabs",
+                          "Fauna",
+                          "Xata",
+                          "Convex",
+                          "Turso",
+                          "Appwrite",
+                        ],
+                      },
+                      {
+                        category: "Vector Databases",
+                        providers: [
+                          "Pinecone",
+                          "Weaviate",
+                          "Qdrant",
+                          "Milvus",
+                          "Chroma",
+                        ],
+                      },
+                      {
+                        category: "Edge, CDN & Networking",
+                        providers: [
+                          "Cloudflare",
+                          "Fastly",
+                          "Akamai",
+                          "GCP Cloud Armor",
+                          "Edgio",
+                          "Tailscale",
+                          "Ngrok",
+                        ],
+                      },
+                      {
+                        category: "Containers & Orchestration",
+                        providers: [
+                          "Docker Hub",
+                          "Kubernetes",
+                          "Google Cloud Run",
+                          "Google Kubernetes Engine (GKE)",
+                          "HashiCorp Nomad",
+                        ],
+                      },
+                      {
+                        category: "Serverless & Compute",
+                        providers: [
+                          "Google Cloud Functions (Commercial)",
+                          "Google Cloud Functions (Dedicated)",
+                          "Google Cloud Functions (Government)",
+                          "Cloudflare Workers",
+                          "Deno Deploy",
+                        ],
+                      },
+                      {
+                        category: "CI/CD & DevOps",
+                        providers: [
+                          "GitHub Actions",
+                          "GitLab CI",
+                          "Bitbucket Pipelines",
+                          "CircleCI",
+                          "Travis CI",
+                          "Google Cloud Build",
+                          "ArgoCD",
+                          "Spinnaker",
+                        ],
+                      },
+                      {
+                        category: "Event Streaming",
+                        providers: [
+                          "Confluent",
+                          "RabbitMQ Cloud",
+                          "Google Cloud Pub/Sub",
+                          "Google Cloud Eventarc",
+                        ],
+                      },
+                    ];
+
+                    const groupRenderData = groups
+                      .map((group) => {
+                        const filteredProviders = group.providers.filter(
+                          (provider) =>
+                            provider
+                              .toLowerCase()
+                              .includes(leftSidebarSearch.toLowerCase()),
+                        );
+
+                        return { ...group, providers: filteredProviders };
+                      })
+                      .filter((group) => group.providers.length > 0);
+
+                    if (groupRenderData.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:cloud-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            {leftSidebarSearch
+                              ? "No results found"
+                              : "No cloud nodes added yet"}
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return groupRenderData.map((group) => (
+                      <div key={group.category} className="mb-4 last:mb-0">
+                        <div className="px-3 py-1.5 text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                          {group.category}
+                        </div>
+                        {group.providers.map((provider) => (
+                          <button
+                            key={provider}
+                            className="w-full text-left px-3 py-2 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center gap-2 truncate"
+                            onClick={() =>
+                              window.dispatchEvent(
+                                new CustomEvent("select-cloud-provider", {
+                                  detail: provider,
+                                }),
+                              )
+                            }
+                          >
+                            <Cloud
+                              className="text-gray-400 flex-shrink-0"
+                              size={14}
+                            />
+                            <span className="truncate">{provider}</span>
+                          </button>
+                        ))}
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : isLoading ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full" />
+              ) : (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = sortedChats.filter((item) =>
+                      (item?.responses[0]?.prompt || "Untitled Chat")
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (sortedChats.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon={
+                              pathname === "/" || pathname === "/code"
+                                ? "solar:code-square-linear"
+                                : "solar:chat-square-linear"
+                            }
+                          />
+                          <span className="text-xs text-default-400">
+                            {pathname === "/" || pathname === "/code"
+                              ? "No code history yet"
+                              : "No chat history yet"}
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="px-3 py-8 text-center text-xs text-default-400">
+                          No results found
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((item) => (
+                      <button
+                        key={item?._id}
+                        className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate cursor-pointer"
+                        onClick={() =>
+                          item?.sessionId && submitForm(item?.sessionId)
+                        }
+                      >
+                        {item?.responses[0]?.prompt || "Untitled Chat"}
+                      </button>
+                    ));
+                  })()}
+                </div>
+              )}
+            </ScrollShadow>
+          )}
+
+          <div
+            className={cn(
+              "mt-auto border-t border-default-200 flex flex-col gap-2",
+              isSidebarOpen ? "px-5 pb-5 pt-4" : "px-1 pb-4 pt-4",
+            )}
+          >
+            {status === "unauthenticated" ? (
+              <div className={cn("flex gap-2", !isSidebarOpen && "hidden")}>
+                <Button
+                  className="flex-1 h-9 bg-black text-white text-[13px] font-medium rounded-md"
+                  onClick={() => {
+                    if (
+                      typeof window !== "undefined" &&
+                      "__TAURI__" in window
+                    ) {
+                      useModalStore.getState().onOpen({ type: "login" });
+                    } else {
+                      window.location.href = "/login";
+                    }
+                  }}
+                >
+                  Login
+                </Button>
               </div>
             ) : (
-              <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
-                {(() => {
-                  const filtered = sortedChats.filter((item) =>
-                    (item?.responses[0]?.prompt || "Untitled Chat")
-                      .toLowerCase()
-                      .includes(leftSidebarSearch.toLowerCase()),
-                  );
-
-                  if (sortedChats.length === 0) {
-                    return (
-                      <div className="flex flex-col items-center justify-center py-12 text-center w-full">
-                        <Icon
-                          className="text-2xl text-default-400 mb-2"
-                          icon={
-                            pathname === "/" || pathname === "/code"
-                              ? "solar:code-square-linear"
-                              : "solar:chat-square-linear"
-                          }
-                        />
-                        <span className="text-xs text-default-400">
-                          {pathname === "/" || pathname === "/code"
-                            ? "No code history yet"
-                            : "No chat history yet"}
-                        </span>
-                      </div>
-                    );
-                  }
-
-                  if (filtered.length === 0) {
-                    return (
-                      <div className="px-3 py-8 text-center text-xs text-default-400">
-                        No results found
-                      </div>
-                    );
-                  }
-
-                  return filtered.map((item) => (
-                    <button
-                      key={item?._id}
-                      className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate cursor-pointer"
-                      onClick={() =>
-                        item?.sessionId && submitForm(item?.sessionId)
-                      }
-                    >
-                      {item?.responses[0]?.prompt || "Untitled Chat"}
-                    </button>
-                  ));
-                })()}
+              <div
+                className={cn(
+                  "flex w-full items-center gap-2",
+                  !isSidebarOpen && "hidden",
+                )}
+              >
+                <div className="flex-1">
+                  <MyAccountDropdown />
+                </div>
+                <NotificationBell />
               </div>
             )}
-          </ScrollShadow>
-        )}
-
-        <div
-          className={cn(
-            "mt-auto border-t border-default-200 flex flex-col gap-2",
-            isSidebarOpen ? "px-5 pb-5 pt-4" : "px-1 pb-4 pt-4",
-          )}
-        >
-
-
-          {status === "unauthenticated" ? (
-            <div className={cn("flex gap-2", !isSidebarOpen && "hidden")}>
-              <Button
-                className="flex-1 h-9 bg-black text-white text-[13px] font-medium rounded-md"
-                onClick={() => {
-                  if (typeof window !== "undefined" && "__TAURI__" in window) {
-                    useModalStore.getState().onOpen({ type: "login" });
-                  } else {
-                    window.location.href = "/login";
-                  }
-                }}
-              >
-                Login
-              </Button>
-            </div>
-          ) : (
-            <div className={cn("flex w-full items-center gap-2", !isSidebarOpen && "hidden")}>
-              <div className="flex-1">
-                <MyAccountDropdown />
-              </div>
-              <NotificationBell />
-            </div>
-          )}
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 
@@ -3330,24 +3195,26 @@ export default function Sidebar() {
       </Modal>
 
       {/* Local Workspace Connection Modal */}
-      <Modal 
-        isOpen={isWorkspaceModalOpen} 
-        onClose={() => setIsWorkspaceModalOpen(false)}
+      <Modal
         backdrop="blur"
         classNames={{
           backdrop: "bg-background/40 backdrop-blur-md",
           base: "border border-default-100 bg-background/90 text-foreground dark:bg-default-50/90",
         }}
+        isOpen={isWorkspaceModalOpen}
+        onClose={() => setIsWorkspaceModalOpen(false)}
       >
         <ModalContent className="rounded-2xl p-2 shadow-2xl">
           <ModalHeader className="flex flex-col gap-1">
             <div className="flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
-                <Icon icon="solar:folder-opened-bold" className="size-5" />
+                <Icon className="size-5" icon="solar:folder-opened-bold" />
               </div>
               <div className="text-left">
                 <h3 className="text-sm font-semibold">Open Local Workspace</h3>
-                <p className="text-[10px] text-default-400 font-normal">Connect any codebase folder from your local machine</p>
+                <p className="text-[10px] text-default-400 font-normal">
+                  Connect any codebase folder from your local machine
+                </p>
               </div>
             </div>
           </ModalHeader>
@@ -3360,28 +3227,32 @@ export default function Sidebar() {
                 <div className="flex gap-2 items-center">
                   <Input
                     autoFocus
-                    placeholder="/path/to/your/project"
-                    variant="bordered"
-                    value={localWorkspacePath}
-                    onChange={(e) => setLocalWorkspacePath(e.target.value)}
                     className="flex-1"
                     classNames={{
-                      inputWrapper: "h-11 rounded-xl border-default-200 focus-within:border-primary bg-transparent",
+                      inputWrapper:
+                        "h-11 rounded-xl border-default-200 focus-within:border-primary bg-transparent",
                       input: "text-xs",
                     }}
+                    placeholder="/path/to/your/project"
+                    value={localWorkspacePath}
+                    variant="bordered"
+                    onChange={(e) => setLocalWorkspacePath(e.target.value)}
                   />
                   {isTauri && (
                     <Button
                       isIconOnly
-                      variant="flat"
-                      color="primary"
                       className="h-11 w-11 rounded-xl shrink-0"
+                      color="primary"
+                      variant="flat"
                       onPress={async () => {
                         try {
                           const tauri = (window as any).__TAURI__;
-                          const invokeFn = tauri.core?.invoke || tauri.tauri?.invoke;
+                          const invokeFn =
+                            tauri.core?.invoke || tauri.tauri?.invoke;
+
                           if (invokeFn) {
                             const selected = await invokeFn("select_directory");
+
                             if (selected) {
                               setLocalWorkspacePath(selected);
                             }
@@ -3391,30 +3262,34 @@ export default function Sidebar() {
                         }
                       }}
                     >
-                      <Icon icon="solar:folder-with-files-bold" className="size-5" />
+                      <Icon
+                        className="size-5"
+                        icon="solar:folder-with-files-bold"
+                      />
                     </Button>
                   )}
                 </div>
               </div>
               <p className="text-[10px] text-default-400 italic">
-                Tip: Connecting a local directory sets up the active environment so our agent swarm can index, read, write files, and run tests.
+                Tip: Connecting a local directory sets up the active environment
+                so our agent swarm can index, read, write files, and run tests.
               </p>
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button 
-              variant="light" 
+            <Button
               className="rounded-xl px-4 text-xs font-medium"
+              variant="light"
               onPress={() => setIsWorkspaceModalOpen(false)}
             >
               Cancel
             </Button>
             <Button
-              color="primary"
               className="rounded-xl px-4 text-xs font-semibold shadow-lg shadow-primary/20"
+              color="primary"
+              isDisabled={!localWorkspacePath.trim()}
               isLoading={isConnectingWorkspace}
               onPress={() => connectWorkspaceDirectory(localWorkspacePath)}
-              isDisabled={!localWorkspacePath.trim()}
             >
               Open Folder
             </Button>

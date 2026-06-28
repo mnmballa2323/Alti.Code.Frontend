@@ -3,6 +3,8 @@
 import { SiKubernetes, SiDigitalocean, SiSnowflake } from "react-icons/si";
 import React from "react";
 
+
+
 const OrbitRing = ({
   size,
   duration,
@@ -100,22 +102,22 @@ export default function EnterpriseConnectorsSection() {
             duration={25}
             items={[
               <img
-                key="gcp_assured_workloads"
-                alt="Google Cloud Assured Workloads"
+                key="gcp"
+                alt="Google Cloud"
                 className="w-6 h-6 object-contain"
                 src="/assets/cloud-logos/gcp.svg"
               />,
               <img
-                key="gcp_dedicated"
-                alt="Google Cloud Dedicated"
-                className="w-6 h-6 object-contain"
-                src="/assets/cloud-logos/gcp.svg"
+                key="aws"
+                alt="Amazon Web Services"
+                className="w-7 h-7 object-contain"
+                src="/assets/cloud-logos/aws.svg"
               />,
               <img
-                key="gcp_commercial"
-                alt="Google Cloud Commercial"
+                key="azure"
+                alt="Microsoft Azure"
                 className="w-6 h-6 object-contain"
-                src="/assets/cloud-logos/gcp.svg"
+                src="/assets/cloud-logos/azure.svg"
               />,
             ]}
             size={260}
