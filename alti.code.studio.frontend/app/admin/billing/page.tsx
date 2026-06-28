@@ -4,7 +4,7 @@ import React from "react";
 
 export default function BillingPage() {
   return (
-    <div className="w-full">
+    <div className="w-full pt-6">
       <div className="flex flex-col gap-6">
         <div className="flex gap-6">
           <div className="flex-1">
