@@ -70,28 +70,34 @@ export const UserRepository = {
    * Create a new user with an automatically generated confirmation token
    */
   createUser: async userData => {
+    const { companyName, ...userFields } = userData;
     const confirmationToken = crypto.randomBytes(32).toString('hex');
     const date = new Date();
     date.setDate(date.getDate() + 1);
 
     try {
       return await prisma.$transaction(async tx => {
-        const tenantName = `Workspace - ${userData.email.split('@')[0]}_${crypto.randomBytes(3).toString('hex')}`;
+        const emailDomain = userFields.email.split('@')[1]?.toLowerCase();
+        const personalDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com', 'aol.com', 'zoho.com', 'proton.me', 'protonmail.com'];
+        const domain = (emailDomain && !personalDomains.includes(emailDomain)) ? emailDomain : null;
+
+        const tenantName = companyName || `Workspace - ${userFields.email.split('@')[0]}_${crypto.randomBytes(3).toString('hex')}`;
         const tenant = await tx.tenant.create({
           data: {
             name: tenantName,
+            domain,
           },
         });
 
         // Auto-set admin role in dev if email contains admin
         let role = 'unauthorized';
-        if (userData.email.includes('admin')) {
+        if (userFields.email.includes('admin')) {
           role = 'admin';
         }
 
         return tx.user.create({
           data: {
-            ...userData,
+            ...userFields,
             role,
             tenantId: tenant.id,
             tenantRole: 'owner',

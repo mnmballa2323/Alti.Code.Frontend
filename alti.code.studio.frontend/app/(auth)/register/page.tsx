@@ -23,10 +23,24 @@ export default function RegisterPage() {
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
+    const companyName = formData.get("companyName") as string;
+
+    if (!companyName || !companyName.trim()) {
+      toast.error("Company Name is required");
+      return;
+    }
 
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
 
+      return;
+    }
+
+    // Validate corporate domain
+    const personalDomains = ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "icloud.com", "aol.com", "zoho.com", "proton.me", "protonmail.com", "gmx.com", "yandex.com", "mail.com"];
+    const emailDomain = email.split("@")[1]?.toLowerCase();
+    if (emailDomain && personalDomains.includes(emailDomain)) {
+      toast.error("Please use a valid company email address (personal emails not allowed).");
       return;
     }
 
@@ -42,6 +56,7 @@ export default function RegisterPage() {
             email,
             password,
             confirmPassword,
+            companyName,
           }),
         },
       );
@@ -86,8 +101,24 @@ export default function RegisterPage() {
                   "h-12 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input: "text-black font-medium",
               }}
+              name="companyName"
+              placeholder="Company Name"
+              type="text"
+              variant="flat"
+            />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Input
+              isRequired
+              className="max-w-full"
+              classNames={{
+                inputWrapper:
+                  "h-12 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                input: "text-black font-medium",
+              }}
               name="email"
-              placeholder="Enter Email"
+              placeholder="Company Email"
               type="email"
               variant="flat"
             />
