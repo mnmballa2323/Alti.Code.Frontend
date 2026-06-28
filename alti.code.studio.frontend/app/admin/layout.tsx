@@ -131,7 +131,29 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="flex flex-col h-screen w-full bg-[#FFFFFF] dark:bg-[#0d1117] text-neutral-800 dark:text-neutral-200 font-sans overflow-hidden">
+    <div className="flex flex-col h-screen w-screen bg-[#F3F4F6] dark:bg-[#0d1117] overflow-hidden text-neutral-900 dark:text-neutral-100">
+      <style dangerouslySetInnerHTML={{__html: `
+        /* Overriding Chrome autofill default background */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active,
+        input:-internal-autofill-selected {
+          -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+          box-shadow: 0 0 0 1000px #ffffff inset !important;
+          -webkit-text-fill-color: #171717 !important;
+        }
+        
+        .dark input:-webkit-autofill,
+        .dark input:-webkit-autofill:hover, 
+        .dark input:-webkit-autofill:focus, 
+        .dark input:-webkit-autofill:active,
+        .dark input:-internal-autofill-selected {
+          -webkit-box-shadow: 0 0 0 1000px #171717 inset !important;
+          box-shadow: 0 0 0 1000px #171717 inset !important;
+          -webkit-text-fill-color: #ffffff !important;
+        }
+      `}} />
       {/* Top Title Navbar */}
       <div className="h-14 w-full bg-white dark:bg-[#161b22] border-b border-neutral-100 dark:border-neutral-800 flex items-center shrink-0 z-20">
         {/* Left header: aligns with sidebar width */}
