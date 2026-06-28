@@ -60,7 +60,7 @@ export default function DatabaseConnectorsSection() {
         <img
           alt="Cosmos DB"
           className="w-8 h-8 object-contain"
-          src="https://api.iconify.design/devicon/cosmosdb.svg"
+          src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Azure_Cosmos_DB.svg"
         />
       ),
     },
@@ -80,7 +80,7 @@ export default function DatabaseConnectorsSection() {
         <img
           alt="Azure SQL"
           className="w-8 h-8 object-contain"
-          src="https://api.iconify.design/devicon/azuresqldatabase.svg"
+          src="https://upload.wikimedia.org/wikipedia/commons/d/db/Azure_SQL_Database.svg"
         />
       ),
     },
