@@ -81,8 +81,21 @@ export default function BillingPage() {
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
             <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Payment</div>
             <div className="flex items-baseline justify-between mt-2">
-              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
-                {activePaymentMethod.details}
+              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200 flex items-baseline gap-1">
+                {activePaymentMethod.details.startsWith("Ending in") ? (
+                  <>
+                    <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-medium lowercase">ending in</span>
+                    <span>{activePaymentMethod.details.replace("Ending in ", "")}</span>
+                  </>
+                ) : activePaymentMethod.details.includes("ending in") ? (
+                  <>
+                    <span>{activePaymentMethod.details.split(" ending in ")[0]}</span>
+                    <span className="text-[10px] text-neutral-400 dark:text-neutral-500 font-medium lowercase mx-0.5">ending in</span>
+                    <span>{activePaymentMethod.details.split(" ending in ")[1]}</span>
+                  </>
+                ) : (
+                  <span>{activePaymentMethod.details}</span>
+                )}
               </span>
               <span className="text-[10px] text-neutral-400 font-semibold">
                 {activePaymentMethod.extra}
