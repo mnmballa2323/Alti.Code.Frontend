@@ -148,3 +148,15 @@ variable "redis_memory_size_gb" {
   type        = number
   default     = 1
 }
+
+variable "waf_rate_limit_count" {
+  description = "The maximum number of requests allowed in the WAF rate limit window"
+  type        = number
+  default     = 100
+}
+
+variable "waf_rate_limit_interval" {
+  description = "The time window in seconds for the WAF rate limit"
+  type        = number
+  default     = 60
+}

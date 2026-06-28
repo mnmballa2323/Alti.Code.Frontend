@@ -78,8 +78,8 @@ resource "google_compute_security_policy" "waf_policy" {
       conform_action = "allow"
       exceed_action  = "deny(429)" # Return HTTP 429 Too Many Requests
       rate_limit_threshold {
-        count        = 100        # Max 100 requests
-        interval_sec = 60         # Per 60 seconds
+        count        = var.waf_rate_limit_count
+        interval_sec = var.waf_rate_limit_interval
       }
       enforce_on_key = "IP"
     }
