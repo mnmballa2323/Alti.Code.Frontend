@@ -551,31 +551,31 @@ export default function VaultPage() {
   // ─────────────────────────────────────────────────────────────────────────
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans">
-        <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[30vh] overflow-hidden">
-          <div className="flex w-full flex-col items-center gap-5 z-20 px-6">
-            {/* ── Tab toggle navbar ── */}
-            {!selectedSecretId && (
-              <div className="w-full max-w-2xl">
-                <div className="flex items-center justify-between w-full bg-white dark:bg-[#161b22] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-sm p-1">
-                  {VAULT_TABS.map((tab) => (
-                    <button
-                      key={tab.id}
-                      className={`py-2 px-3 rounded-xl text-[11px] font-semibold tracking-wide whitespace-nowrap transition-all duration-200 ${
-                        vaultMode === tab.id
-                          ? "bg-black dark:bg-white text-white dark:text-black shadow-sm"
-                          : "text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5"
-                      }`}
-                      type="button"
-                      onClick={() => setVaultMode(tab.id)}
-                    >
-                      {tab.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
+      <div className="flex flex-col h-full bg-default-50 dark:bg-background w-full font-sans">
+        {/* Top Navbar */}
+        <div className="flex items-center justify-center w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111] shrink-0">
+          {!selectedSecretId && (
+            <div className="flex items-center bg-default-100 dark:bg-default-50 p-1 rounded-lg border-none shadow-inner">
+              {VAULT_TABS.map((tab) => (
+                <button
+                  key={tab.id}
+                  className={`h-8 px-4 flex items-center rounded-md text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                    vaultMode === tab.id
+                      ? "bg-white dark:bg-default-200 text-foreground shadow-sm"
+                      : "text-default-500 hover:text-foreground/80 hover:bg-default-200/50"
+                  }`}
+                  type="button"
+                  onClick={() => setVaultMode(tab.id)}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+        <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full">
+          <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[20vh] overflow-hidden">
+            <div className="flex w-full flex-col items-center gap-5 z-20 px-6">
             {/* ── Saved secret detail view ── */}
             <div className="flex w-full flex-col gap-4 max-w-2xl">
               {selectedSecretId ? (
