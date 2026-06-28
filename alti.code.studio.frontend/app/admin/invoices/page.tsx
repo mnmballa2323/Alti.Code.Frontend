@@ -15,7 +15,7 @@ export default function InvoicesPage() {
   ];
 
   return (
-    <div className="w-full">
+    <div className="w-full pt-6">
       <div className="w-full">
         {/* Table Header */}
         <div className="grid grid-cols-6 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
