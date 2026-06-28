@@ -27,7 +27,7 @@ export default function InvoicesPage() {
         <div className="grid grid-cols-4 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
           <div>INVOICE ID</div>
           <div>MONTH</div>
-          <div>AMOUNT</div>
+          <div className="text-right">AMOUNT</div>
           <div></div>
         </div>
 
@@ -40,7 +40,7 @@ export default function InvoicesPage() {
             >
               <div>{inv.id}</div>
               <div>{inv.month}</div>
-              <div>{inv.amount}</div>
+              <div className="text-right">{inv.amount}</div>
               <div className="flex justify-end">
                 <button className="flex items-center gap-1.5 text-blue-500 hover:text-blue-600 font-semibold text-xs transition-colors">
                   <Download className="w-3.5 h-3.5" />
