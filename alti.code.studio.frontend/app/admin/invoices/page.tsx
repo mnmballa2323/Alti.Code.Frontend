@@ -28,7 +28,9 @@ export default function InvoicesPage() {
           <div>INVOICE ID</div>
           <div>MONTH</div>
           <div>AMOUNT</div>
-          <div>DOWNLOAD</div>
+          <div className="flex justify-end">
+            <div className="w-24 text-left">DOWNLOAD</div>
+          </div>
         </div>
 
         {/* Table Body */}
@@ -41,11 +43,13 @@ export default function InvoicesPage() {
               <div>{inv.id}</div>
               <div>{inv.month}</div>
               <div>{inv.amount}</div>
-              <div className="flex justify-start">
-                <button className="flex items-center gap-1.5 text-blue-500 hover:text-blue-600 font-semibold text-xs transition-colors">
-                  <Download className="w-3.5 h-3.5" />
-                  PDF
-                </button>
+              <div className="flex justify-end">
+                <div className="w-24 flex justify-start">
+                  <button className="flex items-center gap-1.5 text-blue-500 hover:text-blue-600 font-semibold text-xs transition-colors">
+                    <Download className="w-3.5 h-3.5" />
+                    PDF
+                  </button>
+                </div>
               </div>
             </div>
           ))}
