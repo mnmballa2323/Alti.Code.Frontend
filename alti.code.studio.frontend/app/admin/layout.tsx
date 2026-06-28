@@ -120,20 +120,10 @@ export default function AdminLayout({
   };
 
   const getPageTitle = () => {
-    if (pathname.startsWith("/admin/dashboard")) return "Dashboard";
     if (pathname.startsWith("/admin/members")) return "Invite";
-    if (pathname.startsWith("/admin/team-members")) return "Individual";
-    if (pathname.startsWith("/admin/teams")) return "Teams";
-    if (pathname.startsWith("/admin/enterprise")) return "Enterprise";
-
-    if (pathname.startsWith("/admin/revenue")) return "Revenue";
-
-    if (pathname.startsWith("/admin/instructions")) return "Instructions";
-    if (pathname.startsWith("/admin/guardrails")) return "Guardrails";
-    if (pathname.startsWith("/admin/usage")) return "Model Usage";
-    if (pathname.startsWith("/admin/audit")) return "Audit Logs";
-
-    if (pathname.startsWith("/admin/gcp")) return "Google Cloud Platform";
+    if (pathname.startsWith("/admin/team-members")) return "Members";
+    if (pathname.startsWith("/admin/billing")) return "Billing";
+    if (pathname.startsWith("/admin/invoices")) return "Invoices";
 
     return "Platform Admin";
   };
