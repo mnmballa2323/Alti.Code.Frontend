@@ -210,11 +210,6 @@ export default function TeamMembersPage() {
                           <span className="text-neutral-900 dark:text-white font-medium truncate flex-1">
                             {member.email}
                           </span>
-                          {isYou && (
-                            <span className="px-1.5 py-0.5 text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded border border-neutral-200/40 dark:border-neutral-700/40 shrink-0">
-                              You
-                            </span>
-                          )}
                         </div>
                         <div className="col-span-2 flex items-center text-neutral-500 dark:text-neutral-400 capitalize">
                           {member.role || "user"}
