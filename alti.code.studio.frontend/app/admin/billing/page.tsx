@@ -1,14 +1,13 @@
 "use client";
 
 import React from "react";
-import { ChevronDown } from "lucide-react";
 
-export default function InvitePage() {
+export default function BillingPage() {
   return (
     <div className="w-full max-w-5xl">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">
-          Invite
+          Billing
         </h1>
       </div>
 
@@ -17,14 +16,14 @@ export default function InvitePage() {
           <div className="flex-1">
             <input
               type="text"
-              placeholder="Enter First Name"
+              placeholder="Enter Cardholder Name"
               className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 placeholder:text-neutral-400"
             />
           </div>
           <div className="flex-1">
             <input
               type="text"
-              placeholder="Enter Last Name"
+              placeholder="Enter Card Number"
               className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 placeholder:text-neutral-400"
             />
           </div>
@@ -33,37 +32,29 @@ export default function InvitePage() {
         <div className="flex gap-6">
           <div className="flex-1">
             <input
-              type="email"
-              placeholder="Enter Email Address"
+              type="text"
+              placeholder="MM / YY"
               className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 placeholder:text-neutral-400"
             />
           </div>
-          <div className="flex-1 relative">
-            <select 
-              defaultValue="" 
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm text-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-400 appearance-none pr-10"
-            >
-              <option value="" disabled>
-                Select Role Type
-              </option>
-              <option value="admin">Admin</option>
-              <option value="member">Member</option>
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-neutral-400">
-              <ChevronDown className="w-4 h-4" />
-            </div>
+          <div className="flex-1">
+            <input
+              type="text"
+              placeholder="CVC"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 placeholder:text-neutral-400"
+            />
           </div>
         </div>
 
         <div className="flex items-center justify-between mt-4">
           <p className="text-[11px] text-neutral-500 tracking-wide">
             <span className="font-bold text-neutral-900 dark:text-neutral-200">
-              Billing notice:
+              Stripe Security Notice:
             </span>{" "}
-            Adding a new team member adds an active seat to your plan at $25.00/month.
+            Your card information is encrypted and securely saved via Stripe Vault.
           </p>
           <button className="px-5 py-2.5 bg-neutral-500 hover:bg-neutral-600 transition-colors text-white text-xs font-semibold rounded-lg">
-            Invite Member
+            Save Card
           </button>
         </div>
       </div>

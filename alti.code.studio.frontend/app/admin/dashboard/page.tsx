@@ -1,5 +1,5 @@
-import DashboardConsoleView from "@/components/dashboard/DashboardConsoleView";
+import { redirect } from "next/navigation";
 
 export default function AdminDashboardPage() {
-  return <DashboardConsoleView />;
+  redirect("/admin/members");
 }

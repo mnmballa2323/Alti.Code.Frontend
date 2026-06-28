@@ -6,17 +6,12 @@ import Link from "next/link";
 import {
   UserPlus,
   Users,
+  CreditCard,
   FileText,
-  Shield,
-  Activity,
-  BarChart3,
   ArrowLeft,
-  LayoutDashboard,
-  DollarSign,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
-import { GoogleIcon } from "@/components/CloudIcons";
 
 interface SidebarItem {
   label: string;
@@ -25,36 +20,10 @@ interface SidebarItem {
 }
 
 const adminItems: SidebarItem[] = [
-  { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
   { label: "Invite", href: "/admin/members", icon: UserPlus },
-  { label: "Revenue", href: "/admin/revenue", icon: DollarSign },
-  { label: "Audit Logs", href: "/admin/audit", icon: Activity },
-  { label: "Model Usage", href: "/admin/usage", icon: BarChart3 },
-];
-
-const memberItems: SidebarItem[] = [
-  { label: "Individual", href: "/admin/team-members", icon: Users },
-  { label: "Teams", href: "/admin/teams", icon: Users },
-  { label: "Enterprise", href: "/admin/enterprise", icon: Users },
-];
-
-const managerItems: SidebarItem[] = [
-  { label: "Instructions", href: "/admin/instructions", icon: FileText },
-  { label: "Guardrails", href: "/admin/guardrails", icon: Shield },
-];
-
-const cloudItems: SidebarItem[] = [
-  { label: "GCP Cloud", href: "/admin/gcp?env=cloud", icon: GoogleIcon },
-  {
-    label: "GCP Dedicated",
-    href: "/admin/gcp?env=dedicated",
-    icon: GoogleIcon,
-  },
-  {
-    label: "GCP Government",
-    href: "/admin/gcp?env=government",
-    icon: GoogleIcon,
-  },
+  { label: "Members", href: "/admin/team-members", icon: Users },
+  { label: "Billing", href: "/admin/billing", icon: CreditCard },
+  { label: "Invoices", href: "/admin/invoices", icon: FileText },
 ];
 
 export default function AdminLayout({
@@ -174,7 +143,7 @@ export default function AdminLayout({
       {/* Top Title Navbar */}
       <div className="h-14 w-full bg-white dark:bg-[#161b22] border-b border-neutral-100 dark:border-neutral-800 flex items-center shrink-0 z-20">
         {/* Left header: aligns with sidebar width */}
-        <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 h-full flex items-center gap-3 px-6 shrink-0">
+        <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 h-full flex items-center gap-3 px-6 shrink-0">
           <img
             alt="Inso Code Logo"
             className="w-5 h-5 object-contain block dark:hidden animate-fade-in"
@@ -227,9 +196,6 @@ export default function AdminLayout({
         {/* Internal Navigation Sidebar */}
         <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
           {renderNavGroup("Platform Admin", adminItems)}
-          {renderNavGroup("Member Management", memberItems, "mt-8")}
-          {renderNavGroup("Platform Controls", managerItems, "mt-8")}
-          {renderNavGroup("Cloud Providers", cloudItems, "mt-8")}
         </div>
 
         {/* Main Content Pane */}

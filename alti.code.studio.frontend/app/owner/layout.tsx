@@ -149,7 +149,7 @@ export default function OwnerLayout({
       {/* Top Title Navbar */}
       <div className="h-14 w-full bg-white dark:bg-[#161b22] border-b border-neutral-100 dark:border-neutral-800 flex items-center shrink-0 z-20">
         {/* Left header: aligns with sidebar width */}
-        <div className="w-64 border-r border-neutral-100 dark:border-neutral-800 h-full flex items-center gap-3 px-6 shrink-0">
+        <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 h-full flex items-center gap-3 px-6 shrink-0">
           <img
             alt="Inso Code Logo"
             className="w-5 h-5 object-contain block dark:hidden animate-fade-in"

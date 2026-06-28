@@ -6,6 +6,7 @@ import { Panel, Group, Separator } from "react-resizable-panels";
 import { CopilotKit } from "@copilotkit/react-core";
 import { CopilotSidebar } from "@copilotkit/react-ui";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import "@copilotkit/react-ui/styles.css";
 
 import { RootState } from "@/store";
@@ -18,6 +19,8 @@ import GhostEditor from "@/components/ghost-editor";
 export function PersistentLayout({ children }: { children: React.ReactNode }) {
   const { isGhostEditorOpen } = useSelector((state: RootState) => state.ui);
   const { data: session } = useSession();
+  const pathname = usePathname();
+  const isNoSidebarRoute = pathname?.startsWith("/admin") || pathname?.startsWith("/owner");
   const [isTauri, setIsTauri] = useState(false);
   const [headers, setHeaders] = useState<Record<string, string>>({});
 
@@ -72,15 +75,17 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
           {/* Main Body */}
           <div className="flex w-full flex-1 overflow-hidden relative">
             {/* Sidebar */}
-            <div className="z-30 relative h-full shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
-              <React.Suspense
-                fallback={
-                  <div className="w-72 h-full bg-[#E5E5EB] dark:bg-sidebar" />
-                }
-              >
-                <Sidebar />
-              </React.Suspense>
-            </div>
+            {!isNoSidebarRoute && (
+              <div className="z-30 relative h-full shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+                <React.Suspense
+                  fallback={
+                    <div className="w-72 h-full bg-[#E5E5EB] dark:bg-sidebar" />
+                  }
+                >
+                  <Sidebar />
+                </React.Suspense>
+              </div>
+            )}
 
             {/* Content Area */}
             {isGhostEditorOpen ? (
