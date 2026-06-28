@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Users, CreditCard, Landmark, Send } from "lucide-react";
+import { Users, CreditCard, Landmark } from "lucide-react";
 
 export function CardBrandLogo({ brand }: { brand: string }) {
   const b = brand.toLowerCase();
@@ -44,9 +44,9 @@ export default function BillingPage() {
   const seatPrice = 15;
   const totalAmount = activeSeats * seatPrice;
 
-  const [paymentType, setPaymentType] = React.useState<"card" | "ach" | "wire">("card");
+  const [paymentType, setPaymentType] = React.useState<"card" | "ach">("card");
   const [activePaymentMethod, setActivePaymentMethod] = React.useState<{
-    type: "card" | "ach" | "wire";
+    type: "card" | "ach";
     details: string;
     extra: string;
   }>({
@@ -68,14 +68,6 @@ export default function BillingPage() {
       type: "ach",
       details: "Chase *9103",
       extra: "ACH"
-    });
-  };
-
-  const handleSelectWire = () => {
-    setActivePaymentMethod({
-      type: "wire",
-      details: "J.P. Morgan",
-      extra: "Wire"
     });
   };
 
@@ -122,7 +114,6 @@ export default function BillingPage() {
               <div className="flex items-center gap-2">
                 {activePaymentMethod.type === "card" && <CardBrandLogo brand="visa" />}
                 {activePaymentMethod.type === "ach" && <Landmark className="w-4 h-4 text-[#635BFF]" />}
-                {activePaymentMethod.type === "wire" && <Send className="w-4 h-4 text-[#635BFF]" />}
                 <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
                   {activePaymentMethod.details}
                 </span>
@@ -151,14 +142,6 @@ export default function BillingPage() {
           >
             <Landmark className="w-3.5 h-3.5" />
             ACH Bank Debit
-          </button>
-          <button
-            type="button"
-            onClick={() => setPaymentType("wire")}
-            className={`pb-3 text-xs font-bold uppercase tracking-wider transition-colors focus:outline-none flex items-center gap-1.5 ${paymentType === "wire" ? "border-b-2 border-black dark:border-white text-neutral-900 dark:text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"}`}
-          >
-            <Send className="w-3.5 h-3.5" />
-            Wire Transfer
           </button>
         </div>
 
@@ -251,54 +234,6 @@ export default function BillingPage() {
               >
                 Link Bank Account
               </button>
-            </div>
-          </>
-        )}
-
-        {paymentType === "wire" && (
-          <>
-            {/* Stripe Virtual Bank Details for Wire Transfer */}
-            <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-6 shadow-sm mt-2">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-neutral-50 dark:border-neutral-800/50">
-                <div>
-                  <h3 className="text-xs font-bold text-neutral-800 dark:text-neutral-200">Virtual Bank Account Details</h3>
-                  <p className="text-[10px] text-neutral-400 mt-0.5">Wire transfer instructions generated via Stripe</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleSelectWire}
-                  className="px-4 py-1.5 bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-100 dark:text-neutral-900 text-white text-xs font-semibold rounded-lg transition-colors focus:outline-none"
-                >
-                  Set as Primary
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-                <div>
-                  <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider">Bank Name</span>
-                  <p className="text-xs font-bold text-neutral-700 dark:text-neutral-300 mt-1">J.P. Morgan Chase (Stripe Treasury)</p>
-                </div>
-                <div>
-                  <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider">Routing Number</span>
-                  <p className="text-xs font-bold text-neutral-700 dark:text-neutral-300 mt-1">021000021</p>
-                </div>
-                <div>
-                  <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider">Account Number</span>
-                  <p className="text-xs font-bold text-neutral-700 dark:text-neutral-300 mt-1">893029103</p>
-                </div>
-                <div>
-                  <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider">Account Name</span>
-                  <p className="text-xs font-bold text-neutral-700 dark:text-neutral-300 mt-1">Alti Code Studio LLC</p>
-                </div>
-                <div>
-                  <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider text-red-500 dark:text-red-400">Payment Reference (Memo)</span>
-                  <p className="text-xs font-bold text-red-500 dark:text-red-400 mt-1">ALTI-9283-RECON</p>
-                </div>
-              </div>
-
-              <p className="text-[10px] text-neutral-500 dark:text-neutral-400 leading-relaxed mt-6 pt-4 border-t border-neutral-50 dark:border-neutral-800/50">
-                <span className="font-bold text-neutral-700 dark:text-neutral-300">Important Instruction:</span> Initiate Wire or ACH credit transfers from your commercial banking portal to this unique virtual account. Please include your <span className="font-bold">Payment Reference</span> in the wire memo line to ensure Stripe reconciles the balance instantly.
-              </p>
             </div>
           </>
         )}
