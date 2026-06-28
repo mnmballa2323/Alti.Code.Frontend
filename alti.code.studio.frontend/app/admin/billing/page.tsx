@@ -55,6 +55,9 @@ export default function BillingPage() {
     extra: "Visa"
   });
 
+  const [holderType, setHolderType] = React.useState("");
+  const [accountType, setAccountType] = React.useState("");
+
   const handleSaveCard = () => {
     setActivePaymentMethod({
       type: "card",
@@ -210,20 +213,26 @@ export default function BillingPage() {
                 </div>
                 <div>
                   <select
-                    className="w-full h-11 px-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none text-neutral-800 dark:text-neutral-200 shadow-sm appearance-none cursor-pointer"
+                    value={holderType}
+                    onChange={(e) => setHolderType(e.target.value)}
+                    className={`w-full h-11 px-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none shadow-sm appearance-none cursor-pointer ${holderType === "" ? "text-neutral-400" : "text-neutral-800 dark:text-neutral-200"}`}
                     style={{ backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`, backgroundPosition: 'right 0.75rem center', backgroundSize: '1.25em 1.25em', backgroundRepeat: 'no-repeat' }}
                   >
-                    <option value="company">Company</option>
-                    <option value="individual">Individual</option>
+                    <option value="" disabled hidden>Select Holder Type</option>
+                    <option value="company" className="text-neutral-800 dark:text-neutral-200">Company</option>
+                    <option value="individual" className="text-neutral-800 dark:text-neutral-200">Individual</option>
                   </select>
                 </div>
                 <div>
                   <select
-                    className="w-full h-11 px-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none text-neutral-800 dark:text-neutral-200 shadow-sm appearance-none cursor-pointer"
+                    value={accountType}
+                    onChange={(e) => setAccountType(e.target.value)}
+                    className={`w-full h-11 px-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none shadow-sm appearance-none cursor-pointer ${accountType === "" ? "text-neutral-400" : "text-neutral-800 dark:text-neutral-200"}`}
                     style={{ backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`, backgroundPosition: 'right 0.75rem center', backgroundSize: '1.25em 1.25em', backgroundRepeat: 'no-repeat' }}
                   >
-                    <option value="checking">Checking</option>
-                    <option value="savings">Savings</option>
+                    <option value="" disabled hidden>Select Account Type</option>
+                    <option value="checking" className="text-neutral-800 dark:text-neutral-200">Checking</option>
+                    <option value="savings" className="text-neutral-800 dark:text-neutral-200">Savings</option>
                   </select>
                 </div>
               </div>
