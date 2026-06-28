@@ -18,7 +18,7 @@ export default function MembersPage() {
     <div className="w-full pt-6">
       <div className="w-full">
         {/* Table Header */}
-        <div className="grid grid-cols-[18%_18%_48%_16%] px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
+        <div className="grid grid-cols-[20%_20%_42%_18%] px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
           <div>FIRST NAME</div>
           <div>LAST NAME</div>
           <div>EMAIL ADDRESS</div>
@@ -30,7 +30,7 @@ export default function MembersPage() {
           {mockMembers.map((member, i) => (
             <div
               key={i}
-              className="grid grid-cols-[18%_18%_48%_16%] items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300"
+              className="grid grid-cols-[20%_20%_42%_18%] items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300"
             >
               <div>{member.firstName}</div>
               <div>{member.lastName}</div>
