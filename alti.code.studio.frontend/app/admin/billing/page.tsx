@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Users, CreditCard } from "lucide-react";
+import { Users, CreditCard, Landmark, Send } from "lucide-react";
 
 export function CardBrandLogo({ brand }: { brand: string }) {
   const b = brand.toLowerCase();
@@ -44,6 +44,41 @@ export default function BillingPage() {
   const seatPrice = 15;
   const totalAmount = activeSeats * seatPrice;
 
+  const [paymentType, setPaymentType] = React.useState<"card" | "ach" | "wire">("card");
+  const [activePaymentMethod, setActivePaymentMethod] = React.useState<{
+    type: "card" | "ach" | "wire";
+    details: string;
+    extra: string;
+  }>({
+    type: "card",
+    details: "*4242",
+    extra: "Visa"
+  });
+
+  const handleSaveCard = () => {
+    setActivePaymentMethod({
+      type: "card",
+      details: "*4242",
+      extra: "Visa"
+    });
+  };
+
+  const handleLinkBank = () => {
+    setActivePaymentMethod({
+      type: "ach",
+      details: "Chase *9103",
+      extra: "ACH"
+    });
+  };
+
+  const handleSelectWire = () => {
+    setActivePaymentMethod({
+      type: "wire",
+      details: "J.P. Morgan",
+      extra: "Wire"
+    });
+  };
+
   return (
     <div className="w-full pt-6">
       <div className="flex flex-col gap-6 w-full">
@@ -80,60 +115,193 @@ export default function BillingPage() {
             </div>
           </div>
 
-          {/* Card 4: Payment Card */}
+          {/* Card 4: Payment Method */}
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
-            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Card</div>
+            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Payment</div>
             <div className="flex items-center justify-between mt-2">
               <div className="flex items-center gap-2">
-                <CardBrandLogo brand="visa" />
-                <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">*4242</span>
+                {activePaymentMethod.type === "card" && <CardBrandLogo brand="visa" />}
+                {activePaymentMethod.type === "ach" && <Landmark className="w-4 h-4 text-[#635BFF]" />}
+                {activePaymentMethod.type === "wire" && <Send className="w-4 h-4 text-[#635BFF]" />}
+                <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                  {activePaymentMethod.details}
+                </span>
               </div>
-              <span className="text-[10px] text-neutral-400 font-semibold">12/28</span>
+              <span className="text-[10px] text-neutral-400 font-semibold">
+                {activePaymentMethod.extra}
+              </span>
             </div>
           </div>
         </div>
 
-        {/* Floating Input Fields (No white card background, original height/styles) */}
-        <div className="flex flex-col gap-6 mt-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <input
-              type="text"
-              placeholder="Enter Cardholder Name"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
-            />
-            <input
-              type="text"
-              placeholder="Enter Card Number"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <input
-              type="text"
-              placeholder="MM / YY"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
-            />
-            <input
-              type="text"
-              placeholder="CVC"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
-            />
-          </div>
-        </div>
-
-        {/* Stripe Notice and Save Card Action */}
-        <div className="flex items-center justify-between mt-4">
-          <p className="text-[11px] text-neutral-500 tracking-wide">
-            <span className="font-bold text-neutral-900 dark:text-neutral-200">
-              Stripe Security Notice:
-            </span>{" "}
-            Your card information is encrypted and securely saved via Stripe Vault.
-          </p>
-          <button className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg shadow-sm">
-            Save Card
+        {/* Payment Method Selector Tabs */}
+        <div className="flex border-b border-neutral-100 dark:border-neutral-800 gap-6 mt-4">
+          <button
+            type="button"
+            onClick={() => setPaymentType("card")}
+            className={`pb-3 text-xs font-bold uppercase tracking-wider transition-colors focus:outline-none flex items-center gap-1.5 ${paymentType === "card" ? "border-b-2 border-black dark:border-white text-neutral-900 dark:text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"}`}
+          >
+            <CreditCard className="w-3.5 h-3.5" />
+            Credit Card
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaymentType("ach")}
+            className={`pb-3 text-xs font-bold uppercase tracking-wider transition-colors focus:outline-none flex items-center gap-1.5 ${paymentType === "ach" ? "border-b-2 border-black dark:border-white text-neutral-900 dark:text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"}`}
+          >
+            <Landmark className="w-3.5 h-3.5" />
+            ACH Bank Debit
+          </button>
+          <button
+            type="button"
+            onClick={() => setPaymentType("wire")}
+            className={`pb-3 text-xs font-bold uppercase tracking-wider transition-colors focus:outline-none flex items-center gap-1.5 ${paymentType === "wire" ? "border-b-2 border-black dark:border-white text-neutral-900 dark:text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"}`}
+          >
+            <Send className="w-3.5 h-3.5" />
+            Wire Transfer
           </button>
         </div>
+
+        {/* Dynamic Forms based on Selector Selection */}
+        {paymentType === "card" && (
+          <>
+            {/* Credit Card Inputs */}
+            <div className="flex flex-col gap-6 mt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <input
+                  type="text"
+                  placeholder="Enter Cardholder Name"
+                  className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                />
+                <input
+                  type="text"
+                  placeholder="Enter Card Number"
+                  className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <input
+                  type="text"
+                  placeholder="MM / YY"
+                  className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                />
+                <input
+                  type="text"
+                  placeholder="CVC"
+                  className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                />
+              </div>
+            </div>
+
+            {/* Action Row */}
+            <div className="flex items-center justify-between mt-4">
+              <p className="text-[11px] text-neutral-500 tracking-wide">
+                <span className="font-bold text-neutral-900 dark:text-neutral-200">
+                  Stripe Security Notice:
+                </span>{" "}
+                Your card information is encrypted and securely saved via Stripe Vault.
+              </p>
+              <button
+                type="button"
+                onClick={handleSaveCard}
+                className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg shadow-sm focus:outline-none"
+              >
+                Save Card
+              </button>
+            </div>
+          </>
+        )}
+
+        {paymentType === "ach" && (
+          <>
+            {/* ACH Direct Debit Inputs */}
+            <div className="flex flex-col gap-6 mt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <input
+                  type="text"
+                  placeholder="Account Holder Name"
+                  className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                />
+                <input
+                  type="text"
+                  placeholder="Bank Routing Number"
+                  className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                />
+                <input
+                  type="text"
+                  placeholder="Bank Account Number"
+                  className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                />
+              </div>
+            </div>
+
+            {/* Action Row */}
+            <div className="flex items-center justify-between mt-4">
+              <p className="text-[11px] text-neutral-500 tracking-wide">
+                <span className="font-bold text-neutral-900 dark:text-neutral-200">
+                  Stripe Financial Connections:
+                </span>{" "}
+                Bank accounts are securely linked and instantly verified for monthly recurring debits.
+              </p>
+              <button
+                type="button"
+                onClick={handleLinkBank}
+                className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg shadow-sm focus:outline-none"
+              >
+                Link Bank Account
+              </button>
+            </div>
+          </>
+        )}
+
+        {paymentType === "wire" && (
+          <>
+            {/* Stripe Virtual Bank Details for Wire Transfer */}
+            <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-6 shadow-sm mt-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-neutral-50 dark:border-neutral-800/50">
+                <div>
+                  <h3 className="text-xs font-bold text-neutral-800 dark:text-neutral-200">Virtual Bank Account Details</h3>
+                  <p className="text-[10px] text-neutral-400 mt-0.5">Wire transfer instructions generated via Stripe</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleSelectWire}
+                  className="px-4 py-1.5 bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:hover:bg-neutral-100 dark:text-neutral-900 text-white text-xs font-semibold rounded-lg transition-colors focus:outline-none"
+                >
+                  Set as Primary
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+                <div>
+                  <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider">Bank Name</span>
+                  <p className="text-xs font-bold text-neutral-700 dark:text-neutral-300 mt-1">J.P. Morgan Chase (Stripe Treasury)</p>
+                </div>
+                <div>
+                  <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider">Routing Number</span>
+                  <p className="text-xs font-bold text-neutral-700 dark:text-neutral-300 mt-1">021000021</p>
+                </div>
+                <div>
+                  <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider">Account Number</span>
+                  <p className="text-xs font-bold text-neutral-700 dark:text-neutral-300 mt-1">893029103</p>
+                </div>
+                <div>
+                  <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider">Account Name</span>
+                  <p className="text-xs font-bold text-neutral-700 dark:text-neutral-300 mt-1">Alti Code Studio LLC</p>
+                </div>
+                <div>
+                  <span className="text-[9px] text-neutral-400 font-bold uppercase tracking-wider text-red-500 dark:text-red-400">Payment Reference (Memo)</span>
+                  <p className="text-xs font-bold text-red-500 dark:text-red-400 mt-1">ALTI-9283-RECON</p>
+                </div>
+              </div>
+
+              <p className="text-[10px] text-neutral-500 dark:text-neutral-400 leading-relaxed mt-6 pt-4 border-t border-neutral-50 dark:border-neutral-800/50">
+                <span className="font-bold text-neutral-700 dark:text-neutral-300">Important Instruction:</span> Initiate Wire or ACH credit transfers from your commercial banking portal to this unique virtual account. Please include your <span className="font-bold">Payment Reference</span> in the wire memo line to ensure Stripe reconciles the balance instantly.
+              </p>
+            </div>
+          </>
+        )}
 
       </div>
     </div>
