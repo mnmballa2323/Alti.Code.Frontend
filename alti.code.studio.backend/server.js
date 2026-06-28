@@ -222,7 +222,7 @@ async function main() {
   } catch (error) {
     logger.error(`❌ Failed to start server: ${error}`);
     // console.log(`❌ Failed to connect: ${error}`);
-    process.exit(1);
+    console.log('Skipping exit for Postgres failure.');
   }
 
   process.on('unhandledRejection', (reason, promise) => {

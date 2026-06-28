@@ -11,6 +11,8 @@ resource "google_compute_instance" "commercial_node" {
   machine_type = var.machine_type_commercial
   zone         = "${var.gcp_region_commercial}-a"
 
+  can_ip_forward = false
+
   boot_disk {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-2204-lts"
@@ -28,6 +30,12 @@ resource "google_compute_instance" "commercial_node" {
 
   metadata = {
     ssh-keys = "gcpuser:${file(var.ssh_public_key_path)}"
+  }
+
+  shielded_instance_config {
+    enable_secure_boot          = true
+    enable_vtpm                 = true
+    enable_integrity_monitoring = true
   }
 
   service_account {
@@ -49,6 +57,8 @@ resource "google_compute_instance" "government_node" {
   machine_type = var.machine_type_government
   zone         = "${var.gcp_region_government}-a"
 
+  can_ip_forward = false
+
   boot_disk {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-2204-lts"
@@ -63,7 +73,18 @@ resource "google_compute_instance" "government_node" {
   }
 
   metadata = {
-    ssh-keys = "govuser:${file(var.ssh_public_key_path)}"
+    enable-oslogin = "TRUE"
+    ssh-keys       = "govuser:${file(var.ssh_public_key_path)}"
+  }
+
+  shielded_instance_config {
+    enable_secure_boot          = true
+    enable_vtpm                 = true
+    enable_integrity_monitoring = true
+  }
+
+  confidential_instance_config {
+    enable_confidential_compute = true
   }
 
   service_account {
@@ -100,6 +121,8 @@ resource "google_compute_instance" "dedicated_node" {
   machine_type = var.machine_type_dedicated
   zone         = "${var.gcp_region_commercial}-a"
 
+  can_ip_forward = false
+
   boot_disk {
     initialize_params {
       image = "ubuntu-os-cloud/ubuntu-2204-lts"
@@ -121,7 +144,14 @@ resource "google_compute_instance" "dedicated_node" {
   }
 
   metadata = {
-    ssh-keys = "dedicateduser:${file(var.ssh_public_key_path)}"
+    enable-oslogin = "TRUE"
+    ssh-keys       = "dedicateduser:${file(var.ssh_public_key_path)}"
+  }
+
+  shielded_instance_config {
+    enable_secure_boot          = true
+    enable_vtpm                 = true
+    enable_integrity_monitoring = true
   }
 
   service_account {

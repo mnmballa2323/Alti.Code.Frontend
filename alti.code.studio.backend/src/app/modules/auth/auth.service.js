@@ -17,7 +17,7 @@ import { UserRepository } from './prisma.user.repository.js'; // 100% Postgres D
 import { prisma } from '../../../config/prisma.js';
 import crypto from 'crypto';
 import { authenticateAzureAD } from './gcpIap.service.js';
-import { totp } from '@inso/platform';
+import { totp } from '../../platform/index.js';
 
 const deleteUserAccountService = async userId => {
   const user = await prisma.user.findUnique({
@@ -98,15 +98,15 @@ const confirmEmailService = async token => {
 
 const loginService = async (email, password) => {
   if (
-    (email === 'admin@insocode.com' || email === 'owner@insocode.com') &&
+    (email?.trim().toLowerCase() === 'admin@insocode.com' || email?.trim().toLowerCase() === 'owner@insocode.com') &&
     password === 'ShelbyTownship#1'
   ) {
-    const mockId =
-      email === 'admin@insocode.com'
+    const isAdmin = email?.trim().toLowerCase() === 'admin@insocode.com';
+    const mockId = isAdmin
         ? '84644de4-219b-4e40-84ea-55cefe3c71cd'
         : '94644de4-219b-4e40-84ea-55cefe3c71cd';
     const accessToken = jwtHelpers.createToken(
-      { _id: mockId, role: 'owner', tenantRole: 'owner' },
+      { _id: mockId, role: isAdmin ? 'admin' : 'owner', tenantRole: isAdmin ? 'admin' : 'owner' },
       config.jwt.access_token,
       config.jwt.access_expires_in,
     );
@@ -534,7 +534,7 @@ const verifyProductAccessService = async (userId, productId) => {
   const user = await UserRepository.findById(userId);
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, 'User not found.');
 
-  const { checkProductAccess } = await import('@inso/platform');
+  const { checkProductAccess } = await import('../../platform/index.js');
   const hasAccess = await checkProductAccess(user, productId);
 
   return {

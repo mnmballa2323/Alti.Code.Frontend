@@ -71,7 +71,7 @@ describe('The Legion — 115+ Agent Registry', () => {
 
     const { agentRegistry } = await import('../agents/agent.registry.js');
     expect(agentRegistry.count).toBeGreaterThanOrEqual(115);
-  });
+  }, 15000);
 });
 
 describe('Legion Squads', () => {

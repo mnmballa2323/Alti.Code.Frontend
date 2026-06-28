@@ -161,4 +161,8 @@ router.post('/batch', AgentController.allocateComputeCluster);
  */
 router.post('/hermes', AgentController.triggerHermes);
 
+router.get('/custom', AgentController.getCustomAgents);
+router.post('/custom', AgentController.createCustomAgent);
+router.delete('/custom/:agentId', AgentController.deleteCustomAgent);
+
 export const AgentRoutes = router;

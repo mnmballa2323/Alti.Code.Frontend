@@ -83,6 +83,14 @@ const MODEL_RATES = {
   'claude-3-opus': { input: 0.000015, output: 0.000075 },
   'gemini-3.1-flash': { input: 0.0000001, output: 0.0000004 },
   'gemini-3.1-pro': { input: 0.00000125, output: 0.000005 },
+  'gemini-3.5-flash': { input: 0.000000075, output: 0.0000003 },
+  'gemini-3.5-pro': { input: 0.00000125, output: 0.000005 },
+  'claude-sonnet-4.6': { input: 0.000003, output: 0.000015 },
+  'claude-opus-4.8': { input: 0.000015, output: 0.000075 },
+  'claude-fable-5': { input: 0.000015, output: 0.000075 },
+  'gpt-5.4-mini': { input: 0.00000015, output: 0.0000006 },
+  'gpt-5.5-pro': { input: 0.0000025, output: 0.00001 },
+  'gpt-5.5-thinking': { input: 0.000015, output: 0.000075 },
   default: { input: 0.000003, output: 0.000015 },
 };
 

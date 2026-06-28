@@ -2,6 +2,8 @@
 
 import { multiCloudInferenceService } from '../ai/multicloud_inference.service.js';
 import { prisma } from '../../../config/prisma.js';
+import { tokenBilling } from '../enterprise/token.billing.js';
+import { CustomAgentService } from '../agents/customAgent.service.js';
 import SubscriptionModel from '../payment/payment.model.js';
 import { VaultService } from '../vault/vault.service.js';
 import { GoogleDlpService } from '../ai/gcpDlp.service.js';
@@ -441,6 +443,20 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
     logger.warn('Failed to load rules context for LLM Gateway:', err);
   }
 
+  // Load custom agent instructions dynamically
+  if (actualModelName && actualModelName.startsWith('custom-agent-')) {
+    try {
+      const customAgent = CustomAgentService.getAgentById(actualModelName);
+      if (customAgent && customAgent.prompt) {
+        rulesContext += `=== CUSTOM AGENT SYSTEM INSTRUCTIONS (${customAgent.name}) ===\n`;
+        rulesContext += `${customAgent.prompt}\n`;
+        rulesContext += `==========================================================\n\n`;
+      }
+    } catch (err) {
+      logger.warn('Failed to load custom agent prompt prefix:', err);
+    }
+  }
+
   const finalPrompt = rulesContext
     ? `${rulesContext}${scrubbedPrompt}`
     : scrubbedPrompt;
@@ -449,28 +465,61 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
   const creds = await VaultService.getRawCredentials(userId);
 
   // Force Google Vertex AI Sovereign Cloud connection for all model requests (Sovereign Mode)
+  const isGptModel = actualModelName.includes('gpt');
+  const preferredProvider = isGptModel ? 'azure' : 'gcp-vertex';
   logger.info(
-    '🧠 [LlmGateway] Delegating inference strictly to Google Vertex AI (Sovereign mode)...',
+    `🧠 [LlmGateway] Routing inference to ${preferredProvider === 'azure' ? 'Azure OpenAI Foundry' : 'Google Vertex AI'}...`,
   );
   try {
     const cleanModelName = actualModelName.startsWith('azure/')
       ? actualModelName.replace(/^azure\//, '')
       : actualModelName.startsWith('gcp-vertex/')
       ? actualModelName.replace(/^gcp-vertex\//, '')
-      : ['gemini-3.5-flash', 'gemini-3.1-pro', 'claude-sonnet-4.6', 'claude-opus-4.6'].includes(actualModelName)
+      : ['gemini-3.5-flash', 'gemini-3.1-pro', 'claude-sonnet-4.6', 'claude-opus-4.6', 'gpt-5.4-mini', 'gpt-5.5-pro', 'gpt-5.5-thinking'].includes(actualModelName)
       ? actualModelName
       : 'gemini-3.5-flash';
     const result = await multiCloudInferenceService.executeMultiCloudInference(
       finalPrompt,
       'gateway',
       {
-        preferredProvider: 'gcp-vertex',
+        preferredProvider,
         modelId: cleanModelName,
         vaultCredentials: creds,
       },
     );
     reply = result.content;
-    usedModelName = `gcp-vertex/${result.model}`;
+    usedModelName = `${result.provider}/${result.model}`;
+
+    if (result && result.tokens) {
+      try {
+        let tenantId = 'default_tenant';
+        if (userId && userId !== 'system_dev_user') {
+          const user = await prisma.user.findUnique({
+            where: { id: userId },
+            select: { tenantId: true }
+          });
+          if (user?.tenantId) {
+            tenantId = user.tenantId;
+          }
+        }
+        // Initialize billing account if it doesn't exist yet
+        try {
+          if (!tokenBilling.getAccount(tenantId)) {
+            tokenBilling.createAccount(tenantId, 'starter');
+          }
+        } catch (accErr) {
+          // ignore
+        }
+        tokenBilling.consumeTokens(tenantId, {
+          agentName: 'Gateway Chat',
+          model: cleanModelName,
+          inputTokens: result.tokens.prompt || 0,
+          outputTokens: result.tokens.completion || 0,
+        });
+      } catch (err) {
+        logger.error('[LlmGateway] Failed to consume tokens in billing engine:', err);
+      }
+    }
   } catch (err) {
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,

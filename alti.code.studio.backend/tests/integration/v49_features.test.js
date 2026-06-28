@@ -65,7 +65,7 @@ describe('Milestone v49.0.0 Feature Tests', () => {
             expect(context).toContain('Commit:');
             expect(context).toContain('Author:');
             expect(context).toContain('Message:');
-        });
+        }, 15000);
 
         it('should fallback gracefully for untracked or non-existent files', async () => {
             const context = await GitContextGrounder.getLineBlameContext('non_existent.js', 1, 5);

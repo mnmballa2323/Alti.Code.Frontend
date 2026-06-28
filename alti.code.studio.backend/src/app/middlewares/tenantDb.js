@@ -5,7 +5,7 @@
  * Maintains backwards compatibility for Inso Code routes.
  */
 
-import { tenantDbRouter } from '@inso/platform';
+import { tenantDbRouter } from '../platform/index.js';
 
 export { tenantDbRouter };
 export default tenantDbRouter;

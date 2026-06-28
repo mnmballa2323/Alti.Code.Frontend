@@ -1,5 +1,39 @@
 global.self = global;
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
+
+vi.mock('../../src/app/platform/index.js', () => {
+    return {
+        prisma: {
+            user: {
+                findUnique: vi.fn().mockResolvedValue({
+                    id: 'mock-user-id',
+                    email: 'mock@mock.com',
+                    tenantId: 'mock-tenant-id',
+                    tenant: { customerKmsKeyArn: null }
+                })
+            },
+            vault: {
+                findUnique: vi.fn().mockResolvedValue({
+                    openaiApiKey: 'encrypted',
+                    anthropicApiKey: 'encrypted',
+                    geminiApiKey: 'encrypted',
+                    gcpProjectId: 'encrypted',
+                    gcpClientEmail: 'encrypted',
+                    gcpPrivateKey: 'encrypted'
+                })
+            }
+        },
+        getTenantPrisma: vi.fn(),
+        connectPrisma: vi.fn()
+    };
+});
+
+vi.mock('../../src/app/modules/ai/multicloud_inference.service.js', () => ({
+    multiCloudInferenceService: {
+        executeMultiCloudInference: vi.fn()
+    }
+}));
+
 import { ultimateRagService } from '../../src/app/modules/rag/ultimate_rag.service.js';
 import { azureGenAiService as AzureGenAiService } from '../../src/app/modules/ai/azureGenAi.service.js';
 import { discoveryEngineService } from '../../src/app/modules/gcpCloud/gcpSearch.service.js';
@@ -40,6 +74,8 @@ vi.mock('../../src/app/modules/fileSearch/fileSearch.service.js', () => ({
     }
 }));
 
+
+
 vi.mock('../../src/app/modules/gcpCloud/gcpCache.service.js', () => ({
     ragCacheService: {
         getCachedContext: vi.fn().mockResolvedValue(null),
@@ -63,7 +99,13 @@ vi.mock('../../src/config/prisma.js', () => ({
     prisma: {
         user: {
             findFirst: vi.fn().mockResolvedValue({ id: 'mock-user-id' }),
-            upsert: vi.fn().mockResolvedValue({ id: 'mock-user-id' })
+            upsert: vi.fn().mockResolvedValue({ id: 'mock-user-id' }),
+            findUnique: vi.fn().mockResolvedValue({
+                id: 'mock-user-id',
+                email: 'mock@mock.com',
+                tenantId: 'mock-tenant-id',
+                tenant: { customerKmsKeyArn: null }
+            })
         },
         chatHistory: {
             findFirst: vi.fn().mockResolvedValue(null),
@@ -77,6 +119,9 @@ vi.mock('../../src/config/prisma.js', () => ({
                 geminiApiKey: 'mocked-key',
                 azureEndpoint: 'mocked-endpoint',
                 azureApiKey: 'mocked-key',
+                gcpProjectId: 'mocked-gcp-project',
+                gcpClientEmail: 'mocked-email',
+                gcpPrivateKey: 'mocked-key',
             })
         }
     }

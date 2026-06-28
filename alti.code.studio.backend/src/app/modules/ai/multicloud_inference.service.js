@@ -83,8 +83,7 @@ class MultiCloudInferenceService {
     }
 
     const modelId = options.modelId || 'gemini-3.5-flash';
-    const isGpt = modelId.includes('gpt');
-    const primaryProvider = isGpt ? 'azure' : 'gcp-vertex';
+    const primaryProvider = 'azure';
 
     if (process.env.AIR_GAPPED_MODE === 'true') {
       logger.warn(
@@ -97,7 +96,7 @@ class MultiCloudInferenceService {
       `🌐 [Google Sovereign Inference] Initiating inference for Agent [${activeAgent}] on ${primaryProvider.toUpperCase()}`,
     );
 
-    const providersQueue = isGpt ? ['azure'] : ['gcp-vertex'];
+    const providersQueue = ['azure'];
     let lastError = null;
     let resultObj = null;
 
@@ -375,6 +374,7 @@ class MultiCloudInferenceService {
       provider: 'azure',
       model: modelId,
       latencyMs: latency,
+      tokens: { prompt: promptTokens, completion: completionTokens },
     };
   }
 

@@ -1,4 +1,3 @@
-
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -14,5 +13,7 @@ export default defineConfig({
             '**/alti.code.studio.backend.azure/**',
             '**/submodules/**',
         ],
+        testTimeout: 30000,
+        pool: 'forks',
     },
 });

@@ -297,6 +297,18 @@ class GcpKmsService {
     };
   }
 
+  async encryptPayload(plaintext) {
+    const keyId = process.env.GCP_KMS_KEY_ID || 'projects/mock-project/locations/global/keyRings/mock-ring/cryptoKeys/mock-key';
+    const result = await this.encrypt(keyId, plaintext);
+    return result.ciphertext;
+  }
+
+  async decryptPayload(ciphertext) {
+    const keyId = process.env.GCP_KMS_KEY_ID || 'projects/mock-project/locations/global/keyRings/mock-ring/cryptoKeys/mock-key';
+    const result = await this.decrypt(keyId, ciphertext);
+    return result.plaintext;
+  }
+
   async signPayload(data) {
     logger.info('🔒 Google Cloud KMS: Signing payload');
     const crypto = await import('crypto');

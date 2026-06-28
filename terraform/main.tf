@@ -55,6 +55,14 @@ resource "google_compute_subnetwork" "commercial_subnet" {
   ip_cidr_range = "10.100.1.0/24"
   region        = var.gcp_region_commercial
   network       = google_compute_network.commercial_vpc[0].id
+
+  private_ip_google_access = true
+
+  log_config {
+    aggregation_interval = "INTERVAL_5_SEC"
+    flow_sampling        = 0.5
+    metadata             = "INCLUDE_ALL_METADATA"
+  }
 }
 
 # Private IP Allocation and Service Connection for Cloud SQL Private Access
@@ -109,6 +117,14 @@ resource "google_compute_subnetwork" "government_subnet" {
   ip_cidr_range = "10.200.1.0/24"
   region        = var.gcp_region_government
   network       = google_compute_network.government_vpc[0].id
+
+  private_ip_google_access = true
+
+  log_config {
+    aggregation_interval = "INTERVAL_5_SEC"
+    flow_sampling        = 0.5
+    metadata             = "INCLUDE_ALL_METADATA"
+  }
 }
 
 resource "google_compute_global_address" "gov_private_ip_alloc" {

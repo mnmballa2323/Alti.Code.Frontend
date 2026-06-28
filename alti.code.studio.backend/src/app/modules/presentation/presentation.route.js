@@ -1,6 +1,7 @@
 import express from 'express';
 import pptxgen from 'pptxgenjs/dist/pptxgen.cjs.js';
-import { executeVertexInference, executeVertexImagen } from '../ai/vertex_ai.helper.js';
+import { executeVertexImagen } from '../ai/vertex_ai.helper.js';
+import { multiCloudInferenceService } from '../ai/multicloud_inference.service.js';
 
 const router = express.Router();
 
@@ -93,11 +94,25 @@ You MUST return a valid JSON object matching the following format exactly (no ma
 }`;
 
     console.log(`[Presentation] Generating slide structure using model ${modelId}...`);
-    const llmResponse = await executeVertexInference(llmPrompt, modelId, { responseMimeType: 'application/json' });
+    let textResponse = '';
+    try {
+      const llmResult = await multiCloudInferenceService.executeMultiCloudInference(
+        llmPrompt,
+        'presentation_generator',
+        {
+          preferredProvider: 'azure',
+          modelId: modelId.includes('gpt') ? modelId : 'gpt-5.5-pro',
+        }
+      );
+      textResponse = llmResult.content;
+    } catch (llmErr) {
+      console.warn('[Presentation] Multi-cloud slide inference failed, using fallback:', llmErr.message);
+      throw llmErr;
+    }
     
     let slideStructure;
     try {
-      const cleanedJson = cleanJSONString(llmResponse.text);
+      const cleanedJson = cleanJSONString(textResponse);
       slideStructure = JSON.parse(cleanedJson);
     } catch (parseErr) {
       console.warn('[Presentation] LLM JSON parsing failed, using high-fidelity fallback:', parseErr.message);

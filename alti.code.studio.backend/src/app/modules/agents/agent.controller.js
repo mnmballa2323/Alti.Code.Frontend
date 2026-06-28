@@ -13,6 +13,7 @@ import { logger } from '../../../shared/logger.js';
 import { puppeteerAgent } from './puppeteer.agent.js';
 import { cloudBatchService } from '../gcpCloud/gcpBatch.service.js';
 import { hermesAgentBridge } from './hermes.agent.js';
+import { CustomAgentService } from './customAgent.service.js';
 
 const startMission = catchAsync(async (req, res) => {
   const { goal } = req.body;
@@ -142,6 +143,65 @@ export const AgentController = {
       success: true,
       message: 'Hermes Agent task completed',
       data: { output },
+    });
+  }),
+
+  getCustomAgents: catchAsync(async (req, res) => {
+    const userId = req.user?._id || req.user?.id || 'anonymous';
+    const agents = CustomAgentService.getAgents(userId);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Custom agents fetched successfully.',
+      data: agents,
+    });
+  }),
+
+  createCustomAgent: catchAsync(async (req, res) => {
+    const userId = req.user?._id || req.user?.id || 'anonymous';
+    const { name, description, prompt, tools } = req.body;
+    
+    if (!name) {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        success: false,
+        message: 'Agent name is required.',
+      });
+    }
+
+    const newAgent = CustomAgentService.createAgent({
+      name,
+      description,
+      prompt,
+      tools,
+      userId,
+    });
+
+    sendResponse(res, {
+      statusCode: httpStatus.CREATED,
+      success: true,
+      message: 'Custom Agent registered successfully.',
+      data: newAgent,
+    });
+  }),
+
+  deleteCustomAgent: catchAsync(async (req, res) => {
+    const userId = req.user?._id || req.user?.id || 'anonymous';
+    const { agentId } = req.params;
+
+    const success = CustomAgentService.deleteAgent(agentId, userId);
+    
+    if (!success) {
+      return res.status(httpStatus.NOT_FOUND).json({
+        success: false,
+        message: 'Custom Agent not found or not owned by user.',
+      });
+    }
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: 'Custom Agent deleted successfully.',
+      data: null,
     });
   }),
 };

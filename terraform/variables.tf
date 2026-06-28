@@ -55,13 +55,13 @@ variable "pg_admin_username" {
 }
 
 variable "pg_admin_password" {
-  description = "Administrator password for PostgreSQL Database"
+  description = "Administrator password for PostgreSQL Database (must be supplied via TF_VAR_pg_admin_password or securely at runtime)"
   type        = string
-  default     = "P@ssw0rd1234!" # Avoid using default password in live environments
+  default     = null
   sensitive   = true
 
   validation {
-    condition     = length(var.pg_admin_password) >= 8 && length(var.pg_admin_password) <= 128
+    condition     = var.pg_admin_password == null ? true : (length(var.pg_admin_password) >= 8 && length(var.pg_admin_password) <= 128)
     error_message = "The pg_admin_password must be between 8 and 128 characters in length."
   }
 }

@@ -1,10 +1,10 @@
 import { test, expect, vi } from 'vitest';
 import { openclawProxyService } from '../../src/app/modules/openclaw/openclaw.proxy.service.js';
 import { openClawAgent } from '../../src/app/modules/agents/openclaw.agent.js';
-import * as https from 'https';
+import https from 'node:https';
 import { EventEmitter } from 'events';
 
-vi.mock('https');
+vi.mock('node:https');
 
 // Mock Gemini to avoid actual LLM calls and CircuitBreaker failures
 vi.mock('../../src/app/modules/gemini/gemini.service.js', () => {

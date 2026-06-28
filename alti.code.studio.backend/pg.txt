@@ -1,9 +1,0 @@
-
-[1m[46m RUN [49m[22m [36mv4.0.18 [39m[90mC:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend[39m
-
-No test files found, exiting with code 1
-
-filter: src/app/shared/memory/pgvector.test.js
-include: **/*.test.js, **/*.spec.js
-exclude:  **/node_modules/**, **/.git/**
-

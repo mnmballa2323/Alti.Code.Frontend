@@ -7,6 +7,7 @@
 import { prismaClient } from '../../platform/db/prismaClient.js';
 import { logger } from '../../../shared/logger.js';
 import vm from 'vm';
+import crypto from 'crypto';
 
 const prisma = prismaClient.prisma;
 

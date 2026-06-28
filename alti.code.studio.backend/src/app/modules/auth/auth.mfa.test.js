@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import httpStatus from 'http-status';
 import { authService } from './auth.service.js';
 import { UserRepository } from './prisma.user.repository.js';
-import { totp } from '@inso/platform';
+import { totp } from '../../platform/index.js';
 import config from '../../../../config/index.js';
 import bcrypt from 'bcryptjs';
 import { authenticateAzureAD } from './gcpIap.service.js';

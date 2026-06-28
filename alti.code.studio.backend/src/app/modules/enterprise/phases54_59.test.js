@@ -441,9 +441,9 @@ describe('Phase 59: Token Metering & Billing Engine', () => {
     expect(TOKEN_PRICING_PLANS.unlimited.monthlyTokens).toBe(Infinity);
   });
 
-  it('should have 7 model rates', async () => {
+  it('should have 15 model rates', async () => {
     const { MODEL_RATES } = await import('./token.billing.js');
-    expect(Object.keys(MODEL_RATES).length).toBe(7);
+    expect(Object.keys(MODEL_RATES).length).toBe(15);
     expect(MODEL_RATES['gpt-4o']).toBeDefined();
     expect(MODEL_RATES['claude-3.5-sonnet']).toBeDefined();
   });
@@ -477,7 +477,7 @@ describe('Phase 59: Token Metering & Billing Engine', () => {
     const plans = tokenBilling.listPlans();
     expect(Object.keys(plans).length).toBe(5);
     const models = tokenBilling.listModels();
-    expect(Object.keys(models).length).toBe(7);
+    expect(Object.keys(models).length).toBe(15);
   });
 
   it('should report stats', async () => {
@@ -486,7 +486,7 @@ describe('Phase 59: Token Metering & Billing Engine', () => {
     expect(stats.totalAccounts).toBeGreaterThan(0);
     expect(stats.totalTokensConsumed).toBeGreaterThan(0);
     expect(stats.plans).toBe(5);
-    expect(stats.models).toBe(7);
+    expect(stats.models).toBe(15);
   });
 });
 

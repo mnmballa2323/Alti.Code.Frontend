@@ -173,8 +173,8 @@ const getRawCredentials = async userId => {
         throwOnError,
       ),
       geminiApiKey: await decryptField(vault.geminiApiKey, key, throwOnError),
-      azureEndpoint: '',
-      azureApiKey: '',
+      azureEndpoint: await decryptField(vault.azureEndpoint, key, throwOnError),
+      azureApiKey: await decryptField(vault.azureApiKey, key, throwOnError),
       gcpProjectId: await decryptField(vault.gcpProjectId, key, throwOnError),
       gcpClientEmail: await decryptField(
         vault.gcpClientEmail,
@@ -182,9 +182,9 @@ const getRawCredentials = async userId => {
         throwOnError,
       ),
       gcpPrivateKey: await decryptField(vault.gcpPrivateKey, key, throwOnError),
-      awsAccessKeyId: '',
-      awsSecretAccessKey: '',
-      awsRegion: '',
+      awsAccessKeyId: await decryptField(vault.awsAccessKeyId, key, throwOnError),
+      awsSecretAccessKey: await decryptField(vault.awsSecretAccessKey, key, throwOnError),
+      awsRegion: await decryptField(vault.awsRegion, key, throwOnError),
     };
   };
 
@@ -219,14 +219,14 @@ const getMaskedCredentials = async userId => {
     openaiApiKey: maskKey(raw.openaiApiKey),
     anthropicApiKey: maskKey(raw.anthropicApiKey),
     geminiApiKey: maskKey(raw.geminiApiKey),
-    azureEndpoint: '',
-    azureApiKey: '',
+    azureEndpoint: raw.azureEndpoint || '',
+    azureApiKey: maskKey(raw.azureApiKey),
     gcpProjectId: raw.gcpProjectId || '',
     gcpClientEmail: raw.gcpClientEmail || '',
     gcpPrivateKey: maskKey(raw.gcpPrivateKey),
-    awsAccessKeyId: '',
-    awsSecretAccessKey: '',
-    awsRegion: '',
+    awsAccessKeyId: maskKey(raw.awsAccessKeyId),
+    awsSecretAccessKey: maskKey(raw.awsSecretAccessKey),
+    awsRegion: raw.awsRegion || '',
   };
 };
 
@@ -280,9 +280,14 @@ const updateCredentials = async (userId, keys) => {
   await processField('openaiApiKey', keys.openaiApiKey);
   await processField('anthropicApiKey', keys.anthropicApiKey);
   await processField('geminiApiKey', keys.geminiApiKey);
+  await processField('azureEndpoint', keys.azureEndpoint);
+  await processField('azureApiKey', keys.azureApiKey);
   await processField('gcpProjectId', keys.gcpProjectId);
   await processField('gcpClientEmail', keys.gcpClientEmail);
   await processField('gcpPrivateKey', keys.gcpPrivateKey);
+  await processField('awsAccessKeyId', keys.awsAccessKeyId);
+  await processField('awsSecretAccessKey', keys.awsSecretAccessKey);
+  await processField('awsRegion', keys.awsRegion);
 
   const vault = await prisma.vault.upsert({
     where: { userId: targetUserId },

@@ -1,9 +1,0 @@
-[
-  {
-    "file": "C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/refactorAgent/refactor.cognitive.test.js",
-    "title": "should execute Recall -> Reason -> Verify -> Memorize flow",
-    "err": [
-      "TypeError: __vite_ssr_import_3__.treeSitterService.init is not a function\n    at Module.refactorWorkerProcessor (C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/refactorAgent/refactor.worker.js:101:33)\n    at processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/refactorAgent/refactor.cognitive.test.js:56:24\n    at file:///C:/Users/hyper/Desktop/workspace/alti.code.studio/alti.code.studio.backend/node_modules/@vitest/runner/dist/index.js:915:20"
-    ]
-  }
-]
