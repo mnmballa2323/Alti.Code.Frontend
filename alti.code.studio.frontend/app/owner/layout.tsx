@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import {
   Users,
-  Activity,
   ArrowLeft,
   LayoutDashboard,
   DollarSign,
@@ -23,7 +22,6 @@ interface SidebarItem {
 const ownerItems: SidebarItem[] = [
   { label: "Dashboard", href: "/owner/dashboard", icon: LayoutDashboard },
   { label: "Revenue", href: "/owner/revenue", icon: DollarSign },
-  { label: "Audit Logs", href: "/owner/audit", icon: Activity },
 ];
 
 const memberItems: SidebarItem[] = [
@@ -120,8 +118,6 @@ export default function OwnerLayout({
     if (pathname.startsWith("/owner/teams")) return "Teams";
     if (pathname.startsWith("/owner/enterprise")) return "Enterprise";
     if (pathname.startsWith("/owner/revenue")) return "Revenue";
-
-    if (pathname.startsWith("/owner/audit")) return "Audit Logs";
 
     return "Platform Owner";
   };
