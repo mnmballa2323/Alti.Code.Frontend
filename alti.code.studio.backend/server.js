@@ -17,6 +17,7 @@ import { logger } from './src/shared/logger.js';
 import { agentRegistry } from './src/app/modules/agents/agent.registry.js';
 import { startDataRetentionCron } from './src/app/scripts/dataRetention.cron.js';
 import crypto from 'crypto';
+import { auditFipsCompliance } from './src/shared/security/fipsCheck.js';
 
 // Enforce FIPS 140-3 Cryptography for Defense/Gov (DoD IL5/IL6)
 if (process.env.NODE_ENV === 'production') {
@@ -27,6 +28,9 @@ if (process.env.NODE_ENV === 'production') {
         logger.warn('⚠️ [SECURITY] Failed to set FIPS mode. Ensure Node is compiled with OpenSSL FIPS module.', err.message);
     }
 }
+
+// Run FIPS runtime compliance audit
+auditFipsCompliance();
 
 process.on('uncaughtException', error => {
   logger.error('🚨 Uncaught Exception detected!', error);
