@@ -98,7 +98,7 @@ export default function InvitePage() {
             </span>{" "}
             Adding a new team member adds an active seat to your plan at $25.00/month.
           </p>
-          <button className="px-5 py-2.5 bg-neutral-500 hover:bg-neutral-600 transition-colors text-white text-xs font-semibold rounded-lg">
+          <button className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg">
             Invite Member
           </button>
         </div>

@@ -53,7 +53,7 @@ export default function BillingPage() {
             </span>{" "}
             Your card information is encrypted and securely saved via Stripe Vault.
           </p>
-          <button className="px-5 py-2.5 bg-neutral-500 hover:bg-neutral-600 transition-colors text-white text-xs font-semibold rounded-lg">
+          <button className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg">
             Save Card
           </button>
         </div>
