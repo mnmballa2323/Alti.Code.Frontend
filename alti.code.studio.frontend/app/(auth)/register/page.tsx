@@ -85,9 +85,6 @@ export default function RegisterPage() {
         <h1 className="text-3xl font-semibold tracking-tight text-black">
           Create an account
         </h1>
-        <p className="text-center text-gray-500 text-sm mt-2 font-medium">
-          Join the Inso Code platform
-        </p>
       </div>
 
       <div className="flex flex-col gap-5 mt-2">

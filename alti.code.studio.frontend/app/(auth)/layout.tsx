@@ -149,54 +149,8 @@ function formatCommandLine(text: string) {
 }
 
 function CodeTerminal() {
-  const [visibleLines, setVisibleLines] = useState<typeof SWARM_STEPS>([]);
-  const [currentLineIndex, setCurrentLineIndex] = useState(0);
-  const [currentCharIndex, setCurrentCharIndex] = useState(0);
+  const visibleLines = SWARM_STEPS;
   const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (currentLineIndex >= SWARM_STEPS.length) {
-      const resetTimeout = setTimeout(() => {
-        setVisibleLines([]);
-        setCurrentLineIndex(0);
-        setCurrentCharIndex(0);
-      }, 5000);
-
-      return () => clearTimeout(resetTimeout);
-    }
-
-    const currentLine = SWARM_STEPS[currentLineIndex];
-
-    if (currentLine.type === "empty") {
-      setVisibleLines((prev) => [...prev, currentLine]);
-      setCurrentLineIndex((prev) => prev + 1);
-      setCurrentCharIndex(0);
-
-      return;
-    }
-
-    // Speed up standard outputs, slow down typing command lines
-    const isCommand = currentLine.type === "command";
-    const delay = isCommand ? 35 : 12;
-
-    const charTimeout = setTimeout(() => {
-      if (currentCharIndex < currentLine.text.length) {
-        setCurrentCharIndex((prev) => prev + 1);
-      } else {
-        setVisibleLines((prev) => [...prev, currentLine]);
-        setCurrentLineIndex((prev) => prev + 1);
-        setCurrentCharIndex(0);
-      }
-    }, delay);
-
-    return () => clearTimeout(charTimeout);
-  }, [currentLineIndex, currentCharIndex]);
-
-  useEffect(() => {
-    if (containerRef.current) {
-      containerRef.current.scrollTop = containerRef.current.scrollHeight;
-    }
-  }, [visibleLines, currentCharIndex]);
 
   const getLineStyles = (type: string) => {
     switch (type) {
@@ -243,7 +197,6 @@ function CodeTerminal() {
               </div>
               <div className="text-[10px] text-[#00E5A3] font-semibold flex items-center gap-1.5">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#00E5A3] opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-[#00E5A3]" />
                 </span>
                 GCP Sovereign
@@ -279,15 +232,7 @@ function CodeTerminal() {
                 { name: "Coder", label: "COD" },
                 { name: "Auditor", label: "AUD" },
               ].map((agent) => {
-                const status = getAgentStatus(agent.name, currentLineIndex);
-                let badgeClass = "bg-neutral-800 text-neutral-500";
-
-                if (status === "active")
-                  badgeClass =
-                    "bg-amber-500/20 text-amber-300 border border-amber-500/30 animate-pulse";
-                if (status === "done")
-                  badgeClass =
-                    "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                const badgeClass = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
 
                 return (
                   <div
@@ -322,35 +267,6 @@ function CodeTerminal() {
                 : line.text}
             </div>
           ))}
-          {currentLineIndex < SWARM_STEPS.length && (
-            <div
-              className={`whitespace-pre-wrap ${getLineStyles(SWARM_STEPS[currentLineIndex].type)}`}
-            >
-              {SWARM_STEPS[currentLineIndex].type === "command" ? (
-                <>
-                  {formatCommandLine(
-                    SWARM_STEPS[currentLineIndex].text.substring(
-                      0,
-                      currentCharIndex,
-                    ),
-                  )}
-                  <span className="animate-pulse bg-[#00C2FF] text-[#00C2FF] px-[3px] ml-0.5 shadow-[0_0_8px_#00C2FF]">
-                    █
-                  </span>
-                </>
-              ) : (
-                <>
-                  {SWARM_STEPS[currentLineIndex].text.substring(
-                    0,
-                    currentCharIndex,
-                  )}
-                  <span className="animate-pulse bg-[#00C2FF] text-[#00C2FF] px-[3px] ml-0.5 shadow-[0_0_8px_#00C2FF]">
-                    █
-                  </span>
-                </>
-              )}
-            </div>
-          )}
         </div>
       </div>
     </div>
