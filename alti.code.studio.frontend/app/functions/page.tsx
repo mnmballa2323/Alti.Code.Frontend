@@ -15,7 +15,7 @@ function FunctionsPageContent() {
 
   return (
     <ChatBotLayout>
-      <div className="flex h-full w-full relative bg-default-50 dark:bg-background">
+      <div className="flex h-full w-full relative bg-transparent">
         <div className="flex-1 flex flex-col h-full overflow-hidden">
           <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden animate-in fade-in duration-300">
             <div className="flex w-full flex-col items-center gap-6 z-20 px-6 max-w-2xl">
@@ -50,7 +50,7 @@ export default function FunctionsPage() {
   return (
     <Suspense
       fallback={
-        <div className="h-full w-full bg-default-50 dark:bg-background" />
+        <div className="h-full w-full bg-transparent" />
       }
     >
       <FunctionsPageContent />
