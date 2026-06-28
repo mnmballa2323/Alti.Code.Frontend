@@ -15,7 +15,7 @@ export default function BillingPage() {
     extra: string;
   }>({
     type: "card",
-    details: "*4242",
+    details: "Ending in 4242",
     extra: "Visa"
   });
 
@@ -28,7 +28,7 @@ export default function BillingPage() {
   const handleSaveCard = () => {
     setActivePaymentMethod({
       type: "card",
-      details: "*4242",
+      details: "Ending in 4242",
       extra: "Visa"
     });
   };
@@ -36,7 +36,7 @@ export default function BillingPage() {
   const handleLinkBank = () => {
     setActivePaymentMethod({
       type: "ach",
-      details: "Chase *9103",
+      details: "Chase ending in 9103",
       extra: "ACH"
     });
   };
