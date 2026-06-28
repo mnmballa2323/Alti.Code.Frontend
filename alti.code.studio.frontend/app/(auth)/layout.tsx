@@ -343,9 +343,6 @@ export default function AuthLayout({
 
           {/* Bottom Panel Text */}
           <div className="relative z-20 w-full max-w-xl mt-auto">
-            <span className="text-neutral-500 text-sm font-normal tracking-wide block mb-3">
-              inso code
-            </span>
             <h2 className="text-4xl xl:text-5xl font-bold tracking-tight mb-4 leading-tight bg-gradient-to-br from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
               Build the future.
             </h2>
