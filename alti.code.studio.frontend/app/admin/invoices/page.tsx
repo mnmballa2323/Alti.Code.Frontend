@@ -16,12 +16,6 @@ export default function InvoicesPage() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">
-          Invoices
-        </h1>
-      </div>
-
       <div className="w-full">
         {/* Table Header */}
         <div className="grid grid-cols-6 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">

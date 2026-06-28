@@ -5,12 +5,6 @@ import React from "react";
 export default function BillingPage() {
   return (
     <div className="w-full">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">
-          Billing
-        </h1>
-      </div>
-
       <div className="flex flex-col gap-6">
         <div className="flex gap-6">
           <div className="flex-1">
