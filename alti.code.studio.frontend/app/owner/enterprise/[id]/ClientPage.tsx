@@ -75,6 +75,7 @@ export default function EnterpriseDetailPage() {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [customPrice, setCustomPrice] = useState("$1,000");
   const [isSaving, setIsSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -230,22 +231,35 @@ export default function EnterpriseDetailPage() {
                       Monthly Price Per Member
                     </label>
                     <div className="relative">
-                      <select
-                        className="w-full px-4 py-3 bg-neutral-100 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all text-neutral-850 dark:text-neutral-200 appearance-none cursor-pointer pr-10"
-                        value={customPrice}
-                        onChange={(e) => setCustomPrice(e.target.value)}
+                      <button
+                        type="button"
+                        className="w-full flex items-center justify-between px-4 py-3 bg-neutral-100 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all text-neutral-800 dark:text-neutral-200 cursor-pointer"
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       >
-                        <option value="$0">$0</option>
-                        <option value="$250">$250</option>
-                        <option value="$500">$500</option>
-                        <option value="$750">$750</option>
-                        <option value="$1,000">$1,000</option>
-                        <option value="$1,250">$1,250</option>
-                        <option value="$2,000">$2,000</option>
-                      </select>
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <ChevronDown className="w-4 h-4 text-neutral-400 dark:text-neutral-500" />
-                      </div>
+                        <span>{customPrice}</span>
+                        <ChevronDown className="w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-transform duration-200" style={{ transform: isDropdownOpen ? "rotate(180deg)" : "none" }} />
+                      </button>
+
+                      {isDropdownOpen && (
+                        <>
+                          <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)} />
+                          <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-xl z-50 overflow-hidden py-1 animate-fade-in max-h-60 overflow-y-auto">
+                            {["$0", "$250", "$500", "$750", "$1,000", "$1,250", "$2,000"].map((price) => (
+                              <button
+                                key={price}
+                                type="button"
+                                className="w-full text-left px-4 py-3 text-sm text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                                onClick={() => {
+                                  setCustomPrice(price);
+                                  setIsDropdownOpen(false);
+                                }}
+                              >
+                                {price}
+                              </button>
+                            ))}
+                          </div>
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className="flex gap-3">

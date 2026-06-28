@@ -132,16 +132,10 @@ export default function EnterprisePage() {
                 className="group grid grid-cols-12 gap-4 px-6 py-5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200 hover:border-neutral-350 dark:hover:border-neutral-700 cursor-pointer"
                 onClick={() => router.push(`/owner/enterprise/${tenant.id}`)}
               >
-                <div className="col-span-4 flex flex-col gap-0.5 min-w-0">
+                <div className="col-span-4 flex items-center min-w-0">
                   <span className="text-neutral-900 dark:text-white font-normal overflow-hidden text-ellipsis whitespace-nowrap">
                     {tenant.name}
                   </span>
-                  {tenant.domain && (
-                    <div className="flex items-center gap-1 text-[11px] text-neutral-455 dark:text-neutral-500 font-normal">
-                      <Globe className="w-3 h-3" />
-                      <span>{tenant.domain}</span>
-                    </div>
-                  )}
                 </div>
 
                 <div className="col-span-3 flex items-center gap-2 text-neutral-500 dark:text-neutral-400 font-normal min-w-0">
