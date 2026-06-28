@@ -5,13 +5,13 @@ import { Download } from "lucide-react";
 
 export default function InvoicesPage() {
   const mockInvoices = [
-    { id: "INV-2026-006", month: "June 2026", amount: "$25.00" },
-    { id: "INV-2026-005", month: "May 2026", amount: "$25.00" },
-    { id: "INV-2026-004", month: "April 2026", amount: "$25.00" },
-    { id: "INV-2026-003", month: "March 2026", amount: "$25.00" },
-    { id: "INV-2026-002", month: "February 2026", amount: "$25.00" },
-    { id: "INV-2026-001", month: "January 2026", amount: "$25.00" },
-    { id: "INV-2025-012", month: "December 2025", amount: "$25.00" },
+    { id: "INV-2026-006", plan: "Standard", seats: "1 Seat", month: "June 2026", amount: "$25.00" },
+    { id: "INV-2026-005", plan: "Standard", seats: "1 Seat", month: "May 2026", amount: "$25.00" },
+    { id: "INV-2026-004", plan: "Standard", seats: "1 Seat", month: "April 2026", amount: "$25.00" },
+    { id: "INV-2026-003", plan: "Standard", seats: "1 Seat", month: "March 2026", amount: "$25.00" },
+    { id: "INV-2026-002", plan: "Standard", seats: "1 Seat", month: "February 2026", amount: "$25.00" },
+    { id: "INV-2026-001", plan: "Standard", seats: "1 Seat", month: "January 2026", amount: "$25.00" },
+    { id: "INV-2025-012", plan: "Standard", seats: "1 Seat", month: "December 2025", amount: "$25.00" },
   ];
 
   return (
@@ -24,8 +24,10 @@ export default function InvoicesPage() {
 
       <div className="w-full">
         {/* Table Header */}
-        <div className="grid grid-cols-4 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
+        <div className="grid grid-cols-6 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
           <div>INVOICE ID</div>
+          <div>PLAN</div>
+          <div>SEATS</div>
           <div>MONTH</div>
           <div className="text-right">AMOUNT</div>
           <div></div>
@@ -36,9 +38,11 @@ export default function InvoicesPage() {
           {mockInvoices.map((inv) => (
             <div
               key={inv.id}
-              className="grid grid-cols-4 items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300"
+              className="grid grid-cols-6 items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300"
             >
               <div>{inv.id}</div>
+              <div>{inv.plan}</div>
+              <div>{inv.seats}</div>
               <div>{inv.month}</div>
               <div className="text-right">{inv.amount}</div>
               <div className="flex justify-end">
