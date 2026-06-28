@@ -9,7 +9,7 @@ export function TuningTabs() {
   const pathname = usePathname();
 
   return (
-    <div className="flex w-full items-center h-full">
+    <div className="flex w-full items-center justify-center h-full">
       <Tabs
         aria-label="Tuning Options"
         classNames={{

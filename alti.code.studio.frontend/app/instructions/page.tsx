@@ -156,7 +156,7 @@ export default function InstructionsPage() {
     <ChatBotLayout>
       <div className="flex flex-col h-full bg-default-50 dark:bg-[#0A0A0A]">
         {/* Top Navbar */}
-        <div className="flex items-center w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111]">
+        <div className="flex items-center justify-center w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111] shrink-0">
           <TuningTabs />
         </div>
         <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide">

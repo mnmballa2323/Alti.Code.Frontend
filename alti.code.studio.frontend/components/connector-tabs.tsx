@@ -14,7 +14,7 @@ export function ConnectorTabs() {
     : pathname;
 
   return (
-    <div className="flex w-full flex-col mb-4">
+    <div className="flex w-full items-center justify-center h-full">
       <Tabs
         aria-label="Connector Options"
         classNames={{
