@@ -58,7 +58,7 @@ export default function MembersPage() {
               <div className="flex items-center justify-between w-full pr-4 relative">
                 <div className="relative">
                   {member.isYou ? (
-                    <span className="font-semibold text-neutral-800 dark:text-neutral-200">
+                    <span className="font-medium text-neutral-700 dark:text-neutral-300">
                       {member.role}
                     </span>
                   ) : (
