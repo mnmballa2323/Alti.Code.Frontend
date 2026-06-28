@@ -576,458 +576,465 @@ export default function VaultPage() {
         <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full">
           <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[20vh] overflow-hidden">
             <div className="flex w-full flex-col items-center gap-5 z-20 px-6">
-            {/* ── Saved secret detail view ── */}
-            <div className="flex w-full flex-col gap-4 max-w-2xl">
-              {selectedSecretId ? (
-                (() => {
-                  const secret = activeSecret!;
-                  const conf =
-                    serviceConfig[secret.service] ?? serviceConfig.Default;
-                  const ServiceIcon = conf.icon;
-                  const isRevealed = revealedIds.has(secret.id);
+              {/* ── Saved secret detail view ── */}
+              <div className="flex w-full flex-col gap-4 max-w-2xl">
+                {selectedSecretId ? (
+                  (() => {
+                    const secret = activeSecret!;
+                    const conf =
+                      serviceConfig[secret.service] ?? serviceConfig.Default;
+                    const ServiceIcon = conf.icon;
+                    const isRevealed = revealedIds.has(secret.id);
 
-                  return (
-                    <div className="flex flex-col gap-4 w-full animate-in slide-in-from-bottom-4 duration-500 fill-mode-both">
-                      {/* Name row */}
-                      <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-between gap-3 border border-gray-100 dark:border-gray-800">
-                        <div className="flex items-center gap-3">
-                          <ServiceIcon className={conf.color} size={18} />
-                          <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                            {secret.name}
-                          </span>
-                          <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-md">
-                            {secret.service}
-                          </span>
+                    return (
+                      <div className="flex flex-col gap-4 w-full animate-in slide-in-from-bottom-4 duration-500 fill-mode-both">
+                        {/* Name row */}
+                        <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-between gap-3 border border-gray-100 dark:border-gray-800">
+                          <div className="flex items-center gap-3">
+                            <ServiceIcon className={conf.color} size={18} />
+                            <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                              {secret.name}
+                            </span>
+                            <span className="text-xs text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-md">
+                              {secret.service}
+                            </span>
+                          </div>
+                          <button
+                            className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
+                            onClick={() => handleEditClick(secret)}
+                          >
+                            <Edit2 size={12} /> Edit
+                          </button>
                         </div>
+                        {/* Key row */}
+                        <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-between gap-3 border border-gray-100 dark:border-gray-800">
+                          <span className="text-sm font-mono text-gray-900 dark:text-gray-100 truncate flex-1">
+                            {isRevealed
+                              ? secret.key
+                              : "••••••••••••••••••••••••"}
+                          </span>
+                          <div className="flex gap-4 items-center shrink-0">
+                            <button
+                              className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
+                              onClick={() => handleCopy(secret.key)}
+                            >
+                              <Copy size={12} /> Copy
+                            </button>
+                            <button
+                              className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
+                              onClick={() => toggleReveal(secret.id)}
+                            >
+                              {isRevealed ? (
+                                <>
+                                  <EyeOff size={12} /> Hide
+                                </>
+                              ) : (
+                                <>
+                                  <Eye size={12} /> Reveal
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        </div>
+                        {/* Delete */}
                         <button
-                          className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
-                          onClick={() => handleEditClick(secret)}
+                          className="w-full bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-500 shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-center gap-3 hover:bg-red-100 dark:hover:bg-red-900/50 transition-all font-medium text-sm border border-red-100 dark:border-red-900/50"
+                          onClick={() => {
+                            setSecretToDelete(secret.id);
+                            openDeleteModal();
+                          }}
                         >
-                          <Edit2 size={12} /> Edit
+                          Delete Secret
                         </button>
                       </div>
-                      {/* Key row */}
-                      <div className="w-full bg-white dark:bg-[#161b22] shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-between gap-3 border border-gray-100 dark:border-gray-800">
-                        <span className="text-sm font-mono text-gray-900 dark:text-gray-100 truncate flex-1">
-                          {isRevealed ? secret.key : "••••••••••••••••••••••••"}
-                        </span>
-                        <div className="flex gap-4 items-center shrink-0">
-                          <button
-                            className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
-                            onClick={() => handleCopy(secret.key)}
-                          >
-                            <Copy size={12} /> Copy
-                          </button>
-                          <button
-                            className="text-xs font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100 transition-colors flex items-center gap-1.5"
-                            onClick={() => toggleReveal(secret.id)}
-                          >
-                            {isRevealed ? (
-                              <>
-                                <EyeOff size={12} /> Hide
-                              </>
-                            ) : (
-                              <>
-                                <Eye size={12} /> Reveal
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                      {/* Delete */}
-                      <button
-                        className="w-full bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-500 shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-center gap-3 hover:bg-red-100 dark:hover:bg-red-900/50 transition-all font-medium text-sm border border-red-100 dark:border-red-900/50"
-                        onClick={() => {
-                          setSecretToDelete(secret.id);
-                          openDeleteModal();
-                        }}
-                      >
-                        Delete Secret
-                      </button>
-                    </div>
-                  );
-                })()
-              ) : (
-                /* ── New / Edit form ── */
-                <div className="flex w-full flex-col gap-3 animate-in slide-in-from-bottom-4 duration-500 fill-mode-both">
-                  {/* Shared: Name */}
-                  <Field
-                    placeholder="Name"
-                    value={newName}
-                    onChange={setNewName}
-                  />
-
-                  {/* ── API Key ── */}
-                  {vaultMode === "api-key" && (
-                    <>
-                      <Field
-                        placeholder="URL"
-                        value={apiProvider}
-                        onChange={setApiProvider}
-                      />
-                      <Field
-                        revealable
-                        placeholder="API Key"
-                        revealed={showApiKey}
-                        value={apiKey}
-                        onChange={setApiKey}
-                        onToggleReveal={() => setShowApiKey(!showApiKey)}
-                      />
-                    </>
-                  )}
-
-                  {/* ── Login ── */}
-                  {vaultMode === "login" && (
-                    <>
-                      <Field
-                        placeholder="URL (e.g. https://github.com)"
-                        type="url"
-                        value={loginUrl}
-                        onChange={setLoginUrl}
-                      />
-                      <Field
-                        placeholder="Email address"
-                        type="email"
-                        value={loginEmail}
-                        onChange={setLoginEmail}
-                      />
-                      <Field
-                        placeholder="Username (optional)"
-                        value={loginUsername}
-                        onChange={setLoginUsername}
-                      />
-                      <Field
-                        revealable
-                        placeholder="Password"
-                        revealed={showLoginPw}
-                        value={loginPassword}
-                        onChange={setLoginPassword}
-                        onToggleReveal={() => setShowLoginPw(!showLoginPw)}
-                      />
-                    </>
-                  )}
-
-                  {/* ── SSH / Cert ── */}
-                  {vaultMode === "ssh" && (
-                    <>
-                      <Select
-                        options={[
-                          "SSH Private Key",
-                          "SSL Certificate",
-                          "GPG Key",
-                          "Apple Certificate",
-                          "Android Keystore",
-                          "Code Signing Certificate",
-                        ]}
-                        placeholder="Select Type"
-                        value={sshKeyType}
-                        onChange={setSshKeyType}
-                      />
-                      <Field
-                        revealable
-                        textarea
-                        placeholder="Paste key content here..."
-                        revealed={false}
-                        value={sshContent}
-                        onChange={setSshContent}
-                      />
-                      <Field
-                        revealable
-                        placeholder="Passphrase (optional)"
-                        revealed={showSshPass}
-                        value={sshPassphrase}
-                        onChange={setSshPassphrase}
-                        onToggleReveal={() => setShowSshPass(!showSshPass)}
-                      />
-                    </>
-                  )}
-
-                  {/* ── Database ── */}
-                  {vaultMode === "database" && (
-                    <>
-                      <Select
-                        options={[
-                          "PostgreSQL",
-                          "MySQL",
-                          "SQLite",
-                          "MongoDB",
-                          "Redis",
-                          "MSSQL",
-                          "Oracle",
-                          "CockroachDB",
-                          "Other",
-                        ]}
-                        placeholder="Select Dialect"
-                        value={dbDialect}
-                        onChange={setDbDialect}
-                      />
-                      <div className="flex gap-3">
-                        <div className="flex-1">
-                          <Field
-                            placeholder="Host"
-                            value={dbHost}
-                            onChange={setDbHost}
-                          />
-                        </div>
-                        <div className="w-28">
-                          <Field
-                            placeholder="Port"
-                            type="number"
-                            value={dbPort}
-                            onChange={setDbPort}
-                          />
-                        </div>
-                      </div>
-                      <Field
-                        placeholder="Database name"
-                        value={dbName}
-                        onChange={setDbName}
-                      />
-                      <Field
-                        placeholder="Username"
-                        value={dbUser}
-                        onChange={setDbUser}
-                      />
-                      <Field
-                        revealable
-                        placeholder="Password"
-                        revealed={showDbPw}
-                        value={dbPassword}
-                        onChange={setDbPassword}
-                        onToggleReveal={() => setShowDbPw(!showDbPw)}
-                      />
-                    </>
-                  )}
-
-                  {/* ── OAuth ── */}
-                  {vaultMode === "oauth" && (
-                    <>
-                      <Field
-                        placeholder="Client ID"
-                        value={oauthClientId}
-                        onChange={setOauthClientId}
-                      />
-                      <Field
-                        revealable
-                        placeholder="Client Secret"
-                        revealed={showOauthSecret}
-                        value={oauthClientSecret}
-                        onChange={setOauthClientSecret}
-                        onToggleReveal={() =>
-                          setShowOauthSecret(!showOauthSecret)
-                        }
-                      />
-                      <Field
-                        placeholder="Scopes (e.g. read:user, repo)"
-                        value={oauthScopes}
-                        onChange={setOauthScopes}
-                      />
-                      <Field
-                        placeholder="Redirect URI (optional)"
-                        type="url"
-                        value={oauthRedirectUri}
-                        onChange={setOauthRedirectUri}
-                      />
-                    </>
-                  )}
-
-                  {/* ── Cloud IAM ── */}
-                  {vaultMode === "cloud-iam" && (
-                    <>
-                      <Select
-                        options={[
-                          "Google Cloud Platform",
-                          "GCP Dedicated (Sovereign)",
-                          "GCP Government (FedRAMP)",
-                          "Cloudflare",
-                          "Other",
-                        ]}
-                        placeholder="Select Provider"
-                        value={iamProvider}
-                        onChange={setIamProvider}
-                      />
-                      <Field
-                        placeholder={
-                          iamProvider.startsWith("Google") ||
-                          iamProvider.startsWith("GCP")
-                            ? "Service Account Email"
-                            : "Key ID"
-                        }
-                        value={iamKeyId}
-                        onChange={setIamKeyId}
-                      />
-                      <Field
-                        revealable
-                        placeholder={
-                          iamProvider.startsWith("Google") ||
-                          iamProvider.startsWith("GCP")
-                            ? "Private Key JSON"
-                            : "Secret Key"
-                        }
-                        revealed={showIamSecret}
-                        value={iamSecret}
-                        onChange={setIamSecret}
-                        onToggleReveal={() => setShowIamSecret(!showIamSecret)}
-                      />
-                      <Field
-                        placeholder="Region (e.g. us-central1)"
-                        value={iamRegion}
-                        onChange={setIamRegion}
-                      />
-                    </>
-                  )}
-
-                  {/* ── Encryption Key ── */}
-                  {vaultMode === "encryption" && (
-                    <>
-                      <Select
-                        options={[
-                          "AES-256",
-                          "AES-128",
-                          "RSA-2048",
-                          "RSA-4096",
-                          "HMAC-SHA256",
-                          "JWT Secret",
-                          "TOTP Seed",
-                          "Ed25519",
-                          "ChaCha20",
-                          "Other",
-                        ]}
-                        placeholder="Select Algorithm"
-                        value={encAlgorithm}
-                        onChange={setEncAlgorithm}
-                      />
-                      <Field
-                        revealable
-                        placeholder="Key value"
-                        revealed={showEncKey}
-                        value={encKeyValue}
-                        onChange={setEncKeyValue}
-                        onToggleReveal={() => setShowEncKey(!showEncKey)}
-                      />
-                    </>
-                  )}
-
-                  {/* ── Env / Config ── */}
-                  {vaultMode === "env-config" && (
+                    );
+                  })()
+                ) : (
+                  /* ── New / Edit form ── */
+                  <div className="flex w-full flex-col gap-3 animate-in slide-in-from-bottom-4 duration-500 fill-mode-both">
+                    {/* Shared: Name */}
                     <Field
-                      textarea
-                      placeholder={
-                        "# Paste your .env content here\nDATABASE_URL=postgres://...\nNEXT_PUBLIC_API_URL=https://...\nSECRET_KEY=..."
-                      }
-                      value={envContent}
-                      onChange={setEnvContent}
+                      placeholder="Name"
+                      value={newName}
+                      onChange={setNewName}
                     />
-                  )}
 
-                  {/* Save button */}
-                  <button
-                    className="w-full bg-black dark:bg-white shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-center font-medium text-sm text-white dark:text-black hover:bg-gray-900 dark:hover:bg-gray-100 transition-all mt-1"
-                    onClick={handleSave}
-                  >
-                    {editingSecretId
-                      ? `Update ${modeLabel}`
-                      : `Save ${modeLabel}`}
-                  </button>
-                </div>
-              )}
+                    {/* ── API Key ── */}
+                    {vaultMode === "api-key" && (
+                      <>
+                        <Field
+                          placeholder="URL"
+                          value={apiProvider}
+                          onChange={setApiProvider}
+                        />
+                        <Field
+                          revealable
+                          placeholder="API Key"
+                          revealed={showApiKey}
+                          value={apiKey}
+                          onChange={setApiKey}
+                          onToggleReveal={() => setShowApiKey(!showApiKey)}
+                        />
+                      </>
+                    )}
+
+                    {/* ── Login ── */}
+                    {vaultMode === "login" && (
+                      <>
+                        <Field
+                          placeholder="URL (e.g. https://github.com)"
+                          type="url"
+                          value={loginUrl}
+                          onChange={setLoginUrl}
+                        />
+                        <Field
+                          placeholder="Email address"
+                          type="email"
+                          value={loginEmail}
+                          onChange={setLoginEmail}
+                        />
+                        <Field
+                          placeholder="Username (optional)"
+                          value={loginUsername}
+                          onChange={setLoginUsername}
+                        />
+                        <Field
+                          revealable
+                          placeholder="Password"
+                          revealed={showLoginPw}
+                          value={loginPassword}
+                          onChange={setLoginPassword}
+                          onToggleReveal={() => setShowLoginPw(!showLoginPw)}
+                        />
+                      </>
+                    )}
+
+                    {/* ── SSH / Cert ── */}
+                    {vaultMode === "ssh" && (
+                      <>
+                        <Select
+                          options={[
+                            "SSH Private Key",
+                            "SSL Certificate",
+                            "GPG Key",
+                            "Apple Certificate",
+                            "Android Keystore",
+                            "Code Signing Certificate",
+                          ]}
+                          placeholder="Select Type"
+                          value={sshKeyType}
+                          onChange={setSshKeyType}
+                        />
+                        <Field
+                          revealable
+                          textarea
+                          placeholder="Paste key content here..."
+                          revealed={false}
+                          value={sshContent}
+                          onChange={setSshContent}
+                        />
+                        <Field
+                          revealable
+                          placeholder="Passphrase (optional)"
+                          revealed={showSshPass}
+                          value={sshPassphrase}
+                          onChange={setSshPassphrase}
+                          onToggleReveal={() => setShowSshPass(!showSshPass)}
+                        />
+                      </>
+                    )}
+
+                    {/* ── Database ── */}
+                    {vaultMode === "database" && (
+                      <>
+                        <Select
+                          options={[
+                            "PostgreSQL",
+                            "MySQL",
+                            "SQLite",
+                            "MongoDB",
+                            "Redis",
+                            "MSSQL",
+                            "Oracle",
+                            "CockroachDB",
+                            "Other",
+                          ]}
+                          placeholder="Select Dialect"
+                          value={dbDialect}
+                          onChange={setDbDialect}
+                        />
+                        <div className="flex gap-3">
+                          <div className="flex-1">
+                            <Field
+                              placeholder="Host"
+                              value={dbHost}
+                              onChange={setDbHost}
+                            />
+                          </div>
+                          <div className="w-28">
+                            <Field
+                              placeholder="Port"
+                              type="number"
+                              value={dbPort}
+                              onChange={setDbPort}
+                            />
+                          </div>
+                        </div>
+                        <Field
+                          placeholder="Database name"
+                          value={dbName}
+                          onChange={setDbName}
+                        />
+                        <Field
+                          placeholder="Username"
+                          value={dbUser}
+                          onChange={setDbUser}
+                        />
+                        <Field
+                          revealable
+                          placeholder="Password"
+                          revealed={showDbPw}
+                          value={dbPassword}
+                          onChange={setDbPassword}
+                          onToggleReveal={() => setShowDbPw(!showDbPw)}
+                        />
+                      </>
+                    )}
+
+                    {/* ── OAuth ── */}
+                    {vaultMode === "oauth" && (
+                      <>
+                        <Field
+                          placeholder="Client ID"
+                          value={oauthClientId}
+                          onChange={setOauthClientId}
+                        />
+                        <Field
+                          revealable
+                          placeholder="Client Secret"
+                          revealed={showOauthSecret}
+                          value={oauthClientSecret}
+                          onChange={setOauthClientSecret}
+                          onToggleReveal={() =>
+                            setShowOauthSecret(!showOauthSecret)
+                          }
+                        />
+                        <Field
+                          placeholder="Scopes (e.g. read:user, repo)"
+                          value={oauthScopes}
+                          onChange={setOauthScopes}
+                        />
+                        <Field
+                          placeholder="Redirect URI (optional)"
+                          type="url"
+                          value={oauthRedirectUri}
+                          onChange={setOauthRedirectUri}
+                        />
+                      </>
+                    )}
+
+                    {/* ── Cloud IAM ── */}
+                    {vaultMode === "cloud-iam" && (
+                      <>
+                        <Select
+                          options={[
+                            "Google Cloud Platform",
+                            "GCP Dedicated (Sovereign)",
+                            "GCP Government (FedRAMP)",
+                            "Cloudflare",
+                            "Other",
+                          ]}
+                          placeholder="Select Provider"
+                          value={iamProvider}
+                          onChange={setIamProvider}
+                        />
+                        <Field
+                          placeholder={
+                            iamProvider.startsWith("Google") ||
+                            iamProvider.startsWith("GCP")
+                              ? "Service Account Email"
+                              : "Key ID"
+                          }
+                          value={iamKeyId}
+                          onChange={setIamKeyId}
+                        />
+                        <Field
+                          revealable
+                          placeholder={
+                            iamProvider.startsWith("Google") ||
+                            iamProvider.startsWith("GCP")
+                              ? "Private Key JSON"
+                              : "Secret Key"
+                          }
+                          revealed={showIamSecret}
+                          value={iamSecret}
+                          onChange={setIamSecret}
+                          onToggleReveal={() =>
+                            setShowIamSecret(!showIamSecret)
+                          }
+                        />
+                        <Field
+                          placeholder="Region (e.g. us-central1)"
+                          value={iamRegion}
+                          onChange={setIamRegion}
+                        />
+                      </>
+                    )}
+
+                    {/* ── Encryption Key ── */}
+                    {vaultMode === "encryption" && (
+                      <>
+                        <Select
+                          options={[
+                            "AES-256",
+                            "AES-128",
+                            "RSA-2048",
+                            "RSA-4096",
+                            "HMAC-SHA256",
+                            "JWT Secret",
+                            "TOTP Seed",
+                            "Ed25519",
+                            "ChaCha20",
+                            "Other",
+                          ]}
+                          placeholder="Select Algorithm"
+                          value={encAlgorithm}
+                          onChange={setEncAlgorithm}
+                        />
+                        <Field
+                          revealable
+                          placeholder="Key value"
+                          revealed={showEncKey}
+                          value={encKeyValue}
+                          onChange={setEncKeyValue}
+                          onToggleReveal={() => setShowEncKey(!showEncKey)}
+                        />
+                      </>
+                    )}
+
+                    {/* ── Env / Config ── */}
+                    {vaultMode === "env-config" && (
+                      <Field
+                        textarea
+                        placeholder={
+                          "# Paste your .env content here\nDATABASE_URL=postgres://...\nNEXT_PUBLIC_API_URL=https://...\nSECRET_KEY=..."
+                        }
+                        value={envContent}
+                        onChange={setEnvContent}
+                      />
+                    )}
+
+                    {/* Save button */}
+                    <button
+                      className="w-full bg-black dark:bg-white shadow-sm rounded-xl px-4 py-3.5 flex items-center justify-center font-medium text-sm text-white dark:text-black hover:bg-gray-900 dark:hover:bg-gray-100 transition-all mt-1"
+                      onClick={handleSave}
+                    >
+                      {editingSecretId
+                        ? `Update ${modeLabel}`
+                        : `Save ${modeLabel}`}
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
+
+        {/* ── Delete confirmation modal ── */}
+        <Modal
+          hideCloseButton
+          backdrop="blur"
+          classNames={{
+            base: "bg-white dark:bg-[#161616] rounded-[24px] border border-default-200/50 shadow-2xl overflow-hidden max-w-[320px] w-[320px]",
+            header:
+              "pt-6 pb-1.5 px-6 flex flex-col items-center justify-center",
+            body: "pt-0 pb-5 px-6 text-center flex flex-col items-center justify-center",
+            footer: "p-0 m-0 flex flex-row w-full gap-0 bg-transparent min-h-0",
+          }}
+          isOpen={isDeleteModalOpen}
+          size="xs"
+          onOpenChange={onDeleteModalChange}
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader>
+                  <h3 className="text-[17px] font-semibold text-default-900 tracking-tight text-center w-full">
+                    Delete
+                  </h3>
+                </ModalHeader>
+                <ModalBody>
+                  <p className="text-default-500 dark:text-default-400 text-[13px] leading-snug text-center w-full">
+                    Are you sure you want to delete?
+                  </p>
+                </ModalBody>
+                <ModalFooter className="p-0 m-0 border-t border-[#E5E5EA] dark:border-[#2C2C2E] flex flex-row w-full gap-0 bg-transparent min-h-0">
+                  <Button
+                    className="w-[calc(50%-0.5px)] h-12 rounded-none border-none text-default-800 dark:text-default-200 font-normal hover:bg-default-100/50 text-[15px]"
+                    variant="light"
+                    onPress={onClose}
+                  >
+                    Cancel
+                  </Button>
+                  <div className="w-[1px] h-12 bg-[#E5E5EA] dark:bg-[#2C2C2E] shrink-0" />
+                  <Button
+                    className="w-[calc(50%-0.5px)] h-12 rounded-none border-none text-danger font-normal hover:bg-default-100/50 text-[15px]"
+                    variant="light"
+                    onPress={() => {
+                      if (secretToDelete) handleDelete(secretToDelete);
+                      onClose();
+                    }}
+                  >
+                    Delete
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+
+        {/* ── Success modal ── */}
+        <Modal
+          hideCloseButton
+          backdrop="blur"
+          classNames={{
+            base: "bg-white dark:bg-[#161616] rounded-[24px] border border-default-200/50 shadow-2xl overflow-hidden max-w-[320px] w-[320px]",
+            header:
+              "pt-6 pb-1.5 px-6 flex flex-col items-center justify-center",
+            body: "pt-0 pb-5 px-6 text-center flex flex-col items-center justify-center",
+            footer: "p-0 m-0 flex w-full bg-transparent min-h-0",
+          }}
+          isOpen={isSuccessModalOpen}
+          size="xs"
+          onOpenChange={setIsSuccessModalOpen}
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader>
+                  <h3 className="text-[17px] font-semibold text-default-900 tracking-tight text-center w-full">
+                    Saved
+                  </h3>
+                </ModalHeader>
+                <ModalBody>
+                  <p className="text-default-500 dark:text-default-400 text-[13px] leading-snug text-center w-full">
+                    {successMessage}
+                  </p>
+                </ModalBody>
+                <ModalFooter className="p-0 m-0 border-t border-[#E5E5EA] dark:border-[#2C2C2E] flex w-full bg-transparent min-h-0">
+                  <Button
+                    className="w-full h-12 rounded-none border-none text-primary font-normal hover:bg-default-100/50 text-[15px]"
+                    variant="light"
+                    onPress={onClose}
+                  >
+                    Close
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
       </div>
-
-      {/* ── Delete confirmation modal ── */}
-      <Modal
-        hideCloseButton
-        backdrop="blur"
-        classNames={{
-          base: "bg-white dark:bg-[#161616] rounded-[24px] border border-default-200/50 shadow-2xl overflow-hidden max-w-[320px] w-[320px]",
-          header: "pt-6 pb-1.5 px-6 flex flex-col items-center justify-center",
-          body: "pt-0 pb-5 px-6 text-center flex flex-col items-center justify-center",
-          footer: "p-0 m-0 flex flex-row w-full gap-0 bg-transparent min-h-0",
-        }}
-        isOpen={isDeleteModalOpen}
-        size="xs"
-        onOpenChange={onDeleteModalChange}
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader>
-                <h3 className="text-[17px] font-semibold text-default-900 tracking-tight text-center w-full">
-                  Delete
-                </h3>
-              </ModalHeader>
-              <ModalBody>
-                <p className="text-default-500 dark:text-default-400 text-[13px] leading-snug text-center w-full">
-                  Are you sure you want to delete?
-                </p>
-              </ModalBody>
-              <ModalFooter className="p-0 m-0 border-t border-[#E5E5EA] dark:border-[#2C2C2E] flex flex-row w-full gap-0 bg-transparent min-h-0">
-                <Button
-                  className="w-[calc(50%-0.5px)] h-12 rounded-none border-none text-default-800 dark:text-default-200 font-normal hover:bg-default-100/50 text-[15px]"
-                  variant="light"
-                  onPress={onClose}
-                >
-                  Cancel
-                </Button>
-                <div className="w-[1px] h-12 bg-[#E5E5EA] dark:bg-[#2C2C2E] shrink-0" />
-                <Button
-                  className="w-[calc(50%-0.5px)] h-12 rounded-none border-none text-danger font-normal hover:bg-default-100/50 text-[15px]"
-                  variant="light"
-                  onPress={() => {
-                    if (secretToDelete) handleDelete(secretToDelete);
-                    onClose();
-                  }}
-                >
-                  Delete
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
-
-      {/* ── Success modal ── */}
-      <Modal
-        hideCloseButton
-        backdrop="blur"
-        classNames={{
-          base: "bg-white dark:bg-[#161616] rounded-[24px] border border-default-200/50 shadow-2xl overflow-hidden max-w-[320px] w-[320px]",
-          header: "pt-6 pb-1.5 px-6 flex flex-col items-center justify-center",
-          body: "pt-0 pb-5 px-6 text-center flex flex-col items-center justify-center",
-          footer: "p-0 m-0 flex w-full bg-transparent min-h-0",
-        }}
-        isOpen={isSuccessModalOpen}
-        size="xs"
-        onOpenChange={setIsSuccessModalOpen}
-      >
-        <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader>
-                <h3 className="text-[17px] font-semibold text-default-900 tracking-tight text-center w-full">
-                  Saved
-                </h3>
-              </ModalHeader>
-              <ModalBody>
-                <p className="text-default-500 dark:text-default-400 text-[13px] leading-snug text-center w-full">
-                  {successMessage}
-                </p>
-              </ModalBody>
-              <ModalFooter className="p-0 m-0 border-t border-[#E5E5EA] dark:border-[#2C2C2E] flex w-full bg-transparent min-h-0">
-                <Button
-                  className="w-full h-12 rounded-none border-none text-primary font-normal hover:bg-default-100/50 text-[15px]"
-                  variant="light"
-                  onPress={onClose}
-                >
-                  Close
-                </Button>
-              </ModalFooter>
-            </>
-          )}
-        </ModalContent>
-      </Modal>
     </ChatBotLayout>
   );
 }
