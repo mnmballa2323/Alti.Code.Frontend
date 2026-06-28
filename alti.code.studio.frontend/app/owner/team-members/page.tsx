@@ -206,12 +206,12 @@ export default function TeamMembersPage() {
                           router.push(`/owner/team-members/${member.id}`)
                         }
                       >
-                        <div className="col-span-6 flex items-center gap-2">
-                          <span className="text-neutral-900 dark:text-white font-medium overflow-hidden text-ellipsis whitespace-nowrap">
+                        <div className="col-span-6 flex items-center gap-2 min-w-0">
+                          <span className="text-neutral-900 dark:text-white font-medium truncate flex-1">
                             {member.email}
                           </span>
                           {isYou && (
-                            <span className="px-1.5 py-0.5 text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded border border-neutral-200/40 dark:border-neutral-700/40">
+                            <span className="px-1.5 py-0.5 text-[10px] font-medium bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded border border-neutral-200/40 dark:border-neutral-700/40 shrink-0">
                               You
                             </span>
                           )}
