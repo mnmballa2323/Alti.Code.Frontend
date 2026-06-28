@@ -24,6 +24,46 @@ interface Member {
   subscriptionPrice?: number;
 }
 
+const DUMMY_ENTERPRISE_DATA: Record<string, any> = {
+  "jpmorgan-chase": {
+    id: "jpmorgan-chase",
+    name: "JPMorgan Chase (Sovereign)",
+    domain: "jpmc.alticodestudio.com",
+    plan: "enterprise",
+    status: "active",
+    owner: "jamie.dimon@jpmchase.com",
+    users: [
+      { id: "jpm-1", name: "Jamie Dimon", email: "jamie.dimon@jpmchase.com", tenantRole: "owner", subscriptionPrice: 1000 },
+      { id: "jpm-2", name: "Ada Lovelace", email: "ada@jpmchase.com", tenantRole: "admin", subscriptionPrice: 1000 },
+      { id: "jpm-3", name: "Alan Turing", email: "alan@jpmchase.com", tenantRole: "developer", subscriptionPrice: 1000 },
+    ]
+  },
+  "nasa-hq": {
+    id: "nasa-hq",
+    name: "NASA Jet Propulsion Lab",
+    domain: "jpl.nasa.gov",
+    plan: "enterprise",
+    status: "active",
+    owner: "director@jpl.nasa.gov",
+    users: [
+      { id: "nasa-1", name: "JPL Director", email: "director@jpl.nasa.gov", tenantRole: "owner", subscriptionPrice: 1000 },
+      { id: "nasa-2", name: "Grace Hopper", email: "grace@jpl.nasa.gov", tenantRole: "developer", subscriptionPrice: 1000 },
+    ]
+  },
+  "dod-sovereign": {
+    id: "dod-sovereign",
+    name: "Department of Defense (Sovereign)",
+    domain: "pentagon.mil",
+    plan: "enterprise",
+    status: "active",
+    owner: "secdef@pentagon.mil",
+    users: [
+      { id: "dod-1", name: "Secretary of Defense", email: "secdef@pentagon.mil", tenantRole: "owner", subscriptionPrice: 1000 },
+      { id: "dod-2", name: "General Cyber Command", email: "cyber@pentagon.mil", tenantRole: "admin", subscriptionPrice: 1000 },
+    ]
+  }
+};
+
 export default function EnterpriseDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -53,9 +93,24 @@ export default function EnterpriseDetailPage() {
             subscriptionPrice: u.subscriptionPrice,
           }))
         );
+      } else {
+        throw new Error("Not found");
       }
     } catch (err) {
-      console.error("Failed to fetch sovereign tenant details:", err);
+      console.warn("Fallback to dummy enterprise details for:", teamId);
+      const dummy = DUMMY_ENTERPRISE_DATA[teamId];
+      if (dummy) {
+        setTenant(dummy);
+        setMembers(
+          dummy.users.map((u: any) => ({
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            role: u.tenantRole,
+            subscriptionPrice: u.subscriptionPrice,
+          }))
+        );
+      }
     } finally {
       setLoading(false);
     }

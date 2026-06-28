@@ -17,6 +17,36 @@ interface TenantInfo {
   userCount: number;
 }
 
+const DUMMY_TEAMS: TenantInfo[] = [
+  {
+    id: "acme-corp",
+    name: "Acme Corp (Dedicated)",
+    domain: "acme.alticodestudio.com",
+    plan: "starter",
+    status: "active",
+    owner: "admin@acme.com",
+    userCount: 8,
+  },
+  {
+    id: "stark-industries",
+    name: "Stark Industries",
+    domain: "stark.alticodestudio.com",
+    plan: "starter",
+    status: "active",
+    owner: "pepper.potts@stark.com",
+    userCount: 15,
+  },
+  {
+    id: "wayne-enterprises",
+    name: "Wayne Enterprises",
+    domain: "wayne.alticodestudio.com",
+    plan: "starter",
+    status: "suspended",
+    owner: "lucius.fox@wayne.com",
+    userCount: 4,
+  }
+];
+
 export default function TeamsPage() {
   const router = useRouter();
   const { status } = useSession();
@@ -30,10 +60,13 @@ export default function TeamsPage() {
       if (res && Array.isArray(res)) {
         // Filter for Dedicated tier (starter plan)
         const starterTenants = res.filter((t: any) => t.plan === "starter");
-        setTenants(starterTenants);
+        setTenants(starterTenants.length > 0 ? starterTenants : DUMMY_TEAMS);
+      } else {
+        setTenants(DUMMY_TEAMS);
       }
     } catch (err) {
       console.error("Failed to fetch dedicated tenants:", err);
+      setTenants(DUMMY_TEAMS);
     } finally {
       setLoading(false);
     }

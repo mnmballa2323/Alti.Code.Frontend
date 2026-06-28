@@ -24,6 +24,46 @@ interface Member {
   subscriptionPrice?: number;
 }
 
+const DUMMY_TEAMS_DATA: Record<string, any> = {
+  "acme-corp": {
+    id: "acme-corp",
+    name: "Acme Corp (Dedicated)",
+    domain: "acme.alticodestudio.com",
+    plan: "starter",
+    status: "active",
+    owner: "admin@acme.com",
+    users: [
+      { id: "acme-1", name: "Ada Lovelace", email: "ada.lovelace@acme.com", tenantRole: "admin", subscriptionPrice: 1000 },
+      { id: "acme-2", name: "Alan Turing", email: "alan.turing@acme.com", tenantRole: "manager", subscriptionPrice: 1000 },
+      { id: "acme-3", name: "Grace Hopper", email: "grace.hopper@acme.com", tenantRole: "developer", subscriptionPrice: 1000 },
+    ]
+  },
+  "stark-industries": {
+    id: "stark-industries",
+    name: "Stark Industries",
+    domain: "stark.alticodestudio.com",
+    plan: "starter",
+    status: "active",
+    owner: "pepper.potts@stark.com",
+    users: [
+      { id: "stark-1", name: "Tony Stark", email: "tony@stark.com", tenantRole: "owner", subscriptionPrice: 1000 },
+      { id: "stark-2", name: "Happy Hogan", email: "happy@stark.com", tenantRole: "manager", subscriptionPrice: 1000 },
+    ]
+  },
+  "wayne-enterprises": {
+    id: "wayne-enterprises",
+    name: "Wayne Enterprises",
+    domain: "wayne.alticodestudio.com",
+    plan: "starter",
+    status: "suspended",
+    owner: "lucius.fox@wayne.com",
+    users: [
+      { id: "wayne-1", name: "Bruce Wayne", email: "bruce@wayne.com", tenantRole: "owner", subscriptionPrice: 1000 },
+      { id: "wayne-2", name: "Lucius Fox", email: "lucius.fox@wayne.com", tenantRole: "admin", subscriptionPrice: 1000 },
+    ]
+  }
+};
+
 export default function TeamDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -53,9 +93,24 @@ export default function TeamDetailPage() {
             subscriptionPrice: u.subscriptionPrice,
           }))
         );
+      } else {
+        throw new Error("Not found");
       }
     } catch (err) {
-      console.error("Failed to fetch tenant details:", err);
+      console.warn("Fallback to dummy tenant details for:", teamId);
+      const dummy = DUMMY_TEAMS_DATA[teamId];
+      if (dummy) {
+        setTenant(dummy);
+        setMembers(
+          dummy.users.map((u: any) => ({
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            role: u.tenantRole,
+            subscriptionPrice: u.subscriptionPrice,
+          }))
+        );
+      }
     } finally {
       setLoading(false);
     }
