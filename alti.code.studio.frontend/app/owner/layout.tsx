@@ -6,8 +6,6 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import {
   Users,
-  FileText,
-  Shield,
   Activity,
   BarChart3,
   ArrowLeft,
@@ -34,11 +32,6 @@ const memberItems: SidebarItem[] = [
   { label: "Individual", href: "/owner/team-members", icon: Users },
   { label: "Teams", href: "/owner/teams", icon: Users },
   { label: "Enterprise", href: "/owner/enterprise", icon: Users },
-];
-
-const managerItems: SidebarItem[] = [
-  { label: "Instructions", href: "/owner/instructions", icon: FileText },
-  { label: "Guardrails", href: "/owner/guardrails", icon: Shield },
 ];
 
 export default function OwnerLayout({
@@ -128,11 +121,8 @@ export default function OwnerLayout({
     if (pathname.startsWith("/owner/team-members")) return "Individual";
     if (pathname.startsWith("/owner/teams")) return "Teams";
     if (pathname.startsWith("/owner/enterprise")) return "Enterprise";
-
     if (pathname.startsWith("/owner/revenue")) return "Revenue";
 
-    if (pathname.startsWith("/owner/instructions")) return "Instructions";
-    if (pathname.startsWith("/owner/guardrails")) return "Guardrails";
     if (pathname.startsWith("/owner/usage")) return "Model Usage";
     if (pathname.startsWith("/owner/audit")) return "Audit Logs";
 
@@ -220,7 +210,6 @@ export default function OwnerLayout({
         <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
           {renderNavGroup("", ownerItems)}
           {renderNavGroup("Member Management", memberItems, "mt-8")}
-          {renderNavGroup("Platform Controls", managerItems, "mt-8")}
         </div>
 
         {/* Main Content Pane */}
