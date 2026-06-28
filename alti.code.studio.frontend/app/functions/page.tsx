@@ -32,7 +32,7 @@ function FunctionsPageContent() {
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
                   hideDropdown={true}
-                  placeholder="e.g. Format Stripe webhooks and extract the customer email..."
+                  placeholder="Enter function here..."
                   prompt={promptValue}
                   setPrompt={setPromptValue}
                   onSend={handleSend}
