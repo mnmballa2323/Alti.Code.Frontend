@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -293,6 +294,11 @@ function PromptInputFullLineComponent({
   const { defaultModel, setDefaultModel } = useSettingsStore();
 
   const getModelDisplayName = (modelKey: string): string => {
+    if (modelKey && modelKey.startsWith("custom-agent-")) {
+      const match = customAgents.find((a) => a.id === modelKey);
+      return match ? `Agent: ${match.name}` : "Custom Agent";
+    }
+
     switch (modelKey) {
       case "":
         return "Select Model";
@@ -335,8 +341,33 @@ function PromptInputFullLineComponent({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dispatch = useDispatch<AppDispatch>();
   const { data: session } = useSession();
-  const token = session?.user.accessToken ?? null;
+  const token = session?.user?.accessToken ?? null;
   const sessionId = useSelector((state: RootState) => state.messages.sessionId);
+  const [customAgents, setCustomAgents] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!token) return;
+    const fetchCustomAgents = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/agents/custom`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        if (res.data?.success) {
+          setCustomAgents(res.data.data || []);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch custom agents in input actions dropdown:", err);
+      }
+    };
+    fetchCustomAgents();
+
+    const handleSync = (e: any) => {
+      if (e.detail) setCustomAgents(e.detail);
+    };
+    window.addEventListener("sync-custom-agents", handleSync);
+    return () => window.removeEventListener("sync-custom-agents", handleSync);
+  }, [token]);
 
   // Enforce Select Model by default on initial component mount
   useEffect(() => {
@@ -1084,6 +1115,31 @@ function PromptInputFullLineComponent({
                       </span>
                     </div>
                   </DropdownItem>
+                </DropdownSection>
+                <DropdownSection
+                  title={customAgents.length > 0 ? "Custom Agents" : ""}
+                  classNames={{
+                    heading: customAgents.length > 0 ? "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5" : "hidden",
+                  }}
+                >
+                  {customAgents.map((agent) => (
+                    <DropdownItem
+                      key={agent.id}
+                      className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                      textValue={agent.name}
+                      onPress={() => setDefaultModel(agent.id)}
+                    >
+                      <div className="flex items-center gap-3 text-left">
+                        <Icon
+                          className="size-4 text-primary shrink-0"
+                          icon="solar:user-speak-bold"
+                        />
+                        <span className="text-xs font-medium text-foreground text-[12px] truncate max-w-[150px]">
+                          {agent.name}
+                        </span>
+                      </div>
+                    </DropdownItem>
+                  ))}
                 </DropdownSection>
               </DropdownMenu>
             </Dropdown>

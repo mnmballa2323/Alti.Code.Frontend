@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "sonner";
 import { formatDistanceToNow } from "date-fns";
+import { Popover, PopoverTrigger, PopoverContent } from "@heroui/react";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
@@ -120,10 +121,10 @@ export default function NotificationBell() {
       {/* Bell Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative flex items-center justify-center w-9 h-9 bg-[#FAFAFA] dark:bg-default-100 hover:bg-default-100 dark:hover:bg-default-200 border border-default-200 dark:border-gray-800 rounded-xl transition-all"
+        className="relative flex items-center justify-center w-9 h-9 bg-transparent hover:bg-gray-100 dark:hover:bg-white/5 border-none rounded-xl transition-all cursor-pointer shrink-0"
         aria-label="Notifications"
       >
-        <Bell className={`w-4 h-4 text-default-700 dark:text-white ${unreadCount > 0 ? 'animate-bounce' : ''}`} />
+        <Bell className={`w-4 h-4 text-gray-400 ${unreadCount > 0 ? 'animate-bounce' : ''}`} />
         {unreadCount > 0 && (
           <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] px-1 items-center justify-center text-[9px] font-bold text-white bg-red-500 rounded-full border-2 border-[#FAFAFA] dark:border-sidebar">
             {unreadCount > 9 ? "9+" : unreadCount}
@@ -133,14 +134,14 @@ export default function NotificationBell() {
 
       {/* Dropdown Panel */}
       {isOpen && (
-        <div className="absolute right-0 bottom-12 z-50 w-80 bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 rounded-2xl shadow-xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className="absolute right-0 bottom-[48px] z-50 w-[248px] bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-200">
           {/* Header */}
           <div className="px-4 py-3 border-b border-default-200/50 dark:border-gray-800 flex items-center justify-between bg-gray-50/50 dark:bg-gray-800/30">
             <span className="text-xs font-semibold text-foreground">Notifications</span>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllRead}
-                className="text-[10px] text-primary hover:underline font-medium flex items-center gap-1"
+                className="text-[10px] text-primary hover:underline font-medium flex items-center gap-1 cursor-pointer"
               >
                 <Check className="w-3 h-3" /> Mark all read
               </button>
@@ -180,7 +181,7 @@ export default function NotificationBell() {
                     )}
                     <button
                       onClick={(e) => handleDelete(e, notification.id)}
-                      className="text-default-400 hover:text-red-500 transition-colors p-1"
+                      className="text-default-400 hover:text-red-500 transition-colors p-1 cursor-pointer"
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>

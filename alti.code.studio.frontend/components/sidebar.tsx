@@ -1784,14 +1784,15 @@ export default function Sidebar() {
   };
 
   const content = (
-    <div className="flex h-full z-20 bg-white dark:bg-sidebar">
-      {/* Primary Column (Left Side Menu) */}
-      <div
-        className={cn(
-          "flex h-full flex-col transition-all duration-300 bg-white dark:bg-sidebar border-r border-default-200",
-          isSidebarOpen ? "w-72" : "w-10",
-        )}
-      >
+    <div className="dark h-full" data-theme="dark">
+      <div className="flex h-full z-20 bg-[#0B1121] text-foreground">
+        {/* Primary Column (Left Side Menu) */}
+        <div
+          className={cn(
+            "flex h-full flex-col transition-all duration-300 bg-[#0B1121] border-r border-white/5",
+            isSidebarOpen ? "w-72" : "w-10",
+          )}
+        >
         {/* Top Section - Brand & Toggle */}
         <div
           className={cn(
@@ -1967,13 +1968,12 @@ export default function Sidebar() {
         {/* 6 navigation icons toggle container (Main Menu) */}
         <div
           className={cn(
-            "border-b border-default-200",
             isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
           )}
         >
           <div
             className={cn(
-              "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
+              "bg-white/5 border border-white/5 rounded-xl p-1",
               isSidebarOpen
                 ? "flex flex-row items-center justify-between gap-0.5 w-full"
                 : "flex flex-col items-center gap-2",
@@ -2003,8 +2003,8 @@ export default function Sidebar() {
                         ? "h-[30px] flex-1 rounded-md"
                         : "h-[30px] w-[30px] rounded-md",
                       item.isActive
-                        ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
-                        : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
+                        ? "bg-white/10 text-white shadow-sm"
+                        : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
                     )}
                     onClick={item.onClick}
                     onMouseEnter={() => {
@@ -2028,13 +2028,12 @@ export default function Sidebar() {
         {/* Project Parameters (Instructions, Guardrails, Data) & Connections (Apps, Database, Cloud) - Unified 6-Icon Grid */}
         <div
           className={cn(
-            "border-b border-default-200",
             isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
           )}
         >
           <div
             className={cn(
-              "bg-[#F4F4F6] dark:bg-default-50 rounded-xl p-1",
+              "bg-white/5 border border-white/5 rounded-xl p-1",
               isSidebarOpen
                 ? "flex flex-row items-center justify-between gap-0.5 w-full"
                 : "flex flex-col items-center gap-2",
@@ -2064,8 +2063,8 @@ export default function Sidebar() {
                         ? "h-[30px] flex-1 rounded-md"
                         : "h-[30px] w-[30px] rounded-md",
                       item.isActive
-                        ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
-                        : "bg-transparent border-transparent text-default-400 hover:text-default-700 dark:hover:text-default-200",
+                        ? "bg-white/10 text-white shadow-sm"
+                        : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
                     )}
                     onClick={item.onClick}
                     onMouseEnter={() => {
@@ -2135,35 +2134,40 @@ export default function Sidebar() {
         {/* Search bar and + icon on the same line below the main menu */}
         <div
           className={cn(
-            "px-3 py-3 flex items-center gap-2 border-b border-default-200",
+            isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
             !isSidebarOpen && "hidden",
           )}
         >
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-400" />
-            <input
-              className="w-full bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg pl-9 pr-3 py-1.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary transition-all text-foreground"
-              placeholder="Search..."
-              value={leftSidebarSearch}
-              onChange={(e) => setLeftSidebarSearch(e.target.value)}
-            />
-          </div>
-          <Tooltip
-            showArrow
-            classNames={{
-              content:
-                "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-            }}
-            closeDelay={0}
-            content={getPlusTooltipContent()}
-            delay={0}
-            placement="top"
+          <div
+            className={cn(
+              "bg-white/5 border border-white/5 rounded-xl p-1 flex flex-row items-center justify-between gap-1 w-full"
+            )}
           >
-            <Button
-              isIconOnly
-              className="bg-[#F4F4F6] dark:bg-default-100 border border-default-200 rounded-lg text-default-600 flex-shrink-0"
-              size="sm"
-              variant="flat"
+            <div className="relative flex-1 h-[30px]">
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-default-400 z-10" />
+              <input
+                className="w-full h-full bg-transparent border-none rounded-md pl-8 pr-2 py-0 text-xs focus:outline-none focus:ring-0 transition-all text-white placeholder:text-gray-400"
+                placeholder="Search..."
+                value={leftSidebarSearch}
+                onChange={(e) => setLeftSidebarSearch(e.target.value)}
+              />
+            </div>
+            <Tooltip
+              showArrow
+              classNames={{
+                content:
+                  "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+              }}
+              closeDelay={0}
+              content={getPlusTooltipContent()}
+              delay={0}
+              placement="top"
+            >
+              <Button
+                isIconOnly
+                className="bg-transparent hover:bg-white/10 border-none rounded-md text-gray-400 hover:text-white flex-shrink-0 shadow-none h-[30px] w-[30px] min-w-[30px]"
+                size="sm"
+                variant="flat"
               onClick={() => {
                 if (pathname === "/vault") {
                   window.dispatchEvent(new CustomEvent("open-vault-modal"));
@@ -2189,6 +2193,7 @@ export default function Sidebar() {
               <Plus className="size-3.5" />
             </Button>
           </Tooltip>
+        </div>
         </div>
 
         {!isSidebarOpen && <div className="flex-1" />}
@@ -3201,11 +3206,12 @@ export default function Sidebar() {
         </div>
       </div>
     </div>
+    </div>
   );
 
   if (!mounted) {
     return (
-      <div className="flex h-full border-r border-default-200 bg-white dark:bg-sidebar w-[56px] transition-all" />
+      <div className="flex h-full border-r border-white/5 bg-[#0B1121] w-[56px] transition-all" />
     );
   }
 
