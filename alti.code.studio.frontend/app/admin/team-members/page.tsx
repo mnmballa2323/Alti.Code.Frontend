@@ -5,7 +5,7 @@ import { Download } from "lucide-react";
 
 export default function MembersPage() {
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">
           Members

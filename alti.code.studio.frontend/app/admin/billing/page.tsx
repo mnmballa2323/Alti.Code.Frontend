@@ -4,7 +4,7 @@ import React from "react";
 
 export default function BillingPage() {
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">
           Billing
@@ -17,14 +17,14 @@ export default function BillingPage() {
             <input
               type="text"
               placeholder="Enter Cardholder Name"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 placeholder:text-neutral-400"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
             />
           </div>
           <div className="flex-1">
             <input
               type="text"
               placeholder="Enter Card Number"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 placeholder:text-neutral-400"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
             />
           </div>
         </div>
@@ -34,14 +34,14 @@ export default function BillingPage() {
             <input
               type="text"
               placeholder="MM / YY"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 placeholder:text-neutral-400"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
             />
           </div>
           <div className="flex-1">
             <input
               type="text"
               placeholder="CVC"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 placeholder:text-neutral-400"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
             />
           </div>
         </div>

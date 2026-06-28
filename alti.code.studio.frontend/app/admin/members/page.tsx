@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react";
 
 export default function InvitePage() {
   return (
-    <div className="w-full max-w-5xl">
+    <div className="w-full">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-xl font-semibold text-neutral-900 dark:text-white">
           Invite
@@ -18,14 +18,14 @@ export default function InvitePage() {
             <input
               type="text"
               placeholder="Enter First Name"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 placeholder:text-neutral-400"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
             />
           </div>
           <div className="flex-1">
             <input
               type="text"
               placeholder="Enter Last Name"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 placeholder:text-neutral-400"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
             />
           </div>
         </div>
@@ -35,13 +35,13 @@ export default function InvitePage() {
             <input
               type="email"
               placeholder="Enter Email Address"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none focus:ring-1 focus:ring-neutral-400 placeholder:text-neutral-400"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
             />
           </div>
           <div className="flex-1 relative">
             <select 
               defaultValue="" 
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm text-neutral-400 focus:outline-none focus:ring-1 focus:ring-neutral-400 appearance-none pr-10"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm text-neutral-400 focus:outline-none appearance-none pr-10"
             >
               <option value="" disabled>
                 Select Role Type
