@@ -243,7 +243,7 @@ export default function TeamMembersPage() {
                               {/* Custom Dropdown Trigger */}
                               <button
                                 type="button"
-                                className="w-full flex items-center justify-between px-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm font-semibold shadow-sm hover:shadow-md transition-all text-neutral-850 dark:text-neutral-200 cursor-pointer focus:outline-none"
+                                className="w-full flex items-center justify-between px-4 py-3 bg-neutral-100 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm font-semibold shadow-sm hover:shadow-md transition-all text-neutral-800 dark:text-neutral-200 cursor-pointer focus:outline-none"
                                 onClick={() => setIsPriceDropdownOpen(!isPriceDropdownOpen)}
                               >
                                 <span>{customPrice}</span>
@@ -260,7 +260,7 @@ export default function TeamMembersPage() {
 
                               {/* Dropdown Options List */}
                               {isPriceDropdownOpen && (
-                                <div className="absolute left-0 right-0 mt-2 z-50 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/80 dark:border-neutral-700 rounded-2xl shadow-xl p-2 animate-in fade-in slide-in-from-top-1 duration-150 flex flex-col gap-0.5">
+                                <div className="absolute left-0 right-0 mt-2 z-50 bg-neutral-100 dark:bg-[#1f242c] border border-neutral-200/85 dark:border-neutral-800 rounded-2xl shadow-xl p-2 animate-in fade-in slide-in-from-top-1 duration-150 flex flex-col gap-0.5">
                                   {["$0", "$250", "$500", "$750", "$1,000"].map((price) => (
                                     <button
                                       key={price}
@@ -268,7 +268,7 @@ export default function TeamMembersPage() {
                                       className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold w-full text-left transition-colors cursor-pointer ${
                                         customPrice === price
                                           ? "bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white shadow-sm"
-                                          : "text-neutral-600 dark:text-neutral-400 hover:bg-white/60 dark:hover:bg-neutral-900/40 hover:text-neutral-900 dark:hover:text-white"
+                                          : "text-neutral-600 dark:text-neutral-400 hover:bg-white/70 dark:hover:bg-neutral-900/40 hover:text-neutral-900 dark:hover:text-white"
                                       }`}
                                       onClick={() => {
                                         setCustomPrice(price);
