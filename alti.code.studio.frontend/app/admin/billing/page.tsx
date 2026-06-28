@@ -17,14 +17,14 @@ export default function BillingPage() {
             <input
               type="text"
               placeholder="Enter Cardholder Name"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[0_0_0px_1000px_#ffffff_inset] dark:[&:-webkit-autofill]:shadow-[0_0_0px_1000px_#171717_inset] [&:-webkit-autofill]:[-webkit-text-fill-color:#171717] dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#fff]"
             />
           </div>
           <div className="flex-1">
             <input
               type="text"
               placeholder="Enter Card Number"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[0_0_0px_1000px_#ffffff_inset] dark:[&:-webkit-autofill]:shadow-[0_0_0px_1000px_#171717_inset] [&:-webkit-autofill]:[-webkit-text-fill-color:#171717] dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#fff]"
             />
           </div>
         </div>
@@ -34,14 +34,14 @@ export default function BillingPage() {
             <input
               type="text"
               placeholder="MM / YY"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[0_0_0px_1000px_#ffffff_inset] dark:[&:-webkit-autofill]:shadow-[0_0_0px_1000px_#171717_inset] [&:-webkit-autofill]:[-webkit-text-fill-color:#171717] dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#fff]"
             />
           </div>
           <div className="flex-1">
             <input
               type="text"
               placeholder="CVC"
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 [&:-webkit-autofill]:bg-white [&:-webkit-autofill]:shadow-[0_0_0px_1000px_#ffffff_inset] dark:[&:-webkit-autofill]:shadow-[0_0_0px_1000px_#171717_inset] [&:-webkit-autofill]:[-webkit-text-fill-color:#171717] dark:[&:-webkit-autofill]:[-webkit-text-fill-color:#fff]"
             />
           </div>
         </div>
