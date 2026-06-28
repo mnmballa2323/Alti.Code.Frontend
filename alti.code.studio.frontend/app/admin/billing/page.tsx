@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CreditCard, Users, CheckCircle, ExternalLink, ShieldCheck } from "lucide-react";
+import { CreditCard, Users, ShieldCheck } from "lucide-react";
 
 export default function BillingPage() {
   const [activeSeats, setActiveSeats] = React.useState(7);
@@ -43,20 +43,6 @@ export default function BillingPage() {
               <span className="text-[10px] text-neutral-400 font-semibold">USD</span>
             </div>
           </div>
-        </div>
-
-        {/* Stripe Portal Button & Helper Text */}
-        <div className="flex items-center justify-between bg-neutral-50 dark:bg-neutral-800/20 border border-neutral-100 dark:border-neutral-800/50 rounded-2xl px-6 py-4">
-          <p className="text-[10px] text-neutral-400">
-            Next invoice date is July 28, 2026. Manage cycles, history, or tier upgrades securely via Stripe.
-          </p>
-          <button 
-            type="button"
-            className="bg-[#635BFF] hover:bg-[#5A52E6] text-white flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg transition-colors focus:outline-none shrink-0"
-          >
-            <span>Stripe Billing Portal</span>
-            <ExternalLink className="w-3 h-3" />
-          </button>
         </div>
 
         {/* Payment Details Card (Simplified & Floating) */}
