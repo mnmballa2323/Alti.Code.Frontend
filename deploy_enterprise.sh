@@ -193,16 +193,25 @@ if [ "$DRY_RUN" = true ]; then
     echo -e "  -var=\"enable_gcp_cloud=false\""
     echo -e "  -var=\"enable_gcp_dedicated=false\""
     echo -e "  -var=\"enable_gcp_government=true\""
+    echo -e "  -var=\"pg_db_tier=db-custom-4-16384\""
+    echo -e "  -var=\"redis_tier=STANDARD_HA\""
+    echo -e "  -var=\"redis_memory_size_gb=5\""
   elif [ "$DEPLOY_OPTION" = "cloud" ]; then
     echo -e "  -var=\"gcp_region_commercial=${REGION}\""
     echo -e "  -var=\"enable_gcp_cloud=true\""
     echo -e "  -var=\"enable_gcp_dedicated=false\""
     echo -e "  -var=\"enable_gcp_government=false\""
+    echo -e "  -var=\"pg_db_tier=db-custom-2-7680\""
+    echo -e "  -var=\"redis_tier=BASIC\""
+    echo -e "  -var=\"redis_memory_size_gb=1\""
   elif [ "$DEPLOY_OPTION" = "dedicated" ]; then
     echo -e "  -var=\"gcp_region_commercial=${REGION}\""
     echo -e "  -var=\"enable_gcp_cloud=false\""
     echo -e "  -var=\"enable_gcp_dedicated=true\""
     echo -e "  -var=\"enable_gcp_government=false\""
+    echo -e "  -var=\"pg_db_tier=db-custom-4-16384\""
+    echo -e "  -var=\"redis_tier=STANDARD_HA\""
+    echo -e "  -var=\"redis_memory_size_gb=5\""
   fi
   exit 0
 fi
@@ -252,6 +261,9 @@ if [ "$DEPLOY_OPTION" = "government" ]; then
     -var="enable_gcp_cloud=false"
     -var="enable_gcp_dedicated=false"
     -var="enable_gcp_government=true"
+    -var="pg_db_tier=db-custom-4-16384"
+    -var="redis_tier=STANDARD_HA"
+    -var="redis_memory_size_gb=5"
   )
 elif [ "$DEPLOY_OPTION" = "cloud" ]; then
   TF_VARS+=(
@@ -259,6 +271,9 @@ elif [ "$DEPLOY_OPTION" = "cloud" ]; then
     -var="enable_gcp_cloud=true"
     -var="enable_gcp_dedicated=false"
     -var="enable_gcp_government=false"
+    -var="pg_db_tier=db-custom-2-7680"
+    -var="redis_tier=BASIC"
+    -var="redis_memory_size_gb=1"
   )
 elif [ "$DEPLOY_OPTION" = "dedicated" ]; then
   TF_VARS+=(
@@ -266,6 +281,9 @@ elif [ "$DEPLOY_OPTION" = "dedicated" ]; then
     -var="enable_gcp_cloud=false"
     -var="enable_gcp_dedicated=true"
     -var="enable_gcp_government=false"
+    -var="pg_db_tier=db-custom-4-16384"
+    -var="redis_tier=STANDARD_HA"
+    -var="redis_memory_size_gb=5"
   )
 fi
 
