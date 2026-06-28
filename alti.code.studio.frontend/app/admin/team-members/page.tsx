@@ -50,7 +50,7 @@ export default function MembersPage() {
           {members.map((member, i) => (
             <div
               key={i}
-              className="grid grid-cols-[20%_20%_42%_18%] items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300"
+              className="group grid grid-cols-[20%_20%_42%_18%] items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300"
             >
               <div>{member.firstName}</div>
               <div>{member.lastName}</div>
@@ -68,7 +68,7 @@ export default function MembersPage() {
                       className="flex items-center gap-1 hover:bg-neutral-50 dark:hover:bg-neutral-800 px-2 py-1 -mx-2 rounded-lg transition-colors text-left font-medium text-sm text-neutral-700 dark:text-neutral-300 focus:outline-none"
                     >
                       <span>{member.role}</span>
-                      <ChevronDown className={`w-3.5 h-3.5 text-neutral-400 transition-transform duration-200 ${activeDropdownIndex === i ? "rotate-180" : ""}`} />
+                      <ChevronDown className={`w-3.5 h-3.5 text-neutral-400 transition-all duration-200 ${activeDropdownIndex === i ? "opacity-100 rotate-180" : "opacity-0 group-hover:opacity-100"}`} />
                     </button>
                   )}
 
