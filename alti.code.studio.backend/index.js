@@ -8,7 +8,7 @@
 // 🛡️ The Intelligence Vanguard: Universal ReDoS Immunity
 import RE2 from 're2';
 // global.RegExp = RE2; // Disabling global override because RE2 does not support lookarounds used by Express's path-to-regexp
-console.log('🛡️ [V8 Engine Patch] Global RegExp override disabled to prevent path-to-regexp crash.');
+// RE2 global override disabled to prevent path-to-regexp crash
 
 import cors from 'cors';
 import dotenv from 'dotenv';
@@ -30,11 +30,10 @@ import globalErrorHandler from './src/app/middlewares/globalErrorHandler/globalE
 import router from './src/app/routes/index.js';
 import * as trpcExpress from '@trpc/server/adapters/express';
 import { appRouter } from './src/app/trpc/router.js';
-// // import { logger } from './src/shared/logger';
+import { logger } from './src/shared/logger.js';
 import { marketSeeder } from './src/app/modules/enterprise/market.seeder.js';
 import config from './config/index.js';
 // import './src/app/middlewares/resetUsage/resetUsage.js';
-// import { logger } from './src/shared/logger.js';
 
 // // Load environment variables
 dotenv.config();

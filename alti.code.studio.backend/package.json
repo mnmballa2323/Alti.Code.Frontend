@@ -17,7 +17,12 @@
     "pretest": "npm run license-check",
     "test": "wireit",
     "lint": "wireit",
-    "agent-factory": "node scripts/autonomous_agent_factory.js"
+    "agent-factory": "node scripts/autonomous_agent_factory.js",
+    "db:migrate": "npx prisma migrate dev",
+    "db:deploy": "npx prisma migrate deploy",
+    "db:seed": "npx prisma db seed",
+    "db:studio": "npx prisma studio",
+    "db:generate": "npx prisma generate"
   },
   "wireit": {
     "test": {
