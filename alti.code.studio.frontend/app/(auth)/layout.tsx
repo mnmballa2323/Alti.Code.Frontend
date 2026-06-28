@@ -350,7 +350,7 @@ export default function AuthLayout({
               Build the future.
             </h2>
             <p className="text-neutral-400 text-lg xl:text-xl font-medium leading-relaxed">
-              Join the Inso Code platform and accelerate your engineering team
+              Join the inso code platform and accelerate your engineering team
               with autonomous AI agents.
             </p>
           </div>
