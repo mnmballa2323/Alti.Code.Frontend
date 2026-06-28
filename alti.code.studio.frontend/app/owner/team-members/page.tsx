@@ -196,7 +196,7 @@ export default function TeamMembersPage() {
                   return (
                     <div
                       key={member.id}
-                      className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl transition-all shadow-sm duration-200 hover:border-neutral-350 dark:hover:border-neutral-700 overflow-hidden"
+                      className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl transition-all shadow-sm duration-200 hover:border-neutral-350 dark:hover:border-neutral-700 relative"
                     >
                       <div
                         className="group grid grid-cols-12 gap-4 px-6 py-4 items-center text-sm cursor-pointer"
@@ -233,7 +233,7 @@ export default function TeamMembersPage() {
                       </div>
 
                       {isEditing && (
-                        <div className="px-6 pb-6 pt-4 border-t border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22]">
+                        <div className="px-6 pb-6 pt-4 border-t border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] rounded-b-2xl">
                           <div className="flex items-end gap-4">
                             <div className="flex-1 relative">
                               <label className="block text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
@@ -260,15 +260,15 @@ export default function TeamMembersPage() {
 
                               {/* Dropdown Options List */}
                               {isPriceDropdownOpen && (
-                                <div className="absolute left-0 right-0 mt-2 z-50 bg-white dark:bg-[#161b22] border border-neutral-200/80 dark:border-neutral-800 rounded-2xl shadow-xl p-2 animate-in fade-in slide-in-from-top-1 duration-150 flex flex-col gap-0.5">
+                                <div className="absolute left-0 right-0 mt-2 z-50 bg-neutral-100 dark:bg-neutral-800 border border-neutral-200/80 dark:border-neutral-700 rounded-2xl shadow-xl p-2 animate-in fade-in slide-in-from-top-1 duration-150 flex flex-col gap-0.5">
                                   {["$0", "$250", "$500", "$750", "$1,000"].map((price) => (
                                     <button
                                       key={price}
                                       type="button"
                                       className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold w-full text-left transition-colors cursor-pointer ${
                                         customPrice === price
-                                          ? "bg-neutral-50 dark:bg-neutral-800 text-neutral-900 dark:text-white"
-                                          : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-50/50 dark:hover:bg-neutral-800/40 hover:text-neutral-900 dark:hover:text-white"
+                                          ? "bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white shadow-sm"
+                                          : "text-neutral-600 dark:text-neutral-400 hover:bg-white/60 dark:hover:bg-neutral-900/40 hover:text-neutral-900 dark:hover:text-white"
                                       }`}
                                       onClick={() => {
                                         setCustomPrice(price);
