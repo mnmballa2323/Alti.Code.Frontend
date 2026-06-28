@@ -10,8 +10,8 @@ const plans = [
     commitment: "Min. 1 seat",
     description: (
       <>
-        Sovereign agent orchestration systems running in standard multi tenant
-        environments designed for corporate data compliance and secure access.
+        Sovereign agent systems in standard multi tenant zones designed for
+        corporate compliance and security.
       </>
     ),
     features: [
@@ -30,8 +30,8 @@ const plans = [
     commitment: "Min. 5 seats",
     description: (
       <>
-        Dedicated single tenant infrastructure isolated on private virtual
-        networks with enhanced encryption keys and physical boundary controls.
+        Dedicated single tenant infrastructure isolated on private networks with
+        enhanced security and data isolation.
       </>
     ),
     features: [
@@ -50,8 +50,8 @@ const plans = [
     commitment: "Min. 10 seats",
     description: (
       <>
-        FedRAMP High and strict sovereignty compliant hosting instances for
-        classified and public sector workloads needing strict security clearances.
+        FedRAMP High and strict sovereignty compliant environments for
+        classified public sector agent workloads.
       </>
     ),
     features: [
