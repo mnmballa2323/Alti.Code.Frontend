@@ -4,6 +4,20 @@ import React from "react";
 import { ChevronDown } from "lucide-react";
 
 export default function InvitePage() {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [selectedRole, setSelectedRole] = React.useState("");
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between mb-8">
@@ -38,20 +52,42 @@ export default function InvitePage() {
               className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400"
             />
           </div>
-          <div className="flex-1 relative">
-            <select 
-              defaultValue="" 
-              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm text-neutral-400 focus:outline-none appearance-none pr-10"
+          <div className="flex-1 relative" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={() => setIsOpen(!isOpen)}
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm flex items-center justify-between text-left focus:outline-none"
             >
-              <option value="" disabled>
-                Select Role Type
-              </option>
-              <option value="admin">Admin</option>
-              <option value="member">Member</option>
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-neutral-400">
-              <ChevronDown className="w-4 h-4" />
-            </div>
+              <span className={selectedRole ? "text-neutral-900 dark:text-neutral-100 font-medium" : "text-neutral-400"}>
+                {selectedRole ? (selectedRole === "admin" ? "Admin" : "Member") : "Select Role Type"}
+              </span>
+              <ChevronDown className={`w-4 h-4 text-neutral-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+            </button>
+            
+            {isOpen && (
+              <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-lg z-50 overflow-hidden py-1 animate-fade-in animate-slide-up">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedRole("admin");
+                    setIsOpen(false);
+                  }}
+                  className="w-full px-4 py-2.5 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                >
+                  Admin
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSelectedRole("member");
+                    setIsOpen(false);
+                  }}
+                  className="w-full px-4 py-2.5 text-left text-sm text-neutral-700 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                >
+                  Member
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
