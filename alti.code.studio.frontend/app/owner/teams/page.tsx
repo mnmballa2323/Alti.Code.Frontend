@@ -1,78 +1,39 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Loader2, Search, ChevronRight } from "lucide-react";
+import { Loader2, Search, ChevronRight, Globe, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-import { teamAPI } from "@/lib/enterprise-api";
-import { useAppSelector } from "@/store";
+import { adminAPI } from "@/lib/enterprise-api";
 
-interface Member {
-  id: string;
-  name?: string;
-  email: string;
-  role: string;
-  subscriptionPrice?: number;
-}
-
-interface TeamInfo {
+interface TenantInfo {
   id: string;
   name: string;
-  description: string;
-  members: Member[];
+  domain?: string;
+  plan: string;
+  status: string;
+  owner?: string;
+  userCount: number;
 }
 
 export default function TeamsPage() {
   const router = useRouter();
   const { status } = useSession();
-  const currentUserFromStore = useAppSelector(
-    (state) => state.user.data,
-  ) as any;
-  const [currentUser, setCurrentUser] = useState<any>({
-    id: "admin-user",
-    name: "Platform Admin",
-    email: "admin@alticodestudio.com",
-    role: "admin",
-  });
-  const [members, setMembers] = useState<Member[]>([
-    {
-      id: "2",
-      name: "Ada Lovelace",
-      email: "ada.lovelace@alticodestudio.com",
-      role: "admin",
-    },
-    {
-      id: "4",
-      name: "Alan Turing",
-      email: "alan.turing@alticodestudio.com",
-      role: "manager",
-    },
-    {
-      id: "3",
-      name: "Grace Hopper",
-      email: "grace.hopper@alticodestudio.com",
-      role: "developer",
-    },
-    {
-      id: "1",
-      name: "Jules Verne",
-      email: "jules.verne@alticodestudio.com",
-      role: "developer",
-    },
-  ]);
+  const [tenants, setTenants] = useState<TenantInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const fetchMembers = async () => {
+  const fetchTenants = async () => {
     try {
-      const res = await teamAPI.members();
-
-      if (res && res.members && res.members.length > 0) {
-        setMembers(res.members);
+      const res = await adminAPI.listTenants();
+      if (res && Array.isArray(res)) {
+        // Filter for Dedicated tier (starter plan)
+        const starterTenants = res.filter((t: any) => t.plan === "starter");
+        setTenants(starterTenants);
       }
     } catch (err) {
-      console.error("Failed to fetch team members:", err);
+      console.error("Failed to fetch dedicated tenants:", err);
     } finally {
       setLoading(false);
     }
@@ -80,80 +41,20 @@ export default function TeamsPage() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      fetchMembers();
+      fetchTenants();
     } else if (status === "unauthenticated") {
       setLoading(false);
     }
   }, [status]);
 
-  useEffect(() => {
-    if (currentUserFromStore && currentUserFromStore.email) {
-      setCurrentUser(currentUserFromStore);
-    }
-  }, [currentUserFromStore]);
-
-  // Merge current user into members list if not already present
-  const allMembers = [...members];
-
-  if (currentUser && !allMembers.some((m) => m.email === currentUser.email)) {
-    allMembers.push({
-      id: currentUser.id || currentUser._id || "current-user",
-      name:
-        currentUser.name ||
-        `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() ||
-        undefined,
-      email: currentUser.email,
-      role: currentUser.role || "admin",
-    });
-  }
-
-  const rawTeams: TeamInfo[] = [
-    {
-      id: "engineering",
-      name: "Engineering Team",
-      description: "Core platform engineering and development",
-      members: allMembers.filter((m) => {
-        const r = (m.role || "").toLowerCase();
-
-        return r === "developer" || r === "dev";
-      }),
-    },
-    {
-      id: "product-design",
-      name: "Product & Design Team",
-      description: "Product management and UI/UX design",
-      members: allMembers.filter((m) => {
-        const r = (m.role || "").toLowerCase();
-
-        return (
-          r === "manager" ||
-          (r === "admin" &&
-            m.email !== "owner@insocode.com" &&
-            m.email !== "admin@insocode.com")
-        );
-      }),
-    },
-    {
-      id: "ops-support",
-      name: "Operations & Support Team",
-      description: "Infrastructure, security, and customer support",
-      members: allMembers.filter((m) => {
-        const r = (m.role || "").toLowerCase();
-
-        return (
-          r === "owner" ||
-          m.email === "owner@insocode.com" ||
-          m.email === "admin@insocode.com"
-        );
-      }),
-    },
-  ];
-
-  // Filter teams based on search query
-  const filteredTeams = rawTeams.filter((team) => {
+  // Filter based on search query
+  const filteredTenants = tenants.filter((t) => {
     const query = searchQuery.toLowerCase();
-
-    return team.name.toLowerCase().includes(query);
+    return (
+      t.name.toLowerCase().includes(query) ||
+      (t.domain && t.domain.toLowerCase().includes(query)) ||
+      (t.owner && t.owner.toLowerCase().includes(query))
+    );
   });
 
   return (
@@ -165,8 +66,8 @@ export default function TeamsPage() {
           <div className="relative mb-4">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-neutral-500" />
             <input
-              className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all shadow-sm text-neutral-850 dark:text-neutral-100 placeholder-neutral-450 dark:placeholder-neutral-500"
-              placeholder="Search teams..."
+              className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all shadow-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500"
+              placeholder="Search Dedicated team accounts..."
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -175,7 +76,8 @@ export default function TeamsPage() {
 
           {/* Table Header */}
           <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
-            <div className="col-span-9">Team Name</div>
+            <div className="col-span-5">Team Account Name</div>
+            <div className="col-span-4">Owner Email</div>
             <div className="col-span-3 text-right pr-12">Members</div>
           </div>
         </div>
@@ -186,26 +88,38 @@ export default function TeamsPage() {
             <div className="flex flex-col items-center justify-center py-20">
               <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
               <p className="text-sm text-neutral-500">
-                Loading workspace teams...
+                Loading dedicated environments...
               </p>
             </div>
-          ) : filteredTeams.length > 0 ? (
-            filteredTeams.map((team) => (
+          ) : filteredTenants.length > 0 ? (
+            filteredTenants.map((tenant) => (
               <div
-                key={team.id}
-                className="group grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200 hover:border-neutral-350 dark:hover:border-neutral-700 cursor-pointer"
-                onClick={() => router.push(`/owner/teams/${team.id}`)}
+                key={tenant.id}
+                className="group grid grid-cols-12 gap-4 px-6 py-5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200 hover:border-neutral-350 dark:hover:border-neutral-700 cursor-pointer"
+                onClick={() => router.push(`/owner/teams/${tenant.id}`)}
               >
-                <div className="col-span-9 flex items-center gap-2">
-                  <span className="text-neutral-600 dark:text-neutral-300 font-medium overflow-hidden text-ellipsis whitespace-nowrap">
-                    {team.name}
+                <div className="col-span-5 flex flex-col gap-0.5">
+                  <span className="text-neutral-900 dark:text-white font-semibold overflow-hidden text-ellipsis whitespace-nowrap">
+                    {tenant.name}
                   </span>
+                  {tenant.domain && (
+                    <div className="flex items-center gap-1 text-[11px] text-neutral-400 dark:text-neutral-500">
+                      <Globe className="w-3 h-3" />
+                      <span>{tenant.domain}</span>
+                    </div>
+                  )}
                 </div>
+
+                <div className="col-span-4 flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
+                  <User className="w-3.5 h-3.5" />
+                  <span className="truncate">{tenant.owner || "No owner assigned"}</span>
+                </div>
+
                 <div className="col-span-3 flex items-center justify-end gap-3 pr-2">
                   <span className="px-3 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 rounded-full border border-neutral-200/50 dark:border-neutral-750">
-                    {team.members.length === 1
+                    {tenant.userCount === 1
                       ? "1 member"
-                      : `${team.members.length} members`}
+                      : `${tenant.userCount} members`}
                   </span>
                   <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors" />
                 </div>
@@ -213,7 +127,7 @@ export default function TeamsPage() {
             ))
           ) : (
             <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
-              No teams match your search query.
+              No Dedicated accounts match your search query.
             </div>
           )}
         </div>

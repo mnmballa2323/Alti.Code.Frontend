@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
-import { teamAPI } from "@/lib/enterprise-api";
+import { adminAPI, teamAPI } from "@/lib/enterprise-api";
 import { useAppSelector, useAppDispatch } from "@/store";
 import { setActiveMemberName } from "@/store/uiSlice";
 
@@ -31,77 +31,31 @@ export default function EnterpriseDetailPage() {
   const { status } = useSession();
 
   const teamId = params.id as string;
-  const currentUserFromStore = useAppSelector(
-    (state) => state.user.data,
-  ) as any;
-  const [currentUser, setCurrentUser] = useState<any>(null);
-  const [members, setMembers] = useState<Member[]>([
-    {
-      id: "2",
-      name: "Ada Lovelace",
-      email: "ada.lovelace@alticodestudio.com",
-      role: "admin",
-    },
-    {
-      id: "4",
-      name: "Alan Turing",
-      email: "alan.turing@alticodestudio.com",
-      role: "manager",
-    },
-    {
-      id: "3",
-      name: "Grace Hopper",
-      email: "grace.hopper@alticodestudio.com",
-      role: "developer",
-    },
-    {
-      id: "1",
-      name: "Jules Verne",
-      email: "jules.verne@alticodestudio.com",
-      role: "developer",
-    },
-  ]);
+  const [tenant, setTenant] = useState<any>(null);
+  const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [customPrice, setCustomPrice] = useState("$1,000");
   const [isSaving, setIsSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  let teamName = "Team Directory";
-  let teamDesc = "Workspace team members";
-  let teamAdminEmail = "admin@alticodestudio.com";
-
-  if (teamId === "engineering") {
-    teamName = "Engineering Team";
-    teamDesc = "Core platform engineering and development";
-    teamAdminEmail = "engineering-admin@alticodestudio.com";
-  } else if (teamId === "product-design") {
-    teamName = "Product & Design Team";
-    teamDesc = "Product management and UI/UX design";
-    teamAdminEmail = "product-admin@alticodestudio.com";
-  } else if (teamId === "ops-support") {
-    teamName = "Operations & Support Team";
-    teamDesc = "Infrastructure, security, and customer support";
-    teamAdminEmail = "ops-admin@alticodestudio.com";
-  }
-
-  useEffect(() => {
-    dispatch(setActiveMemberName(teamName));
-
-    return () => {
-      dispatch(setActiveMemberName(null));
-    };
-  }, [dispatch, teamName]);
-
-  const fetchMembers = async () => {
+  const fetchTenantDetails = async () => {
     try {
-      const res = await teamAPI.members();
-
-      if (res && res.members && res.members.length > 0) {
-        setMembers(res.members);
+      const res = await adminAPI.getTenant(teamId);
+      if (res) {
+        setTenant(res);
+        setMembers(
+          (res.users || []).map((u: any) => ({
+            id: u.id,
+            name: u.name,
+            email: u.email,
+            role: u.tenantRole || "developer",
+            subscriptionPrice: u.subscriptionPrice,
+          }))
+        );
       }
     } catch (err) {
-      console.error("Failed to fetch team members:", err);
+      console.error("Failed to fetch sovereign tenant details:", err);
     } finally {
       setLoading(false);
     }
@@ -109,69 +63,36 @@ export default function EnterpriseDetailPage() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      fetchMembers();
+      fetchTenantDetails();
     } else if (status === "unauthenticated") {
       setLoading(false);
     }
-  }, [status]);
+  }, [status, teamId]);
+
+  const teamName = tenant ? tenant.name : "Sovereign Environment";
+  const teamDesc = tenant ? tenant.domain || "Sovereign enterprise environment" : "Loading environment details...";
+  const teamAdminEmail = tenant ? tenant.owner || "No owner assigned" : "";
 
   useEffect(() => {
-    if (currentUserFromStore && currentUserFromStore.email) {
-      setCurrentUser(currentUserFromStore);
+    if (tenant) {
+      dispatch(setActiveMemberName(teamName));
     }
-  }, [currentUserFromStore]);
+    return () => {
+      dispatch(setActiveMemberName(null));
+    };
+  }, [dispatch, teamName, tenant]);
 
-  // Merge current user if not already in members
-  const allMembers = [...members];
-
-  if (currentUser && !allMembers.some((m) => m.email === currentUser.email)) {
-    allMembers.push({
-      id: currentUser.id || currentUser._id || "current-user",
-      name:
-        currentUser.name ||
-        `${currentUser.firstName || ""} ${currentUser.lastName || ""}`.trim() ||
-        undefined,
-      email: currentUser.email,
-      role: currentUser.role || "admin",
-    });
-  }
-
-  // Filter members belonging to this specific team
-  const teamMembers = allMembers.filter((m) => {
-    const roleLower = (m.role || "").toLowerCase();
-
-    if (teamId === "engineering") {
-      return roleLower === "developer" || roleLower === "dev";
-    } else if (teamId === "product-design") {
-      return (
-        roleLower === "manager" ||
-        (roleLower === "admin" &&
-          m.email !== "owner@insocode.com" &&
-          m.email !== "admin@insocode.com")
-      );
-    } else if (teamId === "ops-support") {
-      return (
-        roleLower === "owner" ||
-        m.email === "owner@insocode.com" ||
-        m.email === "admin@insocode.com"
-      );
-    }
-
-    return false;
-  });
-
-  const firstMember = teamMembers[0];
   const memberPrice =
-    firstMember &&
-    firstMember.subscriptionPrice !== undefined &&
-    firstMember.subscriptionPrice !== null
-      ? firstMember.subscriptionPrice
+    members.length > 0 &&
+    members[0].subscriptionPrice !== undefined &&
+    members[0].subscriptionPrice !== null
+      ? members[0].subscriptionPrice
       : 1000;
 
   // Set default edit price based on first member
   useEffect(() => {
-    if (teamMembers.length > 0) {
-      const first = teamMembers[0];
+    if (members.length > 0) {
+      const first = members[0];
       const priceVal =
         first.subscriptionPrice !== undefined &&
         first.subscriptionPrice !== null
@@ -180,22 +101,20 @@ export default function EnterpriseDetailPage() {
 
       setCustomPrice(priceVal);
     }
-  }, [editModalOpen]);
+  }, [editModalOpen, members]);
 
   const handleSaveTeamPricing = async () => {
     setIsSaving(true);
     try {
       // Update all team members' price in parallel
       await Promise.all(
-        teamMembers
-          .filter((m) => !["current-user", "owner-1", "admin-1"].includes(m.id))
-          .map((m) => teamAPI.updateMemberPrice(m.id, customPrice)),
+        members.map((m) => teamAPI.updateMemberPrice(m.id, customPrice))
       );
       setEditModalOpen(false);
-      await fetchMembers();
+      await fetchTenantDetails();
     } catch (err) {
-      console.error("Failed to update enterprise pricing:", err);
-      alert("Failed to update enterprise pricing. Please try again.");
+      console.error("Failed to update sovereign team pricing:", err);
+      alert("Failed to update pricing. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -206,27 +125,27 @@ export default function EnterpriseDetailPage() {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
           <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
-          <p className="text-sm text-neutral-500">
-            Loading enterprise details...
-          </p>
+          <p className="text-sm text-neutral-500">Loading sovereign details...</p>
         </div>
       ) : (
         <div className="space-y-6">
           {/* Team Header card */}
           <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-sm transition-all hover:border-neutral-350 dark:hover:border-neutral-700 hover:shadow-md overflow-hidden">
-            <div className="group px-6 py-4 flex items-center justify-between">
-              <div className="flex items-center">
-                <span className="text-sm font-medium text-neutral-700 dark:text-neutral-300">
-                  {teamAdminEmail}
+            <div className="group px-6 py-5 flex items-center justify-between">
+              <div className="flex flex-col gap-1">
+                <h1 className="text-xl font-bold text-neutral-900 dark:text-white leading-none">
+                  {teamName}
+                </h1>
+                <span className="text-sm text-neutral-500">
+                  {teamDesc} (Owner: {teamAdminEmail})
                 </span>
               </div>
 
               <div className="relative w-64 h-8 shrink-0">
-                {/* Monthly price per member (visible when not hovered) */}
+                {/* Monthly price per member */}
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-row items-center gap-8 transition-all duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none">
                   <span className="px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-850 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200/50 dark:border-neutral-750 whitespace-nowrap leading-none">
-                    {teamMembers.length}{" "}
-                    {teamMembers.length === 1 ? "Member" : "Members"}
+                    {members.length} {members.length === 1 ? "Member" : "Members"}
                   </span>
                   <span className="text-sm font-bold text-neutral-900 dark:text-white leading-none">
                     {new Intl.NumberFormat("en-US", {
@@ -238,7 +157,7 @@ export default function EnterpriseDetailPage() {
                   </span>
                 </div>
 
-                {/* Edit pencil icon (visible on hover) */}
+                {/* Edit pencil icon */}
                 <button
                   className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center justify-center p-1 text-neutral-500 hover:text-neutral-900 dark:hover:text-white rounded-full bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:scale-105 transition-all w-8 h-8 cursor-pointer opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto duration-200"
                   onClick={() => setEditModalOpen(true)}
@@ -268,7 +187,6 @@ export default function EnterpriseDetailPage() {
                         <option value="$1,000">$1,000</option>
                         <option value="$1,250">$1,250</option>
                         <option value="$2,000">$2,000</option>
-                        <option value="$2,500">$2,500</option>
                       </select>
                       <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
                         <ChevronDown className="w-4 h-4 text-neutral-400 dark:text-neutral-500" />
@@ -304,8 +222,8 @@ export default function EnterpriseDetailPage() {
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 dark:text-neutral-500" />
             <input
-              className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all shadow-sm text-neutral-800 dark:text-neutral-100 placeholder-neutral-400 dark:placeholder-neutral-500"
-              placeholder="Search..."
+              className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all shadow-sm text-neutral-850 dark:text-neutral-100 placeholder-neutral-450 dark:placeholder-neutral-500"
+              placeholder="Search sovereign members..."
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -314,74 +232,50 @@ export default function EnterpriseDetailPage() {
 
           {/* Members list */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {teamMembers.filter(
+            {members.filter(
               (m) =>
-                (m.email || "")
-                  .toLowerCase()
-                  .includes(searchQuery.toLowerCase()) ||
-                (m.name &&
-                  m.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                (m.role &&
-                  m.role.toLowerCase().includes(searchQuery.toLowerCase())),
+                (m.email || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (m.name && m.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (m.role && m.role.toLowerCase().includes(searchQuery.toLowerCase()))
             ).length > 0 ? (
-              teamMembers
+              members
                 .filter(
                   (m) =>
-                    (m.email || "")
-                      .toLowerCase()
-                      .includes(searchQuery.toLowerCase()) ||
-                    (m.name &&
-                      m.name
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase())) ||
-                    (m.role &&
-                      m.role.toLowerCase().includes(searchQuery.toLowerCase())),
+                    (m.email || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (m.name && m.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                    (m.role && m.role.toLowerCase().includes(searchQuery.toLowerCase()))
                 )
-                .map((member) => {
-                  const isYou =
-                    currentUser && member.email === currentUser.email;
-
-                  return (
-                    <div
-                      key={member.id}
-                      className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 flex items-start gap-4 transition-all hover:border-neutral-350 dark:hover:border-neutral-700 shadow-sm"
-                    >
-                      {/* Member info */}
-                      <div className="flex-1 min-w-0 space-y-1">
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-neutral-850 dark:text-neutral-100 truncate text-[15px]">
-                            {member.name || "Unknown User"}
-                          </span>
-                          {isYou && (
-                            <span className="px-1.5 py-0.5 text-[9px] font-bold bg-neutral-100 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 rounded border border-neutral-200/40 dark:border-neutral-700/40 uppercase">
-                              You
-                            </span>
-                          )}
-                        </div>
-                        <div className="flex items-center gap-1.5 text-sm text-neutral-500">
-                          <Mail className="w-3.5 h-3.5 shrink-0" />
-                          <span className="truncate">{member.email}</span>
-                        </div>
-                        <div className="flex items-center gap-1.5 text-sm text-neutral-500">
-                          <Shield className="w-3.5 h-3.5 shrink-0" />
-                          <span className="capitalize truncate">
-                            {member.role}
-                          </span>
-                        </div>
+                .map((member) => (
+                  <div
+                    key={member.id}
+                    className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 flex items-start gap-4 transition-all hover:border-neutral-350 dark:hover:border-neutral-700 shadow-sm cursor-pointer"
+                    onClick={() => router.push(`/owner/team-members/${member.id}`)}
+                  >
+                    <div className="flex-1 min-w-0 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-neutral-850 dark:text-neutral-100 truncate text-[15px] group-hover:text-black dark:group-hover:text-white transition-colors">
+                          {member.name || member.email.split("@")[0]}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-sm text-neutral-500">
+                        <Mail className="w-3.5 h-3.5 shrink-0" />
+                        <span className="truncate">{member.email}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-sm text-neutral-500">
+                        <Shield className="w-3.5 h-3.5 shrink-0" />
+                        <span className="capitalize truncate">{member.role}</span>
                       </div>
                     </div>
-                  );
-                })
+                  </div>
+                ))
             ) : (
               <div className="col-span-2 text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
-                No members currently in this team.
+                No members currently in this sovereign environment.
               </div>
             )}
           </div>
         </div>
       )}
-
-      {/* Edit Team */}
     </div>
   );
 }
