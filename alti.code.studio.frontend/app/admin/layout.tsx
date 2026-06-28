@@ -51,8 +51,18 @@ export default function AdminLayout({
 
   useEffect(() => {
     if (profile) {
-      if (profile.role === "admin" || profile.role === "ADMIN") {
+      if (
+        profile.role === "admin" ||
+        profile.role === "ADMIN" ||
+        profile.role === "owner" ||
+        profile.role === "OWNER" ||
+        profile.role === "super_admin" ||
+        profile.role === "SUPER_ADMIN"
+      ) {
         setIsAdmin(true);
+      } else {
+        // Authenticated but not admin/owner → redirect away
+        window.location.href = "/";
       }
     }
   }, [profile]);

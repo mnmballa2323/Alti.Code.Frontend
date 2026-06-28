@@ -56,8 +56,8 @@ const createCheckoutSessionService = async (user, plan) => {
       plan_name: plan.plan_name,
       duration: plan.duration,
     },
-    success_url: `${config.client_url}`,
-    cancel_url: `${config.client_url}`,
+    success_url: `${config.client_url}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${config.client_url}/#pricing`,
   });
 
   return session.url;

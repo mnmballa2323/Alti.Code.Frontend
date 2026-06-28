@@ -106,7 +106,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use(
-    '/api/v1/subscription/webhook',
+    '/api/v1/payment/webhook',
     express.raw({ type: 'application/json' }),
 );
 

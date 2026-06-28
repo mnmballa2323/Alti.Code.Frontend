@@ -10,22 +10,39 @@ import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { checkUsageLimits } from '../../middlewares/checkUsageLimits/checkUsageLimits.js';
 import UserModel from '../auth/auth.model.js';
+import { UserRepository } from '../auth/prisma.user.repository.js';
 import SubscriptionModel from './payment.model.js';
 import { PaymentService } from './payment.service.js';
 // import { checkFreePlanLimits } from '../../middlewares/checkFreePlanLimits/checkFreePlanLimits.js';
 import { checkFreePlanLimits } from '../../middlewares/checkFreePlanLimits/checkFreePlanLimits.js';
 
 const createCheckoutSession = catchAsync(async (req, res, next) => {
-  const { userId, plan } = req.body;
-  // console.log(userId, plan);
+  const { plan_name, price, duration, userId } = req.body;
 
-  if (!mongoose.Types.ObjectId.isValid(userId)) {
-    console.error('Invalid User ID:', userId);
-    return res.status(400).json({ error: 'Invalid User ID' });
+  // Auth middleware sets req.user from JWT (contains _id, role but NOT email).
+  // Stripe needs the full user doc with email, so always fetch from DB.
+  const lookupId = req.user?._id || userId;
+
+  if (!lookupId) {
+    return res.status(400).json({ error: 'User identification required' });
   }
 
-  const user = await UserModel.findById(userId);
+  // Try Prisma (primary DB) first, fall back to Mongoose
+  let user = await UserRepository.findById(lookupId);
+  if (!user) {
+    try {
+      user = await UserModel.findById(lookupId);
+    } catch (_castErr) {
+      // UUID from Prisma can't be cast to MongoDB ObjectId — expected
+    }
+  }
   if (!user) return res.status(404).json({ error: 'User not found' });
+
+  const plan = {
+    plan_name: plan_name || req.body.plan?.plan_name,
+    price: price || req.body.plan?.price,
+    duration: duration || req.body.plan?.duration || 'year',
+  };
 
   const sessionUrl = await PaymentService.createCheckoutSessionService(
     user,

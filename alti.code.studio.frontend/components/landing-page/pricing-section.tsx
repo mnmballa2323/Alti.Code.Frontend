@@ -1,13 +1,17 @@
 "use client";
 
 import React from "react";
-import { Check } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/store";
 
 const plans = [
   {
     name: "Cloud",
     price: "1,000",
     commitment: "Min. 1 seat",
+    backendPlan: "launch",
+    backendPrice: 100000,
     description: (
       <>
         Sovereign agent systems in standard multi tenant zones designed for
@@ -23,11 +27,14 @@ const plans = [
     cta: "Deploy Cloud",
     buttonClass:
       "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
+    isContact: false,
   },
   {
     name: "Dedicated",
     price: "2,500",
     commitment: "Min. 5 seats",
+    backendPlan: "build",
+    backendPrice: 250000,
     description: (
       <>
         Dedicated single tenant infrastructure isolated on private networks with
@@ -43,11 +50,14 @@ const plans = [
     cta: "Deploy Dedicated",
     buttonClass:
       "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
+    isContact: false,
   },
   {
     name: "Sovereign",
     price: "5,000",
     commitment: "Min. 10 seats",
+    backendPlan: "scale",
+    backendPrice: 500000,
     description: (
       <>
         FedRAMP High and strict sovereignty compliant environments for
@@ -63,10 +73,71 @@ const plans = [
     cta: "Contact Us",
     buttonClass:
       "bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600",
+    isContact: true,
   },
 ];
 
 export default function PricingSection() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const profile = useAppSelector((state) => state.user.data);
+  const [loading, setLoading] = React.useState<string | null>(null);
+
+  const handleCheckout = async (plan: (typeof plans)[number]) => {
+    // Sovereign tier → contact form
+    if (plan.isContact) {
+      router.push("/contact");
+      return;
+    }
+
+    // Not logged in → register first
+    if (status !== "authenticated" || !session?.user) {
+      router.push("/register");
+      return;
+    }
+
+    setLoading(plan.backendPlan);
+
+    try {
+      const API_URL =
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+
+      const token =
+        (session.user as any).accessToken ||
+        localStorage.getItem("accessToken") ||
+        localStorage.getItem("token");
+
+      const res = await fetch(`${API_URL}/payment/create-checkout-session`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          plan_name: plan.backendPlan,
+          price: plan.backendPrice,
+          duration: "year",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data?.data?.url) {
+        window.location.href = data.data.url;
+      } else if (data?.data) {
+        window.location.href = data.data;
+      } else {
+        console.error("Checkout session response:", data);
+        alert("Unable to start checkout. Please try again.");
+      }
+    } catch (err) {
+      console.error("Checkout error:", err);
+      alert("Payment service unavailable. Please try again later.");
+    } finally {
+      setLoading(null);
+    }
+  };
+
   return (
     <section
       className="w-full py-24 bg-white dark:bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 border-t border-gray-100 dark:border-gray-900 transition-colors duration-300"
@@ -128,9 +199,36 @@ export default function PricingSection() {
 
               {/* Action Button */}
               <button
-                className={`w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 border border-transparent active:scale-[0.98] ${plan.buttonClass}`}
+                onClick={() => handleCheckout(plan)}
+                disabled={loading === plan.backendPlan}
+                className={`w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 border border-transparent active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed ${plan.buttonClass}`}
               >
-                {plan.cta}
+                {loading === plan.backendPlan ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <svg
+                      className="animate-spin h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                      />
+                    </svg>
+                    Processing…
+                  </span>
+                ) : (
+                  plan.cta
+                )}
               </button>
             </div>
           ))}

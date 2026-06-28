@@ -7,3 +7,5 @@ alti.code.studio.frontend/public/downloads/*.exe
 # Ignore local deployment files
 deployments/
 .env
+terraform/.terraform/
+terraform/terraform-bin/

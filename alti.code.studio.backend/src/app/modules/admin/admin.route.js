@@ -41,7 +41,11 @@ router.get(
   AdminController.getAllPayment,
 );
 
-router.get('/admin/:email', AdminController.getAdmin);
+router.get(
+  '/admin/:email',
+  auth(ENUM_USER_ROLE.ADMIN),
+  AdminController.getAdmin,
+);
 
 router.get(
   '/all-user/statistics',
