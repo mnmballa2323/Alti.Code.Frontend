@@ -215,7 +215,7 @@ export default function DatabaseConnectorsSection() {
               100% { transform: translateX(0); }
             }
             .animate-scroll-right {
-              animation: scroll-right 40s linear infinite;
+              animation: scroll-right 75s linear infinite;
               width: max-content;
             }
             .fade-edges {
