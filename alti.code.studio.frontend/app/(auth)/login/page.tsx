@@ -270,7 +270,7 @@ export default function LoginPage() {
           />
         )}
         <h1 className="text-3xl font-semibold tracking-tight text-black">
-          {isDesktopApp ? "Build The Future" : "Welcome back"}
+          {isDesktopApp ? "Build The Future" : "Welcome Back"}
         </h1>
         {isDesktopApp && (
           <p className="text-gray-500 text-sm mt-2 font-medium whitespace-nowrap">
