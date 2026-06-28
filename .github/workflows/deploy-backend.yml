@@ -1,0 +1,63 @@
+name: Deploy Production Backend to GCP Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'alti.code.studio.backend/**'
+      - '.github/workflows/deploy-backend.yml'
+
+jobs:
+  deploy:
+    name: Build & Deploy Backend
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write # Required for Workload Identity Federation OIDC token authentication
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Google Cloud Authentication via OIDC
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ secrets.GCP_DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Set up GCP SDK and CLI
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Authorize Docker Registry push
+        run: gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
+
+      - name: Build and Push Docker Container Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./alti.code.studio.backend
+          file: ./alti.code.studio.backend/Dockerfile
+          push: true
+          tags: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/inso-registry/backend:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Deploy Container to Google Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: inso-production-api
+          region: us-central1
+          image: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/inso-registry/backend:${{ github.sha }}
+          # Ingress only allowed via cloud load balancer shielded by Cloud Armor WAF
+          ingress: internal-and-cloud-load-balancing
+          vpc_connector: projects/${{ secrets.GCP_PROJECT_ID }}/locations/us-central1/connectors/inso-vpc-conn
+          env_vars: |
+            NODE_ENV=production
+            PORT=8080
+            DISABLE_REDIS=false
+          secrets: |
+            DATABASE_URL=DATABASE_URL:latest
+            REDIS_URL=REDIS_URL:latest
+            STRIPE_SECRET_KEY=STRIPE_SECRET_KEY:latest
+            STRIPE_WEBHOOK_SECRET_KEY=STRIPE_WEBHOOK_SECRET_KEY:latest
