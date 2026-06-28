@@ -1072,34 +1072,91 @@ function ConnectAppsContent() {
               )}
               <AnimatePresence mode="wait">
                 {!selectedApp ? (
-                  /* Idle Hub View */
+                  /* App Grid View */
                   <motion.div
                     key="idle"
                     animate={{ opacity: 1, scale: 1 }}
-                    className="flex-1 flex flex-col items-center justify-center p-8 max-w-2xl mx-auto text-center gap-8 min-h-full w-full"
+                    className="flex-1 flex flex-col p-8 max-w-6xl mx-auto w-full min-h-full"
                     exit={{ opacity: 0, scale: 0.98 }}
                     initial={{ opacity: 0, scale: 0.98 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <div className="flex flex-col items-center gap-4">
-                      {/* Blue Spars Circle Icon */}
-                      <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20 text-white bg-gradient-to-br from-primary to-indigo-600 shrink-0">
-                        <Icon
-                          className="text-3xl"
-                          icon="solar:stars-line-bold"
-                        />
-                      </div>
-
+                    <div className="flex flex-col mb-8 gap-2">
                       <h2 className="text-2xl font-bold text-default-900 tracking-tight">
-                        Isolated Action Hub
+                        App Connectors
                       </h2>
-                      <p className="text-sm text-default-500 max-w-md leading-relaxed">
+                      <p className="text-sm text-default-500 max-w-2xl">
                         Connect and prompt individual web applications securely.
-                        Select an application in the sidebar to configure
-                        authentication and interact with its tools in a focused,
-                        zero-hallucination agent session.
+                        Select an application below to configure authentication and interact with its tools in a focused, zero-hallucination agent session.
                       </p>
                     </div>
+
+                    <div className="flex items-center justify-between mb-6 gap-4">
+                      <div className="relative flex-1 max-w-md h-10">
+                        <Icon icon="solar:magnifer-linear" className="absolute left-3 top-1/2 -translate-y-1/2 text-default-400 text-lg" />
+                        <input
+                          className="w-full h-full bg-white dark:bg-[#161b22] border border-default-200 dark:border-default-100 rounded-xl pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-default-900 dark:text-default-100 placeholder:text-default-400"
+                          placeholder="Search applications..."
+                          value={search}
+                          onChange={(e) => setSearch(e.target.value)}
+                        />
+                      </div>
+                      <div className="flex items-center bg-default-100 dark:bg-default-50 p-1 rounded-lg">
+                        <button
+                          className={`px-4 h-8 rounded-md text-xs font-semibold transition-all ${activeTab === "all" ? "bg-white dark:bg-default-200 text-foreground shadow-sm" : "text-default-500 hover:text-foreground"}`}
+                          onClick={() => setActiveTab("all")}
+                        >
+                          All Apps
+                        </button>
+                        <button
+                          className={`px-4 h-8 rounded-md text-xs font-semibold transition-all ${activeTab === "connected" ? "bg-white dark:bg-default-200 text-foreground shadow-sm" : "text-default-500 hover:text-foreground"}`}
+                          onClick={() => setActiveTab("connected")}
+                        >
+                          Connected
+                        </button>
+                      </div>
+                    </div>
+
+                    {loadingApps ? (
+                      <div className="flex flex-col items-center justify-center py-20 gap-3">
+                        <Icon className="text-3xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
+                        <span className="text-sm text-default-400">Loading catalog...</span>
+                      </div>
+                    ) : filteredApps.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-default-200 dark:border-default-100 rounded-2xl">
+                        <Icon className="text-4xl text-default-300 mb-3" icon="solar:folder-error-bold-duotone" />
+                        <span className="text-sm text-default-500">No apps found matching your search.</span>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                        {filteredApps.map((app) => (
+                          <div
+                            key={app.id}
+                            className="group flex flex-col p-5 bg-white dark:bg-[#161b22] border border-default-200 dark:border-default-100 rounded-2xl hover:border-primary/50 hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer relative"
+                            onClick={() => {
+                              openAppDetailsModal(app);
+                              window.dispatchEvent(new CustomEvent("select-connect-app", { detail: app }));
+                            }}
+                          >
+                            <div className="flex items-start justify-between mb-4">
+                              <div className="w-12 h-12 rounded-xl border border-default-200 dark:border-default-100 flex items-center justify-center bg-default-50 dark:bg-black/50 overflow-hidden shrink-0">
+                                <AppIcon app={app} className="w-8 h-8 object-contain" />
+                              </div>
+                              {app.status === "connected" && (
+                                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/10 text-success text-[10px] font-bold tracking-wide uppercase">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                                  Connected
+                                </div>
+                              )}
+                            </div>
+                            <h3 className="font-bold text-default-900 text-sm mb-1 line-clamp-1">{app.name}</h3>
+                            <p className="text-xs text-default-500 line-clamp-2 leading-relaxed flex-1">
+                              {app.description}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </motion.div>
                 ) : isMcp ? (
                   /* MCP Server Details Panel (Studio Presets + Stdio Transport Configs) */
@@ -1111,6 +1168,15 @@ function ConnectAppsContent() {
                     initial={{ opacity: 0, y: 8 }}
                     transition={{ duration: 0.2 }}
                   >
+                    <div className="w-full flex justify-start mb-2">
+                      <button
+                        className="flex items-center gap-2 text-xs font-semibold text-default-500 hover:text-default-900 transition-colors"
+                        onClick={() => setSelectedApp(null)}
+                      >
+                        <Icon icon="solar:arrow-left-linear" className="text-sm" />
+                        Back to Catalog
+                      </button>
+                    </div>
                     {mcpError && (
                       <AlertWrapper className="w-full" variant="danger">
                         <div className="flex items-center gap-2 text-xs">
