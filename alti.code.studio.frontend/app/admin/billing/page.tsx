@@ -1,7 +1,43 @@
 "use client";
 
 import React from "react";
-import { Users } from "lucide-react";
+import { Users, CreditCard } from "lucide-react";
+
+export function CardBrandLogo({ brand }: { brand: string }) {
+  const b = brand.toLowerCase();
+  if (b === "visa") {
+    return (
+      <svg viewBox="0 0 24 15" className="h-4.5 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10.1 14.5L12.2 2H10.1L8.0 14.5H10.1ZM21.5 2H19.5c-.6 0-1.1.4-1.4 1.0L15.3 14.5h2.2l.4-1.2h2.7l.3 1.2h2.0l-1.4-12.5zm-3.0 7.2l.9-2.5.5 2.5h-1.4ZM6.3 2H4.2c-.2 0-.4.1-.5.3L.3 14.5H2.5l.4-1.2h2.7c.0.2.1.4.1.6l.2.6h2.2L6.8 2.0c0-.1-.1-.1-.5 0zm.3 4.3l-.3 1.2H4.1L5.1 4.5l1.5 1.8z" fill="#1A1F71" className="dark:fill-white" />
+      </svg>
+    );
+  }
+  if (b === "mastercard" || b === "master") {
+    return (
+      <svg viewBox="0 0 24 15" className="h-4.5 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8" cy="7.5" r="7" fill="#EB001B" />
+        <circle cx="16" cy="7.5" r="7" fill="#F79E1B" fillOpacity="0.8" />
+      </svg>
+    );
+  }
+  if (b === "amex" || b === "american express") {
+    return (
+      <svg viewBox="0 0 24 15" className="h-4.5 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="15" rx="2" fill="#0070D2" />
+        <text x="3" y="10" fill="white" fontSize="6.5" fontWeight="bold" fontFamily="sans-serif">AMEX</text>
+      </svg>
+    );
+  }
+  if (b === "discover") {
+    return (
+      <svg viewBox="0 0 24 15" className="h-4.5 w-auto shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="15" rx="2" fill="#F68220" />
+        <text x="2" y="10" fill="white" fontSize="5.5" fontWeight="bold" fontFamily="sans-serif">DISCOVER</text>
+      </svg>
+    );
+  }
+  return <CreditCard className="w-4 h-4 text-neutral-400 shrink-0" />;
+}
 
 export default function BillingPage() {
   const [activeSeats, setActiveSeats] = React.useState(7);
@@ -47,8 +83,11 @@ export default function BillingPage() {
           {/* Card 4: Payment Card */}
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
             <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Card</div>
-            <div className="flex items-baseline justify-between mt-2">
-              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">Visa *4242</span>
+            <div className="flex items-center justify-between mt-2">
+              <div className="flex items-center gap-2">
+                <CardBrandLogo brand="visa" />
+                <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">*4242</span>
+              </div>
               <span className="text-[10px] text-neutral-400 font-semibold">12/28</span>
             </div>
           </div>
