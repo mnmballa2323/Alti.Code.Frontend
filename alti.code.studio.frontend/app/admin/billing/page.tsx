@@ -3,45 +3,6 @@
 import React from "react";
 import { Users, CreditCard, Landmark, ChevronDown } from "lucide-react";
 
-export function CardBrandLogo({ brand }: { brand: string }) {
-  const b = brand.toLowerCase();
-  if (b === "visa") {
-    return (
-      <svg viewBox="0 0 36 24" className="h-5.5 w-auto shrink-0 shadow-sm rounded" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="36" height="24" rx="3" fill="#1A1F71" />
-        <path d="M12.1 16.5l.8-4.9h1.7l-.8 4.9h-1.7zm5.2-4.9h-1.6c-.4 0-.8.2-1 .6L12.3 16.5h1.9l.4-.9h2.3c.0.2.1.4.1.7.0.2.1.2.3.2h1.7l-1.5-4.9zm-2.1 2.7l.7-1.7.4 1.7h-1.1zm-8.1-2.7H4.8l2.9 4.9H9.4l2.2-4.9H9.9L8.4 14.8l-1-3.2v-.1zm13-.02c-.8 0-1.4.3-1.7.8l-.1.2 1.6.4c.2-.3.5-.5.9-.5.5 0 .8.2.8.5 0 .3-.4.5-.8.6-.9.3-1.5.5-1.5 1.4 0 .8.7 1.4 1.8 1.4.9 0 1.6-.3 1.9-.8l.1-.3-1.6-.4c-.2.3-.5.5-.9.5-.5 0-.8-.2-.8-.5 0-.3.4-.5.8-.6.9-.3 1.5-.5 1.5-1.4 0-.8-.7-1.4-1.8-1.4z" fill="white" />
-        <path d="M4.5 10.7l.2-.7c.1-.2.3-.4.5-.4h3.6l.1.3-3.1 6.3L4.5 10.7z" fill="#F79E1B" />
-      </svg>
-    );
-  }
-  if (b === "mastercard" || b === "master") {
-    return (
-      <svg viewBox="0 0 36 24" className="h-5.5 w-auto shrink-0 shadow-sm rounded" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="36" height="24" rx="3" fill="#1A1A1A" />
-        <circle cx="14" cy="12" r="6" fill="#EB001B" />
-        <circle cx="22" cy="12" r="6" fill="#F79E1B" fillOpacity="0.85" />
-      </svg>
-    );
-  }
-  if (b === "amex" || b === "american express") {
-    return (
-      <svg viewBox="0 0 36 24" className="h-5.5 w-auto shrink-0 shadow-sm rounded" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="36" height="24" rx="3" fill="#0070D2" />
-        <text x="5" y="15" fill="white" fontSize="9" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.5">AMEX</text>
-      </svg>
-    );
-  }
-  if (b === "discover") {
-    return (
-      <svg viewBox="0 0 36 24" className="h-5.5 w-auto shrink-0 shadow-sm rounded" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="36" height="24" rx="3" fill="#F68220" />
-        <text x="3" y="14" fill="white" fontSize="7" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.5">DISCOVER</text>
-      </svg>
-    );
-  }
-  return <CreditCard className="w-4 h-4 text-neutral-400 shrink-0" />;
-}
-
 export default function BillingPage() {
   const [activeSeats, setActiveSeats] = React.useState(7);
   const seatPrice = 15;
@@ -119,14 +80,10 @@ export default function BillingPage() {
           {/* Card 4: Payment Method */}
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
             <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Payment</div>
-            <div className="flex items-center justify-between mt-2">
-              <div className="flex items-center gap-2">
-                {activePaymentMethod.type === "card" && <CardBrandLogo brand="visa" />}
-                {activePaymentMethod.type === "ach" && <Landmark className="w-4 h-4 text-[#635BFF]" />}
-                <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
-                  {activePaymentMethod.details}
-                </span>
-              </div>
+            <div className="flex items-baseline justify-between mt-2">
+              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                {activePaymentMethod.details}
+              </span>
               <span className="text-[10px] text-neutral-400 font-semibold">
                 {activePaymentMethod.extra}
               </span>
