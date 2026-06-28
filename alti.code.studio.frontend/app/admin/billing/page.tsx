@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CreditCard, Users, ShieldCheck } from "lucide-react";
+import { CreditCard, Users } from "lucide-react";
 
 export default function BillingPage() {
   const [activeSeats, setActiveSeats] = React.useState(7);
@@ -88,14 +88,11 @@ export default function BillingPage() {
 
         {/* Stripe Notice and Save Card Action */}
         <div className="flex items-center justify-between mt-4">
-          <p className="text-[11px] text-neutral-500 tracking-wide flex items-center gap-1.5">
-            <ShieldCheck className="w-4 h-4 text-green-500 shrink-0" />
-            <span>
-              <span className="font-bold text-neutral-900 dark:text-neutral-200">
-                Stripe Security Notice:
-              </span>{" "}
-              Your card information is encrypted and securely saved via Stripe Vault.
-            </span>
+          <p className="text-[11px] text-neutral-500 tracking-wide">
+            <span className="font-bold text-neutral-900 dark:text-neutral-200">
+              Stripe Security Notice:
+            </span>{" "}
+            Your card information is encrypted and securely saved via Stripe Vault.
           </p>
           <button className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg shadow-sm">
             Save Card
