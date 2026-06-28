@@ -13,21 +13,16 @@ output "dedicated_vm_public_ip" {
 }
 
 output "commercial_postgres_ip" {
-  value       = var.enable_gcp_cloud || var.enable_gcp_dedicated ? module.database_commercial[0].postgres_ip : null
-  description = "The private IP address of the commercial PostgreSQL database instance"
+  value       = google_sql_database_instance.db_instance.private_ip_address
+  description = "The private IP address of the PostgreSQL database instance"
 }
 
 output "commercial_redis_hostname" {
-  value       = var.enable_gcp_cloud || var.enable_gcp_dedicated ? module.database_commercial[0].redis_hostname : null
-  description = "The private hostname/IP of the commercial Redis instance"
+  value       = google_redis_instance.redis_cache.host
+  description = "The private hostname/IP of the Redis instance"
 }
 
 output "commercial_redis_port" {
-  value       = var.enable_gcp_cloud || var.enable_gcp_dedicated ? module.database_commercial[0].redis_port : null
-  description = "The private port of the commercial Redis instance"
-}
-
-output "government_postgres_ip" {
-  value       = var.enable_gcp_government ? module.database_government[0].postgres_ip : null
-  description = "The private IP address of the government PostgreSQL database instance"
+  value       = google_redis_instance.redis_cache.port
+  description = "The private port of the Redis instance"
 }

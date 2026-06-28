@@ -75,7 +75,6 @@ resource "google_compute_security_policy" "waf_policy" {
       }
     }
     rate_limit_options {
-      cone_limit     = 1000
       conform_action = "allow"
       exceed_action  = "deny(429)" # Return HTTP 429 Too Many Requests
       rate_limit_threshold {

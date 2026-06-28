@@ -112,7 +112,7 @@ resource "google_compute_node_group" "commercial_node_group" {
   name          = "alti-${var.customer_id}-node-group"
   zone          = "${var.gcp_region_commercial}-a"
   node_template = google_compute_node_template.commercial_node_template[0].id
-  size          = 1
+  initial_size  = 1
 }
 
 resource "google_compute_instance" "dedicated_node" {
