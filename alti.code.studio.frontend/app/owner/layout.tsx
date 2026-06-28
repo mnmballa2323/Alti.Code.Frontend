@@ -25,9 +25,9 @@ const ownerItems: SidebarItem[] = [
 ];
 
 const memberItems: SidebarItem[] = [
-  { label: "Individual", href: "/owner/team-members", icon: Users },
-  { label: "Teams", href: "/owner/teams", icon: Users },
-  { label: "Enterprise", href: "/owner/enterprise", icon: Users },
+  { label: "Cloud", href: "/owner/team-members", icon: Users },
+  { label: "Dedicated", href: "/owner/teams", icon: Users },
+  { label: "Sovereign", href: "/owner/enterprise", icon: Users },
 ];
 
 export default function OwnerLayout({
@@ -114,9 +114,9 @@ export default function OwnerLayout({
   const getPageTitle = () => {
     if (pathname.startsWith("/owner/dashboard")) return "Dashboard";
     if (pathname.startsWith("/owner/members")) return "Invite";
-    if (pathname.startsWith("/owner/team-members")) return "Individual";
-    if (pathname.startsWith("/owner/teams")) return "Teams";
-    if (pathname.startsWith("/owner/enterprise")) return "Enterprise";
+    if (pathname.startsWith("/owner/team-members")) return "Cloud";
+    if (pathname.startsWith("/owner/teams")) return "Dedicated";
+    if (pathname.startsWith("/owner/enterprise")) return "Sovereign";
     if (pathname.startsWith("/owner/revenue")) return "Revenue";
 
     return "Platform Owner";
@@ -187,10 +187,10 @@ export default function OwnerLayout({
                 <ArrowLeft className="w-3.5 h-3.5" />
                 <span>
                   {isEnterpriseDetail
-                    ? "Back to Enterprise"
+                    ? "Back to Sovereign"
                     : isTeamsDetail
-                      ? "Back to Teams"
-                      : "Back to Individual"}
+                      ? "Back to Dedicated"
+                      : "Back to Cloud"}
                 </span>
               </Link>
             )}
@@ -202,7 +202,7 @@ export default function OwnerLayout({
         {/* Internal Navigation Sidebar */}
         <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
           {renderNavGroup("", ownerItems)}
-          {renderNavGroup("Member Management", memberItems, "mt-8")}
+          {renderNavGroup("Deployments", memberItems, "mt-8")}
         </div>
 
         {/* Main Content Pane */}

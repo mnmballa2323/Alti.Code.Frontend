@@ -11,7 +11,7 @@
     "password": "$2b$10$fL0qfMQ0UsG3MVA2qQBfk.sFyxGHG/dm.PLWTLuSTJYgrTk0D1vhK",
     "role": "owner",
     "isSubscribed": true,
-    "subscriptionPrice": null,
+    "subscriptionPrice": 750,
     "subscriptionPlan": "command",
     "subscriptionDur": "month",
     "subscriptionExp": null,
