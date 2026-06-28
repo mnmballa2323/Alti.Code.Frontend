@@ -15,6 +15,7 @@ import SubscriptionModel from './payment.model.js';
 import { PaymentService } from './payment.service.js';
 // import { checkFreePlanLimits } from '../../middlewares/checkFreePlanLimits/checkFreePlanLimits.js';
 import { checkFreePlanLimits } from '../../middlewares/checkFreePlanLimits/checkFreePlanLimits.js';
+import { logger } from '../../../shared/logger.js';
 
 const createCheckoutSession = catchAsync(async (req, res, next) => {
   const { plan_name, price, duration, userId } = req.body;
@@ -106,7 +107,7 @@ const incrementPromptsUsed = async userId => {
 
     if (user.isSubscribed) {
       const subscription = await checkUsageLimits(userId);
-      console.log('Subscription check result:', subscription);
+      logger.info(`Subscription check result: ${JSON.stringify(subscription)}`);
 
       if (!subscription || !subscription._id) {
         throw new Error('Subscription not found or invalid.');
@@ -125,7 +126,7 @@ const incrementPromptsUsed = async userId => {
     await session.commitTransaction();
     return { success: true, message: 'Prompt usage updated successfully.' };
   } catch (error) {
-    console.error('Error in incrementPromptsUsed:', error);
+    logger.error(`Error in incrementPromptsUsed: ${error.message}`);
     await session.abortTransaction();
     return { success: false, message: error.message };
   } finally {

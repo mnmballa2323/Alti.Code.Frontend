@@ -8,12 +8,13 @@
 import cron from 'node-cron';
 import SubscriptionModel from '../../modules/payment/payment.model.js';
 import UserModel from '../../modules/auth/auth.model.js';
+import { logger } from '../../../shared/logger.js';
 
 cron.schedule(
   '47 18 * * *', // Runs at 6:47 PM UTC (3:11 PM Bangladesh Time)
   // '30 2 * * *',  // Runs at 2:30 AM Bangladesh Time
   async () => {
-    console.log(
+    logger.info(
       `⏳ Running scheduled task at ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Dhaka' })}`,
     );
 
@@ -29,7 +30,7 @@ cron.schedule(
       await subscription.save();
     }
 
-    console.log(
+    logger.info(
       `✅ Reset prompts & images for ${activeSubscriptions.length} active subscriptions.`,
     );
 
@@ -50,7 +51,7 @@ cron.schedule(
       );
     }
 
-    console.log(`✅ Expired ${expiredSubscriptions.length} subscriptions.`);
+    logger.info(`✅ Expired ${expiredSubscriptions.length} subscriptions.`);
 
     // ✅ 3. Reset free plan usage for all users
     await UserModel.updateMany(
@@ -64,7 +65,7 @@ cron.schedule(
       },
     );
 
-    console.log('✅ Reset free plan usage for all users.');
+    logger.info('✅ Reset free plan usage for all users.');
   },
   {
     scheduled: true,
