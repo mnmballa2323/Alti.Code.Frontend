@@ -77,8 +77,9 @@ export default function TeamsPage() {
           {/* Table Header */}
           <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
             <div className="col-span-5">Team Account Name</div>
-            <div className="col-span-4">Owner Email</div>
-            <div className="col-span-3 text-right pr-12">Members</div>
+            <div className="col-span-3">Owner Email</div>
+            <div className="col-span-2 text-right">Members</div>
+            <div className="col-span-2 text-right pr-6">Price</div>
           </div>
         </div>
 
@@ -110,16 +111,20 @@ export default function TeamsPage() {
                   )}
                 </div>
 
-                <div className="col-span-4 flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
+                <div className="col-span-3 flex items-center gap-2 text-neutral-500 dark:text-neutral-400">
                   <User className="w-3.5 h-3.5" />
                   <span className="truncate">{tenant.owner || "No owner assigned"}</span>
                 </div>
 
-                <div className="col-span-3 flex items-center justify-end gap-3 pr-2">
-                  <span className="px-3 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 rounded-full border border-neutral-200/50 dark:border-neutral-750">
-                    {tenant.userCount === 1
-                      ? "1 member"
-                      : `${tenant.userCount} members`}
+                <div className="col-span-2 text-right text-neutral-600 dark:text-neutral-400 font-semibold pr-2">
+                  {tenant.userCount === 1
+                    ? "1 member"
+                    : `${tenant.userCount} members`}
+                </div>
+
+                <div className="col-span-2 flex items-center justify-end gap-2 pr-1">
+                  <span className="text-neutral-800 dark:text-neutral-200 font-medium text-sm">
+                    $2,500/mo
                   </span>
                   <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors" />
                 </div>

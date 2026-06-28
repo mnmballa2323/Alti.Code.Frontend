@@ -171,8 +171,10 @@ export default function TeamMembersPage() {
 
             {/* Table Header */}
             <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
-              <div className="col-span-10">Email</div>
-              <div className="col-span-2">Price</div>
+              <div className="col-span-6">Email</div>
+              <div className="col-span-2">Role</div>
+              <div className="col-span-2 text-right">Members</div>
+              <div className="col-span-2 text-right pr-6">Price</div>
             </div>
           </div>
 
@@ -204,7 +206,7 @@ export default function TeamMembersPage() {
                           router.push(`/owner/team-members/${member.id}`)
                         }
                       >
-                        <div className="col-span-10 flex items-center gap-2">
+                        <div className="col-span-6 flex items-center gap-2">
                           <span className="text-neutral-900 dark:text-white font-medium overflow-hidden text-ellipsis whitespace-nowrap">
                             {member.email}
                           </span>
@@ -214,12 +216,18 @@ export default function TeamMembersPage() {
                             </span>
                           )}
                         </div>
-                        <div className="col-span-2 flex items-center justify-between">
+                        <div className="col-span-2 flex items-center text-neutral-500 dark:text-neutral-400 capitalize">
+                          {member.role || "user"}
+                        </div>
+                        <div className="col-span-2 text-right text-neutral-600 dark:text-neutral-400 font-semibold pr-2">
+                          1 member
+                        </div>
+                        <div className="col-span-2 flex items-center justify-end gap-2 pr-1">
                           <span className="text-neutral-800 dark:text-neutral-200 font-medium text-sm">
                             {prices[member.id] || "$1,000"}
                           </span>
                           <button
-                            className="p-1 text-neutral-400 hover:text-neutral-900 dark:hover:text-white rounded transition-colors ml-auto opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                            className="p-1 text-neutral-400 hover:text-neutral-900 dark:hover:text-white rounded transition-colors opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                             onClick={(e) => {
                               e.stopPropagation();
                               setEditingMember(member);
