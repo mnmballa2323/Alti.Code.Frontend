@@ -123,21 +123,6 @@ export default function PricingSection() {
                   <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed font-medium text-left">
                     {plan.description}
                   </p>
-
-                  {/* Features List */}
-                  <div className="border-t border-gray-200/60 dark:border-gray-800/60 pt-5">
-                    <ul className="space-y-3 text-left">
-                      {plan.features.map((feature, fIdx) => (
-                        <li
-                          key={fIdx}
-                          className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2"
-                        >
-                          <Check className="w-4.5 h-4.5 text-emerald-500 flex-shrink-0" />
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
                 </div>
               </div>
 
