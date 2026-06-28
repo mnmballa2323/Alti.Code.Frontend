@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
-import { GoogleIcon } from "@/components/CloudIcons";
 
 interface SidebarItem {
   label: string;
@@ -40,10 +39,6 @@ const memberItems: SidebarItem[] = [
 const managerItems: SidebarItem[] = [
   { label: "Instructions", href: "/owner/instructions", icon: FileText },
   { label: "Guardrails", href: "/owner/guardrails", icon: Shield },
-];
-
-const cloudItems: SidebarItem[] = [
-  { label: "Google Cloud Platform", href: "/owner/gcp", icon: GoogleIcon },
 ];
 
 export default function OwnerLayout({
@@ -141,8 +136,6 @@ export default function OwnerLayout({
     if (pathname.startsWith("/owner/usage")) return "Model Usage";
     if (pathname.startsWith("/owner/audit")) return "Audit Logs";
 
-    if (pathname.startsWith("/owner/gcp")) return "Google Cloud Platform";
-
     return "Platform Owner";
   };
 
@@ -228,7 +221,6 @@ export default function OwnerLayout({
           {renderNavGroup("", ownerItems)}
           {renderNavGroup("Member Management", memberItems, "mt-8")}
           {renderNavGroup("Platform Controls", managerItems, "mt-8")}
-          {renderNavGroup("Cloud Providers", cloudItems, "mt-8")}
         </div>
 
         {/* Main Content Pane */}
