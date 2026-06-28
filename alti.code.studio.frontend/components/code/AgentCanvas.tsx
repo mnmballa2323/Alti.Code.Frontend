@@ -281,9 +281,24 @@ const initialEdges: Edge[] = [
   },
   { id: "e-openhands-swekit", source: "openhands", target: "swekit" },
   { id: "e-lang-interpreter", source: "langgraph", target: "openinterpreter" },
-  { id: "e-lang-opencode", source: "langgraph", target: "opencode", animated: true },
-  { id: "e-lang-openspec", source: "langgraph", target: "openspec", animated: true },
-  { id: "e-lang-cloner", source: "langgraph", target: "website_cloner", animated: true },
+  {
+    id: "e-lang-opencode",
+    source: "langgraph",
+    target: "opencode",
+    animated: true,
+  },
+  {
+    id: "e-lang-openspec",
+    source: "langgraph",
+    target: "openspec",
+    animated: true,
+  },
+  {
+    id: "e-lang-cloner",
+    source: "langgraph",
+    target: "website_cloner",
+    animated: true,
+  },
 
   // Tool edges
   {

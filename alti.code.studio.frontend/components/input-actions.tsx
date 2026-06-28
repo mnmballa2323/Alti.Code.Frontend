@@ -296,6 +296,7 @@ function PromptInputFullLineComponent({
   const getModelDisplayName = (modelKey: string): string => {
     if (modelKey && modelKey.startsWith("custom-agent-")) {
       const match = customAgents.find((a) => a.id === modelKey);
+
       return match ? `Agent: ${match.name}` : "Custom Agent";
     }
 
@@ -351,21 +352,28 @@ function PromptInputFullLineComponent({
       try {
         const res = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/agents/custom`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
+
         if (res.data?.success) {
           setCustomAgents(res.data.data || []);
         }
       } catch (err) {
-        console.warn("Failed to fetch custom agents in input actions dropdown:", err);
+        console.warn(
+          "Failed to fetch custom agents in input actions dropdown:",
+          err,
+        );
       }
     };
+
     fetchCustomAgents();
 
     const handleSync = (e: any) => {
       if (e.detail) setCustomAgents(e.detail);
     };
+
     window.addEventListener("sync-custom-agents", handleSync);
+
     return () => window.removeEventListener("sync-custom-agents", handleSync);
   }, [token]);
 
@@ -968,10 +976,11 @@ function PromptInputFullLineComponent({
                 variant="flat"
               >
                 <DropdownSection
-                  title="Google Gemini"
                   classNames={{
-                    heading: "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
+                    heading:
+                      "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
                   }}
+                  title="Google Gemini"
                 >
                   <DropdownItem
                     key="gemini-3.5-flash"
@@ -1007,10 +1016,11 @@ function PromptInputFullLineComponent({
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection
-                  title="Anthropic Claude"
                   classNames={{
-                    heading: "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
+                    heading:
+                      "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
                   }}
+                  title="Anthropic Claude"
                 >
                   <DropdownItem
                     key="claude-sonnet-4.6"
@@ -1062,10 +1072,11 @@ function PromptInputFullLineComponent({
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection
-                  title="OpenAI GPT"
                   classNames={{
-                    heading: "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
+                    heading:
+                      "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
                   }}
+                  title="OpenAI GPT"
                 >
                   <DropdownItem
                     key="gpt-5.4-mini"
@@ -1117,10 +1128,13 @@ function PromptInputFullLineComponent({
                   </DropdownItem>
                 </DropdownSection>
                 <DropdownSection
-                  title={customAgents.length > 0 ? "Custom Agents" : ""}
                   classNames={{
-                    heading: customAgents.length > 0 ? "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5" : "hidden",
+                    heading:
+                      customAgents.length > 0
+                        ? "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5"
+                        : "hidden",
                   }}
+                  title={customAgents.length > 0 ? "Custom Agents" : ""}
                 >
                   {customAgents.map((agent) => (
                     <DropdownItem

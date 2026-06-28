@@ -17,4 +17,3 @@ export const fontSerif = Instrument_Serif({
   variable: "--font-serif",
   weight: ["400"],
 });
-

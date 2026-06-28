@@ -17,8 +17,8 @@ import {
 } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
-
 import { useDispatch, useSelector } from "react-redux";
+
 import { RootState } from "@/store";
 import { removeRepository } from "@/store/systemSlice";
 import { useModalStore } from "@/store/useModalStore";
@@ -84,9 +84,12 @@ const SettingsModal = () => {
           if (keys.geminiApiKey) setGeminiApiKey(keys.geminiApiKey);
           if (keys.azureEndpoint) setAzureEndpoint(keys.azureEndpoint);
           if (keys.azureApiKey) setAzureApiKey(keys.azureApiKey);
-          if (keys.azureSovereignTenantId) setAzureSovereignTenantId(keys.azureSovereignTenantId);
-          if (keys.azureSovereignClientId) setAzureSovereignClientId(keys.azureSovereignClientId);
-          if (keys.azureSovereignClientSecret) setAzureSovereignClientSecret(keys.azureSovereignClientSecret);
+          if (keys.azureSovereignTenantId)
+            setAzureSovereignTenantId(keys.azureSovereignTenantId);
+          if (keys.azureSovereignClientId)
+            setAzureSovereignClientId(keys.azureSovereignClientId);
+          if (keys.azureSovereignClientSecret)
+            setAzureSovereignClientSecret(keys.azureSovereignClientSecret);
         }
       } catch (e) {
         console.error("Failed to load keys from Vault:", e);
@@ -374,12 +377,8 @@ const SettingsModal = () => {
                       <SelectItem key="claude-fable-5">
                         Claude Fable 5
                       </SelectItem>
-                      <SelectItem key="gpt-5.4-mini">
-                        GPT-5.4 Mini
-                      </SelectItem>
-                      <SelectItem key="gpt-5.5-pro">
-                        GPT-5.5 Pro
-                      </SelectItem>
+                      <SelectItem key="gpt-5.4-mini">GPT-5.4 Mini</SelectItem>
+                      <SelectItem key="gpt-5.5-pro">GPT-5.5 Pro</SelectItem>
                       <SelectItem key="gpt-5.5-thinking">
                         GPT-5.5 Thinking
                       </SelectItem>
@@ -486,7 +485,8 @@ const SettingsModal = () => {
                     </h3>
                     {repositories.length === 0 ? (
                       <p className="text-xs text-default-400">
-                        No external repositories ingested yet. Paste a GitHub link in the chat to automatically clone and index it.
+                        No external repositories ingested yet. Paste a GitHub
+                        link in the chat to automatically clone and index it.
                       </p>
                     ) : (
                       <div className="flex flex-col gap-2 max-h-[160px] overflow-y-auto pr-1">
@@ -496,7 +496,10 @@ const SettingsModal = () => {
                             className="flex items-center justify-between p-2 rounded-xl bg-black/5 dark:bg-white/5 border border-default-100/30"
                           >
                             <div className="flex items-center gap-2 truncate">
-                              <Icon icon="solar:git-repository-linear" className="text-lg text-default-400 flex-shrink-0" />
+                              <Icon
+                                className="text-lg text-default-400 flex-shrink-0"
+                                icon="solar:git-repository-linear"
+                              />
                               <span className="text-xs font-medium dark:text-gray-200 text-gray-700 truncate">
                                 {repo.name}
                               </span>
@@ -506,9 +509,14 @@ const SettingsModal = () => {
                               className="size-7 min-w-7 rounded-lg hover:bg-danger/10 text-default-400 hover:text-danger"
                               size="sm"
                               variant="light"
-                              onPress={() => dispatch(removeRepository(repo.id))}
+                              onPress={() =>
+                                dispatch(removeRepository(repo.id))
+                              }
                             >
-                              <Icon icon="solar:trash-bin-trash-linear" className="text-sm" />
+                              <Icon
+                                className="text-sm"
+                                icon="solar:trash-bin-trash-linear"
+                              />
                             </Button>
                           </div>
                         ))}

@@ -184,9 +184,7 @@ export function VideoEyeRecorder() {
 
       if (data.success) {
         toast.dismiss();
-        toast.success(
-          "✅ Azure Event Grid: Analysis job queued successfully.",
-        );
+        toast.success("✅ Azure Event Grid: Analysis job queued successfully.");
 
         // Listen for the async Pub/Sub result on the WebSocket or Poll (Simulated via immediate return for UI demo)
         if (data.data?.analysis?.reply) {

@@ -2,7 +2,6 @@
 
 import { Input } from "@heroui/react";
 import { useState } from "react";
-
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -17,8 +16,6 @@ export default function RegisterPage() {
   const toggleVisibility = () => setIsVisible(!isVisible);
   const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
   const router = useRouter();
-
-
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

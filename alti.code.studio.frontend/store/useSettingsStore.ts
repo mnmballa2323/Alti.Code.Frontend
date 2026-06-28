@@ -76,9 +76,12 @@ export const useSettingsStore = create<SettingsState>()(
 
       setAzureEndpoint: (endpoint) => set({ azureEndpoint: endpoint }),
       setAzureApiKey: (key) => set({ azureApiKey: key }),
-      setAzureSovereignTenantId: (projectId) => set({ azureSovereignTenantId: projectId }),
-      setAzureSovereignClientId: (email) => set({ azureSovereignClientId: email }),
-      setAzureSovereignClientSecret: (key) => set({ azureSovereignClientSecret: key }),
+      setAzureSovereignTenantId: (projectId) =>
+        set({ azureSovereignTenantId: projectId }),
+      setAzureSovereignClientId: (email) =>
+        set({ azureSovereignClientId: email }),
+      setAzureSovereignClientSecret: (key) =>
+        set({ azureSovereignClientSecret: key }),
 
       setEditorFontSize: (size) => set({ editorFontSize: size }),
       setEditorWordWrap: (enabled) => set({ editorWordWrap: enabled }),

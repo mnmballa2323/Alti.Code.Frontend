@@ -23,9 +23,11 @@ export default function HeroSwarm() {
 
   useEffect(() => {
     const canvas = document.getElementById("hero-canvas") as HTMLCanvasElement;
+
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
+
     if (!ctx) return;
 
     let animationFrameId: number;
@@ -42,6 +44,7 @@ export default function HeroSwarm() {
       phase: number;
     }> = [];
     const starCount = 200;
+
     for (let i = 0; i < starCount; i++) {
       stars.push({
         x: Math.random() * width,
@@ -78,6 +81,7 @@ export default function HeroSwarm() {
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
+
       mouse.x = e.clientX - rect.left;
       mouse.y = e.clientY - rect.top;
     };
@@ -103,6 +107,7 @@ export default function HeroSwarm() {
       ctx.strokeStyle = "rgba(255, 255, 255, 0.025)";
       ctx.lineWidth = 1;
       const gridSpacing = 100;
+
       for (let x = 0; x < width; x += gridSpacing) {
         ctx.beginPath();
         ctx.moveTo(x, 0);
@@ -120,6 +125,7 @@ export default function HeroSwarm() {
       stars.forEach((s) => {
         s.phase += s.pulseSpeed;
         const currentOpacity = s.opacity * (0.35 + Math.sin(s.phase) * 0.65);
+
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity})`;
@@ -138,6 +144,7 @@ export default function HeroSwarm() {
           const dx = mouse.x - p.x;
           const dy = mouse.y - p.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
+
           if (dist < 180) {
             p.x += (dx / dist) * 0.12;
             p.y += (dy / dist) * 0.12;
@@ -161,6 +168,7 @@ export default function HeroSwarm() {
 
           if (dist < connectionDistance) {
             const alpha = (1 - dist / connectionDistance) * 0.35;
+
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -179,6 +187,7 @@ export default function HeroSwarm() {
 
           if (dist < 180) {
             const alpha = (1 - dist / 180) * 0.5;
+
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(mouse.x, mouse.y);
@@ -204,7 +213,10 @@ export default function HeroSwarm() {
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#030214] via-[#090729] to-black text-white px-4 sm:px-6 lg:px-8 pt-28">
       {/* Interactive Swarm Canvas */}
-      <canvas id="hero-canvas" className="absolute inset-0 w-full h-full pointer-events-none z-0" />
+      <canvas
+        className="absolute inset-0 w-full h-full pointer-events-none z-0"
+        id="hero-canvas"
+      />
 
       {/* Premium Apple/OpenAI-style background gradient mesh */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -225,8 +237,11 @@ export default function HeroSwarm() {
             </span>
           </h1>
           <p className="max-w-5xl text-zinc-400 text-lg md:text-xl font-normal leading-relaxed mt-4 px-4">
-            Deploy autonomous agent swarms to write clean code, execute tests, and fix compilation errors<br className="hidden md:inline" />
-            directly inside your private cloud environment under complete sovereign and deterministic control.
+            Deploy autonomous agent swarms to write clean code, execute tests,
+            and fix compilation errors
+            <br className="hidden md:inline" />
+            directly inside your private cloud environment under complete
+            sovereign and deterministic control.
           </p>
         </div>
 
@@ -285,7 +300,6 @@ export default function HeroSwarm() {
             </p>
           )}
         </div>
-
       </div>
     </section>
   );

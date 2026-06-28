@@ -38,7 +38,12 @@ function Navbar() {
 
   useEffect(() => {
     setMounted(true);
-    if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
+    if (
+      typeof window !== "undefined" &&
+      ("__TAURI__" in window ||
+        "electron" in window ||
+        window.navigator.userAgent.includes("Electron"))
+    ) {
       setIsDesktopApp(true);
     }
   }, []);
@@ -48,7 +53,9 @@ function Navbar() {
     const handleScrollNavbar = () => {
       setIsScrolled(window.scrollY > 50);
     };
+
     window.addEventListener("scroll", handleScrollNavbar);
+
     return () => window.removeEventListener("scroll", handleScrollNavbar);
   }, []);
 
@@ -322,188 +329,198 @@ function Navbar() {
           "flex items-center justify-between h-[80px] z-[100] fixed top-0 left-0 right-0 w-full transition-all duration-300",
           isScrolled
             ? "bg-white dark:bg-black border-b border-zinc-200/50 dark:border-zinc-800/50 shadow-sm"
-            : "bg-transparent border-b border-transparent"
+            : "bg-transparent border-b border-transparent",
         )}
       >
         <div className="wrapper relative flex items-center justify-between px-4 md:px-6 lg:px-8 w-full">
-            {/* Logo */}
-            {mounted ? (
-              <Link
-                className="flex-shrink-0 flex items-center gap-2 md:gap-3 lg:-translate-x-4"
-                href="/"
-              >
-                {/* Standard Logo (Theme Responsive when Scrolled, or forced white when at top) */}
-                <div className={cn("flex items-center gap-2 md:gap-3", (!isScrolled) ? "hidden" : "dark:hidden")}>
-                  <Image
-                    priority
-                    alt="Inso Logo Icon"
-                    className="h-8 w-auto object-contain"
-                    height={32}
-                    src="/assets/logo-icon-black.png?v=2"
-                    width={37}
-                  />
-                  <Image
-                    priority
-                    alt="Inso Code"
-                    className="h-6 w-auto object-contain"
-                    height={24}
-                    src="/inso-logo-black.png"
-                    width={120}
-                  />
-                </div>
-                <div className={cn("flex items-center gap-2 md:gap-3", (!isScrolled) ? "flex" : "hidden dark:flex")}>
-                  <Image
-                    priority
-                    alt="Inso Logo Icon"
-                    className="h-8 w-auto object-contain"
-                    height={32}
-                    src="/assets/logo-icon-white.png?v=2"
-                    width={37}
-                  />
-                  <Image
-                    priority
-                    alt="Inso Code"
-                    className="h-6 w-auto object-contain"
-                    height={24}
-                    src="/inso-logo-white.png"
-                    width={120}
-                  />
-                </div>
-              </Link>
-            ) : (
-              <div
-                className="animate-pulse dark:bg-gray-800 bg-gray-200 rounded"
-                style={{ width: 160, height: 32 }}
-              />
-            )}
-
-            {/* Toggle Menu (Centered) */}
-            <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          {/* Logo */}
+          {mounted ? (
+            <Link
+              className="flex-shrink-0 flex items-center gap-2 md:gap-3 lg:-translate-x-4"
+              href="/"
+            >
+              {/* Standard Logo (Theme Responsive when Scrolled, or forced white when at top) */}
               <div
                 className={cn(
-                  "flex items-center gap-3 p-1.5 rounded-full transition-all duration-300",
-                  isScrolled
-                    ? "bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-inner"
-                    : "bg-black/35 backdrop-blur-md border border-zinc-800/50 shadow-lg"
+                  "flex items-center gap-2 md:gap-3",
+                  !isScrolled ? "hidden" : "dark:hidden",
                 )}
               >
-                {sections.map((sec, index) => {
-                  const IconComponent = sec.icon;
-                  const isActive = activeSection === index;
-
-                  return (
-                    <button
-                      key={index}
-                      className={cn(
-                        "relative group p-2.5 rounded-full transition-all duration-300",
-                        isActive
-                          ? isScrolled
-                            ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-md scale-105"
-                            : "bg-white/15 text-white shadow-md border border-white/10 scale-105"
-                          : isScrolled
-                          ? "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/50"
-                          : "text-zinc-400 hover:text-white hover:bg-white/5"
-                      )}
-                      onClick={() => handleSectionClick(index)}
-                    >
-                      <IconComponent className="w-[20px] h-[20px]" />
-
-                      {/* Tooltip */}
-                      <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 px-2.5 py-1 text-[11px] font-semibold text-white bg-black dark:bg-zinc-950 border border-zinc-700/50 rounded-lg shadow-xl opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
-                        {sec.name}
-                      </span>
-                    </button>
-                  );
-                })}
+                <Image
+                  priority
+                  alt="Inso Logo Icon"
+                  className="h-8 w-auto object-contain"
+                  height={32}
+                  src="/assets/logo-icon-black.png?v=2"
+                  width={37}
+                />
+                <Image
+                  priority
+                  alt="Inso Code"
+                  className="h-6 w-auto object-contain"
+                  height={24}
+                  src="/inso-logo-black.png"
+                  width={120}
+                />
               </div>
+              <div
+                className={cn(
+                  "flex items-center gap-2 md:gap-3",
+                  !isScrolled ? "flex" : "hidden dark:flex",
+                )}
+              >
+                <Image
+                  priority
+                  alt="Inso Logo Icon"
+                  className="h-8 w-auto object-contain"
+                  height={32}
+                  src="/assets/logo-icon-white.png?v=2"
+                  width={37}
+                />
+                <Image
+                  priority
+                  alt="Inso Code"
+                  className="h-6 w-auto object-contain"
+                  height={24}
+                  src="/inso-logo-white.png"
+                  width={120}
+                />
+              </div>
+            </Link>
+          ) : (
+            <div
+              className="animate-pulse dark:bg-gray-800 bg-gray-200 rounded"
+              style={{ width: 160, height: 32 }}
+            />
+          )}
+
+          {/* Toggle Menu (Centered) */}
+          <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <div
+              className={cn(
+                "flex items-center gap-3 p-1.5 rounded-full transition-all duration-300",
+                isScrolled
+                  ? "bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-inner"
+                  : "bg-black/35 backdrop-blur-md border border-zinc-800/50 shadow-lg",
+              )}
+            >
+              {sections.map((sec, index) => {
+                const IconComponent = sec.icon;
+                const isActive = activeSection === index;
+
+                return (
+                  <button
+                    key={index}
+                    className={cn(
+                      "relative group p-2.5 rounded-full transition-all duration-300",
+                      isActive
+                        ? isScrolled
+                          ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-md scale-105"
+                          : "bg-white/15 text-white shadow-md border border-white/10 scale-105"
+                        : isScrolled
+                          ? "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/50"
+                          : "text-zinc-400 hover:text-white hover:bg-white/5",
+                    )}
+                    onClick={() => handleSectionClick(index)}
+                  >
+                    <IconComponent className="w-[20px] h-[20px]" />
+
+                    {/* Tooltip */}
+                    <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 px-2.5 py-1 text-[11px] font-semibold text-white bg-black dark:bg-zinc-950 border border-zinc-700/50 rounded-lg shadow-xl opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
+                      {sec.name}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
+          </div>
 
-            {/* Auth Section */}
-            <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center lg:translate-x-4">
-              {mounted && session?.user && status === "authenticated" ? (
-                <>
-                  <Button
-                    className={cn(
-                      "rounded-full bg-transparent px-6 transition-colors border",
-                      isScrolled
-                        ? "border-black/20 dark:border-white/20 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5"
-                        : "border-white/25 text-white hover:bg-white/10"
-                    )}
-                    size="sm"
-                    onClick={() => {
-                      const userRole = (profile?.role || "").toLowerCase();
+          {/* Auth Section */}
+          <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center lg:translate-x-4">
+            {mounted && session?.user && status === "authenticated" ? (
+              <>
+                <Button
+                  className={cn(
+                    "rounded-full bg-transparent px-6 transition-colors border",
+                    isScrolled
+                      ? "border-black/20 dark:border-white/20 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5"
+                      : "border-white/25 text-white hover:bg-white/10",
+                  )}
+                  size="sm"
+                  onClick={() => {
+                    const userRole = (profile?.role || "").toLowerCase();
 
-                      if (userRole === "owner") {
-                        router.push("/owner/dashboard");
-                      } else if (userRole === "admin") {
-                        router.push("/admin/dashboard");
-                      } else {
-                        router.push("/new-chat");
-                      }
-                    }}
-                  >
-                    Launch App
-                  </Button>
-                  <Button
-                    className={cn(
-                      "rounded-full px-6 transition-all duration-200 shadow-sm",
-                      isScrolled
-                        ? "dark:bg-white dark:text-black bg-black text-white hover:opacity-90"
-                        : "bg-white text-black hover:bg-zinc-100"
-                    )}
-                    size="sm"
-                    onClick={() => {
-                      useModalStore.getState().onOpen({ type: "logout" });
-                    }}
-                  >
-                    Logout
-                  </Button>
-                </>
-              ) : (
-                <>
+                    if (userRole === "owner") {
+                      router.push("/owner/dashboard");
+                    } else if (userRole === "admin") {
+                      router.push("/admin/dashboard");
+                    } else {
+                      router.push("/new-chat");
+                    }
+                  }}
+                >
+                  Launch App
+                </Button>
+                <Button
+                  className={cn(
+                    "rounded-full px-6 transition-all duration-200 shadow-sm",
+                    isScrolled
+                      ? "dark:bg-white dark:text-black bg-black text-white hover:opacity-90"
+                      : "bg-white text-black hover:bg-zinc-100",
+                  )}
+                  size="sm"
+                  onClick={() => {
+                    useModalStore.getState().onOpen({ type: "logout" });
+                  }}
+                >
+                  Logout
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  className={cn(
+                    "rounded-full px-6 transition-all duration-200 shadow-sm",
+                    isScrolled
+                      ? "dark:bg-white dark:text-black bg-black text-white hover:opacity-90"
+                      : "bg-white text-black hover:bg-zinc-100",
+                    isDesktopApp && "w-[160px]",
+                  )}
+                  size="sm"
+                  onClick={() => {
+                    if (isDesktopApp) {
+                      useModalStore.getState().onOpen({ type: "login" });
+                    } else {
+                      router.push("/login");
+                    }
+                  }}
+                >
+                  Login
+                </Button>
+                {!isDesktopApp && (
                   <Button
                     className={cn(
                       "rounded-full px-6 transition-all duration-200 shadow-sm",
                       isScrolled
                         ? "dark:bg-white dark:text-black bg-black text-white hover:opacity-90"
                         : "bg-white text-black hover:bg-zinc-100",
-                      isDesktopApp && "w-[160px]"
                     )}
                     size="sm"
-                    onClick={() => {
-                      if (isDesktopApp) {
-                        useModalStore.getState().onOpen({ type: "login" });
-                      } else {
-                        router.push("/login");
-                      }
-                    }}
+                    onClick={() => router.push("/register")}
                   >
-                    Login
+                    Register
                   </Button>
-                  {!isDesktopApp && (
-                    <Button
-                      className={cn(
-                        "rounded-full px-6 transition-all duration-200 shadow-sm",
-                        isScrolled
-                          ? "dark:bg-white dark:text-black bg-black text-white hover:opacity-90"
-                          : "bg-white text-black hover:bg-zinc-100"
-                      )}
-                      size="sm"
-                      onClick={() => router.push("/register")}
-                    >
-                      Register
-                    </Button>
-                  )}
-                </>
-              )}
-            </div>
+                )}
+              </>
+            )}
+          </div>
 
-            <div className="lg:hidden">
-              <MobileNavSheet />
-            </div>
+          <div className="lg:hidden">
+            <MobileNavSheet />
+          </div>
 
-            {/* Mobile Hamburger Menu */}
-            {/* <div className="lg:hidden flex items-center gap-4">
+          {/* Mobile Hamburger Menu */}
+          {/* <div className="lg:hidden flex items-center gap-4">
             <Button
               onClick={() => router.push("/login")}
               className="rounded-full dark:bg-white dark:text-black bg-black text-white text-xs px-4 py-2"
@@ -522,8 +539,8 @@ function Navbar() {
               />
             </motion.button>
           </div> */}
-          </div>
         </div>
+      </div>
 
       {/* Mobile Drawer */}
       {/*  <AnimatePresence>

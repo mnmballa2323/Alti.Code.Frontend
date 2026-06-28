@@ -16,9 +16,7 @@ import {
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
-import {
-  GoogleIcon,
-} from "@/components/CloudIcons";
+import { GoogleIcon } from "@/components/CloudIcons";
 
 interface SidebarItem {
   label: string;

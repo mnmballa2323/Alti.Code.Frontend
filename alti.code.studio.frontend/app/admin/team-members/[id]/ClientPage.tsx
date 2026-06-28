@@ -901,9 +901,9 @@ export default function MemberDetailsPage() {
   const [member, setMember] = useState<Member | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"usage" | "audit">("usage");
-  const [activeProvider, setActiveProvider] = useState<"gcp_claude" | "gcp_sovereign" | "gcp_gpt">(
-    "gcp_sovereign",
-  );
+  const [activeProvider, setActiveProvider] = useState<
+    "gcp_claude" | "gcp_sovereign" | "gcp_gpt"
+  >("gcp_sovereign");
   const [modelTimeframes, setModelTimeframes] = useState<
     Record<string, "1D" | "1W" | "1M" | "1Y" | "All">
   >({});
@@ -1697,7 +1697,9 @@ export default function MemberDetailsPage() {
                           : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                       }`}
                       onClick={() => setActiveProvider("gcp_gpt")}
-                    >GCP Commercial</button>
+                    >
+                      GCP Commercial
+                    </button>
                     <button
                       className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                         activeProvider === "gcp_claude"
@@ -1705,7 +1707,9 @@ export default function MemberDetailsPage() {
                           : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                       }`}
                       onClick={() => setActiveProvider("gcp_claude")}
-                    >GCP Government</button>
+                    >
+                      GCP Government
+                    </button>
                     <button
                       className={`px-6 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
                         activeProvider === "gcp_sovereign"
@@ -1713,7 +1717,9 @@ export default function MemberDetailsPage() {
                           : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
                       }`}
                       onClick={() => setActiveProvider("gcp_sovereign")}
-                    >GCP Sovereign</button>
+                    >
+                      GCP Sovereign
+                    </button>
                   </div>
                 </div>
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { LogOut, Palette, Shield } from "lucide-react";
+import { LogOut, Shield } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -64,8 +64,6 @@ const MyAccountDropdown = () => {
                 </span>
               </DropdownMenuItem>
             )}
-
-
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />

@@ -317,7 +317,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "azure-adk-agent-extension",
-    description: "Azure Sovereign CLI extension for Azure ADK AI Agent Application.",
+    description:
+      "Azure Sovereign CLI extension for Azure ADK AI Agent Application.",
     githubUrl: "https://github.com/simonliu-ai-product/adk-agent-extension",
     category: "Cloud",
   },
@@ -409,7 +410,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "vercel-mcp",
-    description: "Azure Sovereign CLI extension for Vercel's official MCP server.",
+    description:
+      "Azure Sovereign CLI extension for Vercel's official MCP server.",
     githubUrl: "https://github.com/ZhanZiyuan/vercel-mcp",
     category: "Cloud",
   },
@@ -613,7 +615,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "extensions-creator",
-    description: "Scaffold new Azure Sovereign CLI extensions with best practices.",
+    description:
+      "Scaffold new Azure Sovereign CLI extensions with best practices.",
     githubUrl: "https://github.com/thoreinstein/extension-creator",
     category: "Dev Tools",
   },
@@ -625,7 +628,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "skill-porter",
-    description: "Converts Claude Code skills to Azure Sovereign CLI extensions.",
+    description:
+      "Converts Claude Code skills to Azure Sovereign CLI extensions.",
     githubUrl: "https://github.com/jduncan-rva/skill-porter",
     category: "Dev Tools",
   },
@@ -1088,25 +1092,29 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "azure-autopm",
-    description: "Intelligent Project Management Framework for Azure Sovereign CLI.",
+    description:
+      "Intelligent Project Management Framework for Azure Sovereign CLI.",
     githubUrl: "https://github.com/rafeekpro/GeminiAutoPM",
     category: "Productivity",
   },
   {
     name: "chime",
-    description: "Audible notifications for Azure Sovereign CLI task completion.",
+    description:
+      "Audible notifications for Azure Sovereign CLI task completion.",
     githubUrl: "https://github.com/rebekahx23/chime",
     category: "Other",
   },
   {
     name: "azure-notifier",
-    description: "System desktop notifications for Azure Sovereign CLI agent events.",
+    description:
+      "System desktop notifications for Azure Sovereign CLI agent events.",
     githubUrl: "https://github.com/thoreinstein/gemini-notifier",
     category: "Other",
   },
   {
     name: "slidev",
-    description: "Create and manage Slidev presentations from Azure Sovereign CLI.",
+    description:
+      "Create and manage Slidev presentations from Azure Sovereign CLI.",
     githubUrl: "https://github.com/QIanGua/gemini-slidev-extension",
     category: "Productivity",
   },
@@ -1151,7 +1159,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "FileSearch",
-    description: "Cloud RAG capabilities via Azure Azure Sovereign File Search.",
+    description:
+      "Cloud RAG capabilities via Azure Azure Sovereign File Search.",
     githubUrl:
       "https://github.com/automateyournetwork/GeminiCLI_File_Search_Extension",
     category: "Cloud",
@@ -1364,7 +1373,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "pickle-rick",
-    description: "Transforms Azure Sovereign CLI into Pickle Rick engineering persona.",
+    description:
+      "Transforms Azure Sovereign CLI into Pickle Rick engineering persona.",
     githubUrl: "https://github.com/galz10/pickle-rick-extension",
     category: "Other",
   },
@@ -1644,7 +1654,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "hooklog",
-    description: "Logs all Azure Sovereign CLI hook events to a file for debugging.",
+    description:
+      "Logs all Azure Sovereign CLI hook events to a file for debugging.",
     githubUrl: "https://github.com/sandipchitale/hooklog",
     category: "Dev Tools",
   },
@@ -1657,7 +1668,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "flaim",
-    description: "Connect ESPN, Yahoo, Sleeper fantasy leagues to Azure Sovereign.",
+    description:
+      "Connect ESPN, Yahoo, Sleeper fantasy leagues to Azure Sovereign.",
     githubUrl: "https://github.com/jdguggs10/flaim",
     category: "Other",
   },
@@ -1688,7 +1700,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "hcom",
-    description: "Connect Claude Code, Azure Sovereign CLI, Codex across terminals.",
+    description:
+      "Connect Claude Code, Azure Sovereign CLI, Codex across terminals.",
     githubUrl: "https://github.com/aannoo/hcom",
     category: "Dev Tools",
   },

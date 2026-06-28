@@ -11,6 +11,7 @@ import { useSearchParams } from "next/navigation";
 
 import { SAAS_MOCKS } from "./catalog";
 
+import { ConnectorTabs } from "@/components/connector-tabs";
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { API_URL } from "@/lib/config";
 import { AlertWrapper } from "@/components/ui/AlertWrapper";
@@ -128,21 +129,17 @@ const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
     command: "npx",
     args: ["-y", "@modelcontextprotocol/server-redis"],
   },
-
 };
 
-const FALLBACK_APPS: AppIntegration[] = SAAS_MOCKS.map(
-  (mockApp) => ({
-    id: `app-${mockApp.slug}`,
-    name: mockApp.name,
-    description: `Seamlessly connect and automate workflows directly with ${mockApp.name}.`,
-    icon: mockApp.icon,
-    color: "bg-white border border-gray-200",
-    status: "disconnected" as const,
-    type: "official" as const,
-  }),
-).sort((a, b) => a.name.localeCompare(b.name));
-
+const FALLBACK_APPS: AppIntegration[] = SAAS_MOCKS.map((mockApp) => ({
+  id: `app-${mockApp.slug}`,
+  name: mockApp.name,
+  description: `Seamlessly connect and automate workflows directly with ${mockApp.name}.`,
+  icon: mockApp.icon,
+  color: "bg-white border border-gray-200",
+  status: "disconnected" as const,
+  type: "official" as const,
+})).sort((a, b) => a.name.localeCompare(b.name));
 
 const AppIcon = ({
   app,
@@ -162,7 +159,7 @@ const AppIcon = ({
           className,
         )}
       >
-        <Icon icon={app.icon} className="size-5 text-gray-600" />
+        <Icon className="size-5 text-gray-600" icon={app.icon} />
       </div>
     );
   }
@@ -188,7 +185,6 @@ const AppIcon = ({
   }
 
   const localSVGRegistry: Record<string, React.ReactNode> = {
-
     ansible: (
       <svg
         className="w-full h-full p-0.5 object-contain"
@@ -414,7 +410,10 @@ function ConnectAppsContent() {
   const searchParams = useSearchParams();
 
   // States
-  const [notification, setNotification] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+  const [notification, setNotification] = useState<{
+    type: "success" | "danger";
+    message: string;
+  } | null>(null);
 
   useEffect(() => {
     const status = searchParams.get("status");
@@ -462,7 +461,12 @@ function ConnectAppsContent() {
   const cleanSlug = selectedApp
     ? selectedApp.id.replace("app-", "").toLowerCase()
     : "";
-  const isOauthProvider = ["mcp_github", "mcp_gitlab", "mcp_slack", "mcp_jira"].includes(cleanSlug);
+  const isOauthProvider = [
+    "mcp_github",
+    "mcp_gitlab",
+    "mcp_slack",
+    "mcp_jira",
+  ].includes(cleanSlug);
   const isMcp =
     (cleanSlug.startsWith("mcp_") && !isOauthProvider) ||
     selectedApp?.type === "custom";
@@ -560,8 +564,7 @@ function ConnectAppsContent() {
       return;
     }
 
-    const isLocalMcp =
-      slug.startsWith("mcp_");
+    const isLocalMcp = slug.startsWith("mcp_");
 
     if (isLocalMcp) {
       // Ingest Launcher Presets dynamically
@@ -618,10 +621,15 @@ function ConnectAppsContent() {
             setCustomServersList(customServers);
           }
           if (activeRes.data && activeRes.data.success) {
-            activeOauthProviders = (activeRes.data.data || []).map((conn: any) => conn.provider);
+            activeOauthProviders = (activeRes.data.data || []).map(
+              (conn: any) => conn.provider,
+            );
           }
         } catch (e) {
-          console.error("Failed to fetch custom servers or active OAuth connections", e);
+          console.error(
+            "Failed to fetch custom servers or active OAuth connections",
+            e,
+          );
         }
 
         // Custom MCP Apps
@@ -640,14 +648,15 @@ function ConnectAppsContent() {
         // Standard SaaS & Presets
         const standardAppsMapped = FALLBACK_APPS.map((app) => {
           const slug = app.id.replace("app-", "").toLowerCase();
-          const isOauthConnected = activeOauthProviders.includes(slug) || activeOauthProviders.includes(`mcp_${slug}`);
-          const active = isOauthConnected || activeTools.some((t: any) => t.server === slug);
+          const isOauthConnected =
+            activeOauthProviders.includes(slug) ||
+            activeOauthProviders.includes(`mcp_${slug}`);
+          const active =
+            isOauthConnected || activeTools.some((t: any) => t.server === slug);
 
           return {
             ...app,
-            status: active
-              ? ("connected" as const)
-              : ("disconnected" as const),
+            status: active ? ("connected" as const) : ("disconnected" as const),
           };
         });
 
@@ -691,10 +700,13 @@ function ConnectAppsContent() {
     };
 
     const oauthProvider = providerMap[slug];
+
     if (oauthProvider) {
       // Redirect directly to native user-scoped OAuth connection endpoint
       const connectUrl = `${API_URL}/integrations/connect/${oauthProvider}?token=${accessToken || ""}`;
+
       window.location.href = connectUrl;
+
       return;
     }
 
@@ -711,7 +723,10 @@ function ConnectAppsContent() {
     try {
       const preset = COMMAND_PRESETS[slug] || {
         command: "npx",
-        args: ["-y", `@modelcontextprotocol/server-${slug.replace("mcp_", "")}`],
+        args: [
+          "-y",
+          `@modelcontextprotocol/server-${slug.replace("mcp_", "")}`,
+        ],
       };
       const res = await axios.post(
         `${API_URL}/mcp/connect`,
@@ -958,9 +973,14 @@ function ConnectAppsContent() {
     });
     try {
       if (oauthProvider) {
-        await axios.delete(`${API_URL}/integrations/disconnect/${oauthProvider}`, {
-          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
-        });
+        await axios.delete(
+          `${API_URL}/integrations/disconnect/${oauthProvider}`,
+          {
+            headers: accessToken
+              ? { Authorization: `Bearer ${accessToken}` }
+              : {},
+          },
+        );
       } else {
         await axios.post(
           `${API_URL}/mcp/disconnect`,
@@ -1012,6 +1032,9 @@ function ConnectAppsContent() {
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-hidden bg-default-50 dark:bg-background flex flex-col h-full font-sans w-full">
+        <div className="px-6 pt-4">
+          <ConnectorTabs />
+        </div>
         {/* Master-Detail Split Screen Container */}
         <div className="flex flex-1 w-full overflow-hidden bg-white dark:bg-[#0A0A0A]">
           {/* Right Column: Center Presentation Area */}
@@ -1021,11 +1044,25 @@ function ConnectAppsContent() {
                 <AlertWrapper className="w-full" variant={notification.type}>
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-2 text-xs">
-                      <Icon className="text-base" icon={notification.type === "success" ? "solar:check-circle-bold" : "solar:danger-triangle-bold"} />
+                      <Icon
+                        className="text-base"
+                        icon={
+                          notification.type === "success"
+                            ? "solar:check-circle-bold"
+                            : "solar:danger-triangle-bold"
+                        }
+                      />
                       <span>{notification.message}</span>
                     </div>
-                    <button onClick={() => setNotification(null)} className="hover:opacity-75 transition-opacity" type="button">
-                      <Icon icon="solar:close-circle-bold" className="text-lg" />
+                    <button
+                      className="hover:opacity-75 transition-opacity"
+                      type="button"
+                      onClick={() => setNotification(null)}
+                    >
+                      <Icon
+                        className="text-lg"
+                        icon="solar:close-circle-bold"
+                      />
                     </button>
                   </div>
                 </AlertWrapper>
@@ -1561,11 +1598,16 @@ function ConnectAppsContent() {
 
 export default function ConnectAppsPage() {
   return (
-    <Suspense fallback={
-      <div className="flex-1 flex items-center justify-center bg-white dark:bg-[#0A0A0A] h-screen">
-        <Icon className="text-3xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
-      </div>
-    }>
+    <Suspense
+      fallback={
+        <div className="flex-1 flex items-center justify-center bg-white dark:bg-[#0A0A0A] h-screen">
+          <Icon
+            className="text-3xl text-primary animate-spin"
+            icon="line-md:loading-twotone-loop"
+          />
+        </div>
+      }
+    >
       <ConnectAppsContent />
     </Suspense>
   );

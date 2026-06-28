@@ -848,7 +848,8 @@ export default function VaultPage() {
                       />
                       <Field
                         placeholder={
-                          iamProvider.startsWith("Google") || iamProvider.startsWith("GCP")
+                          iamProvider.startsWith("Google") ||
+                          iamProvider.startsWith("GCP")
                             ? "Service Account Email"
                             : "Key ID"
                         }
@@ -858,7 +859,8 @@ export default function VaultPage() {
                       <Field
                         revealable
                         placeholder={
-                          iamProvider.startsWith("Google") || iamProvider.startsWith("GCP")
+                          iamProvider.startsWith("Google") ||
+                          iamProvider.startsWith("GCP")
                             ? "Private Key JSON"
                             : "Secret Key"
                         }

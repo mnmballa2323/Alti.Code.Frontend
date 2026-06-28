@@ -26,7 +26,8 @@ export default function AudioRecorder({
   const startRecording = async () => {
     // Check if the browser supports SpeechRecognition
     const SpeechRecognition =
-      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
       toast.error(

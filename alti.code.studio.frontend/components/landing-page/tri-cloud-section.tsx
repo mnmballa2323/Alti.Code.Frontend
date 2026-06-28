@@ -13,7 +13,8 @@ const deployments = [
         src="/assets/cloud-logos/gcp.svg"
       />
     ),
-    description: "Deploy scalable and shared cloud compute resources optimized for rapid deployment while ensuring corporate compliance in public tenant zones."
+    description:
+      "Deploy scalable and shared cloud compute resources optimized for rapid deployment while ensuring corporate compliance in public tenant zones.",
   },
   {
     name: "Dedicated Cloud",
@@ -25,7 +26,8 @@ const deployments = [
         src="/assets/cloud-logos/gcp.svg"
       />
     ),
-    description: "Deploy dedicated single tenant infrastructure featuring complete physical data isolation and advanced virtual networks for enterprise safety."
+    description:
+      "Deploy dedicated single tenant infrastructure featuring complete physical data isolation and advanced virtual networks for enterprise safety.",
   },
   {
     name: "Assured Workloads",
@@ -37,8 +39,9 @@ const deployments = [
         src="/assets/cloud-logos/gcp.svg"
       />
     ),
-    description: "Deploy compliant and isolated sovereign cloud instances certified for FedRAMP High and government regulations to secure sensitive public workloads."
-  }
+    description:
+      "Deploy compliant and isolated sovereign cloud instances certified for FedRAMP High and government regulations to secure sensitive public workloads.",
+  },
 ];
 
 export default function GcpSovereignSection() {
@@ -54,7 +57,9 @@ export default function GcpSovereignSection() {
             Google Cloud. Sovereign Security.
           </h3>
           <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium max-w-5xl">
-            Deploy sovereign AI agent swarms on Google Cloud, Dedicated Cloud, and Assured Workloads environments. Enforce absolute compliance and data isolation tailored to your organization.
+            Deploy sovereign AI agent swarms on Google Cloud, Dedicated Cloud,
+            and Assured Workloads environments. Enforce absolute compliance and
+            data isolation tailored to your organization.
           </p>
         </div>
 

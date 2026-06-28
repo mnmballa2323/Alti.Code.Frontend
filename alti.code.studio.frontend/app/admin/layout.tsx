@@ -16,10 +16,7 @@ import {
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
-import {
-  GoogleIcon,
-  LibertyIcon,
-} from "@/components/CloudIcons";
+import { GoogleIcon } from "@/components/CloudIcons";
 
 interface SidebarItem {
   label: string;
@@ -48,8 +45,16 @@ const managerItems: SidebarItem[] = [
 
 const cloudItems: SidebarItem[] = [
   { label: "GCP Cloud", href: "/admin/gcp?env=cloud", icon: GoogleIcon },
-  { label: "GCP Dedicated", href: "/admin/gcp?env=dedicated", icon: GoogleIcon },
-  { label: "GCP Government", href: "/admin/gcp?env=government", icon: GoogleIcon },
+  {
+    label: "GCP Dedicated",
+    href: "/admin/gcp?env=dedicated",
+    icon: GoogleIcon,
+  },
+  {
+    label: "GCP Government",
+    href: "/admin/gcp?env=government",
+    icon: GoogleIcon,
+  },
 ];
 
 export default function AdminLayout({
@@ -138,9 +143,7 @@ export default function AdminLayout({
       return "Platform Controls";
     }
 
-    if (
-      pathname.startsWith("/admin/gcp")
-    ) {
+    if (pathname.startsWith("/admin/gcp")) {
       return "Cloud Providers";
     }
 

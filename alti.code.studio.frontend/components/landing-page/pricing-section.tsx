@@ -5,57 +5,60 @@ import { Check } from "lucide-react";
 
 const plans = [
   {
-    name: "Google Cloud",
+    name: "Cloud",
     price: "1,000",
     commitment: "Min. 1 seat",
     description: (
       <>
-        Sovereign agent systems in standard multi-tenant commercial zones for corporate compliance.
+        Sovereign agent systems in standard multi-tenant commercial zones for
+        corporate compliance.
       </>
     ),
     features: [
       "Multi-tenant deployment",
       "Google Cloud host",
       "Shared infrastructure",
-      "Fastest deployment"
+      "Fastest deployment",
     ],
     cta: "Deploy Cloud",
     buttonClass:
       "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
   },
   {
-    name: "Dedicated Cloud",
+    name: "Dedicated",
     price: "2,500",
     commitment: "Min. 5 seats",
     description: (
       <>
-        Dedicated single-tenant infrastructure with enhanced security and physical data isolation.
+        Dedicated single-tenant infrastructure with enhanced security and
+        physical data isolation.
       </>
     ),
     features: [
       "Single-tenant deployment",
       "Google Cloud host",
       "Dedicated infrastructure",
-      "Enhanced security & data isolation"
+      "Enhanced security & data isolation",
     ],
     cta: "Deploy Dedicated",
     buttonClass:
       "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
   },
   {
-    name: "Assured Workloads",
+    name: "Sovereign",
     price: "5,000",
     commitment: "Min. 10 seats",
     description: (
       <>
-        FedRAMP High and strict sovereignty-compliant environments for public sector workloads.
+        FedRAMP High and strict sovereignty-compliant environments for public
+        sector workloads.
       </>
     ),
     features: [
       "Sovereign deployment",
       "Google Cloud Assured Workloads",
       "FedRAMP High capable",
-      "Sovereign security controls"
+      "Sovereign security controls",
     ],
     cta: "Contact Us",
     buttonClass:
@@ -76,9 +79,11 @@ export default function PricingSection() {
             Predictable Pricing.
           </h2>
           <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
-            Enterprise licensing for sovereign agent orchestration and secure sandboxing.
+            Enterprise licensing for sovereign agent orchestration and secure
+            sandboxing.
             <br />
-            Inference token usage is billed directly at cost or routed via client-managed keys.
+            Inference token usage is billed directly at cost or routed via
+            client-managed keys.
           </p>
         </div>
 
@@ -123,7 +128,10 @@ export default function PricingSection() {
                   <div className="border-t border-gray-200/60 dark:border-gray-800/60 pt-5">
                     <ul className="space-y-3 text-left">
                       {plan.features.map((feature, fIdx) => (
-                        <li key={fIdx} className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2">
+                        <li
+                          key={fIdx}
+                          className="text-sm text-gray-500 dark:text-gray-400 font-medium flex items-center gap-2"
+                        >
                           <Check className="w-4.5 h-4.5 text-emerald-500 flex-shrink-0" />
                           <span>{feature}</span>
                         </li>

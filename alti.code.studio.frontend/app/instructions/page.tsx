@@ -162,200 +162,202 @@ export default function InstructionsPage() {
         <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide">
           <div className="flex flex-col items-center justify-start min-h-full w-full py-6">
             <div className="w-full max-w-4xl space-y-6">
-
-            {/* Header section */}
-            <div className="bg-white dark:bg-[#111111] p-6 rounded-3xl border border-default-200 shadow-sm flex items-center justify-between">
-              <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
-                  <BookOpen className="w-6 h-6" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                    System Instructions
-                  </h1>
-                  <p className="text-xs text-default-500 mt-0.5">
-                    Define active parameters and behaviors to guide codebase
-                    generation and development swarms.
-                  </p>
-                </div>
-              </div>
-              <Button
-                isIconOnly
-                className="text-default-400 hover:text-foreground rounded-xl"
-                variant="light"
-                onClick={fetchRules}
-              >
-                <RefreshCw className="size-4" />
-              </Button>
-            </div>
-
-            {/* Composer Box */}
-            <Card className="p-6 border border-default-200 bg-white dark:bg-[#111111] rounded-3xl shadow-sm">
-              <form className="space-y-4" onSubmit={handleSend}>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-semibold text-default-600 dark:text-default-400 uppercase tracking-wider">
-                    {editingId ? "Edit Instruction" : "Compose Instruction"}
-                  </span>
-                  {editingId && (
-                    <Button
-                      className="h-6 rounded-lg text-xs"
-                      color="danger"
-                      size="sm"
-                      variant="light"
-                      onClick={() => {
-                        setEditingId(null);
-                        setInputValue("");
-                      }}
-                    >
-                      Cancel Edit
-                    </Button>
-                  )}
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Input
-                    classNames={{
-                      inputWrapper:
-                        "bg-[#F4F4F6] dark:bg-default-50 hover:bg-[#e4e4e7] dark:hover:bg-default-100/50 focus-within:bg-[#F4F4F6] shadow-none rounded-2xl border-none h-12",
-                    }}
-                    placeholder="Enter instructions (e.g., 'Use Tailwind CSS for layouts', 'Write clean async Go APIs')"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                  />
-                  <Button
-                    className="h-12 px-6 rounded-2xl font-semibold shadow-sm shrink-0 flex items-center gap-2"
-                    color="primary"
-                    isLoading={submitting}
-                    type="submit"
-                  >
-                    {editingId ? "Update" : "Add"} <Plus className="size-4" />
-                  </Button>
-                </div>
-
-                {/* Presets Grid */}
-                <div className="space-y-2 pt-2 border-t border-default-100/50">
-                  <span className="text-[10px] text-default-400 font-semibold uppercase tracking-wider block">
-                    Enterprise Quick-Add Presets:
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {PRESET_INSTRUCTIONS.map((preset, idx) => (
-                      <Chip
-                        key={idx}
-                        avatar={
-                          <Sparkles className="size-3 text-primary shrink-0" />
-                        }
-                        className="cursor-pointer bg-[#F4F4F6] dark:bg-default-50 hover:bg-primary/10 hover:text-primary border-none text-default-600 dark:text-gray-300 transition-colors text-[11px] font-medium py-3 rounded-lg"
-                        onClick={() => addPreset(preset.text)}
-                      >
-                        {preset.label}
-                      </Chip>
-                    ))}
+              {/* Header section */}
+              <div className="bg-white dark:bg-[#111111] p-6 rounded-3xl border border-default-200 shadow-sm flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                    <BookOpen className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground">
+                      System Instructions
+                    </h1>
+                    <p className="text-xs text-default-500 mt-0.5">
+                      Define active parameters and behaviors to guide codebase
+                      generation and development swarms.
+                    </p>
                   </div>
                 </div>
-              </form>
-            </Card>
-
-            {/* Instruction Listing */}
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-semibold text-default-600 dark:text-default-400 uppercase tracking-wider">
-                  Active Instructions ({instructions.length})
-                </span>
-                <span className="text-[10px] text-default-400 flex items-center gap-1 font-medium">
-                  <Sliders className="size-3" /> Auto-saved & synced instantly
-                </span>
+                <Button
+                  isIconOnly
+                  className="text-default-400 hover:text-foreground rounded-xl"
+                  variant="light"
+                  onClick={fetchRules}
+                >
+                  <RefreshCw className="size-4" />
+                </Button>
               </div>
 
-              {loading ? (
-                <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-[#111111] rounded-3xl border border-default-200">
-                  <Spinner color="primary" />
-                  <span className="text-xs text-default-500 mt-2">
-                    Loading codebase instructions...
+              {/* Composer Box */}
+              <Card className="p-6 border border-default-200 bg-white dark:bg-[#111111] rounded-3xl shadow-sm">
+                <form className="space-y-4" onSubmit={handleSend}>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-default-600 dark:text-default-400 uppercase tracking-wider">
+                      {editingId ? "Edit Instruction" : "Compose Instruction"}
+                    </span>
+                    {editingId && (
+                      <Button
+                        className="h-6 rounded-lg text-xs"
+                        color="danger"
+                        size="sm"
+                        variant="light"
+                        onClick={() => {
+                          setEditingId(null);
+                          setInputValue("");
+                        }}
+                      >
+                        Cancel Edit
+                      </Button>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Input
+                      classNames={{
+                        inputWrapper:
+                          "bg-[#F4F4F6] dark:bg-default-50 hover:bg-[#e4e4e7] dark:hover:bg-default-100/50 focus-within:bg-[#F4F4F6] shadow-none rounded-2xl border-none h-12",
+                      }}
+                      placeholder="Enter instructions (e.g., 'Use Tailwind CSS for layouts', 'Write clean async Go APIs')"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                    />
+                    <Button
+                      className="h-12 px-6 rounded-2xl font-semibold shadow-sm shrink-0 flex items-center gap-2"
+                      color="primary"
+                      isLoading={submitting}
+                      type="submit"
+                    >
+                      {editingId ? "Update" : "Add"} <Plus className="size-4" />
+                    </Button>
+                  </div>
+
+                  {/* Presets Grid */}
+                  <div className="space-y-2 pt-2 border-t border-default-100/50">
+                    <span className="text-[10px] text-default-400 font-semibold uppercase tracking-wider block">
+                      Enterprise Quick-Add Presets:
+                    </span>
+                    <div className="flex flex-wrap gap-2">
+                      {PRESET_INSTRUCTIONS.map((preset, idx) => (
+                        <Chip
+                          key={idx}
+                          avatar={
+                            <Sparkles className="size-3 text-primary shrink-0" />
+                          }
+                          className="cursor-pointer bg-[#F4F4F6] dark:bg-default-50 hover:bg-primary/10 hover:text-primary border-none text-default-600 dark:text-gray-300 transition-colors text-[11px] font-medium py-3 rounded-lg"
+                          onClick={() => addPreset(preset.text)}
+                        >
+                          {preset.label}
+                        </Chip>
+                      ))}
+                    </div>
+                  </div>
+                </form>
+              </Card>
+
+              {/* Instruction Listing */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-default-600 dark:text-default-400 uppercase tracking-wider">
+                    Active Instructions ({instructions.length})
+                  </span>
+                  <span className="text-[10px] text-default-400 flex items-center gap-1 font-medium">
+                    <Sliders className="size-3" /> Auto-saved & synced instantly
                   </span>
                 </div>
-              ) : instructions.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-20 text-center bg-white dark:bg-[#111111] rounded-3xl border border-default-200 p-6">
-                  <BookOpen className="size-12 text-default-200 mb-4" />
-                  <h3 className="text-sm font-semibold text-foreground">
-                    No Instructions Configured
-                  </h3>
-                  <p className="text-xs text-default-400 max-w-sm mt-1">
-                    System instructions direct the coding agents on programming
-                    styles, file conventions, and modularity choices. Add some
-                    above to start.
-                  </p>
-                </div>
-              ) : (
-                <div className="space-y-3.5">
-                  {instructions.map((inst, index) => (
-                    <Card
-                      key={inst.id}
-                      className="p-5 border border-default-200 bg-white dark:bg-[#111111] hover:border-primary/20 transition-all rounded-2xl shadow-sm flex flex-row items-start justify-between gap-4 group"
-                    >
-                      <div className="flex items-start gap-4">
-                        <div className="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 rounded-xl shrink-0 mt-0.5">
-                          <Check className="size-4" />
-                        </div>
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[10px] font-mono text-default-400 font-semibold uppercase tracking-wider">
-                              INST-{String(index + 1).padStart(2, "0")}
-                            </span>
-                            <Chip
-                              className="text-[9px] uppercase font-bold tracking-wider h-4 border-none px-1.5"
-                              color="success"
-                              size="sm"
-                              variant="flat"
-                            >
-                              Enforced
-                            </Chip>
-                          </div>
-                          <p className="text-sm text-foreground leading-relaxed">
-                            {inst.name}
-                          </p>
-                        </div>
-                      </div>
 
-                      <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Tooltip
-                          classNames={{
-                            content:
-                              "bg-black text-white text-xs py-1 px-2 rounded-md shadow-lg",
-                          }}
-                          content="Edit Instruction"
-                        >
-                          <Button
-                            isIconOnly
-                            className="rounded-lg text-default-400 hover:text-primary"
-                            size="sm"
-                            variant="light"
-                            onClick={() => editInstruction(inst.id, inst.name)}
+                {loading ? (
+                  <div className="flex flex-col items-center justify-center py-20 bg-white dark:bg-[#111111] rounded-3xl border border-default-200">
+                    <Spinner color="primary" />
+                    <span className="text-xs text-default-500 mt-2">
+                      Loading codebase instructions...
+                    </span>
+                  </div>
+                ) : instructions.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-20 text-center bg-white dark:bg-[#111111] rounded-3xl border border-default-200 p-6">
+                    <BookOpen className="size-12 text-default-200 mb-4" />
+                    <h3 className="text-sm font-semibold text-foreground">
+                      No Instructions Configured
+                    </h3>
+                    <p className="text-xs text-default-400 max-w-sm mt-1">
+                      System instructions direct the coding agents on
+                      programming styles, file conventions, and modularity
+                      choices. Add some above to start.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3.5">
+                    {instructions.map((inst, index) => (
+                      <Card
+                        key={inst.id}
+                        className="p-5 border border-default-200 bg-white dark:bg-[#111111] hover:border-primary/20 transition-all rounded-2xl shadow-sm flex flex-row items-start justify-between gap-4 group"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className="p-2 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 rounded-xl shrink-0 mt-0.5">
+                            <Check className="size-4" />
+                          </div>
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] font-mono text-default-400 font-semibold uppercase tracking-wider">
+                                INST-{String(index + 1).padStart(2, "0")}
+                              </span>
+                              <Chip
+                                className="text-[9px] uppercase font-bold tracking-wider h-4 border-none px-1.5"
+                                color="success"
+                                size="sm"
+                                variant="flat"
+                              >
+                                Enforced
+                              </Chip>
+                            </div>
+                            <p className="text-sm text-foreground leading-relaxed">
+                              {inst.name}
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-1 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Tooltip
+                            classNames={{
+                              content:
+                                "bg-black text-white text-xs py-1 px-2 rounded-md shadow-lg",
+                            }}
+                            content="Edit Instruction"
                           >
-                            <Edit3 className="size-4" />
-                          </Button>
-                        </Tooltip>
-                        <Tooltip
-                          classNames={{
-                            content:
-                              "bg-black text-white text-xs py-1 px-2 rounded-md shadow-lg",
-                          }}
-                          content="Delete Instruction"
-                        >
-                          <Button
-                            isIconOnly
-                            className="rounded-lg text-default-400 hover:text-danger"
-                            size="sm"
-                            variant="light"
-                            onClick={() => deleteInstruction(inst.id)}
+                            <Button
+                              isIconOnly
+                              className="rounded-lg text-default-400 hover:text-primary"
+                              size="sm"
+                              variant="light"
+                              onClick={() =>
+                                editInstruction(inst.id, inst.name)
+                              }
+                            >
+                              <Edit3 className="size-4" />
+                            </Button>
+                          </Tooltip>
+                          <Tooltip
+                            classNames={{
+                              content:
+                                "bg-black text-white text-xs py-1 px-2 rounded-md shadow-lg",
+                            }}
+                            content="Delete Instruction"
                           >
-                            <Trash2 className="size-4" />
-                          </Button>
-                        </Tooltip>
-                      </div>
-                    </Card>
-                  ))}
-                </div>
-              )}
+                            <Button
+                              isIconOnly
+                              className="rounded-lg text-default-400 hover:text-danger"
+                              size="sm"
+                              variant="light"
+                              onClick={() => deleteInstruction(inst.id)}
+                            >
+                              <Trash2 className="size-4" />
+                            </Button>
+                          </Tooltip>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

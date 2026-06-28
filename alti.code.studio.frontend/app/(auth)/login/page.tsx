@@ -4,7 +4,6 @@ import { Checkbox, Input } from "@heroui/react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
@@ -24,12 +23,15 @@ export default function LoginPage() {
   const [isDesktopApp, setIsDesktopApp] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
+    if (
+      typeof window !== "undefined" &&
+      ("__TAURI__" in window ||
+        "electron" in window ||
+        window.navigator.userAgent.includes("Electron"))
+    ) {
       setIsDesktopApp(true);
     }
   }, []);
-
-
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -72,7 +74,12 @@ export default function LoginPage() {
       }
 
       if (response.data?.accessToken) {
-        if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
+        if (
+          typeof window !== "undefined" &&
+          ("__TAURI__" in window ||
+            "electron" in window ||
+            window.navigator.userAgent.includes("Electron"))
+        ) {
           localStorage.setItem("token", response.data.accessToken);
           localStorage.setItem("accessToken", response.data.accessToken);
           toast.success("Login successful!");
@@ -140,7 +147,12 @@ export default function LoginPage() {
       }
 
       if (response.data?.accessToken) {
-        if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
+        if (
+          typeof window !== "undefined" &&
+          ("__TAURI__" in window ||
+            "electron" in window ||
+            window.navigator.userAgent.includes("Electron"))
+        ) {
           localStorage.setItem("token", response.data.accessToken);
           localStorage.setItem("accessToken", response.data.accessToken);
           toast.success("Verification successful! Logging in...");

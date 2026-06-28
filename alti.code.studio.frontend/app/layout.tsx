@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <head>
-        <link rel="ai-catalog" href="/.well-known/ai-catalog.json" />
+        <link href="/.well-known/ai-catalog.json" rel="ai-catalog" />
       </head>
       <body
         className={clsx(

@@ -12,12 +12,10 @@ import {
   AlertCircle,
   Activity,
   ArrowRight,
-  Shield,
-  Layers,
   Search,
   ArrowLeft,
 } from "lucide-react";
-import { Button, Tooltip, Input, Card, Chip, Spinner } from "@heroui/react";
+import { Button, Input, Card, Chip, Spinner } from "@heroui/react";
 
 interface SpecialistEngine {
   name: string;
@@ -238,41 +236,66 @@ const ENGINE_DISPLAY_NAMES: Record<string, string> = {
   "uipathRpaBotAgent.name": "Desktop Action Bot",
   "intuneMdmPolicyAgent.name": "Device Policy Administrator",
   "peoplesoftHcmBridgeAgent.name": "Corporate Directory Sync Connector",
-  "cicero_law_enforcement": "Municipal Policy Legal Verifier",
+  cicero_law_enforcement: "Municipal Policy Legal Verifier",
 };
 
 const getEngineDisplayName = (name: string): string => {
-  return ENGINE_DISPLAY_NAMES[name] || name.replace(/_|-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
+  return (
+    ENGINE_DISPLAY_NAMES[name] ||
+    name.replace(/_|-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+  );
 };
 
 const FALLBACK_ENGINES: SpecialistEngine[] = [
   {
     name: "opencode",
-    description: "Autonomous SWE Coding Agent — writes patches, runs builds, triages bugs, implements features.",
-    capabilities: ["opencode", "coding-agent", "bug-fix", "patch-generation", "terminal-execution"],
+    description:
+      "Autonomous SWE Coding Agent — writes patches, runs builds, triages bugs, implements features.",
+    capabilities: [
+      "opencode",
+      "coding-agent",
+      "bug-fix",
+      "patch-generation",
+      "terminal-execution",
+    ],
     queue: "opencode-queue",
     version: "1.0.0",
     isPlugin: false,
   },
   {
     name: "openspec",
-    description: "Spec-Driven Development Planner — proposes, validates, and archives project specs.",
-    capabilities: ["openspec", "spec-driven-development", "sdd", "planning", "proposal", "validation"],
+    description:
+      "Spec-Driven Development Planner — proposes, validates, and archives project specs.",
+    capabilities: [
+      "openspec",
+      "spec-driven-development",
+      "sdd",
+      "planning",
+      "proposal",
+      "validation",
+    ],
     queue: "openspec-queue",
     version: "1.0.0",
     isPlugin: false,
   },
   {
     name: "website_cloner",
-    description: "AI Website Cloner — clones, scraps, and reverse-engineers target websites into Next.js/React templates.",
-    capabilities: ["website-cloning", "scraping", "reverse-engineering", "asset-extraction"],
+    description:
+      "AI Website Cloner — clones, scraps, and reverse-engineers target websites into Next.js/React templates.",
+    capabilities: [
+      "website-cloning",
+      "scraping",
+      "reverse-engineering",
+      "asset-extraction",
+    ],
     queue: "cloner-queue",
     version: "1.0.0",
     isPlugin: false,
   },
   {
     name: "auditor",
-    description: "Cloud FinOps Auditor — Monthly burn estimation and resource optimization for every mission.",
+    description:
+      "Cloud FinOps Auditor — Monthly burn estimation and resource optimization for every mission.",
     capabilities: ["cost-audit", "finops", "resource-governance"],
     queue: "auditor-queue",
     version: "1.0.0",
@@ -287,7 +310,9 @@ export default function EnginesPage() {
   const [engines, setEngines] = useState<SpecialistEngine[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedEngine, setSelectedEngine] = useState<SpecialistEngine | null>(null);
+  const [selectedEngine, setSelectedEngine] = useState<SpecialistEngine | null>(
+    null,
+  );
 
   // Form State parameters
   const [opencodeAction, setOpencodeAction] = useState("runTask");
@@ -307,9 +332,12 @@ export default function EnginesPage() {
   // Terminal Execution Log State
   const [executing, setExecuting] = useState(false);
   const [consoleLogs, setConsoleLogs] = useState<string[]>([]);
-  const [execStatus, setExecStatus] = useState<"idle" | "success" | "error">("idle");
+  const [execStatus, setExecStatus] = useState<"idle" | "success" | "error">(
+    "idle",
+  );
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
   // Listen to sidebar selection events
   useEffect(() => {
@@ -320,7 +348,9 @@ export default function EnginesPage() {
         setExecStatus("idle");
       }
     };
+
     window.addEventListener("select-engine", handleSelect);
+
     return () => window.removeEventListener("select-engine", handleSelect);
   }, []);
 
@@ -330,8 +360,11 @@ export default function EnginesPage() {
       setLoading(true);
       try {
         const res = await axios.get(`${API_URL}/engines/list`, {
-          headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+          headers: accessToken
+            ? { Authorization: `Bearer ${accessToken}` }
+            : {},
         });
+
         if (res.data && res.data.success && res.data.data.length > 0) {
           setEngines(res.data.data);
         } else {
@@ -343,6 +376,7 @@ export default function EnginesPage() {
         setLoading(false);
       }
     };
+
     loadRegistry();
   }, [accessToken]);
 
@@ -350,7 +384,9 @@ export default function EnginesPage() {
     if (!selectedEngine) return;
     setExecuting(true);
     setExecStatus("idle");
-    setConsoleLogs([`⏳ Initializing execution thread for Engine: [${selectedEngine.name}]...`]);
+    setConsoleLogs([
+      `⏳ Initializing execution thread for Engine: [${selectedEngine.name}]...`,
+    ]);
 
     let requestBody: any = {
       action: "default",
@@ -387,10 +423,19 @@ export default function EnginesPage() {
     }
 
     try {
-      setConsoleLogs((prev) => [...prev, `📤 Sending payload to trigger console endpoint...`]);
-      const res = await axios.post(`${API_URL}/engines/${selectedEngine.name}/run`, requestBody, {
-        headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
-      });
+      setConsoleLogs((prev) => [
+        ...prev,
+        `📤 Sending payload to trigger console endpoint...`,
+      ]);
+      const res = await axios.post(
+        `${API_URL}/engines/${selectedEngine.name}/run`,
+        requestBody,
+        {
+          headers: accessToken
+            ? { Authorization: `Bearer ${accessToken}` }
+            : {},
+        },
+      );
 
       if (res.data && res.data.success) {
         setExecStatus("success");
@@ -415,14 +460,21 @@ export default function EnginesPage() {
     }
   };
 
-  const currentDisplayName = selectedEngine ? getEngineDisplayName(selectedEngine.name) : "";
+  const currentDisplayName = selectedEngine
+    ? getEngineDisplayName(selectedEngine.name)
+    : "";
 
   // Filter engines list based on search bar query
   const filteredEngines = engines.filter((e) => {
     const displayName = getEngineDisplayName(e.name).toLowerCase();
     const desc = e.description.toLowerCase();
     const query = searchQuery.toLowerCase();
-    return displayName.includes(query) || desc.includes(query) || e.name.toLowerCase().includes(query);
+
+    return (
+      displayName.includes(query) ||
+      desc.includes(query) ||
+      e.name.toLowerCase().includes(query)
+    );
   });
 
   return (
@@ -436,9 +488,9 @@ export default function EnginesPage() {
           {/* Back navigation header bar */}
           <div className="px-8 pt-6 pb-3 border-b border-default-100 flex items-center gap-4 bg-transparent shrink-0">
             <Button
-              variant="flat"
-              size="sm"
               className="rounded-xl flex items-center gap-1.5 text-xs font-semibold"
+              size="sm"
+              variant="flat"
               onClick={() => setSelectedEngine(null)}
             >
               <ArrowLeft className="size-3.5" /> Back to Catalog
@@ -452,7 +504,6 @@ export default function EnginesPage() {
           <div className="flex-1 flex flex-col md:flex-row h-full overflow-hidden p-8 gap-8 pt-4">
             {/* Engine Parameters & Controls Column */}
             <div className="w-full md:w-[380px] shrink-0 flex flex-col justify-between h-full space-y-6">
-              
               {/* Header / Info details */}
               <div className="space-y-4">
                 <div className="space-y-1">
@@ -460,15 +511,20 @@ export default function EnginesPage() {
                     <div className="p-2 rounded-xl bg-primary/10 text-primary">
                       <Cpu className="size-4" />
                     </div>
-                    <h1 className="text-xl font-bold tracking-tight">{currentDisplayName}</h1>
+                    <h1 className="text-xl font-bold tracking-tight">
+                      {currentDisplayName}
+                    </h1>
                   </div>
                   <p className="text-[10px] text-default-400 font-mono">
-                    Engine Registry ID: {selectedEngine.name} | Queue: {selectedEngine.queue}
+                    Engine Registry ID: {selectedEngine.name} | Queue:{" "}
+                    {selectedEngine.queue}
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <h4 className="text-[10px] font-bold text-default-400 uppercase tracking-wider">Engine Purpose</h4>
+                  <h4 className="text-[10px] font-bold text-default-400 uppercase tracking-wider">
+                    Engine Purpose
+                  </h4>
                   <p className="text-xs text-default-600 leading-relaxed bg-[#f4f4f5] dark:bg-default-50 p-4 rounded-2xl border border-default-100/50">
                     {selectedEngine.description}
                   </p>
@@ -478,13 +534,16 @@ export default function EnginesPage() {
               {/* Config Forms Area */}
               <div className="flex-1 overflow-y-auto space-y-5 pr-1">
                 <h4 className="text-[10px] font-bold text-default-400 uppercase tracking-wider flex items-center gap-1.5">
-                  <Sliders className="size-3 text-default-400" /> Configuration Parameters
+                  <Sliders className="size-3 text-default-400" /> Configuration
+                  Parameters
                 </h4>
 
                 {selectedEngine.name === "opencode" && (
                   <div className="space-y-4">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-semibold text-default-600">Action Mode</label>
+                      <label className="text-[11px] font-semibold text-default-600">
+                        Action Mode
+                      </label>
                       <select
                         className="w-full bg-[#f4f4f5] dark:bg-default-50 border border-default-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary text-foreground"
                         value={opencodeAction}
@@ -497,7 +556,9 @@ export default function EnginesPage() {
 
                     <div className="flex flex-col gap-1.5">
                       <label className="text-[11px] font-semibold text-default-600">
-                        {opencodeAction === "getTaskStatus" ? "Session ID" : "Task Instructions"}
+                        {opencodeAction === "getTaskStatus"
+                          ? "Session ID"
+                          : "Task Instructions"}
                       </label>
                       <textarea
                         className="w-full bg-[#f4f4f5] dark:bg-default-50 border border-default-200 rounded-xl p-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary text-foreground h-20 resize-none"
@@ -512,7 +573,9 @@ export default function EnginesPage() {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-semibold text-default-600">Workspace Path (Optional)</label>
+                      <label className="text-[11px] font-semibold text-default-600">
+                        Workspace Path (Optional)
+                      </label>
                       <input
                         className="w-full bg-[#f4f4f5] dark:bg-default-50 border border-default-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary text-foreground"
                         placeholder="/Users/michaelmeram/workspace/..."
@@ -526,7 +589,9 @@ export default function EnginesPage() {
                 {selectedEngine.name === "openspec" && (
                   <div className="space-y-4">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-semibold text-default-600">OpenSpec Action</label>
+                      <label className="text-[11px] font-semibold text-default-600">
+                        OpenSpec Action
+                      </label>
                       <select
                         className="w-full bg-[#f4f4f5] dark:bg-default-50 border border-default-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary text-foreground"
                         value={openspecAction}
@@ -541,7 +606,9 @@ export default function EnginesPage() {
 
                     {openspecAction === "propose" && (
                       <div className="flex flex-col gap-1.5">
-                        <label className="text-[11px] font-semibold text-default-600">Proposal Name</label>
+                        <label className="text-[11px] font-semibold text-default-600">
+                          Proposal Name
+                        </label>
                         <input
                           className="w-full bg-[#f4f4f5] dark:bg-default-50 border border-default-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary text-foreground"
                           placeholder="database-logging-spec"
@@ -552,7 +619,9 @@ export default function EnginesPage() {
                     )}
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-semibold text-default-600">Workspace Path (Optional)</label>
+                      <label className="text-[11px] font-semibold text-default-600">
+                        Workspace Path (Optional)
+                      </label>
                       <input
                         className="w-full bg-[#f4f4f5] dark:bg-default-50 border border-default-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary text-foreground"
                         placeholder="/Users/michaelmeram/workspace/..."
@@ -566,7 +635,9 @@ export default function EnginesPage() {
                 {selectedEngine.name === "website_cloner" && (
                   <div className="space-y-4">
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-semibold text-default-600">Target Website URL</label>
+                      <label className="text-[11px] font-semibold text-default-600">
+                        Target Website URL
+                      </label>
                       <input
                         className="w-full bg-[#f4f4f5] dark:bg-default-50 border border-default-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary text-foreground"
                         placeholder="https://example.com"
@@ -576,7 +647,9 @@ export default function EnginesPage() {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-semibold text-default-600">Project Directory Name</label>
+                      <label className="text-[11px] font-semibold text-default-600">
+                        Project Directory Name
+                      </label>
                       <input
                         className="w-full bg-[#f4f4f5] dark:bg-default-50 border border-default-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary text-foreground"
                         placeholder="my-cloned-website"
@@ -586,7 +659,9 @@ export default function EnginesPage() {
                     </div>
 
                     <div className="flex flex-col gap-1.5">
-                      <label className="text-[11px] font-semibold text-default-600">Workspace Path (Optional)</label>
+                      <label className="text-[11px] font-semibold text-default-600">
+                        Workspace Path (Optional)
+                      </label>
                       <input
                         className="w-full bg-[#f4f4f5] dark:bg-default-50 border border-default-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-primary text-foreground"
                         placeholder="/Users/michaelmeram/workspace/..."
@@ -597,9 +672,13 @@ export default function EnginesPage() {
                   </div>
                 )}
 
-                {!["opencode", "openspec", "website_cloner"].includes(selectedEngine.name) && (
+                {!["opencode", "openspec", "website_cloner"].includes(
+                  selectedEngine.name,
+                ) && (
                   <div className="flex flex-col gap-1.5">
-                    <label className="text-[11px] font-semibold text-default-600">Task Query Instructions</label>
+                    <label className="text-[11px] font-semibold text-default-600">
+                      Task Query Instructions
+                    </label>
                     <textarea
                       className="w-full bg-[#f4f4f5] dark:bg-default-50 border border-default-200 rounded-xl p-3 text-xs focus:outline-none focus:ring-1 focus:ring-primary text-foreground h-28 resize-none"
                       placeholder={`Instruct the ${currentDisplayName}...`}
@@ -613,18 +692,19 @@ export default function EnginesPage() {
               {/* Run Button Footer */}
               <div className="pt-4 border-t border-default-100 bg-[#fafafa]/50 dark:bg-black/50">
                 <Button
-                  color="primary"
                   className="w-full font-semibold rounded-xl text-white flex items-center justify-center gap-2 h-11"
+                  color="primary"
                   isDisabled={executing}
                   onClick={runEngineTask}
                 >
                   {executing ? (
                     <>
-                      <Spinner size="sm" color="current" /> Running Task...
+                      <Spinner color="current" size="sm" /> Running Task...
                     </>
                   ) : (
                     <>
-                      <Play className="size-4 shrink-0 fill-current" /> Trigger Engine Run
+                      <Play className="size-4 shrink-0 fill-current" /> Trigger
+                      Engine Run
                     </>
                   )}
                 </Button>
@@ -639,7 +719,9 @@ export default function EnginesPage() {
                   <div className="w-3 h-3 rounded-full bg-rose-500" />
                   <div className="w-3 h-3 rounded-full bg-amber-500" />
                   <div className="w-3 h-3 rounded-full bg-emerald-500" />
-                  <span className="text-[10px] font-mono text-default-400 pl-2">bash-sandbox-session</span>
+                  <span className="text-[10px] font-mono text-default-400 pl-2">
+                    bash-sandbox-session
+                  </span>
                 </div>
                 <div className="flex items-center gap-4">
                   {executing && (
@@ -671,7 +753,9 @@ export default function EnginesPage() {
                 ) : (
                   <div className="h-full flex flex-col items-center justify-center text-[#5c5c5c] space-y-3">
                     <Terminal className="size-10" />
-                    <p className="text-[10px] uppercase tracking-wider">Standby: Engine execution output is empty</p>
+                    <p className="text-[10px] uppercase tracking-wider">
+                      Standby: Engine execution output is empty
+                    </p>
                   </div>
                 )}
               </div>
@@ -688,10 +772,13 @@ export default function EnginesPage() {
                 <div className="p-2 rounded-xl bg-primary/10 text-primary">
                   <Cpu className="size-5" />
                 </div>
-                <h1 className="text-2xl font-bold tracking-tight">Engine Registry Catalog</h1>
+                <h1 className="text-2xl font-bold tracking-tight">
+                  Engine Registry Catalog
+                </h1>
               </div>
               <p className="text-xs text-default-500">
-                Deploy and orchestrate from our {engines.length || 216} active microservice execution engines.
+                Deploy and orchestrate from our {engines.length || 216} active
+                microservice execution engines.
               </p>
             </div>
 
@@ -714,18 +801,23 @@ export default function EnginesPage() {
           <div className="flex-1 overflow-y-auto pr-1">
             {loading ? (
               <div className="h-full flex flex-col items-center justify-center space-y-3">
-                <Spinner size="lg" color="primary" />
-                <span className="text-xs text-default-500">Retrieving engine records from registry...</span>
+                <Spinner color="primary" size="lg" />
+                <span className="text-xs text-default-500">
+                  Retrieving engine records from registry...
+                </span>
               </div>
             ) : filteredEngines.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-default-400 space-y-2">
                 <AlertCircle className="size-8 text-default-300" />
-                <p className="text-sm font-medium">No engines matched your search query</p>
+                <p className="text-sm font-medium">
+                  No engines matched your search query
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-8">
                 {filteredEngines.map((engine) => {
                   const displayName = getEngineDisplayName(engine.name);
+
                   return (
                     <Card
                       key={engine.name}
@@ -743,10 +835,10 @@ export default function EnginesPage() {
                             <Cpu className="size-4" />
                           </div>
                           <Chip
-                            variant="flat"
+                            className="text-[9px] uppercase tracking-wide border-none"
                             color={engine.isPlugin ? "success" : "secondary"}
                             size="sm"
-                            className="text-[9px] uppercase tracking-wide border-none"
+                            variant="flat"
                           >
                             {engine.isPlugin ? "Plugin" : "Core"}
                           </Chip>

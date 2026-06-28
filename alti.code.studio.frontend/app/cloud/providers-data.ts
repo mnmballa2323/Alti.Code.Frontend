@@ -28,7 +28,11 @@ export const PROVIDER_SPECIALIZATIONS: Record<string, CloudFunctionAgent[]> = {
       agentName: "GCP GCS Specialist (Tier 14)",
       agentId: "gcp_gcs_specialist",
       status: "ACTIVE",
-      capabilities: ["lifecycle-management", "retention-policies", "signed-urls"],
+      capabilities: [
+        "lifecycle-management",
+        "retention-policies",
+        "signed-urls",
+      ],
       description:
         "Configures Signed URLs, storage classes (Standard/Nearline/Coldline/Archive), and object lifecycle policies.",
       icon: "Database",
@@ -39,11 +43,7 @@ export const PROVIDER_SPECIALIZATIONS: Record<string, CloudFunctionAgent[]> = {
       agentName: "GCP Cloud Functions Specialist (Tier 14)",
       agentId: "gcp_functions_specialist",
       status: "OPTIMIZING",
-      capabilities: [
-        "event-triggering",
-        "concurrency-tuning",
-        "min-instances",
-      ],
+      capabilities: ["event-triggering", "concurrency-tuning", "min-instances"],
       description:
         "Tunes 2nd gen Cloud Functions, event-driven triggers via Eventarc, and runtime execution scaling.",
       icon: "Cpu",
@@ -69,11 +69,7 @@ export const PROVIDER_SPECIALIZATIONS: Record<string, CloudFunctionAgent[]> = {
       agentName: "GCP IAM Guardian (Tier 14)",
       agentId: "gcp_iam_guardian",
       status: "SWARMING",
-      capabilities: [
-        "workload-identity",
-        "vpc-service-controls",
-        "iam-roles",
-      ],
+      capabilities: ["workload-identity", "vpc-service-controls", "iam-roles"],
       description:
         "Audits VPC Service Controls boundaries, workload identity pools, and custom least-privilege IAM roles.",
       icon: "Lock",
@@ -93,5 +89,5 @@ export const PROVIDER_SPECIALIZATIONS: Record<string, CloudFunctionAgent[]> = {
         "Compiles declarative Terraform files, manages GCP Organization Policy compliance, and runs validation gates.",
       icon: "Activity",
     },
-  ]
+  ],
 };

@@ -1,5 +1,4 @@
 export const SAAS_MOCKS = [
-
   {
     name: "GitHub",
     slug: "mcp_github",

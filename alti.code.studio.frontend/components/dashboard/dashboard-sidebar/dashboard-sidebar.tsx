@@ -200,7 +200,10 @@ export default function Component() {
           isOpen={isLogoutOpen}
           onConfirm={async () => {
             const isDesktop =
-              typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"));
+              typeof window !== "undefined" &&
+              ("__TAURI__" in window ||
+                "electron" in window ||
+                window.navigator.userAgent.includes("Electron"));
 
             if (isDesktop) {
               localStorage.removeItem("token");

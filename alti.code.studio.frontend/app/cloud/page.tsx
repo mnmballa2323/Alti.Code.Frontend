@@ -31,6 +31,7 @@ import {
 } from "@heroui/react";
 import { useDispatch } from "react-redux";
 
+import { ConnectorTabs } from "@/components/connector-tabs";
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { connectCloud } from "@/store/systemSlice";
 import { AppDispatch } from "@/store";
@@ -67,7 +68,11 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
       agentName: "GCP GCS Specialist (Tier 14)",
       agentId: "gcp_gcs_specialist",
       status: "ACTIVE",
-      capabilities: ["lifecycle-management", "retention-policies", "signed-urls"],
+      capabilities: [
+        "lifecycle-management",
+        "retention-policies",
+        "signed-urls",
+      ],
       description:
         "Configures Signed URLs, storage classes (Standard/Nearline/Coldline/Archive), and object lifecycle policies.",
       icon: "Database",
@@ -78,11 +83,7 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
       agentName: "GCP Cloud Functions Specialist (Tier 14)",
       agentId: "gcp_functions_specialist",
       status: "OPTIMIZING",
-      capabilities: [
-        "event-triggering",
-        "concurrency-tuning",
-        "min-instances",
-      ],
+      capabilities: ["event-triggering", "concurrency-tuning", "min-instances"],
       description:
         "Tunes 2nd gen Cloud Functions, event-driven triggers via Eventarc, and runtime execution scaling.",
       icon: "Cpu",
@@ -108,11 +109,7 @@ const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
       agentName: "GCP IAM Guardian (Tier 14)",
       agentId: "gcp_iam_guardian",
       status: "SWARMING",
-      capabilities: [
-        "workload-identity",
-        "vpc-service-controls",
-        "iam-roles",
-      ],
+      capabilities: ["workload-identity", "vpc-service-controls", "iam-roles"],
       description:
         "Audits VPC Service Controls boundaries, workload identity pools, and custom least-privilege IAM roles.",
       icon: "Lock",
@@ -428,6 +425,7 @@ export default function CloudPage() {
   return (
     <ChatBotLayout>
       <div className="flex-1 overflow-y-auto bg-default-50 dark:bg-[#0A0A0A] p-8 font-sans scrollbar-hide">
+        <ConnectorTabs />
         <div className="flex flex-col items-center justify-start min-h-full w-full py-6">
           {selectedProvider ? (
             <div className="w-full max-w-4xl text-left bg-white dark:bg-[#111111] p-8 rounded-3xl border border-default-200 shadow-sm animate-in fade-in slide-in-from-bottom-4 duration-500 my-auto">
@@ -519,7 +517,8 @@ export default function CloudPage() {
                           </div>
                           <div>
                             <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                              GCP Sovereign AI Gateway Routing (Sovereign Azure Inference)
+                              GCP Sovereign AI Gateway Routing (Sovereign Azure
+                              Inference)
                             </h4>
                             <p className="text-[10px] text-gray-400">
                               Sovereign proxy path enforced for foundational

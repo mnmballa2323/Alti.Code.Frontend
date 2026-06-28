@@ -3,8 +3,6 @@
 import { SiKubernetes, SiDigitalocean, SiSnowflake } from "react-icons/si";
 import React from "react";
 
-
-
 const OrbitRing = ({
   size,
   duration,

@@ -10,7 +10,6 @@ import { Toaster } from "react-hot-toast";
 import { Provider as ReduxProvider, useDispatch } from "react-redux";
 import { SessionProvider, useSession, signIn } from "next-auth/react";
 
-
 import { store } from "@/store";
 import { getUserData } from "@/lib/user";
 import { userController } from "@/store/userSlice";
@@ -62,7 +61,10 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
     const accessToken = session?.user?.accessToken ?? null;
 
     if (typeof window !== "undefined") {
-      const isTauri = "__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron");
+      const isTauri =
+        "__TAURI__" in window ||
+        "electron" in window ||
+        window.navigator.userAgent.includes("Electron");
 
       if (accessToken) {
         localStorage.setItem("token", accessToken);
@@ -183,7 +185,12 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [tauriSession, setTauriSession] = React.useState<any>(() => {
-    if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
+    if (
+      typeof window !== "undefined" &&
+      ("__TAURI__" in window ||
+        "electron" in window ||
+        window.navigator.userAgent.includes("Electron"))
+    ) {
       const token = localStorage.getItem("accessToken");
 
       if (token) {
@@ -202,7 +209,12 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   });
 
   React.useEffect(() => {
-    if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
+    if (
+      typeof window !== "undefined" &&
+      ("__TAURI__" in window ||
+        "electron" in window ||
+        window.navigator.userAgent.includes("Electron"))
+    ) {
       const token = localStorage.getItem("accessToken");
 
       if (token) {

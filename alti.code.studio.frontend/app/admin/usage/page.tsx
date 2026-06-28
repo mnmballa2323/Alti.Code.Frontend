@@ -863,7 +863,9 @@ const archivedModelsData: Record<string, ArchivedModelInfo[]> = {
 };
 
 export default function ModelUsagePage() {
-  const [activeTab, setActiveTab] = useState<"gcp_claude" | "gcp_sovereign" | "gcp_gpt">("gcp_gpt");
+  const [activeTab, setActiveTab] = useState<
+    "gcp_claude" | "gcp_sovereign" | "gcp_gpt"
+  >("gcp_gpt");
   const data = initialUsageData[activeTab];
 
   // Object tracking timeframe for each model name
@@ -945,7 +947,9 @@ export default function ModelUsagePage() {
                   : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
               }`}
               onClick={() => setActiveTab("gcp_gpt")}
-            >GCP Commercial</button>
+            >
+              GCP Commercial
+            </button>
             <button
               className={`px-6 py-2 text-xs font-bold rounded-xl transition-all ${
                 activeTab === "gcp_claude"
@@ -953,7 +957,9 @@ export default function ModelUsagePage() {
                   : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
               }`}
               onClick={() => setActiveTab("gcp_claude")}
-            >GCP Government</button>
+            >
+              GCP Government
+            </button>
             <button
               className={`px-6 py-2 text-xs font-bold rounded-xl transition-all ${
                 activeTab === "gcp_sovereign"
@@ -961,7 +967,9 @@ export default function ModelUsagePage() {
                   : "text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
               }`}
               onClick={() => setActiveTab("gcp_sovereign")}
-            >GCP Sovereign</button>
+            >
+              GCP Sovereign
+            </button>
           </div>
         </div>
 

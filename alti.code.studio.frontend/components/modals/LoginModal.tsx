@@ -69,7 +69,12 @@ export function LoginModal() {
 
       if (response.data?.accessToken) {
         // Check if we are running in the Tauri desktop app
-        if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
+        if (
+          typeof window !== "undefined" &&
+          ("__TAURI__" in window ||
+            "electron" in window ||
+            window.navigator.userAgent.includes("Electron"))
+        ) {
           localStorage.setItem("token", response.data.accessToken);
           localStorage.setItem("accessToken", response.data.accessToken);
           toast.success("Login successful!");
@@ -139,7 +144,12 @@ export function LoginModal() {
 
       if (response.data?.accessToken) {
         // Check if we are running in the Tauri desktop app
-        if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
+        if (
+          typeof window !== "undefined" &&
+          ("__TAURI__" in window ||
+            "electron" in window ||
+            window.navigator.userAgent.includes("Electron"))
+        ) {
           localStorage.setItem("token", response.data.accessToken);
           localStorage.setItem("accessToken", response.data.accessToken);
           toast.success("Verification successful! Logging in...");

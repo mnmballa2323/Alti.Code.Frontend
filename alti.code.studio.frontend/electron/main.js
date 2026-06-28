@@ -255,7 +255,7 @@ const createWindow = () => {
             win.loadURL('app://./index.html');
         });
     } else {
-        win.loadURL('http://localhost:3005');
+        win.loadURL('http://localhost:3001');
         // Open DevTools in development
         // win.webContents.openDevTools();
     }
