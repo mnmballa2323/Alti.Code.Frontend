@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CreditCard, Users } from "lucide-react";
+import { Users } from "lucide-react";
 
 export default function BillingPage() {
   const [activeSeats, setActiveSeats] = React.useState(7);
@@ -46,10 +46,7 @@ export default function BillingPage() {
 
           {/* Card 4: Payment Card */}
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
-            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-              <CreditCard className="w-3.5 h-3.5 text-[#635BFF]" />
-              <span>Card</span>
-            </div>
+            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Card</div>
             <div className="flex items-baseline justify-between mt-2">
               <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">Visa *4242</span>
               <span className="text-[10px] text-neutral-400 font-semibold">12/28</span>
