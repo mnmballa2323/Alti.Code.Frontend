@@ -13,13 +13,12 @@ export function TuningTabs() {
       <Tabs
         aria-label="Tuning Options"
         classNames={{
-          tabList: "gap-6 relative rounded-none p-0 border-b-0",
-          cursor: "w-full bg-primary",
-          tab: "max-w-fit px-0 h-14",
-          tabContent: "group-data-[selected=true]:text-primary",
+          tabList: "bg-default-100 dark:bg-default-50 p-1 rounded-lg border-none shadow-inner",
+          cursor: "bg-white dark:bg-default-200 shadow-sm rounded-md",
+          tab: "h-8 px-4",
+          tabContent: "group-data-[selected=true]:text-foreground text-default-500 font-medium text-sm",
         }}
         selectedKey={pathname}
-        variant="underlined"
         onSelectionChange={(key) => router.push(key as string)}
       >
         <Tab
