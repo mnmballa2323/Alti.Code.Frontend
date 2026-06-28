@@ -1069,7 +1069,6 @@ export default function Sidebar() {
     router.prefetch("/cloud");
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
-    router.prefetch("/slides");
     router.prefetch("/documents");
     router.prefetch("/connect-apps");
   }, [router]);
@@ -1094,8 +1093,6 @@ export default function Sidebar() {
         return "Data";
       case "/functions":
         return "Functions";
-      case "/slides":
-        return "Slides";
       case "/connect-apps":
       case "/integrations":
         return "Apps";
@@ -1150,15 +1147,6 @@ export default function Sidebar() {
       isActive: pathname === "/functions",
       onClick: () => {
         router.push("/functions");
-      },
-    },
-    {
-      label: "Slides",
-      icon: Presentation,
-      path: "/slides",
-      isActive: pathname === "/slides",
-      onClick: () => {
-        router.push("/slides");
       },
     },
     {
@@ -1358,7 +1346,6 @@ export default function Sidebar() {
     router.prefetch("/instructions");
     router.prefetch("/guardrails");
     router.prefetch("/knowledge");
-    router.prefetch("/slides");
     router.prefetch("/vault");
     router.prefetch("/connect-apps");
     router.prefetch("/database");
