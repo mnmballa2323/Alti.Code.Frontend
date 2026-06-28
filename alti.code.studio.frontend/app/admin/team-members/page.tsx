@@ -16,17 +16,17 @@ export default function MembersPage() {
 
   const [members, setMembers] = React.useState(mockMembers);
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState<number | null>(null);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const activeDropdownRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+      if (activeDropdownRef.current && !activeDropdownRef.current.contains(event.target as Node)) {
         setActiveDropdownIndex(null);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  }, [activeDropdownIndex]);
 
   const handleRoleChange = (index: number, newRole: string) => {
     const updatedMembers = [...members];
@@ -35,7 +35,7 @@ export default function MembersPage() {
   };
 
   return (
-    <div className="w-full pt-6" ref={containerRef}>
+    <div className="w-full pt-6">
       <div className="w-full">
         {/* Table Header */}
         <div className="grid grid-cols-[20%_20%_42%_18%] px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
@@ -56,7 +56,7 @@ export default function MembersPage() {
               <div>{member.lastName}</div>
               <div>{member.email}</div>
               <div className="flex items-center justify-between w-full pr-0 relative">
-                <div className="relative">
+                <div className="relative" ref={activeDropdownIndex === i ? activeDropdownRef : null}>
                   {member.isYou ? (
                     <span className="font-medium text-neutral-700 dark:text-neutral-300">
                       {member.role}
