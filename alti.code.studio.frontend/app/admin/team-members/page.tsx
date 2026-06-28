@@ -34,15 +34,15 @@ export default function MembersPage() {
             >
               <div>{member.firstName}</div>
               <div>{member.lastName}</div>
-              <div className="flex items-center justify-between w-full pr-8">
-                <span>{member.email}</span>
+              <div>{member.email}</div>
+              <div className="flex items-center justify-between w-full pr-4">
+                <span>{member.role}</span>
                 {member.isYou && (
                   <span className="px-2 py-0.5 rounded text-[10px] bg-neutral-100 dark:bg-neutral-800 text-neutral-500 font-bold shrink-0">
                     You
                   </span>
                 )}
               </div>
-              <div>{member.role}</div>
             </div>
           ))}
         </div>
