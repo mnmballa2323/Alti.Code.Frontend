@@ -200,12 +200,35 @@ export default function BillingPage() {
           <>
             {/* ACH Direct Debit Inputs */}
             <div className="flex flex-col gap-6 mt-2">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <input
-                  type="text"
-                  placeholder="Account Holder Name"
-                  className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+                <div className="sm:col-span-2">
+                  <input
+                    type="text"
+                    placeholder="Account Holder Name"
+                    className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                  />
+                </div>
+                <div>
+                  <select
+                    className="w-full h-11 px-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none text-neutral-800 dark:text-neutral-200 shadow-sm appearance-none cursor-pointer"
+                    style={{ backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`, backgroundPosition: 'right 0.75rem center', backgroundSize: '1.25em 1.25em', backgroundRepeat: 'no-repeat' }}
+                  >
+                    <option value="company">Company</option>
+                    <option value="individual">Individual</option>
+                  </select>
+                </div>
+                <div>
+                  <select
+                    className="w-full h-11 px-3 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none text-neutral-800 dark:text-neutral-200 shadow-sm appearance-none cursor-pointer"
+                    style={{ backgroundImage: `url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E")`, backgroundPosition: 'right 0.75rem center', backgroundSize: '1.25em 1.25em', backgroundRepeat: 'no-repeat' }}
+                  >
+                    <option value="checking">Checking</option>
+                    <option value="savings">Savings</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <input
                   type="text"
                   placeholder="Bank Routing Number"
