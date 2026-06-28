@@ -144,7 +144,7 @@ export default function MembersPage() {
                   setMemberToRemove(null);
                   setIndexToRemove(null);
                 }}
-                className="px-3.5 py-2 border border-neutral-200 dark:border-neutral-800 text-xs font-semibold text-neutral-600 dark:text-neutral-400 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none"
+                className="px-3.5 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 text-xs font-semibold rounded-lg transition-colors focus:outline-none"
               >
                 Cancel
               </button>
