@@ -330,8 +330,22 @@ export default function AuthLayout({
             style={{ animationDelay: "-4s" }}
           />
 
+          {/* Logo in top left */}
+          <div className="relative z-20">
+            <Link href="/">
+              <img
+                alt="Inso Logo Icon"
+                className="h-8 w-auto hover:opacity-80 transition-opacity cursor-pointer"
+                src="/logo-white.png"
+              />
+            </Link>
+          </div>
+
           {/* Bottom Panel Text */}
           <div className="relative z-20 w-full max-w-xl mt-auto">
+            <span className="text-neutral-500 text-sm font-normal tracking-wide block mb-3">
+              inso code
+            </span>
             <h2 className="text-4xl xl:text-5xl font-bold tracking-tight mb-4 leading-tight bg-gradient-to-br from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
               Build the future.
             </h2>
@@ -347,18 +361,6 @@ export default function AuthLayout({
       <div
         className={`w-full ${isTauri ? "max-w-2xl mx-auto" : "lg:w-1/2"} flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative`}
       >
-        {/* Logo in top right */}
-        {!isTauri && (
-          <div className="absolute top-6 right-6 sm:top-8 sm:right-8">
-            <Link href="/">
-              <img
-                alt="Inso Logo Icon"
-                className="h-8 w-auto hover:opacity-80 transition-opacity cursor-pointer"
-                src="/logo-black.png"
-              />
-            </Link>
-          </div>
-        )}
 
         {/* Back Button */}
         {!isTauri && (
