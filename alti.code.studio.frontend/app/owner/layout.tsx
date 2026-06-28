@@ -7,7 +7,6 @@ import { useSession } from "next-auth/react";
 import {
   Users,
   Activity,
-  BarChart3,
   ArrowLeft,
   LayoutDashboard,
   DollarSign,
@@ -25,7 +24,6 @@ const ownerItems: SidebarItem[] = [
   { label: "Dashboard", href: "/owner/dashboard", icon: LayoutDashboard },
   { label: "Revenue", href: "/owner/revenue", icon: DollarSign },
   { label: "Audit Logs", href: "/owner/audit", icon: Activity },
-  { label: "Model Usage", href: "/owner/usage", icon: BarChart3 },
 ];
 
 const memberItems: SidebarItem[] = [
@@ -123,7 +121,6 @@ export default function OwnerLayout({
     if (pathname.startsWith("/owner/enterprise")) return "Enterprise";
     if (pathname.startsWith("/owner/revenue")) return "Revenue";
 
-    if (pathname.startsWith("/owner/usage")) return "Model Usage";
     if (pathname.startsWith("/owner/audit")) return "Audit Logs";
 
     return "Platform Owner";

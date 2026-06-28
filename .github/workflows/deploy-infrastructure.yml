@@ -1,0 +1,101 @@
+name: One-Click Infrastructure Deployment
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_tier:
+        description: 'Target Deployment Tier'
+        required: true
+        default: 'cloud'
+        type: choice
+        options:
+          - 'cloud'
+          - 'dedicated'
+          - 'government'
+      customer_name:
+        description: 'Unique name of the enterprise tenant'
+        required: true
+        default: 'enterprise-tenant'
+        type: string
+      gcp_region:
+        description: 'Target Google Cloud Region'
+        required: true
+        default: 'us-central1'
+        type: string
+      gcp_project_id:
+        description: 'Target Google Cloud Project ID'
+        required: true
+        default: 'alti-code-studio-production'
+        type: string
+      auto_approve:
+        description: 'Bypass interactive prompts and auto-apply changes'
+        required: true
+        default: true
+        type: boolean
+      dry_run:
+        description: 'Simulate deployment steps without modifying cloud resources'
+        required: true
+        default: false
+        type: boolean
+
+jobs:
+  deploy-infrastructure:
+    name: Deploy Alti Infrastructure
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '1.7.0'
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: 'access_token'
+          # Integrates with Workload Identity Federation for FedRAMP/SOC2 compliance
+          workload_identity_provider: 'projects/123456789/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+          service_account: 'github-actions-deployer@${{ github.event.inputs.gcp_project_id }}.iam.gserviceaccount.com'
+
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Install Dependencies
+        run: |
+          cd alti.code.studio.backend
+          npm ci --legacy-peer-deps
+
+      - name: Run Deployer Script
+        run: |
+          chmod +x ./deploy_enterprise.sh
+          
+          # Build arguments array
+          ARGS=(
+            --deployment-option "${{ github.event.inputs.deployment_tier }}"
+            --customer "${{ github.event.inputs.customer_name }}"
+            --region "${{ github.event.inputs.gcp_region }}"
+            --project "${{ github.event.inputs.gcp_project_id }}"
+          )
+          
+          if [ "${{ github.event.inputs.auto_approve }}" = "true" ]; then
+            ARGS+=(--auto-approve)
+          fi
+          
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            ARGS+=(--dry-run)
+          fi
+          
+          # Execute the headless one-click deployer
+          ./deploy_enterprise.sh "${ARGS[@]}"
