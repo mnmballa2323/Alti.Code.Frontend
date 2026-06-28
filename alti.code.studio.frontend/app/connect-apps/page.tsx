@@ -1117,7 +1117,7 @@ function ConnectAppsContent() {
                       </div>
                     </div>
 
-                    {loadingApps ? (
+                    {loading ? (
                       <div className="flex flex-col items-center justify-center py-20 gap-3">
                         <Icon className="text-3xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
                         <span className="text-sm text-default-400">Loading catalog...</span>
