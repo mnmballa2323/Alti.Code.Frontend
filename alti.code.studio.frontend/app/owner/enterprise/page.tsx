@@ -109,10 +109,10 @@ export default function EnterprisePage() {
 
           {/* Table Header */}
           <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
-            <div className="col-span-5">Enterprise Account Name</div>
+            <div className="col-span-4">Enterprise Account Name</div>
             <div className="col-span-3">Owner Email</div>
-            <div className="col-span-2 text-right">Members</div>
-            <div className="col-span-2 text-right pr-6">Price</div>
+            <div className="col-span-3">Members</div>
+            <div className="col-span-2">Price</div>
           </div>
         </div>
 
@@ -132,7 +132,7 @@ export default function EnterprisePage() {
                 className="group grid grid-cols-12 gap-4 px-6 py-5 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-sm transition-all shadow-sm duration-200 hover:border-neutral-350 dark:hover:border-neutral-700 cursor-pointer"
                 onClick={() => router.push(`/owner/enterprise/${tenant.id}`)}
               >
-                <div className="col-span-5 flex flex-col gap-0.5">
+                <div className="col-span-4 flex flex-col gap-0.5 min-w-0">
                   <span className="text-neutral-900 dark:text-white font-normal overflow-hidden text-ellipsis whitespace-nowrap">
                     {tenant.name}
                   </span>
@@ -144,22 +144,22 @@ export default function EnterprisePage() {
                   )}
                 </div>
 
-                <div className="col-span-3 flex items-center gap-2 text-neutral-500 dark:text-neutral-400 font-normal">
-                  <User className="w-3.5 h-3.5" />
+                <div className="col-span-3 flex items-center gap-2 text-neutral-500 dark:text-neutral-400 font-normal min-w-0">
+                  <User className="w-3.5 h-3.5 shrink-0" />
                   <span className="truncate">{tenant.owner || "No owner assigned"}</span>
                 </div>
 
-                <div className="col-span-2 text-right text-neutral-600 dark:text-neutral-400 font-normal pr-2">
+                <div className="col-span-3 text-neutral-600 dark:text-neutral-400 font-normal">
                   {tenant.userCount === 1
                     ? "1 member"
                     : `${tenant.userCount} members`}
                 </div>
 
-                <div className="col-span-2 flex items-center justify-end gap-2 pr-1">
+                <div className="col-span-2 flex items-center justify-between pr-2">
                   <span className="text-neutral-800 dark:text-neutral-200 font-normal text-sm">
                     $5,000/mo
                   </span>
-                  <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors" />
+                  <ChevronRight className="w-4 h-4 text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-200 transition-colors shrink-0" />
                 </div>
               </div>
             ))

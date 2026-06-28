@@ -171,10 +171,10 @@ export default function TeamMembersPage() {
 
             {/* Table Header */}
             <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl items-center text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wider uppercase shadow-sm">
-              <div className="col-span-6">Email</div>
+              <div className="col-span-5">Email</div>
               <div className="col-span-2">Role</div>
-              <div className="col-span-2 text-right">Members</div>
-              <div className="col-span-2 text-right pr-6">Price</div>
+              <div className="col-span-3">Members</div>
+              <div className="col-span-2">Price</div>
             </div>
           </div>
 
@@ -206,7 +206,7 @@ export default function TeamMembersPage() {
                           router.push(`/owner/team-members/${member.id}`)
                         }
                       >
-                        <div className="col-span-6 flex items-center gap-2 min-w-0">
+                        <div className="col-span-5 flex items-center gap-2 min-w-0">
                           <span className="text-neutral-900 dark:text-white font-normal truncate flex-1">
                             {member.email}
                           </span>
@@ -214,10 +214,10 @@ export default function TeamMembersPage() {
                         <div className="col-span-2 flex items-center text-neutral-500 dark:text-neutral-400 capitalize font-normal">
                           {member.role || "user"}
                         </div>
-                        <div className="col-span-2 text-right text-neutral-600 dark:text-neutral-400 font-normal pr-2">
+                        <div className="col-span-3 text-neutral-600 dark:text-neutral-400 font-normal">
                           1 member
                         </div>
-                        <div className="col-span-2 flex items-center justify-end gap-2 pr-1">
+                        <div className="col-span-2 flex items-center justify-between pr-2">
                           <span className="text-neutral-800 dark:text-neutral-200 font-normal text-sm">
                             {prices[member.id] || "$1,000"}
                           </span>
