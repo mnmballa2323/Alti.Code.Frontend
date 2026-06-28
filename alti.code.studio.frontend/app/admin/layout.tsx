@@ -64,9 +64,11 @@ export default function AdminLayout({
   ) => {
     return (
       <div className={`mb-6 ${extraClass}`}>
-        <h3 className="px-4 text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
-          {title}
-        </h3>
+        {title && (
+          <h3 className="px-4 text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
+            {title}
+          </h3>
+        )}
         <nav className="flex flex-col gap-1">
           {items.map((item) => {
             const isActive = pathname.startsWith(item.href);
@@ -185,7 +187,7 @@ export default function AdminLayout({
       <div className="flex-1 flex w-full overflow-hidden">
         {/* Internal Navigation Sidebar */}
         <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
-          {renderNavGroup("Platform Admin", adminItems)}
+          {renderNavGroup("", adminItems)}
         </div>
 
         {/* Main Content Pane */}
