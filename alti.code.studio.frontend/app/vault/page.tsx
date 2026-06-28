@@ -553,7 +553,7 @@ export default function VaultPage() {
     <ChatBotLayout>
       <div className="flex flex-col h-full bg-default-50 dark:bg-background w-full font-sans">
         {/* Top Navbar */}
-        <div className="flex items-center justify-center w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111] shrink-0">
+        <div className="flex items-center justify-center relative z-50 w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111] shrink-0">
           {!selectedSecretId && (
             <div className="flex items-center bg-default-100 dark:bg-default-50 p-1 rounded-lg border-none shadow-inner">
               {VAULT_TABS.map((tab) => (

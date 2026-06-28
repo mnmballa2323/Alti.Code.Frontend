@@ -21,10 +21,10 @@ export function TuningTabs() {
             "group-data-[selected=true]:text-foreground text-default-500 font-medium text-sm",
         }}
         selectedKey={pathname}
+        onSelectionChange={(key) => router.push(key as string)}
       >
         <Tab
           key="/instructions"
-          href="/instructions"
           title={
             <div className="flex items-center space-x-2">
               <BookOpen className="w-4 h-4" />
@@ -34,7 +34,6 @@ export function TuningTabs() {
         />
         <Tab
           key="/guardrails"
-          href="/guardrails"
           title={
             <div className="flex items-center space-x-2">
               <Shield className="w-4 h-4" />
@@ -44,7 +43,6 @@ export function TuningTabs() {
         />
         <Tab
           key="/knowledge"
-          href="/knowledge"
           title={
             <div className="flex items-center space-x-2">
               <Database className="w-4 h-4" />

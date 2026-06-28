@@ -26,10 +26,10 @@ export function ConnectorTabs() {
             "group-data-[selected=true]:text-foreground text-default-500 font-medium text-sm",
         }}
         selectedKey={selectedKey}
+        onSelectionChange={(key) => router.push(key as string)}
       >
         <Tab
           key="/connect-apps"
-          href="/connect-apps"
           title={
             <div className="flex items-center space-x-2">
               <LayoutGrid className="w-4 h-4" />
@@ -39,7 +39,6 @@ export function ConnectorTabs() {
         />
         <Tab
           key="/database"
-          href="/database"
           title={
             <div className="flex items-center space-x-2">
               <Server className="w-4 h-4" />
@@ -49,7 +48,6 @@ export function ConnectorTabs() {
         />
         <Tab
           key="/cloud"
-          href="/cloud"
           title={
             <div className="flex items-center space-x-2">
               <Cloud className="w-4 h-4" />
