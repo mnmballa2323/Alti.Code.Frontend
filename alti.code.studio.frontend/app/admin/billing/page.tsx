@@ -12,8 +12,8 @@ export default function BillingPage() {
     <div className="w-full pt-6">
       <div className="flex flex-col gap-6 max-w-4xl">
         
-        {/* Floating Box Cards in a Row for the Plan Part */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* Floating Box Cards in a Row for the Plan & Card Part */}
+        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           {/* Card 1: Plan Type */}
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm relative flex flex-col justify-between h-28">
             <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Plan</div>
@@ -43,67 +43,63 @@ export default function BillingPage() {
               <span className="text-[10px] text-neutral-400 font-semibold">USD</span>
             </div>
           </div>
+
+          {/* Card 4: Payment Card */}
+          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
+            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
+              <CreditCard className="w-3.5 h-3.5 text-[#635BFF]" />
+              <span>Card</span>
+            </div>
+            <div className="flex items-baseline justify-between mt-2">
+              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">Visa *4242</span>
+              <span className="text-[10px] text-neutral-400 font-semibold">12/28</span>
+            </div>
+          </div>
         </div>
 
-        {/* Payment Details Card (Simplified & Floating) */}
-        <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl shadow-sm p-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-neutral-50 dark:border-neutral-800/50">
-            <div>
-              <h2 className="text-xs font-bold text-neutral-900 dark:text-white">Payment Method</h2>
-              <p className="text-[10px] text-neutral-400 mt-0.5">Secure credit card vaulting</p>
-            </div>
-            
-            <div className="flex items-center gap-3 bg-neutral-50/50 dark:bg-neutral-800/20 px-4 py-2 border border-neutral-100 dark:border-neutral-800 rounded-xl">
-              <CreditCard className="w-4 h-4 text-[#635BFF]" />
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200">Visa ending in 4242</span>
-                  <span className="px-1 py-0.5 rounded text-[8px] font-bold bg-neutral-200 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">Primary</span>
-                </div>
-                <p className="text-[9px] text-neutral-400">Expires 12 / 2028</p>
-              </div>
-            </div>
+        {/* Floating Input Fields (No white card background, original height/styles) */}
+        <div className="flex flex-col gap-6 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <input
+              type="text"
+              placeholder="Enter Cardholder Name"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+            />
+            <input
+              type="text"
+              placeholder="Enter Card Number"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+            />
           </div>
 
-          <div className="mt-6 space-y-4">
-            <p className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider">Update Card Info</p>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input
-                type="text"
-                placeholder="Cardholder Name"
-                className="w-full h-10 px-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs focus:outline-none placeholder:text-neutral-400"
-              />
-              <input
-                type="text"
-                placeholder="Card Number"
-                className="w-full h-10 px-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs focus:outline-none placeholder:text-neutral-400"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <input
-                type="text"
-                placeholder="MM / YY"
-                className="w-full h-10 px-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs focus:outline-none placeholder:text-neutral-400"
-              />
-              <input
-                type="text"
-                placeholder="CVC"
-                className="w-full h-10 px-3.5 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-xs focus:outline-none placeholder:text-neutral-400"
-              />
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <input
+              type="text"
+              placeholder="MM / YY"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+            />
+            <input
+              type="text"
+              placeholder="CVC"
+              className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+            />
           </div>
+        </div>
 
-          <div className="mt-8 flex items-center justify-between pt-4 border-t border-neutral-50 dark:border-neutral-800/50">
-            <p className="text-[9px] text-neutral-400 leading-normal flex items-start gap-1 max-w-[280px]">
-              <ShieldCheck className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
-              <span>Card information is encrypted and securely tokenized directly with Stripe Vault APIs.</span>
-            </p>
-            <button className="px-4 py-2 bg-neutral-900 dark:bg-white dark:text-neutral-900 text-white hover:bg-neutral-800 dark:hover:bg-neutral-100 text-xs font-semibold rounded-lg transition-colors focus:outline-none shrink-0">
-              Save Card
-            </button>
-          </div>
+        {/* Stripe Notice and Save Card Action */}
+        <div className="flex items-center justify-between mt-4">
+          <p className="text-[11px] text-neutral-500 tracking-wide flex items-center gap-1.5">
+            <ShieldCheck className="w-4 h-4 text-green-500 shrink-0" />
+            <span>
+              <span className="font-bold text-neutral-900 dark:text-neutral-200">
+                Stripe Security Notice:
+              </span>{" "}
+              Your card information is encrypted and securely saved via Stripe Vault.
+            </span>
+          </p>
+          <button className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg shadow-sm">
+            Save Card
+          </button>
         </div>
 
       </div>
