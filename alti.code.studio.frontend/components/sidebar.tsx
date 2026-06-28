@@ -2143,32 +2143,36 @@ export default function Sidebar() {
               "flex flex-row items-center justify-between gap-2 w-full"
             )}
           >
-            <div className="relative flex-1 h-[32px] bg-white/5 border border-white/5 rounded-xl">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-default-400 z-10" />
+            {/* Search Input Container */}
+            <div className="relative flex-1 bg-white/5 border border-white/5 rounded-xl p-1 flex items-center">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-default-500 z-10" />
               <input
-                className="w-full h-full bg-transparent border-none rounded-md pl-8 pr-2 py-0 text-xs focus:outline-none focus:ring-0 transition-all text-white placeholder:text-default-500"
+                className="w-full h-[32px] bg-transparent border-none rounded-lg pl-8 pr-2 py-0 text-xs focus:outline-none focus:ring-0 transition-all text-default-300 placeholder:text-default-500 hover:bg-white/5"
                 placeholder="Search..."
                 value={leftSidebarSearch}
                 onChange={(e) => setLeftSidebarSearch(e.target.value)}
               />
             </div>
-            <Tooltip
-              showArrow
-              classNames={{
-                content:
-                  "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
-              }}
-              closeDelay={0}
-              content={getPlusTooltipContent()}
-              delay={0}
-              placement="top"
-            >
-              <Button
-                isIconOnly
-                className="bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl text-default-400 hover:text-white flex-shrink-0 shadow-none h-[32px] w-[32px] min-w-[32px]"
-                size="sm"
-                variant="flat"
-              onClick={() => {
+
+            {/* Plus Button Container */}
+            <div className="bg-white/5 border border-white/5 rounded-xl p-1 flex items-center shrink-0">
+              <Tooltip
+                showArrow
+                classNames={{
+                  content:
+                    "bg-[#1E293B] text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                }}
+                closeDelay={0}
+                content={getPlusTooltipContent()}
+                delay={0}
+                placement="top"
+              >
+                <Button
+                  isIconOnly
+                  className="bg-transparent hover:bg-white/5 border-none rounded-lg text-default-500 hover:text-white flex-shrink-0 shadow-none h-[32px] w-[32px] min-w-[32px]"
+                  size="sm"
+                  variant="flat"
+                onClick={() => {
                 if (pathname === "/vault") {
                   window.dispatchEvent(new CustomEvent("open-vault-modal"));
                 } else if (pathname === "/documents") {
