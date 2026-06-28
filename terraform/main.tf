@@ -9,13 +9,8 @@ terraform {
 }
 
 provider "google" {
-  project = var.project_id
+  project = var.gcp_project_id
   region  = var.region
-}
-
-variable "project_id" {
-  type        = string
-  description = "The ID of the GCP Project"
 }
 
 variable "region" {

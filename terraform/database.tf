@@ -7,7 +7,7 @@ resource "google_sql_database_instance" "db_instance" {
   depends_on = [google_service_networking_connection.private_vpc_connection]
 
   settings {
-    tier              = "db-custom-2-7680" # 2 vCPUs, 7.5 GB RAM (Enterprise starter)
+    tier              = var.pg_db_tier # Parameterized database tier/SKU
     availability_type = "REGIONAL"         # Enable High Availability (HA) failover across zones
 
     ip_configuration {

@@ -1,8 +1,8 @@
 # Provision Google Cloud Memorystore for Redis for distributed caching, queue management, and session syncing
 resource "google_redis_instance" "redis_cache" {
   name           = "inso-production-redis"
-  tier           = "STANDARD_HA" # High availability with automatic replication/failover
-  memory_size_gb = 5             # 5GB Memory capacity
+  tier           = var.redis_tier       # Parameterized High availability tier
+  memory_size_gb = var.redis_memory_size_gb # Parameterized Memory capacity
 
   region                  = var.region
   authorized_network      = google_compute_network.private_network.id
