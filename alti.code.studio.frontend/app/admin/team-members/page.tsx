@@ -21,6 +21,48 @@ export default function MembersPage() {
   const activeDropdownRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
+    async function loadMembers() {
+      try {
+        const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/admin/all-user`, {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        });
+        if (res.ok) {
+          const result = await res.json();
+          // If the backend returns users list
+          const usersList = result?.data || result;
+          if (Array.isArray(usersList)) {
+            const formatted = usersList.map(u => {
+              const emailStr = u.email || "";
+              const nameParts = (u.name || "").split(" ");
+              return {
+                firstName: u.firstName || nameParts[0] || "User",
+                lastName: u.lastName || nameParts[1] || "",
+                email: emailStr,
+                role: u.role === "admin" ? "Admin" : "Member",
+                isYou: emailStr.toLowerCase() === "meram.michael@gmail.com"
+              };
+            });
+            // Keep the 'You' admin row at the top or ensure it exists
+            const hasYou = formatted.some(u => u.isYou);
+            if (!hasYou) {
+              setMembers([mockMembers[0], ...formatted]);
+            } else {
+              setMembers(formatted);
+            }
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load members from database:", err);
+      }
+    }
+    loadMembers();
+  }, []);
+
+  React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (activeDropdownRef.current && !activeDropdownRef.current.contains(event.target as Node)) {
         setActiveDropdownIndex(null);
