@@ -24,7 +24,7 @@ function FunctionsPageContent() {
                   className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
                   style={{ fontFamily: "var(--font-secondary)" }}
                 >
-                  Create a New Function
+                  Create New Function
                 </h1>
               </div>
 
