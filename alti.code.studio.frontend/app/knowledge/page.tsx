@@ -2,15 +2,25 @@
 
 import React, { useState, useEffect, Suspense, useCallback } from "react";
 import { Button } from "@heroui/button";
-import { Paperclip, Search, FileText, Trash2, FolderPlus, Folder, Loader2 } from "lucide-react";
+import {
+  Paperclip,
+  Search,
+  FileText,
+  Trash2,
+  FolderPlus,
+  Folder,
+  Loader2,
+} from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import axios from "axios";
 
+import { TuningTabs } from "@/components/tuning-tabs";
 import ChatBotLayout from "@/components/ChatbotLayout";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
 interface FileItem {
   id: string;
@@ -49,7 +59,10 @@ function KnowledgePageContent() {
     setIsLoading(true);
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await axios.get(`${API_BASE_URL}/knowledge/folders`, { headers });
+      const res = await axios.get(`${API_BASE_URL}/knowledge/folders`, {
+        headers,
+      });
+
       if (res.data?.success) {
         setFolders(res.data.data || []);
       }
@@ -68,10 +81,16 @@ function KnowledgePageContent() {
   useEffect(() => {
     if (urlFolderId && urlFolderName) {
       const existing = folders.find((f) => f.id === urlFolderId);
+
       if (existing) {
         setSelectedFolder(existing);
       } else {
-        setSelectedFolder({ id: urlFolderId, name: urlFolderName, files: [], createdAt: "" });
+        setSelectedFolder({
+          id: urlFolderId,
+          name: urlFolderName,
+          files: [],
+          createdAt: "",
+        });
       }
     }
   }, [urlFolderId, urlFolderName, folders]);
@@ -81,7 +100,9 @@ function KnowledgePageContent() {
     const handleSelectFolder = (e: any) => {
       setSelectedFolder(e.detail);
     };
+
     window.addEventListener("select-knowledge-folder", handleSelectFolder);
+
     return () =>
       window.removeEventListener("select-knowledge-folder", handleSelectFolder);
   }, []);
@@ -97,8 +118,9 @@ function KnowledgePageContent() {
       const res = await axios.post(
         `${API_BASE_URL}/knowledge/folders`,
         { name: newFolderName },
-        { headers }
+        { headers },
       );
+
       if (res.data?.success) {
         toast.success("Folder created successfully.");
         setNewFolderName("");
@@ -114,10 +136,12 @@ function KnowledgePageContent() {
 
   // 3. Handle File Upload
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!selectedFolder || !e.target.files || e.target.files.length === 0) return;
+    if (!selectedFolder || !e.target.files || e.target.files.length === 0)
+      return;
 
     const file = e.target.files[0];
     const formData = new FormData();
+
     formData.append("file", file);
     formData.append("folderId", selectedFolder.id);
 
@@ -130,13 +154,23 @@ function KnowledgePageContent() {
         "Content-Type": "multipart/form-data",
       };
 
-      const res = await axios.post(`${API_BASE_URL}/knowledge/files/upload`, formData, { headers });
+      const res = await axios.post(
+        `${API_BASE_URL}/knowledge/files/upload`,
+        formData,
+        { headers },
+      );
+
       if (res.data?.success) {
-        toast.success(`"${file.name}" successfully parsed and loaded to RAG memory.`, { id: toastId });
+        toast.success(
+          `"${file.name}" successfully parsed and loaded to RAG memory.`,
+          { id: toastId },
+        );
         fetchFolders();
       }
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to upload file.", { id: toastId });
+      toast.error(err.response?.data?.message || "Failed to upload file.", {
+        id: toastId,
+      });
     } finally {
       setIsUploading(false);
     }
@@ -147,7 +181,11 @@ function KnowledgePageContent() {
     if (!fileToDelete) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await axios.delete(`${API_BASE_URL}/knowledge/files/${fileToDelete.id}`, { headers });
+      const res = await axios.delete(
+        `${API_BASE_URL}/knowledge/files/${fileToDelete.id}`,
+        { headers },
+      );
+
       if (res.data?.success) {
         toast.success("File deleted successfully.");
         fetchFolders();
@@ -164,7 +202,11 @@ function KnowledgePageContent() {
     if (!folderToDelete) return;
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await axios.delete(`${API_BASE_URL}/knowledge/folders/${folderToDelete.id}`, { headers });
+      const res = await axios.delete(
+        `${API_BASE_URL}/knowledge/folders/${folderToDelete.id}`,
+        { headers },
+      );
+
       if (res.data?.success) {
         toast.success("Folder deleted successfully.");
         setSelectedFolder(null);
@@ -178,14 +220,21 @@ function KnowledgePageContent() {
     }
   };
 
-  const activeFiles = selectedFolder ? (folders.find(f => f.id === selectedFolder.id)?.files || []) : [];
+  const activeFiles = selectedFolder
+    ? folders.find((f) => f.id === selectedFolder.id)?.files || []
+    : [];
   const filteredFiles = activeFiles.filter((f) =>
-    f.name.toLowerCase().includes(searchQuery.toLowerCase())
+    f.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   return (
     <ChatBotLayout>
-      <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans">
+      <div className="flex flex-col h-full bg-default-50 dark:bg-[#0A0A0A]">
+        {/* Top Navbar */}
+        <div className="flex items-center w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111] shrink-0">
+          <TuningTabs />
+        </div>
+        <div className="flex-1 overflow-hidden bg-transparent flex flex-col font-sans">
         {!selectedFolder ? (
           <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[20vh] overflow-hidden">
             <div className="flex w-full flex-col items-center gap-6 z-20 px-6 max-w-xl">
@@ -195,23 +244,24 @@ function KnowledgePageContent() {
                   Knowledge Hub
                 </h1>
                 <p className="text-xs text-default-400 mt-2">
-                  Create secure directories to host private codebase document files and semantic vector catalogs.
+                  Create secure directories to host private codebase document
+                  files and semantic vector catalogs.
                 </p>
               </div>
 
               {/* Create Folder Form */}
-              <form onSubmit={handleCreateFolder} className="w-full flex gap-2">
+              <form className="w-full flex gap-2" onSubmit={handleCreateFolder}>
                 <input
-                  type="text"
+                  className="flex-1 bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 rounded-xl px-4 py-2.5 text-sm outline-none placeholder-gray-400"
                   placeholder="New folder name..."
+                  type="text"
                   value={newFolderName}
                   onChange={(e) => setNewFolderName(e.target.value)}
-                  className="flex-1 bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 rounded-xl px-4 py-2.5 text-sm outline-none placeholder-gray-400"
                 />
                 <Button
-                  type="submit"
-                  isLoading={isCreatingFolder}
                   className="bg-black dark:bg-white text-white dark:text-black rounded-xl font-medium text-xs px-4"
+                  isLoading={isCreatingFolder}
+                  type="submit"
                 >
                   <FolderPlus className="w-4 h-4 mr-1" /> Create
                 </Button>
@@ -224,19 +274,25 @@ function KnowledgePageContent() {
                     <Loader2 className="w-6 h-6 text-primary animate-spin" />
                   </div>
                 ) : folders.length === 0 ? (
-                  <p className="text-center text-xs text-default-400 py-8">No knowledge folders created yet.</p>
+                  <p className="text-center text-xs text-default-400 py-8">
+                    No knowledge folders created yet.
+                  </p>
                 ) : (
                   folders.map((folder) => (
                     <div
                       key={folder.id}
-                      onClick={() => setSelectedFolder(folder)}
                       className="w-full bg-white dark:bg-[#161b22] hover:bg-default-100 dark:hover:bg-default-50 border border-default-200/50 dark:border-gray-800 shadow-sm rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer transition-all"
+                      onClick={() => setSelectedFolder(folder)}
                     >
                       <div className="flex items-center gap-3">
                         <Folder className="w-4 h-4 text-primary" />
-                        <span className="text-sm font-medium text-foreground">{folder.name}</span>
+                        <span className="text-sm font-medium text-foreground">
+                          {folder.name}
+                        </span>
                       </div>
-                      <span className="text-xs text-default-400">{folder.files?.length || 0} files</span>
+                      <span className="text-xs text-default-400">
+                        {folder.files?.length || 0} files
+                      </span>
                     </div>
                   ))
                 )}
@@ -250,18 +306,20 @@ function KnowledgePageContent() {
               <div className="sticky top-0 z-20 bg-[#F4F4F6] dark:bg-background pt-8 pb-0 flex flex-col gap-4 -mx-6 px-6">
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center gap-2">
-                    <button 
-                      onClick={() => setSelectedFolder(null)}
+                    <button
                       className="text-xs text-default-400 hover:text-foreground transition-colors mr-2"
+                      onClick={() => setSelectedFolder(null)}
                     >
                       &larr; Back
                     </button>
                     <Folder className="w-4 h-4 text-primary" />
-                    <h2 className="text-base font-semibold text-foreground">{selectedFolder.name}</h2>
+                    <h2 className="text-base font-semibold text-foreground">
+                      {selectedFolder.name}
+                    </h2>
                   </div>
-                  <button 
-                    onClick={() => setFolderToDelete(selectedFolder)}
+                  <button
                     className="text-xs text-red-500 hover:text-red-600 transition-colors"
+                    onClick={() => setFolderToDelete(selectedFolder)}
                   >
                     Delete Folder
                   </button>
@@ -277,11 +335,13 @@ function KnowledgePageContent() {
                     )}
                   </div>
                   <span className="text-sm text-gray-400">
-                    {isUploading ? "Uploading file..." : "Click or drag & drop files here..."}
+                    {isUploading
+                      ? "Uploading file..."
+                      : "Click or drag & drop files here..."}
                   </span>
                   <input
-                    disabled={isUploading}
                     className="hidden"
+                    disabled={isUploading}
                     type="file"
                     onChange={handleFileUpload}
                   />
@@ -331,7 +391,9 @@ function KnowledgePageContent() {
                   ))}
                 </div>
               ) : (
-                <p className="text-center text-xs text-default-400 py-8">No files matching filter.</p>
+                <p className="text-center text-xs text-default-400 py-8">
+                  No files matching filter.
+                </p>
               )}
             </div>
           </div>
@@ -377,7 +439,8 @@ function KnowledgePageContent() {
                 Delete Folder
               </h3>
               <p className="text-sm text-center text-gray-500 dark:text-gray-400 px-4">
-                Are you sure you want to delete folder "{folderToDelete.name}"? All nested files will be deleted.
+                Are you sure you want to delete folder "{folderToDelete.name}"?
+                All nested files will be deleted.
               </p>
             </div>
             <div className="flex border-t border-default-200/50 dark:border-gray-800 w-full">
