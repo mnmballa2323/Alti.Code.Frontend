@@ -330,13 +330,8 @@ export default function AuthLayout({
             style={{ animationDelay: "-4s" }}
           />
 
-          {/* Interactive Terminal Window */}
-          <div className="z-20 w-full flex items-center justify-center mt-24 mb-12">
-            <CodeTerminal />
-          </div>
-
           {/* Bottom Panel Text */}
-          <div className="relative z-20 w-full max-w-xl">
+          <div className="relative z-20 w-full max-w-xl mt-auto">
             <h2 className="text-4xl xl:text-5xl font-bold tracking-tight mb-4 leading-tight bg-gradient-to-br from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
               Build the future.
             </h2>

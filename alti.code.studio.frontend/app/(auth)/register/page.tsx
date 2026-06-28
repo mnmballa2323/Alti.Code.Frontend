@@ -83,7 +83,7 @@ export default function RegisterPage() {
     <div className="flex w-full flex-col gap-6">
       <div className="flex flex-col items-center">
         <h1 className="text-3xl font-semibold tracking-tight text-black">
-          Create an account
+          Create Account
         </h1>
       </div>
 
