@@ -10,7 +10,7 @@ export default function BillingPage() {
 
   return (
     <div className="w-full pt-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="flex flex-col gap-6 max-w-3xl">
         
         {/* SaaS Subscription Info (Stripe billing integration) */}
         <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl shadow-sm p-6 flex flex-col justify-between">
@@ -62,17 +62,17 @@ export default function BillingPage() {
             </div>
           </div>
 
-          <div className="mt-8">
+          <div className="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-neutral-50 dark:border-neutral-800/50">
+            <p className="text-[10px] text-neutral-400 max-w-[400px]">
+              Updates to plan tiers, billing cycles, and seat expansion can be handled securely in the customer portal.
+            </p>
             <button 
               type="button"
-              className="w-full bg-[#635BFF] hover:bg-[#5A52E6] text-white flex items-center justify-center gap-1.5 px-4 py-2.5 text-xs font-semibold rounded-lg transition-colors focus:outline-none"
+              className="bg-[#635BFF] hover:bg-[#5A52E6] text-white flex items-center justify-center gap-1.5 px-4 py-2 text-xs font-semibold rounded-lg transition-colors focus:outline-none shrink-0"
             >
               <span>Manage Billing in Stripe</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </button>
-            <p className="text-[10px] text-neutral-400 text-center mt-2.5">
-              Updates to plan tiers, billing cycles, and seat expansion can be handled securely in the customer portal.
-            </p>
           </div>
         </div>
 
