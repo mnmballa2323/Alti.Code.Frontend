@@ -2154,6 +2154,9 @@ export default function Sidebar() {
               />
             </div>
 
+            {/* Divider */}
+            <div className="w-[1px] h-4 bg-white/10 shrink-0 mx-0.5" />
+
             {/* Plus Button */}
             <Tooltip
               showArrow
