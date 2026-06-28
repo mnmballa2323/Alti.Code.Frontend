@@ -1,2 +1,0 @@
-components/providers/I18nProvider.tsx(4,30): error TS2307: Cannot find module 'react-intl' or its corresponding type declarations.
-components/sidebar.tsx(485,12): error TS2304: Cannot find name 'Cpu'.

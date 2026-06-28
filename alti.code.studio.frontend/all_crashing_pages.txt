@@ -1,1 +1,0 @@
-Error occurred prerendering page "/code". Read more: https://nextjs.org/docs/messages/prerender-error
