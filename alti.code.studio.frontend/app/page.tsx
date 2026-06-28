@@ -7,7 +7,7 @@ import Navbar from "@/components/navbar";
 import PreFooter from "@/components/landing-page/pre-footer";
 import HeroSwarm from "@/components/landing-page/hero-swarm";
 import PairedProgrammerSection from "@/components/landing-page/paired-programmer-section";
-import AzureSovereignSection from "@/components/landing-page/tri-cloud-section";
+import GcpSovereignSection from "@/components/landing-page/tri-cloud-section";
 import ModelProvidersSection from "@/components/landing-page/model-providers-section";
 import AgentSwarmSection from "@/components/landing-page/agent-swarm-section";
 import EnterpriseConnectorsSection from "@/components/landing-page/enterprise-connectors-section";
@@ -25,7 +25,7 @@ export default function LandingPage() {
   const [isDesktopApp, setIsDesktopApp] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && "__TAURI__" in window) {
+    if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
       setIsDesktopApp(true);
       const token = localStorage.getItem("accessToken");
 
@@ -54,7 +54,7 @@ export default function LandingPage() {
           <PairedProgrammerSection />
         </div>
         <div id="section-2">
-          <AzureSovereignSection />
+          <GcpSovereignSection />
         </div>
         <div id="section-model-intelligence">
           <ModelProvidersSection />

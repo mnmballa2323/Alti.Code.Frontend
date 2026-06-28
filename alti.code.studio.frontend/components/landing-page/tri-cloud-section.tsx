@@ -4,44 +4,44 @@ import React from "react";
 
 const deployments = [
   {
-    name: "Azure Cloud",
-    subtitle: "Multi tenant Azure Commercial",
+    name: "Google Cloud",
+    subtitle: "Multi-tenant Google Cloud",
     icon: (
       <img
-        alt="Azure Cloud"
+        alt="Google Cloud"
         className="w-8 h-8"
-        src="/assets/cloud-logos/azure.svg"
+        src="/assets/cloud-logos/gcp.svg"
       />
     ),
     description: "Deploy scalable and shared cloud compute resources optimized for rapid deployment while ensuring corporate compliance in public tenant zones."
   },
   {
-    name: "Azure Dedicated",
-    subtitle: "Single tenant Azure Commercial",
+    name: "Dedicated Cloud",
+    subtitle: "Single-tenant Google Cloud",
     icon: (
       <img
-        alt="Azure Dedicated"
+        alt="Dedicated Cloud"
         className="w-8 h-8"
-        src="/assets/cloud-logos/azure.svg"
+        src="/assets/cloud-logos/gcp.svg"
       />
     ),
     description: "Deploy dedicated single tenant infrastructure featuring complete physical data isolation and advanced virtual networks for enterprise safety."
   },
   {
-    name: "Azure Government",
-    subtitle: "Azure Government",
+    name: "Assured Workloads",
+    subtitle: "Sovereign Google Cloud",
     icon: (
       <img
-        alt="Azure Government"
+        alt="Assured Workloads"
         className="w-8 h-8"
-        src="/assets/cloud-logos/azure.svg"
+        src="/assets/cloud-logos/gcp.svg"
       />
     ),
-    description: "Deploy compliant and isolated sovereign cloud instances certified for DoD Impact Levels 4 and 5 to secure sensitive public sector workloads and ensure compliance."
+    description: "Deploy compliant and isolated sovereign cloud instances certified for FedRAMP High and government regulations to secure sensitive public workloads."
   }
 ];
 
-export default function AzureSovereignSection() {
+export default function GcpSovereignSection() {
   return (
     <section
       className="w-full py-32 bg-white dark:bg-[#0A0A0A] text-black dark:text-white px-4 sm:px-6 lg:px-8 border-t border-gray-100 dark:border-gray-900 transition-colors duration-300"
@@ -51,12 +51,10 @@ export default function AzureSovereignSection() {
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-6 max-w-5xl">
           <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white leading-tight">
-            Azure Exclusive. Sovereign Security.
+            Google Cloud. Sovereign Security.
           </h3>
           <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium max-w-5xl">
-            Deploy sovereign AI agent swarms on Azure Cloud, Dedicated, and Government environments.
-            <br className="hidden md:inline" />
-            Enforce absolute compliance and data isolation tailored to your organization.
+            Deploy sovereign AI agent swarms on Google Cloud, Dedicated Cloud, and Assured Workloads environments. Enforce absolute compliance and data isolation tailored to your organization.
           </p>
         </div>
 

@@ -7,11 +7,8 @@ const providers = [
   {
     name: "Anthropic",
     brand: "Claude Models",
-    icon: (
-      <svg className="w-8 h-8 text-black dark:text-white" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M17.3041 3.541h-3.6718l6.696 16.918H24Zm-10.6082 0L0 20.459h3.7442l1.3693-3.5527h7.0052l1.3693 3.5528h3.7442L10.5363 3.5409Zm-.3712 10.2232 2.2914-5.9456 2.2914 5.9456Z" />
-      </svg>
-    ),
+    glowClass: "from-orange-500/10 via-orange-500/2 to-transparent",
+    borderHoverClass: "hover:border-orange-500/30 dark:hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/5",
     models: [
       {
         name: "Claude Sonnet 4.6",
@@ -21,22 +18,26 @@ const providers = [
         metric: { label: "Speed", value: "99%" }
       },
       {
-        name: "Claude Opus 4.6",
+        name: "Claude Opus 4.8",
         role: "Architecture & Multi-Repo",
         description: "Resolves complex multi-repository dependencies, deep architectural planning, and consensus.",
         tags: ["System Design", "Multi-Repo", "Consensus"],
         metric: { label: "Complexity", value: "97%" }
+      },
+      {
+        name: "Claude Fable 5",
+        role: "Frontier Cognitive Research",
+        description: "Executing self-directed research, deep structural validation, and autonomous generation.",
+        tags: ["Frontier Model", "Self-Correction", "Cognitive"],
+        metric: { label: "Reasoning", value: "99.8%" }
       }
     ]
   },
   {
-    name: "Google Cloud",
+    name: "Google",
     brand: "Gemini Models",
-    icon: (
-      <svg className="w-8 h-8 text-[#1A73E8]" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 0C12 6.627 6.627 12 0 12C6.627 12 12 17.373 12 24C12 17.373 17.373 12 24 12C17.373 12 12 6.627 12 0Z" />
-      </svg>
-    ),
+    glowClass: "from-blue-500/10 via-blue-500/2 to-transparent",
+    borderHoverClass: "hover:border-blue-500/30 dark:hover:border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/5",
     models: [
       {
         name: "Gemini 3.5 Flash",
@@ -46,11 +47,40 @@ const providers = [
         metric: { label: "Speed", value: "98%" }
       },
       {
-        name: "Gemini 3.1 Pro",
+        name: "Gemini 3.5 Pro",
         role: "Deep Reasoning & Logic",
         description: "Complex logic reasoning, deep analysis, and multi-file code understanding.",
         tags: ["Deep Logic", "Multi-File", "Analysis"],
-        metric: { label: "Logic", value: "96%" }
+        metric: { label: "Logic", value: "98.5%" }
+      }
+    ]
+  },
+  {
+    name: "Open AI",
+    brand: "GPT Models",
+    glowClass: "from-[#10a37f]/10 via-[#10a37f]/2 to-transparent",
+    borderHoverClass: "hover:border-[#10a37f]/30 dark:hover:border-[#10a37f]/30 hover:shadow-lg hover:shadow-[#10a37f]/5",
+    models: [
+      {
+        name: "GPT-5.4 Mini (Sovereign)",
+        role: "Multimodal Reasoning & Processing",
+        description: "Executes enterprise-grade reasoning, document parsing, and sovereign agent planning.",
+        tags: ["Reasoning", "Multimodal", "Sovereign"],
+        metric: { label: "Cognition", value: "98%" }
+      },
+      {
+        name: "GPT-5.5 Pro (Sovereign)",
+        role: "Advanced Math & Synthesis",
+        description: "Multi-step complex logic reasoning, code validation, and deep compliance check loops.",
+        tags: ["Complex Logic", "Chain-of-Thought", "High Compliance"],
+        metric: { label: "Logic", value: "99%" }
+      },
+      {
+        name: "GPT-5.5 Thinking (Sovereign)",
+        role: "Deep Strategic Inference",
+        description: "Chain-of-thought reasoning, solving highly complex structural codebases and formal security checks.",
+        tags: ["Thinking", "Reasoning Loop", "Auditing"],
+        metric: { label: "Inference", value: "99.9%" }
       }
     ]
   }
@@ -59,101 +89,55 @@ const providers = [
 export default function ModelProvidersSection() {
   return (
     <section
-      className="w-full py-32 bg-white dark:bg-[#0A0A0A] text-black dark:text-white px-4 sm:px-6 lg:px-8 border-t border-gray-100 dark:border-gray-900 transition-colors duration-300"
+      className="relative w-full py-32 bg-zinc-50/40 dark:bg-[#030303] text-black dark:text-white px-4 sm:px-6 lg:px-8 border-y border-zinc-200/50 dark:border-zinc-900 transition-colors duration-300 overflow-hidden"
       id="model-intelligence"
     >
-      <div className="max-w-7xl mx-auto flex flex-col items-center gap-20">
+      {/* Decorative background glow blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-1/4 left-[10%] w-[30vw] h-[30vh] rounded-full bg-blue-500/5 dark:bg-blue-500/3 blur-[120px]" />
+        <div className="absolute bottom-1/4 right-[10%] w-[30vw] h-[30vh] rounded-full bg-purple-500/5 dark:bg-purple-500/3 blur-[120px]" />
+      </div>
+
+      <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center gap-20">
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-6 max-w-5xl">
           <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white leading-tight">
-            Dual Sovereign AI Restriction
+            Triple Sovereign AI Restriction
           </h3>
-          <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium max-w-5xl">
-            To guarantee absolute data sovereignty and regulatory compliance, the platform is restricted<br className="hidden md:inline" /> exclusively to the industry's premier model providers, hosted securely on Microsoft Azure and Google Cloud.
+          <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-normal max-w-5xl">
+            To guarantee absolute data sovereignty and regulatory compliance, the platform is restricted<br className="hidden md:inline" />
+            exclusively to the premier model providers hosted securely on Google Cloud and Microsoft Azure.
           </p>
         </div>
 
-        {/* Providers Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 w-full max-w-6xl mx-auto items-stretch">
+        {/* Providers Cards Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full max-w-7xl mx-auto items-stretch">
           {providers.map((provider, idx) => (
             <div
               key={idx}
-              className="relative flex flex-col justify-between p-8 rounded-[32px] border bg-gray-50 dark:bg-black/40 border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md hover:border-gray-200 dark:hover:border-gray-700 transition-all duration-300 h-full"
+              className={cn(
+                "group relative flex items-center justify-center p-8 rounded-[24px] border transition-all duration-500 h-28 overflow-hidden",
+                "bg-white/60 dark:bg-zinc-950/40 backdrop-blur-md border-zinc-200/60 dark:border-zinc-800/80 shadow-sm",
+                provider.borderHoverClass
+              )}
             >
-              <div className="flex flex-col gap-8 h-full justify-between">
-                {/* Header Row: Icon, Title & Brand */}
-                <div className="flex items-center gap-5">
-                  <div className="w-14 h-14 bg-white dark:bg-[#111] border border-gray-100 dark:border-gray-800 rounded-2xl flex items-center justify-center p-3 shadow-sm flex-shrink-0">
-                    {provider.icon}
-                  </div>
-                  <div className="flex flex-col gap-1">
-                    <h4 className="text-xl sm:text-2xl font-bold tracking-tight text-black dark:text-white leading-tight">
-                      {provider.name}
-                    </h4>
-                    <span className="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wide">
-                      {provider.brand}
-                    </span>
-                  </div>
-                </div>
+              {/* Glowing decorative gradient behind the provider card */}
+              <div className={cn(
+                "absolute top-0 right-0 w-32 h-32 rounded-full bg-gradient-to-br blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-0",
+                provider.glowClass
+              )} />
 
-                {/* Models List */}
-                <div className="flex flex-col gap-4 flex-grow justify-end mt-4">
-                  <span className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest">
-                    Supported Models
-                  </span>
-                  <div className={cn(
-                    "grid gap-4 h-full",
-                    provider.models.length > 1 ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1"
-                  )}>
-                    {provider.models.map((model, mIdx) => (
-                      <div
-                        key={mIdx}
-                        className="flex flex-col justify-between gap-4 p-5 rounded-2xl bg-white/70 dark:bg-black/30 border border-gray-100 dark:border-gray-900 shadow-sm hover:border-gray-200 dark:hover:border-gray-700 dark:hover:bg-black/60 transition-all duration-300 h-full"
-                      >
-                        <div className="flex flex-col gap-3">
-                          {/* Title and Metric Row */}
-                          <div className="flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-2">
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0" />
-                              <span className="text-sm font-bold text-black dark:text-white">
-                                {model.name}
-                              </span>
-                            </div>
-                            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-900 text-gray-400 dark:text-gray-500 uppercase tracking-wider whitespace-nowrap">
-                              {model.metric.value} {model.metric.label}
-                            </span>
-                          </div>
-
-                          {/* Specialization Role & Description */}
-                          <div className="flex flex-col gap-1">
-                            <span className="text-[11px] font-semibold text-gray-400 dark:text-gray-500">
-                              {model.role}
-                            </span>
-                            <p className="text-[11px] leading-relaxed text-gray-500 dark:text-gray-400">
-                              {model.description}
-                            </p>
-                          </div>
-                        </div>
-
-                        {/* Tags */}
-                        <div className="flex flex-wrap gap-1.5 pt-1">
-                          {model.tags.map((tag, tIdx) => (
-                            <span
-                              key={tIdx}
-                              className="text-[9px] font-bold px-2 py-0.5 rounded bg-gray-100/50 dark:bg-gray-900/50 text-gray-400 dark:text-gray-500 border border-gray-100 dark:border-gray-800/30 whitespace-nowrap"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <span className="relative z-10 text-2xl font-bold tracking-tight text-black dark:text-white leading-tight group-hover:scale-105 transition-transform duration-300">
+                {provider.name}
+              </span>
             </div>
           ))}
         </div>
+
+        {/* Legal Disclaimer */}
+        <p className="text-[10px] text-zinc-400 dark:text-zinc-500 leading-relaxed font-normal max-w-4xl text-center">
+          * Anthropic, Google, and OpenAI are trademarks of their respective owners. Mention of these providers signifies compatibility with their sovereign API endpoints and does not imply official partnership, sponsorship, or endorsement.
+        </p>
       </div>
     </section>
   );

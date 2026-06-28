@@ -100,22 +100,22 @@ export default function EnterpriseConnectorsSection() {
             duration={25}
             items={[
               <img
-                key="azure_gov"
-                alt="Azure Government (IL5)"
+                key="gcp_assured_workloads"
+                alt="Google Cloud Assured Workloads"
                 className="w-6 h-6 object-contain"
-                src="/assets/cloud-logos/azure.svg"
+                src="/assets/cloud-logos/gcp.svg"
               />,
               <img
-                key="azure_sovereign"
-                alt="Azure Sovereign (IL6)"
+                key="gcp_dedicated"
+                alt="Google Cloud Dedicated"
                 className="w-6 h-6 object-contain"
-                src="/assets/cloud-logos/azure.svg"
+                src="/assets/cloud-logos/gcp.svg"
               />,
               <img
-                key="azure_commercial"
-                alt="Azure Commercial"
+                key="gcp_commercial"
+                alt="Google Cloud Commercial"
                 className="w-6 h-6 object-contain"
-                src="/assets/cloud-logos/azure.svg"
+                src="/assets/cloud-logos/gcp.svg"
               />,
             ]}
             size={260}

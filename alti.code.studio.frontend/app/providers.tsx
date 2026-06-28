@@ -62,7 +62,7 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
     const accessToken = session?.user?.accessToken ?? null;
 
     if (typeof window !== "undefined") {
-      const isTauri = "__TAURI__" in window;
+      const isTauri = "__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron");
 
       if (accessToken) {
         localStorage.setItem("token", accessToken);
@@ -183,7 +183,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [tauriSession, setTauriSession] = React.useState<any>(() => {
-    if (typeof window !== "undefined" && "__TAURI__" in window) {
+    if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
       const token = localStorage.getItem("accessToken");
 
       if (token) {
@@ -202,7 +202,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   });
 
   React.useEffect(() => {
-    if (typeof window !== "undefined" && "__TAURI__" in window) {
+    if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
       const token = localStorage.getItem("accessToken");
 
       if (token) {

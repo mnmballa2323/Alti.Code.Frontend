@@ -19,7 +19,7 @@ export default function Home() {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
   const { data: session } = useSession();
-  const token = session?.user.accessToken ?? null;
+  const token = session?.user?.accessToken ?? null;
   const sessionId = useSelector((state: RootState) => state.messages.sessionId);
   const isChatting = useSelector(
     (state: RootState) => state.messages.isChatting,

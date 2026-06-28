@@ -28,17 +28,28 @@ import MobileNavSheet from "./landing-page/MobileNavSheet";
 
 import { useModalStore } from "@/store/useModalStore";
 import { useAppSelector } from "@/store";
+import { cn } from "@/lib/utils";
 
 function Navbar() {
   const [mounted, setMounted] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isDesktopApp, setIsDesktopApp] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    if (typeof window !== "undefined" && "__TAURI__" in window) {
+    if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
       setIsDesktopApp(true);
     }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handleScrollNavbar = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScrollNavbar);
+    return () => window.removeEventListener("scroll", handleScrollNavbar);
   }, []);
 
   const { data: session, status } = useSession();
@@ -305,17 +316,24 @@ function Navbar() {
 
   return (
     <>
-      <div className="h-[80px] w-full">
-        <div className="bg-white dark:bg-black flex items-center justify-between h-[80px] z-[100] fixed top-0 left-0 right-0 w-full transition-all duration-300 border-b border-gray-100 dark:border-gray-800">
-          <div className="wrapper relative flex items-center justify-between px-4 md:px-6 lg:px-8 w-full">
+      {pathname !== "/" && <div className="h-[80px] w-full" />}
+      <div
+        className={cn(
+          "flex items-center justify-between h-[80px] z-[100] fixed top-0 left-0 right-0 w-full transition-all duration-300",
+          isScrolled
+            ? "bg-white dark:bg-black border-b border-zinc-200/50 dark:border-zinc-800/50 shadow-sm"
+            : "bg-transparent border-b border-transparent"
+        )}
+      >
+        <div className="wrapper relative flex items-center justify-between px-4 md:px-6 lg:px-8 w-full">
             {/* Logo */}
             {mounted ? (
               <Link
                 className="flex-shrink-0 flex items-center gap-2 md:gap-3 lg:-translate-x-4"
                 href="/"
               >
-                {/* Light Mode: Icon + Text */}
-                <div className="flex items-center gap-2 md:gap-3 dark:hidden">
+                {/* Standard Logo (Theme Responsive when Scrolled, or forced white when at top) */}
+                <div className={cn("flex items-center gap-2 md:gap-3", (!isScrolled) ? "hidden" : "dark:hidden")}>
                   <Image
                     priority
                     alt="Inso Logo Icon"
@@ -333,8 +351,7 @@ function Navbar() {
                     width={120}
                   />
                 </div>
-                {/* Dark Mode: Icon + Text */}
-                <div className="hidden dark:flex items-center gap-2 md:gap-3">
+                <div className={cn("flex items-center gap-2 md:gap-3", (!isScrolled) ? "flex" : "hidden dark:flex")}>
                   <Image
                     priority
                     alt="Inso Logo Icon"
@@ -360,9 +377,16 @@ function Navbar() {
               />
             )}
 
-            {/* Gray Toggle Menu (Centered) */}
+            {/* Toggle Menu (Centered) */}
             <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-              <div className="flex items-center gap-3 bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 p-1.5 rounded-full shadow-inner">
+              <div
+                className={cn(
+                  "flex items-center gap-3 p-1.5 rounded-full transition-all duration-300",
+                  isScrolled
+                    ? "bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-inner"
+                    : "bg-black/35 backdrop-blur-md border border-zinc-800/50 shadow-lg"
+                )}
+              >
                 {sections.map((sec, index) => {
                   const IconComponent = sec.icon;
                   const isActive = activeSection === index;
@@ -370,11 +394,16 @@ function Navbar() {
                   return (
                     <button
                       key={index}
-                      className={`relative group p-2.5 rounded-full transition-all duration-300 ${
+                      className={cn(
+                        "relative group p-2.5 rounded-full transition-all duration-300",
                         isActive
-                          ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-md scale-105"
-                          : "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/50"
-                      }`}
+                          ? isScrolled
+                            ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-md scale-105"
+                            : "bg-white/15 text-white shadow-md border border-white/10 scale-105"
+                          : isScrolled
+                          ? "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/50"
+                          : "text-zinc-400 hover:text-white hover:bg-white/5"
+                      )}
                       onClick={() => handleSectionClick(index)}
                     >
                       <IconComponent className="w-[20px] h-[20px]" />
@@ -389,12 +418,17 @@ function Navbar() {
               </div>
             </div>
 
-            {/* ✅ Auth Section Added */}
+            {/* Auth Section */}
             <div className="hidden lg:flex gap-4 xl:gap-6 justify-end items-center lg:translate-x-4">
               {mounted && session?.user && status === "authenticated" ? (
                 <>
                   <Button
-                    className="rounded-full border border-black/20 dark:border-white/20 bg-transparent text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5 transition-colors px-6"
+                    className={cn(
+                      "rounded-full bg-transparent px-6 transition-colors border",
+                      isScrolled
+                        ? "border-black/20 dark:border-white/20 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5"
+                        : "border-white/25 text-white hover:bg-white/10"
+                    )}
                     size="sm"
                     onClick={() => {
                       const userRole = (profile?.role || "").toLowerCase();
@@ -411,7 +445,12 @@ function Navbar() {
                     Launch App
                   </Button>
                   <Button
-                    className="rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 px-6"
+                    className={cn(
+                      "rounded-full px-6 transition-all duration-200 shadow-sm",
+                      isScrolled
+                        ? "dark:bg-white dark:text-black bg-black text-white hover:opacity-90"
+                        : "bg-white text-black hover:bg-zinc-100"
+                    )}
                     size="sm"
                     onClick={() => {
                       useModalStore.getState().onOpen({ type: "logout" });
@@ -423,7 +462,13 @@ function Navbar() {
               ) : (
                 <>
                   <Button
-                    className={`rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 ${isDesktopApp ? "w-[160px]" : "px-6"}`}
+                    className={cn(
+                      "rounded-full px-6 transition-all duration-200 shadow-sm",
+                      isScrolled
+                        ? "dark:bg-white dark:text-black bg-black text-white hover:opacity-90"
+                        : "bg-white text-black hover:bg-zinc-100",
+                      isDesktopApp && "w-[160px]"
+                    )}
                     size="sm"
                     onClick={() => {
                       if (isDesktopApp) {
@@ -437,7 +482,12 @@ function Navbar() {
                   </Button>
                   {!isDesktopApp && (
                     <Button
-                      className="rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200 px-6"
+                      className={cn(
+                        "rounded-full px-6 transition-all duration-200 shadow-sm",
+                        isScrolled
+                          ? "dark:bg-white dark:text-black bg-black text-white hover:opacity-90"
+                          : "bg-white text-black hover:bg-zinc-100"
+                      )}
                       size="sm"
                       onClick={() => router.push("/register")}
                     >
@@ -474,7 +524,6 @@ function Navbar() {
           </div> */}
           </div>
         </div>
-      </div>
 
       {/* Mobile Drawer */}
       {/*  <AnimatePresence>

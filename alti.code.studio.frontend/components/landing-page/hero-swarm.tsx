@@ -21,36 +21,222 @@ export default function HeroSwarm() {
     }
   }, []);
 
+  useEffect(() => {
+    const canvas = document.getElementById("hero-canvas") as HTMLCanvasElement;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let animationFrameId: number;
+    let width = (canvas.width = window.innerWidth);
+    let height = (canvas.height = window.innerHeight);
+
+    // 1. Twinkling Stars Setup
+    const stars: Array<{
+      x: number;
+      y: number;
+      radius: number;
+      opacity: number;
+      pulseSpeed: number;
+      phase: number;
+    }> = [];
+    const starCount = 200;
+    for (let i = 0; i < starCount; i++) {
+      stars.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 1.1 + 0.3,
+        opacity: Math.random() * 0.65 + 0.25,
+        pulseSpeed: Math.random() * 0.022 + 0.006,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+
+    // 2. Constellation Network Particles Setup
+    const particles: Array<{
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      radius: number;
+    }> = [];
+    const particleCount = 55;
+    const connectionDistance = 165;
+
+    for (let i = 0; i < particleCount; i++) {
+      particles.push({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.28,
+        vy: (Math.random() - 0.5) * 0.28,
+        radius: Math.random() * 1.6 + 0.8,
+      });
+    }
+
+    let mouse = { x: -1000, y: -1000 };
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    };
+
+    const handleMouseLeave = () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    };
+
+    const handleResize = () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("resize", handleResize);
+    canvas.addEventListener("mouseleave", handleMouseLeave);
+
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw subtle grid
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.025)";
+      ctx.lineWidth = 1;
+      const gridSpacing = 100;
+      for (let x = 0; x < width; x += gridSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < height; y += gridSpacing) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(width, y);
+        ctx.stroke();
+      }
+
+      // Draw twinkling stars
+      stars.forEach((s) => {
+        s.phase += s.pulseSpeed;
+        const currentOpacity = s.opacity * (0.35 + Math.sin(s.phase) * 0.65);
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${currentOpacity})`;
+        ctx.fill();
+      });
+
+      // Draw and update network particles
+      particles.forEach((p) => {
+        p.x += p.vx;
+        p.y += p.vy;
+
+        if (p.x < 0 || p.x > width) p.vx *= -1;
+        if (p.y < 0 || p.y > height) p.vy *= -1;
+
+        if (mouse.x > 0) {
+          const dx = mouse.x - p.x;
+          const dy = mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 180) {
+            p.x += (dx / dist) * 0.12;
+            p.y += (dy / dist) * 0.12;
+          }
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.55)";
+        ctx.fill();
+      });
+
+      // Constellation lines between particles
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const p1 = particles[i];
+          const p2 = particles[j];
+          const dx = p1.x - p2.x;
+          const dy = p1.y - p2.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < connectionDistance) {
+            const alpha = (1 - dist / connectionDistance) * 0.35;
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.lineWidth = 0.95;
+            ctx.stroke();
+          }
+        }
+
+        // Connection to mouse
+        if (mouse.x > 0) {
+          const p = particles[i];
+          const dx = p.x - mouse.x;
+          const dy = p.y - mouse.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 180) {
+            const alpha = (1 - dist / 180) * 0.5;
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+            ctx.lineWidth = 0.95;
+            ctx.stroke();
+          }
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
-    <section className="relative w-full min-h-[calc(100vh-80px)] flex flex-col items-center justify-center overflow-hidden bg-white text-black px-4 sm:px-6 lg:px-8">
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#030214] via-[#090729] to-black text-white px-4 sm:px-6 lg:px-8 pt-28">
+      {/* Interactive Swarm Canvas */}
+      <canvas id="hero-canvas" className="absolute inset-0 w-full h-full pointer-events-none z-0" />
+
       {/* Premium Apple/OpenAI-style background gradient mesh */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vh] rounded-[100%] bg-gradient-to-br from-blue-200/40 to-purple-200/40 blur-[100px] animate-[spin_40s_linear_infinite]" />
-        <div className="absolute top-[20%] right-[-10%] w-[40vw] h-[60vh] rounded-[100%] bg-gradient-to-bl from-teal-200/30 to-emerald-200/30 blur-[120px] animate-[spin_50s_linear_infinite_reverse]" />
-        <div className="absolute bottom-[-10%] left-[20%] w-[60vw] h-[50vh] rounded-[100%] bg-gradient-to-tr from-rose-200/30 to-orange-200/30 blur-[100px] animate-[spin_60s_linear_infinite]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vh] rounded-[100%] bg-gradient-to-br from-indigo-900/25 to-transparent blur-[120px] animate-[spin_45s_linear_infinite]" />
+        <div className="absolute top-[20%] right-[-10%] w-[45vw] h-[60vh] rounded-[100%] bg-gradient-to-bl from-blue-950/20 to-transparent blur-[150px] animate-[spin_55s_linear_infinite_reverse]" />
+        <div className="absolute bottom-[-10%] left-[25%] w-[60vw] h-[50vh] rounded-[100%] bg-gradient-to-tr from-purple-950/20 to-transparent blur-[120px] animate-[spin_65s_linear_infinite]" />
       </div>
 
-      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-10 -mt-4 md:-mt-6">
+      <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-8 -mt-16 md:-mt-32">
         {/* Apple-style Headline */}
         <div className="flex flex-col items-center gap-6 relative top-2 md:top-4">
           <h1 className="flex flex-col items-center justify-center font-bold tracking-tighter leading-[1.0] text-center">
-            <span className="text-5xl md:text-7xl lg:text-[5.5rem] text-black">
+            <span className="text-5xl md:text-7xl lg:text-[5.5rem] text-white">
               Private and Secure
             </span>
-            <span className="text-[1.6rem] sm:text-[2.2rem] md:text-[2.8rem] lg:text-[3.2rem] tracking-tight text-black mt-3 whitespace-nowrap">
-              Autonomous Software Engineering.
+            <span className="text-[1.6rem] sm:text-[2.2rem] md:text-[2.8rem] lg:text-[3.2rem] tracking-tight text-white mt-3 whitespace-nowrap">
+              Autonomous Software Engineering
             </span>
           </h1>
-
+          <p className="max-w-5xl text-zinc-400 text-lg md:text-xl font-normal leading-relaxed mt-4 px-4">
+            Deploy autonomous agent swarms to write clean code, execute tests, and fix compilation errors<br className="hidden md:inline" />
+            directly inside your private cloud environment under complete sovereign and deterministic control.
+          </p>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col items-center gap-4 mt-6 w-full sm:w-auto relative top-2 md:top-4">
+        <div className="flex flex-col items-center gap-4 mt-6 md:mt-8 w-full sm:w-auto relative top-2 md:top-4">
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
             {(os === "win" || os === "other" || os === null) && (
               <Button
                 as={Link}
-                className="w-full sm:w-auto bg-black text-white font-semibold rounded-full px-10 py-7 text-lg hover:scale-[1.02] transition-transform shadow-lg flex items-center gap-3"
+                className="w-full sm:w-auto bg-white text-black font-semibold rounded-full px-10 py-7 text-lg hover:scale-[1.02] hover:bg-zinc-100 transition-all shadow-lg shadow-white/5 flex items-center gap-3"
                 href="/download/windows"
                 size="lg"
               >
@@ -70,7 +256,7 @@ export default function HeroSwarm() {
             {(os === "mac" || os === "other" || os === null) && (
               <Button
                 as={Link}
-                className="w-full sm:w-auto bg-black text-white font-semibold rounded-full px-10 py-7 text-lg hover:scale-[1.02] transition-transform shadow-lg flex items-center gap-3"
+                className="w-full sm:w-auto bg-white text-black font-semibold rounded-full px-10 py-7 text-lg hover:scale-[1.02] hover:bg-zinc-100 transition-all shadow-lg shadow-white/5 flex items-center gap-3"
                 href="/download/mac"
                 size="lg"
               >
@@ -87,10 +273,10 @@ export default function HeroSwarm() {
             )}
           </div>
           {(os === "mac" || os === "win") && (
-            <p className="text-sm text-gray-500 font-medium">
+            <p className="text-sm text-zinc-400 font-medium">
               Also available for{" "}
               <Link
-                className="underline hover:text-black transition-colors"
+                className="underline hover:text-white transition-colors"
                 href={os === "mac" ? "/download/windows" : "/download/mac"}
               >
                 {os === "mac" ? "Windows" : "Mac"}
@@ -100,49 +286,6 @@ export default function HeroSwarm() {
           )}
         </div>
 
-        {/* Statistics Banner */}
-        <div className="mt-8 w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-5 divide-y md:divide-y-0 md:divide-x divide-gray-200/60 bg-white/70 backdrop-blur-xl border border-gray-200 shadow-2xl rounded-3xl p-4">
-          <div className="flex flex-col items-center justify-center py-6 px-4">
-            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
-              2
-            </span>
-            <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
-              Model Providers
-            </span>
-          </div>
-          <div className="flex flex-col items-center justify-center py-6 px-4">
-            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
-              25,000
-            </span>
-            <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
-              Agent Swarm
-            </span>
-          </div>
-          <div className="flex flex-col items-center justify-center py-6 px-4">
-            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
-              66
-            </span>
-            <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
-              Cloud Connections
-            </span>
-          </div>
-          <div className="flex flex-col items-center justify-center py-6 px-4">
-            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
-              175
-            </span>
-            <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
-              App Connectors
-            </span>
-          </div>
-          <div className="flex flex-col items-center justify-center py-6 px-4">
-            <span className="text-4xl md:text-5xl font-extrabold text-black tracking-tight">
-              18
-            </span>
-            <span className="text-gray-500 font-bold mt-4 text-[10px] lg:text-xs uppercase tracking-wider text-center">
-              Database Connectors
-            </span>
-          </div>
-        </div>
       </div>
     </section>
   );

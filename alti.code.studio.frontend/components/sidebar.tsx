@@ -2140,13 +2140,13 @@ export default function Sidebar() {
         >
           <div
             className={cn(
-              "bg-white/5 border border-white/5 rounded-xl p-1 flex flex-row items-center justify-between gap-1 w-full"
+              "flex flex-row items-center justify-between gap-2 w-full"
             )}
           >
-            <div className="relative flex-1 h-[30px]">
+            <div className="relative flex-1 h-[32px] bg-white/5 border border-white/5 rounded-xl">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-default-400 z-10" />
               <input
-                className="w-full h-full bg-transparent border-none rounded-md pl-8 pr-2 py-0 text-xs focus:outline-none focus:ring-0 transition-all text-white placeholder:text-gray-400"
+                className="w-full h-full bg-transparent border-none rounded-md pl-8 pr-2 py-0 text-xs focus:outline-none focus:ring-0 transition-all text-white placeholder:text-default-500"
                 placeholder="Search..."
                 value={leftSidebarSearch}
                 onChange={(e) => setLeftSidebarSearch(e.target.value)}
@@ -2165,7 +2165,7 @@ export default function Sidebar() {
             >
               <Button
                 isIconOnly
-                className="bg-transparent hover:bg-white/10 border-none rounded-md text-gray-400 hover:text-white flex-shrink-0 shadow-none h-[30px] w-[30px] min-w-[30px]"
+                className="bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl text-default-400 hover:text-white flex-shrink-0 shadow-none h-[32px] w-[32px] min-w-[32px]"
                 size="sm"
                 variant="flat"
               onClick={() => {
@@ -2245,8 +2245,8 @@ export default function Sidebar() {
                           className={cn(
                             "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
                             isActive
-                              ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
-                              : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300",
+                              ? "bg-primary/20 text-white font-semibold"
+                              : "hover:bg-white/5 text-default-400 hover:text-default-200",
                           )}
                           onClick={() => {
                             setSelectedEngineName(e.name);
@@ -2263,7 +2263,7 @@ export default function Sidebar() {
                                 "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50",
                                 isActive
                                   ? "bg-white dark:bg-black"
-                                  : "bg-[#f4f4f5] dark:bg-[#27272a]",
+                                  : "bg-[#1E293B] border-white/5",
                               )}
                             >
                               <Cpu className="size-4 text-default-500" />
@@ -2329,8 +2329,8 @@ export default function Sidebar() {
                           className={cn(
                             "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
                             isActive
-                              ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
-                              : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300",
+                              ? "bg-primary/20 text-white font-semibold"
+                              : "hover:bg-white/5 text-default-400 hover:text-default-200",
                           )}
                           onClick={() => {
                             setSelectedAppId(app.id);
@@ -2348,7 +2348,7 @@ export default function Sidebar() {
                                 "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
                                 isActive
                                   ? "bg-white dark:bg-black"
-                                  : "bg-[#f4f4f5] dark:bg-[#27272a]",
+                                  : "bg-[#1E293B] border-white/5",
                               )}
                             >
                               <AppIcon
@@ -2405,8 +2405,8 @@ export default function Sidebar() {
                         className={cn(
                           "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
                           isActive
-                            ? "bg-primary/10 text-primary dark:text-primary-400 font-semibold"
-                            : "hover:bg-default-100 dark:hover:bg-default-200/20 text-default-700 dark:text-default-300",
+                            ? "bg-primary/20 text-white font-semibold"
+                            : "hover:bg-white/5 text-default-400 hover:text-default-200",
                         )}
                         onClick={() => {
                           router.push(`/database/${db.id}`, { scroll: false });
@@ -2418,7 +2418,7 @@ export default function Sidebar() {
                               "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
                               isActive
                                 ? "bg-white dark:bg-black"
-                                : "bg-[#f4f4f5] dark:bg-[#27272a]",
+                                : "bg-[#1E293B] border-white/5",
                             )}
                           >
                             <img

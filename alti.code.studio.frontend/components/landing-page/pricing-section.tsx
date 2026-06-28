@@ -5,17 +5,17 @@ import { Check } from "lucide-react";
 
 const plans = [
   {
-    name: "Azure Cloud",
+    name: "Google Cloud",
     price: "1,000",
     commitment: "Min. 1 seat",
     description: (
       <>
-        Sovereign agent systems in standard multi tenant commercial zones for corporate compliance.
+        Sovereign agent systems in standard multi-tenant commercial zones for corporate compliance.
       </>
     ),
     features: [
-      "Multi tenant deployment",
-      "Azure Commercial host",
+      "Multi-tenant deployment",
+      "Google Cloud host",
       "Shared infrastructure",
       "Fastest deployment"
     ],
@@ -24,38 +24,38 @@ const plans = [
       "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
   },
   {
-    name: "Azure Dedicated",
+    name: "Dedicated Cloud",
     price: "2,500",
     commitment: "Min. 5 seats",
     description: (
       <>
-        Dedicated single tenant infrastructure with enhanced security and physical data isolation.
+        Dedicated single-tenant infrastructure with enhanced security and physical data isolation.
       </>
     ),
     features: [
-      "Single tenant deployment",
-      "Azure Commercial host",
+      "Single-tenant deployment",
+      "Google Cloud host",
       "Dedicated infrastructure",
-      "Enhanced security & isolation"
+      "Enhanced security & data isolation"
     ],
     cta: "Deploy Dedicated",
     buttonClass:
       "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
   },
   {
-    name: "Azure Government",
+    name: "Assured Workloads",
     price: "5,000",
     commitment: "Min. 10 seats",
     description: (
       <>
-        FedRAMP High and DoD Impact Level 4 & 5 compliant environments for defense workloads.
+        FedRAMP High and strict sovereignty-compliant environments for public sector workloads.
       </>
     ),
     features: [
-      "Government deployment",
-      "Azure Government host",
-      "IL4 / IL5 capable",
-      "Government security controls"
+      "Sovereign deployment",
+      "Google Cloud Assured Workloads",
+      "FedRAMP High capable",
+      "Sovereign security controls"
     ],
     cta: "Contact Us",
     buttonClass:

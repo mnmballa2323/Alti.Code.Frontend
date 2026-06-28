@@ -365,7 +365,7 @@ export default function AuthLayout({
   const [isTauri, setIsTauri] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && (window as any).__TAURI__) {
+    if (typeof window !== "undefined" && ((window as any).__TAURI__ || (window as any).electron || window.navigator.userAgent.includes("Electron"))) {
       setIsTauri(true);
     }
   }, []);

@@ -11,7 +11,7 @@ export function Logout() {
   const router = useRouter();
 
   const handleLogOut = async () => {
-    const isDesktop = typeof window !== "undefined" && "__TAURI__" in window;
+    const isDesktop = typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"));
 
     if (isDesktop) {
       localStorage.removeItem("token");

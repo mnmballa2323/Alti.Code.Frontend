@@ -24,7 +24,7 @@ export default function LoginPage() {
   const [isDesktopApp, setIsDesktopApp] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && "__TAURI__" in window) {
+    if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
       setIsDesktopApp(true);
     }
   }, []);
@@ -72,7 +72,7 @@ export default function LoginPage() {
       }
 
       if (response.data?.accessToken) {
-        if (typeof window !== "undefined" && "__TAURI__" in window) {
+        if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
           localStorage.setItem("token", response.data.accessToken);
           localStorage.setItem("accessToken", response.data.accessToken);
           toast.success("Login successful!");
@@ -140,7 +140,7 @@ export default function LoginPage() {
       }
 
       if (response.data?.accessToken) {
-        if (typeof window !== "undefined" && "__TAURI__" in window) {
+        if (typeof window !== "undefined" && ("__TAURI__" in window || "electron" in window || window.navigator.userAgent.includes("Electron"))) {
           localStorage.setItem("token", response.data.accessToken);
           localStorage.setItem("accessToken", response.data.accessToken);
           toast.success("Verification successful! Logging in...");
