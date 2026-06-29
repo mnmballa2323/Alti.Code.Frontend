@@ -265,6 +265,7 @@ TF_VARS=(
   -var="customer_id=$CUSTOMER"
   -var="gcp_project_id=$GCP_PROJECT"
   -var="ssh_public_key_path=$SSH_KEY_PATH"
+  -var="db_password=${DB_PASSWORD:-P@ssw0rd1234!}"
 )
 
 if [ -n "$GCP_KMS_CRYPTO_KEY" ]; then
@@ -348,7 +349,7 @@ if [ -n "$POSTGRES_IP" ] && [ "$POSTGRES_IP" != "null" ]; then
   echo -e "${GREEN}✔ PostgreSQL database host discovered at private IP: ${CYAN}$POSTGRES_IP${NC}"
   echo -e "Configuring backend database connection string..."
   
-  export DATABASE_URL="postgresql://${pg_admin_username:-altipgadmin}:${pg_admin_password:-P@ssw0rd1234!}@${POSTGRES_IP}:5432/pentagidb?schema=public"
+  export DATABASE_URL="postgresql://${pg_admin_username:-inso_admin}:${pg_admin_password:-P@ssw0rd1234!}@${POSTGRES_IP}:5432/pentagidb?schema=public&connect_timeout=10"
   
   # Navigate to the backend directory and run prisma schema synchronization
   cd ../alti.code.studio.backend
