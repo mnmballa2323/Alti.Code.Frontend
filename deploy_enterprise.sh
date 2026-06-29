@@ -334,6 +334,17 @@ if [ "$AUTO_APPROVE" != true ]; then
   fi
 fi
 
+# Auto-import existing resources if they exist to prevent 409 conflict errors
+if gcloud compute networks describe "inso-production-vpc" --project="$GCP_PROJECT" &>/dev/null; then
+  echo -e "${YELLOW}⚠️ VPC Network inso-production-vpc already exists. Importing into Terraform state...${NC}"
+  terraform import "${TF_VARS[@]}" google_compute_network.private_network "projects/${GCP_PROJECT}/global/networks/inso-production-vpc" || echo "VPC already imported."
+fi
+
+if gcloud compute security-policies describe "inso-production-waf-policy" --project="$GCP_PROJECT" &>/dev/null; then
+  echo -e "${YELLOW}⚠️ Security Policy inso-production-waf-policy already exists. Importing into Terraform state...${NC}"
+  terraform import "${TF_VARS[@]}" google_compute_security_policy.waf_policy "inso-production-waf-policy" || echo "WAF Policy already imported."
+fi
+
 echo -e "\n${GREEN}Applying Terraform changes...${NC}"
 terraform apply "${TF_VARS[@]}" -auto-approve
 
