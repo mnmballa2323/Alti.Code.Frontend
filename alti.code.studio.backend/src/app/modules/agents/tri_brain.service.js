@@ -72,14 +72,11 @@ function instrumentCode(code) {
  */
 class TriBrainService {
   constructor() {
-
-    // LIQUID ROUTING METRICS: Epsilon-Greedy Latency Matrix
+    // LIQUID ROUTING METRICS: Enforced Azure Sovereign Strategy
     this.latencyMatrix = {
-      aws: { totalTime: 0, count: 0, avg: 50 }, // assume optimistic 50ms start
       azure: { totalTime: 0, count: 0, avg: 60 },
-      gcp: { totalTime: 0, count: 0, avg: 55 },
     };
-    this.epsilon = 0.15; // 15% of the time, explore a random cloud to discover new latency dips
+    this.epsilon = 0.0; // No exploration allowed outside Azure
   }
 
   /**
@@ -115,10 +112,8 @@ class TriBrainService {
       `   [Tri-Brain] Retrieved relational graph dependencies for historical lineage.`,
     );
 
-    // Step 1: The Architect (AWS Bedrock / Claude 5 Sonnet) writes the code
-    logger.info(
-      `🏗️ [Tri-Brain] Step 1: Claude 5 Sonnet (AWS) generating code...`,
-    );
+    // Step 1: The Architect (Azure Foundry) writes the code
+    logger.info(`🏗️ [Tri-Brain] Step 1: GPT-5.5 (Azure) generating code...`);
     const claudePrompt = `You are the Lead Architect. Generate the complete code implementation for this intent: ${safeIntent}
         
 Strictly adhere to these historical architectural constraints derived from our Vector DB:
@@ -129,26 +124,11 @@ ${graphContext}
 `;
 
     let initialCode = '';
-    try {
-      // Pillar 33: Multi-Cloud Traffic Shifting (Failover Simulation)
-      const architectResult = await AzureGenAiService.generateContent(
-        claudePrompt,
-        'claude-5-sonnet',
-      );
-      initialCode = architectResult.content;
-    } catch (error) {
-      logger.warn(
-        `⚠️ [Tri-Brain] AWS Bedrock rate limit detected! Executing Pillar 33 Multi-Cloud Traffic Shift...`,
-      );
-      logger.info(
-        `   [Tri-Brain] Routing 100% of LLM traffic seamlessly to Azure Foundry (GPT-5.5)...`,
-      );
-      const fallbackResult = await AzureGenAiService.generateContent(
-        claudePrompt,
-        'gpt-5.5',
-      );
-      initialCode = fallbackResult.content;
-    }
+    const architectResult = await AzureGenAiService.generateContent(
+      claudePrompt,
+      'gpt-5.5',
+    );
+    initialCode = architectResult.content;
 
     // Pillar 31: Auto-Injecting Telemetry (AST Rewriter)
     logger.info(
@@ -156,14 +136,14 @@ ${graphContext}
     );
     initialCode = instrumentCode(initialCode);
 
-    // Step 2: The QA Engineer (GCP Vertex / Gemini 3.1 Pro) writes exhaustive tests
+    // Step 2: The QA Engineer (Azure Foundry) writes exhaustive tests
     logger.info(
-      `🧪 [Tri-Brain] Step 2: Gemini 3.1 Pro (GCP) writing integration tests...`,
+      `🧪 [Tri-Brain] Step 2: GPT-5.5 (Azure) writing integration tests...`,
     );
     const qaPrompt = `You are the QA Engineer. Review the following code and write an exhaustive, edge-case heavy integration test suite for it.\n\nCode:\n${initialCode}`;
     const qaResult = await AzureGenAiService.generateContent(
       qaPrompt,
-      'gemini-3.1-pro',
+      'gpt-5.5',
       0.1,
     );
     const testSuite = qaResult.content;
@@ -279,8 +259,8 @@ ${graphContext}
    * @param {string[]} tried
    */
   async fastInference(prompt, tried = []) {
-    // Step 1: Epsilon-Greedy Selection
-    const clouds = ['aws', 'azure', 'gcp'].filter(c => !tried.includes(c));
+    // Step 1: Strict Azure Sovereign Enforcement
+    const clouds = ['azure'].filter(c => !tried.includes(c));
 
     if (clouds.length === 0) {
       logger.warn(
@@ -313,26 +293,8 @@ ${graphContext}
     let resultText = '';
 
     try {
-      if (selectedCloud === 'aws') {
-        const result = await AzureGenAiService.generateContent(
-          prompt,
-          'claude-5-sonnet',
-        );
-        resultText = result.content;
-      } else if (selectedCloud === 'azure') {
-        const result = await AzureGenAiService.generateContent(
-          prompt,
-          'gpt-5.5',
-        );
-        resultText = result.content;
-      } else {
-        const result = await AzureGenAiService.generateContent(
-          prompt,
-          'gemini-3.1-pro',
-          0.2,
-        );
-        resultText = result.content;
-      }
+      const result = await AzureGenAiService.generateContent(prompt, 'gpt-5.5');
+      resultText = result.content;
 
       // Update Latency Matrix
       const latency = Date.now() - startTime;

@@ -85,7 +85,9 @@ class AuditLogService {
       // Dispatch audit event to all active SIEM endpoints
       try {
         const { siemService } = await import('./siem.service.js');
-        siemService.dispatchEvent(tenantId, 'AUDIT_LOG_ENTRY', auditEntry).catch(() => {});
+        siemService
+          .dispatchEvent(tenantId, 'AUDIT_LOG_ENTRY', auditEntry)
+          .catch(() => {});
       } catch (siemErr) {
         logger.debug(`[AUDIT] SIEM dispatch skipped: ${siemErr.message}`);
       }

@@ -16,7 +16,7 @@ const DEFAULT_REGION = process.env.GCP_REGION || 'us-central1';
  */
 export async function executeVertexInference(prompt, modelId, options = {}) {
   const isStructured = options.responseMimeType === 'application/json';
-  
+
   // 1. Map model ids to publisher and model name in Vertex AI
   let publisher = 'google';
   let vertexModelId = 'gemini-2.5-flash';
@@ -89,12 +89,14 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
         };
       }
 
-      logger.info(`🌐 Direct Vertex AI REST Call: ${url} (Model: ${vertexModelId})`);
+      logger.info(
+        `🌐 Direct Vertex AI REST Call: ${url} (Model: ${vertexModelId})`,
+      );
       const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(body),
       });
@@ -118,7 +120,9 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
         };
       } else {
         const errText = await response.text();
-        throw new Error(`Vertex AI API returned status ${response.status}: ${errText}`);
+        throw new Error(
+          `Vertex AI API returned status ${response.status}: ${errText}`,
+        );
       }
     } catch (apiErr) {
       logger.error(`❌ Direct Vertex AI call failed: ${apiErr.message}`);
@@ -129,7 +133,9 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
   const apiKey = process.env.GEMINI_API_KEY;
   if (apiKey && !isClaude) {
     try {
-      logger.info(`🔄 Falling back to Google AI Studio Developer API for model ${vertexModelId}...`);
+      logger.info(
+        `🔄 Falling back to Google AI Studio Developer API for model ${vertexModelId}...`,
+      );
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${vertexModelId}:generateContent?key=${apiKey}`;
       const response = await fetch(url, {
         method: 'POST',
@@ -159,13 +165,20 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
         };
       }
     } catch (devErr) {
-      logger.error(`❌ Google AI Studio developer fallback failed: ${devErr.message}`);
+      logger.error(
+        `❌ Google AI Studio developer fallback failed: ${devErr.message}`,
+      );
     }
   }
 
   // 5. Fallback to Google Sovereign simulated cloud response
-  logger.warn('⚠️ All direct Vertex and developer connections failed. Invoking secure sovereign simulation.');
-  const simulatedText = getSimulatedResponse(prompt, `Google Vertex AI ${modelId}`);
+  logger.warn(
+    '⚠️ All direct Vertex and developer connections failed. Invoking secure sovereign simulation.',
+  );
+  const simulatedText = getSimulatedResponse(
+    prompt,
+    `Google Vertex AI ${modelId}`,
+  );
   return {
     text: simulatedText,
     usage: {
@@ -220,7 +233,7 @@ export async function executeVertexImagen(prompt, options = {}) {
     try {
       const region = DEFAULT_REGION;
       const url = `https://${region}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${region}/publishers/google/models/imagen-3.0-generate-002:predict`;
-      
+
       const body = {
         instances: [{ prompt }],
         parameters: {
@@ -235,7 +248,7 @@ export async function executeVertexImagen(prompt, options = {}) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(body),
       });
@@ -248,7 +261,9 @@ export async function executeVertexImagen(prompt, options = {}) {
         }
       } else {
         const errText = await response.text();
-        logger.warn(`Vertex Imagen returned status ${response.status}: ${errText}`);
+        logger.warn(
+          `Vertex Imagen returned status ${response.status}: ${errText}`,
+        );
       }
     } catch (apiErr) {
       logger.error(`❌ Direct Vertex Imagen call failed: ${apiErr.message}`);
@@ -262,15 +277,21 @@ export async function executeVertexImagen(prompt, options = {}) {
 
 function getDynamicSvgIllustration(prompt) {
   const lowercase = prompt.toLowerCase();
-  
+
   let primaryColor = '#8B5CF6'; // Purple
-  if (lowercase.includes('corporate') || lowercase.includes('blue')) primaryColor = '#2563EB';
-  if (lowercase.includes('sovereign') || lowercase.includes('black')) primaryColor = '#1F2937';
+  if (lowercase.includes('corporate') || lowercase.includes('blue'))
+    primaryColor = '#2563EB';
+  if (lowercase.includes('sovereign') || lowercase.includes('black'))
+    primaryColor = '#1F2937';
 
   // Build SVG string dynamically based on the prompt's context
   let svgContent = '';
-  
-  if (lowercase.includes('roadmap') || lowercase.includes('plan') || lowercase.includes('timeline')) {
+
+  if (
+    lowercase.includes('roadmap') ||
+    lowercase.includes('plan') ||
+    lowercase.includes('timeline')
+  ) {
     // Render a timeline roadmap diagram
     svgContent = `
       <g stroke="${primaryColor}" stroke-width="2" fill="none" opacity="0.8">
@@ -286,13 +307,21 @@ function getDynamicSvgIllustration(prompt) {
       <text x="150" y="50" fill="#FFFFFF" font-family="sans-serif" font-size="10" font-weight="bold" opacity="0.9">PHASE 2</text>
       <text x="250" y="50" fill="#FFFFFF" font-family="sans-serif" font-size="10" font-weight="bold" opacity="0.9">PHASE 3</text>
     `;
-  } else if (lowercase.includes('security') || lowercase.includes('guardrail') || lowercase.includes('shield')) {
+  } else if (
+    lowercase.includes('security') ||
+    lowercase.includes('guardrail') ||
+    lowercase.includes('shield')
+  ) {
     // Render a secure shield check diagram
     svgContent = `
       <path d="M 150 40 L 230 70 L 230 140 C 230 190 190 230 150 250 C 110 230 70 190 70 140 L 70 70 Z" fill="none" stroke="${primaryColor}" stroke-width="3" opacity="0.8" />
       <path d="M 110 140 L 140 170 L 200 110" fill="none" stroke="${primaryColor}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.9" />
     `;
-  } else if (lowercase.includes('database') || lowercase.includes('spanner') || lowercase.includes('postgres')) {
+  } else if (
+    lowercase.includes('database') ||
+    lowercase.includes('spanner') ||
+    lowercase.includes('postgres')
+  ) {
     // Render connected database cylinders
     svgContent = `
       <g stroke="${primaryColor}" stroke-width="2" fill="none" opacity="0.8">

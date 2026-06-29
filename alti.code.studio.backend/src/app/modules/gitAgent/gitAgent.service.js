@@ -498,11 +498,14 @@ ${issueNumber ? 'Resolves #' + issueNumber : 'Proactive Vulnerability Patch'}
   }
 };
 
-const getUserGithubToken = async (userId) => {
+const getUserGithubToken = async userId => {
   if (!userId) return null;
   try {
-    const UserConnectionModel = (await import('../integrations/userConnection.model.js')).default;
-    const { encryptionService } = await import('../security/encryption.service.js');
+    const UserConnectionModel = (
+      await import('../integrations/userConnection.model.js')
+    ).default;
+    const { encryptionService } =
+      await import('../security/encryption.service.js');
     const githubConn = await UserConnectionModel.findOne({
       userId,
       provider: 'mcp_github',
@@ -514,7 +517,9 @@ const getUserGithubToken = async (userId) => {
       return creds.access_token || creds.authed_user?.access_token || null;
     }
   } catch (err) {
-    logger.warn(`Failed to resolve GitHub token for user ${userId}: ${err.message}`);
+    logger.warn(
+      `Failed to resolve GitHub token for user ${userId}: ${err.message}`,
+    );
   }
   return null;
 };
@@ -523,12 +528,16 @@ const searchRepositories = async (query = '', userId = null) => {
   const userToken = await getUserGithubToken(userId);
   const token = userToken || process.env.GITHUB_PAT;
   if (!token) {
-    throw new Error('GitHub access token is required (please connect your GitHub account or set GITHUB_PAT).');
+    throw new Error(
+      'GitHub access token is required (please connect your GitHub account or set GITHUB_PAT).',
+    );
   }
   const octokit = new Octokit({ auth: token });
 
   try {
-    logger.info(`📂 GitAgent: Searching repositories with query: "${query}" (user: ${userId || 'system'})`);
+    logger.info(
+      `📂 GitAgent: Searching repositories with query: "${query}" (user: ${userId || 'system'})`,
+    );
 
     let response;
     if (query) {

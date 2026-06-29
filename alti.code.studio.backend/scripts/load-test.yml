@@ -1,0 +1,25 @@
+config:
+  target: "http://localhost:5001/api/v1"
+  phases:
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 150
+      name: "Stress Test Rate Limiter and WAF"
+  defaults:
+    headers:
+      Content-Type: "application/json"
+      x-api-key: "load-test-key-123"
+
+scenarios:
+  - name: "Checkout Session Creation (Zod/WAF Test)"
+    flow:
+      - post:
+          url: "/payment/create-checkout-session"
+          json:
+            userId: "test-user-id"
+            plan_name: "enterprise-tier"
+            price: 999
+            duration: "year"
+      - think: 1
+      - get:
+          url: "/agents/status"

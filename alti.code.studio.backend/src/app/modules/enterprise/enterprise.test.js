@@ -260,7 +260,7 @@ describe('Phase 28: Resilience & SLA Infrastructure', () => {
     const { CircuitBreaker } = await import('./resilience.js');
     const cb = new CircuitBreaker('fast-recovery', {
       failureThreshold: 2,
-      resetTimeoutMs: 50,
+      resetTimeoutMs: 1500,
     });
 
     await cb.recordFailure(new Error('fail'));
@@ -268,7 +268,7 @@ describe('Phase 28: Resilience & SLA Infrastructure', () => {
     expect(await cb.isAvailable()).toBe(false);
 
     // Wait for reset
-    await new Promise(r => setTimeout(r, 60));
+    await new Promise(r => setTimeout(r, 1600));
     expect(await cb.isAvailable()).toBe(true); // HALF_OPEN
     expect(cb.getStatus().state).toBe('HALF_OPEN');
   });
@@ -494,9 +494,7 @@ describe('Phase 31: Compliance Engine — SOX / HIPAA / PCI-DSS / GDPR / FedRAMP
       tenantId: 'enterprise-tenant',
     });
 
-    expect(entry.hash).toBe(
-      'gcp-kms-signed:mocked-gcp-kms-signature-data',
-    );
+    expect(entry.hash).toBe('gcp-kms-signed:mocked-gcp-kms-signature-data');
     expect(mockPost).toHaveBeenCalled();
 
     // Clean up environment variables & mock
@@ -1205,7 +1203,7 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       // Mock GCP KMS signature response and webhook post
       const mockPost = vi
         .spyOn(axios.default, 'post')
-        .mockImplementation(async (url) => {
+        .mockImplementation(async url => {
           if (url.includes(':asymmetricSign')) {
             return {
               data: { signature: 'mock-asymmetric-signature-from-gcp-kms' },

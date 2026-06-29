@@ -26,7 +26,8 @@ export const SecurityController = {
   async verifyLedger(req, res) {
     try {
       const tenantId = req.query.tenantId || req.body.tenantId || null;
-      const { ledgerVerifierService } = await import('./ledgerVerifier.service.js');
+      const { ledgerVerifierService } =
+        await import('./ledgerVerifier.service.js');
       const report = await ledgerVerifierService.verifyChain(tenantId);
 
       res.status(200).json({

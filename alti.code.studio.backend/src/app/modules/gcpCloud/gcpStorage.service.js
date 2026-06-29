@@ -12,14 +12,22 @@ class GcpStorageService {
 
   init() {
     try {
-      if (process.env.NODE_ENV !== 'test' || process.env.GCP_REAL_SERVICES === 'true') {
-        if (process.env.GOOGLE_APPLICATION_CREDENTIALS || process.env.GCP_PROJECT_ID) {
+      if (
+        process.env.NODE_ENV !== 'test' ||
+        process.env.GCP_REAL_SERVICES === 'true'
+      ) {
+        if (
+          process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+          process.env.GCP_PROJECT_ID
+        ) {
           this.storage = new Storage();
           this.isInitialized = true;
         }
       }
     } catch (e) {
-      logger.warn(`⚠️ Google Cloud Storage initialization failed, falling back to local mock storage: ${e.message}`);
+      logger.warn(
+        `⚠️ Google Cloud Storage initialization failed, falling back to local mock storage: ${e.message}`,
+      );
       this.isInitialized = false;
     }
   }
@@ -30,7 +38,9 @@ class GcpStorageService {
   async uploadContent(containerName, blobName, content) {
     if (this.isInitialized && this.storage) {
       try {
-        logger.info(`📦 Google Cloud Storage: Uploading content to bucket ${containerName}/${blobName}`);
+        logger.info(
+          `📦 Google Cloud Storage: Uploading content to bucket ${containerName}/${blobName}`,
+        );
         const bucket = this.storage.bucket(containerName);
         const file = bucket.file(blobName);
         await file.save(content, {
@@ -39,14 +49,20 @@ class GcpStorageService {
         });
         return true;
       } catch (e) {
-        logger.error(`❌ Google Cloud Storage upload failed: ${e.message}. Falling back to local mock.`);
+        logger.error(
+          `❌ Google Cloud Storage upload failed: ${e.message}. Falling back to local mock.`,
+        );
       }
     }
 
     // Local Mock Fallback
-    logger.info(`📦 Google Cloud Storage Mock: Writing content locally to ${containerName}/${blobName}`);
+    logger.info(
+      `📦 Google Cloud Storage Mock: Writing content locally to ${containerName}/${blobName}`,
+    );
     try {
-      const localPath = path.resolve(`./logs/gcs_mock/${containerName}/${blobName}`);
+      const localPath = path.resolve(
+        `./logs/gcs_mock/${containerName}/${blobName}`,
+      );
       await fs.mkdir(path.dirname(localPath), { recursive: true });
       await fs.writeFile(localPath, content, 'utf8');
     } catch (e) {
@@ -60,7 +76,10 @@ class GcpStorageService {
    */
   async uploadFile(containerName, blobName, filePathOrContent) {
     let isFilePath = false;
-    if (typeof filePathOrContent === 'string' && filePathOrContent.length < 512) {
+    if (
+      typeof filePathOrContent === 'string' &&
+      filePathOrContent.length < 512
+    ) {
       try {
         await fs.access(filePathOrContent);
         isFilePath = true;
@@ -71,7 +90,9 @@ class GcpStorageService {
 
     if (this.isInitialized && this.storage) {
       try {
-        logger.info(`📦 Google Cloud Storage: Uploading file to bucket ${containerName}/${blobName}`);
+        logger.info(
+          `📦 Google Cloud Storage: Uploading file to bucket ${containerName}/${blobName}`,
+        );
         const bucket = this.storage.bucket(containerName);
         if (isFilePath) {
           await bucket.upload(filePathOrContent, {
@@ -86,14 +107,20 @@ class GcpStorageService {
         }
         return true;
       } catch (e) {
-        logger.error(`❌ Google Cloud Storage upload failed: ${e.message}. Falling back to local mock.`);
+        logger.error(
+          `❌ Google Cloud Storage upload failed: ${e.message}. Falling back to local mock.`,
+        );
       }
     }
 
     // Local Mock Fallback
-    logger.info(`📦 Google Cloud Storage Mock: Writing file locally to ${containerName}/${blobName}`);
+    logger.info(
+      `📦 Google Cloud Storage Mock: Writing file locally to ${containerName}/${blobName}`,
+    );
     try {
-      const localPath = path.resolve(`./logs/gcs_mock/${containerName}/${blobName}`);
+      const localPath = path.resolve(
+        `./logs/gcs_mock/${containerName}/${blobName}`,
+      );
       await fs.mkdir(path.dirname(localPath), { recursive: true });
       if (isFilePath) {
         const content = await fs.readFile(filePathOrContent);
@@ -113,20 +140,28 @@ class GcpStorageService {
   async downloadContent(containerName, blobName) {
     if (this.isInitialized && this.storage) {
       try {
-        logger.info(`📦 Google Cloud Storage: Downloading content from bucket ${containerName}/${blobName}`);
+        logger.info(
+          `📦 Google Cloud Storage: Downloading content from bucket ${containerName}/${blobName}`,
+        );
         const bucket = this.storage.bucket(containerName);
         const file = bucket.file(blobName);
         const [content] = await file.download();
         return content.toString('utf8');
       } catch (e) {
-        logger.error(`❌ Google Cloud Storage download failed: ${e.message}. Falling back to local mock.`);
+        logger.error(
+          `❌ Google Cloud Storage download failed: ${e.message}. Falling back to local mock.`,
+        );
       }
     }
 
     // Local Mock Fallback
-    logger.info(`📦 Google Cloud Storage Mock: Reading content locally from ${containerName}/${blobName}`);
+    logger.info(
+      `📦 Google Cloud Storage Mock: Reading content locally from ${containerName}/${blobName}`,
+    );
     try {
-      const localPath = path.resolve(`./logs/gcs_mock/${containerName}/${blobName}`);
+      const localPath = path.resolve(
+        `./logs/gcs_mock/${containerName}/${blobName}`,
+      );
       return await fs.readFile(localPath, 'utf8');
     } catch (e) {
       return '';

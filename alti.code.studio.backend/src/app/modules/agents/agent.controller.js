@@ -160,7 +160,7 @@ export const AgentController = {
   createCustomAgent: catchAsync(async (req, res) => {
     const userId = req.user?._id || req.user?.id || 'anonymous';
     const { name, description, prompt, tools } = req.body;
-    
+
     if (!name) {
       return res.status(httpStatus.BAD_REQUEST).json({
         success: false,
@@ -189,7 +189,7 @@ export const AgentController = {
     const { agentId } = req.params;
 
     const success = CustomAgentService.deleteAgent(agentId, userId);
-    
+
     if (!success) {
       return res.status(httpStatus.NOT_FOUND).json({
         success: false,

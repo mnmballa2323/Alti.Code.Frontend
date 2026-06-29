@@ -1,6 +1,8 @@
 import { config } from 'dotenv';
 import path from 'path';
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
+import { DefaultAzureCredential } from '@azure/identity';
+import { SecretClient } from '@azure/keyvault-secrets';
 
 config({ path: path.join(process.cwd(), '.env') });
 
@@ -58,12 +60,9 @@ const configObject = {
     mailgun_key: process.env.MAILGUN_KEY,
     mailgun_from: process.env.MAILGUN_FROM,
   },
-  groq_api_key: process.env.GROQ_API_KEY,
   tavily_api_key: process.env.TAVILY_API_KEY,
   serper_api_key: process.env.SERPER_API_KEY,
-  together_secret_key: process.env.TOGETHER_API_KEY,
-  gemini_secret_key: process.env.GEMINI_API_KEY,
-  deepseek_secret_key: process.env.DEEPSEEK_API_KEY,
+  // Sovereign inference requires only Azure or local models. Other providers are blocked.
   cyberdesk_api_key: process.env.CYBERDESK_API_KEY,
   stripe: {
     stripe_secret_key: process.env.STRIPE_SECRET_KEY,
@@ -80,6 +79,8 @@ const configObject = {
     tenant_id: process.env.ARM_TENANT_ID,
     client_id: process.env.ARM_CLIENT_ID,
     model_name: process.env.AZURE_MODEL_NAME || 'gpt-5.5',
+    azure_openai_endpoint: process.env.AZURE_OPENAI_ENDPOINT,
+    azure_openai_api_key: process.env.AZURE_OPENAI_API_KEY,
   },
   smtp: {
     host: process.env.SMTP_HOST,
@@ -125,9 +126,13 @@ export const loadEnterpriseSecrets = async () => {
     GITHUB_CLIENT_SECRET: val => {
       configObject.github.clientSecret = val;
     },
-    GEMINI_API_KEY: val => {
-      configObject.gemini_secret_key = val;
-      process.env.GEMINI_API_KEY = val;
+    AZURE_OPENAI_API_KEY: val => {
+      configObject.azure.azure_openai_api_key = val;
+      process.env.AZURE_OPENAI_API_KEY = val;
+    },
+    AZURE_OPENAI_ENDPOINT: val => {
+      configObject.azure.azure_openai_endpoint = val;
+      process.env.AZURE_OPENAI_ENDPOINT = val;
     },
     STRIPE_SECRET_KEY: val => {
       configObject.stripe.stripe_secret_key = val;
@@ -181,10 +186,32 @@ export const loadEnterpriseSecrets = async () => {
     }
   }
 
-  if (process.env.AZURE_KEYVAULT_NAME) {
-    console.log(
-      `[Azure Key Vault] Sovereign Vault loaded: ${process.env.AZURE_KEYVAULT_NAME}`,
-    );
+  // Azure Key Vault Integration
+  const keyVaultName = process.env.AZURE_KEYVAULT_NAME;
+  if (keyVaultName) {
+    console.log(`[Azure Key Vault] Initializing Sovereign Vault: ${keyVaultName}`);
+    try {
+      const KVUri = `https://${keyVaultName}.vault.azure.net`;
+      const credential = new DefaultAzureCredential();
+      const client = new SecretClient(KVUri, credential);
+
+      for (const [key, updater] of Object.entries(secretsMap)) {
+        const secretName = key.replace(/_/g, '-');
+        try {
+          const secret = await client.getSecret(secretName);
+          if (secret && secret.value) {
+            updater(secret.value.trim());
+            console.log(`[Azure Key Vault] Loaded secret: ${key}`);
+          }
+        } catch (secretErr) {
+          console.warn(`⚠️ [Azure Key Vault] Failed to load ${key} from Vault: ${secretErr.message}. Using environment default.`);
+        }
+      }
+    } catch (err) {
+      console.error('❌ [Azure Key Vault] Failed to initialize SecretClient:', err.message);
+    }
+  } else {
+    console.log('[Azure Key Vault] AZURE_KEYVAULT_NAME not set. Falling back to local env variables.');
   }
 };
 

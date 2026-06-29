@@ -42,18 +42,27 @@ const triggerEngineTask = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Engine ID is required');
   }
 
-  logger.info(`🚀 Engine Trigger: Executing ${engineId}.${action || 'default'} with args:`, args);
+  logger.info(
+    `🚀 Engine Trigger: Executing ${engineId}.${action || 'default'} with args:`,
+    args,
+  );
 
   let result = null;
 
   // Route to specific services if matched, otherwise fallback to generic orchestration
   if (engineId === 'opencode') {
     if (action === 'runTask') {
-      result = await OpenCodeAgentService.runTask(args.task || args.query, args.workspace);
+      result = await OpenCodeAgentService.runTask(
+        args.task || args.query,
+        args.workspace,
+      );
     } else if (action === 'getTaskStatus') {
       result = await OpenCodeAgentService.getTaskStatus(args.sessionId);
     } else {
-      throw new ApiError(httpStatus.BAD_REQUEST, `Unsupported action '${action}' for opencode`);
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        `Unsupported action '${action}' for opencode`,
+      );
     }
   } else if (engineId === 'openspec') {
     if (action === 'init') {
@@ -65,22 +74,32 @@ const triggerEngineTask = catchAsync(async (req, res) => {
     } else if (action === 'validate') {
       result = await OpenSpecAgentService.validate(args.workspace);
     } else {
-      throw new ApiError(httpStatus.BAD_REQUEST, `Unsupported action '${action}' for openspec`);
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        `Unsupported action '${action}' for openspec`,
+      );
     }
   } else if (engineId === 'website_cloner') {
     if (action === 'clone' || action === 'prepareClonerTemplate') {
       result = await AiWebsiteClonerService.prepareClonerTemplate(
         args.targetUrl || args.url,
         args.projectName || args.name,
-        args.workspace
+        args.workspace,
       );
     } else {
-      throw new ApiError(httpStatus.BAD_REQUEST, `Unsupported action '${action}' for website_cloner`);
+      throw new ApiError(
+        httpStatus.BAD_REQUEST,
+        `Unsupported action '${action}' for website_cloner`,
+      );
     }
   } else {
     // Fallback: Dispatch a single-node graph step using the Orchestrator for the generic agent
-    logger.info(`🔄 Engine Trigger: Dispatching generic step via graph orchestrator for ${engineId}`);
-    result = await graphOrchestrator.run(`Run task using agent ${engineId}: ${args.task || args.query || 'execute default'}`);
+    logger.info(
+      `🔄 Engine Trigger: Dispatching generic step via graph orchestrator for ${engineId}`,
+    );
+    result = await graphOrchestrator.run(
+      `Run task using agent ${engineId}: ${args.task || args.query || 'execute default'}`,
+    );
   }
 
   sendResponse(res, {

@@ -46,7 +46,7 @@ export const OwnerController = {
         orderBy: { createdAt: 'desc' },
       });
 
-      const activeTenants = dbTenants.map((t) => ({
+      const activeTenants = dbTenants.map(t => ({
         id: t.id,
         name: t.name,
         plan: t.ssoEnabled ? 'Sovereign' : 'Dedicated',

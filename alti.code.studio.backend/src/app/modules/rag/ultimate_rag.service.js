@@ -188,15 +188,23 @@ Example: ["original query", "specific technical term query", "architectural patt
         // A. Search via high-dimensional vectorStoreService
         if (tenantId) {
           try {
-            const vectorMatches = await vectorStoreService.search(primaryQuery, 5, tenantId);
+            const vectorMatches = await vectorStoreService.search(
+              primaryQuery,
+              5,
+              tenantId,
+            );
             if (vectorMatches && vectorMatches.length > 0) {
-              docs.push(...vectorMatches.map(m => ({
-                name: m.metadata?.fileName || 'Knowledge Vector Chunk',
-                content: m.document
-              })));
+              docs.push(
+                ...vectorMatches.map(m => ({
+                  name: m.metadata?.fileName || 'Knowledge Vector Chunk',
+                  content: m.document,
+                })),
+              );
             }
           } catch (err) {
-            logger.warn(`[Ultimate RAG] Vector store retrieval failed: ${err.message}`);
+            logger.warn(
+              `[Ultimate RAG] Vector store retrieval failed: ${err.message}`,
+            );
           }
         }
 
@@ -206,28 +214,30 @@ Example: ["original query", "specific technical term query", "architectural patt
             where: {
               OR: [
                 { folder: { userId: userId || undefined } },
-                { folder: { tenantId: tenantId || undefined } }
+                { folder: { tenantId: tenantId || undefined } },
               ],
               content: {
                 contains: primaryQuery,
-                mode: 'insensitive'
-              }
+                mode: 'insensitive',
+              },
             },
             take: 3,
-            select: { name: true, content: true }
+            select: { name: true, content: true },
           });
           if (dbMatches && dbMatches.length > 0) {
-            docs.push(...dbMatches.map(m => ({
-              name: m.name,
-              content: m.content
-            })));
+            docs.push(
+              ...dbMatches.map(m => ({
+                name: m.name,
+                content: m.content,
+              })),
+            );
           }
         } catch (err) {
           // Non-blocking fallback
         }
 
         return docs;
-      })
+      }),
     ]);
 
     // ─── Assemble context ───────────────────────
@@ -282,9 +292,13 @@ Example: ["original query", "specific technical term query", "architectural patt
     }
 
     const knowledgeResult = sources.find(s => s.id === 'knowledge_hub')?.result;
-    if (knowledgeResult && Array.isArray(knowledgeResult) && knowledgeResult.length > 0) {
+    if (
+      knowledgeResult &&
+      Array.isArray(knowledgeResult) &&
+      knowledgeResult.length > 0
+    ) {
       combinedContext += `\n\n[KNOWLEDGE CATALOG UPLOADS]\n`;
-      knowledgeResult.forEach((doc) => {
+      knowledgeResult.forEach(doc => {
         combinedContext += `\n--- DOCUMENT: ${doc.name} ---\n${doc.content}\n`;
       });
     }

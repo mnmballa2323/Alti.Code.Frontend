@@ -11,14 +11,22 @@ class GcpFirestoreService {
 
   init() {
     try {
-      if (process.env.NODE_ENV !== 'test' || process.env.GCP_REAL_SERVICES === 'true') {
-        if (process.env.GOOGLE_APPLICATION_CREDENTIALS || process.env.GCP_PROJECT_ID) {
+      if (
+        process.env.NODE_ENV !== 'test' ||
+        process.env.GCP_REAL_SERVICES === 'true'
+      ) {
+        if (
+          process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+          process.env.GCP_PROJECT_ID
+        ) {
           this.db = new Firestore();
           this.isInitialized = true;
         }
       }
     } catch (e) {
-      logger.warn(`⚠️ Google Cloud Firestore initialization failed, falling back to local map cache: ${e.message}`);
+      logger.warn(
+        `⚠️ Google Cloud Firestore initialization failed, falling back to local map cache: ${e.message}`,
+      );
       this.isInitialized = false;
     }
   }
@@ -29,7 +37,9 @@ class GcpFirestoreService {
   async loadDocState(docName) {
     if (this.isInitialized && this.db) {
       try {
-        logger.info(`💾 Google Cloud Firestore: Loading Yjs state for document: ${docName}`);
+        logger.info(
+          `💾 Google Cloud Firestore: Loading Yjs state for document: ${docName}`,
+        );
         const docRef = this.db.collection('crdt_states').doc(docName);
         const doc = await docRef.get();
         if (doc.exists) {
@@ -40,12 +50,16 @@ class GcpFirestoreService {
         }
         return null;
       } catch (e) {
-        logger.error(`❌ Google Cloud Firestore get failed: ${e.message}. Falling back to mock.`);
+        logger.error(
+          `❌ Google Cloud Firestore get failed: ${e.message}. Falling back to mock.`,
+        );
       }
     }
 
     // Local Map Fallback
-    logger.info(`💾 Google Cloud Firestore Mock: Loading Yjs state for document: ${docName}`);
+    logger.info(
+      `💾 Google Cloud Firestore Mock: Loading Yjs state for document: ${docName}`,
+    );
     return this.cache.get(docName) || null;
   }
 
@@ -57,21 +71,30 @@ class GcpFirestoreService {
 
     if (this.isInitialized && this.db) {
       try {
-        logger.info(`💾 Google Cloud Firestore: Persisting Yjs update for document: ${docName}`);
+        logger.info(
+          `💾 Google Cloud Firestore: Persisting Yjs update for document: ${docName}`,
+        );
         const docRef = this.db.collection('crdt_states').doc(docName);
-        await docRef.set({
-          docName,
-          state: base64State,
-          updatedAt: new Date().toISOString(),
-        }, { merge: true });
+        await docRef.set(
+          {
+            docName,
+            state: base64State,
+            updatedAt: new Date().toISOString(),
+          },
+          { merge: true },
+        );
         return true;
       } catch (e) {
-        logger.error(`❌ Google Cloud Firestore set failed: ${e.message}. Falling back to mock.`);
+        logger.error(
+          `❌ Google Cloud Firestore set failed: ${e.message}. Falling back to mock.`,
+        );
       }
     }
 
     // Local Map Fallback
-    logger.info(`💾 Google Cloud Firestore Mock: Persisting Yjs update for document: ${docName}`);
+    logger.info(
+      `💾 Google Cloud Firestore Mock: Persisting Yjs update for document: ${docName}`,
+    );
     this.cache.set(docName, state);
     return true;
   }

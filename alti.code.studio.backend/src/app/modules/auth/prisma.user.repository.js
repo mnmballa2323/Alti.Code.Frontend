@@ -78,10 +78,25 @@ export const UserRepository = {
     try {
       return await prisma.$transaction(async tx => {
         const emailDomain = userFields.email.split('@')[1]?.toLowerCase();
-        const personalDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com', 'aol.com', 'zoho.com', 'proton.me', 'protonmail.com'];
-        const domain = (emailDomain && !personalDomains.includes(emailDomain)) ? emailDomain : null;
+        const personalDomains = [
+          'gmail.com',
+          'yahoo.com',
+          'hotmail.com',
+          'outlook.com',
+          'icloud.com',
+          'aol.com',
+          'zoho.com',
+          'proton.me',
+          'protonmail.com',
+        ];
+        const domain =
+          emailDomain && !personalDomains.includes(emailDomain)
+            ? emailDomain
+            : null;
 
-        const tenantName = companyName || `Workspace - ${userFields.email.split('@')[0]}_${crypto.randomBytes(3).toString('hex')}`;
+        const tenantName =
+          companyName ||
+          `Workspace - ${userFields.email.split('@')[0]}_${crypto.randomBytes(3).toString('hex')}`;
         const tenant = await tx.tenant.create({
           data: {
             name: tenantName,

@@ -301,9 +301,13 @@ You must strictly format your outputs to match the expected schema of the MCP to
         if (token.startsWith('ey')) {
           // It's a JWT access token, decode it
           const { jwtHelpers } = await import('../../helpers/jwtHelpers.js');
-          const configObject = (await import('../../../../config/index.js')).default;
+          const configObject = (await import('../../../../config/index.js'))
+            .default;
           try {
-            const decoded = jwtHelpers.verifyToken(token, configObject.jwt.access_token);
+            const decoded = jwtHelpers.verifyToken(
+              token,
+              configObject.jwt.access_token,
+            );
             userId = decoded.userId || decoded.id;
           } catch (e) {
             // fallback: try direct decode without verification if expired or custom signature
@@ -317,9 +321,12 @@ You must strictly format your outputs to match the expected schema of the MCP to
         }
 
         if (userId) {
-          const UserConnectionModel = (await import('../integrations/userConnection.model.js')).default;
-          const { encryptionService } = await import('../security/encryption.service.js');
-          
+          const UserConnectionModel = (
+            await import('../integrations/userConnection.model.js')
+          ).default;
+          const { encryptionService } =
+            await import('../security/encryption.service.js');
+
           const connection = await UserConnectionModel.findOne({
             userId,
             provider: `mcp_${serverName.replace('_agent', '')}`,
@@ -327,9 +334,12 @@ You must strictly format your outputs to match the expected schema of the MCP to
           });
 
           if (connection && connection.credentials) {
-            const decryptedText = await encryptionService.decrypt(connection.credentials);
+            const decryptedText = await encryptionService.decrypt(
+              connection.credentials,
+            );
             const creds = JSON.parse(decryptedText);
-            const decryptedToken = creds.access_token || creds.authed_user?.access_token;
+            const decryptedToken =
+              creds.access_token || creds.authed_user?.access_token;
             if (decryptedToken) {
               finalToken = decryptedToken;
               logger.info(
@@ -339,7 +349,9 @@ You must strictly format your outputs to match the expected schema of the MCP to
           }
         }
       } catch (err) {
-        logger.error(`⚠️ MCP Gateway: Failed to resolve user connection credentials: ${err.message}`);
+        logger.error(
+          `⚠️ MCP Gateway: Failed to resolve user connection credentials: ${err.message}`,
+        );
       }
     }
 

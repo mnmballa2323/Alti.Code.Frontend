@@ -30,10 +30,10 @@ export class GitContextGrounder {
     // Find git root dynamically relative to the target file directory to prevent process.cwd() pollution
     let gitRoot = path.dirname(filePath);
     try {
-      const { stdout } = await execAsync('git rev-parse --show-toplevel', { 
+      const { stdout } = await execAsync('git rev-parse --show-toplevel', {
         timeout: 3000,
         cwd: path.dirname(filePath),
-        env: cleanEnv 
+        env: cleanEnv,
       });
       if (stdout.trim()) {
         gitRoot = stdout.trim();
@@ -131,9 +131,11 @@ export class GitContextGrounder {
       );
       if (process.env.NODE_ENV === 'test' || process.env.VITEST) {
         // Return simulated mock blame details for testing environments where git binary is restricted
-        return `[Git Context Grounding for ${gitRelativePath} (Lines ${startLine}-${endLine})]\n` +
+        return (
+          `[Git Context Grounding for ${gitRelativePath} (Lines ${startLine}-${endLine})]\n` +
           `- Commit: c97256bcde294e856a5052abaadd70e64718b405 | Author: AI Migration Bot | Date: 2026-06-27 | Affects: 2 line(s)\n` +
-          `  Message: "feat(swarm): resolve sandbox escape and process exit crash in developer swarm"\n`;
+          `  Message: "feat(swarm): resolve sandbox escape and process exit crash in developer swarm"\n`
+        );
       }
       return `[Git Context] Blame tracking unavailable: ${error.message}${stderr} (gitRoot: ${gitRoot}, gitRelativePath: ${gitRelativePath}, cwd: ${process.cwd()})`;
     }

@@ -31,7 +31,9 @@ const initiateOAuth = catchAsync(async (req, res) => {
     const clientId = process.env.JIRA_CLIENT_ID || '';
     authUrl = `https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=${clientId}&scope=read:jira-work%20write:jira-work%20offline_access&redirect_uri=${encodeURIComponent(redirectUri)}&state=${userId}&response_type=code&prompt=consent`;
   } else {
-    return res.status(400).json({ success: false, message: `Unsupported provider: ${provider}` });
+    return res
+      .status(400)
+      .json({ success: false, message: `Unsupported provider: ${provider}` });
   }
 
   res.redirect(authUrl);
@@ -44,7 +46,9 @@ const oauthCallback = catchAsync(async (req, res) => {
 
   if (!code || !userId) {
     logger.error('OAuth Callback: Missing authorization code or state');
-    return res.redirect(`${config.client_url}/connect-apps?status=error&message=missing_callback_params`);
+    return res.redirect(
+      `${config.client_url}/connect-apps?status=error&message=missing_callback_params`,
+    );
   }
 
   const redirectUri = `${config.client_url.replace(/:[0-9]+/, ':5000')}/api/v1/integrations/callback/${provider}`;
@@ -60,7 +64,7 @@ const oauthCallback = catchAsync(async (req, res) => {
           code,
           redirect_uri: redirectUri,
         },
-        { headers: { Accept: 'application/json' } }
+        { headers: { Accept: 'application/json' } },
       );
       tokenData = response.data;
     } else if (provider === 'slack') {
@@ -71,7 +75,7 @@ const oauthCallback = catchAsync(async (req, res) => {
           client_secret: process.env.SLACK_CLIENT_SECRET || '',
           code,
           redirect_uri: redirectUri,
-        })
+        }),
       );
       tokenData = response.data;
     } else if (provider === 'jira') {
@@ -83,17 +87,27 @@ const oauthCallback = catchAsync(async (req, res) => {
           client_secret: process.env.JIRA_CLIENT_SECRET || '',
           code,
           redirect_uri: redirectUri,
-        }
+        },
       );
       tokenData = response.data;
     }
 
-    if (!tokenData || tokenData.error || (!tokenData.access_token && !tokenData.authed_user?.access_token)) {
-      throw new Error(tokenData.error_description || tokenData.error || 'Failed to fetch access tokens.');
+    if (
+      !tokenData ||
+      tokenData.error ||
+      (!tokenData.access_token && !tokenData.authed_user?.access_token)
+    ) {
+      throw new Error(
+        tokenData.error_description ||
+          tokenData.error ||
+          'Failed to fetch access tokens.',
+      );
     }
 
     // Envelope encrypt credentials at rest
-    const encryptedCredentials = await encryptionService.encrypt(JSON.stringify(tokenData));
+    const encryptedCredentials = await encryptionService.encrypt(
+      JSON.stringify(tokenData),
+    );
 
     // Save in DB
     await UserConnectionModel.findOneAndUpdate(
@@ -102,20 +116,27 @@ const oauthCallback = catchAsync(async (req, res) => {
         status: 'connected',
         credentials: encryptedCredentials,
       },
-      { upsert: true, new: true }
+      { upsert: true, new: true },
     );
 
-    res.redirect(`${config.client_url}/connect-apps?status=success&provider=${provider}`);
+    res.redirect(
+      `${config.client_url}/connect-apps?status=success&provider=${provider}`,
+    );
   } catch (error) {
     logger.error(`OAuth Integration Callback Error for ${provider}:`, error);
-    res.redirect(`${config.client_url}/connect-apps?status=error&message=${encodeURIComponent(error.message)}`);
+    res.redirect(
+      `${config.client_url}/connect-apps?status=error&message=${encodeURIComponent(error.message)}`,
+    );
   }
 });
 
 // Get user connections list
 const getActiveConnections = catchAsync(async (req, res) => {
   const userId = req.user._id.toString();
-  const connections = await UserConnectionModel.find({ userId, status: 'connected' }).select('provider status connectionId createdAt');
+  const connections = await UserConnectionModel.find({
+    userId,
+    status: 'connected',
+  }).select('provider status connectionId createdAt');
 
   sendResponse(res, {
     statusCode: 200,
@@ -130,7 +151,10 @@ const disconnectProvider = catchAsync(async (req, res) => {
   const userId = req.user._id.toString();
   const { provider } = req.params;
 
-  await UserConnectionModel.findOneAndDelete({ userId, provider: provider.startsWith('db_') ? provider : `mcp_${provider}` });
+  await UserConnectionModel.findOneAndDelete({
+    userId,
+    provider: provider.startsWith('db_') ? provider : `mcp_${provider}`,
+  });
 
   sendResponse(res, {
     statusCode: 200,
@@ -145,11 +169,15 @@ const saveCustomConnection = catchAsync(async (req, res) => {
   const { provider, details } = req.body; // e.g. provider = 'db_postgresql', details = { host, port, database, user, password, name, connectionString, ssl }
 
   if (!provider || !details) {
-    return res.status(400).json({ success: false, message: 'Provider and details are required' });
+    return res
+      .status(400)
+      .json({ success: false, message: 'Provider and details are required' });
   }
 
   // Envelope encrypt details
-  const encryptedCredentials = await encryptionService.encrypt(JSON.stringify(details));
+  const encryptedCredentials = await encryptionService.encrypt(
+    JSON.stringify(details),
+  );
 
   const result = await UserConnectionModel.findOneAndUpdate(
     { userId, provider },
@@ -158,7 +186,7 @@ const saveCustomConnection = catchAsync(async (req, res) => {
       credentials: encryptedCredentials,
       connectionId: details.name || 'Default Connection',
     },
-    { upsert: true, new: true }
+    { upsert: true, new: true },
   );
 
   sendResponse(res, {
@@ -178,18 +206,25 @@ const testDatabaseConnection = catchAsync(async (req, res) => {
   const { provider, details } = req.body;
 
   if (!provider || !details) {
-    return res.status(400).json({ success: false, message: 'Provider and details are required' });
+    return res
+      .status(400)
+      .json({ success: false, message: 'Provider and details are required' });
   }
 
-  const connString = details.connectionString || 
+  const connString =
+    details.connectionString ||
     (provider === 'db_mongodb'
       ? `mongodb://${details.user ? `${details.user}:${details.password}@` : ''}${details.host}:${details.port || 27017}/${details.database || ''}`
       : provider === 'db_redis'
-      ? `redis://${details.user ? `${details.user}:${details.password}@` : ''}${details.host}:${details.port || 6379}`
-      : `postgresql://${details.user ? `${details.user}:${details.password}@` : ''}${details.host}:${details.port || 5432}/${details.database || ''}`);
+        ? `redis://${details.user ? `${details.user}:${details.password}@` : ''}${details.host}:${details.port || 6379}`
+        : `postgresql://${details.user ? `${details.user}:${details.password}@` : ''}${details.host}:${details.port || 5432}/${details.database || ''}`);
 
   try {
-    if (provider.includes('postgresql') || provider.includes('neon') || provider.includes('supabase')) {
+    if (
+      provider.includes('postgresql') ||
+      provider.includes('neon') ||
+      provider.includes('supabase')
+    ) {
       const pg = (await import('pg')).default;
       const client = new pg.Client({
         connectionString: connString,
@@ -200,11 +235,16 @@ const testDatabaseConnection = catchAsync(async (req, res) => {
       await client.end();
     } else if (provider.includes('mongodb')) {
       const mongoose = (await import('mongoose')).default;
-      const conn = await mongoose.createConnection(connString, { serverSelectionTimeoutMS: 5000 }).asPromise();
+      const conn = await mongoose
+        .createConnection(connString, { serverSelectionTimeoutMS: 5000 })
+        .asPromise();
       await conn.close();
     } else if (provider.includes('redis')) {
       const Redis = (await import('ioredis')).default;
-      const redis = new Redis(connString, { maxRetriesPerRequest: 0, connectTimeout: 5000 });
+      const redis = new Redis(connString, {
+        maxRetriesPerRequest: 0,
+        connectTimeout: 5000,
+      });
       await redis.ping();
       await redis.quit();
     } else {
@@ -223,7 +263,7 @@ const testDatabaseConnection = catchAsync(async (req, res) => {
           socket.destroy();
           reject(new Error('Connection timed out'));
         });
-        socket.on('error', (err) => {
+        socket.on('error', err => {
           socket.destroy();
           reject(err);
         });

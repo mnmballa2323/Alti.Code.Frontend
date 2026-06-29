@@ -12,7 +12,13 @@ const prisma = prismaClient.prisma;
 /**
  * Creates a notification record and dispatches it over WebSocket if socket server is present.
  */
-async function createNotification({ userId, title, message, type = 'info', actionUrl = null }) {
+async function createNotification({
+  userId,
+  title,
+  message,
+  type = 'info',
+  actionUrl = null,
+}) {
   if (!userId) return null;
 
   try {
@@ -28,7 +34,9 @@ async function createNotification({ userId, title, message, type = 'info', actio
 
     // Notify user in real-time if global socket server instance is active
     if (global.io) {
-      logger.info(`📡 [WebSockets] Dispatching real-time notification to user: ${userId}`);
+      logger.info(
+        `📡 [WebSockets] Dispatching real-time notification to user: ${userId}`,
+      );
       global.io.to(userId).emit('notification_received', notification);
     }
 
@@ -60,7 +68,9 @@ async function getNotifications(userId) {
       take: 50,
     });
   } catch (err) {
-    logger.warn(`⚠️ DB connection unavailable. Returning empty notification list.`);
+    logger.warn(
+      `⚠️ DB connection unavailable. Returning empty notification list.`,
+    );
     return [];
   }
 }
@@ -75,7 +85,9 @@ async function markAsRead(notificationId, userId) {
       data: { read: true },
     });
   } catch (err) {
-    logger.warn(`⚠️ DB connection unavailable. Marking notification read locally.`);
+    logger.warn(
+      `⚠️ DB connection unavailable. Marking notification read locally.`,
+    );
     return { count: 1 };
   }
 }
@@ -90,7 +102,9 @@ async function markAllAsRead(userId) {
       data: { read: true },
     });
   } catch (err) {
-    logger.warn(`⚠️ DB connection unavailable. Marking all notifications read locally.`);
+    logger.warn(
+      `⚠️ DB connection unavailable. Marking all notifications read locally.`,
+    );
     return { count: 1 };
   }
 }
@@ -104,7 +118,9 @@ async function deleteNotification(notificationId, userId) {
       where: { id: notificationId, userId },
     });
   } catch (err) {
-    logger.warn(`⚠️ DB connection unavailable. Simulating notification deletion.`);
+    logger.warn(
+      `⚠️ DB connection unavailable. Simulating notification deletion.`,
+    );
     return { count: 1 };
   }
 }

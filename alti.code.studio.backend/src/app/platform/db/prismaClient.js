@@ -32,9 +32,10 @@ const queryExtensions = {
 
         // 3. Optimized Cache Key Generation (MD5 for long strings, direct formatting for short strings)
         const argString = args ? JSON.stringify(args) : '{}';
-        const hash = argString.length < 64 
-          ? argString.replace(/[^a-zA-Z0-9]/g, '')
-          : crypto.createHash('md5').update(argString).digest('hex');
+        const hash =
+          argString.length < 64
+            ? argString.replace(/[^a-zA-Z0-9]/g, '')
+            : crypto.createHash('md5').update(argString).digest('hex');
         const cacheKey = `pg_cache:${model}:${operation}:${hash}`;
 
         // 4. Redis Cache Retrieval
@@ -119,13 +120,13 @@ export const getTenantPrisma = (tenantId, dedicatedDbUrl) => {
     const oldestTenantId = clientPool.keys().next().value;
     const oldestClient = clientPool.get(oldestTenantId);
     clientPool.delete(oldestTenantId);
-    
+
     // Disconnect client asynchronously to release connection resources back to PostgreSQL
     if (oldestClient && typeof oldestClient.$disconnect === 'function') {
       oldestClient.$disconnect().catch(() => {});
     }
     logger.info(
-      `🔌 [Platform DataLayer] Evicted connection pool for Tenant ID: ${oldestTenantId} to optimize memory & energy.`
+      `🔌 [Platform DataLayer] Evicted connection pool for Tenant ID: ${oldestTenantId} to optimize memory & energy.`,
     );
   }
 
@@ -172,7 +173,7 @@ export async function connectPrisma() {
       logger.error(
         '❌ FATAL: PostgreSQL connection is mandatory in production. Exiting process.',
       );
-      console.log("Mocking database, skipping process.exit(1);");
+      console.log('Mocking database, skipping process.exit(1);');
     }
   }
 }

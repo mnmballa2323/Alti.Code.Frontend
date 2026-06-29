@@ -33,6 +33,8 @@ import { SandyaaRoutes } from '../modules/sandyaa/sandyaa.route.js';
 import { tenantDbRouter } from '../middlewares/tenantDb.js';
 import { scimRoutes } from '../modules/iam/scim.route.js';
 import { okfGovernanceMiddleware } from '../middlewares/okfGovernanceMiddleware.js';
+import mongoSanitize from 'express-mongo-sanitize';
+import xss from 'xss-clean';
 
 // 🛡️ Global Immutable Audit Logging (SOC 2 / FedRAMP)
 router.use(auditMiddleware('GLOBAL_API_REQUEST'));
@@ -41,6 +43,10 @@ router.use(auditMiddleware('GLOBAL_API_REQUEST'));
 router.use(enterpriseWAF.rateLimiter);
 router.use(enterpriseWAF.securityHeaders);
 router.use(enterpriseWAF.payloadInspector);
+
+// 🛡️ Global Input Sanitization (NoSQL / XSS Prevention)
+router.use(mongoSanitize());
+router.use(xss());
 
 // Public Routes
 router.use('/auth', authRoutes);
@@ -149,7 +155,8 @@ try {
               if (file === 'dspyAgent.route.js') basePath = '/oss-swarm/dspy';
               if (file === 'engine.route.js') basePath = '/engines';
               if (file === 'integration.route.js') basePath = '/integrations';
-              if (file === 'userConnection.route.js') basePath = '/integrations';
+              if (file === 'userConnection.route.js')
+                basePath = '/integrations';
               if (file === 'cloudRun.route.js') basePath = '/cloud-run';
               if (file === 'tts.route.js') basePath = '/tts';
               if (file === 'asset.route.js') basePath = '/assets';

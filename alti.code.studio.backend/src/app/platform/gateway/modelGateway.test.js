@@ -294,7 +294,6 @@ describe('Platform Model Gateway', () => {
         }),
       );
     });
-
   });
 
   describe('Phase 12: Product Token Limits, Scoping & Regional Metrics', () => {

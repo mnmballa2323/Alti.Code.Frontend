@@ -31,9 +31,11 @@ export const verifyGcpIapToken = async (req, res, next) => {
   // 🛡️ ENFORCE ZERO-TRUST JWT VERIFICATION IN PRODUCTION
   if (process.env.NODE_ENV === 'production') {
     const iapAssertion = req.headers['x-goog-iap-jwt-assertion'];
-    
+
     if (!iapAssertion) {
-      logger.error('❌ [GcpIAP] Missing x-goog-iap-jwt-assertion header in production');
+      logger.error(
+        '❌ [GcpIAP] Missing x-goog-iap-jwt-assertion header in production',
+      );
       return res.status(401).json({
         error: 'Google Cloud Identity-Aware Proxy JWT Assertion Required.',
       });
@@ -42,7 +44,7 @@ export const verifyGcpIapToken = async (req, res, next) => {
     try {
       // Validate expected IAP audience from env variable (e.g. /projects/PROJECT_NUMBER/global/backendServices/SERVICE_ID)
       const expectedAudience = process.env.GCP_IAP_AUDIENCE;
-      
+
       const ticket = await oAuth2Client.verifySignedJwtWithCertsAsync({
         jwt: iapAssertion,
         certsUrl: 'https://www.gstatic.com/iap/verify/public_key',
@@ -59,11 +61,13 @@ export const verifyGcpIapToken = async (req, res, next) => {
         role: payload.email.startsWith('admin') ? 'ADMIN' : 'USER',
         subject: payload.sub,
       };
-      
+
       logger.info(`✅ [GcpIAP] Zero-Trust Verified User: ${payload.email}`);
       return next();
     } catch (err) {
-      logger.error(`❌ [GcpIAP] Cryptographic validation failed: ${err.message}`);
+      logger.error(
+        `❌ [GcpIAP] Cryptographic validation failed: ${err.message}`,
+      );
       return res.status(401).json({
         error: `Google Cloud Identity-Aware Proxy Verification Failed: ${err.message}`,
       });
@@ -72,7 +76,8 @@ export const verifyGcpIapToken = async (req, res, next) => {
 
   // Development bypass logic
   const authHeader =
-    req.headers['x-goog-authenticated-user-email'] || req.headers['authorization'];
+    req.headers['x-goog-authenticated-user-email'] ||
+    req.headers['authorization'];
   if (!authHeader) {
     if (
       process.env.NODE_ENV === 'development' ||
@@ -86,15 +91,19 @@ export const verifyGcpIapToken = async (req, res, next) => {
     logger.warn(
       '⚠️ [GcpIAP] Missing x-goog-authenticated-user-email or Authorization header. Access Denied.',
     );
-    return res
-      .status(401)
-      .json({ error: 'Google Cloud Identity-Aware Proxy Authentication Required.' });
+    return res.status(401).json({
+      error: 'Google Cloud Identity-Aware Proxy Authentication Required.',
+    });
   }
 
   // Parse email from GCP IAP header
-  const email = typeof authHeader === 'string' && authHeader.includes('accounts.google.com:')
-    ? authHeader.replace(/^accounts\.google\.com:/, '')
-    : authHeader === 'Bearer mock_token_admin' ? 'admin@gcp.local' : 'user@gcp.local';
+  const email =
+    typeof authHeader === 'string' &&
+    authHeader.includes('accounts.google.com:')
+      ? authHeader.replace(/^accounts\.google\.com:/, '')
+      : authHeader === 'Bearer mock_token_admin'
+        ? 'admin@gcp.local'
+        : 'user@gcp.local';
 
   req.user = { email, role: email.startsWith('admin') ? 'ADMIN' : 'USER' };
   next();

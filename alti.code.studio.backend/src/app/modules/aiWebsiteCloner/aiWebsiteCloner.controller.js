@@ -24,7 +24,11 @@ const cloneWebsite = catchAsync(async (req, res) => {
       .json({ success: false, message: 'projectName is required.' });
   }
 
-  const result = await AiWebsiteClonerService.prepareClonerTemplate(targetUrl, projectName, workspace);
+  const result = await AiWebsiteClonerService.prepareClonerTemplate(
+    targetUrl,
+    projectName,
+    workspace,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

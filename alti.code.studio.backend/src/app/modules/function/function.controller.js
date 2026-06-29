@@ -47,7 +47,11 @@ const updateFunction = catchAsync(async (req, res) => {
   const { functionId } = req.params;
   const { name, description, code } = req.body;
 
-  await FunctionService.updateFunction(functionId, { name, description, code }, userId);
+  await FunctionService.updateFunction(
+    functionId,
+    { name, description, code },
+    userId,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

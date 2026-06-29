@@ -351,7 +351,8 @@ class AgenticRouterService {
           task: 'Perform basic credentials and configuration scanning',
         },
         {
-          agentId: 'Google Cloud Security Command Center (SCC) Zero-Trust Security Auditor',
+          agentId:
+            'Google Cloud Security Command Center (SCC) Zero-Trust Security Auditor',
           task: 'Enforce Zero-Trust perimeter and IAM least-privilege policies',
         },
       );
@@ -374,7 +375,8 @@ class AgenticRouterService {
           task: 'Scan queue worker configurations',
         },
         {
-          agentId: 'Google Cloud Pub/Sub Event-Driven Mesh Conductor Specialist',
+          agentId:
+            'Google Cloud Pub/Sub Event-Driven Mesh Conductor Specialist',
           task: 'Orchestrate event-driven Service Bus topologies and DLQ rules',
         },
       );
@@ -576,11 +578,13 @@ class AgenticRouterService {
     if (isIdentityOutput) {
       downstreamSequence.push(
         {
-          agentId: 'GCP Google Cloud IAM & Google Cloud IAM External Identities Specialist',
+          agentId:
+            'GCP Google Cloud IAM & Google Cloud IAM External Identities Specialist',
           task: 'Configure enterprise identity federations and custom JWT tokens',
         },
         {
-          agentId: 'Google Cloud Security Command Center (SCC) Zero-Trust Security Auditor',
+          agentId:
+            'Google Cloud Security Command Center (SCC) Zero-Trust Security Auditor',
           task: 'Audit user access controls and authentication boundaries',
         },
       );
@@ -604,7 +608,8 @@ class AgenticRouterService {
     if (isFunctionsMeshOutput) {
       downstreamSequence.push(
         {
-          agentId: 'GCP Google Cloud Functions & Event Grid Micro-Mesh Specialist',
+          agentId:
+            'GCP Google Cloud Functions & Event Grid Micro-Mesh Specialist',
           task: 'Configure 2nd gen serverless handlers and Event Grid trigger meshes',
         },
         {
@@ -710,7 +715,8 @@ class AgenticRouterService {
           task: 'Build DLP inspection templates and Data Catalog taxologies',
         },
         {
-          agentId: 'Google Cloud Security Command Center (SCC) Zero-Trust Security Auditor',
+          agentId:
+            'Google Cloud Security Command Center (SCC) Zero-Trust Security Auditor',
           task: 'Verify data privacy access perimeters',
         },
       );
@@ -814,8 +820,7 @@ class AgenticRouterService {
       outputLower.includes('index_metadata');
     if (isVertexAiVectorOutput) {
       downstreamSequence.push({
-        agentId:
-          'GCP GCP AI Studio Vector Search & Matching Engine Specialist',
+        agentId: 'GCP GCP AI Studio Vector Search & Matching Engine Specialist',
         task: 'Configure high-dimensional Vector Search index parameters and endpoints',
       });
       strategy = 'Hierarchical GCP AI Vector Search Swarm';
@@ -916,8 +921,7 @@ class AgenticRouterService {
           task: 'Audit and coordinate cross-environment task workflows',
         },
       );
-      strategy =
-        'Hierarchical GCP Dataflow & Airflow Orchestration Swarm';
+      strategy = 'Hierarchical GCP Dataflow & Airflow Orchestration Swarm';
     }
 
     // 31. Analyze Cloud Dataflow & Beam pipelines
@@ -930,8 +934,7 @@ class AgenticRouterService {
     if (isDataflowOutput) {
       downstreamSequence.push(
         {
-          agentId:
-            'GCP Cloud GCP Stream Analytics & Apache Beam Specialist',
+          agentId: 'GCP Cloud GCP Stream Analytics & Apache Beam Specialist',
           task: 'Design real-time Apache Beam pipelines and optimize Cloud Dataflow execution',
         },
         {
@@ -976,8 +979,7 @@ class AgenticRouterService {
     if (isFilestoreOutput) {
       downstreamSequence.push(
         {
-          agentId:
-            'GCP Cloud GCP Files & Distributed NFS Storage Specialist',
+          agentId: 'GCP Cloud GCP Files & Distributed NFS Storage Specialist',
           task: 'Configure enterprise NFS file systems and Cloud Filestore capacity tiers',
         },
         {
@@ -1024,7 +1026,8 @@ class AgenticRouterService {
           task: 'Design Eventarc trigger meshes and coordinate CloudEvents payload mappings',
         },
         {
-          agentId: 'Google Cloud Pub/Sub Event-Driven Mesh Conductor Specialist',
+          agentId:
+            'Google Cloud Pub/Sub Event-Driven Mesh Conductor Specialist',
           task: 'Integrate Eventarc triggers with high-throughput Pub/Sub message topics',
         },
       );
@@ -1071,8 +1074,7 @@ class AgenticRouterService {
           task: 'Audit build container provenance and secure software supply chains',
         },
       );
-      strategy =
-        'Hierarchical Binary Authorization & Supply Chain Swarm';
+      strategy = 'Hierarchical Binary Authorization & Supply Chain Swarm';
     }
 
     // 38. Analyze Cloud Interconnect & Secure VPN connections
@@ -1110,7 +1112,8 @@ class AgenticRouterService {
           task: 'Build keyless multi-cloud OIDC provider integrations and Workload Identity pools',
         },
         {
-          agentId: 'Google Cloud Security Command Center (SCC) Zero-Trust Security Auditor',
+          agentId:
+            'Google Cloud Security Command Center (SCC) Zero-Trust Security Auditor',
           task: 'Enforce Zero-Trust external clearance boundaries and IAM trust policies',
         },
       );
@@ -1167,8 +1170,7 @@ class AgenticRouterService {
       outputLower.includes('api_developer_portal');
     if (isApigeeEnterpriseOutput) {
       downstreamSequence.push({
-        agentId:
-          'GCP Google Cloud Apigee Enterprise API Management Specialist',
+        agentId: 'GCP Google Cloud Apigee Enterprise API Management Specialist',
         task: 'Configure Apigee API proxy routing configurations and traffic rate-limiting policies',
       });
       strategy = 'Hierarchical GCP Apigee Enterprise Swarm';
@@ -1210,8 +1212,7 @@ class AgenticRouterService {
       outputLower.includes('dialogflow_cx');
     if (isVertexAiSearchOutput) {
       downstreamSequence.push({
-        agentId:
-          'GCP GCP AI Studio Search & Conversation Agentic Specialist',
+        agentId: 'GCP GCP AI Studio Search & Conversation Agentic Specialist',
         task: 'Configure RAG data store search indexes and conversational Dialogflow CX intents',
       });
       strategy = 'Hierarchical GCP AI Studio Agent Builder Swarm';
@@ -1225,8 +1226,7 @@ class AgenticRouterService {
       outputLower.includes('tls_inspection');
     if (isSecureProxyOutput) {
       downstreamSequence.push({
-        agentId:
-          'GCP Secure Web Proxy & Zero-Trust Access Gateway Specialist',
+        agentId: 'GCP Secure Web Proxy & Zero-Trust Access Gateway Specialist',
         task: 'Deploy secure SWP gateways, TLS decryption boundaries, and egress routing filters',
       });
       strategy = 'Hierarchical GCP Secure Web Proxy Egress Swarm';
@@ -1255,8 +1255,7 @@ class AgenticRouterService {
       outputLower.includes('slurm_cluster');
     if (isTpuHpcOutput) {
       downstreamSequence.push({
-        agentId:
-          'GCP Cloud TPU & High-Performance Compute Cluster Specialist',
+        agentId: 'GCP Cloud TPU & High-Performance Compute Cluster Specialist',
         task: 'Configure Slurm cluster batch schedulers and JAX TPU VM pod configurations',
       });
       strategy = 'Hierarchical GCP TPU & High-Performance Compute Swarm';

@@ -18,7 +18,9 @@ class LedgerVerifierService {
    * @returns {Promise<object>} Verification report
    */
   async verifyChain(tenantId) {
-    logger.info(`🔍 [LedgerVerifier] Starting cryptographic verification of WORM ledger...`);
+    logger.info(
+      `🔍 [LedgerVerifier] Starting cryptographic verification of WORM ledger...`,
+    );
 
     const queryOptions = {
       orderBy: { createdAt: 'asc' },
@@ -34,14 +36,19 @@ class LedgerVerifierService {
       return { success: true, verifiedCount: 0, status: 'EMPTY_LEDGER' };
     }
 
-    let expectedPreviousHash = crypto.createHash('sha256').update('genesis').digest('hex');
+    let expectedPreviousHash = crypto
+      .createHash('sha256')
+      .update('genesis')
+      .digest('hex');
 
     for (let i = 0; i < logs.length; i++) {
       const log = logs[i];
 
       // 1. Verify previous hash link matches calculated preceding hash
       if (log.previousHash !== expectedPreviousHash) {
-        logger.error(`❌ [LedgerVerifier] TAMPER DETECTED: Chain broken at block ID: ${log.id}. previousHash mismatch.`);
+        logger.error(
+          `❌ [LedgerVerifier] TAMPER DETECTED: Chain broken at block ID: ${log.id}. previousHash mismatch.`,
+        );
         return {
           success: false,
           tamperedIndex: i,
@@ -69,7 +76,9 @@ class LedgerVerifierService {
 
       // 3. Compare stored hash against computed payload hash
       if (calculatedHash !== log.hash) {
-        logger.error(`❌ [LedgerVerifier] TAMPER DETECTED: Payload altered at block ID: ${log.id}.`);
+        logger.error(
+          `❌ [LedgerVerifier] TAMPER DETECTED: Payload altered at block ID: ${log.id}.`,
+        );
         return {
           success: false,
           tamperedIndex: i,
@@ -82,7 +91,9 @@ class LedgerVerifierService {
       expectedPreviousHash = calculatedHash;
     }
 
-    logger.info(`✅ [LedgerVerifier] Ledger integrity verified. All ${logs.length} blocks checked.`);
+    logger.info(
+      `✅ [LedgerVerifier] Ledger integrity verified. All ${logs.length} blocks checked.`,
+    );
     return {
       success: true,
       verifiedCount: logs.length,

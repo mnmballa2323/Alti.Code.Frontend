@@ -12,7 +12,7 @@ const geminiService = async (
   mode,
   domain,
 ) => {
-  const model = mode && mode !== 'Agent' ? mode : 'gemini-3.1-pro';
+  const model = mode && mode !== 'Agent' ? mode : 'gpt-4o';
 
   return LlmGatewayService.routeCompletion(
     userId,
@@ -40,7 +40,7 @@ const generateContentWithImage = async (
   textPrompt = 'Describe this image in detail.',
   sessionId,
 ) => {
-  const model = AzureGenAiService.getGenerativeModel('gemini-3.1-pro', 0.5);
+  const model = AzureGenAiService.getGenerativeModel('gpt-4o', 0.5);
   const imagePart = {
     inlineData: {
       data: base64Image,
@@ -52,7 +52,7 @@ const generateContentWithImage = async (
 };
 
 const gemini25PreviewService = async (sessionId, prompt, userId) => {
-  const model = AzureGenAiService.getGenerativeModel('gemini-2.5-pro', 0.5);
+  const model = AzureGenAiService.getGenerativeModel('gpt-4o', 0.5);
   const result = await model.generateContent(prompt);
   return result.response.text();
 };

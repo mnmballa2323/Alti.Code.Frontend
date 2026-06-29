@@ -693,7 +693,13 @@ agentRegistry.register({
   description:
     'Autonomous SWE Coding Agent — writes patches, runs builds, triages bugs, implements features.',
   queue: 'opencode-queue',
-  capabilities: ['opencode', 'coding-agent', 'bug-fix', 'patch-generation', 'terminal-execution'],
+  capabilities: [
+    'opencode',
+    'coding-agent',
+    'bug-fix',
+    'patch-generation',
+    'terminal-execution',
+  ],
   version: '1.0.0',
 });
 
@@ -702,7 +708,14 @@ agentRegistry.register({
   description:
     'Spec-Driven Development Planner — proposes, validates, and archives project specs.',
   queue: 'openspec-queue',
-  capabilities: ['openspec', 'spec-driven-development', 'sdd', 'planning', 'proposal', 'validation'],
+  capabilities: [
+    'openspec',
+    'spec-driven-development',
+    'sdd',
+    'planning',
+    'proposal',
+    'validation',
+  ],
   version: '1.0.0',
 });
 
@@ -711,7 +724,12 @@ agentRegistry.register({
   description:
     'AI Website Cloner — clones, scraps, and reverse-engineers target websites into Next.js/React templates.',
   queue: 'cloner-queue',
-  capabilities: ['website-cloning', 'scraping', 'reverse-engineering', 'asset-extraction'],
+  capabilities: [
+    'website-cloning',
+    'scraping',
+    'reverse-engineering',
+    'asset-extraction',
+  ],
   version: '1.0.0',
 });
 

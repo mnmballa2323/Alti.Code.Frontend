@@ -652,14 +652,8 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
         DEFINITIONS_DIR,
         'gcp.cloudfunctions.mesh.agent.yaml',
       );
-      const kmsPath = path.join(
-        DEFINITIONS_DIR,
-        'gcp.kms.officer.agent.yaml',
-      );
-      const buildPath = path.join(
-        DEFINITIONS_DIR,
-        'gcp.build.cicd.agent.yaml',
-      );
+      const kmsPath = path.join(DEFINITIONS_DIR, 'gcp.kms.officer.agent.yaml');
+      const buildPath = path.join(DEFINITIONS_DIR, 'gcp.build.cicd.agent.yaml');
       const edgePath = path.join(
         DEFINITIONS_DIR,
         'gcp.cdn.interconnect.agent.yaml',
@@ -706,10 +700,7 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
         DEFINITIONS_DIR,
         'gcp.memorystore.tuner.agent.yaml',
       );
-      const natPath = path.join(
-        DEFINITIONS_DIR,
-        'gcp.nat.network.agent.yaml',
-      );
+      const natPath = path.join(DEFINITIONS_DIR, 'gcp.nat.network.agent.yaml');
       const assetAuditorPath = path.join(
         DEFINITIONS_DIR,
         'gcp.asset.inventory.agent.yaml',
@@ -938,9 +929,7 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
       );
 
       expect(monitoringDef.id).toBe('agent.gcp.operations.monitoring');
-      expect(monitoringDef.name).toBe(
-        'GCP Operations & Monitoring Specialist',
-      );
+      expect(monitoringDef.name).toBe('GCP Operations & Monitoring Specialist');
 
       expect(armorDef.id).toBe('agent.gcp.waf.gateway');
       expect(armorDef.name).toBe(
@@ -1130,9 +1119,7 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
         'GCP Secure Web Proxy & Zero-Trust Access Gateway Specialist',
       );
 
-      expect(runMulticontainerDef.id).toBe(
-        'agent.gcp.cloudrun.multicontainer',
-      );
+      expect(runMulticontainerDef.id).toBe('agent.gcp.cloudrun.multicontainer');
       expect(runMulticontainerDef.name).toBe(
         'GCP Google Cloud Run Multicontainer & Sidecar Orchestration Specialist',
       );
@@ -1231,9 +1218,7 @@ describe('Declarative YAML Agent Integration & Routing System', () => {
         'ALTER TABLE child_table ADD FOREIGN KEY (parent_id) INTERLEAVE IN PARENT parent_table;';
       const spannerSwarm =
         await agenticRouter.routeDownstreamSwarm(spannerOutput);
-      expect(spannerSwarm.strategy).toBe(
-        'Hierarchical Spanner Scaling Swarm',
-      );
+      expect(spannerSwarm.strategy).toBe('Hierarchical Spanner Scaling Swarm');
       expect(spannerSwarm.sequence.map(s => s.agentId)).toContain(
         'GCP Cloud Spanner Scalability Specialist',
       );

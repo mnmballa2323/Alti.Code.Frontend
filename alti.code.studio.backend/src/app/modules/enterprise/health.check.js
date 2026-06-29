@@ -85,8 +85,13 @@ class HealthCheckEngine {
       this.setDependencyStatus('cache', 'HEALTHY', 0);
     } else {
       try {
-        const { gcpCacheService } = await import('../gcpCloud/gcpCache.service.js');
-        if (gcpCacheService && gcpCacheService.publisher && gcpCacheService.publisher.status === 'ready') {
+        const { gcpCacheService } =
+          await import('../gcpCloud/gcpCache.service.js');
+        if (
+          gcpCacheService &&
+          gcpCacheService.publisher &&
+          gcpCacheService.publisher.status === 'ready'
+        ) {
           const start = Date.now();
           await gcpCacheService.publisher.ping();
           this.setDependencyStatus('cache', 'HEALTHY', Date.now() - start);

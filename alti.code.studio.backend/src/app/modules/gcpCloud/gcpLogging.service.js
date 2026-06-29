@@ -10,14 +10,22 @@ class GcpLoggingService {
 
   init() {
     try {
-      if (process.env.NODE_ENV !== 'test' || process.env.GCP_REAL_SERVICES === 'true') {
-        if (process.env.GOOGLE_APPLICATION_CREDENTIALS || process.env.GCP_PROJECT_ID) {
+      if (
+        process.env.NODE_ENV !== 'test' ||
+        process.env.GCP_REAL_SERVICES === 'true'
+      ) {
+        if (
+          process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+          process.env.GCP_PROJECT_ID
+        ) {
           this.logging = new Logging();
           this.isInitialized = true;
         }
       }
     } catch (e) {
-      logger.warn(`⚠️ Google Cloud Logging initialization failed, falling back to local logger: ${e.message}`);
+      logger.warn(
+        `⚠️ Google Cloud Logging initialization failed, falling back to local logger: ${e.message}`,
+      );
       this.isInitialized = false;
     }
   }
@@ -49,7 +57,9 @@ class GcpLoggingService {
         await log.write(logEntry);
         return;
       } catch (e) {
-        logger.error(`❌ Google Cloud Logging write failed: ${e.message}. Falling back to standard console logger.`);
+        logger.error(
+          `❌ Google Cloud Logging write failed: ${e.message}. Falling back to standard console logger.`,
+        );
       }
     }
 
@@ -63,7 +73,8 @@ class GcpLoggingService {
 const service = new GcpLoggingService();
 
 export const GcpLoggingServiceInstance = {
-  writeAuditLog: (logName, entry, severity) => service.writeAuditLog(logName, entry, severity),
+  writeAuditLog: (logName, entry, severity) =>
+    service.writeAuditLog(logName, entry, severity),
 };
 
 export const CloudLoggingService = GcpLoggingServiceInstance;

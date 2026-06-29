@@ -7,6 +7,7 @@
 
 import express from 'express';
 import { authMiddleware } from '../../middlewares/auth.middleware.js';
+import { requireMfa } from '../../middlewares/requireMfa.middleware.js';
 import { ENUM_USER_ROLE } from '../../../shared/enum.js';
 import { AuditController } from './audit.controller.js';
 
@@ -57,6 +58,7 @@ const router = express.Router();
 router.get(
   '/',
   authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  requireMfa,
   AuditController.getLogs,
 );
 
@@ -72,21 +74,25 @@ router.get(
 router.post(
   '/export/gcs',
   authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  requireMfa,
   AuditController.exportLogsToGCS,
 );
 router.post(
   '/analyze',
   authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  requireMfa,
   AuditController.analyzeLogs,
 );
 router.post(
   '/lighthouse',
   authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  requireMfa,
   AuditController.runLighthouseAudit,
 );
 router.post(
   '/genkit',
   authMiddleware(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.SUPER_ADMIN),
+  requireMfa,
   AuditController.runGenkitAudit,
 );
 

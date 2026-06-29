@@ -63,40 +63,38 @@ class SwarmBrain {
 
     // 🌐 Distributed Swarm Sync (Redis Pub/Sub via Azure Cache)
     // This bridges the local EventEmitter to the global Redis cluster.
-    import('../gcpCloud/gcpCache.service.js').then(
-      ({ memorystoreService }) => {
-        memorystoreService.subscribeToCrdt('global_hive_mind', message => {
-          try {
-            const data = JSON.parse(message);
-            if (data.type === 'cognitive_alert') {
-              // Forward external cluster alerts to the local UI
-              logger.warn(
-                `🌍 [Distributed Swarm Sync] External node broadcasted: ${data.alert}`,
-              );
-              socketService.broadcast('swarm', 'hive_mind_alert', {
-                alert: data.alert,
-              });
-            }
-          } catch (e) {}
-        });
+    import('../gcpCloud/gcpCache.service.js').then(({ memorystoreService }) => {
+      memorystoreService.subscribeToCrdt('global_hive_mind', message => {
+        try {
+          const data = JSON.parse(message);
+          if (data.type === 'cognitive_alert') {
+            // Forward external cluster alerts to the local UI
+            logger.warn(
+              `🌍 [Distributed Swarm Sync] External node broadcasted: ${data.alert}`,
+            );
+            socketService.broadcast('swarm', 'hive_mind_alert', {
+              alert: data.alert,
+            });
+          }
+        } catch (e) {}
+      });
 
-        // Global listener for telemetry (Local -> Global)
-        this.hiveMindMesh.on('cognitive_alert', alert => {
-          logger.warn(
-            `🧠 [Hive-Mind Pub/Sub] Cross-agent alert broadcasted: ${alert}`,
-          );
+      // Global listener for telemetry (Local -> Global)
+      this.hiveMindMesh.on('cognitive_alert', alert => {
+        logger.warn(
+          `🧠 [Hive-Mind Pub/Sub] Cross-agent alert broadcasted: ${alert}`,
+        );
 
-          // Broadcast to the local UI
-          socketService.broadcast('swarm', 'hive_mind_alert', { alert });
+        // Broadcast to the local UI
+        socketService.broadcast('swarm', 'hive_mind_alert', { alert });
 
-          // Replicate globally to all other Pods/Instances via Redis
-          memorystoreService.publishCrdtUpdate(
-            'global_hive_mind',
-            JSON.stringify({ type: 'cognitive_alert', alert }),
-          );
-        });
-      },
-    );
+        // Replicate globally to all other Pods/Instances via Redis
+        memorystoreService.publishCrdtUpdate(
+          'global_hive_mind',
+          JSON.stringify({ type: 'cognitive_alert', alert }),
+        );
+      });
+    });
 
     // Initialize loaders
     dynamicAgentLoaderService.init();
@@ -560,19 +558,22 @@ If you require assistance from another specialized agent to complete your task, 
         clawCodeRouterService.shouldRouteToClawCode(injectedPrompt);
 
       if (isCodeTask) {
-        // Determine preferred agent based on API keys and configuration
-        const hasBedrock = !!(
-          process.env.AWS_BEDROCK_API_KEY || process.env.AWS_ACCESS_KEY_ID
+        // Determine preferred agent based on Sovereign Cloud keys
+        const hasAzure = !!(
+          process.env.AZURE_OPENAI_API_KEY || config.azure_api_key
         );
         const hasGemini = !!(
-          config.gemini_secret_key || process.env.GEMINI_API_KEY
+          config.gemini_secret_key ||
+          process.env.GEMINI_API_KEY ||
+          process.env.VERTEX_API_KEY
         );
         const clawBinaryExists = fs.existsSync(clawCodeRouterService.clawPath);
 
         let preferredAgent = 'goose';
         if (
           clawBinaryExists &&
-          (hasBedrock || process.env.PREFERRED_AGENT === 'claw' || !hasGemini)
+          (process.env.PREFERRED_AGENT === 'claw' || !hasGemini) &&
+          hasAzure
         ) {
           preferredAgent = 'claw';
         }

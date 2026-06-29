@@ -71,12 +71,14 @@ When auditing code or providing blueprints, provide pure HTML snippets or Next.j
 
     while (iterations < maxIterations) {
       iterations++;
-      logger.info(`📈 SEO Expert: Invoking Gemini iteration ${iterations}/${maxIterations}...`);
-      
+      logger.info(
+        `📈 SEO Expert: Invoking Gemini iteration ${iterations}/${maxIterations}...`,
+      );
+
       const response = await GeminiAiService.generateContent(
-        chatHistory.length > 0 
+        chatHistory.length > 0
           ? `${currentPrompt}\n\n=== TOOL EXECUTION HISTORY ===\n${chatHistory.join('\n')}\n\nContinue execution.`
-          : currentPrompt
+          : currentPrompt,
       );
 
       // Check if response contains a tool call block
@@ -86,28 +88,39 @@ When auditing code or providing blueprints, provide pure HTML snippets or Next.j
           const parsed = JSON.parse(jsonMatch[0]);
           const callData = parsed.__MCP_CALL__;
           if (callData && callData.tool) {
-            logger.info(`🔌 SEO Expert: Intercepted tool call to "${callData.tool}"`);
-            
+            logger.info(
+              `🔌 SEO Expert: Intercepted tool call to "${callData.tool}"`,
+            );
+
             // Execute the tool dynamically via the MCP Gateway
-            const { mcpGateway } = await import('../../mcp/mcp_gateway.service.js');
-            
+            const { mcpGateway } =
+              await import('../../mcp/mcp_gateway.service.js');
+
             let toolResult;
             try {
               toolResult = await mcpGateway.executeToolWithContext(
                 'open_seo',
                 callData.tool,
-                callData.params || {}
+                callData.params || {},
               );
             } catch (err) {
-              toolResult = { error: `Failed to execute tool ${callData.tool}: ${err.message}` };
+              toolResult = {
+                error: `Failed to execute tool ${callData.tool}: ${err.message}`,
+              };
             }
 
-            logger.info(`🔌 SEO Expert: Tool execution completed successfully.`);
-            chatHistory.push(`Tool Call: ${JSON.stringify(callData)}\nResult: ${JSON.stringify(toolResult)}`);
+            logger.info(
+              `🔌 SEO Expert: Tool execution completed successfully.`,
+            );
+            chatHistory.push(
+              `Tool Call: ${JSON.stringify(callData)}\nResult: ${JSON.stringify(toolResult)}`,
+            );
             continue; // Go to next iteration to let Gemini consume the tool output
           }
         } catch (parseErr) {
-          logger.warn(`⚠️ SEO Expert: Failed to parse tool call JSON block: ${parseErr.message}`);
+          logger.warn(
+            `⚠️ SEO Expert: Failed to parse tool call JSON block: ${parseErr.message}`,
+          );
         }
       }
 

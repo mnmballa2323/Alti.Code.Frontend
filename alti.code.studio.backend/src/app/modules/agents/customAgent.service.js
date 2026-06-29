@@ -15,7 +15,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Save file path inside database / workspace boundary
-const AGENTS_FILE_PATH = path.join(__dirname, '../../../../data/custom_agents.json');
+const AGENTS_FILE_PATH = path.join(
+  __dirname,
+  '../../../../data/custom_agents.json',
+);
 
 // In-memory cache to eliminate multiple disk reads
 let cachedAgents = null;
@@ -60,7 +63,11 @@ function getAgentsCache() {
 function flushAgentsCacheToDisk() {
   if (cachedAgents === null) return;
   try {
-    fs.writeFileSync(AGENTS_FILE_PATH, JSON.stringify(cachedAgents, null, 2), 'utf-8');
+    fs.writeFileSync(
+      AGENTS_FILE_PATH,
+      JSON.stringify(cachedAgents, null, 2),
+      'utf-8',
+    );
   } catch (err) {
     logger.error('Failed to save custom agents to disk:', err);
   }
@@ -69,7 +76,13 @@ function flushAgentsCacheToDisk() {
 /**
  * Creates a new custom agent.
  */
-function createAgent({ name, description = '', prompt = '', tools = [], userId }) {
+function createAgent({
+  name,
+  description = '',
+  prompt = '',
+  tools = [],
+  userId,
+}) {
   const agents = getAgentsCache();
   const newAgent = {
     id: `custom-agent-${crypto.randomUUID()}`,
@@ -108,13 +121,17 @@ function getAgentById(id) {
  */
 function deleteAgent(id, userId) {
   const agents = getAgentsCache();
-  const index = agents.findIndex(agent => agent.id === id && (!userId || agent.userId === userId));
-  
+  const index = agents.findIndex(
+    agent => agent.id === id && (!userId || agent.userId === userId),
+  );
+
   if (index === -1) return false;
-  
+
   const deletedAgent = agents.splice(index, 1)[0];
   flushAgentsCacheToDisk();
-  logger.info(`🗑️ Custom agent deleted successfully: ${deletedAgent.name} [${id}]`);
+  logger.info(
+    `🗑️ Custom agent deleted successfully: ${deletedAgent.name} [${id}]`,
+  );
   return true;
 }
 

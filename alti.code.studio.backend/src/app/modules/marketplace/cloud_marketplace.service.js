@@ -112,8 +112,6 @@ class CloudMarketplaceService {
     };
   }
 
-
-
   // ─── 4. Automated Metering & Hourly Usage Batching ───────────────────────
 
   /**
@@ -136,7 +134,11 @@ class CloudMarketplaceService {
 
       for (const line of lines) {
         const tx = JSON.parse(line);
-        if (tx.cloudProvider === 'gcp' && tx.financials && tx.financials.totalCostUsd) {
+        if (
+          tx.cloudProvider === 'gcp' &&
+          tx.financials &&
+          tx.financials.totalCostUsd
+        ) {
           groupedUsage.gcp += tx.financials.totalCostUsd;
           batchTotalCost += tx.financials.totalCostUsd;
           batchTotalTransactions++;

@@ -338,8 +338,7 @@ describe('Industry Compliance Service Tests', () => {
     });
 
     it('should invoke GCP service endpoint when GCP_LEGAL_NOTICE_URL is set', async () => {
-      process.env.GCP_LEGAL_NOTICE_URL =
-        'https://api.gcp.com/legal/dispatch';
+      process.env.GCP_LEGAL_NOTICE_URL = 'https://api.gcp.com/legal/dispatch';
 
       const payload = {
         contractId: 'sovereign-contract-003',
@@ -374,9 +373,7 @@ describe('Industry Compliance Service Tests', () => {
       expect(result.breach_detected).toBe(true);
       expect(result.severity).toBe('MEDIUM');
       expect(result.gcp_routing_metadata.status).toBe('DISPATCHED');
-      expect(result.gcp_routing_metadata.messageId).toBe(
-        'gcp-live-msg-id-888',
-      );
+      expect(result.gcp_routing_metadata.messageId).toBe('gcp-live-msg-id-888');
       expect(axiosSpy).toHaveBeenCalledWith(
         'https://api.gcp.com/legal/dispatch',
         expect.any(Object),

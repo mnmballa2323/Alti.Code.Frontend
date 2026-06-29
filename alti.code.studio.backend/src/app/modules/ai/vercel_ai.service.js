@@ -24,7 +24,7 @@ export class VercelAiService {
 
     const model = options.model || 'gemini-3.5-flash';
     const result = await executeVertexInference(prompt, model, options);
-    
+
     return {
       text: result.text,
       usage: result.usage,

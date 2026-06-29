@@ -52,8 +52,14 @@ const auth =
           verifiedUser = jwtHelpers.verifyToken(token, config.jwt.access_token);
         } catch (error) {
           if (config.env !== 'production') {
-            logger.warn('⚠️ Token verification failed in development. Falling back to mock user.');
-            verifiedUser = { role: 'admin', userId: 'mock_admin', email: 'dev@alti.local' };
+            logger.warn(
+              '⚠️ Token verification failed in development. Falling back to mock user.',
+            );
+            verifiedUser = {
+              role: 'admin',
+              userId: 'mock_admin',
+              email: 'dev@alti.local',
+            };
           } else {
             throw new ApiError(httpStatus.FORBIDDEN, 'Invalid Token');
           }

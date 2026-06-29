@@ -218,21 +218,29 @@ capabilities:
 
       // Mock AzureGenAiService calls to bypass real LLMs
       const { azureGenAiService } = await import('../ai/azureGenAi.service.js');
-      vi.spyOn(azureGenAiService, 'generateContent').mockImplementation(async (prompt, model) => {
-        if (model === 'claude-5-sonnet') {
-          return { content: 'const a = 1;' };
-        }
-        if (model === 'gpt-5.5') {
-          if (prompt.includes('Introspection') || prompt.includes('introspection')) {
-            return { content: 'NO_CHANGE' };
+      vi.spyOn(azureGenAiService, 'generateContent').mockImplementation(
+        async (prompt, model) => {
+          if (model === 'gpt-5.5' && prompt.includes('Lead Architect')) {
+            return { content: 'const a = 1;' };
+          }
+          if (model === 'claude-5-sonnet') {
+            return { content: 'const a = 1;' };
+          }
+          if (model === 'gpt-5.5') {
+            if (
+              prompt.includes('Introspection') ||
+              prompt.includes('introspection')
+            ) {
+              return { content: 'NO_CHANGE' };
+            }
+            return { content: 'APPROVED' };
+          }
+          if (model === 'gemini-3.1-pro') {
+            return { content: 'describe("test", () => {})' };
           }
           return { content: 'APPROVED' };
-        }
-        if (model === 'gemini-3.1-pro') {
-          return { content: 'describe("test", () => {})' };
-        }
-        return { content: 'APPROVED' };
-      });
+        },
+      );
 
       // Mock imports
       vi.mock('../knowledge/knowledge.rag.service.js', () => ({

@@ -16,7 +16,8 @@ export class GcpSwarmAgent extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'gcpSwarm';
-    this.description = 'Dynamic Google Cloud Platform (GCP) Swarm Specialist — Governs GCS storage optimizations, Pub/Sub event queues, and KMS cryptographic keys audits.';
+    this.description =
+      'Dynamic Google Cloud Platform (GCP) Swarm Specialist — Governs GCS storage optimizations, Pub/Sub event queues, and KMS cryptographic keys audits.';
     this.preamble = `
 You are the GcpSwarm Master Agent.
 Your role is to monitor and optimize Google Cloud configurations, pipelines, buckets, keys, and message routing.
@@ -31,21 +32,36 @@ You route cloud service requests to your specialized sub-agents:
     logger.info(`⚡ [gcpSwarm] Routing Cloud service query: ${prompt}`);
     const cleanPrompt = prompt.toLowerCase();
 
-    if (cleanPrompt.includes('storage') || cleanPrompt.includes('bucket') || cleanPrompt.includes('gcs') || cleanPrompt.includes('blob')) {
+    if (
+      cleanPrompt.includes('storage') ||
+      cleanPrompt.includes('bucket') ||
+      cleanPrompt.includes('gcs') ||
+      cleanPrompt.includes('blob')
+    ) {
       const storage = agentRegistry.get('gcpStorageOptimizer');
       if (storage && storage.instance) {
         return storage.instance._invoke(prompt, contextBlock, opts);
       }
     }
 
-    if (cleanPrompt.includes('pubsub') || cleanPrompt.includes('pub/sub') || cleanPrompt.includes('topic') || cleanPrompt.includes('queue')) {
+    if (
+      cleanPrompt.includes('pubsub') ||
+      cleanPrompt.includes('pub/sub') ||
+      cleanPrompt.includes('topic') ||
+      cleanPrompt.includes('queue')
+    ) {
       const broker = agentRegistry.get('gcpPubSubBroker');
       if (broker && broker.instance) {
         return broker.instance._invoke(prompt, contextBlock, opts);
       }
     }
 
-    if (cleanPrompt.includes('kms') || cleanPrompt.includes('key') || cleanPrompt.includes('encryption') || cleanPrompt.includes('rotate')) {
+    if (
+      cleanPrompt.includes('kms') ||
+      cleanPrompt.includes('key') ||
+      cleanPrompt.includes('encryption') ||
+      cleanPrompt.includes('rotate')
+    ) {
       const guardian = agentRegistry.get('gcpKmsGuardian');
       if (guardian && guardian.instance) {
         return guardian.instance._invoke(prompt, contextBlock, opts);
@@ -72,12 +88,16 @@ export class GcpStorageOptimizer extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'gcpStorageOptimizer';
-    this.description = 'GCP GCS Storage Optimizer — Performs bucket lifecycle sweeps and object access scans.';
-    this.preamble = 'You are the GcpStorageOptimizer micro-specialist. You inspect Cloud Storage buckets, check signed URL policies, and define object lifecycle expiration paths.';
+    this.description =
+      'GCP GCS Storage Optimizer — Performs bucket lifecycle sweeps and object access scans.';
+    this.preamble =
+      'You are the GcpStorageOptimizer micro-specialist. You inspect Cloud Storage buckets, check signed URL policies, and define object lifecycle expiration paths.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`🕵️‍♂️ [gcpStorageOptimizer] Scanning Google Cloud Storage buckets...`);
+    logger.info(
+      `🕵️‍♂️ [gcpStorageOptimizer] Scanning Google Cloud Storage buckets...`,
+    );
     return `
 📦 **gcpStorageOptimizer GCS Audit**
 - **Monitored Buckets Count:** 8 GCS buckets verified.
@@ -99,12 +119,16 @@ export class GcpPubSubBroker extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'gcpPubSubBroker';
-    this.description = 'GCP Pub/Sub Broker Specialist — Designs asynchronous event routing triggers.';
-    this.preamble = 'You are the GcpPubSubBroker micro-specialist. You analyze message queues, Pub/Sub push/pull subscriptions, and ensure dead-letter topic bindings.';
+    this.description =
+      'GCP Pub/Sub Broker Specialist — Designs asynchronous event routing triggers.';
+    this.preamble =
+      'You are the GcpPubSubBroker micro-specialist. You analyze message queues, Pub/Sub push/pull subscriptions, and ensure dead-letter topic bindings.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`📐 [gcpPubSubBroker] Synthesizing Pub/Sub topics queue models...`);
+    logger.info(
+      `📐 [gcpPubSubBroker] Synthesizing Pub/Sub topics queue models...`,
+    );
     return `
 ⚡ **gcpPubSubBroker Ingestion Topology**
 - **Active Topics:** 4 verified (auth-events, telemetry-logs, deploy-triggers, database-sweeps).
@@ -126,12 +150,16 @@ export class GcpKmsGuardian extends BaseSpecialistAgent {
   constructor() {
     super();
     this.name = 'gcpKmsGuardian';
-    this.description = 'GCP KMS Guardian Specialist — Monitors key ring rotations and cryptokey compliance.';
-    this.preamble = 'You are the GcpKmsGuardian micro-specialist. You verify Key Management Service key ring policies and audit envelope decryption triggers.';
+    this.description =
+      'GCP KMS Guardian Specialist — Monitors key ring rotations and cryptokey compliance.';
+    this.preamble =
+      'You are the GcpKmsGuardian micro-specialist. You verify Key Management Service key ring policies and audit envelope decryption triggers.';
   }
 
   async _invoke(prompt, contextBlock, opts = {}) {
-    logger.info(`🛡️ [gcpKmsGuardian] Auditing KMS encryption keys and rings...`);
+    logger.info(
+      `🛡️ [gcpKmsGuardian] Auditing KMS encryption keys and rings...`,
+    );
     return `
 🛡️ **gcpKmsGuardian Security Manifest**
 - **Key Ring:** alti-production-keyring.
@@ -156,7 +184,7 @@ agentRegistry.register({
   capabilities: ['gcp-orchestration', 'cloud-auditing'],
   policy: { accessLevel: 'ADMIN' },
   version: '1.0.0',
-  instance: master
+  instance: master,
 });
 
 const storage = new GcpStorageOptimizer();
@@ -167,7 +195,7 @@ agentRegistry.register({
   capabilities: ['gcs-optimization', 'bucket-lifecycle'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: storage
+  instance: storage,
 });
 
 const broker = new GcpPubSubBroker();
@@ -178,7 +206,7 @@ agentRegistry.register({
   capabilities: ['pubsub-routing', 'event-queues'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: broker
+  instance: broker,
 });
 
 const guardian = new GcpKmsGuardian();
@@ -189,5 +217,5 @@ agentRegistry.register({
   capabilities: ['kms-protection', 'key-rotation'],
   policy: { accessLevel: 'DEVELOPER' },
   version: '1.0.0',
-  instance: guardian
+  instance: guardian,
 });

@@ -14,7 +14,13 @@ const prisma = prismaClient.prisma;
 /**
  * Creates a serverless function entry.
  */
-async function createFunction({ name, description = '', code, language = 'javascript', userId }) {
+async function createFunction({
+  name,
+  description = '',
+  code,
+  language = 'javascript',
+  userId,
+}) {
   try {
     return await prisma.serverlessFunction.create({
       data: {
@@ -93,15 +99,21 @@ async function deleteFunction(functionId, userId) {
  */
 async function executeCode(code) {
   const logs = [];
-  
+
   // Custom sandbox to capture stdout and restrict standard libraries
   const sandbox = {
     console: {
       log: (...args) => {
-        logs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' '));
+        logs.push(
+          args
+            .map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a)))
+            .join(' '),
+        );
       },
       error: (...args) => {
-        logs.push(`[ERROR] ${args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')}`);
+        logs.push(
+          `[ERROR] ${args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ')}`,
+        );
       },
     },
     setTimeout,
@@ -122,7 +134,10 @@ async function executeCode(code) {
 
     let displayResult = 'undefined';
     if (result !== undefined) {
-      displayResult = typeof result === 'object' ? JSON.stringify(result, null, 2) : String(result);
+      displayResult =
+        typeof result === 'object'
+          ? JSON.stringify(result, null, 2)
+          : String(result);
     }
 
     return {

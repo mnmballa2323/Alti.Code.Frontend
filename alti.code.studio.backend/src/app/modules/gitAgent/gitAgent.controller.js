@@ -153,7 +153,9 @@ const changeDirectory = catchAsync(async (req, res) => {
     }
 
     process.chdir(resolvedPath);
-    console.log(`📁 [Workspace] Successfully changed active working directory to: ${resolvedPath}`);
+    console.log(
+      `📁 [Workspace] Successfully changed active working directory to: ${resolvedPath}`,
+    );
 
     sendResponse(res, {
       statusCode: httpStatus.OK,
@@ -164,7 +166,9 @@ const changeDirectory = catchAsync(async (req, res) => {
       },
     });
   } catch (err) {
-    console.error(`❌ [Workspace] Failed to change directory to ${newPath}: ${err.message}`);
+    console.error(
+      `❌ [Workspace] Failed to change directory to ${newPath}: ${err.message}`,
+    );
     sendResponse(res, {
       statusCode: httpStatus.INTERNAL_SERVER_ERROR,
       success: false,

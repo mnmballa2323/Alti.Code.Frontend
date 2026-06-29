@@ -99,15 +99,20 @@ const confirmEmailService = async token => {
 
 const loginService = async (email, password) => {
   if (
-    (email?.trim().toLowerCase() === 'admin@insocode.com' || email?.trim().toLowerCase() === 'owner@insocode.com') &&
+    (email?.trim().toLowerCase() === 'admin@insocode.com' ||
+      email?.trim().toLowerCase() === 'owner@insocode.com') &&
     password === 'ShelbyTownship#1'
   ) {
     const isAdmin = email?.trim().toLowerCase() === 'admin@insocode.com';
     const mockId = isAdmin
-        ? '84644de4-219b-4e40-84ea-55cefe3c71cd'
-        : '94644de4-219b-4e40-84ea-55cefe3c71cd';
+      ? '84644de4-219b-4e40-84ea-55cefe3c71cd'
+      : '94644de4-219b-4e40-84ea-55cefe3c71cd';
     const accessToken = jwtHelpers.createToken(
-      { _id: mockId, role: isAdmin ? 'admin' : 'owner', tenantRole: isAdmin ? 'admin' : 'owner' },
+      {
+        _id: mockId,
+        role: isAdmin ? 'admin' : 'owner',
+        tenantRole: isAdmin ? 'admin' : 'owner',
+      },
       config.jwt.access_token,
       config.jwt.access_expires_in,
     );
@@ -512,6 +517,7 @@ const validateMfaChallengeService = async (mfaToken, code) => {
       role: user.role,
       tenantId: user.tenantId,
       tenantRole: user.tenantRole,
+      mfaVerified: true,
     },
     config.jwt.access_token,
     config.jwt.access_expires_in,

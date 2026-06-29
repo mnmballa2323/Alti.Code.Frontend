@@ -23,10 +23,7 @@ const getServices = async () => {
   try {
     const genAiModule = await import(
       pathToFileURL(
-        path.resolve(
-          __dirname,
-          '../app/modules/ai/azureGenAi.service.js',
-        ),
+        path.resolve(__dirname, '../app/modules/ai/azureGenAi.service.js'),
       )
     );
     const deployModule = await import(
@@ -47,7 +44,8 @@ const getServices = async () => {
     );
     const fsModule = await import('fs/promises');
     return {
-      AzureGenAiService: genAiModule.azureGenAiService || genAiModule.AzureGenAiService,
+      AzureGenAiService:
+        genAiModule.azureGenAiService || genAiModule.AzureGenAiService,
       uDeploymentService: deployModule.uDeploymentService,
       spannerGraphService: spannerModule.spannerGraphService,
       fs: fsModule,

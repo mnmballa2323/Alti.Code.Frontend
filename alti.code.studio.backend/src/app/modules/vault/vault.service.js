@@ -18,10 +18,7 @@ const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 /**
  * Resolves a GCP Cloud KMS master key to unwrap KEK, with fallback to derived mock key if offline.
  */
-const resolveGcpKmsKey = async (
-  customerKmsKeyArn,
-  bypassCache = false,
-) => {
+const resolveGcpKmsKey = async (customerKmsKeyArn, bypassCache = false) => {
   if (!customerKmsKeyArn) return null;
 
   if (!bypassCache) {
@@ -182,8 +179,16 @@ const getRawCredentials = async userId => {
         throwOnError,
       ),
       gcpPrivateKey: await decryptField(vault.gcpPrivateKey, key, throwOnError),
-      awsAccessKeyId: await decryptField(vault.awsAccessKeyId, key, throwOnError),
-      awsSecretAccessKey: await decryptField(vault.awsSecretAccessKey, key, throwOnError),
+      awsAccessKeyId: await decryptField(
+        vault.awsAccessKeyId,
+        key,
+        throwOnError,
+      ),
+      awsSecretAccessKey: await decryptField(
+        vault.awsSecretAccessKey,
+        key,
+        throwOnError,
+      ),
       awsRegion: await decryptField(vault.awsRegion, key, throwOnError),
     };
   };
@@ -246,9 +251,7 @@ const updateCredentials = async (userId, keys) => {
       include: { tenant: true },
     });
     if (user?.tenant?.customerKmsKeyArn) {
-      tenantKmsKey = await resolveGcpKmsKey(
-        user.tenant.customerKmsKeyArn,
-      );
+      tenantKmsKey = await resolveGcpKmsKey(user.tenant.customerKmsKeyArn);
     }
   } catch (err) {
     logger.warn(

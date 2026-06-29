@@ -21,7 +21,9 @@ export const BigQueryService = new GoogleBigQueryService();
 // 2. Vertex AI Feature Store
 class VertexFeatureStoreService {
   async getPrecomputedEmbedding(id) {
-    logger.info(`🧠 Google Vertex AI Feature Store: Fetching embedding for ${id}`);
+    logger.info(
+      `🧠 Google Vertex AI Feature Store: Fetching embedding for ${id}`,
+    );
     return Array(768)
       .fill(0)
       .map(() => Math.random() - 0.5);
@@ -75,7 +77,8 @@ class GcpSandboxExecutorService {
         const result = eval(code);
         stdoutVal = String(result);
       } catch (e) {
-        stdoutVal = 'Execution completed successfully on Google Cloud Run Sandbox.';
+        stdoutVal =
+          'Execution completed successfully on Google Cloud Run Sandbox.';
       }
     }
     return {
@@ -220,7 +223,9 @@ class GcpDeploymentEngineService {
   }
 
   async executeAutoDeploy(platform, config) {
-    logger.info(`🚀 Google Cloud Run: Autodeploying platform service ${platform}`);
+    logger.info(
+      `🚀 Google Cloud Run: Autodeploying platform service ${platform}`,
+    );
     return {
       url: 'https://cloud-run-service.a.run.app',
       service: platform,
@@ -246,14 +251,22 @@ class GcpKmsService {
 
   init() {
     try {
-      if (process.env.NODE_ENV !== 'test' || process.env.GCP_REAL_SERVICES === 'true') {
-        if (process.env.GOOGLE_APPLICATION_CREDENTIALS || process.env.GCP_PROJECT_ID) {
+      if (
+        process.env.NODE_ENV !== 'test' ||
+        process.env.GCP_REAL_SERVICES === 'true'
+      ) {
+        if (
+          process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+          process.env.GCP_PROJECT_ID
+        ) {
           this.client = new KeyManagementServiceClient();
           this.isInitialized = true;
         }
       }
     } catch (e) {
-      logger.warn(`⚠️ Google Cloud KMS initialization failed, falling back to local crypto: ${e.message}`);
+      logger.warn(
+        `⚠️ Google Cloud KMS initialization failed, falling back to local crypto: ${e.message}`,
+      );
       this.isInitialized = false;
     }
   }
@@ -261,36 +274,51 @@ class GcpKmsService {
   async encrypt(keyId, plaintext) {
     if (this.isInitialized && this.client) {
       try {
-        logger.info(`🔒 Google Cloud KMS: Encrypting payload using key ${keyId}`);
+        logger.info(
+          `🔒 Google Cloud KMS: Encrypting payload using key ${keyId}`,
+        );
         const [result] = await this.client.encrypt({
           name: keyId,
           plaintext: Buffer.from(plaintext),
         });
-        return { ciphertext: Buffer.from(result.ciphertext).toString('base64'), keyId };
+        return {
+          ciphertext: Buffer.from(result.ciphertext).toString('base64'),
+          keyId,
+        };
       } catch (e) {
-        logger.error(`❌ Google Cloud KMS Encryption failed: ${e.message}. Falling back to local crypto.`);
+        logger.error(
+          `❌ Google Cloud KMS Encryption failed: ${e.message}. Falling back to local crypto.`,
+        );
       }
     }
 
-    logger.info(`🔒 Google Cloud KMS Mock: Encrypting payload using local crypto.`);
+    logger.info(
+      `🔒 Google Cloud KMS Mock: Encrypting payload using local crypto.`,
+    );
     return { ciphertext: Buffer.from(plaintext).toString('base64'), keyId };
   }
 
   async decrypt(keyId, ciphertext) {
     if (this.isInitialized && this.client) {
       try {
-        logger.info(`🔓 Google Cloud KMS: Decrypting payload using key ${keyId}`);
+        logger.info(
+          `🔓 Google Cloud KMS: Decrypting payload using key ${keyId}`,
+        );
         const [result] = await this.client.decrypt({
           name: keyId,
           ciphertext: Buffer.from(ciphertext, 'base64'),
         });
         return { plaintext: result.plaintext.toString('utf8'), keyId };
       } catch (e) {
-        logger.error(`❌ Google Cloud KMS Decryption failed: ${e.message}. Falling back to local crypto.`);
+        logger.error(
+          `❌ Google Cloud KMS Decryption failed: ${e.message}. Falling back to local crypto.`,
+        );
       }
     }
 
-    logger.info(`🔓 Google Cloud KMS Mock: Decrypting payload using local crypto.`);
+    logger.info(
+      `🔓 Google Cloud KMS Mock: Decrypting payload using local crypto.`,
+    );
     return {
       plaintext: Buffer.from(ciphertext, 'base64').toString('utf8'),
       keyId,
@@ -298,13 +326,17 @@ class GcpKmsService {
   }
 
   async encryptPayload(plaintext) {
-    const keyId = process.env.GCP_KMS_KEY_ID || 'projects/mock-project/locations/global/keyRings/mock-ring/cryptoKeys/mock-key';
+    const keyId =
+      process.env.GCP_KMS_KEY_ID ||
+      'projects/mock-project/locations/global/keyRings/mock-ring/cryptoKeys/mock-key';
     const result = await this.encrypt(keyId, plaintext);
     return result.ciphertext;
   }
 
   async decryptPayload(ciphertext) {
-    const keyId = process.env.GCP_KMS_KEY_ID || 'projects/mock-project/locations/global/keyRings/mock-ring/cryptoKeys/mock-key';
+    const keyId =
+      process.env.GCP_KMS_KEY_ID ||
+      'projects/mock-project/locations/global/keyRings/mock-ring/cryptoKeys/mock-key';
     const result = await this.decrypt(keyId, ciphertext);
     return result.plaintext;
   }
@@ -383,9 +415,7 @@ class GcpVectorSearchService {
     return true;
   }
   async queryContext(vector, limit = 5) {
-    logger.info(
-      `🧠 Vertex AI Vector Search: Querying context with vector...`,
-    );
+    logger.info(`🧠 Vertex AI Vector Search: Querying context with vector...`);
     return [];
   }
 }
@@ -405,7 +435,9 @@ export const documentAiService = new GcpDocumentAiService();
 // 21. Google Cloud Vision API
 class GcpComputerVisionService {
   async detectText(buffer) {
-    logger.info(`👁️ Google Cloud Vision API: Detecting text from image buffer...`);
+    logger.info(
+      `👁️ Google Cloud Vision API: Detecting text from image buffer...`,
+    );
     return 'Sample OCR text extracted from layout stream.';
   }
 }
@@ -414,7 +446,9 @@ export const visionService = new GcpComputerVisionService();
 // 22. Google Cloud Video Intelligence
 class GcpVideoIntelligenceService {
   async analyzeUiGlitch(videoBuffer) {
-    logger.info(`👁️ Google Cloud Video Intelligence: Analyzing UI glitch recording...`);
+    logger.info(
+      `👁️ Google Cloud Video Intelligence: Analyzing UI glitch recording...`,
+    );
     return 'No visual glitches detected in stream.';
   }
 }

@@ -16,19 +16,27 @@ import { logger } from '../logger.js';
 export function auditFipsCompliance() {
   try {
     // Node.js crypto.getFips() returns 1 if enabled, 0 if disabled, or throws if not supported/available
-    const isFipsActive = typeof crypto.getFips === 'function' ? crypto.getFips() === 1 : false;
+    const isFipsActive =
+      typeof crypto.getFips === 'function' ? crypto.getFips() === 1 : false;
 
     if (isFipsActive) {
-      logger.info('🔒 [SECURITY AUDIT] Cryptographic FIPS 140 compliance mode is ACTIVE.');
+      logger.info(
+        '🔒 [SECURITY AUDIT] Cryptographic FIPS 140 compliance mode is ACTIVE.',
+      );
       return true;
     } else {
-      logger.warn('⚠️ [SECURITY AUDIT] Cryptographic FIPS 140 compliance mode is INACTIVE.');
+      logger.warn(
+        '⚠️ [SECURITY AUDIT] Cryptographic FIPS 140 compliance mode is INACTIVE.',
+      );
       return false;
     }
   } catch (error) {
-    logger.error('❌ [SECURITY AUDIT] FIPS compliance check failed or unsupported:', {
-      message: error.message,
-    });
+    logger.error(
+      '❌ [SECURITY AUDIT] FIPS compliance check failed or unsupported:',
+      {
+        message: error.message,
+      },
+    );
     return false;
   }
 }

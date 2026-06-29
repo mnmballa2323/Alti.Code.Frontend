@@ -11,16 +11,17 @@ import { githubDocsService } from '../../githubDocs/githubDocs.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GithubFnGithubCopilotConversationalPromptParserAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'githubCopilotConversationalPromptParser';
-        this.description = 'Specialist GitHub Copilot Conversational Prompt Parser expert in chat context processing.';
-        this.manifest = {
-            id: 'githubCopilotConversationalPromptParser',
-            capabilities: ["github-parse-copilot-history"],
-            version: '39.6.0'
-        };
-        this.preamble = `You are the Inso Code Specialist GitHub Copilot Conversational Prompt Parser expert in chat context processing.
+  constructor() {
+    super();
+    this.name = 'githubCopilotConversationalPromptParser';
+    this.description =
+      'Specialist GitHub Copilot Conversational Prompt Parser expert in chat context processing.';
+    this.manifest = {
+      id: 'githubCopilotConversationalPromptParser',
+      capabilities: ['github-parse-copilot-history'],
+      version: '39.6.0',
+    };
+    this.preamble = `You are the Inso Code Specialist GitHub Copilot Conversational Prompt Parser expert in chat context processing.
 This agent is the absolute authority on the specific operational boundary of: conversational history parsing, copilot prompt engineering.
 
 # GROUNDED COPILOT CAPABILITIES
@@ -32,23 +33,30 @@ This agent is the absolute authority on the specific operational boundary of: co
 - Ground all designs and explanations strictly in the official grounded developer documentation context provided.
 - Never invent parameters, workflow properties, or API endpoints that are not documented.
 - Respond with clear, structured markdown. When generating code blocks, provide clean, production-grade snippets (JavaScript/TypeScript for APIs, YAML for Actions).`;
+  }
+
+  /**
+   * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
+   */
+  async _invoke(prompt, contextBlock) {
+    logger.info(
+      `🐙 [githubCopilotConversationalPromptParser] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`,
+    );
+
+    let docsContext = '';
+    try {
+      // Retrieve domain-specific documentation chunks
+      docsContext = await githubDocsService.searchDocs(
+        `GitHub Copilot conversational history parsing, copilot prompt engineering ${prompt}`,
+        5,
+      );
+    } catch (err) {
+      logger.warn(
+        `🐙 [githubCopilotConversationalPromptParser] Failed to query RAG documentation. Fallback used. Error: ${err.message}`,
+      );
     }
 
-    /**
-     * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
-     */
-    async _invoke(prompt, contextBlock) {
-        logger.info(`🐙 [githubCopilotConversationalPromptParser] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`);
-        
-        let docsContext = '';
-        try {
-            // Retrieve domain-specific documentation chunks
-            docsContext = await githubDocsService.searchDocs(`GitHub Copilot conversational history parsing, copilot prompt engineering ${prompt}`, 5);
-        } catch (err) {
-            logger.warn(`🐙 [githubCopilotConversationalPromptParser] Failed to query RAG documentation. Fallback used. Error: ${err.message}`);
-        }
-
-        const groundedPrompt = `${this.preamble}
+    const groundedPrompt = `${this.preamble}
 
 === GROUNDED DEVELOPER DOCUMENTATION CONTEXT ===
 ${docsContext || 'No documentation found in local RAG vector store.'}
@@ -59,9 +67,10 @@ ${contextBlock || 'No additional file context provided.'}
 === REQUEST ===
 ${prompt}`;
 
-        return await GeminiAiService.generateContent(groundedPrompt);
-    }
+    return await GeminiAiService.generateContent(groundedPrompt);
+  }
 }
 
-export const pluginInstance = new GithubFnGithubCopilotConversationalPromptParserAgent();
+export const pluginInstance =
+  new GithubFnGithubCopilotConversationalPromptParserAgent();
 export default GithubFnGithubCopilotConversationalPromptParserAgent;

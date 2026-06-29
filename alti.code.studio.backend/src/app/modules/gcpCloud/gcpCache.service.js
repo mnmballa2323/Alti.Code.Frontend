@@ -124,7 +124,9 @@ class GcpCacheService {
     try {
       await this.publisher.set(key, value, 'EX', ttlSeconds);
     } catch (error) {
-      logger.error(`❌ GCP Memorystore setCache Error [${key}]: ${error.message}`);
+      logger.error(
+        `❌ GCP Memorystore setCache Error [${key}]: ${error.message}`,
+      );
     }
   }
 
@@ -146,7 +148,9 @@ class GcpCacheService {
     try {
       return await this.publisher.get(key);
     } catch (error) {
-      logger.error(`❌ GCP Memorystore getCache Error [${key}]: ${error.message}`);
+      logger.error(
+        `❌ GCP Memorystore getCache Error [${key}]: ${error.message}`,
+      );
       const entry = this.fallbackCache.get(key);
       if (entry) {
         if (entry.expiry > Date.now()) {
@@ -190,9 +194,7 @@ class GcpCacheService {
         JSON.stringify(contextData),
         3600,
       );
-      logger.info(
-        `⚡ [GCP RAG Cache] Swarm RAG context successfully cached.`,
-      );
+      logger.info(`⚡ [GCP RAG Cache] Swarm RAG context successfully cached.`);
     } catch (error) {
       logger.error(
         `❌ [GCP RAG Cache] Failed to write RAG cache:`,

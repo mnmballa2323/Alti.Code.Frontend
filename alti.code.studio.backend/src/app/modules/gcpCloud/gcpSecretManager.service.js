@@ -10,14 +10,22 @@ class GcpSecretManagerService {
 
   init() {
     try {
-      if (process.env.NODE_ENV !== 'test' || process.env.GCP_REAL_SERVICES === 'true') {
-        if (process.env.GOOGLE_APPLICATION_CREDENTIALS || process.env.GCP_PROJECT_ID) {
+      if (
+        process.env.NODE_ENV !== 'test' ||
+        process.env.GCP_REAL_SERVICES === 'true'
+      ) {
+        if (
+          process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+          process.env.GCP_PROJECT_ID
+        ) {
           this.client = new SecretManagerServiceClient();
           this.isInitialized = true;
         }
       }
     } catch (e) {
-      logger.warn(`⚠️ Google Cloud Secret Manager initialization failed, falling back to env variables: ${e.message}`);
+      logger.warn(
+        `⚠️ Google Cloud Secret Manager initialization failed, falling back to env variables: ${e.message}`,
+      );
       this.isInitialized = false;
     }
   }
@@ -34,7 +42,9 @@ class GcpSecretManagerService {
         });
         return version.payload.data.toString('utf8');
       } catch (e) {
-        logger.error(`❌ GCP Secret Manager access failed for ${secretId}: ${e.message}`);
+        logger.error(
+          `❌ GCP Secret Manager access failed for ${secretId}: ${e.message}`,
+        );
       }
     }
 

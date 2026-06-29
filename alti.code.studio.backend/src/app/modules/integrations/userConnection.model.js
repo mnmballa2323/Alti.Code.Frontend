@@ -38,7 +38,10 @@ const UserConnectionSchema = new mongoose.Schema(
 // Compound index to ensure uniqueness per user/provider
 UserConnectionSchema.index({ userId: 1, provider: 1 }, { unique: true });
 
-const UserConnectionModel = mongoose.model('UserConnection', UserConnectionSchema);
+const UserConnectionModel = mongoose.model(
+  'UserConnection',
+  UserConnectionSchema,
+);
 
 export default UserConnectionModel;
 export const UserConnection = UserConnectionModel;

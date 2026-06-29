@@ -49,7 +49,9 @@ class MultiCloudInferenceService {
       typeof prompt === 'string' &&
       !prompt.includes('=== CODEBASE SYSTEM RULES & GUARDRAILS ===') &&
       !prompt.includes('=== CODEBASE RULES & GUARDRAILS ===') &&
-      !prompt.includes('=== STRICT SYSTEM INSTRUCTIONS FOR ISOLATED CHAT WORKSPACE ===')
+      !prompt.includes(
+        '=== STRICT SYSTEM INSTRUCTIONS FOR ISOLATED CHAT WORKSPACE ===',
+      )
     ) {
       let rulesContext = '';
       try {
@@ -218,7 +220,7 @@ class MultiCloudInferenceService {
       `☁️ [Google Vertex AI Sovereign Inference] Executing on Google Cloud Vertex AI using model ${modelId}...`,
     );
     const startTime = Date.now();
-    
+
     const result = await executeVertexInference(prompt, modelId, options);
     const latency = Date.now() - startTime;
 
@@ -288,7 +290,7 @@ class MultiCloudInferenceService {
       logger.warn(
         `Azure Microservice unavailable (${e.message}). Falling back to local Azure Foundry client with retries...`,
       );
-      
+
       let azureApiKey =
         options.vaultCredentials?.azureApiKey || process.env.AZURE_API_KEY;
       let azureEndpoint =
@@ -299,13 +301,13 @@ class MultiCloudInferenceService {
       if (azureApiKey) {
         let attempt = 0;
         let success = false;
-        
+
         while (attempt < maxRetries && !success) {
           try {
             attempt++;
             const deploymentId = modelId;
             const url = `${azureEndpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=2024-02-15-preview`;
-            
+
             // Build strict payload options
             const payload = {
               messages: [{ role: 'user', content: prompt }],
@@ -316,8 +318,10 @@ class MultiCloudInferenceService {
                 : {}),
             };
 
-            logger.info(`Sending Azure Foundry Request (Attempt ${attempt}/${maxRetries}) to endpoint: ${azureEndpoint}`);
-            
+            logger.info(
+              `Sending Azure Foundry Request (Attempt ${attempt}/${maxRetries}) to endpoint: ${azureEndpoint}`,
+            );
+
             const headers = {
               'Content-Type': 'application/json',
             };
@@ -337,18 +341,29 @@ class MultiCloudInferenceService {
 
             if (!res.ok) {
               const errBody = await res.text();
-              throw new Error(`Azure API returned status ${res.status}: ${errBody}`);
+              throw new Error(
+                `Azure API returned status ${res.status}: ${errBody}`,
+              );
             }
 
             const data = await res.json();
             text = data.choices?.[0]?.message?.content || '';
             success = true;
-            logger.info(`✨ Successfully completed Azure Foundry LLM call on attempt ${attempt}`);
+            logger.info(
+              `✨ Successfully completed Azure Foundry LLM call on attempt ${attempt}`,
+            );
           } catch (err) {
-            logger.error(`⚠️ [Azure Connection Attempt ${attempt} Failed]: ${err.message}`);
+            logger.error(
+              `⚠️ [Azure Connection Attempt ${attempt} Failed]: ${err.message}`,
+            );
             if (attempt >= maxRetries) {
-              logger.error(`❌ All ${maxRetries} Azure Foundry connection attempts failed. Falling back to secure simulation.`);
-              text = this._getSimulatedResponse(prompt, `Azure Foundry ${modelId}`);
+              logger.error(
+                `❌ All ${maxRetries} Azure Foundry connection attempts failed. Falling back to secure simulation.`,
+              );
+              text = this._getSimulatedResponse(
+                prompt,
+                `Azure Foundry ${modelId}`,
+              );
             } else {
               // Exponential backoff sleep: 1s, 2s, 4s...
               const backoffMs = Math.pow(2, attempt) * 500;
@@ -510,9 +525,7 @@ class MultiCloudInferenceService {
     stats.azure.totalBilledUsd = parseFloat(
       stats.azure.totalBilledUsd.toFixed(4),
     );
-    stats.gcp.totalBilledUsd = parseFloat(
-      stats.gcp.totalBilledUsd.toFixed(4),
-    );
+    stats.gcp.totalBilledUsd = parseFloat(stats.gcp.totalBilledUsd.toFixed(4));
     stats.global.totalBilledUsd = parseFloat(
       stats.global.totalBilledUsd.toFixed(4),
     );
@@ -538,7 +551,7 @@ class MultiCloudInferenceService {
     return `[SIMULATED COMPLIANT RESPONSE FROM ${modelDesc.toUpperCase()}]
 This response was processed securely via multi-cloud model endpoints and recorded in the respective Cloud Marketplace dashboard for billing and procurement transparency.
 Your prompt snippet: "${prompt.substring(0, 80)}..."`;
-}
+  }
 }
 
 export const multiCloudInferenceService = new MultiCloudInferenceService();

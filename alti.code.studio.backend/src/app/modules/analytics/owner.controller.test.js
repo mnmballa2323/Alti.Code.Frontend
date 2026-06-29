@@ -13,21 +13,41 @@ vi.mock('../../../config/prisma.js', () => ({
       count: vi.fn().mockResolvedValue(5),
     },
     tenant: {
-      count: vi.fn()
+      count: vi
+        .fn()
         .mockResolvedValueOnce(2) // dedicatedAccounts
         .mockResolvedValueOnce(2), // sovereignAccounts
       findMany: vi.fn().mockResolvedValue([
-        { id: 'jpmorgan', name: 'JPMorgan Chase', ssoEnabled: true, dataRegion: 'us-east-1' },
-        { id: 'acme-corp', name: 'Acme Corp', ssoEnabled: false, dataRegion: 'us-central-1' },
-        { id: 'stripe-dev', name: 'Stripe Dev', ssoEnabled: true, dataRegion: 'us-west-1' },
-        { id: 'apple-corp', name: 'Apple Corp', ssoEnabled: false, dataRegion: 'us-east-1' },
+        {
+          id: 'jpmorgan',
+          name: 'JPMorgan Chase',
+          ssoEnabled: true,
+          dataRegion: 'us-east-1',
+        },
+        {
+          id: 'acme-corp',
+          name: 'Acme Corp',
+          ssoEnabled: false,
+          dataRegion: 'us-central-1',
+        },
+        {
+          id: 'stripe-dev',
+          name: 'Stripe Dev',
+          ssoEnabled: true,
+          dataRegion: 'us-west-1',
+        },
+        {
+          id: 'apple-corp',
+          name: 'Apple Corp',
+          ssoEnabled: false,
+          dataRegion: 'us-east-1',
+        },
       ]),
     },
     subscription: {
-      findMany: vi.fn().mockResolvedValue([
-        { price: 6240.25 },
-        { price: 6240.25 },
-      ]),
+      findMany: vi
+        .fn()
+        .mockResolvedValue([{ price: 6240.25 }, { price: 6240.25 }]),
     },
   },
 }));

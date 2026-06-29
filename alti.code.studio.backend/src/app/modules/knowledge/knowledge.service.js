@@ -36,7 +36,9 @@ async function createFolder(name, userId = null, tenantId = null) {
       },
     });
   } catch (err) {
-    logger.warn(`⚠️ DB connection unavailable. Creating simulated folder payload.`);
+    logger.warn(
+      `⚠️ DB connection unavailable. Creating simulated folder payload.`,
+    );
     return {
       id: crypto.randomUUID(),
       name,
@@ -54,11 +56,7 @@ async function getFolders(userId = null, tenantId = null) {
   try {
     return await prisma.knowledgeFolder.findMany({
       where: {
-        OR: [
-          { userId },
-          { tenantId },
-          { userId: null, tenantId: null }
-        ],
+        OR: [{ userId }, { tenantId }, { userId: null, tenantId: null }],
       },
       include: {
         files: {
@@ -76,7 +74,9 @@ async function getFolders(userId = null, tenantId = null) {
       },
     });
   } catch (err) {
-    logger.warn(`⚠️ DB connection unavailable. Returning simulated folder structure.`);
+    logger.warn(
+      `⚠️ DB connection unavailable. Returning simulated folder structure.`,
+    );
     return [];
   }
 }
@@ -115,17 +115,34 @@ async function ingestUploadedFile(fileObject, folderId) {
   await ensureUploadsDir();
 
   const tempPath = fileObject.path;
-  const finalPath = path.join(UPLOADS_DIR, `${Date.now()}-${fileObject.originalname}`);
-  
+  const finalPath = path.join(
+    UPLOADS_DIR,
+    `${Date.now()}-${fileObject.originalname}`,
+  );
+
   // Move file to final secure location
   await fs.rename(tempPath, finalPath);
 
   // 1. Read and parse content based on type
   let content = '';
   const fileExt = path.extname(fileObject.originalname).toLowerCase();
-  
+
   try {
-    if (['.txt', '.md', '.json', '.js', '.ts', '.json', '.html', '.css', '.csv', '.yaml', '.yml'].includes(fileExt)) {
+    if (
+      [
+        '.txt',
+        '.md',
+        '.json',
+        '.js',
+        '.ts',
+        '.json',
+        '.html',
+        '.css',
+        '.csv',
+        '.yaml',
+        '.yml',
+      ].includes(fileExt)
+    ) {
       content = await fs.readFile(finalPath, 'utf-8');
     } else if (fileExt === '.pdf') {
       // PDF Multimodal extract fallback: In production, send file stream to Gemini for OCR & extraction
@@ -138,8 +155,13 @@ Raw content extraction is skipped for binary file type: ${fileExt}`;
 
     // 2. Feed content into the Ultimate RAG pipeline for vector indexing
     if (content.trim()) {
-      logger.info(`🌐 [RAG Ingestion] Indexing document chunks for file: ${fileObject.originalname}`);
-      await knowledgeRagService.ingestDocument(content, fileObject.originalname);
+      logger.info(
+        `🌐 [RAG Ingestion] Indexing document chunks for file: ${fileObject.originalname}`,
+      );
+      await knowledgeRagService.ingestDocument(
+        content,
+        fileObject.originalname,
+      );
     }
 
     // 3. Persist file metadata
@@ -156,7 +178,9 @@ Raw content extraction is skipped for binary file type: ${fileExt}`;
       });
       return savedFile;
     } catch (dbErr) {
-      logger.warn(`⚠️ DB connection unavailable. Saving file metadata locally only.`);
+      logger.warn(
+        `⚠️ DB connection unavailable. Saving file metadata locally only.`,
+      );
       return {
         id: crypto.randomUUID(),
         folderId,
@@ -168,7 +192,9 @@ Raw content extraction is skipped for binary file type: ${fileExt}`;
       };
     }
   } catch (err) {
-    logger.error(`❌ Failed to process file ${fileObject.originalname}: ${err.message}`);
+    logger.error(
+      `❌ Failed to process file ${fileObject.originalname}: ${err.message}`,
+    );
     throw err;
   }
 }

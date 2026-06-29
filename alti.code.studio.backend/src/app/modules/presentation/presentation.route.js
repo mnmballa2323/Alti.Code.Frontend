@@ -93,94 +93,127 @@ You MUST return a valid JSON object matching the following format exactly (no ma
   ]
 }`;
 
-    console.log(`[Presentation] Generating slide structure using model ${modelId}...`);
+    console.log(
+      `[Presentation] Generating slide structure using model ${modelId}...`,
+    );
     let textResponse = '';
     try {
-      const llmResult = await multiCloudInferenceService.executeMultiCloudInference(
-        llmPrompt,
-        'presentation_generator',
-        {
-          preferredProvider: 'azure',
-          modelId: modelId.includes('gpt') ? modelId : 'gpt-5.5-pro',
-        }
-      );
+      const llmResult =
+        await multiCloudInferenceService.executeMultiCloudInference(
+          llmPrompt,
+          'presentation_generator',
+          {
+            preferredProvider: 'azure',
+            modelId: modelId.includes('gpt') ? modelId : 'gpt-5.5-pro',
+          },
+        );
       textResponse = llmResult.content;
     } catch (llmErr) {
-      console.warn('[Presentation] Multi-cloud slide inference failed, using fallback:', llmErr.message);
+      console.warn(
+        '[Presentation] Multi-cloud slide inference failed, using fallback:',
+        llmErr.message,
+      );
       throw llmErr;
     }
-    
+
     let slideStructure;
     try {
       const cleanedJson = cleanJSONString(textResponse);
       slideStructure = JSON.parse(cleanedJson);
     } catch (parseErr) {
-      console.warn('[Presentation] LLM JSON parsing failed, using high-fidelity fallback:', parseErr.message);
+      console.warn(
+        '[Presentation] LLM JSON parsing failed, using high-fidelity fallback:',
+        parseErr.message,
+      );
       // High-fidelity fallback structure
       slideStructure = {
         slides: [
           {
-            type: "title",
+            type: 'title',
             tag: strategistMode.toUpperCase(),
             title: title,
             subtitle: subtitle,
           },
           {
-            type: "two-column",
-            title: "Executive Overview",
-            col1Title: "Core Objectives",
-            col1Content: prompt || "Synthesize technical project specs and compile actionable targets.",
-            col2Title: "Key Targets",
+            type: 'two-column',
+            title: 'Executive Overview',
+            col1Title: 'Core Objectives',
+            col1Content:
+              prompt ||
+              'Synthesize technical project specs and compile actionable targets.',
+            col2Title: 'Key Targets',
             col2Content: [
-              "Deploy scalable infrastructure layers",
-              "Enforce enterprise security guardrails",
-              "Automate testing & release integrations"
+              'Deploy scalable infrastructure layers',
+              'Enforce enterprise security guardrails',
+              'Automate testing & release integrations',
             ],
-            imagePrompt: "timeline roadmap diagram illustration"
+            imagePrompt: 'timeline roadmap diagram illustration',
           },
           {
-            type: "context-list",
-            title: "Architecture & Connected Context",
-            items: selectedContext.length > 0 ? selectedContext : [
-              "Default Workspace Project",
-              "Active Database Layer",
-              "Secure Sandbox API"
-            ],
-            imagePrompt: "database cylinder connections diagram"
+            type: 'context-list',
+            title: 'Architecture & Connected Context',
+            items:
+              selectedContext.length > 0
+                ? selectedContext
+                : [
+                    'Default Workspace Project',
+                    'Active Database Layer',
+                    'Secure Sandbox API',
+                  ],
+            imagePrompt: 'database cylinder connections diagram',
           },
           {
-            type: "bullets-card",
-            title: "Operational Safety & Guardrails",
+            type: 'bullets-card',
+            title: 'Operational Safety & Guardrails',
             bullets: [
-              "Programmatic input validation scrubs query scripts before executions.",
-              "Strict sovereign boundary routes block foundational cloud data leaks.",
-              "Automated policy evaluations trigger container rolling updates on failure."
+              'Programmatic input validation scrubs query scripts before executions.',
+              'Strict sovereign boundary routes block foundational cloud data leaks.',
+              'Automated policy evaluations trigger container rolling updates on failure.',
             ],
-            imagePrompt: "secure check shield diagram"
+            imagePrompt: 'secure check shield diagram',
           },
           {
-            type: "roadmap-steps",
-            title: "Implementation Roadmap",
+            type: 'roadmap-steps',
+            title: 'Implementation Roadmap',
             steps: [
-              { num: "01", title: "Compile & Test", desc: "Verify schemas and build mocks." },
-              { num: "02", title: "Stitch Visuals", desc: "Deploy visual token rules." },
-              { num: "03", title: "Provisioning", desc: "Configure cloud workloads." }
+              {
+                num: '01',
+                title: 'Compile & Test',
+                desc: 'Verify schemas and build mocks.',
+              },
+              {
+                num: '02',
+                title: 'Stitch Visuals',
+                desc: 'Deploy visual token rules.',
+              },
+              {
+                num: '03',
+                title: 'Provisioning',
+                desc: 'Configure cloud workloads.',
+              },
             ],
-            imagePrompt: "roadmap release timeline nodes diagram"
-          }
-        ]
+            imagePrompt: 'roadmap release timeline nodes diagram',
+          },
+        ],
       };
     }
 
     // 2. Call Imagen model in parallel to generate custom illustration images
-    console.log('[Presentation] Triggering Vertex AI Imagen calls for slides...');
-    const imagePromises = slideStructure.slides.map(async (slide) => {
+    console.log(
+      '[Presentation] Triggering Vertex AI Imagen calls for slides...',
+    );
+    const imagePromises = slideStructure.slides.map(async slide => {
       if (slide.imagePrompt) {
         try {
-          const imageBase64 = await executeVertexImagen(slide.imagePrompt, { aspectRatio: '1:1' });
+          const imageBase64 = await executeVertexImagen(slide.imagePrompt, {
+            aspectRatio: '1:1',
+          });
           return { ...slide, image: imageBase64 };
         } catch (imgErr) {
-          console.warn(`[Presentation] Imagen call failed for "${slide.imagePrompt}":`, imgErr.message);
+          console.warn(
+            `[Presentation] Imagen call failed for "${slide.imagePrompt}":`,
+            imgErr.message,
+          );
           return slide;
         }
       }
@@ -189,10 +222,14 @@ You MUST return a valid JSON object matching the following format exactly (no ma
 
     const slidesWithImages = await Promise.all(imagePromises);
     res.json({ slides: slidesWithImages });
-
   } catch (error) {
-    console.error('[PresentationRoutes] Slide structure preview generation error:', error);
-    res.status(500).json({ error: 'Failed to preview generated slide structure.' });
+    console.error(
+      '[PresentationRoutes] Slide structure preview generation error:',
+      error,
+    );
+    res
+      .status(500)
+      .json({ error: 'Failed to preview generated slide structure.' });
   }
 });
 
@@ -211,19 +248,19 @@ router.post('/generate', async (req, res) => {
 
     // Define colors based on the visual style
     const isDark = visualStyle === 'Sleek Dark Mode';
-    
+
     // Background and Accent Colors
     const bgHex = isDark ? '0A0A0B' : 'F8FAFC';
     const cardBgHex = isDark ? '121218' : 'FFFFFF';
     const textHex = isDark ? 'FFFFFF' : '0F172A';
     const mutedTextHex = isDark ? '94A3B8' : '64748B';
-    
+
     let accentHex = '8B5CF6'; // Default Purple
     if (visualStyle === 'Corporate Grid') accentHex = '2563EB'; // Corporate Blue
     if (visualStyle === 'Sovereign Minimalist') accentHex = '111827'; // Midnight Black
 
     // Loop through generated slides to compile the PowerPoint presentation
-    slides.forEach((slide) => {
+    slides.forEach(slide => {
       const pptxSlide = pptx.addSlide();
       pptxSlide.background = { fill: bgHex };
 
@@ -283,9 +320,7 @@ router.post('/generate', async (req, res) => {
           fontFace: 'Helvetica Neue',
           italic: true,
         });
-      }
-
-      else if (slide.type === 'two-column') {
+      } else if (slide.type === 'two-column') {
         pptxSlide.addText(slide.title, {
           x: 0.8,
           y: 0.5,
@@ -344,8 +379,8 @@ router.post('/generate', async (req, res) => {
           color: accentHex,
         });
 
-        const bulletLines = Array.isArray(slide.col2Content) 
-          ? slide.col2Content.map(line => ({ text: line })) 
+        const bulletLines = Array.isArray(slide.col2Content)
+          ? slide.col2Content.map(line => ({ text: line }))
           : [];
         pptxSlide.addText(bulletLines, {
           x: 4.0,
@@ -386,9 +421,7 @@ router.post('/generate', async (req, res) => {
             align: 'center',
           });
         }
-      }
-
-      else if (slide.type === 'context-list') {
+      } else if (slide.type === 'context-list') {
         pptxSlide.addText(slide.title, {
           x: 0.8,
           y: 0.5,
@@ -403,7 +436,7 @@ router.post('/generate', async (req, res) => {
         // Render context rows
         const items = Array.isArray(slide.items) ? slide.items : [];
         items.forEach((item, index) => {
-          const yOffset = 1.3 + (index * 1.15);
+          const yOffset = 1.3 + index * 1.15;
           if (index < 3) {
             pptxSlide.addShape(pptx.ShapeType.rect, {
               x: 0.8,
@@ -443,9 +476,7 @@ router.post('/generate', async (req, res) => {
             h: 3.6,
           });
         }
-      }
-
-      else if (slide.type === 'bullets-card') {
+      } else if (slide.type === 'bullets-card') {
         pptxSlide.addText(slide.title, {
           x: 0.8,
           y: 0.5,
@@ -467,8 +498,8 @@ router.post('/generate', async (req, res) => {
           line: { color: isDark ? '2A2A35' : 'E2E8F0', width: 1 },
         });
 
-        const bulletLines = Array.isArray(slide.bullets) 
-          ? slide.bullets.map(line => ({ text: line })) 
+        const bulletLines = Array.isArray(slide.bullets)
+          ? slide.bullets.map(line => ({ text: line }))
           : [];
         pptxSlide.addText(bulletLines, {
           x: 1.1,
@@ -491,9 +522,7 @@ router.post('/generate', async (req, res) => {
             h: 3.6,
           });
         }
-      }
-
-      else if (slide.type === 'roadmap-steps') {
+      } else if (slide.type === 'roadmap-steps') {
         pptxSlide.addText(slide.title, {
           x: 0.8,
           y: 0.5,
@@ -507,7 +536,7 @@ router.post('/generate', async (req, res) => {
 
         const steps = Array.isArray(slide.steps) ? slide.steps : [];
         steps.forEach((step, index) => {
-          const xOffset = 0.8 + (index * 1.95);
+          const xOffset = 0.8 + index * 1.95;
           if (index < 3) {
             pptxSlide.addShape(pptx.ShapeType.rect, {
               x: xOffset,
@@ -565,13 +594,20 @@ router.post('/generate', async (req, res) => {
 
     const buffer = await pptx.write('nodebuffer');
 
-    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.presentationml.presentation');
-    res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(title.replace(/\s+/g, '_'))}.pptx"`);
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    );
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename="${encodeURIComponent(title.replace(/\s+/g, '_'))}.pptx"`,
+    );
     res.send(buffer);
-
   } catch (error) {
     console.error('[PresentationRoutes] PPTX generation error:', error);
-    res.status(500).json({ error: 'Failed to compile PowerPoint presentation.' });
+    res
+      .status(500)
+      .json({ error: 'Failed to compile PowerPoint presentation.' });
   }
 });
 

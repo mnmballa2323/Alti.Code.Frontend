@@ -266,7 +266,7 @@ Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
         );
         const user = await prisma.user.findUnique({
           where: { id: userId },
-          select: { tenantId: true }
+          select: { tenantId: true },
         });
         const tenantId = user?.tenantId;
         const ragResult = await ultimateRagService.synthesize(
@@ -362,7 +362,7 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
         );
         const user = await prisma.user.findUnique({
           where: { id: userId },
-          select: { tenantId: true }
+          select: { tenantId: true },
         });
         const tenantId = user?.tenantId;
         const ragResult = await ultimateRagService.synthesize(
@@ -474,10 +474,18 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
     const cleanModelName = actualModelName.startsWith('azure/')
       ? actualModelName.replace(/^azure\//, '')
       : actualModelName.startsWith('gcp-vertex/')
-      ? actualModelName.replace(/^gcp-vertex\//, '')
-      : ['gemini-3.5-flash', 'gemini-3.1-pro', 'claude-sonnet-4.6', 'claude-opus-4.6', 'gpt-5.4-mini', 'gpt-5.5-pro', 'gpt-5.5-thinking'].includes(actualModelName)
-      ? actualModelName
-      : 'gemini-3.5-flash';
+        ? actualModelName.replace(/^gcp-vertex\//, '')
+        : [
+              'gemini-3.5-flash',
+              'gemini-3.1-pro',
+              'claude-sonnet-4.6',
+              'claude-opus-4.6',
+              'gpt-5.4-mini',
+              'gpt-5.5-pro',
+              'gpt-5.5-thinking',
+            ].includes(actualModelName)
+          ? actualModelName
+          : 'gemini-3.5-flash';
     const result = await multiCloudInferenceService.executeMultiCloudInference(
       finalPrompt,
       'gateway',
@@ -496,7 +504,7 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
         if (userId && userId !== 'system_dev_user') {
           const user = await prisma.user.findUnique({
             where: { id: userId },
-            select: { tenantId: true }
+            select: { tenantId: true },
           });
           if (user?.tenantId) {
             tenantId = user.tenantId;
@@ -517,7 +525,10 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
           outputTokens: result.tokens.completion || 0,
         });
       } catch (err) {
-        logger.error('[LlmGateway] Failed to consume tokens in billing engine:', err);
+        logger.error(
+          '[LlmGateway] Failed to consume tokens in billing engine:',
+          err,
+        );
       }
     }
   } catch (err) {

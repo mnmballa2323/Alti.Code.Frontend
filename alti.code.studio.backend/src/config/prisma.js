@@ -5,6 +5,10 @@
  * Maintains backwards compatibility for Inso Code.
  */
 
-import { prisma, getTenantPrisma, connectPrisma } from '../app/platform/index.js';
+import {
+  prisma,
+  getTenantPrisma,
+  connectPrisma,
+} from '../app/platform/index.js';
 
 export { prisma, getTenantPrisma, connectPrisma };
