@@ -397,7 +397,7 @@ function Navbar() {
                 "flex items-center gap-1.5 p-1.5 rounded-full transition-all duration-300",
                 !isTransparent
                   ? "bg-black/5 border border-black/10 shadow-inner"
-                  : "bg-black/35 backdrop-blur-md border border-zinc-800/50 shadow-lg",
+                  : "bg-white/10 backdrop-blur-md border border-white/20 shadow-lg",
               )}
             >
               {sections.map((sec, index) => {
@@ -410,12 +410,10 @@ function Navbar() {
                     className={cn(
                       "relative group p-2.5 rounded-full transition-all duration-300",
                       isActive
-                        ? !isTransparent
-                          ? "bg-white text-black shadow-md scale-105"
-                          : "bg-white/15 text-white shadow-md border border-white/10 scale-105"
+                        ? "bg-white text-black shadow-md scale-105"
                         : !isTransparent
                           ? "text-gray-500 hover:text-black hover:bg-black/5"
-                          : "text-zinc-400 hover:text-white hover:bg-white/5",
+                          : "text-white/70 hover:text-white hover:bg-white/20",
                     )}
                     onClick={() => handleSectionClick(index)}
                   >
@@ -443,7 +441,7 @@ function Navbar() {
                       : "border-white/25 text-white hover:bg-white/10",
                   )}
                   size="sm"
-                  onPress={() => {
+                  onClick={() => {
                     const userRole = (profile?.role || "").toLowerCase();
 
                     if (userRole === "owner") {
@@ -465,7 +463,7 @@ function Navbar() {
                       : "bg-white text-black hover:bg-zinc-100",
                   )}
                   size="sm"
-                  onPress={() => {
+                  onClick={() => {
                     useModalStore.getState().onOpen({ type: "logout" });
                   }}
                 >
@@ -483,7 +481,7 @@ function Navbar() {
                     isDesktopApp && "w-[160px]",
                   )}
                   size="sm"
-                  onPress={() => {
+                  onClick={() => {
                     if (isDesktopApp) {
                       useModalStore.getState().onOpen({ type: "login" });
                     } else {
@@ -502,7 +500,7 @@ function Navbar() {
                         : "bg-white text-black hover:bg-zinc-100",
                     )}
                     size="sm"
-                    onPress={() => router.push("/register")}
+                    onClick={() => router.push("/register")}
                   >
                     Register
                   </Button>
