@@ -14,6 +14,7 @@ resource "google_sql_database_instance" "db_instance" {
       ipv4_enabled                                  = false # Disable public IP address
       private_network                               = google_compute_network.private_network.id
       enable_private_path_for_google_cloud_services = true
+      require_ssl                                   = true  # Enforce SSL/TLS connections for all clients
     }
 
     backup_configuration {
