@@ -63,7 +63,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // E2E Testing Backdoor
-  if ((process.env.NEXT_PUBLIC_E2E_TEST === "true" || process.env.NODE_ENV === "development") && request.cookies.has("e2e-session")) {
+  if ((process.env.E2E_TEST_MODE === "true" || process.env.NODE_ENV === "development") && request.cookies.has("e2e-session")) {
     try {
       const e2eSession = JSON.parse(request.cookies.get("e2e-session")?.value || "{}");
       

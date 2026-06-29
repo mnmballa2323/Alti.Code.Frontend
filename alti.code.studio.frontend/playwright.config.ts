@@ -37,7 +37,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'NEXT_PUBLIC_E2E_TEST=true npm run dev',
+    command: 'E2E_TEST_MODE=true npm run dev',
     port: 3001,
     reuseExistingServer: !process.env.CI,
   },
