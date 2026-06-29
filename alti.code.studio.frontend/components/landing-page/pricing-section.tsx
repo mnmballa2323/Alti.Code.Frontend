@@ -15,8 +15,8 @@ const plans = [
     backendPrice: 100000,
     description: (
       <>
-        Sovereign agent systems in standard multi tenant zones designed for
-        corporate compliance and security.
+        Sovereign agent systems in standard multi-tenant zones for strict
+        corporate compliance and comprehensive data security.
       </>
     ),
     features: [
@@ -38,8 +38,8 @@ const plans = [
     backendPrice: 250000,
     description: (
       <>
-        Dedicated single tenant infrastructure isolated on private networks with
-        enhanced security and data isolation.
+        Dedicated single-tenant infrastructure entirely isolated on private
+        networks for unparalleled security and data isolation.
       </>
     ),
     features: [
@@ -61,8 +61,8 @@ const plans = [
     backendPrice: 500000,
     description: (
       <>
-        FedRAMP High and strict sovereignty compliant environments for
-        classified public sector agent workloads.
+        FedRAMP High and strict sovereignty compliant environments built
+        exclusively for classified public sector workloads.
       </>
     ),
     features: [
@@ -172,7 +172,7 @@ export default function PricingSection() {
                 <div>
                   {/* Plan Name */}
                   <div className="mb-6">
-                    <h3 className="text-sm xl:text-base font-bold text-black dark:text-white tracking-tight text-left whitespace-nowrap">
+                    <h3 className="text-xl md:text-2xl font-bold text-black dark:text-white tracking-tight text-left whitespace-nowrap">
                       {plan.name}
                     </h3>
                   </div>

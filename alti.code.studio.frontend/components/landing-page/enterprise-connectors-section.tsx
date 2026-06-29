@@ -60,13 +60,14 @@ export default function EnterpriseConnectorsSection() {
         {/* Left Side: Text */}
         <div className="flex flex-col gap-6 max-w-2xl lg:w-[50%] z-10 text-center lg:text-left mx-auto lg:mx-0">
           <h3 className="text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight">
-            66 Cloud Connections. Zero Friction. All Power.
+            66 Cloud Connections. <br />
+            Zero Friction. All Power.
           </h3>
           <p className="text-xl text-zinc-400 leading-relaxed font-medium">
             Inso Code isn&apos;t a walled garden. Your swarm connects directly
-            to the absolute best cloud infrastructure on the planet. From
-            hyper-scalers to specialized providers, we integrate everywhere, for
-            frictionless deployments.
+            to the absolute best cloud infrastructure available today. From
+            hyperscalers to specialized providers, we integrate everywhere,
+            guaranteeing frictionless deployments and total cloud freedom.
           </p>
         </div>
 

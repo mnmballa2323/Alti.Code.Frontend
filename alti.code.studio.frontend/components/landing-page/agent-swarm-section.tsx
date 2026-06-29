@@ -19,7 +19,7 @@ export default function AgentSwarmSection() {
               engineering agents. Whether you need a dedicated PostgreSQL
               optimizer, a React performance auditor, or an adversarial security
               red-team, the swarm provisions the exact experts you need in
-              milliseconds.
+              milliseconds to execute complex tasks at scale.
             </p>
           </div>
         </div>

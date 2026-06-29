@@ -77,9 +77,9 @@ export default function ZeroTrustLedgerSection() {
             <p className="text-xl text-gray-500 leading-relaxed font-medium">
               Every operation is confined to a secure sandbox, monitored, and
               recorded in a local SQLite audit database. Before context leaves
-              your workspace, local DLP rules automatically strip secrets so
-              credentials never touch foundational model APIs or external
-              servers.
+              your workspace, local DLP rules automatically strip sensitive 
+              secrets so your credentials never touch any foundational model 
+              APIs or external third party servers.
             </p>
           </div>
         </div>

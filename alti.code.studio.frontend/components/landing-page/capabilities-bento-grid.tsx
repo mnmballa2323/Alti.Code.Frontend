@@ -25,15 +25,15 @@ export default function CapabilitiesBentoGrid() {
             hidden: { opacity: 0, y: 30 },
             visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
           }}
-          className="flex flex-col items-center text-center gap-4 max-w-3xl mx-auto"
+          className="flex flex-col items-center text-center gap-4 max-w-4xl mx-auto"
         >
           <h3 className="text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-white leading-[1.1]">
             Engineered for scale.
           </h3>
-          <p className="text-xl text-zinc-400 leading-relaxed font-medium">
+          <p className="text-xl md:text-2xl text-zinc-400 leading-relaxed font-medium">
             Under the hood, inso code uses system level components that
-            coordinate local daemons for speed, security, and absolute
-            precision.
+            coordinate local daemons for unmatched speed, enterprise security, 
+            and absolute precision.
           </p>
         </motion.div>
 
@@ -113,7 +113,7 @@ export default function CapabilitiesBentoGrid() {
                 Gossip Mesh Coordination
               </h4>
               <p className="text-[11px] xl:text-xs text-zinc-400 leading-relaxed font-medium">
-                50,000 specialist agents remain perfectly synchronized via a peer
+                25,000 specialist agents remain perfectly synchronized via a peer
                 to peer gossip network to propagate state in sub 10ms.
               </p>
             </div>
