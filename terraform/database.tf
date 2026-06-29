@@ -6,6 +6,9 @@ resource "google_sql_database_instance" "db_instance" {
 
   depends_on = [google_service_networking_connection.private_vpc_connection]
 
+  # Enable Customer-Managed Encryption Key (CMEK) for data-at-rest sovereignty if provided
+  encryption_key_name = var.gcp_kms_crypto_key != null ? var.gcp_kms_crypto_key : null
+
   settings {
     tier              = var.pg_db_tier # Parameterized database tier/SKU
     availability_type = "REGIONAL"         # Enable High Availability (HA) failover across zones

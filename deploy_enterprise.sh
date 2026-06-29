@@ -188,6 +188,9 @@ if [ "$DRY_RUN" = true ]; then
   echo -e "  -var=\"customer_id=${CUSTOMER}\""
   echo -e "  -var=\"gcp_project_id=${GCP_PROJECT:-gcp-project-placeholder}\""
   echo -e "  -var=\"ssh_public_key_path=${SSH_KEY_PATH}\""
+  if [ -n "$GCP_KMS_CRYPTO_KEY" ]; then
+    echo -e "  -var=\"gcp_kms_crypto_key=${GCP_KMS_CRYPTO_KEY}\""
+  fi
   if [ "$DEPLOY_OPTION" = "government" ]; then
     echo -e "  -var=\"gcp_region_government=${REGION}\""
     echo -e "  -var=\"enable_gcp_cloud=false\""
@@ -263,6 +266,11 @@ TF_VARS=(
   -var="gcp_project_id=$GCP_PROJECT"
   -var="ssh_public_key_path=$SSH_KEY_PATH"
 )
+
+if [ -n "$GCP_KMS_CRYPTO_KEY" ]; then
+  echo -e "${GREEN}✔ Customer-Managed Encryption Key (CMEK) detected. Enforcing KMS storage encryption at rest...${NC}"
+  TF_VARS+=(-var="gcp_kms_crypto_key=$GCP_KMS_CRYPTO_KEY")
+fi
 
 if [ "$DEPLOY_OPTION" = "government" ]; then
   TF_VARS+=(

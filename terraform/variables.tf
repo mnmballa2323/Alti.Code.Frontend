@@ -166,3 +166,9 @@ variable "enable_confidential_compute" {
   type        = bool
   default     = false
 }
+
+variable "gcp_kms_crypto_key" {
+  description = "The self-link of the Google Cloud KMS Crypto Key for data encryption at rest (CMEK)"
+  type        = string
+  default     = null
+}
