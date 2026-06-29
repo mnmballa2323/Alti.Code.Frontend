@@ -345,6 +345,16 @@ if gcloud compute security-policies describe "inso-production-waf-policy" --proj
   terraform import "${TF_VARS[@]}" google_compute_security_policy.waf_policy "inso-production-waf-policy" || echo "WAF Policy already imported."
 fi
 
+if gcloud compute addresses describe "private-ip-address" --global --project="$GCP_PROJECT" &>/dev/null; then
+  echo -e "${YELLOW}⚠️ Global Address private-ip-address already exists. Importing into Terraform state...${NC}"
+  terraform import "${TF_VARS[@]}" google_compute_global_address.private_ip_address "projects/${GCP_PROJECT}/global/addresses/private-ip-address" || echo "IP address already imported."
+fi
+
+if gcloud compute networks subnets describe "inso-commercial-subnet" --region="us-central1" --project="$GCP_PROJECT" &>/dev/null; then
+  echo -e "${YELLOW}⚠️ Subnetwork inso-commercial-subnet already exists. Importing into Terraform state...${NC}"
+  terraform import "${TF_VARS[@]}" "google_compute_subnetwork.commercial_subnet[0]" "projects/${GCP_PROJECT}/regions/us-central1/subnetworks/inso-commercial-subnet" || echo "Subnet already imported."
+fi
+
 echo -e "\n${GREEN}Applying Terraform changes...${NC}"
 terraform apply "${TF_VARS[@]}" -auto-approve
 
