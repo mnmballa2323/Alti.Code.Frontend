@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.1.2] - 2026-06-29 — Streaming Code Visibility & Unify Dev Port to 3001
+
+### Fixed
+- **Streaming Code Visibility**: Improved visibility of `SubtleCodeStream` on dark backgrounds by switching from arbitrary hex with 10% opacity to standard `text-emerald-400/50` styling, making the code animation readable.
+- **Port Mapping Unification**: Configured both Tauri and Next.js to run on port `3001` (matching standard web port) instead of `3005`, resolving the blank page issue on `localhost:3001`.
+
 ## [53.1.1] - 2026-06-29 — Tauri v2 Environment Detection Fix
 
 ### Fixed

@@ -62,7 +62,7 @@ function SubtleCodeStream() {
   }, []);
 
   return (
-    <div className="w-full font-mono text-[11px] leading-relaxed text-[#00E5A3] opacity-[0.10] select-none pointer-events-none pr-8">
+    <div className="w-full font-mono text-[12px] leading-relaxed text-emerald-400/50 select-none pointer-events-none pr-8">
       <div className="flex flex-col gap-1 transition-all duration-500">
         {lines.map((line, idx) => {
           const isFadingOut = idx === 0 || idx === lines.length - 1;
@@ -70,7 +70,7 @@ function SubtleCodeStream() {
             <div 
               key={idx} 
               className={`whitespace-pre transition-opacity duration-500 ${
-                isFadingOut ? "opacity-20" : "opacity-100"
+                isFadingOut ? "opacity-30" : "opacity-100"
               }`}
             >
               {line}
