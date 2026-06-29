@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.1.1] - 2026-06-29 — Tauri v2 Environment Detection Fix
+
+### Fixed
+- **Tauri v2 Detection**: Added checks for `__TAURI_INTERNALS__` in `window` across all frontend components and layouts to correctly identify the desktop environment in Tauri v2.
+- **Login Layout Alignment**: Ensured that the desktop app hides the split-screen left panel and properly displays the centered login layout with the Inso logo, heading, and description.
+
 ## [53.1.0] - 2026-06-25 — Complete AWS/Azure/OpenStack Purge & GCP Alignment
 
 ### Removed

@@ -72,6 +72,7 @@ export function LoginModal() {
         if (
           typeof window !== "undefined" &&
           ("__TAURI__" in window ||
+            "__TAURI_INTERNALS__" in window ||
             "electron" in window ||
             window.navigator.userAgent.includes("Electron"))
         ) {
@@ -147,6 +148,7 @@ export function LoginModal() {
         if (
           typeof window !== "undefined" &&
           ("__TAURI__" in window ||
+            "__TAURI_INTERNALS__" in window ||
             "electron" in window ||
             window.navigator.userAgent.includes("Electron"))
         ) {

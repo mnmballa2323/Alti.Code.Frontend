@@ -93,6 +93,7 @@ export default function AuthLayout({
     if (
       typeof window !== "undefined" &&
       ((window as any).__TAURI__ ||
+        (window as any).__TAURI_INTERNALS__ ||
         (window as any).electron ||
         window.navigator.userAgent.includes("Electron"))
     ) {

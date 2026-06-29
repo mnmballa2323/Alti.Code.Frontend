@@ -63,6 +63,7 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
     if (typeof window !== "undefined") {
       const isTauri =
         "__TAURI__" in window ||
+        "__TAURI_INTERNALS__" in window ||
         "electron" in window ||
         window.navigator.userAgent.includes("Electron");
 
@@ -188,6 +189,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
     if (
       typeof window !== "undefined" &&
       ("__TAURI__" in window ||
+        "__TAURI_INTERNALS__" in window ||
         "electron" in window ||
         window.navigator.userAgent.includes("Electron"))
     ) {
@@ -212,6 +214,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
     if (
       typeof window !== "undefined" &&
       ("__TAURI__" in window ||
+        "__TAURI_INTERNALS__" in window ||
         "electron" in window ||
         window.navigator.userAgent.includes("Electron"))
     ) {

@@ -977,10 +977,10 @@ export default function Sidebar() {
   }, []);
 
   const handleOpenLocalWorkspace = async () => {
-    if (typeof window !== "undefined" && (window as any).__TAURI__) {
+    if (typeof window !== "undefined" && ((window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__)) {
       try {
-        const tauri = (window as any).__TAURI__;
-        const invokeFn = tauri.core?.invoke || tauri.tauri?.invoke;
+        const tauri = (window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__;
+        const invokeFn = tauri?.core?.invoke || tauri?.tauri?.invoke;
 
         if (invokeFn) {
           const selectedPath = await invokeFn("select_directory");
@@ -2944,7 +2944,7 @@ export default function Sidebar() {
                   onClick={() => {
                     if (
                       typeof window !== "undefined" &&
-                      "__TAURI__" in window
+                      ("__TAURI__" in window || "__TAURI_INTERNALS__" in window)
                     ) {
                       useModalStore.getState().onOpen({ type: "login" });
                     } else {
@@ -3153,9 +3153,9 @@ export default function Sidebar() {
                       variant="flat"
                       onPress={async () => {
                         try {
-                          const tauri = (window as any).__TAURI__;
+                          const tauri = (window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__;
                           const invokeFn =
-                            tauri.core?.invoke || tauri.tauri?.invoke;
+                            tauri?.core?.invoke || tauri?.tauri?.invoke;
 
                           if (invokeFn) {
                             const selected = await invokeFn("select_directory");
