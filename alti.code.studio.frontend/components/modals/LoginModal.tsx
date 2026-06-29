@@ -265,7 +265,6 @@ export function LoginModal() {
             <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
               <div className="flex flex-col gap-1.5">
                 <Input
-                  isRequired
                   className="max-w-full"
                   classNames={{
                     inputWrapper:
@@ -281,7 +280,6 @@ export function LoginModal() {
 
               <div className="flex flex-col gap-1.5">
                 <Input
-                  isRequired
                   classNames={{
                     inputWrapper:
                       "h-12 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none",

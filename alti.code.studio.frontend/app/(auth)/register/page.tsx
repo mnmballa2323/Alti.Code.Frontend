@@ -96,7 +96,6 @@ export default function RegisterPage() {
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-1.5">
             <Input
-              isRequired
               className="max-w-full"
               classNames={{
                 inputWrapper:
@@ -112,7 +111,6 @@ export default function RegisterPage() {
 
           <div className="flex flex-col gap-1.5">
             <Input
-              isRequired
               className="max-w-full"
               classNames={{
                 inputWrapper:
@@ -128,7 +126,6 @@ export default function RegisterPage() {
 
           <div className="flex flex-col gap-1.5">
             <Input
-              isRequired
               classNames={{
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
@@ -190,7 +187,6 @@ export default function RegisterPage() {
 
           <div className="flex flex-col gap-1.5">
             <Input
-              isRequired
               classNames={{
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",

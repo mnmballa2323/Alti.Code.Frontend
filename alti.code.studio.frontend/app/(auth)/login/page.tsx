@@ -77,17 +77,19 @@ export default function LoginPage() {
       }
 
       if (response.data?.accessToken) {
-        if (
-          typeof window !== "undefined" &&
+        const isTauri = typeof window !== "undefined" &&
           ("__TAURI__" in window ||
             "electron" in window ||
-            window.navigator.userAgent.includes("Electron"))
-        ) {
+            window.navigator.userAgent.includes("Electron"));
+
+        if (isTauri) {
           localStorage.setItem("token", response.data.accessToken);
           localStorage.setItem("accessToken", response.data.accessToken);
+        }
+
+        if (isTauri && process.env.NODE_ENV === "production") {
           toast.success("Login successful!");
           window.location.href = "/new-chat";
-
           return;
         }
 
@@ -100,14 +102,19 @@ export default function LoginPage() {
           toast.error(res.error || "Authentication session failed");
         } else if (res?.ok) {
           toast.success("Login successful!");
-          router.push("/");
-          router.refresh();
+          if (isTauri) {
+            window.location.href = "/new-chat";
+          } else {
+            router.push("/");
+            router.refresh();
+          }
         }
       } else {
         toast.error("Invalid response from server.");
       }
-    } catch (error) {
-      toast.error("An unexpected error occurred during login.");
+    } catch (error: any) {
+      console.error("Login fetch error:", error);
+      toast.error(`Login error: ${error.message || String(error)} | URL: ${process.env.NEXT_PUBLIC_API_URL}`);
     } finally {
       toast.dismiss(loading);
     }
@@ -151,6 +158,7 @@ export default function LoginPage() {
 
       if (response.data?.accessToken) {
         if (
+          process.env.NODE_ENV === "production" &&
           typeof window !== "undefined" &&
           ("__TAURI__" in window ||
             "electron" in window ||
@@ -281,7 +289,6 @@ export default function LoginPage() {
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-1.5">
             <Input
-              isRequired
               className="max-w-full"
               classNames={{
                 inputWrapper:
@@ -297,7 +304,6 @@ export default function LoginPage() {
 
           <div className="flex flex-col gap-1.5">
             <Input
-              isRequired
               classNames={{
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",

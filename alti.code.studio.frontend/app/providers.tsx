@@ -205,6 +205,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
           ).toISOString(),
         };
       }
+      return null;
     }
 
     return undefined;

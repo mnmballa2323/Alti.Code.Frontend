@@ -1086,7 +1086,7 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
-                        className="size-4 text-[#10A37F] shrink-0"
+                        className="size-4 text-black dark:text-white shrink-0"
                         icon="simple-icons:openai"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
@@ -1102,7 +1102,7 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
-                        className="size-4 text-[#10A37F] shrink-0"
+                        className="size-4 text-black dark:text-white shrink-0"
                         icon="simple-icons:openai"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
@@ -1118,7 +1118,7 @@ function PromptInputFullLineComponent({
                   >
                     <div className="flex items-center gap-3 text-left">
                       <Icon
-                        className="size-4 text-[#10A37F] shrink-0"
+                        className="size-4 text-black dark:text-white shrink-0"
                         icon="simple-icons:openai"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
