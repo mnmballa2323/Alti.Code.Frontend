@@ -44,18 +44,18 @@ export default function PairedProgrammerSection() {
         {/* Simple Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
           <FeatureCard
-            description="Provide the vision and intent. The AI swarm instantly translates your commands into production ready code."
-            icon={<TerminalSquare className="w-8 h-8 text-white" />}
+            description="Provide your vision and intent. The AI swarm instantly translates your commands into production code."
+            icon={<TerminalSquare className="w-8 h-8 text-blue-400" />}
             title="Command Driven"
           />
           <FeatureCard
-            description="You make the executive decisions. The AI swarm handles all the development, testing, and debugging."
-            icon={<UserCircle className="w-8 h-8 text-white" />}
+            description="You make all executive decisions. The AI swarm handles all your coding, testing, and debugging."
+            icon={<UserCircle className="w-8 h-8 text-blue-400" />}
             title="Human in Control"
           />
           <FeatureCard
-            description="It reads your entire codebase, understands your unique conventions, and writes code exactly the way you do."
-            icon={<Code2 className="w-8 h-8 text-white" />}
+            description="It reads your entire codebase, learns your unique patterns, and writes code exactly like you do."
+            icon={<Code2 className="w-8 h-8 text-blue-400" />}
             title="Native Integration"
           />
         </div>
@@ -79,16 +79,16 @@ function FeatureCard({
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
       }}
-      className="flex flex-col items-start text-left p-8 rounded-3xl bg-white/[0.02] backdrop-blur-xl border border-white/10 hover:border-white/20 hover:-translate-y-1 hover:shadow-2xl transition-all duration-300 relative group overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+      className="flex flex-col items-start text-left p-8 rounded-3xl bg-blue-950/20 backdrop-blur-xl border border-blue-900/40 hover:border-blue-800/60 hover:bg-blue-900/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-900/20 transition-all duration-300 relative group overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
     >
-      <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-white/[0.03] rounded-full blur-[60px] group-hover:bg-white/[0.05] transition-all duration-500" />
-      <div className="mb-6 bg-white/5 p-3 rounded-2xl border border-white/10">
+      <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-blue-600/10 rounded-full blur-[60px] group-hover:bg-blue-500/20 transition-all duration-500" />
+      <div className="mb-6 bg-blue-900/30 p-3 rounded-2xl border border-blue-800/50">
         {icon}
       </div>
       <h3 className="text-2xl font-bold text-white tracking-tight mb-3">
         {title}
       </h3>
-      <p className="text-zinc-400 leading-relaxed font-medium text-balance">
+      <p className="text-zinc-400 leading-relaxed font-medium">
         {description}
       </p>
     </motion.div>
