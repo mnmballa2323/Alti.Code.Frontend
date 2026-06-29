@@ -5,6 +5,16 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.1.4] - 2026-06-29 — Navbar Logo SSR Support
+
+### Fixed
+- **Navbar Logo Rendering**: Removed client-only `mounted` guard from desktop logo in `components/navbar.tsx`, ensuring the logo loads immediately during SSR/first-paint and resolving the grey fallback box issue on the website.
+
+## [53.1.3] - 2026-06-29 — Always Show Split Screen Layout on Desktop
+
+### Fixed
+- **Tauri Split Layout Alignment**: Configured Next.js auth layout to always show the left panel and streaming code (rather than hiding it in desktop environments) to ensure a rich visual presentation inside the wide 1200x800 desktop app window.
+
 ## [53.1.2] - 2026-06-29 — Streaming Code Visibility & Unify Dev Port to 3001
 
 ### Fixed

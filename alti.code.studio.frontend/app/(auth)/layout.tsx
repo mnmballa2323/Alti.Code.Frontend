@@ -43,12 +43,9 @@ const STREAMING_CODE_LINES = [
 ];
 
 function SubtleCodeStream() {
-  const [lines, setLines] = useState<string[]>([]);
+  const [lines, setLines] = useState<string[]>(STREAMING_CODE_LINES.slice(0, 12));
   
   useEffect(() => {
-    // Start with 12 lines
-    setLines(STREAMING_CODE_LINES.slice(0, 12));
-    
     let currentIndex = 12;
     const interval = setInterval(() => {
       setLines((prev) => {
@@ -127,7 +124,7 @@ export default function AuthLayout({
       />
 
       {/* Left Panel: Streaming Code Generation Terminal */}
-      {!isTauri && (
+      {
         <div className="hidden lg:flex w-1/2 bg-[#050507] relative overflow-hidden flex-col justify-between p-16 border-r border-white/5">
           {/* Subtle grid pattern overlay */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
@@ -174,15 +171,15 @@ export default function AuthLayout({
             </p>
           </div>
         </div>
-      )}
+      }
 
       {/* Right Panel: Auth Form */}
       <div
-        className={`w-full ${isTauri ? "max-w-2xl mx-auto" : "lg:w-1/2"} flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative`}
+        className="w-full lg:w-1/2 flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative"
       >
 
         <div
-          className={`w-full max-w-sm ${isTauri ? "mt-0" : "mt-20 lg:mt-12"}`}
+          className="w-full max-w-sm mt-20 lg:mt-12"
         >
           {children}
         </div>
