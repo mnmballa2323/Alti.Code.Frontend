@@ -317,12 +317,20 @@ class MultiCloudInferenceService {
             };
 
             logger.info(`Sending Azure Foundry Request (Attempt ${attempt}/${maxRetries}) to endpoint: ${azureEndpoint}`);
+            
+            const headers = {
+              'Content-Type': 'application/json',
+            };
+            if (azureApiKey.startsWith('ey') || process.env.AZURE_AD_TOKEN) {
+              const token = process.env.AZURE_AD_TOKEN || azureApiKey;
+              headers['Authorization'] = `Bearer ${token}`;
+            } else {
+              headers['api-key'] = azureApiKey;
+            }
+
             const res = await fetch(url, {
               method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'api-key': azureApiKey,
-              },
+              headers,
               body: JSON.stringify(payload),
               signal: AbortSignal.timeout(20000), // robust 20s timeout per attempt
             });
