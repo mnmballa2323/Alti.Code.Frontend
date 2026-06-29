@@ -25,7 +25,7 @@ on:
       gcp_project_id:
         description: 'Target Google Cloud Project ID'
         required: true
-        default: 'alti-code-studio-production'
+        default: 'alti-code-studio-prod'
         type: string
       auto_approve:
         description: 'Bypass interactive prompts and auto-apply changes'
