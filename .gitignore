@@ -9,3 +9,5 @@ deployments/
 .env
 terraform/.terraform/
 terraform/terraform-bin/
+deployer-key.json
+*.json

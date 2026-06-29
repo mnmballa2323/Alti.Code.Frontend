@@ -15,6 +15,16 @@ RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# Redirect gcloud call to workspace binary if local SDK was compiled
+if [ -f "./google-cloud-sdk/bin/gcloud" ]; then
+  gcloud() {
+    ./google-cloud-sdk/bin/gcloud "$@"
+  }
+elif ! command -v gcloud &>/dev/null; then
+  echo -e "${RED}❌ Error: Google Cloud CLI (gcloud) is not installed. Exiting.${NC}"
+  exit 1
+fi
+
 echo -e "${CYAN}================================================================${NC}"
 echo -e "${CYAN} 🔐 ALTI CODE STUDIO: GCP IAM & WORKLOAD IDENTITY AUTO-SETUP     🔐 ${NC}"
 echo -e "${CYAN}================================================================${NC}"
@@ -61,7 +71,7 @@ ROLES=(
   "roles/securesourcemanager.admin"
   "roles/cloudkms.admin"
   "roles/iam.serviceAccountUser"
-  "roles/securityAdmin"
+  "roles/compute.securityAdmin"
 )
 
 for role in "${ROLES[@]}"; do
@@ -69,7 +79,7 @@ for role in "${ROLES[@]}"; do
   gcloud projects add-iam-policy-binding "$PROJECT_ID" \
       --member="serviceAccount:$SERVICE_ACCOUNT_EMAIL" \
       --role="$role" \
-      --no-user-output-enabled &>/dev/null
+      --no-user-output-enabled
 done
 echo -e "${GREEN}✔ All IAM roles successfully bound to service account.${NC}"
 
