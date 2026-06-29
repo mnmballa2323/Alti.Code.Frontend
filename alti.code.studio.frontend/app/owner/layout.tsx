@@ -4,12 +4,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import {
-  Users,
-  ArrowLeft,
-  LayoutDashboard,
-  DollarSign,
-} from "lucide-react";
+import { Users, ArrowLeft, LayoutDashboard, DollarSign } from "lucide-react";
 
 import { useAppSelector } from "@/store";
 
@@ -88,8 +83,7 @@ export default function OwnerLayout({
         <nav className="flex flex-col gap-1">
           {items.map((item) => {
             const isActive =
-              pathname === item.href ||
-              pathname.startsWith(item.href + "/");
+              pathname === item.href || pathname.startsWith(item.href + "/");
 
             return (
               <a
@@ -126,7 +120,9 @@ export default function OwnerLayout({
 
   return (
     <div className="flex flex-col h-screen w-screen bg-[#F3F4F6] dark:bg-[#0d1117] overflow-hidden text-neutral-900 dark:text-neutral-100">
-      <style dangerouslySetInnerHTML={{__html: `
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
         /* Overriding Chrome autofill default background */
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
@@ -147,7 +143,9 @@ export default function OwnerLayout({
           box-shadow: 0 0 0 1000px #171717 inset !important;
           -webkit-text-fill-color: #ffffff !important;
         }
-      `}} />
+      `,
+        }}
+      />
       {/* Top Title Navbar */}
       <div className="h-14 w-full bg-white dark:bg-[#161b22] border-b border-neutral-100 dark:border-neutral-800 flex items-center shrink-0 z-20">
         {/* Left header: aligns with sidebar width */}

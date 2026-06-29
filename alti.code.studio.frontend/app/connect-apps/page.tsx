@@ -1087,13 +1087,18 @@ function ConnectAppsContent() {
                       </h2>
                       <p className="text-sm text-default-500 max-w-2xl">
                         Connect and prompt individual web applications securely.
-                        Select an application below to configure authentication and interact with its tools in a focused, zero-hallucination agent session.
+                        Select an application below to configure authentication
+                        and interact with its tools in a focused,
+                        zero-hallucination agent session.
                       </p>
                     </div>
 
                     <div className="flex items-center justify-between mb-6 gap-4">
                       <div className="relative flex-1 max-w-md h-10">
-                        <Icon icon="solar:magnifer-linear" className="absolute left-3 top-1/2 -translate-y-1/2 text-default-400 text-lg" />
+                        <Icon
+                          className="absolute left-3 top-1/2 -translate-y-1/2 text-default-400 text-lg"
+                          icon="solar:magnifer-linear"
+                        />
                         <input
                           className="w-full h-full bg-white dark:bg-[#161b22] border border-default-200 dark:border-default-100 rounded-xl pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all text-default-900 dark:text-default-100 placeholder:text-default-400"
                           placeholder="Search applications..."
@@ -1119,13 +1124,23 @@ function ConnectAppsContent() {
 
                     {loading ? (
                       <div className="flex flex-col items-center justify-center py-20 gap-3">
-                        <Icon className="text-3xl text-primary animate-spin" icon="line-md:loading-twotone-loop" />
-                        <span className="text-sm text-default-400">Loading catalog...</span>
+                        <Icon
+                          className="text-3xl text-primary animate-spin"
+                          icon="line-md:loading-twotone-loop"
+                        />
+                        <span className="text-sm text-default-400">
+                          Loading catalog...
+                        </span>
                       </div>
                     ) : filteredApps.length === 0 ? (
                       <div className="flex flex-col items-center justify-center py-20 text-center border border-dashed border-default-200 dark:border-default-100 rounded-2xl">
-                        <Icon className="text-4xl text-default-300 mb-3" icon="solar:folder-error-bold-duotone" />
-                        <span className="text-sm text-default-500">No apps found matching your search.</span>
+                        <Icon
+                          className="text-4xl text-default-300 mb-3"
+                          icon="solar:folder-error-bold-duotone"
+                        />
+                        <span className="text-sm text-default-500">
+                          No apps found matching your search.
+                        </span>
                       </div>
                     ) : (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
@@ -1135,12 +1150,19 @@ function ConnectAppsContent() {
                             className="group flex flex-col p-5 bg-white dark:bg-[#161b22] border border-default-200 dark:border-default-100 rounded-2xl hover:border-primary/50 hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer relative"
                             onClick={() => {
                               openAppDetailsModal(app);
-                              window.dispatchEvent(new CustomEvent("select-connect-app", { detail: app }));
+                              window.dispatchEvent(
+                                new CustomEvent("select-connect-app", {
+                                  detail: app,
+                                }),
+                              );
                             }}
                           >
                             <div className="flex items-start justify-between mb-4">
                               <div className="w-12 h-12 rounded-xl border border-default-200 dark:border-default-100 flex items-center justify-center bg-default-50 dark:bg-black/50 overflow-hidden shrink-0">
-                                <AppIcon app={app} className="w-8 h-8 object-contain" />
+                                <AppIcon
+                                  app={app}
+                                  className="w-8 h-8 object-contain"
+                                />
                               </div>
                               {app.status === "connected" && (
                                 <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/10 text-success text-[10px] font-bold tracking-wide uppercase">
@@ -1149,7 +1171,9 @@ function ConnectAppsContent() {
                                 </div>
                               )}
                             </div>
-                            <h3 className="font-bold text-default-900 text-sm mb-1 line-clamp-1">{app.name}</h3>
+                            <h3 className="font-bold text-default-900 text-sm mb-1 line-clamp-1">
+                              {app.name}
+                            </h3>
                             <p className="text-xs text-default-500 line-clamp-2 leading-relaxed flex-1">
                               {app.description}
                             </p>
@@ -1173,7 +1197,10 @@ function ConnectAppsContent() {
                         className="flex items-center gap-2 text-xs font-semibold text-default-500 hover:text-default-900 transition-colors"
                         onClick={() => setSelectedApp(null)}
                       >
-                        <Icon icon="solar:arrow-left-linear" className="text-sm" />
+                        <Icon
+                          className="text-sm"
+                          icon="solar:arrow-left-linear"
+                        />
                         Back to Catalog
                       </button>
                     </div>

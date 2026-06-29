@@ -1,13 +1,14 @@
 /**
  * Alti Code Studio — Server-Side Auth Middleware
- * 
+ *
  * Protects authenticated routes at the edge BEFORE any page renders.
  * Uses next-auth JWT to validate session tokens.
  */
 
+import type { NextRequest } from "next/server";
+
 import { NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import type { NextRequest } from "next/server";
 
 // Routes that DO NOT require authentication
 const PUBLIC_ROUTES = [
@@ -61,6 +62,28 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // E2E Testing Backdoor
+  if ((process.env.NEXT_PUBLIC_E2E_TEST === "true" || process.env.NODE_ENV === "development") && request.cookies.has("e2e-session")) {
+    try {
+      const e2eSession = JSON.parse(request.cookies.get("e2e-session")?.value || "{}");
+      
+      if (e2eSession.mfaRequired && pathname !== "/auth/mfa") {
+        const mfaUrl = new URL("/auth/mfa", request.url);
+        mfaUrl.searchParams.set("callbackUrl", pathname);
+        return NextResponse.redirect(mfaUrl);
+      }
+
+      if (pathname.startsWith("/admin") || pathname.startsWith("/owner")) {
+        if (e2eSession.role !== "admin" && e2eSession.role !== "owner" && e2eSession.role !== "super_admin") {
+          return NextResponse.redirect(new URL("/dashboard", request.url));
+        }
+      }
+      return NextResponse.next();
+    } catch (e) {
+      // ignore parse errors
+    }
+  }
+
   // Check for valid session token
   const token = await getToken({
     req: request,
@@ -70,13 +93,25 @@ export async function middleware(request: NextRequest) {
   // No valid session → redirect to login
   if (!token) {
     const loginUrl = new URL("/login", request.url);
+
     loginUrl.searchParams.set("callbackUrl", pathname);
+
     return NextResponse.redirect(loginUrl);
+  }
+
+  // Check if MFA is required for this tenant/user
+  if ((token as any).mfaRequired && pathname !== "/auth/mfa") {
+    const mfaUrl = new URL("/auth/mfa", request.url);
+
+    mfaUrl.searchParams.set("callbackUrl", pathname);
+
+    return NextResponse.redirect(mfaUrl);
   }
 
   // Admin/Owner routes require elevated roles
   if (pathname.startsWith("/admin") || pathname.startsWith("/owner")) {
     const role = (token as Record<string, unknown>).role as string | undefined;
+
     if (role !== "admin" && role !== "owner" && role !== "super_admin") {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }

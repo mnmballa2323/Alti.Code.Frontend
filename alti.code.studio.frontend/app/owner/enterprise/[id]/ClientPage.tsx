@@ -13,7 +13,7 @@ import {
 import { useSession } from "next-auth/react";
 
 import { adminAPI, teamAPI } from "@/lib/enterprise-api";
-import { useAppSelector, useAppDispatch } from "@/store";
+import { useAppDispatch } from "@/store";
 import { setActiveMemberName } from "@/store/uiSlice";
 
 interface Member {
@@ -33,10 +33,28 @@ const DUMMY_ENTERPRISE_DATA: Record<string, any> = {
     status: "active",
     owner: "jamie.dimon@jpmchase.com",
     users: [
-      { id: "jpm-1", name: "Jamie Dimon", email: "jamie.dimon@jpmchase.com", tenantRole: "owner", subscriptionPrice: 1000 },
-      { id: "jpm-2", name: "Ada Lovelace", email: "ada@jpmchase.com", tenantRole: "admin", subscriptionPrice: 1000 },
-      { id: "jpm-3", name: "Alan Turing", email: "alan@jpmchase.com", tenantRole: "developer", subscriptionPrice: 1000 },
-    ]
+      {
+        id: "jpm-1",
+        name: "Jamie Dimon",
+        email: "jamie.dimon@jpmchase.com",
+        tenantRole: "owner",
+        subscriptionPrice: 1000,
+      },
+      {
+        id: "jpm-2",
+        name: "Ada Lovelace",
+        email: "ada@jpmchase.com",
+        tenantRole: "admin",
+        subscriptionPrice: 1000,
+      },
+      {
+        id: "jpm-3",
+        name: "Alan Turing",
+        email: "alan@jpmchase.com",
+        tenantRole: "developer",
+        subscriptionPrice: 1000,
+      },
+    ],
   },
   "nasa-hq": {
     id: "nasa-hq",
@@ -46,9 +64,21 @@ const DUMMY_ENTERPRISE_DATA: Record<string, any> = {
     status: "active",
     owner: "director@jpl.nasa.gov",
     users: [
-      { id: "nasa-1", name: "JPL Director", email: "director@jpl.nasa.gov", tenantRole: "owner", subscriptionPrice: 1000 },
-      { id: "nasa-2", name: "Grace Hopper", email: "grace@jpl.nasa.gov", tenantRole: "developer", subscriptionPrice: 1000 },
-    ]
+      {
+        id: "nasa-1",
+        name: "JPL Director",
+        email: "director@jpl.nasa.gov",
+        tenantRole: "owner",
+        subscriptionPrice: 1000,
+      },
+      {
+        id: "nasa-2",
+        name: "Grace Hopper",
+        email: "grace@jpl.nasa.gov",
+        tenantRole: "developer",
+        subscriptionPrice: 1000,
+      },
+    ],
   },
   "dod-sovereign": {
     id: "dod-sovereign",
@@ -58,10 +88,22 @@ const DUMMY_ENTERPRISE_DATA: Record<string, any> = {
     status: "active",
     owner: "secdef@pentagon.mil",
     users: [
-      { id: "dod-1", name: "Secretary of Defense", email: "secdef@pentagon.mil", tenantRole: "owner", subscriptionPrice: 1000 },
-      { id: "dod-2", name: "General Cyber Command", email: "cyber@pentagon.mil", tenantRole: "admin", subscriptionPrice: 1000 },
-    ]
-  }
+      {
+        id: "dod-1",
+        name: "Secretary of Defense",
+        email: "secdef@pentagon.mil",
+        tenantRole: "owner",
+        subscriptionPrice: 1000,
+      },
+      {
+        id: "dod-2",
+        name: "General Cyber Command",
+        email: "cyber@pentagon.mil",
+        tenantRole: "admin",
+        subscriptionPrice: 1000,
+      },
+    ],
+  },
 };
 
 export default function EnterpriseDetailPage() {
@@ -83,6 +125,7 @@ export default function EnterpriseDetailPage() {
   const fetchTenantDetails = async () => {
     try {
       const res = await adminAPI.getTenant(teamId);
+
       if (res) {
         setTenant(res);
         setMembers(
@@ -92,7 +135,7 @@ export default function EnterpriseDetailPage() {
             email: u.email,
             role: u.tenantRole || "developer",
             subscriptionPrice: u.subscriptionPrice,
-          }))
+          })),
         );
       } else {
         throw new Error("Not found");
@@ -100,6 +143,7 @@ export default function EnterpriseDetailPage() {
     } catch (err) {
       console.warn("Fallback to dummy enterprise details for:", teamId);
       const dummy = DUMMY_ENTERPRISE_DATA[teamId];
+
       if (dummy) {
         setTenant(dummy);
         setMembers(
@@ -109,7 +153,7 @@ export default function EnterpriseDetailPage() {
             email: u.email,
             role: u.tenantRole,
             subscriptionPrice: u.subscriptionPrice,
-          }))
+          })),
         );
       }
     } finally {
@@ -126,13 +170,16 @@ export default function EnterpriseDetailPage() {
   }, [status, teamId]);
 
   const teamName = tenant ? tenant.name : "Sovereign Environment";
-  const teamDesc = tenant ? tenant.domain || "Sovereign enterprise environment" : "Loading environment details...";
+  const teamDesc = tenant
+    ? tenant.domain || "Sovereign enterprise environment"
+    : "Loading environment details...";
   const teamAdminEmail = tenant ? tenant.owner || "No owner assigned" : "";
 
   useEffect(() => {
     if (tenant) {
       dispatch(setActiveMemberName(teamName));
     }
+
     return () => {
       dispatch(setActiveMemberName(null));
     };
@@ -164,7 +211,7 @@ export default function EnterpriseDetailPage() {
     try {
       // Update all team members' price in parallel
       await Promise.all(
-        members.map((m) => teamAPI.updateMemberPrice(m.id, customPrice))
+        members.map((m) => teamAPI.updateMemberPrice(m.id, customPrice)),
       );
       setEditModalOpen(false);
       await fetchTenantDetails();
@@ -181,7 +228,9 @@ export default function EnterpriseDetailPage() {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-20">
           <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
-          <p className="text-sm text-neutral-500">Loading sovereign details...</p>
+          <p className="text-sm text-neutral-500">
+            Loading sovereign details...
+          </p>
         </div>
       ) : (
         <div className="space-y-6">
@@ -201,7 +250,8 @@ export default function EnterpriseDetailPage() {
                 {/* Monthly price per member */}
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-row items-center gap-8 transition-all duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none">
                   <span className="px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-850 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200/50 dark:border-neutral-750 whitespace-nowrap leading-none">
-                    {members.length} {members.length === 1 ? "Member" : "Members"}
+                    {members.length}{" "}
+                    {members.length === 1 ? "Member" : "Members"}
                   </span>
                   <span className="text-sm font-bold text-neutral-900 dark:text-white leading-none">
                     {new Intl.NumberFormat("en-US", {
@@ -232,23 +282,41 @@ export default function EnterpriseDetailPage() {
                     </label>
                     <div className="relative">
                       <button
-                        type="button"
                         className="w-full flex items-center justify-between px-4 py-3 bg-neutral-100 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all text-neutral-800 dark:text-neutral-200 cursor-pointer"
+                        type="button"
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       >
                         <span>{customPrice}</span>
-                        <ChevronDown className="w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-transform duration-200" style={{ transform: isDropdownOpen ? "rotate(180deg)" : "none" }} />
+                        <ChevronDown
+                          className="w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-transform duration-200"
+                          style={{
+                            transform: isDropdownOpen
+                              ? "rotate(180deg)"
+                              : "none",
+                          }}
+                        />
                       </button>
 
                       {isDropdownOpen && (
                         <>
-                          <div className="fixed inset-0 z-40" onClick={() => setIsDropdownOpen(false)} />
+                          <div
+                            className="fixed inset-0 z-40"
+                            onClick={() => setIsDropdownOpen(false)}
+                          />
                           <div className="absolute left-0 right-0 mt-2 bg-white dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl shadow-xl z-50 overflow-hidden py-1 animate-fade-in max-h-60 overflow-y-auto">
-                            {["$0", "$250", "$500", "$750", "$1,000", "$1,250", "$2,000"].map((price) => (
+                            {[
+                              "$0",
+                              "$250",
+                              "$500",
+                              "$750",
+                              "$1,000",
+                              "$1,250",
+                              "$2,000",
+                            ].map((price) => (
                               <button
                                 key={price}
-                                type="button"
                                 className="w-full text-left px-4 py-3 text-sm text-neutral-800 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                                type="button"
                                 onClick={() => {
                                   setCustomPrice(price);
                                   setIsDropdownOpen(false);
@@ -303,22 +371,34 @@ export default function EnterpriseDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {members.filter(
               (m) =>
-                (m.email || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (m.name && m.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                (m.role && m.role.toLowerCase().includes(searchQuery.toLowerCase()))
+                (m.email || "")
+                  .toLowerCase()
+                  .includes(searchQuery.toLowerCase()) ||
+                (m.name &&
+                  m.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+                (m.role &&
+                  m.role.toLowerCase().includes(searchQuery.toLowerCase())),
             ).length > 0 ? (
               members
                 .filter(
                   (m) =>
-                    (m.email || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    (m.name && m.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                    (m.role && m.role.toLowerCase().includes(searchQuery.toLowerCase()))
+                    (m.email || "")
+                      .toLowerCase()
+                      .includes(searchQuery.toLowerCase()) ||
+                    (m.name &&
+                      m.name
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase())) ||
+                    (m.role &&
+                      m.role.toLowerCase().includes(searchQuery.toLowerCase())),
                 )
                 .map((member) => (
                   <div
                     key={member.id}
                     className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 flex items-start gap-4 transition-all hover:border-neutral-350 dark:hover:border-neutral-700 shadow-sm cursor-pointer"
-                    onClick={() => router.push(`/owner/team-members/${member.id}`)}
+                    onClick={() =>
+                      router.push(`/owner/team-members/${member.id}`)
+                    }
                   >
                     <div className="flex-1 min-w-0 space-y-1">
                       <div className="flex items-center gap-2">
@@ -332,7 +412,9 @@ export default function EnterpriseDetailPage() {
                       </div>
                       <div className="flex items-center gap-1.5 text-sm text-neutral-500">
                         <Shield className="w-3.5 h-3.5 shrink-0" />
-                        <span className="capitalize truncate">{member.role}</span>
+                        <span className="capitalize truncate">
+                          {member.role}
+                        </span>
                       </div>
                     </div>
                   </div>

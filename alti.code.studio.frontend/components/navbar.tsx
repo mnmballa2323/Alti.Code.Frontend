@@ -332,7 +332,7 @@ function Navbar() {
         className={cn(
           "flex items-center justify-between h-[80px] z-[100] fixed top-0 left-0 right-0 w-full transition-all duration-300",
           !isTransparent
-            ? "bg-white dark:bg-black border-b border-zinc-200/50 dark:border-zinc-800/50 shadow-sm"
+            ? "bg-white border-b border-black/5 shadow-sm"
             : "bg-transparent border-b border-transparent",
         )}
       >
@@ -342,11 +342,10 @@ function Navbar() {
             className="flex-shrink-0 flex items-center gap-2 md:gap-3 lg:-translate-x-4"
             href="/"
           >
-            {/* Standard Logo (Theme Responsive when Scrolled, or forced white when at top) */}
             <div
               className={cn(
                 "flex items-center gap-2 md:gap-3",
-                isTransparent ? "hidden" : "dark:hidden",
+                isTransparent ? "hidden" : "flex",
               )}
             >
               <Image
@@ -369,7 +368,7 @@ function Navbar() {
             <div
               className={cn(
                 "flex items-center gap-2 md:gap-3",
-                isTransparent ? "flex" : "hidden dark:flex",
+                isTransparent ? "flex" : "hidden",
               )}
             >
               <Image
@@ -395,9 +394,9 @@ function Navbar() {
           <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <div
               className={cn(
-                "flex items-center gap-3 p-1.5 rounded-full transition-all duration-300",
+                "flex items-center gap-1.5 p-1.5 rounded-full transition-all duration-300",
                 !isTransparent
-                  ? "bg-gray-100 dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 shadow-inner"
+                  ? "bg-black/5 border border-black/10 shadow-inner"
                   : "bg-black/35 backdrop-blur-md border border-zinc-800/50 shadow-lg",
               )}
             >
@@ -412,10 +411,10 @@ function Navbar() {
                       "relative group p-2.5 rounded-full transition-all duration-300",
                       isActive
                         ? !isTransparent
-                          ? "bg-white dark:bg-zinc-800 text-black dark:text-white shadow-md scale-105"
+                          ? "bg-white text-black shadow-md scale-105"
                           : "bg-white/15 text-white shadow-md border border-white/10 scale-105"
                         : !isTransparent
-                          ? "text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-200/50 dark:hover:bg-zinc-800/50"
+                          ? "text-gray-500 hover:text-black hover:bg-black/5"
                           : "text-zinc-400 hover:text-white hover:bg-white/5",
                     )}
                     onClick={() => handleSectionClick(index)}
@@ -440,7 +439,7 @@ function Navbar() {
                   className={cn(
                     "rounded-full bg-transparent px-6 transition-colors border",
                     !isTransparent
-                      ? "border-black/20 dark:border-white/20 text-black dark:text-white hover:bg-black/5 dark:hover:bg-white/5"
+                      ? "border-black/20 text-black hover:bg-black/5"
                       : "border-white/25 text-white hover:bg-white/10",
                   )}
                   size="sm"
@@ -462,7 +461,7 @@ function Navbar() {
                   className={cn(
                     "rounded-full px-6 transition-all duration-200 shadow-sm",
                     isScrolled || !isTransparent
-                      ? "dark:bg-white dark:text-black bg-black text-white hover:opacity-90"
+                      ? "bg-black text-white hover:opacity-90"
                       : "bg-white text-black hover:bg-zinc-100",
                   )}
                   size="sm"
@@ -479,7 +478,7 @@ function Navbar() {
                   className={cn(
                     "rounded-full px-6 transition-all duration-200 shadow-sm",
                     isScrolled || !isTransparent
-                      ? "dark:bg-white dark:text-black bg-black text-white hover:opacity-90"
+                      ? "bg-black text-white hover:opacity-90"
                       : "bg-white text-black hover:bg-zinc-100",
                     isDesktopApp && "w-[160px]",
                   )}
@@ -499,7 +498,7 @@ function Navbar() {
                     className={cn(
                       "rounded-full px-6 transition-all duration-200 shadow-sm",
                       !isTransparent
-                        ? "dark:bg-white dark:text-black bg-black text-white hover:opacity-90"
+                        ? "bg-transparent border border-black/20 text-black hover:bg-black/5"
                         : "bg-white text-black hover:bg-zinc-100",
                     )}
                     size="sm"

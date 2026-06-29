@@ -2,11 +2,15 @@ import NextAuth, { User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import AzureADProvider from "next-auth/providers/azure-ad";
 
 // Extend User to include the custom token and _id
 interface ExtendedUser extends User {
   _id?: string;
   token?: string;
+  role?: string;
+  tenantId?: string;
+  mfaRequired?: boolean;
 }
 
 // Extend the JWT interface to include the custom fields
@@ -14,6 +18,9 @@ declare module "next-auth/jwt" {
   interface JWT {
     _id?: string;
     accessToken?: string;
+    role?: string;
+    tenantId?: string;
+    mfaRequired?: boolean;
   }
 }
 
@@ -23,6 +30,9 @@ declare module "next-auth" {
     user: {
       _id?: string;
       accessToken?: string;
+      role?: string;
+      tenantId?: string;
+      mfaRequired?: boolean;
     };
   }
 }
@@ -37,6 +47,11 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+    }),
+    AzureADProvider({
+      clientId: process.env.AZURE_AD_CLIENT_ID ?? "",
+      clientSecret: process.env.AZURE_AD_CLIENT_SECRET ?? "",
+      tenantId: process.env.AZURE_AD_TENANT_ID ?? "common",
     }),
     CredentialsProvider({
       name: "Credentials",
@@ -107,6 +122,9 @@ const handler = NextAuth({
             email: credentials?.email,
             token: response.data.accessToken,
             _id: response.data._id,
+            role: response.data.role,
+            tenantId: response.data.tenantId,
+            mfaRequired: response.data.mfaRequired || false,
           } as ExtendedUser;
         }
 
@@ -125,7 +143,7 @@ const handler = NextAuth({
     async jwt({ token, user, account }) {
       // Handles initial login (Credentials or OAuth)
       if (user && account) {
-        if (account.provider === "github" || account.provider === "google") {
+        if (["github", "google", "azure-ad"].includes(account.provider)) {
           try {
             const res = await fetch(
               `${process.env.NEXT_PUBLIC_API_URL}/auth/social-login`,
@@ -148,6 +166,9 @@ const handler = NextAuth({
               if (data.success && data.data) {
                 token.accessToken = data.data.accessToken;
                 token._id = data.data._id;
+                token.role = data.data.role;
+                token.tenantId = data.data.tenantId;
+                token.mfaRequired = data.data.mfaRequired || false;
               }
             }
           } catch (error) {
@@ -156,6 +177,9 @@ const handler = NextAuth({
         } else if (account.provider === "credentials") {
           token.accessToken = (user as ExtendedUser).token;
           token._id = (user as ExtendedUser)._id;
+          token.role = (user as ExtendedUser).role;
+          token.tenantId = (user as ExtendedUser).tenantId;
+          token.mfaRequired = (user as ExtendedUser).mfaRequired;
         }
       }
 
@@ -165,6 +189,9 @@ const handler = NextAuth({
       session.user = {
         accessToken: token.accessToken,
         _id: token._id,
+        role: token.role,
+        tenantId: token.tenantId,
+        mfaRequired: token.mfaRequired,
       };
 
       return session;

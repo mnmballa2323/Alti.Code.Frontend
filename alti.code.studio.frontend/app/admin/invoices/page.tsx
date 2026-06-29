@@ -5,13 +5,55 @@ import { Download } from "lucide-react";
 
 export default function InvoicesPage() {
   const mockInvoices = [
-    { id: "INV-2026-006", plan: "Standard", seats: "1 Seat", month: "June 2026", amount: "$25.00" },
-    { id: "INV-2026-005", plan: "Standard", seats: "1 Seat", month: "May 2026", amount: "$25.00" },
-    { id: "INV-2026-004", plan: "Standard", seats: "1 Seat", month: "April 2026", amount: "$25.00" },
-    { id: "INV-2026-003", plan: "Standard", seats: "1 Seat", month: "March 2026", amount: "$25.00" },
-    { id: "INV-2026-002", plan: "Standard", seats: "1 Seat", month: "February 2026", amount: "$25.00" },
-    { id: "INV-2026-001", plan: "Standard", seats: "1 Seat", month: "January 2026", amount: "$25.00" },
-    { id: "INV-2025-012", plan: "Standard", seats: "1 Seat", month: "December 2025", amount: "$25.00" },
+    {
+      id: "INV-2026-006",
+      plan: "Standard",
+      seats: "1 Seat",
+      month: "June 2026",
+      amount: "$25.00",
+    },
+    {
+      id: "INV-2026-005",
+      plan: "Standard",
+      seats: "1 Seat",
+      month: "May 2026",
+      amount: "$25.00",
+    },
+    {
+      id: "INV-2026-004",
+      plan: "Standard",
+      seats: "1 Seat",
+      month: "April 2026",
+      amount: "$25.00",
+    },
+    {
+      id: "INV-2026-003",
+      plan: "Standard",
+      seats: "1 Seat",
+      month: "March 2026",
+      amount: "$25.00",
+    },
+    {
+      id: "INV-2026-002",
+      plan: "Standard",
+      seats: "1 Seat",
+      month: "February 2026",
+      amount: "$25.00",
+    },
+    {
+      id: "INV-2026-001",
+      plan: "Standard",
+      seats: "1 Seat",
+      month: "January 2026",
+      amount: "$25.00",
+    },
+    {
+      id: "INV-2025-012",
+      plan: "Standard",
+      seats: "1 Seat",
+      month: "December 2025",
+      amount: "$25.00",
+    },
   ];
 
   return (
@@ -24,7 +66,7 @@ export default function InvoicesPage() {
           <div>SEATS</div>
           <div>MONTH</div>
           <div className="text-right">AMOUNT</div>
-          <div></div>
+          <div />
         </div>
 
         {/* Table Body */}

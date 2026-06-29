@@ -1,19 +1,6 @@
-import { Poppins, DM_Sans, Instrument_Serif } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 
-export const fontSans = Poppins({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  weight: ["400", "500", "600", "700"],
-});
-
-export const fontSecondary = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-secondary",
-  weight: ["400", "500", "700"],
-});
-
-export const fontSerif = Instrument_Serif({
-  subsets: ["latin"],
-  variable: "--font-serif",
-  weight: ["400"],
-});
+export const fontSans = GeistSans;
+export const fontSecondary = GeistSans;
+export const fontSerif = GeistMono;

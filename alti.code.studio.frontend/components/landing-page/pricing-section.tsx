@@ -3,6 +3,7 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
 import { useAppSelector } from "@/store";
 
 const plans = [
@@ -87,12 +88,14 @@ export default function PricingSection() {
     // Sovereign tier → contact form
     if (plan.isContact) {
       router.push("/contact");
+
       return;
     }
 
     // Not logged in → register first
     if (status !== "authenticated" || !session?.user) {
       router.push("/register");
+
       return;
     }
 
@@ -199,16 +202,16 @@ export default function PricingSection() {
 
               {/* Action Button */}
               <button
-                onClick={() => handleCheckout(plan)}
-                disabled={loading === plan.backendPlan}
                 className={`w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 border border-transparent active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed ${plan.buttonClass}`}
+                disabled={loading === plan.backendPlan}
+                onClick={() => handleCheckout(plan)}
               >
                 {loading === plan.backendPlan ? (
                   <span className="flex items-center justify-center gap-2">
                     <svg
                       className="animate-spin h-4 w-4"
-                      viewBox="0 0 24 24"
                       fill="none"
+                      viewBox="0 0 24 24"
                     >
                       <circle
                         className="opacity-25"
@@ -220,8 +223,8 @@ export default function PricingSection() {
                       />
                       <path
                         className="opacity-75"
-                        fill="currentColor"
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        fill="currentColor"
                       />
                     </svg>
                     Processing…

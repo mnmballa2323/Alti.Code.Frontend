@@ -1,14 +1,14 @@
-import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import "@testing-library/jest-dom";
+import { vi } from "vitest";
 
 // Mock Next.js router
-vi.mock('next/router', () => ({
+vi.mock("next/router", () => ({
   useRouter() {
     return {
-      route: '/',
-      pathname: '',
+      route: "/",
+      pathname: "",
       query: {},
-      asPath: '',
+      asPath: "",
       push: vi.fn(),
       replace: vi.fn(),
       reload: vi.fn(),
@@ -24,7 +24,7 @@ vi.mock('next/router', () => ({
   },
 }));
 
-vi.mock('next/navigation', () => ({
+vi.mock("next/navigation", () => ({
   useRouter() {
     return {
       push: vi.fn(),
@@ -35,7 +35,7 @@ vi.mock('next/navigation', () => ({
     };
   },
   usePathname() {
-    return '/';
+    return "/";
   },
   useSearchParams() {
     return new URLSearchParams();
@@ -43,9 +43,9 @@ vi.mock('next/navigation', () => ({
 }));
 
 // Mock NextAuth
-vi.mock('next-auth/react', () => ({
+vi.mock("next-auth/react", () => ({
   useSession() {
-    return { data: null, status: 'unauthenticated' };
+    return { data: null, status: "unauthenticated" };
   },
   SessionProvider({ children }: { children: React.ReactNode }) {
     return children;
@@ -53,7 +53,7 @@ vi.mock('next-auth/react', () => ({
 }));
 
 // Mock @asamuzakjp/css-color to bypass CJS/ESM compatibility crash
-vi.mock('@asamuzakjp/css-color', () => ({
+vi.mock("@asamuzakjp/css-color", () => ({
   default: () => ({}),
   cssColor: () => ({}),
 }));

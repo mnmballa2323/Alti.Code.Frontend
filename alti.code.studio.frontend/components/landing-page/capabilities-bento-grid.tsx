@@ -1,17 +1,33 @@
 "use client";
 
 import React from "react";
+import { motion } from "framer-motion";
 
 export default function CapabilitiesBentoGrid() {
   return (
     <section
-      className="w-full lg:h-screen lg:min-h-[720px] flex flex-col justify-center bg-black text-white px-4 sm:px-6 lg:px-8 border-t border-zinc-900 py-16 lg:py-0 overflow-hidden"
+      className="w-full lg:h-screen lg:min-h-[720px] flex flex-col justify-center bg-black text-white px-4 sm:px-6 lg:px-8 border-t border-white/5 py-16 lg:py-0 overflow-hidden relative"
       id="features"
     >
-      <div className="max-w-7xl mx-auto flex flex-col gap-6 lg:gap-8 xl:gap-10 w-full">
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-zinc-950/50 to-black z-0 pointer-events-none" />
+      <motion.div 
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={{
+          visible: { transition: { staggerChildren: 0.1 } }
+        }}
+        className="max-w-7xl mx-auto flex flex-col gap-6 lg:gap-8 xl:gap-10 w-full relative z-10"
+      >
         {/* Header */}
-        <div className="flex flex-col items-center text-center gap-4 max-w-3xl mx-auto">
-          <h3 className="text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-white leading-tight">
+        <motion.div 
+          variants={{
+            hidden: { opacity: 0, y: 30 },
+            visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+          }}
+          className="flex flex-col items-center text-center gap-4 max-w-3xl mx-auto"
+        >
+          <h3 className="text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-white leading-[1.1]">
             Engineered for scale.
           </h3>
           <p className="text-xl text-zinc-400 leading-relaxed font-medium">
@@ -19,12 +35,18 @@ export default function CapabilitiesBentoGrid() {
             coordinate local daemons for speed, security, and absolute
             precision.
           </p>
-        </div>
+        </motion.div>
 
         {/* Bento Grid */}
         <div className="grid grid-cols-12 gap-4 lg:gap-4 xl:gap-5 auto-rows-auto lg:auto-rows-[150px] xl:auto-rows-[180px]">
           {/* Card 1: Desktop IPC & CLI */}
-          <div className="col-span-12 lg:col-span-6 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            className="col-span-12 lg:col-span-6 rounded-[32px] bg-white/[0.02] backdrop-blur-xl border border-white/10 hover:border-white/20 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+          >
             <div className="absolute top-0 right-0 w-[400px] h-[300px] bg-blue-500/5 rounded-full blur-[100px] group-hover:bg-blue-500/10 transition-all duration-500" />
             <div className="flex flex-col gap-2 xl:gap-3 max-w-xs w-full">
               <h4 className="text-lg xl:text-xl font-bold tracking-tight text-white">
@@ -58,10 +80,16 @@ export default function CapabilitiesBentoGrid() {
                 42 passed (481ms)
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 2: AST Traversal */}
-          <div className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.02] backdrop-blur-xl border border-white/10 hover:border-white/20 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+          >
             <div className="flex flex-col gap-2 xl:gap-3">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 AST Traversal Edits
@@ -72,10 +100,16 @@ export default function CapabilitiesBentoGrid() {
                 safe and compilation proof.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 3: Gossip Mesh Coordination */}
-          <div className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.02] backdrop-blur-xl border border-white/10 hover:border-white/20 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+          >
             <div className="flex flex-col gap-2 xl:gap-3">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Gossip Mesh Coordination
@@ -86,10 +120,16 @@ export default function CapabilitiesBentoGrid() {
                 and cloud swarms.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 4: Semantic Prompt Cache */}
-          <div className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.02] backdrop-blur-xl border border-white/10 hover:border-white/20 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+          >
             <div className="flex flex-col gap-2 xl:gap-3">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Semantic Cache
@@ -100,10 +140,16 @@ export default function CapabilitiesBentoGrid() {
                 locally, instantly with zero delay.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 5: Git Submodule Auto-Sync */}
-          <div className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.02] backdrop-blur-xl border border-white/10 hover:border-white/20 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+          >
             <div className="flex flex-col gap-2 xl:gap-3">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Submodule Auto Sync
@@ -114,10 +160,16 @@ export default function CapabilitiesBentoGrid() {
                 enterprise repositories.
               </p>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 6: Private Vault */}
-          <div className="col-span-12 lg:col-span-6 rounded-[32px] bg-zinc-950 border border-zinc-800/80 hover:border-zinc-700/80 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl overflow-hidden relative group">
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
+            }}
+            className="col-span-12 lg:col-span-6 rounded-[32px] bg-white/[0.02] backdrop-blur-xl border border-white/10 hover:border-white/20 px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+          >
             <div className="flex flex-col gap-2 xl:gap-3 max-w-xs w-full">
               <h4 className="text-lg xl:text-xl font-bold tracking-tight text-white">
                 Hardware Secure Vault
@@ -150,9 +202,9 @@ export default function CapabilitiesBentoGrid() {
                 <span>biometric / hardware pin</span>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 }

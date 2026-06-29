@@ -977,9 +977,13 @@ export default function Sidebar() {
   }, []);
 
   const handleOpenLocalWorkspace = async () => {
-    if (typeof window !== "undefined" && ((window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__)) {
+    if (
+      typeof window !== "undefined" &&
+      ((window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__)
+    ) {
       try {
-        const tauri = (window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__;
+        const tauri =
+          (window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__;
         const invokeFn = tauri?.core?.invoke || tauri?.tauri?.invoke;
 
         if (invokeFn) {
@@ -3153,7 +3157,9 @@ export default function Sidebar() {
                       variant="flat"
                       onPress={async () => {
                         try {
-                          const tauri = (window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__;
+                          const tauri =
+                            (window as any).__TAURI__ ||
+                            (window as any).__TAURI_INTERNALS__;
                           const invokeFn =
                             tauri?.core?.invoke || tauri?.tauri?.invoke;
 

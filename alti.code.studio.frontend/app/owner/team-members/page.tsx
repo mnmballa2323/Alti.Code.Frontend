@@ -242,21 +242,25 @@ export default function TeamMembersPage() {
                               <label className="block text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
                                 Custom Pricing Amount
                               </label>
-                              
+
                               {/* Custom Dropdown Trigger */}
                               <button
-                                type="button"
                                 className="w-full flex items-center justify-between px-4 py-3 bg-neutral-100 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm font-semibold shadow-sm hover:shadow-md transition-all text-neutral-800 dark:text-neutral-200 cursor-pointer focus:outline-none"
-                                onClick={() => setIsPriceDropdownOpen(!isPriceDropdownOpen)}
+                                type="button"
+                                onClick={() =>
+                                  setIsPriceDropdownOpen(!isPriceDropdownOpen)
+                                }
                               >
                                 <span>{customPrice}</span>
-                                <ChevronDown className={`w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${isPriceDropdownOpen ? 'rotate-180' : ''}`} />
+                                <ChevronDown
+                                  className={`w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-transform duration-200 ${isPriceDropdownOpen ? "rotate-180" : ""}`}
+                                />
                               </button>
 
                               {/* Dropdown Overlay Close Trigger */}
                               {isPriceDropdownOpen && (
-                                <div 
-                                  className="fixed inset-0 z-40 bg-transparent" 
+                                <div
+                                  className="fixed inset-0 z-40 bg-transparent"
                                   onClick={() => setIsPriceDropdownOpen(false)}
                                 />
                               )}
@@ -264,26 +268,32 @@ export default function TeamMembersPage() {
                               {/* Dropdown Options List */}
                               {isPriceDropdownOpen && (
                                 <div className="absolute left-0 right-0 mt-2 z-50 bg-neutral-100 dark:bg-[#1f242c] border border-neutral-200/85 dark:border-neutral-800 rounded-2xl shadow-xl p-2 animate-in fade-in slide-in-from-top-1 duration-150 flex flex-col gap-0.5">
-                                  {["$0", "$250", "$500", "$750", "$1,000"].map((price) => (
-                                    <button
-                                      key={price}
-                                      type="button"
-                                      className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold w-full text-left transition-colors cursor-pointer ${
-                                        customPrice === price
-                                          ? "bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white shadow-sm"
-                                          : "text-neutral-600 dark:text-neutral-400 hover:bg-white/70 dark:hover:bg-neutral-900/40 hover:text-neutral-900 dark:hover:text-white"
-                                      }`}
-                                      onClick={() => {
-                                        setCustomPrice(price);
-                                        setIsPriceDropdownOpen(price !== customPrice ? false : !isPriceDropdownOpen);
-                                      }}
-                                    >
-                                      <span>{price}</span>
-                                      {customPrice === price && (
-                                        <span className="w-1.5 h-1.5 rounded-full bg-neutral-900 dark:bg-white" />
-                                      )}
-                                    </button>
-                                  ))}
+                                  {["$0", "$250", "$500", "$750", "$1,000"].map(
+                                    (price) => (
+                                      <button
+                                        key={price}
+                                        className={`flex items-center justify-between px-4 py-2.5 rounded-xl text-sm font-semibold w-full text-left transition-colors cursor-pointer ${
+                                          customPrice === price
+                                            ? "bg-white dark:bg-neutral-950 text-neutral-900 dark:text-white shadow-sm"
+                                            : "text-neutral-600 dark:text-neutral-400 hover:bg-white/70 dark:hover:bg-neutral-900/40 hover:text-neutral-900 dark:hover:text-white"
+                                        }`}
+                                        type="button"
+                                        onClick={() => {
+                                          setCustomPrice(price);
+                                          setIsPriceDropdownOpen(
+                                            price !== customPrice
+                                              ? false
+                                              : !isPriceDropdownOpen,
+                                          );
+                                        }}
+                                      >
+                                        <span>{price}</span>
+                                        {customPrice === price && (
+                                          <span className="w-1.5 h-1.5 rounded-full bg-neutral-900 dark:bg-white" />
+                                        )}
+                                      </button>
+                                    ),
+                                  )}
                                 </div>
                               )}
                             </div>

@@ -2,7 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { User, UserPlus, Users, CreditCard, TrendingUp, Loader2 } from "lucide-react";
+import {
+  User,
+  UserPlus,
+  Users,
+  CreditCard,
+  TrendingUp,
+  Loader2,
+} from "lucide-react";
+
 import { API_URL } from "@/lib/config";
 
 interface OwnerMetrics {
@@ -31,6 +39,7 @@ export default function DashboardConsoleView() {
         const headers: HeadersInit = {
           "Content-Type": "application/json",
         };
+
         if (token) {
           headers["Authorization"] = `Bearer ${token}`;
         }
@@ -39,6 +48,7 @@ export default function DashboardConsoleView() {
           headers,
         });
         const json = await res.json();
+
         if (json && json.success && json.data) {
           setMetrics({
             cloudAccounts: json.data.cloudAccounts || 0,
@@ -85,8 +95,8 @@ export default function DashboardConsoleView() {
             <User className="w-5 h-5 text-neutral-400 dark:text-neutral-500" />
           </div>
           <button
-            onClick={() => router.push("/owner/team-members")}
             className="mt-6 w-full py-2.5 text-center text-xs font-semibold bg-[#F9FAFB] dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200/50 dark:border-neutral-700/50 rounded-xl transition-colors cursor-pointer"
+            onClick={() => router.push("/owner/team-members")}
           >
             view all of the cloud accounts
           </button>
@@ -106,8 +116,8 @@ export default function DashboardConsoleView() {
             <UserPlus className="w-5 h-5 text-neutral-400 dark:text-neutral-500" />
           </div>
           <button
-            onClick={() => router.push("/owner/teams")}
             className="mt-6 w-full py-2.5 text-center text-xs font-semibold bg-[#F9FAFB] dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200/50 dark:border-neutral-700/50 rounded-xl transition-colors cursor-pointer"
+            onClick={() => router.push("/owner/teams")}
           >
             view all of the dedicated accounts
           </button>
@@ -127,8 +137,8 @@ export default function DashboardConsoleView() {
             <Users className="w-5 h-5 text-neutral-400 dark:text-neutral-500" />
           </div>
           <button
-            onClick={() => router.push("/owner/enterprise")}
             className="mt-6 w-full py-2.5 text-center text-xs font-semibold bg-[#F9FAFB] dark:bg-neutral-900 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200/50 dark:border-neutral-700/50 rounded-xl transition-colors cursor-pointer"
+            onClick={() => router.push("/owner/enterprise")}
           >
             view all of the sovereign accounts
           </button>
@@ -145,7 +155,11 @@ export default function DashboardConsoleView() {
                 Monthly Recurring Revenues
               </span>
               <span className="text-[36px] font-bold text-neutral-950 dark:text-white leading-none mt-2 animate-fade-in">
-                ${metrics.monthlyRecurringRevenue.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                $
+                {metrics.monthlyRecurringRevenue.toLocaleString("en-US", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
               </span>
             </div>
             <CreditCard className="w-5 h-5 text-neutral-400 dark:text-neutral-500" />
@@ -160,7 +174,11 @@ export default function DashboardConsoleView() {
                 Annual Recurring Revenues
               </span>
               <span className="text-[36px] font-bold text-neutral-950 dark:text-white leading-none mt-2 animate-fade-in">
-                ${metrics.annualRecurringRevenue.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                $
+                {metrics.annualRecurringRevenue.toLocaleString("en-US", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
               </span>
             </div>
             <TrendingUp className="w-5 h-5 text-neutral-400 dark:text-neutral-500" />

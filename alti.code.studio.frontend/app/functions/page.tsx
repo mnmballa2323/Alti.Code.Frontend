@@ -48,11 +48,7 @@ function FunctionsPageContent() {
 
 export default function FunctionsPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="h-full w-full bg-transparent" />
-      }
-    >
+    <Suspense fallback={<div className="h-full w-full bg-transparent" />}>
       <FunctionsPageContent />
     </Suspense>
   );

@@ -21,6 +21,7 @@ function PaymentSuccessContent() {
           clearInterval(timer);
           // Redirect based on user role
           const role = (session?.user as any)?.role;
+
           if (role === "owner") {
             router.push("/owner/dashboard");
           } else if (role === "admin") {
@@ -28,8 +29,10 @@ function PaymentSuccessContent() {
           } else {
             router.push("/new-chat");
           }
+
           return 0;
         }
+
         return prev - 1;
       });
     }, 1000);
@@ -75,8 +78,10 @@ function PaymentSuccessContent() {
 
         {/* Manual CTA */}
         <button
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-black dark:bg-white text-white dark:text-black font-semibold text-sm hover:bg-neutral-900 dark:hover:bg-neutral-100 transition-all duration-300 active:scale-[0.98]"
           onClick={() => {
             const role = (session?.user as any)?.role;
+
             if (role === "owner") {
               router.push("/owner/dashboard");
             } else if (role === "admin") {
@@ -85,7 +90,6 @@ function PaymentSuccessContent() {
               router.push("/new-chat");
             }
           }}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-black dark:bg-white text-white dark:text-black font-semibold text-sm hover:bg-neutral-900 dark:hover:bg-neutral-100 transition-all duration-300 active:scale-[0.98]"
         >
           Go to Dashboard
           <ArrowRight className="w-4 h-4" />
@@ -104,7 +108,11 @@ function PaymentSuccessContent() {
 
 export default function PaymentSuccessPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0A0A0A]" />}>
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#0A0A0A]" />
+      }
+    >
       <PaymentSuccessContent />
     </Suspense>
   );

@@ -57,18 +57,59 @@ export default function DatabaseConnectorsSection() {
     {
       name: "Cosmos DB",
       icon: (
-        <svg className="w-8 h-8" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          className="w-8 h-8"
+          fill="none"
+          viewBox="0 0 18 18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <defs>
-            <linearGradient id="cosmosGrad" x1="9" y1="0" x2="9" y2="18" gradientUnits="userSpaceOnUse">
+            <linearGradient
+              gradientUnits="userSpaceOnUse"
+              id="cosmosGrad"
+              x1="9"
+              x2="9"
+              y1="0"
+              y2="18"
+            >
               <stop stopColor="#76B8F0" />
               <stop offset="1" stopColor="#0062AD" />
             </linearGradient>
           </defs>
-          <path d="M9 1C4.58 1 1 4.58 1 9s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8z" fill="url(#cosmosGrad)" />
-          <ellipse cx="9" cy="9" rx="7" ry="3" stroke="white" strokeWidth="0.7" fill="none" transform="rotate(-30 9 9)" />
-          <ellipse cx="9" cy="9" rx="7" ry="3" stroke="white" strokeWidth="0.7" fill="none" transform="rotate(30 9 9)" />
-          <ellipse cx="9" cy="9" rx="7" ry="3" stroke="white" strokeWidth="0.7" fill="none" />
-          <circle cx="9" cy="9" r="1.5" fill="white" />
+          <path
+            d="M9 1C4.58 1 1 4.58 1 9s3.58 8 8 8 8-3.58 8-8-3.58-8-8-8z"
+            fill="url(#cosmosGrad)"
+          />
+          <ellipse
+            cx="9"
+            cy="9"
+            fill="none"
+            rx="7"
+            ry="3"
+            stroke="white"
+            strokeWidth="0.7"
+            transform="rotate(-30 9 9)"
+          />
+          <ellipse
+            cx="9"
+            cy="9"
+            fill="none"
+            rx="7"
+            ry="3"
+            stroke="white"
+            strokeWidth="0.7"
+            transform="rotate(30 9 9)"
+          />
+          <ellipse
+            cx="9"
+            cy="9"
+            fill="none"
+            rx="7"
+            ry="3"
+            stroke="white"
+            strokeWidth="0.7"
+          />
+          <circle cx="9" cy="9" fill="white" r="1.5" />
         </svg>
       ),
     },
@@ -85,18 +126,59 @@ export default function DatabaseConnectorsSection() {
     {
       name: "Azure SQL",
       icon: (
-        <svg className="w-8 h-8" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg
+          className="w-8 h-8"
+          fill="none"
+          viewBox="0 0 18 18"
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <defs>
-            <linearGradient id="azureSqlGrad" x1="9" y1="1" x2="9" y2="17" gradientUnits="userSpaceOnUse">
+            <linearGradient
+              gradientUnits="userSpaceOnUse"
+              id="azureSqlGrad"
+              x1="9"
+              x2="9"
+              y1="1"
+              y2="17"
+            >
               <stop stopColor="#54AEF0" />
               <stop offset="1" stopColor="#1B6AC2" />
             </linearGradient>
           </defs>
-          <rect x="1" y="1" width="16" height="16" rx="2" fill="url(#azureSqlGrad)" />
-          <ellipse cx="9" cy="5.5" rx="5" ry="2" fill="white" fillOpacity="0.9" />
-          <path d="M4 5.5v7c0 1.1 2.24 2 5 2s5-.9 5-2v-7" stroke="white" strokeWidth="0.8" fill="none" />
-          <path d="M4 9c0 1.1 2.24 2 5 2s5-.9 5-2" stroke="white" strokeWidth="0.6" fill="none" />
-          <path d="M4 12c0 1.1 2.24 2 5 2s5-.9 5-2" stroke="white" strokeWidth="0.6" fill="none" />
+          <rect
+            fill="url(#azureSqlGrad)"
+            height="16"
+            rx="2"
+            width="16"
+            x="1"
+            y="1"
+          />
+          <ellipse
+            cx="9"
+            cy="5.5"
+            fill="white"
+            fillOpacity="0.9"
+            rx="5"
+            ry="2"
+          />
+          <path
+            d="M4 5.5v7c0 1.1 2.24 2 5 2s5-.9 5-2v-7"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.8"
+          />
+          <path
+            d="M4 9c0 1.1 2.24 2 5 2s5-.9 5-2"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.6"
+          />
+          <path
+            d="M4 12c0 1.1 2.24 2 5 2s5-.9 5-2"
+            fill="none"
+            stroke="white"
+            strokeWidth="0.6"
+          />
         </svg>
       ),
     },

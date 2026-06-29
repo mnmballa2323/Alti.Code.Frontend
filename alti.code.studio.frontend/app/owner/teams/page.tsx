@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Loader2, Search, ChevronRight, Globe, User, Plus, X } from "lucide-react";
+import { Loader2, Search, ChevronRight, User, Plus, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
@@ -44,7 +44,7 @@ const DUMMY_TEAMS: TenantInfo[] = [
     status: "suspended",
     owner: "lucius.fox@wayne.com",
     userCount: 4,
-  }
+  },
 ];
 
 export default function TeamsPage() {
@@ -63,9 +63,11 @@ export default function TeamsPage() {
   const fetchTenants = async () => {
     try {
       const res = await adminAPI.listTenants();
+
       if (res && Array.isArray(res)) {
         // Filter for Dedicated tier (starter plan)
         const starterTenants = res.filter((t: any) => t.plan === "starter");
+
         setTenants(starterTenants.length > 0 ? starterTenants : DUMMY_TEAMS);
       } else {
         setTenants(DUMMY_TEAMS);
@@ -111,6 +113,7 @@ export default function TeamsPage() {
   // Filter based on search query
   const filteredTenants = tenants.filter((t) => {
     const query = searchQuery.toLowerCase();
+
     return (
       t.name.toLowerCase().includes(query) ||
       (t.domain && t.domain.toLowerCase().includes(query)) ||
@@ -136,8 +139,8 @@ export default function TeamsPage() {
               />
             </div>
             <button
-              onClick={() => setIsCreateModalOpen(true)}
               className="px-5 py-3 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-100 text-white dark:text-black font-semibold text-sm rounded-2xl transition-all shadow-sm flex items-center gap-2 cursor-pointer shrink-0"
+              onClick={() => setIsCreateModalOpen(true)}
             >
               <Plus className="w-4 h-4" />
               <span>Add Account</span>
@@ -177,7 +180,9 @@ export default function TeamsPage() {
 
                 <div className="col-span-3 flex items-center gap-2 text-neutral-500 dark:text-neutral-400 font-normal min-w-0">
                   <User className="w-3.5 h-3.5 shrink-0" />
-                  <span className="truncate">{tenant.owner || "No owner assigned"}</span>
+                  <span className="truncate">
+                    {tenant.owner || "No owner assigned"}
+                  </span>
                 </div>
 
                 <div className="col-span-3 text-neutral-600 dark:text-neutral-400 font-normal">
@@ -210,7 +215,7 @@ export default function TeamsPage() {
             className="absolute inset-0 bg-black/45 dark:bg-black/60 backdrop-blur-sm"
             onClick={() => setIsCreateModalOpen(false)}
           />
-          
+
           {/* Modal content */}
           <div className="relative bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl w-full max-w-md p-6 shadow-2xl animate-fade-in text-neutral-800 dark:text-neutral-100 mx-4">
             <button
@@ -224,16 +229,16 @@ export default function TeamsPage() {
               Add Dedicated Account
             </h2>
 
-            <form onSubmit={handleCreateTenant} className="space-y-4">
+            <form className="space-y-4" onSubmit={handleCreateTenant}>
               <div>
                 <label className="block text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
                   Account Name
                 </label>
                 <input
-                  type="text"
                   required
-                  placeholder="e.g. Acme Corp"
                   className="w-full px-4 py-3 bg-neutral-50 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-850 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all text-neutral-800 dark:text-neutral-200"
+                  placeholder="e.g. Acme Corp"
+                  type="text"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                 />
@@ -244,9 +249,9 @@ export default function TeamsPage() {
                   Custom Domain (Optional)
                 </label>
                 <input
-                  type="text"
-                  placeholder="e.g. acme.alticodestudio.com"
                   className="w-full px-4 py-3 bg-neutral-50 dark:bg-[#1f242c] border border-neutral-200 dark:border-neutral-855 rounded-2xl text-sm focus:outline-none focus:ring-1 focus:ring-neutral-300 dark:focus:ring-neutral-700 transition-all text-neutral-800 dark:text-neutral-200"
+                  placeholder="e.g. acme.alticodestudio.com"
+                  type="text"
                   value={newDomain}
                   onChange={(e) => setNewDomain(e.target.value)}
                 />
@@ -254,16 +259,16 @@ export default function TeamsPage() {
 
               <div className="flex justify-end gap-3 pt-2">
                 <button
-                  type="button"
                   className="px-5 py-3 text-sm font-semibold text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors focus:outline-none cursor-pointer"
+                  type="button"
                   onClick={() => setIsCreateModalOpen(false)}
                 >
                   Cancel
                 </button>
                 <button
-                  type="submit"
-                  disabled={isCreating}
                   className="px-5 py-3 text-sm font-semibold text-white bg-black hover:bg-neutral-900 dark:bg-white dark:text-black dark:hover:bg-neutral-100 rounded-2xl transition-colors focus:outline-none cursor-pointer flex items-center justify-center gap-2"
+                  disabled={isCreating}
+                  type="submit"
                 >
                   {isCreating ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

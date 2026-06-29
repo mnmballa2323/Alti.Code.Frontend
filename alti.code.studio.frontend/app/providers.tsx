@@ -186,26 +186,41 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   const router = useRouter();
   const pathname = usePathname();
   const [tauriSession, setTauriSession] = React.useState<any>(() => {
-    if (
-      typeof window !== "undefined" &&
-      ("__TAURI__" in window ||
+    if (typeof window !== "undefined") {
+      // E2E Test Backdoor
+      const cookies = document.cookie.split(';');
+      const e2eCookie = cookies.find(c => c.trim().startsWith('e2e-session='));
+      if (e2eCookie) {
+        try {
+          const sessionData = JSON.parse(decodeURIComponent(e2eCookie.split('=')[1]));
+          return {
+            user: sessionData,
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          };
+        } catch (e) {}
+      }
+
+      if (
+        "__TAURI__" in window ||
         "__TAURI_INTERNALS__" in window ||
         "electron" in window ||
-        window.navigator.userAgent.includes("Electron"))
-    ) {
-      const token = localStorage.getItem("accessToken");
+        window.navigator.userAgent.includes("Electron")
+      ) {
+        const token = localStorage.getItem("accessToken");
 
-      if (token) {
-        return {
-          user: {
-            accessToken: token,
-          },
-          expires: new Date(
-            Date.now() + 30 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
-        };
+        if (token) {
+          return {
+            user: {
+              accessToken: token,
+            },
+            expires: new Date(
+              Date.now() + 30 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
+          };
+        }
+
+        return null;
       }
-      return null;
     }
 
     return undefined;

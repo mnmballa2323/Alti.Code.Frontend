@@ -1,53 +1,109 @@
 "use client";
 
 import React from "react";
-import { Download, ChevronDown, Trash2 } from "lucide-react";
+import { ChevronDown, Trash2 } from "lucide-react";
 
 export default function MembersPage() {
   const mockMembers = [
-    { firstName: "Michael", lastName: "Meram", email: "meram.michael@gmail.com", role: "Admin", isYou: true },
-    { firstName: "Sarah", lastName: "Connor", email: "sarah.connor@sky-net.com", role: "Admin", isYou: false },
-    { firstName: "John", lastName: "Doe", email: "john.doe@example.com", role: "Member", isYou: false },
-    { firstName: "Alex", lastName: "Smith", email: "alex.smith@techcorp.com", role: "Member", isYou: false },
-    { firstName: "Emily", lastName: "Watson", email: "emily.watson@designco.io", role: "Member", isYou: false },
-    { firstName: "David", lastName: "Miller", email: "david.miller@devs.net", role: "Member", isYou: false },
-    { firstName: "Jessica", lastName: "Taylor", email: "jessica.taylor@startup.co", role: "Member", isYou: false },
+    {
+      firstName: "Michael",
+      lastName: "Meram",
+      email: "meram.michael@gmail.com",
+      role: "Admin",
+      isYou: true,
+    },
+    {
+      firstName: "Sarah",
+      lastName: "Connor",
+      email: "sarah.connor@sky-net.com",
+      role: "Admin",
+      isYou: false,
+    },
+    {
+      firstName: "John",
+      lastName: "Doe",
+      email: "john.doe@example.com",
+      role: "Member",
+      isYou: false,
+    },
+    {
+      firstName: "Alex",
+      lastName: "Smith",
+      email: "alex.smith@techcorp.com",
+      role: "Member",
+      isYou: false,
+    },
+    {
+      firstName: "Emily",
+      lastName: "Watson",
+      email: "emily.watson@designco.io",
+      role: "Member",
+      isYou: false,
+    },
+    {
+      firstName: "David",
+      lastName: "Miller",
+      email: "david.miller@devs.net",
+      role: "Member",
+      isYou: false,
+    },
+    {
+      firstName: "Jessica",
+      lastName: "Taylor",
+      email: "jessica.taylor@startup.co",
+      role: "Member",
+      isYou: false,
+    },
   ];
 
   const [members, setMembers] = React.useState(mockMembers);
-  const [activeDropdownIndex, setActiveDropdownIndex] = React.useState<number | null>(null);
-  const [memberToRemove, setMemberToRemove] = React.useState<typeof mockMembers[0] | null>(null);
+  const [activeDropdownIndex, setActiveDropdownIndex] = React.useState<
+    number | null
+  >(null);
+  const [memberToRemove, setMemberToRemove] = React.useState<
+    (typeof mockMembers)[0] | null
+  >(null);
   const [indexToRemove, setIndexToRemove] = React.useState<number | null>(null);
   const activeDropdownRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     async function loadMembers() {
       try {
-        const token = typeof window !== "undefined" ? localStorage.getItem("token") || "" : "";
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/admin/all-user`, {
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          }
-        });
+        const token =
+          typeof window !== "undefined"
+            ? localStorage.getItem("token") || ""
+            : "";
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1"}/admin/all-user`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
         if (res.ok) {
           const result = await res.json();
           // If the backend returns users list
           const usersList = result?.data || result;
+
           if (Array.isArray(usersList)) {
-            const formatted = usersList.map(u => {
+            const formatted = usersList.map((u) => {
               const emailStr = u.email || "";
               const nameParts = (u.name || "").split(" ");
+
               return {
                 firstName: u.firstName || nameParts[0] || "User",
                 lastName: u.lastName || nameParts[1] || "",
                 email: emailStr,
                 role: u.role === "admin" ? "Admin" : "Member",
-                isYou: emailStr.toLowerCase() === "meram.michael@gmail.com"
+                isYou: emailStr.toLowerCase() === "meram.michael@gmail.com",
               };
             });
             // Keep the 'You' admin row at the top or ensure it exists
-            const hasYou = formatted.some(u => u.isYou);
+            const hasYou = formatted.some((u) => u.isYou);
+
             if (!hasYou) {
               setMembers([mockMembers[0], ...formatted]);
             } else {
@@ -64,22 +120,28 @@ export default function MembersPage() {
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (activeDropdownRef.current && !activeDropdownRef.current.contains(event.target as Node)) {
+      if (
+        activeDropdownRef.current &&
+        !activeDropdownRef.current.contains(event.target as Node)
+      ) {
         setActiveDropdownIndex(null);
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
+
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [activeDropdownIndex]);
 
   const handleRoleChange = (index: number, newRole: string) => {
     const updatedMembers = [...members];
+
     updatedMembers[index].role = newRole;
     setMembers(updatedMembers);
   };
 
   const handleRemoveMember = (index: number) => {
     const updatedMembers = members.filter((_, i) => i !== index);
+
     setMembers(updatedMembers);
   };
 
@@ -105,41 +167,50 @@ export default function MembersPage() {
               <div>{member.lastName}</div>
               <div>{member.email}</div>
               <div className="flex items-center justify-between w-full pr-0 relative">
-                <div className="relative" ref={activeDropdownIndex === i ? activeDropdownRef : null}>
+                <div
+                  ref={activeDropdownIndex === i ? activeDropdownRef : null}
+                  className="relative"
+                >
                   {member.isYou ? (
                     <span className="font-medium text-neutral-700 dark:text-neutral-300">
                       {member.role}
                     </span>
                   ) : (
                     <button
-                      type="button"
-                      onClick={() => setActiveDropdownIndex(activeDropdownIndex === i ? null : i)}
                       className="flex items-center gap-1 hover:bg-neutral-50 dark:hover:bg-neutral-800 px-2 py-1 -mx-2 rounded-lg transition-colors text-left font-medium text-sm text-neutral-700 dark:text-neutral-300 focus:outline-none"
+                      type="button"
+                      onClick={() =>
+                        setActiveDropdownIndex(
+                          activeDropdownIndex === i ? null : i,
+                        )
+                      }
                     >
                       <span>{member.role}</span>
-                      <ChevronDown className={`w-3.5 h-3.5 text-neutral-400 transition-all duration-200 ${activeDropdownIndex === i ? "opacity-100 rotate-180" : "opacity-0 group-hover:opacity-100"}`} />
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 text-neutral-400 transition-all duration-200 ${activeDropdownIndex === i ? "opacity-100 rotate-180" : "opacity-0 group-hover:opacity-100"}`}
+                      />
                     </button>
                   )}
 
                   {activeDropdownIndex === i && (
                     <div className="absolute left-0 mt-2 w-28 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-lg z-50 overflow-hidden py-1 animate-fade-in animate-slide-up">
                       <button
+                        className={`w-full px-4 py-2 text-left text-xs transition-colors ${member.role === "Admin" ? "bg-neutral-50 dark:bg-neutral-800 font-bold text-neutral-900 dark:text-white" : "text-neutral-750 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"}`}
                         type="button"
                         onClick={() => {
                           handleRoleChange(i, "Admin");
                           setActiveDropdownIndex(null);
                         }}
-                        className={`w-full px-4 py-2 text-left text-xs transition-colors ${member.role === "Admin" ? "bg-neutral-50 dark:bg-neutral-800 font-bold text-neutral-900 dark:text-white" : "text-neutral-750 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"}`}
                       >
                         Admin
                       </button>
                       <button
+                        className={`w-full px-4 py-2 text-left text-xs transition-colors ${member.role === "Member" ? "bg-neutral-50 dark:bg-neutral-800 font-bold text-neutral-900 dark:text-white" : "text-neutral-750 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"}`}
                         type="button"
                         onClick={() => {
                           handleRoleChange(i, "Member");
                           setActiveDropdownIndex(null);
                         }}
-                        className={`w-full px-4 py-2 text-left text-xs transition-colors ${member.role === "Member" ? "bg-neutral-50 dark:bg-neutral-800 font-bold text-neutral-900 dark:text-white" : "text-neutral-750 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"}`}
                       >
                         Member
                       </button>
@@ -152,13 +223,13 @@ export default function MembersPage() {
                   </span>
                 ) : (
                   <button
+                    className="p-1 text-neutral-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded transition-all opacity-0 group-hover:opacity-100 focus:outline-none shrink-0"
+                    title="Remove member"
                     type="button"
                     onClick={() => {
                       setMemberToRemove(member);
                       setIndexToRemove(i);
                     }}
-                    className="p-1 text-neutral-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded transition-all opacity-0 group-hover:opacity-100 focus:outline-none shrink-0"
-                    title="Remove member"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -177,27 +248,31 @@ export default function MembersPage() {
               Remove Member
             </h3>
             <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2 leading-relaxed">
-              Are you sure you want to remove <span className="font-bold text-neutral-800 dark:text-neutral-200">{memberToRemove.firstName} {memberToRemove.lastName}</span> from your team? This action cannot be undone.
+              Are you sure you want to remove{" "}
+              <span className="font-bold text-neutral-800 dark:text-neutral-200">
+                {memberToRemove.firstName} {memberToRemove.lastName}
+              </span>{" "}
+              from your team? This action cannot be undone.
             </p>
             <div className="flex justify-end gap-2.5 mt-5">
               <button
+                className="px-3.5 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 text-xs font-semibold rounded-lg transition-colors focus:outline-none"
                 type="button"
                 onClick={() => {
                   setMemberToRemove(null);
                   setIndexToRemove(null);
                 }}
-                className="px-3.5 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 text-xs font-semibold rounded-lg transition-colors focus:outline-none"
               >
                 Cancel
               </button>
               <button
+                className="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg transition-colors focus:outline-none"
                 type="button"
                 onClick={() => {
                   handleRemoveMember(indexToRemove);
                   setMemberToRemove(null);
                   setIndexToRemove(null);
                 }}
-                className="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg transition-colors focus:outline-none"
               >
                 Remove
               </button>

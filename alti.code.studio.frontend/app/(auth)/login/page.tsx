@@ -5,7 +5,6 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
-import Link from "next/link";
 import { Icon } from "@iconify/react";
 
 import { Button } from "@/components/ui/button";
@@ -29,6 +28,7 @@ export default function LoginPage() {
         window.navigator.userAgent.includes("Electron")
       );
     }
+
     return false;
   });
 
@@ -77,7 +77,8 @@ export default function LoginPage() {
       }
 
       if (response.data?.accessToken) {
-        const isTauri = typeof window !== "undefined" &&
+        const isTauri =
+          typeof window !== "undefined" &&
           ("__TAURI__" in window ||
             "electron" in window ||
             window.navigator.userAgent.includes("Electron"));
@@ -90,6 +91,7 @@ export default function LoginPage() {
         if (isTauri && process.env.NODE_ENV === "production") {
           toast.success("Login successful!");
           window.location.href = "/new-chat";
+
           return;
         }
 
@@ -114,7 +116,9 @@ export default function LoginPage() {
       }
     } catch (error: any) {
       console.error("Login fetch error:", error);
-      toast.error(`Login error: ${error.message || String(error)} | URL: ${process.env.NEXT_PUBLIC_API_URL}`);
+      toast.error(
+        `Login error: ${error.message || String(error)} | URL: ${process.env.NEXT_PUBLIC_API_URL}`,
+      );
     } finally {
       toast.dismiss(loading);
     }
@@ -282,7 +286,6 @@ export default function LoginPage() {
           <span className="desktop-only-block hidden">Build The Future</span>
           <span className="web-only">Welcome Back</span>
         </h1>
-
       </div>
 
       <div className="flex flex-col gap-5 mt-2">
@@ -293,7 +296,8 @@ export default function LoginPage() {
               classNames={{
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
-                input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                input:
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               name="email"
               placeholder="Enter Email"
@@ -307,7 +311,8 @@ export default function LoginPage() {
               classNames={{
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
-                input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                input:
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               endContent={
                 passwordValue.length > 0 && (

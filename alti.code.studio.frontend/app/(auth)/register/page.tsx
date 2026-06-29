@@ -27,6 +27,7 @@ export default function RegisterPage() {
 
     if (!companyName || !companyName.trim()) {
       toast.error("Company Name is required");
+
       return;
     }
 
@@ -37,10 +38,27 @@ export default function RegisterPage() {
     }
 
     // Validate corporate domain
-    const personalDomains = ["gmail.com", "yahoo.com", "hotmail.com", "outlook.com", "icloud.com", "aol.com", "zoho.com", "proton.me", "protonmail.com", "gmx.com", "yandex.com", "mail.com"];
+    const personalDomains = [
+      "gmail.com",
+      "yahoo.com",
+      "hotmail.com",
+      "outlook.com",
+      "icloud.com",
+      "aol.com",
+      "zoho.com",
+      "proton.me",
+      "protonmail.com",
+      "gmx.com",
+      "yandex.com",
+      "mail.com",
+    ];
     const emailDomain = email.split("@")[1]?.toLowerCase();
+
     if (emailDomain && personalDomains.includes(emailDomain)) {
-      toast.error("Please use a valid company email address (personal emails not allowed).");
+      toast.error(
+        "Please use a valid company email address (personal emails not allowed).",
+      );
+
       return;
     }
 
@@ -100,7 +118,8 @@ export default function RegisterPage() {
               classNames={{
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
-                input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                input:
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               name="companyName"
               placeholder="Company Name"
@@ -115,7 +134,8 @@ export default function RegisterPage() {
               classNames={{
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
-                input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                input:
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               name="email"
               placeholder="Company Email"
@@ -129,7 +149,8 @@ export default function RegisterPage() {
               classNames={{
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
-                input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                input:
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               endContent={
                 passwordValue.length > 0 && (
@@ -190,7 +211,8 @@ export default function RegisterPage() {
               classNames={{
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
-                input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                input:
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               endContent={
                 confirmPasswordValue.length > 0 && (

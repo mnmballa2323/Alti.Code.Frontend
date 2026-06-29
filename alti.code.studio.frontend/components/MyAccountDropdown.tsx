@@ -27,7 +27,7 @@ const MyAccountDropdown = () => {
       typeof window !== "undefined" &&
         ("__TAURI__" in window ||
           "electron" in window ||
-          window.navigator.userAgent.includes("Electron"))
+          window.navigator.userAgent.includes("Electron")),
     );
     (async () => {
       try {
@@ -60,17 +60,18 @@ const MyAccountDropdown = () => {
           className="w-[var(--radix-dropdown-menu-trigger-width)]"
         >
           <DropdownMenuGroup>
-            {!isDesktop && (profile?.role === "admin" || profile?.role === "ADMIN") && (
-              <DropdownMenuItem className="relative">
-                <span className="flex items-center space-x-2">
-                  <Shield className="size-5 text-indigo-400" />
-                  <Link href="/admin">
-                    <span className="absolute inset-0" />
-                    Admin Console
-                  </Link>
-                </span>
-              </DropdownMenuItem>
-            )}
+            {!isDesktop &&
+              (profile?.role === "admin" || profile?.role === "ADMIN") && (
+                <DropdownMenuItem className="relative">
+                  <span className="flex items-center space-x-2">
+                    <Shield className="size-5 text-indigo-400" />
+                    <Link href="/admin">
+                      <span className="absolute inset-0" />
+                      Admin Console
+                    </Link>
+                  </span>
+                </DropdownMenuItem>
+              )}
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />

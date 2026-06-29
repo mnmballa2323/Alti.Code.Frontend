@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Users, CreditCard, Landmark, ChevronDown } from "lucide-react";
+import { CreditCard, Landmark, ChevronDown } from "lucide-react";
 
 export default function BillingPage() {
   const [activeSeats, setActiveSeats] = React.useState(7);
@@ -16,7 +16,7 @@ export default function BillingPage() {
   }>({
     type: "card",
     details: "•••• 4242",
-    extra: "Visa"
+    extra: "Visa",
   });
 
   const [holderType, setHolderType] = React.useState("");
@@ -29,7 +29,7 @@ export default function BillingPage() {
     setActivePaymentMethod({
       type: "card",
       details: "•••• 4242",
-      extra: "Visa"
+      extra: "Visa",
     });
   };
 
@@ -37,23 +37,26 @@ export default function BillingPage() {
     setActivePaymentMethod({
       type: "ach",
       details: "Chase •••• 9103",
-      extra: "ACH"
+      extra: "ACH",
     });
   };
 
   return (
     <div className="w-full pt-6">
       <div className="flex flex-col gap-6 w-full">
-        
         {/* Floating Box Cards in a Row for the Plan & Card Part */}
         <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
           {/* Card 1: Plan Type */}
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm relative flex flex-col justify-between h-28">
-            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Plan</div>
+            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
+              Plan
+            </div>
             <div className="flex items-baseline justify-between mt-2">
-              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">Pro SaaS</span>
+              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                Pro SaaS
+              </span>
               <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-green-50 dark:bg-green-950/30 text-green-600 dark:text-green-400 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
                 Active
               </span>
             </div>
@@ -61,25 +64,39 @@ export default function BillingPage() {
 
           {/* Card 2: Active Seats */}
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
-            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Seats</div>
+            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
+              Seats
+            </div>
             <div className="flex items-baseline justify-between mt-2">
-              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">{activeSeats} Active</span>
-              <span className="text-[10px] text-neutral-400 font-semibold">${seatPrice}/seat</span>
+              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                {activeSeats} Active
+              </span>
+              <span className="text-[10px] text-neutral-400 font-semibold">
+                ${seatPrice}/seat
+              </span>
             </div>
           </div>
 
           {/* Card 3: Monthly Cost */}
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
-            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Total Monthly</div>
+            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
+              Total Monthly
+            </div>
             <div className="flex items-baseline justify-between mt-2">
-              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">${totalAmount}.00</span>
-              <span className="text-[10px] text-neutral-400 font-semibold">USD</span>
+              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                ${totalAmount}.00
+              </span>
+              <span className="text-[10px] text-neutral-400 font-semibold">
+                USD
+              </span>
             </div>
           </div>
 
           {/* Card 4: Payment Method */}
           <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
-            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">Payment</div>
+            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
+              Payment
+            </div>
             <div className="flex items-baseline justify-between mt-2">
               <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
                 {activePaymentMethod.details}
@@ -94,17 +111,17 @@ export default function BillingPage() {
         {/* Payment Method Selector Tabs */}
         <div className="flex border-b border-neutral-100 dark:border-neutral-800 gap-6 mt-4">
           <button
+            className={`pb-3 text-xs font-bold uppercase tracking-wider transition-colors focus:outline-none flex items-center gap-1.5 ${paymentType === "card" ? "border-b-2 border-black dark:border-white text-neutral-900 dark:text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"}`}
             type="button"
             onClick={() => setPaymentType("card")}
-            className={`pb-3 text-xs font-bold uppercase tracking-wider transition-colors focus:outline-none flex items-center gap-1.5 ${paymentType === "card" ? "border-b-2 border-black dark:border-white text-neutral-900 dark:text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"}`}
           >
             <CreditCard className="w-3.5 h-3.5" />
             Credit Card
           </button>
           <button
+            className={`pb-3 text-xs font-bold uppercase tracking-wider transition-colors focus:outline-none flex items-center gap-1.5 ${paymentType === "ach" ? "border-b-2 border-black dark:border-white text-neutral-900 dark:text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"}`}
             type="button"
             onClick={() => setPaymentType("ach")}
-            className={`pb-3 text-xs font-bold uppercase tracking-wider transition-colors focus:outline-none flex items-center gap-1.5 ${paymentType === "ach" ? "border-b-2 border-black dark:border-white text-neutral-900 dark:text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"}`}
           >
             <Landmark className="w-3.5 h-3.5" />
             ACH Bank Debit
@@ -118,27 +135,27 @@ export default function BillingPage() {
             <div className="flex flex-col gap-6 mt-2">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <input
-                  type="text"
-                  placeholder="Enter Cardholder Name"
                   className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                  placeholder="Enter Cardholder Name"
+                  type="text"
                 />
                 <input
-                  type="text"
-                  placeholder="Enter Card Number"
                   className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                  placeholder="Enter Card Number"
+                  type="text"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <input
-                  type="text"
-                  placeholder="MM / YY"
                   className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                  placeholder="MM / YY"
+                  type="text"
                 />
                 <input
-                  type="text"
-                  placeholder="CVC"
                   className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                  placeholder="CVC"
+                  type="text"
                 />
               </div>
             </div>
@@ -149,12 +166,13 @@ export default function BillingPage() {
                 <span className="font-bold text-neutral-900 dark:text-neutral-200">
                   Stripe Security Notice:
                 </span>{" "}
-                Your card information is encrypted and securely saved via Stripe Vault.
+                Your card information is encrypted and securely saved via Stripe
+                Vault.
               </p>
               <button
+                className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg shadow-sm focus:outline-none"
                 type="button"
                 onClick={handleSaveCard}
-                className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg shadow-sm focus:outline-none"
               >
                 Save Card
               </button>
@@ -169,40 +187,59 @@ export default function BillingPage() {
               <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
                 <div className="sm:col-span-2">
                   <input
-                    type="text"
-                    placeholder="Account Holder Name"
                     className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                    placeholder="Account Holder Name"
+                    type="text"
                   />
                 </div>
-                
+
                 {/* Custom Holder Type Dropdown */}
                 <div className="relative">
                   {isHolderOpen && (
-                    <div className="fixed inset-0 z-40" onClick={() => setIsHolderOpen(false)} />
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setIsHolderOpen(false)}
+                    />
                   )}
                   <button
+                    className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm text-left flex items-center justify-between shadow-sm focus:outline-none"
                     type="button"
                     onClick={() => setIsHolderOpen(!isHolderOpen)}
-                    className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm text-left flex items-center justify-between shadow-sm focus:outline-none"
                   >
-                    <span className={holderType === "" ? "text-neutral-400" : "text-neutral-800 dark:text-neutral-200"}>
-                      {holderType === "" ? "Select Holder Type" : holderType === "company" ? "Company" : "Individual"}
+                    <span
+                      className={
+                        holderType === ""
+                          ? "text-neutral-400"
+                          : "text-neutral-800 dark:text-neutral-200"
+                      }
+                    >
+                      {holderType === ""
+                        ? "Select Holder Type"
+                        : holderType === "company"
+                          ? "Company"
+                          : "Individual"}
                     </span>
                     <ChevronDown className="w-4 h-4 text-neutral-400 shrink-0" />
                   </button>
                   {isHolderOpen && (
                     <div className="absolute left-0 right-0 mt-1.5 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-xl shadow-lg py-1.5 z-50 overflow-hidden">
                       <button
-                        type="button"
-                        onClick={() => { setHolderType("company"); setIsHolderOpen(false); }}
                         className="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300 transition-colors"
+                        type="button"
+                        onClick={() => {
+                          setHolderType("company");
+                          setIsHolderOpen(false);
+                        }}
                       >
                         Company
                       </button>
                       <button
-                        type="button"
-                        onClick={() => { setHolderType("individual"); setIsHolderOpen(false); }}
                         className="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300 transition-colors"
+                        type="button"
+                        onClick={() => {
+                          setHolderType("individual");
+                          setIsHolderOpen(false);
+                        }}
                       >
                         Individual
                       </button>
@@ -213,31 +250,50 @@ export default function BillingPage() {
                 {/* Custom Account Type Dropdown */}
                 <div className="relative">
                   {isAccountOpen && (
-                    <div className="fixed inset-0 z-40" onClick={() => setIsAccountOpen(false)} />
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setIsAccountOpen(false)}
+                    />
                   )}
                   <button
+                    className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm text-left flex items-center justify-between shadow-sm focus:outline-none"
                     type="button"
                     onClick={() => setIsAccountOpen(!isAccountOpen)}
-                    className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm text-left flex items-center justify-between shadow-sm focus:outline-none"
                   >
-                    <span className={accountType === "" ? "text-neutral-400" : "text-neutral-800 dark:text-neutral-200"}>
-                      {accountType === "" ? "Select Account Type" : accountType === "checking" ? "Checking" : "Savings"}
+                    <span
+                      className={
+                        accountType === ""
+                          ? "text-neutral-400"
+                          : "text-neutral-800 dark:text-neutral-200"
+                      }
+                    >
+                      {accountType === ""
+                        ? "Select Account Type"
+                        : accountType === "checking"
+                          ? "Checking"
+                          : "Savings"}
                     </span>
                     <ChevronDown className="w-4 h-4 text-neutral-400 shrink-0" />
                   </button>
                   {isAccountOpen && (
                     <div className="absolute left-0 right-0 mt-1.5 bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-xl shadow-lg py-1.5 z-50 overflow-hidden">
                       <button
-                        type="button"
-                        onClick={() => { setAccountType("checking"); setIsAccountOpen(false); }}
                         className="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300 transition-colors"
+                        type="button"
+                        onClick={() => {
+                          setAccountType("checking");
+                          setIsAccountOpen(false);
+                        }}
                       >
                         Checking
                       </button>
                       <button
-                        type="button"
-                        onClick={() => { setAccountType("savings"); setIsAccountOpen(false); }}
                         className="w-full text-left px-4 py-2.5 text-xs font-semibold hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-700 dark:text-neutral-300 transition-colors"
+                        type="button"
+                        onClick={() => {
+                          setAccountType("savings");
+                          setIsAccountOpen(false);
+                        }}
                       >
                         Savings
                       </button>
@@ -248,14 +304,14 @@ export default function BillingPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <input
-                  type="text"
-                  placeholder="Bank Routing Number"
                   className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                  placeholder="Bank Routing Number"
+                  type="text"
                 />
                 <input
-                  type="text"
-                  placeholder="Bank Account Number"
                   className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
+                  placeholder="Bank Account Number"
+                  type="text"
                 />
               </div>
             </div>
@@ -266,19 +322,19 @@ export default function BillingPage() {
                 <span className="font-bold text-neutral-900 dark:text-neutral-200">
                   Stripe Financial Connections:
                 </span>{" "}
-                Bank accounts are securely linked and instantly verified for monthly recurring debits.
+                Bank accounts are securely linked and instantly verified for
+                monthly recurring debits.
               </p>
               <button
+                className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg shadow-sm focus:outline-none"
                 type="button"
                 onClick={handleLinkBank}
-                className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg shadow-sm focus:outline-none"
               >
                 Link Bank Account
               </button>
             </div>
           </>
         )}
-
       </div>
     </div>
   );

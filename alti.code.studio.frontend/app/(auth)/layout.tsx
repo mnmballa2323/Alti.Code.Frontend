@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 
 const STREAMING_CODE_LINES = [
   "import { SwarmRegistry } from '@inso/swarm-core';",
@@ -39,24 +39,29 @@ const STREAMING_CODE_LINES = [
   "",
   "// Initializing secure handshake...",
   "// VPC routing verified (us-central1)...",
-  "// Swarm session initialized."
+  "// Swarm session initialized.",
 ];
 
 function SubtleCodeStream() {
   const [lines, setLines] = useState<string[]>([]);
-  
+
   useEffect(() => {
     setLines(STREAMING_CODE_LINES.slice(0, 12));
-    
+
     let currentIndex = 12;
     const interval = setInterval(() => {
       setLines((prev) => {
-        const nextLines = [...prev.slice(1), STREAMING_CODE_LINES[currentIndex]];
+        const nextLines = [
+          ...prev.slice(1),
+          STREAMING_CODE_LINES[currentIndex],
+        ];
+
         currentIndex = (currentIndex + 1) % STREAMING_CODE_LINES.length;
+
         return nextLines;
       });
     }, 1500);
-    
+
     return () => clearInterval(interval);
   }, []);
 
@@ -65,9 +70,10 @@ function SubtleCodeStream() {
       <div className="flex flex-col gap-1 transition-all duration-500">
         {lines.map((line, idx) => {
           const isFadingOut = idx === 0 || idx === lines.length - 1;
+
           return (
-            <div 
-              key={idx} 
+            <div
+              key={idx}
               className={`whitespace-pre transition-opacity duration-500 ${
                 isFadingOut ? "opacity-30" : "opacity-100"
               }`}
@@ -95,6 +101,7 @@ export default function AuthLayout({
         window.navigator.userAgent.includes("Electron")
       );
     }
+
     return false;
   });
 
@@ -152,60 +159,54 @@ export default function AuthLayout({
 
       {/* Left Panel: Streaming Code Generation Terminal */}
       <div className="hidden lg:flex w-1/2 bg-[#050507] relative overflow-hidden flex-col justify-between p-16 border-r border-white/5 desktop-hide">
-          {/* Subtle grid pattern overlay */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+        {/* Subtle grid pattern overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
-          {/* Premium Ambient Glows */}
-          <div className="absolute top-[-25%] left-[-20%] w-[90%] h-[90%] rounded-full bg-blue-600/10 blur-[140px] pointer-events-none animate-float-1" />
-          <div className="absolute bottom-[-15%] right-[-10%] w-[75%] h-[75%] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none animate-float-2" />
-          <div
-            className="absolute top-[35%] right-[15%] w-[45%] h-[45%] rounded-full bg-cyan-500/5 blur-[90px] pointer-events-none animate-float-1"
-            style={{ animationDelay: "-4s" }}
-          />
+        {/* Premium Ambient Glows */}
+        <div className="absolute top-[-25%] left-[-20%] w-[90%] h-[90%] rounded-full bg-blue-600/10 blur-[140px] pointer-events-none animate-float-1" />
+        <div className="absolute bottom-[-15%] right-[-10%] w-[75%] h-[75%] rounded-full bg-violet-600/10 blur-[120px] pointer-events-none animate-float-2" />
+        <div
+          className="absolute top-[35%] right-[15%] w-[45%] h-[45%] rounded-full bg-cyan-500/5 blur-[90px] pointer-events-none animate-float-1"
+          style={{ animationDelay: "-4s" }}
+        />
 
-          {/* Top Header Row */}
-          <div className="relative z-20 flex items-center justify-between w-full">
-            <Link href="/">
-              <img
-                alt="Inso Logo Icon"
-                className="h-8 w-auto hover:opacity-80 transition-opacity cursor-pointer"
-                src="/logo-white.png"
-              />
-            </Link>
-            <Link
-              className="flex items-center gap-2 text-sm font-semibold text-neutral-400 hover:text-white transition-colors"
-              href="/"
-            >
-              <Icon className="text-lg" icon="solar:arrow-left-linear" />
-              Back to Home
-            </Link>
-          </div>
-
-          {/* Subtle Faded Code Stream in Center */}
-          <div className="relative z-10 flex-1 flex items-center justify-center py-8">
-            <SubtleCodeStream />
-          </div>
-
-          {/* Bottom Panel Text */}
-          <div className="relative z-20 w-full max-w-xl mt-auto">
-            <h2 className="text-4xl xl:text-5xl font-bold tracking-tight mb-4 leading-tight bg-gradient-to-br from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
-              Build the future.
-            </h2>
-            <p className="text-neutral-400 text-lg xl:text-xl font-medium leading-relaxed">
-              Join the inso code platform and accelerate your engineering team
-            </p>
-          </div>
+        {/* Top Header Row */}
+        <div className="relative z-20 flex items-center justify-between w-full">
+          <Link href="/">
+            <img
+              alt="Inso Logo Icon"
+              className="h-8 w-auto hover:opacity-80 transition-opacity cursor-pointer"
+              src="/logo-white.png"
+            />
+          </Link>
+          <Link
+            className="flex items-center gap-2 text-sm font-semibold text-neutral-400 hover:text-white transition-colors"
+            href="/"
+          >
+            <Icon className="text-lg" icon="solar:arrow-left-linear" />
+            Back to Home
+          </Link>
         </div>
+
+        {/* Subtle Faded Code Stream in Center */}
+        <div className="relative z-10 flex-1 flex items-center justify-center py-8">
+          <SubtleCodeStream />
+        </div>
+
+        {/* Bottom Panel Text */}
+        <div className="relative z-20 w-full max-w-xl mt-auto">
+          <h2 className="text-4xl xl:text-5xl font-bold tracking-tight mb-4 leading-tight bg-gradient-to-br from-white via-zinc-100 to-zinc-400 bg-clip-text text-transparent">
+            Build the future.
+          </h2>
+          <p className="text-neutral-400 text-lg xl:text-xl font-medium leading-relaxed">
+            Join the inso code platform and accelerate your engineering team
+          </p>
+        </div>
+      </div>
 
       {/* Right Panel: Auth Form */}
-      <div
-        className="w-full flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative desktop-full-width lg:w-1/2"
-      >
-        <div
-          className="w-full max-w-sm mt-20 lg:mt-12"
-        >
-          {children}
-        </div>
+      <div className="w-full flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative desktop-full-width lg:w-1/2">
+        <div className="w-full max-w-sm mt-20 lg:mt-12">{children}</div>
       </div>
     </div>
   );

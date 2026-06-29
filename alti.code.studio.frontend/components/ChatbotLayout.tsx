@@ -20,7 +20,8 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
   const { isGhostEditorOpen } = useSelector((state: RootState) => state.ui);
   const { data: session } = useSession();
   const pathname = usePathname();
-  const isNoSidebarRoute = pathname?.startsWith("/admin") || pathname?.startsWith("/owner");
+  const isNoSidebarRoute =
+    pathname?.startsWith("/admin") || pathname?.startsWith("/owner");
   const [isTauri, setIsTauri] = useState(false);
   const [headers, setHeaders] = useState<Record<string, string>>({});
 
