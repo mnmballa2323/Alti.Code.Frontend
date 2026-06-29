@@ -13,6 +13,7 @@ const Excalidraw = dynamic(
 );
 
 export default function ArchitectureStudio() {
+  // @ts-ignore - Bypass trpc typing collision
   const { data: health, isLoading } = trpc.health.useQuery(undefined, {
     retry: false,
   });

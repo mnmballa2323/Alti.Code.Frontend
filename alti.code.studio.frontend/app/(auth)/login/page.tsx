@@ -271,11 +271,7 @@ export default function LoginPage() {
         <h1 className="text-3xl font-semibold tracking-tight text-black">
           {isDesktopApp ? "Build The Future" : "Welcome Back"}
         </h1>
-        {isDesktopApp && (
-          <p className="text-gray-500 text-sm mt-2 font-medium whitespace-nowrap">
-            Login to the platform and 10x your software development.
-          </p>
-        )}
+
       </div>
 
       <div className="flex flex-col gap-5 mt-2">
