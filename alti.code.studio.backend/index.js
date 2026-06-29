@@ -57,7 +57,8 @@ marketSeeder.seed().catch(err => console.error('Failed to seed Agent Hub:', err)
 
 const allowedOrigins = [
     'https://alti.code.studio',
-    'https://app.alti.code.studio'
+    'https://app.alti.code.studio',
+    'https://www.insocode.com'
 ];
 
 if (config.env !== 'production') {
@@ -133,7 +134,8 @@ app.use(helmet());
 const cspConnectSrc = [
     "'self'",
     'https://alti.code.studio',
-    'https://app.alti.code.studio'
+    'https://app.alti.code.studio',
+    'https://www.insocode.com'
 ];
 const cspFrameAncestors = ["'self'"];
 
@@ -227,6 +229,9 @@ app.use('/api/trpc', trpcExpress.createExpressMiddleware({ router: appRouter }))
 import { prisma } from './src/config/prisma.js';
 import { redisClient } from './src/shared/redis.client.js';
 
+import Stripe from 'stripe';
+const stripeHealthClient = new Stripe(config.stripe?.stripe_secret_key || 'sk_test_dummy_key_to_prevent_crashes');
+
 // GCP Native Health Check (Liveness & Readiness Probes)
 app.get('/healthz', async (req, res) => {
     try {
@@ -236,10 +241,19 @@ app.get('/healthz', async (req, res) => {
         // Ping the caching layer (soft fail if redis is down but we check it)
         const redisStatus = redisClient.isEnabled ? 'connected' : 'disconnected';
         
+        // Ping Stripe API
+        let stripeStatus = 'connected';
+        try {
+            await stripeHealthClient.prices.list({ limit: 1 });
+        } catch(err) {
+            stripeStatus = `unreachable: ${err.message}`;
+        }
+        
         res.status(200).json({
             status: 'OK',
             database: 'connected',
             redis: redisStatus,
+            stripe: stripeStatus,
             timestamp: new Date().toISOString()
         });
     } catch (e) {
