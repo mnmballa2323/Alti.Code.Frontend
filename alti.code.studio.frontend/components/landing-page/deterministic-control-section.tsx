@@ -146,7 +146,7 @@ export default function DeterministicControlSection() {
   }, [agents.length]);
 
   return (
-    <section className="w-full py-32 bg-black text-white px-4 sm:px-6 lg:px-8 border-t border-zinc-900">
+    <section className="w-full py-32 bg-[#030014] text-white px-4 sm:px-6 lg:px-8 border-t border-slate-800">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
         {/* Left Column */}
         <div className="flex flex-col gap-8">

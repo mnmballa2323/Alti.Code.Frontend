@@ -14,7 +14,7 @@ const deployments = [
       />
     ),
     description:
-      "Deploy scalable and shared cloud compute resources optimized for rapid deployment while ensuring corporate compliance in public tenant zones.",
+      "Deploy scalable cloud compute resources optimized for rapid deployment while ensuring compliance in public zones.",
   },
   {
     name: "Dedicated Cloud",
@@ -27,7 +27,7 @@ const deployments = [
       />
     ),
     description:
-      "Deploy dedicated single tenant infrastructure featuring complete physical data isolation and advanced virtual networks for enterprise safety.",
+      "Deploy dedicated single tenant cloud infrastructure featuring complete physical data isolation and advanced virtual networks.",
   },
   {
     name: "Assured Workloads",
@@ -40,7 +40,7 @@ const deployments = [
       />
     ),
     description:
-      "Deploy compliant and isolated sovereign cloud instances certified for FedRAMP High and government regulations to secure sensitive public workloads.",
+      "Deploy compliant sovereign cloud instances certified for FedRAMP High and government regulations for sensitive public workloads.",
   },
 ];
 
@@ -59,7 +59,7 @@ export default function GcpSovereignSection() {
           <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium max-w-5xl">
             Deploy sovereign AI agent swarms on Google Cloud, Dedicated Cloud,
             and Assured Workloads environments. Enforce absolute compliance and
-            data isolation tailored to your organization.
+            strict physical data isolation tailored to your enterprise organization.
           </p>
         </div>
 

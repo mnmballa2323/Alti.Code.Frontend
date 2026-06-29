@@ -6,8 +6,8 @@ import { motion } from "framer-motion";
 
 export default function PairedProgrammerSection() {
   return (
-    <section className="w-full py-24 bg-black flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 border-t border-white/5 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-black to-black z-0 pointer-events-none" />
+    <section className="w-full py-24 bg-[#030014] flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 border-t border-white/5 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-b from-[#05001a] via-[#030014] to-[#030014] z-0 pointer-events-none" />
       <motion.div 
         initial="hidden"
         whileInView="visible"
@@ -79,7 +79,7 @@ function FeatureCard({
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } }
       }}
-      className="flex flex-col items-start text-left p-8 rounded-3xl bg-blue-950/20 backdrop-blur-xl border border-blue-900/40 hover:border-blue-800/60 hover:bg-blue-900/20 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-900/20 transition-all duration-300 relative group overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+      className="flex flex-col items-start text-left p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-white/[0.06] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] transition-all duration-300 relative group overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
     >
       <div className="absolute top-0 right-0 w-[200px] h-[200px] bg-blue-600/10 rounded-full blur-[60px] group-hover:bg-blue-500/20 transition-all duration-500" />
       <div className="mb-6 bg-blue-900/30 p-3 rounded-2xl border border-blue-800/50">

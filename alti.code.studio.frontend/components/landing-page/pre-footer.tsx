@@ -14,7 +14,7 @@ function PreFooter() {
   );
 
   return (
-    <div className="w-full bg-black py-6 md:py-8 lg:py-10 border-t border-white/5">
+    <div className="w-full bg-[#030014] py-6 md:py-8 lg:py-10 border-t border-white/5">
       <div className="wrapper px-4 md:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="flex flex-col lg:flex-row justify-between gap-8 lg:gap-12">

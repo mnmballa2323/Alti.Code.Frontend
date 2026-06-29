@@ -55,7 +55,7 @@ const OrbitRing = ({
 
 export default function EnterpriseConnectorsSection() {
   return (
-    <section className="w-full py-32 bg-black text-white px-4 sm:px-6 lg:px-8 border-t border-zinc-900 overflow-hidden">
+    <section className="w-full py-32 bg-[#030014] text-white px-4 sm:px-6 lg:px-8 border-t border-slate-800 overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row-reverse items-center gap-16 lg:gap-8 lg:justify-between">
         {/* Left Side: Text */}
         <div className="flex flex-col gap-6 max-w-2xl lg:w-[50%] z-10 text-center lg:text-left mx-auto lg:mx-0">

@@ -211,7 +211,7 @@ export default function HeroSwarm() {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#030214] via-[#090729] to-black text-white px-4 sm:px-6 lg:px-8 pt-28">
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-[#02000a] via-[#05001a] to-[#030014] text-white px-4 sm:px-6 lg:px-8 pt-28">
       {/* Interactive Swarm Canvas */}
       <canvas
         className="absolute inset-0 w-full h-full pointer-events-none z-0"
@@ -220,9 +220,10 @@ export default function HeroSwarm() {
 
       {/* Premium Apple/OpenAI-style background gradient mesh */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vh] rounded-[100%] bg-gradient-to-br from-indigo-900/25 to-transparent blur-[120px] animate-[spin_45s_linear_infinite]" />
-        <div className="absolute top-[20%] right-[-10%] w-[45vw] h-[60vh] rounded-[100%] bg-gradient-to-bl from-blue-950/20 to-transparent blur-[150px] animate-[spin_55s_linear_infinite_reverse]" />
-        <div className="absolute bottom-[-10%] left-[25%] w-[60vw] h-[50vh] rounded-[100%] bg-gradient-to-tr from-purple-950/20 to-transparent blur-[120px] animate-[spin_65s_linear_infinite]" />
+        {/* Ambient Magical Glows */}
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vh] rounded-[100%] bg-gradient-to-br from-purple-900/40 to-transparent blur-[120px] animate-[spin_45s_linear_infinite]" />
+        <div className="absolute top-[20%] right-[-10%] w-[45vw] h-[60vh] rounded-[100%] bg-gradient-to-bl from-fuchsia-900/30 to-transparent blur-[150px] animate-[spin_55s_linear_infinite_reverse]" />
+        <div className="absolute bottom-[-10%] left-[25%] w-[60vw] h-[50vh] rounded-[100%] bg-gradient-to-tr from-cyan-900/20 to-transparent blur-[120px] animate-[spin_65s_linear_infinite]" />
       </div>
 
       <div className="relative z-10 flex flex-col items-center text-center max-w-5xl mx-auto gap-8 -mt-16 md:-mt-32">
