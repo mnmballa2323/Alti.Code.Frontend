@@ -86,22 +86,33 @@ export default function AuthLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [isTauri, setIsTauri] = useState(false);
-
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      ((window as any).__TAURI__ ||
+  const [isTauri, setIsTauri] = useState(() => {
+    if (typeof window !== "undefined") {
+      return (
+        (window as any).__TAURI__ ||
         (window as any).__TAURI_INTERNALS__ ||
         (window as any).electron ||
-        window.navigator.userAgent.includes("Electron"))
-    ) {
-      setIsTauri(true);
+        window.navigator.userAgent.includes("Electron")
+      );
     }
+    return false;
+  });
+
+  useEffect(() => {
+    // Keep empty useEffect to satisfy any linter rules, or just remove it if unused
   }, []);
 
   return (
     <div className="flex min-h-screen bg-white font-sans flex-col-reverse lg:flex-row">
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            if (window.__TAURI__ || window.__TAURI_INTERNALS__ || window.electron || navigator.userAgent.includes("Electron")) {
+              document.documentElement.classList.add('is-desktop-app');
+            }
+          `,
+        }}
+      />
       {/* CSS keyframe animations for premium ambient glow effects */}
       <style
         dangerouslySetInnerHTML={{
@@ -121,13 +132,26 @@ export default function AuthLayout({
         .animate-float-2 {
           animation: float-slower 22s ease-in-out infinite;
         }
+        
+        /* Desktop App Overrides for Zero-Flicker */
+        html.is-desktop-app .desktop-hide {
+          display: none !important;
+        }
+        html.is-desktop-app .desktop-full-width {
+          width: 100% !important;
+        }
+        html.is-desktop-app .desktop-only-block {
+          display: block !important;
+        }
+        html.is-desktop-app .web-only {
+          display: none !important;
+        }
       `,
         }}
       />
 
       {/* Left Panel: Streaming Code Generation Terminal */}
-      {!isTauri && (
-        <div className="hidden lg:flex w-1/2 bg-[#050507] relative overflow-hidden flex-col justify-between p-16 border-r border-white/5">
+      <div className="hidden lg:flex w-1/2 bg-[#050507] relative overflow-hidden flex-col justify-between p-16 border-r border-white/5 desktop-hide">
           {/* Subtle grid pattern overlay */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff02_1px,transparent_1px),linear-gradient(to_bottom,#ffffff02_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
 
@@ -169,15 +193,13 @@ export default function AuthLayout({
             </h2>
             <p className="text-neutral-400 text-lg xl:text-xl font-medium leading-relaxed">
               Join the inso code platform and accelerate your engineering team
-              with autonomous AI agents.
             </p>
           </div>
         </div>
-      )}
 
       {/* Right Panel: Auth Form */}
       <div
-        className={`w-full flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative ${!isTauri ? 'lg:w-1/2' : ''}`}
+        className="w-full flex flex-col justify-center items-center p-8 sm:p-12 z-10 relative desktop-full-width lg:w-1/2"
       >
         <div
           className="w-full max-w-sm mt-20 lg:mt-12"

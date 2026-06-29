@@ -100,7 +100,7 @@ export default function RegisterPage() {
               className="max-w-full"
               classNames={{
                 inputWrapper:
-                  "h-12 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                  "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               name="companyName"
@@ -116,7 +116,7 @@ export default function RegisterPage() {
               className="max-w-full"
               classNames={{
                 inputWrapper:
-                  "h-12 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                  "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               name="email"
@@ -131,7 +131,7 @@ export default function RegisterPage() {
               isRequired
               classNames={{
                 inputWrapper:
-                  "h-12 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                  "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               endContent={
@@ -193,7 +193,7 @@ export default function RegisterPage() {
               isRequired
               classNames={{
                 inputWrapper:
-                  "h-12 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                  "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               endContent={
@@ -252,7 +252,7 @@ export default function RegisterPage() {
 
           <div className="flex flex-col gap-3 mt-4">
             <Button
-              className="w-full h-12 font-semibold bg-black text-white rounded-2xl hover:scale-[1.02] transition-transform shadow-md"
+              className="w-full h-12 font-semibold bg-black text-white rounded-2xl shadow-md"
               type="submit"
             >
               Create Account

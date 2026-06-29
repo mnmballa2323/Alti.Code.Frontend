@@ -20,18 +20,20 @@ export default function LoginPage() {
   const [mfaToken, setMfaToken] = useState("");
   const [mfaCode, setMfaCode] = useState("");
   const [isLoadingMfa, setIsLoadingMfa] = useState(false);
-  const [isDesktopApp, setIsDesktopApp] = useState(false);
-
-  useEffect(() => {
-    if (
-      typeof window !== "undefined" &&
-      ("__TAURI__" in window ||
+  const [isDesktopApp, setIsDesktopApp] = useState(() => {
+    if (typeof window !== "undefined") {
+      return (
+        "__TAURI__" in window ||
         "__TAURI_INTERNALS__" in window ||
         "electron" in window ||
-        window.navigator.userAgent.includes("Electron"))
-    ) {
-      setIsDesktopApp(true);
+        window.navigator.userAgent.includes("Electron")
+      );
     }
+    return false;
+  });
+
+  useEffect(() => {
+    // Keep empty useEffect to satisfy any linter rules, or just remove it if unused
   }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -214,7 +216,7 @@ export default function LoginPage() {
                 className="max-w-full text-center"
                 classNames={{
                   inputWrapper:
-                    "h-14 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                    "h-14 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                   input:
                     "text-center font-mono text-2xl tracking-[0.5em] pl-[0.25em] text-black font-semibold",
                 }}
@@ -234,7 +236,7 @@ export default function LoginPage() {
 
             <div className="flex flex-col gap-3 mt-2">
               <Button
-                className="w-full h-12 font-semibold bg-black text-white rounded-2xl hover:scale-[1.02] transition-transform shadow-md disabled:opacity-50"
+                className="w-full h-12 font-semibold bg-black text-white rounded-2xl shadow-md disabled:opacity-50"
                 disabled={mfaCode.length !== 6 || isLoadingMfa}
                 type="submit"
               >
@@ -265,11 +267,12 @@ export default function LoginPage() {
       <div className="flex flex-col items-center text-center">
         <img
           alt="Inso Logo Icon"
-          className={`h-10 w-auto opacity-90 mb-8 ${!isDesktopApp ? "block lg:hidden" : ""}`}
+          className="h-10 w-auto opacity-90 mb-8 web-only block lg:hidden"
           src="/logo-black.png"
         />
         <h1 className="text-3xl font-semibold tracking-tight text-black">
-          {isDesktopApp ? "Build The Future" : "Welcome Back"}
+          <span className="desktop-only-block hidden">Build The Future</span>
+          <span className="web-only">Welcome Back</span>
         </h1>
 
       </div>
@@ -282,7 +285,7 @@ export default function LoginPage() {
               className="max-w-full"
               classNames={{
                 inputWrapper:
-                  "h-12 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                  "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               name="email"
@@ -297,7 +300,7 @@ export default function LoginPage() {
               isRequired
               classNames={{
                 inputWrapper:
-                  "h-12 bg-[#F5F5F7] hover:bg-[#EBEBEF] focus-within:bg-[#EBEBEF] data-[focus=true]:bg-[#EBEBEF] rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                  "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input: "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
               }}
               endContent={
@@ -379,7 +382,7 @@ export default function LoginPage() {
 
           <div className="flex flex-col gap-3 mt-4">
             <Button
-              className="w-full h-12 font-semibold bg-black text-white rounded-2xl hover:scale-[1.02] transition-transform shadow-md"
+              className="w-full h-12 font-semibold bg-black text-white rounded-2xl shadow-md"
               type="submit"
             >
               Login
@@ -387,7 +390,7 @@ export default function LoginPage() {
           </div>
         </form>
 
-        {!isDesktopApp && (
+        <div className="web-only">
           <p className="text-center text-sm text-gray-500 font-medium mt-4">
             Don&apos;t have an account?{" "}
             <button
@@ -398,7 +401,7 @@ export default function LoginPage() {
               Register
             </button>
           </p>
-        )}
+        </div>
       </div>
     </div>
   );

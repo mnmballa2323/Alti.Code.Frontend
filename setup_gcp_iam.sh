@@ -72,6 +72,7 @@ ROLES=(
   "roles/cloudkms.admin"
   "roles/iam.serviceAccountUser"
   "roles/compute.securityAdmin"
+  "roles/vpcaccess.admin"
 )
 
 for role in "${ROLES[@]}"; do

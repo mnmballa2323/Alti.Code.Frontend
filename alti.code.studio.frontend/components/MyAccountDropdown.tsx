@@ -20,8 +20,15 @@ import { getUserData } from "@/lib/user";
 const MyAccountDropdown = () => {
   const { onOpen } = useModalStore();
   const [profile, setProfile] = useState<any>(null);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
+    setIsDesktop(
+      typeof window !== "undefined" &&
+        ("__TAURI__" in window ||
+          "electron" in window ||
+          window.navigator.userAgent.includes("Electron"))
+    );
     (async () => {
       try {
         const token = localStorage.getItem("token");
@@ -53,7 +60,7 @@ const MyAccountDropdown = () => {
           className="w-[var(--radix-dropdown-menu-trigger-width)]"
         >
           <DropdownMenuGroup>
-            {(profile?.role === "admin" || profile?.role === "ADMIN") && (
+            {!isDesktop && (profile?.role === "admin" || profile?.role === "ADMIN") && (
               <DropdownMenuItem className="relative">
                 <span className="flex items-center space-x-2">
                   <Shield className="size-5 text-indigo-400" />
