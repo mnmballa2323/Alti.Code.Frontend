@@ -2,10 +2,10 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { toast } from "react-hot-toast";
 
-export default function MFAPage() {
+function MFAContent() {
   const { data: session, status, update } = useSession();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -104,5 +104,13 @@ export default function MFAPage() {
         </form>
       </div>
     </div>
+  );
+}
+
+export default function MFAPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-[#09090b] text-white">Loading...</div>}>
+      <MFAContent />
+    </Suspense>
   );
 }
