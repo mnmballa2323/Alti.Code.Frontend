@@ -285,6 +285,7 @@ class MultiCloudInferenceService {
     const startTime = Date.now();
     let text = '';
     let latency = 0;
+    let azureUsage = null;
     const maxRetries = 3;
 
     const azureUrl =
@@ -313,6 +314,9 @@ class MultiCloudInferenceService {
         throw new Error(`Microservice responded with status ${res.status}`);
       const data = await res.json();
       text = data.content;
+      if (data.usage) {
+        azureUsage = data.usage;
+      }
       latency = Date.now() - startTime;
     } catch (e) {
       logger.warn(
@@ -377,6 +381,9 @@ class MultiCloudInferenceService {
 
             const data = await res.json();
             text = data.choices?.[0]?.message?.content || '';
+            if (data.usage) {
+              azureUsage = data.usage;
+            }
             success = true;
             logger.info(
               `✨ Successfully completed Azure Foundry LLM call on attempt ${attempt}`,
@@ -410,8 +417,8 @@ class MultiCloudInferenceService {
       latency = Date.now() - startTime;
     }
 
-    const promptTokens = Math.max(1, Math.ceil(prompt.length / 4));
-    const completionTokens = Math.max(1, Math.ceil(text.length / 4));
+    const promptTokens = azureUsage?.prompt_tokens || Math.max(1, Math.ceil(prompt.length / 4));
+    const completionTokens = azureUsage?.completion_tokens || Math.max(1, Math.ceil(text.length / 4));
     await this._recordMarketplaceBilling(
       'azure',
       promptTokens,

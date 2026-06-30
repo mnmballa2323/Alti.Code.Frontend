@@ -10,9 +10,16 @@ import { logger } from '../../../shared/logger.js';
 
 class MetricsService {
   constructor() {
-    // Current Gemini 1.5 Pro list pricing (Example: $1.25/1M input, $3.75/1M output)
-    this.PER_1M_INPUT_COST = 1.25;
-    this.PER_1M_OUTPUT_COST = 3.75;
+    this.MODEL_PRICING = {
+      'gpt-5.4': { input: 2.50, output: 15.00 },
+      'gpt-5.4-mini': { input: 0.75, output: 4.50 },
+      'claude-fable-5': { input: 10.00, output: 50.00 },
+      'claude-opus-4.8': { input: 5.00, output: 25.00 },
+      'claude-sonnet-4.6': { input: 3.00, output: 15.00 },
+      'gemini-3.1-pro': { input: 12.00, output: 18.00 },
+      'gemini-3.5-flash': { input: 1.50, output: 9.00 },
+      'default': { input: 1.25, output: 3.75 }
+    };
   }
 
   /**
@@ -28,9 +35,11 @@ class MetricsService {
     userId = null
   ) {
     try {
-      const inputCost = (promptTokens / 1_000_000) * this.PER_1M_INPUT_COST;
-      const outputCost =
-        (completionTokens / 1_000_000) * this.PER_1M_OUTPUT_COST;
+      const normalizedModel = (model || '').toLowerCase();
+      const pricing = this.MODEL_PRICING[normalizedModel] || this.MODEL_PRICING['default'];
+
+      const inputCost = (promptTokens / 1_000_000) * pricing.input;
+      const outputCost = (completionTokens / 1_000_000) * pricing.output;
       const estimatedCostUsd = inputCost + outputCost;
 
       const metric = new LLMMetrics({

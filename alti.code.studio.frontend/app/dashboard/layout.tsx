@@ -59,7 +59,7 @@ export default function DashboardLayout({
 
   return (
     <div className="flex">
-      <Sidebar />
+      {!pathname.includes("/token-usage") && <Sidebar />}
       {isLoadingDashboard || isRedirecting ? (
         <div className="flex h-screen w-full bg-[#F3F4F6] dark:bg-[#0d1117]" />
       ) : (

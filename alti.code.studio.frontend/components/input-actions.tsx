@@ -312,7 +312,7 @@ function PromptInputFullLineComponent({
       case "gemini-3.5-flash":
         return "Gemini 3.5 Flash";
       case "gemini-3.5-pro":
-        return "Gemini 3.5 Pro";
+        return "Gemini 3.1 Pro";
       case "gpt-5.4-mini":
         return "GPT-5.4 Mini";
       case "gpt-5.4":
@@ -983,7 +983,7 @@ function PromptInputFullLineComponent({
                   <DropdownItem
                     key="gemini-3.5-pro"
                     className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="Gemini 3.5 Pro"
+                    textValue="Gemini 3.1 Pro"
                     onPress={() => setDefaultModel("gemini-3.5-pro")}
                   >
                     <div className="flex items-center gap-3 text-left">
@@ -992,7 +992,7 @@ function PromptInputFullLineComponent({
                         icon="simple-icons:googlegemini"
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
-                        Gemini 3.5 Pro
+                        Gemini 3.1 Pro
                       </span>
                     </div>
                   </DropdownItem>
