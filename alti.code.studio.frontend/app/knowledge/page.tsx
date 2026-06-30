@@ -238,7 +238,7 @@ function KnowledgePageContent() {
         <div className="flex-1 overflow-hidden bg-transparent flex flex-col font-sans">
           {!selectedFolder ? (
             <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide flex flex-col items-center justify-center">
-              <div className="w-full max-w-2xl">
+              <div className="w-full max-w-2xl mb-32">
                 <form className="relative flex items-center w-full shadow-sm rounded-2xl" onSubmit={handleCreateFolder}>
                   <Input
                     classNames={{
