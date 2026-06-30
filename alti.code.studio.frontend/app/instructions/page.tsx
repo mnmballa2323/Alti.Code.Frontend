@@ -93,7 +93,7 @@ export default function InstructionsPage() {
           <TuningTabs />
         </div>
         <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide flex flex-col items-center justify-center">
-          <div className="w-full max-w-2xl mb-32">
+          <div className="w-full max-w-2xl mb-14">
             <form className="relative flex items-center w-full shadow-sm rounded-2xl" onSubmit={handleSend}>
               <Input
                 classNames={{

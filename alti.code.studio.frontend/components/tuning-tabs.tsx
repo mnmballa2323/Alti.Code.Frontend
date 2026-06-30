@@ -2,7 +2,7 @@
 
 import { Tabs, Tab } from "@heroui/react";
 import { usePathname, useRouter } from "next/navigation";
-import { BookOpen, Shield, Database } from "lucide-react";
+import { BookOpen, Shield, Database, FolderGit2, Webhook, Blocks, Plug } from "lucide-react";
 
 export function TuningTabs() {
   const router = useRouter();
@@ -47,6 +47,42 @@ export function TuningTabs() {
             <div className="flex items-center space-x-2">
               <Database className="w-4 h-4" />
               <span>Data</span>
+            </div>
+          }
+        />
+        <Tab
+          key="/repository"
+          title={
+            <div className="flex items-center space-x-2">
+              <FolderGit2 className="w-4 h-4" />
+              <span>Repository</span>
+            </div>
+          }
+        />
+        <Tab
+          key="/apis"
+          title={
+            <div className="flex items-center space-x-2">
+              <Webhook className="w-4 h-4" />
+              <span>API</span>
+            </div>
+          }
+        />
+        <Tab
+          key="/sdk"
+          title={
+            <div className="flex items-center space-x-2">
+              <Blocks className="w-4 h-4" />
+              <span>SDK</span>
+            </div>
+          }
+        />
+        <Tab
+          key="/mcp"
+          title={
+            <div className="flex items-center space-x-2">
+              <Plug className="w-4 h-4" />
+              <span>MCP</span>
             </div>
           }
         />
