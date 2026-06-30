@@ -1243,20 +1243,33 @@ export default function Sidebar() {
   const agentNameParam = searchParams?.get("name");
 
   useEffect(() => {
-    if (agentIdParam && agentNameParam) {
-      setCustomAgents((prev) => {
-        if (!prev.find((a) => a.id === agentIdParam)) {
-          return [
-            ...prev,
-            { id: agentIdParam, name: agentNameParam, prompt: "" },
-          ];
+    const loadCustomAgents = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/agents/custom`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+        if (res.data && res.data.success) {
+          let list = res.data.data || [];
+          if (agentIdParam && agentNameParam) {
+            if (!list.find((a: any) => a.id === agentIdParam)) {
+              list = [
+                ...list,
+                { id: agentIdParam, name: agentNameParam, prompt: "" },
+              ];
+            }
+            setSelectedAgentId(agentIdParam);
+          }
+          setCustomAgents(list);
         }
+      } catch (err) {
+        console.error("Failed to load custom agents:", err);
+      }
+    };
 
-        return prev;
-      });
-      setSelectedAgentId(agentIdParam);
+    if (pathname === "/agents" || pathname?.startsWith("/agents/")) {
+      loadCustomAgents();
     }
-  }, [agentIdParam, agentNameParam]);
+  }, [pathname, token, agentIdParam, agentNameParam]);
 
   // States and fetchers for engines
   const [sidebarEngines, setSidebarEngines] = useState<any[]>([]);
