@@ -9,9 +9,7 @@ import HeroSwarm from "@/components/landing-page/hero-swarm";
 import PairedProgrammerSection from "@/components/landing-page/paired-programmer-section";
 import GcpSovereignSection from "@/components/landing-page/tri-cloud-section";
 import AgentSwarmSection from "@/components/landing-page/agent-swarm-section";
-import EnterpriseConnectorsSection from "@/components/landing-page/enterprise-connectors-section";
-import AppConnectorsSection from "@/components/landing-page/app-connectors-section";
-import DatabaseConnectorsSection from "@/components/landing-page/database-connectors-section";
+
 import DeterministicControlSection from "@/components/landing-page/deterministic-control-section";
 import AgentForgeSection from "@/components/landing-page/agent-forge-section";
 import ZeroTrustLedgerSection from "@/components/landing-page/zero-trust-ledger-section";
@@ -59,15 +57,6 @@ export default function LandingPage() {
           <AgentSwarmSection />
         </div>
         <div id="section-4">
-          <EnterpriseConnectorsSection />
-        </div>
-        <div id="section-5">
-          <AppConnectorsSection />
-        </div>
-        <div id="section-6">
-          <DatabaseConnectorsSection />
-        </div>
-        <div id="section-7">
           <DeterministicControlSection />
         </div>
         <div id="section-8">

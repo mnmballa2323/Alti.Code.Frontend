@@ -225,10 +225,73 @@ async function deleteFile(fileId) {
   }
 }
 
+/**
+ * Gets or creates a default 'Data' folder for flat file uploads.
+ */
+async function getOrCreateDefaultFolder(userId = null, tenantId = null) {
+  try {
+    const existing = await prisma.knowledgeFolder.findFirst({
+      where: {
+        name: '__default_data__',
+        OR: [{ userId }, { tenantId }, { userId: null, tenantId: null }],
+      },
+    });
+
+    if (existing) return existing;
+
+    return await prisma.knowledgeFolder.create({
+      data: {
+        name: '__default_data__',
+        userId,
+        tenantId,
+      },
+    });
+  } catch (err) {
+    logger.warn(`⚠️ DB unavailable. Creating simulated default folder.`);
+    return {
+      id: 'default-folder-' + Date.now(),
+      name: '__default_data__',
+      userId,
+      tenantId,
+      createdAt: new Date(),
+    };
+  }
+}
+
+/**
+ * Gets all files across all folders (flat view).
+ */
+async function getAllFiles(userId = null, tenantId = null) {
+  try {
+    return await prisma.knowledgeFile.findMany({
+      where: {
+        folder: {
+          OR: [{ userId }, { tenantId }, { userId: null, tenantId: null }],
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        size: true,
+        type: true,
+        createdAt: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  } catch (err) {
+    logger.warn(`⚠️ DB unavailable. Returning empty file list.`);
+    return [];
+  }
+}
+
 export const KnowledgeService = {
   createFolder,
   getFolders,
   deleteFolder,
   ingestUploadedFile,
   deleteFile,
+  getOrCreateDefaultFolder,
+  getAllFiles,
 };

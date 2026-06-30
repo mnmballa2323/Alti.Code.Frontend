@@ -14,3 +14,11 @@
 - **Do NOT** bypass the existing auth and middleware validators (`auth.service.js`, `jwtHelpers.js`) when implementing new routes.
 - **Do NOT** use `cat` inside bash commands or bypass explicit tool configurations when executing shell operations.
 - **Do NOT** force-push or bypass standard `git-proxy` testing and verification protocols on the `main` branch.
+
+## Repositories (Allowed code repositories)
+
+## API Endpoints (Allowed API connections)
+
+## SDKs (Allowed SDK packages)
+
+## MCP Servers (Model Context Protocol connections)

@@ -62,7 +62,7 @@ const deleteFolder = catchAsync(async (req, res) => {
 });
 
 const uploadFile = catchAsync(async (req, res) => {
-  const { folderId } = req.body;
+  let { folderId } = req.body;
   const file = req.file;
 
   if (!file) {
@@ -70,6 +70,14 @@ const uploadFile = catchAsync(async (req, res) => {
       success: false,
       message: 'No file uploaded.',
     });
+  }
+
+  // If no folderId provided, use or create a default "Data" folder
+  if (!folderId) {
+    const userId = req.user?._id || req.user?.id;
+    const tenantId = req.user?.tenantId;
+    const defaultFolder = await KnowledgeService.getOrCreateDefaultFolder(userId, tenantId);
+    folderId = defaultFolder.id;
   }
 
   const result = await KnowledgeService.ingestUploadedFile(file, folderId);
@@ -82,7 +90,7 @@ const uploadFile = catchAsync(async (req, res) => {
       title: 'Document Ingestion Complete',
       message: `"${file.originalname}" has been successfully parsed and indexed into your RAG memory.`,
       type: 'success',
-      actionUrl: `/knowledge?folderId=${folderId}`,
+      actionUrl: `/knowledge`,
     });
   }
 
@@ -107,10 +115,25 @@ const deleteFile = catchAsync(async (req, res) => {
   });
 });
 
+const getAllFiles = catchAsync(async (req, res) => {
+  const userId = req.user?._id || req.user?.id;
+  const tenantId = req.user?.tenantId;
+
+  const files = await KnowledgeService.getAllFiles(userId, tenantId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Files fetched successfully.',
+    data: files,
+  });
+});
+
 export const KnowledgeController = {
   createFolder,
   getFolders,
   deleteFolder,
   uploadFile,
   deleteFile,
+  getAllFiles,
 };

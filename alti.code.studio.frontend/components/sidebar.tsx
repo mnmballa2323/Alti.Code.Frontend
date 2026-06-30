@@ -1181,17 +1181,11 @@ export default function Sidebar() {
       isActive:
         pathname === "/instructions" ||
         pathname === "/guardrails" ||
-        pathname === "/knowledge",
-      onClick: () => {},
-    },
-    {
-      label: "Connectors",
-      icon: Cable,
-      path: "/connect-apps",
-      isActive:
-        pathname === "/connect-apps" ||
-        pathname?.startsWith("/database") ||
-        pathname === "/cloud",
+        pathname === "/knowledge" ||
+        pathname === "/repository" ||
+        pathname === "/apis" ||
+        pathname === "/sdk" ||
+        pathname === "/mcp",
       onClick: () => {},
     },
   ];
@@ -1224,7 +1218,14 @@ export default function Sidebar() {
   const [guardrails, setGuardrails] = useState<{ id: string; name: string }[]>(
     [],
   );
+  const [tuningRepos, setTuningRepos] = useState<{ id: string; name: string }[]>([]);
+  const [tuningApis, setTuningApis] = useState<{ id: string; name: string }[]>([]);
+  const [tuningSkds, setTuningSdks] = useState<{ id: string; name: string }[]>([]);
+  const [tuningMcps, setTuningMcps] = useState<{ id: string; name: string }[]>([]);
   const [knowledgeFolders, setKnowledgeFolders] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [knowledgeFiles, setKnowledgeFiles] = useState<
     { id: string; name: string }[]
   >([]);
   const [selectedKnowledgeFolderId, setSelectedKnowledgeFolderId] = useState<
@@ -1481,6 +1482,24 @@ export default function Sidebar() {
     };
   }, [pathname, token]);
 
+  // Listen for knowledge file updates
+  useEffect(() => {
+    const handleKnowledgeFiles = (e: any) => {
+      if (e.detail && Array.isArray(e.detail)) {
+        setKnowledgeFiles(e.detail);
+      }
+    };
+
+    window.addEventListener("refresh-knowledge-files", handleKnowledgeFiles);
+
+    return () => {
+      window.removeEventListener(
+        "refresh-knowledge-files",
+        handleKnowledgeFiles,
+      );
+    };
+  }, []);
+
   const { data: rulesData, refetch: refetchRules } = useQuery({
     queryKey: ["codebase-rules", token, selectedRepo],
     queryFn: async () => {
@@ -1501,9 +1520,13 @@ export default function Sidebar() {
   useEffect(() => {
     const handleRefresh = (e: Event) => {
       const customEvent = e as CustomEvent;
-      if (customEvent.detail && customEvent.detail.instructions) {
-        setInstructions(customEvent.detail.instructions);
-        setGuardrails(customEvent.detail.guardrails);
+      if (customEvent.detail) {
+        if (customEvent.detail.instructions) setInstructions(customEvent.detail.instructions);
+        if (customEvent.detail.guardrails) setGuardrails(customEvent.detail.guardrails);
+        if (customEvent.detail.repositories) setTuningRepos(customEvent.detail.repositories);
+        if (customEvent.detail.apis) setTuningApis(customEvent.detail.apis);
+        if (customEvent.detail.sdks) setTuningSdks(customEvent.detail.sdks);
+        if (customEvent.detail.mcps) setTuningMcps(customEvent.detail.mcps);
       } else {
         refetchRules();
       }
@@ -1523,6 +1546,10 @@ export default function Sidebar() {
     if (rulesData) {
       setInstructions(rulesData.instructions || []);
       setGuardrails(rulesData.guardrails || []);
+      setTuningRepos(rulesData.repositories || []);
+      setTuningApis(rulesData.apis || []);
+      setTuningSdks(rulesData.sdks || []);
+      setTuningMcps(rulesData.mcps || []);
       setIsInitialLoad(false);
     }
   }, [rulesData]);
@@ -2307,6 +2334,190 @@ export default function Sidebar() {
                     ));
                   })()}
                 </div>
+              ) : pathname === "/repository" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = tuningRepos.filter((repo) =>
+                      repo.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (tuningRepos.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:folder-with-files-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No repositories added yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:folder-with-files-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((repo) => (
+                      <div
+                        key={repo.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        <span className="truncate">{repo.name}</span>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/apis" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = tuningApis.filter((api) =>
+                      api.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (tuningApis.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:server-square-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No APIs connected yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:server-square-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((api) => (
+                      <div
+                        key={api.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        <span className="truncate">{api.name}</span>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/sdk" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = tuningSkds.filter((sdk) =>
+                      sdk.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (tuningSkds.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:box-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No SDKs configured yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:box-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((sdk) => (
+                      <div
+                        key={sdk.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        <span className="truncate">{sdk.name}</span>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/mcp" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = tuningMcps.filter((mcp) =>
+                      mcp.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (tuningMcps.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:plug-circle-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No MCP connections yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:plug-circle-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((mcp) => (
+                      <div
+                        key={mcp.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        <span className="truncate">{mcp.name}</span>
+                      </div>
+                    ));
+                  })()}
+                </div>
               ) : pathname === "/instructions" ? (
                 <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                   {(() => {
@@ -2516,17 +2727,17 @@ export default function Sidebar() {
               ) : pathname === "/knowledge" ? (
                 <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
                   {(() => {
-                    const filtered = knowledgeFolders.filter((kf) =>
+                    const filtered = knowledgeFiles.filter((kf) =>
                       kf.name
                         .toLowerCase()
                         .includes(leftSidebarSearch.toLowerCase()),
                     );
 
-                    if (knowledgeFolders.length === 0) {
+                    if (knowledgeFiles.length === 0) {
                       return (
                         <div className="flex flex-col items-center justify-center py-12 h-full text-center w-full">
                           <span className="text-xs text-default-500 font-medium">
-                            No knowledge folders yet
+                            No data files yet
                           </span>
                         </div>
                       );
@@ -2542,28 +2753,12 @@ export default function Sidebar() {
                     }
 
                     return filtered.map((kf) => (
-                      <button
+                      <div
                         key={kf.id}
-                        className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
-                          kf.id === selectedKnowledgeFolderId
-                            ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white"
-                            : ""
-                        }`}
-                        type="button"
-                        onClick={() => {
-                          setSelectedKnowledgeFolderId(kf.id);
-                          router.push(
-                            `/knowledge?folderId=${kf.id}&folderName=${encodeURIComponent(kf.name)}`,
-                          );
-                          window.dispatchEvent(
-                            new CustomEvent("select-knowledge-folder", {
-                              detail: kf,
-                            }),
-                          );
-                        }}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
                       >
                         <span className="truncate">{kf.name}</span>
-                      </button>
+                      </div>
                     ));
                   })()}
                 </div>

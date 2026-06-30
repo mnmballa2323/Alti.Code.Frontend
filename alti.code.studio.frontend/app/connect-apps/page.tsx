@@ -1038,9 +1038,9 @@ function ConnectAppsContent() {
         </div>
         <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans w-full">
           {/* Master-Detail Split Screen Container */}
-          <div className="flex flex-1 w-full overflow-hidden bg-white dark:bg-[#0A0A0A]">
+          <div className="flex flex-1 w-full overflow-hidden bg-default-100 dark:bg-default-50">
             {/* Right Column: Center Presentation Area */}
-            <div className="flex-1 bg-white dark:bg-[#0A0A0A] flex flex-col h-full overflow-y-auto relative">
+            <div className="flex-1 bg-default-100 dark:bg-default-50 flex flex-col h-full overflow-y-auto relative">
               {notification && (
                 <div className="p-6 pb-0 w-full max-w-xl mx-auto shrink-0">
                   <AlertWrapper className="w-full" variant={notification.type}>
@@ -1699,7 +1699,7 @@ export default function ConnectAppsPage() {
   return (
     <Suspense
       fallback={
-        <div className="flex-1 flex items-center justify-center bg-white dark:bg-[#0A0A0A] h-screen">
+        <div className="flex-1 flex items-center justify-center bg-default-100 dark:bg-default-50 h-screen">
           <Icon
             className="text-3xl text-primary animate-spin"
             icon="line-md:loading-twotone-loop"

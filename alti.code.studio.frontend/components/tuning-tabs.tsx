@@ -3,10 +3,28 @@
 import { Tabs, Tab } from "@heroui/react";
 import { usePathname, useRouter } from "next/navigation";
 import { BookOpen, Shield, Database, FolderGit2, Webhook, Blocks, Plug } from "lucide-react";
+import { Key, useCallback, useMemo } from "react";
+
+const TAB_KEYS = ["/instructions", "/guardrails", "/knowledge", "/repository", "/apis", "/sdk", "/mcp"];
 
 export function TuningTabs() {
   const router = useRouter();
   const pathname = usePathname();
+
+  // Only set selectedKey if pathname matches a valid tab
+  const activeKey = useMemo(() => {
+    return TAB_KEYS.includes(pathname) ? pathname : "/instructions";
+  }, [pathname]);
+
+  const handleSelectionChange = useCallback(
+    (key: Key) => {
+      const route = key as string;
+      if (route && route !== pathname) {
+        router.push(route);
+      }
+    },
+    [router, pathname],
+  );
 
   return (
     <div className="flex w-full items-center justify-center h-full">
@@ -20,12 +38,11 @@ export function TuningTabs() {
           tabContent:
             "group-data-[selected=true]:text-foreground text-default-500 font-medium text-sm",
         }}
-        selectedKey={pathname}
-        onSelectionChange={(key) => router.push(key as string)}
+        selectedKey={activeKey}
+        onSelectionChange={handleSelectionChange}
       >
         <Tab
           key="/instructions"
-          href="/instructions"
           title={
             <div className="flex items-center space-x-2">
               <BookOpen className="w-4 h-4" />
@@ -35,7 +52,6 @@ export function TuningTabs() {
         />
         <Tab
           key="/guardrails"
-          href="/guardrails"
           title={
             <div className="flex items-center space-x-2">
               <Shield className="w-4 h-4" />
@@ -45,7 +61,6 @@ export function TuningTabs() {
         />
         <Tab
           key="/knowledge"
-          href="/knowledge"
           title={
             <div className="flex items-center space-x-2">
               <Database className="w-4 h-4" />
@@ -55,7 +70,6 @@ export function TuningTabs() {
         />
         <Tab
           key="/repository"
-          href="/repository"
           title={
             <div className="flex items-center space-x-2">
               <FolderGit2 className="w-4 h-4" />
@@ -65,7 +79,6 @@ export function TuningTabs() {
         />
         <Tab
           key="/apis"
-          href="/apis"
           title={
             <div className="flex items-center space-x-2">
               <Webhook className="w-4 h-4" />
@@ -75,7 +88,6 @@ export function TuningTabs() {
         />
         <Tab
           key="/sdk"
-          href="/sdk"
           title={
             <div className="flex items-center space-x-2">
               <Blocks className="w-4 h-4" />
@@ -85,7 +97,6 @@ export function TuningTabs() {
         />
         <Tab
           key="/mcp"
-          href="/mcp"
           title={
             <div className="flex items-center space-x-2">
               <Plug className="w-4 h-4" />

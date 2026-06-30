@@ -31,6 +31,12 @@ router.delete(
   KnowledgeController.deleteFolder,
 );
 
+router.get(
+  '/files',
+  auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
+  KnowledgeController.getAllFiles,
+);
+
 router.post(
   '/files/upload',
   auth(ENUM_USER_ROLE.ADMIN, ENUM_USER_ROLE.USER),
