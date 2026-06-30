@@ -25,6 +25,7 @@ export function TuningTabs() {
       >
         <Tab
           key="/instructions"
+          href="/instructions"
           title={
             <div className="flex items-center space-x-2">
               <BookOpen className="w-4 h-4" />
@@ -34,6 +35,7 @@ export function TuningTabs() {
         />
         <Tab
           key="/guardrails"
+          href="/guardrails"
           title={
             <div className="flex items-center space-x-2">
               <Shield className="w-4 h-4" />
@@ -43,6 +45,7 @@ export function TuningTabs() {
         />
         <Tab
           key="/knowledge"
+          href="/knowledge"
           title={
             <div className="flex items-center space-x-2">
               <Database className="w-4 h-4" />
@@ -52,6 +55,7 @@ export function TuningTabs() {
         />
         <Tab
           key="/repository"
+          href="/repository"
           title={
             <div className="flex items-center space-x-2">
               <FolderGit2 className="w-4 h-4" />
@@ -61,6 +65,7 @@ export function TuningTabs() {
         />
         <Tab
           key="/apis"
+          href="/apis"
           title={
             <div className="flex items-center space-x-2">
               <Webhook className="w-4 h-4" />
@@ -70,6 +75,7 @@ export function TuningTabs() {
         />
         <Tab
           key="/sdk"
+          href="/sdk"
           title={
             <div className="flex items-center space-x-2">
               <Blocks className="w-4 h-4" />
@@ -79,6 +85,7 @@ export function TuningTabs() {
         />
         <Tab
           key="/mcp"
+          href="/mcp"
           title={
             <div className="flex items-center space-x-2">
               <Plug className="w-4 h-4" />
