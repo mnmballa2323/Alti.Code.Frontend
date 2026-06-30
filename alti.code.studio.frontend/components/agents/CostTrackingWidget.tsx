@@ -6,13 +6,20 @@ import { FormattedMessage } from "react-intl";
 import { API_URL } from "@/lib/config";
 
 interface CostMetrics {
-  totals: {
-    totalCost: number;
-    totalTokens: number;
-    totalInvocations: number;
-    avgExecutionMs: number;
+  billing?: {
+    plan: string;
+    tokensUsed: number;
+    tokensRemaining: number;
+    monthlyAllowance: number;
   };
-  topAgents: Array<{ agent: string; cost: number; calls: number }>;
+  modelsUsage: Array<{
+    model: string;
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+    cost: number;
+    invocations: number;
+  }>;
 }
 
 export default function CostTrackingWidget() {
@@ -25,7 +32,7 @@ export default function CostTrackingWidget() {
         typeof window !== "undefined"
           ? localStorage.getItem("accessToken")
           : null;
-      const res = await fetch(`${API_URL}/metrics/mission-control/stats`, {
+      const res = await fetch(`${API_URL}/api/v1/metrics/user/stats`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       const data = await res.json();
@@ -60,15 +67,12 @@ export default function CostTrackingWidget() {
     );
   }
 
-  const { totals, topAgents } = metrics || {
-    totals: {
-      totalCost: 0,
-      totalTokens: 0,
-      totalInvocations: 0,
-      avgExecutionMs: 0,
-    },
-    topAgents: [],
-  };
+  const modelsUsage = metrics?.modelsUsage || [];
+  const billing = metrics?.billing;
+
+  const totalCost = modelsUsage.reduce((acc, m) => acc + m.cost, 0);
+  const totalTokens = billing?.tokensUsed || modelsUsage.reduce((acc, m) => acc + m.totalTokens, 0);
+  const totalInvocations = modelsUsage.reduce((acc, m) => acc + m.invocations, 0);
 
   return (
     <Card className="w-full bg-black/40 backdrop-blur-xl border border-white/10 text-white">
@@ -95,7 +99,7 @@ export default function CostTrackingWidget() {
               Estimated Cost
             </p>
             <p className="text-2xl font-mono font-semibold text-success">
-              ${totals.totalCost.toFixed(4)}
+              ${totalCost.toFixed(4)}
             </p>
           </div>
           <div className="p-3 rounded-lg bg-white/5 border border-white/10">
@@ -103,32 +107,32 @@ export default function CostTrackingWidget() {
               Total Tokens
             </p>
             <p className="text-xl font-mono">
-              {totals.totalTokens.toLocaleString()}
+              {totalTokens.toLocaleString()}
             </p>
           </div>
           <div className="p-3 rounded-lg bg-white/5 border border-white/10">
             <p className="text-xs text-default-400 mb-1 tracking-wider uppercase">
               Swarm Invocations
             </p>
-            <p className="text-xl font-mono">{totals.totalInvocations}</p>
+            <p className="text-xl font-mono">{totalInvocations}</p>
           </div>
           <div className="p-3 rounded-lg bg-white/5 border border-white/10">
             <p className="text-xs text-default-400 mb-1 tracking-wider uppercase">
               Avg Latency
             </p>
             <p className="text-xl font-mono">
-              {(totals.avgExecutionMs / 1000).toFixed(2)}s
+              N/A
             </p>
           </div>
         </div>
 
-        {topAgents.length > 0 && (
+        {modelsUsage.length > 0 && (
           <div className="mt-2">
             <p className="text-xs font-semibold text-default-500 uppercase mb-3 border-b border-white/10 pb-2">
-              Top Burning Agents
+              Top Models Used
             </p>
             <div className="space-y-2">
-              {topAgents.map((agent, i) => (
+              {modelsUsage.map((m, i) => (
                 <div
                   key={i}
                   className="flex justify-between items-center text-sm p-2 rounded bg-white/5"
@@ -136,15 +140,15 @@ export default function CostTrackingWidget() {
                   <div className="flex items-center gap-2">
                     <Icon
                       className="text-indigo-400"
-                      icon="solar:cpu-bolt-bold"
+                      icon="solar:server-square-cloud-bold"
                     />
-                    <span className="font-semibold">{agent.agent}</span>
+                    <span className="font-semibold">{m.model}</span>
                   </div>
                   <div className="text-right font-mono text-default-400">
                     <span className="text-warning mr-3">
-                      ${agent.cost.toFixed(4)}
+                      ${m.cost.toFixed(4)}
                     </span>
-                    <span className="text-xs">{agent.calls} calls</span>
+                    <span className="text-xs">{m.totalTokens.toLocaleString()} tokens</span>
                   </div>
                 </div>
               ))}

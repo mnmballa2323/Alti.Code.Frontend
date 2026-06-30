@@ -240,7 +240,7 @@ Provide your synthesized answer below:
       `🌊 [GCP RAG] Pillar 20: Streaming Vertex Gemini 2.0 Pro tokens to client in real-time...`,
     );
     const stream = await azureOpenAi.chat.completions.create({
-      model: 'gpt-5.5-pro',
+      model: 'gpt-5.4',
       messages: [{ role: 'user', content: synthesisPrompt }],
       temperature: 0.1,
       stream: true,

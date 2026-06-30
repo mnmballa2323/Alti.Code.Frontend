@@ -15,6 +15,10 @@ const LLMMetricsSchema = new mongoose.Schema(
       default: 'default_enterprise_tenant',
       index: true,
     },
+    userId: {
+      type: String,
+      index: true,
+    },
     agentName: {
       type: String,
       required: true,

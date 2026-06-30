@@ -67,22 +67,13 @@ const pricingCatalog = [
     outputPrice: 0.6,
   },
   {
-    id: "gpt-5.5-pro",
-    name: "GPT-5.5 Pro",
+    id: "gpt-5.4",
+    name: "GPT-5.4",
     provider: "OpenAI GPT",
     icon: "simple-icons:openai",
     iconColor: "text-black dark:text-white",
     inputPrice: 2.5,
     outputPrice: 10.0,
-  },
-  {
-    id: "gpt-5.5-thinking",
-    name: "GPT-5.5 Thinking",
-    provider: "OpenAI GPT",
-    icon: "simple-icons:openai",
-    iconColor: "text-black dark:text-white",
-    inputPrice: 15.0,
-    outputPrice: 75.0,
   },
 ];
 
@@ -93,7 +84,7 @@ const fallbackUsageReport = {
   usagePercent: 64,
   byModel: [
     {
-      name: "gpt-5.5-pro",
+      name: "gpt-5.4",
       tokens: 1450000,
       input: 1100000,
       output: 350000,
@@ -114,7 +105,7 @@ const fallbackUsageReport = {
       cost: 2.58,
     },
     {
-      name: "gpt-5.5-thinking",
+      name: "gpt-5.4-mini",
       tokens: 162050,
       input: 100000,
       output: 62050,
@@ -148,7 +139,7 @@ function BillingPage() {
   const [providerFilter, setProviderFilter] = useState<string>("All");
 
   // Cost Calculator states
-  const [calcModel, setCalcModel] = useState<string>("gpt-5.5-pro");
+  const [calcModel, setCalcModel] = useState<string>("gpt-5.4");
   const [calcInput, setCalcInput] = useState<string>("100000");
   const [calcOutput, setCalcOutput] = useState<string>("20000");
   const [calcResult, setCalcResult] = useState<any>({

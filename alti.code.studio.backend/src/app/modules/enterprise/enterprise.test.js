@@ -1035,14 +1035,14 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         .spyOn(multiCloudInferenceService, 'executeMultiCloudInference')
         .mockResolvedValue({
           content: 'Azure response with custom vault keys',
-          model: 'gpt-5.5',
+          model: 'gpt-5.4',
         });
 
       await LlmGatewayService.routeCompletion(
         'user-123',
         'session-123',
         'hello',
-        'gpt-5.5',
+        'gpt-5.4',
       );
 
       expect(mockInference).toHaveBeenCalledWith(

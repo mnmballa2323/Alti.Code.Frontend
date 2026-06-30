@@ -104,7 +104,7 @@ You MUST return a valid JSON object matching the following format exactly (no ma
           'presentation_generator',
           {
             preferredProvider: 'azure',
-            modelId: modelId.includes('gpt') ? modelId : 'gpt-5.5-pro',
+            modelId: modelId.includes('gpt') ? modelId : 'gpt-5.4',
           },
         );
       textResponse = llmResult.content;

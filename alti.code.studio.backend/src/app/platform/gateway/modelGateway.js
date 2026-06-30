@@ -12,7 +12,7 @@
  * and includes transient error retries, DLP scrubbing, and context compression.
  */
 
-// Removed VertexAI import
+import { executeVertexInference } from '../../modules/ai/vertex_ai.helper.js';
 import { AzureOpenAI } from 'openai';
 // Removed Bedrock import
 import httpStatus from 'http-status';
@@ -122,14 +122,14 @@ export const routePlatformCompletion = async ({
   productId = null,
   tenantId = null,
 }) => {
-  // Security validation: Only allow GCP Vertex AI publicly
-  if (provider !== 'gcp') {
+  // Security validation: Only allow GCP Vertex AI and Azure Foundry publicly
+  if (provider !== 'gcp' && provider !== 'azure') {
     logger.error(
       `🚫 [Model Gateway] Blocked connection attempt to unauthorized provider: ${provider}`,
     );
     throw new ApiError(
       httpStatus.FORBIDDEN,
-      'Security Policy Exception: Direct API connections to non-GCP providers are blocked. Please use GCP Vertex AI.',
+      'Security Policy Exception: Direct API connections to non-GCP/Azure providers are blocked. Please use GCP Vertex AI or Azure Foundry.',
     );
   }
 
@@ -170,12 +170,11 @@ export const routePlatformCompletion = async ({
   let activeProvider = provider.toLowerCase();
   let activeModel = model;
 
+  // GCP requests are permitted to run natively via Vertex AI
   if (activeProvider === 'gcp') {
-    logger.warn(
-      `⚠️ [Model Gateway] Redirecting ${provider} request to Azure OpenAI (Sovereign Mode)...\n`,
+    logger.info(
+      `🌐 [Model Gateway] Using Native Vertex AI for ${provider} request.\n`,
     );
-    activeProvider = 'azure';
-    activeModel = 'azure/gpt-5.5';
   }
 
   logger.info(
@@ -190,6 +189,20 @@ export const routePlatformCompletion = async ({
 
   try {
     switch (activeProvider) {
+      case 'gcp': {
+        const response = await executeVertexInference(activePrompt, activeModel, {
+          temperature,
+        });
+
+        if (response?.usage) {
+          tokensConsumed =
+            (response.usage.promptTokens || 0) + (response.usage.completionTokens || 0);
+        }
+
+        resultText = response.text || '';
+        break;
+      }
+
       case 'azure': {
         const azureApiKey = process.env.AZURE_OPENAI_API_KEY;
         const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
@@ -228,7 +241,7 @@ export const routePlatformCompletion = async ({
       default:
         throw new ApiError(
           httpStatus.BAD_REQUEST,
-          `Unsupported Cloud provider: "${provider}". Must be: gcp.`,
+          `Unsupported Cloud provider: "${provider}". Must be: gcp, azure.`,
         );
     }
 

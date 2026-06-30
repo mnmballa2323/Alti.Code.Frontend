@@ -16,6 +16,7 @@
 
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
+import { prisma } from '../../platform/db/prismaClient.js';
 
 // ═══════════════════════════════════════════════
 // Token Pricing Plans
@@ -89,8 +90,7 @@ const MODEL_RATES = {
   'claude-opus-4.8': { input: 0.000015, output: 0.000075 },
   'claude-fable-5': { input: 0.000015, output: 0.000075 },
   'gpt-5.4-mini': { input: 0.00000015, output: 0.0000006 },
-  'gpt-5.5-pro': { input: 0.0000025, output: 0.00001 },
-  'gpt-5.5-thinking': { input: 0.000015, output: 0.000075 },
+  'gpt-5.4': { input: 0.0000025, output: 0.00001 },
   default: { input: 0.000003, output: 0.000015 },
 };
 
@@ -203,6 +203,28 @@ class TokenBillingEngine {
     );
     this.stats.totalTokensConsumed += totalTokens;
     this.stats.totalRevenue += totalCost;
+
+    // Async background update to Prisma UserBilling
+    (async () => {
+      try {
+        if (!tenantId.startsWith('default')) {
+          await prisma.userBilling.upsert({
+            where: { userId: tenantId },
+            update: {
+              currentSpendUsd: { increment: record.cost },
+              tokenBalance: { decrement: totalTokens },
+            },
+            create: {
+              userId: tenantId,
+              currentSpendUsd: record.cost,
+              tokenBalance: -totalTokens,
+            },
+          });
+        }
+      } catch (e) {
+        logger.error(`Failed to sync UserBilling to Postgres for user ${tenantId}`, e);
+      }
+    })();
 
     return {
       consumed: true,

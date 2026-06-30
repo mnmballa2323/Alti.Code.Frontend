@@ -14,7 +14,7 @@ import { catchAsync } from '../../../shared/catchAsync.js';
 
 class GcpVertexAIAdapter {
   constructor(options = {}) {
-    this.modelName = options.model || config.azure.model_name || 'gpt-5.5';
+    this.modelName = options.model || config.azure.model_name || 'gpt-5.4';
   }
 
   async getResponse(forwardedProps) {

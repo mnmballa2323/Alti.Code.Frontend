@@ -78,7 +78,7 @@ const configObject = {
     subscription_id: process.env.ARM_SUBSCRIPTION_ID,
     tenant_id: process.env.ARM_TENANT_ID,
     client_id: process.env.ARM_CLIENT_ID,
-    model_name: process.env.AZURE_MODEL_NAME || 'gpt-5.5',
+    model_name: process.env.AZURE_MODEL_NAME || 'gpt-5.4',
     azure_openai_endpoint: process.env.AZURE_OPENAI_ENDPOINT,
     azure_openai_api_key: process.env.AZURE_OPENAI_API_KEY,
   },

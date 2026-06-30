@@ -29,7 +29,7 @@ Return ONLY the raw instruction string. If no strong pattern is found, return "N
       userId,
       sessionId,
       evolutionPrompt,
-      'gpt-5.5',
+      'gpt-5.4',
       'Instinct-Evolution',
     );
 

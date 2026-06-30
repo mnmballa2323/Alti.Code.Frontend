@@ -16,7 +16,7 @@ export class MastraAgentService {
    * @returns {Agent} Mastra Agent
    */
   static createAgent(options = {}) {
-    const modelName = options.model || config.azure.model_name || 'gpt-5.5';
+    const modelName = options.model || config.azure.model_name || 'gpt-5.4';
 
     return new Agent({
       id: options.id || 'mastra-agent',

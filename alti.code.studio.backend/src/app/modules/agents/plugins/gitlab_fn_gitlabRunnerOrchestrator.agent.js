@@ -11,17 +11,16 @@ import { gitlabDocsService } from '../../gitlabDocs/gitlabDocs.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GitlabFnGitlabRunnerOrchestratorAgent extends BaseSpecialistAgent {
-  constructor() {
-    super();
-    this.name = 'gitlabRunnerOrchestrator';
-    this.description =
-      'Specialist GitLab Runner Orchestrator expert in cataloging and filtering instance-wide runners.';
-    this.manifest = {
-      id: 'gitlabRunnerOrchestrator',
-      capabilities: ['gitlab-list-runners'],
-      version: '39.6.0',
-    };
-    this.preamble = `You are the Inso Code Specialist GitLab Runner Orchestrator expert in cataloging and filtering instance-wide runners.
+    constructor() {
+        super();
+        this.name = 'gitlabRunnerOrchestrator';
+        this.description = 'Specialist GitLab Runner Orchestrator expert in cataloging and filtering instance-wide runners.';
+        this.manifest = {
+            id: 'gitlabRunnerOrchestrator',
+            capabilities: ["gitlab-list-runners"],
+            version: '39.6.0'
+        };
+        this.preamble = `You are the Inso Code Specialist GitLab Runner Orchestrator expert in cataloging and filtering instance-wide runners.
 This agent is the absolute authority on the specific operational boundary of: listing all instance runners, listing project/group runners, runner types.
 
 # GROUNDED RUNNERS CAPABILITIES
@@ -33,60 +32,45 @@ This agent is the absolute authority on the specific operational boundary of: li
 - Ground all designs and explanations strictly in the official grounded developer documentation context provided.
 - Never invent parameters, workflow properties, or API endpoints that are not documented.
 - Respond with clear, structured markdown. When generating code blocks, provide clean, production-grade snippets (JavaScript/TypeScript for APIs).`;
-  }
-
-  /**
-   * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
-   */
-  async _invoke(prompt, contextBlock, tenantId, spanId) {
-    if (prompt.startsWith('execute:') || prompt.startsWith('run:')) {
-      const code = prompt.replace(/^(execute|run):/, '').trim();
-      const runResult = this.runSandboxed(code);
-      return typeof runResult === 'string'
-        ? runResult
-        : JSON.stringify(runResult);
     }
 
-    logger.info(
-      `🦊 [gitlabRunnerOrchestrator] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`,
-    );
-
-    let docsContext = '';
-    try {
-      // Retrieve domain-specific documentation chunks
-      docsContext = await gitlabDocsService.searchDocs(
-        `GitLab Runners listing all instance runners, listing project/group runners, runner types ${prompt}`,
-        5,
-        tenantId,
-      );
-    } catch (err) {
-      logger.warn(
-        `🦊 [gitlabRunnerOrchestrator] Failed to query RAG documentation. Fallback used. Error: ${err.message}`,
-      );
-    }
-
-    let memoryContext = '';
-    try {
-      const { agentMemoryService } =
-        await import('../../memory/agentmemory.service.js');
-      if (agentMemoryService.isReady) {
-        const recentMemories = await agentMemoryService.smartSearch({
-          query: prompt,
-          limit: 3,
-        });
-        if (recentMemories && recentMemories.documents) {
-          memoryContext = recentMemories.documents
-            .map(d => `- Memory: ${d}`)
-            .join('\n');
+    /**
+     * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
+     */
+    async _invoke(prompt, contextBlock, tenantId, spanId) {
+        if (prompt.startsWith('execute:') || prompt.startsWith('run:')) {
+            const code = prompt.replace(/^(execute|run):/, '').trim();
+            const runResult = this.runSandboxed(code);
+            return typeof runResult === 'string' ? runResult : JSON.stringify(runResult);
         }
-      }
-    } catch (memErr) {
-      logger.debug(
-        `🦊 [gitlabRunnerOrchestrator] Memory retrieval bypassed: ${memErr.message}`,
-      );
-    }
 
-    const groundedPrompt = `${this.preamble}
+        logger.info(`🦊 [gitlabRunnerOrchestrator] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`);
+        
+        let docsContext = '';
+        try {
+            // Retrieve domain-specific documentation chunks
+            docsContext = await gitlabDocsService.searchDocs(`GitLab Runners listing all instance runners, listing project/group runners, runner types ${prompt}`, 5, tenantId);
+        } catch (err) {
+            logger.warn(`🦊 [gitlabRunnerOrchestrator] Failed to query RAG documentation. Fallback used. Error: ${err.message}`);
+        }
+
+        let memoryContext = '';
+        try {
+            const { agentMemoryService } = await import('../../memory/agentmemory.service.js');
+            if (agentMemoryService.isReady) {
+                const recentMemories = await agentMemoryService.smartSearch({
+                    query: prompt,
+                    limit: 3
+                });
+                if (recentMemories && recentMemories.documents) {
+                    memoryContext = recentMemories.documents.map(d => `- Memory: ${d}`).join('\n');
+                }
+            }
+        } catch (memErr) {
+            logger.debug(`🦊 [gitlabRunnerOrchestrator] Memory retrieval bypassed: ${memErr.message}`);
+        }
+
+        const groundedPrompt = `${this.preamble}
 
 === GROUNDED DEVELOPER DOCUMENTATION CONTEXT ===
 ${docsContext || 'No documentation found in local RAG vector store.'}
@@ -100,27 +84,22 @@ ${contextBlock || 'No additional file context provided.'}
 === REQUEST ===
 ${prompt}`;
 
-    let response = await GeminiAiService.generateContent(groundedPrompt);
+        let response = await GeminiAiService.generateContent(groundedPrompt);
 
-    // Reflection self-correction loop (1-pass review and correction if code blocks are present)
-    if (response.includes('```') && !prompt.includes('no-reflect')) {
-      logger.info(
-        `🦊 [gitlabRunnerOrchestrator] Code blocks detected. Initiating automated reflection loop...`,
-      );
-      try {
-        const reflectionPrompt = `You are the critic evaluator for [gitlabRunnerOrchestrator].
+        // Reflection self-correction loop (1-pass review and correction if code blocks are present)
+        if (response.includes('```') && !prompt.includes('no-reflect')) {
+            logger.info(`🦊 [gitlabRunnerOrchestrator] Code blocks detected. Initiating automated reflection loop...`);
+            try {
+                const reflectionPrompt = `You are the critic evaluator for [gitlabRunnerOrchestrator].
 Review the following proposed output for correctness, safety, and adherence to GitLab best practices.
 Provide 1-2 points of critical feedback. If it is perfect and compliant, return "APPROVED".
 
 PROPOSED OUTPUT:
 ${response}`;
-        const reviewResult =
-          await GeminiAiService.generateContent(reflectionPrompt);
-        if (!reviewResult.includes('APPROVED')) {
-          logger.info(
-            `🦊 [gitlabRunnerOrchestrator] Reflection loop identified feedback. Correcting response...`,
-          );
-          const correctionPrompt = `${groundedPrompt}
+                const reviewResult = await GeminiAiService.generateContent(reflectionPrompt);
+                if (!reviewResult.includes('APPROVED')) {
+                    logger.info(`🦊 [gitlabRunnerOrchestrator] Reflection loop identified feedback. Correcting response...`);
+                    const correctionPrompt = `${groundedPrompt}
                     
 === PREVIOUS ATTEMPT ===
 ${response}
@@ -129,36 +108,29 @@ ${response}
 ${reviewResult}
 
 Please correct the previous attempt based on the feedback above.`;
-          response = await GeminiAiService.generateContent(correctionPrompt);
+                    response = await GeminiAiService.generateContent(correctionPrompt);
+                }
+            } catch (reflectErr) {
+                logger.warn(`🦊 [gitlabRunnerOrchestrator] Reflection loop failed (non-blocking): ${reflectErr.message}`);
+            }
         }
-      } catch (reflectErr) {
-        logger.warn(
-          `🦊 [gitlabRunnerOrchestrator] Reflection loop failed (non-blocking): ${reflectErr.message}`,
-        );
-      }
-    }
 
-    // Asynchronously record this consultation back to the memory store
-    try {
-      const { agentMemoryService } =
-        await import('../../memory/agentmemory.service.js');
-      if (agentMemoryService.isReady) {
-        agentMemoryService
-          .observe({
-            content: `Agent [gitlabRunnerOrchestrator] processed query: "${prompt.substring(0, 150)}..." and generated output.`,
-            type: 'agent_consultation',
-            metadata: { agentId: 'gitlabRunnerOrchestrator', query: prompt },
-          })
-          .catch(() => {});
-      }
-    } catch (observeErr) {
-      logger.debug(
-        `🦊 [gitlabRunnerOrchestrator] Storing consultation observation failed (non-blocking): ${observeErr.message}`,
-      );
-    }
+        // Asynchronously record this consultation back to the memory store
+        try {
+            const { agentMemoryService } = await import('../../memory/agentmemory.service.js');
+            if (agentMemoryService.isReady) {
+                agentMemoryService.observe({
+                    content: `Agent [gitlabRunnerOrchestrator] processed query: "${prompt.substring(0, 150)}..." and generated output.`,
+                    type: 'agent_consultation',
+                    metadata: { agentId: 'gitlabRunnerOrchestrator', query: prompt }
+                }).catch(() => {});
+            }
+        } catch (observeErr) {
+            logger.debug(`🦊 [gitlabRunnerOrchestrator] Storing consultation observation failed (non-blocking): ${observeErr.message}`);
+        }
 
-    return response;
-  }
+        return response;
+    }
 }
 
 export const pluginInstance = new GitlabFnGitlabRunnerOrchestratorAgent();

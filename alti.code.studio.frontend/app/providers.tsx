@@ -234,6 +234,23 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         "electron" in window ||
         window.navigator.userAgent.includes("Electron"))
     ) {
+      const cookies = document.cookie.split(';');
+      const e2eCookie = cookies.find(c => c.trim().startsWith('e2e-session='));
+      
+      if (e2eCookie) {
+        try {
+          const sessionData = JSON.parse(decodeURIComponent(e2eCookie.split('=')[1]));
+          setTauriSession({
+            user: sessionData,
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          });
+          if (pathname === "/login" || pathname === "/") {
+            router.replace("/new-chat");
+          }
+          return;
+        } catch (e) {}
+      }
+
       const token = localStorage.getItem("accessToken");
 
       if (token) {

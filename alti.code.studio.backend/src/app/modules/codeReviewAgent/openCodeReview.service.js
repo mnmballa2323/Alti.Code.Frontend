@@ -27,7 +27,7 @@ class OpenCodeReviewService {
       ...process.env,
       OCR_LLM_URL: `${this.litellmUrl}/v1`,
       OCR_LLM_TOKEN: process.env.GEMINI_API_KEY || 'dummy-token',
-      OCR_LLM_MODEL: config.azure.model_name || 'gpt-5.5',
+      OCR_LLM_MODEL: config.azure.model_name || 'gpt-5.4',
     };
 
     return new Promise((resolve, reject) => {

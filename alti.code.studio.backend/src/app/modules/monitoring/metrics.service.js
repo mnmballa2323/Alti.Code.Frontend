@@ -25,6 +25,7 @@ class MetricsService {
     promptTokens,
     completionTokens,
     executionTimeMs,
+    userId = null
   ) {
     try {
       const inputCost = (promptTokens / 1_000_000) * this.PER_1M_INPUT_COST;
@@ -34,6 +35,7 @@ class MetricsService {
 
       const metric = new LLMMetrics({
         tenantId: tenantId || 'default_enterprise_tenant',
+        userId,
         agentName,
         model,
         promptTokens,
@@ -105,6 +107,40 @@ class MetricsService {
         error,
       );
       return null;
+    }
+  }
+
+  /**
+   * Retrieves aggregated token usage grouped by model for a specific user
+   */
+  async getUserTokenUsagePerModel(userId) {
+    try {
+      const aggregate = await LLMMetrics.aggregate([
+        { $match: { userId } },
+        {
+          $group: {
+            _id: '$model',
+            promptTokens: { $sum: '$promptTokens' },
+            completionTokens: { $sum: '$completionTokens' },
+            totalTokens: { $sum: '$totalTokens' },
+            estimatedCostUsd: { $sum: '$estimatedCostUsd' },
+            invocations: { $sum: 1 },
+          },
+        },
+        { $sort: { totalTokens: -1 } },
+      ]);
+
+      return aggregate.map((m) => ({
+        model: m._id,
+        promptTokens: m.promptTokens,
+        completionTokens: m.completionTokens,
+        totalTokens: m.totalTokens,
+        cost: m.estimatedCostUsd,
+        invocations: m.invocations,
+      }));
+    } catch (error) {
+      logger.error(`❌ MetricsService: Failed to aggregate user metrics per model`, error);
+      return [];
     }
   }
 }

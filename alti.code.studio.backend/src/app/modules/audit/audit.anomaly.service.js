@@ -15,7 +15,7 @@ class AuditAnomalyService {
   constructor() {
     this.projectId = config.azure.tenant_id;
     this.location = 'eastus';
-    this.modelName = config.azure.model_name || 'gpt-5.5'; // Use primary analytical model
+    this.modelName = config.azure.model_name || 'gpt-5.4'; // Use primary analytical model
 
     try {
       this.isEnabled = true;
@@ -75,7 +75,7 @@ class AuditAnomalyService {
         await multiCloudInferenceService.executeMultiCloudInference(
           prompt,
           'audit_anomaly',
-          { modelId: 'gpt-5.5' },
+          { modelId: 'gpt-5.4' },
         );
       const responseText = result.content;
 

@@ -126,7 +126,7 @@ ${graphContext}
     let initialCode = '';
     const architectResult = await AzureGenAiService.generateContent(
       claudePrompt,
-      'gpt-5.5',
+      'gpt-5.4',
     );
     initialCode = architectResult.content;
 
@@ -143,7 +143,7 @@ ${graphContext}
     const qaPrompt = `You are the QA Engineer. Review the following code and write an exhaustive, edge-case heavy integration test suite for it.\n\nCode:\n${initialCode}`;
     const qaResult = await AzureGenAiService.generateContent(
       qaPrompt,
-      'gpt-5.5',
+      'gpt-5.4',
       0.1,
     );
     const testSuite = qaResult.content;
@@ -156,7 +156,7 @@ ${graphContext}
 
     const cisoResult = await AzureGenAiService.generateContent(
       auditPrompt,
-      'gpt-5.5',
+      'gpt-5.4',
       0.0,
     );
 
@@ -199,7 +199,7 @@ ${graphContext}
       );
       const selfIntrospectionResult = await AzureGenAiService.generateContent(
         `Analyze the latency of your last execution. If inefficient, generate a self-mutating AST patch for tri_brain.service.js to optimize Node.js V8 bytecode. Return exactly "OPTIMIZED:" followed by the raw javascript function snippet, or "NO_CHANGE".`,
-        'gpt-5.5',
+        'gpt-5.4',
       );
 
       const aiResponse = selfIntrospectionResult.content;
@@ -293,7 +293,7 @@ ${graphContext}
     let resultText = '';
 
     try {
-      const result = await AzureGenAiService.generateContent(prompt, 'gpt-5.5');
+      const result = await AzureGenAiService.generateContent(prompt, 'gpt-5.4');
       resultText = result.content;
 
       // Update Latency Matrix

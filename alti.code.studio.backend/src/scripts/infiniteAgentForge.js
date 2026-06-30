@@ -122,7 +122,7 @@ const forgeNewAgent = async () => {
       'system',
       'infinite-forge',
       brainstormPrompt,
-      'gpt-5.5',
+      'gpt-5.4',
       'Agent-Forge',
     );
 

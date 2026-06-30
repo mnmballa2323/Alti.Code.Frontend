@@ -18,7 +18,7 @@ import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service
 
 class CapabilityRouter {
   constructor() {
-    this.modelName = (config.azure && config.azure.model_name) || 'gpt-5.5';
+    this.modelName = (config.azure && config.azure.model_name) || 'gpt-5.4';
     this.isIndexed = false;
   }
 

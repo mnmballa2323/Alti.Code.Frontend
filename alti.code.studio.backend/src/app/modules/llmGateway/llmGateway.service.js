@@ -2,6 +2,7 @@
 
 import { multiCloudInferenceService } from '../ai/multicloud_inference.service.js';
 import { prisma } from '../../../config/prisma.js';
+import { metricsService } from '../monitoring/metrics.service.js';
 import { tokenBilling } from '../enterprise/token.billing.js';
 import { CustomAgentService } from '../agents/customAgent.service.js';
 import SubscriptionModel from '../payment/payment.model.js';
@@ -180,11 +181,11 @@ const routeCompletion = async (
       actualModelName === 'default'
     ) {
       if (subscription.plan_name === 'enterprise-azure-il6') {
-        actualModelName = 'azure/il6-gpt-5.5';
+        actualModelName = 'azure/il6-gpt-5.4';
       } else if (subscription.plan_name === 'enterprise-azure-il5') {
-        actualModelName = 'azure/il5-gpt-5.5';
+        actualModelName = 'azure/il5-gpt-5.4';
       } else {
-        actualModelName = 'azure/gpt-5.5';
+        actualModelName = 'azure/gpt-5.4';
       }
       logger.info(
         `🏢 [LlmGateway] Enterprise Azure: Auto-routing overridden to default Azure OpenAI model: ${actualModelName}`,
@@ -193,7 +194,7 @@ const routeCompletion = async (
       const isAzureOrLocal =
         actualModelName.startsWith('azure/') ||
         actualModelName.startsWith('local/') ||
-        actualModelName === 'gpt-5.5';
+        actualModelName === 'gpt-5.4';
       if (!isAzureOrLocal) {
         throw new ApiError(
           httpStatus.FORBIDDEN,
@@ -476,13 +477,13 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
       : actualModelName.startsWith('gcp-vertex/')
         ? actualModelName.replace(/^gcp-vertex\//, '')
         : [
+              'gemini-3.5-pro',
               'gemini-3.5-flash',
-              'gemini-3.1-pro',
+              'claude-fable-5',
+              'claude-opus-4.8',
               'claude-sonnet-4.6',
-              'claude-opus-4.6',
+              'gpt-5.4',
               'gpt-5.4-mini',
-              'gpt-5.5-pro',
-              'gpt-5.5-thinking',
             ].includes(actualModelName)
           ? actualModelName
           : 'gemini-3.5-flash';
@@ -510,23 +511,34 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
             tenantId = user.tenantId;
           }
         }
-        // Initialize billing account if it doesn't exist yet
+        // Initialize billing account for the user if it doesn't exist yet
         try {
-          if (!tokenBilling.getAccount(tenantId)) {
-            tokenBilling.createAccount(tenantId, 'starter');
+          if (!tokenBilling.getAccount(userId)) {
+            tokenBilling.createAccount(userId, 'starter');
           }
         } catch (accErr) {
           // ignore
         }
-        tokenBilling.consumeTokens(tenantId, {
+        tokenBilling.consumeTokens(userId, {
           agentName: 'Gateway Chat',
           model: cleanModelName,
           inputTokens: result.tokens.prompt || 0,
           outputTokens: result.tokens.completion || 0,
         });
+        
+        // Log to Mongoose metrics for granular analytics
+        await metricsService.recordLLMUsage(
+          tenantId,
+          'Gateway Chat',
+          cleanModelName,
+          result.tokens.prompt || 0,
+          result.tokens.completion || 0,
+          result.latencyMs || 0,
+          userId
+        );
       } catch (err) {
         logger.error(
-          '[LlmGateway] Failed to consume tokens in billing engine:',
+          '[LlmGateway] Failed to consume tokens in billing/metrics engine:',
           err,
         );
       }

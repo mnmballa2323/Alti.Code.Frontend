@@ -14,6 +14,7 @@
  */
 
 import { logger } from '../../../shared/logger.js';
+import { executeVertexInference } from './vertex_ai.helper.js';
 import axios from 'axios';
 
 const BASE_SYSTEM_PROMPT =
@@ -28,11 +29,11 @@ const PROVIDERS = {
         await import('@azure/openai');
       return new OpenAIClient(
         process.env.AZURE_OPENAI_ENDPOINT,
-        new AzureKeyCredential(process.env.AZURE_OPENAI_KEY),
+        new AzureKeyCredential(process.env.AZURE_OPENAI_API_KEY),
       );
     },
     reason: async (client, prompt, options = {}) => {
-      const deploymentId = options.model || 'gpt-4o';
+      const deploymentId = options.model || 'gpt-5.4';
       const messages = [
         { role: 'system', content: BASE_SYSTEM_PROMPT },
         { role: 'user', content: prompt },
@@ -43,7 +44,7 @@ const PROVIDERS = {
       return result.choices[0].message.content;
     },
     generate: async (client, prompt, options = {}) => {
-      const deploymentId = options.model || 'gpt-4o';
+      const deploymentId = options.model || 'gpt-5.4';
       const messages = [
         { role: 'system', content: BASE_SYSTEM_PROMPT },
         { role: 'user', content: prompt },
@@ -54,6 +55,22 @@ const PROVIDERS = {
       return result.choices[0].message.content;
     },
   },
+  vertex_ai: {
+    name: 'Google Vertex AI (Gemini & Claude)',
+    initialize: async () => {
+      return true;
+    },
+    reason: async (client, prompt, options = {}) => {
+      const modelId = options.model || 'gemini-3.5-pro';
+      const res = await executeVertexInference(prompt, modelId, options);
+      return res.text;
+    },
+    generate: async (client, prompt, options = {}) => {
+      const modelId = options.model || 'gemini-3.5-flash';
+      const res = await executeVertexInference(prompt, modelId, options);
+      return res.text;
+    },
+  },
 };
 
 class AIProvider {
@@ -61,7 +78,7 @@ class AIProvider {
     this.activeProvider = process.env.AI_PROVIDER || 'azure_openai';
     this.client = null;
     this.providers = PROVIDERS;
-    this.fallbackOrder = ['azure_openai'];
+    this.fallbackOrder = ['azure_openai', 'vertex_ai'];
   }
 
   async init() {

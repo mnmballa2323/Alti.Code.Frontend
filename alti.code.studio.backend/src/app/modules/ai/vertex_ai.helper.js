@@ -99,6 +99,7 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
           Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify(body),
+        signal: options.signal,
       });
 
       if (response.ok) {
@@ -150,6 +151,7 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
             ...(isStructured ? { responseMimeType: 'application/json' } : {}),
           },
         }),
+        signal: options.signal,
       });
 
       if (response.ok) {

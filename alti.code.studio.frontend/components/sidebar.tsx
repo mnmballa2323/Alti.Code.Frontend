@@ -1770,21 +1770,12 @@ export default function Sidebar() {
                   alt="Inso Logo Icon"
                   className={cn(
                     "w-auto object-contain",
-                    isTauri ? "h-[18px]" : "h-6",
+                    isTauri ? "h-[18px]" : "h-5",
                   )}
-                  height={24}
+                  height={20}
                   src="/assets/logo-icon-black.png?v=2"
-                  width={28}
+                  width={24}
                 />
-                {!isTauri && (
-                  <Image
-                    alt="Inso Code"
-                    className="h-4 w-auto object-contain"
-                    height={16}
-                    src="/inso-logo-black.png"
-                    width={80}
-                  />
-                )}
               </div>
               {/* Dark Mode: Icon + Text */}
               <div className="hidden dark:flex items-center gap-2">
@@ -1792,21 +1783,12 @@ export default function Sidebar() {
                   alt="Inso Logo Icon"
                   className={cn(
                     "w-auto object-contain",
-                    isTauri ? "h-[18px]" : "h-6",
+                    isTauri ? "h-[18px]" : "h-5",
                   )}
-                  height={24}
+                  height={20}
                   src="/assets/logo-icon-white.png?v=2"
-                  width={28}
+                  width={24}
                 />
-                {!isTauri && (
-                  <Image
-                    alt="Inso Code"
-                    className="h-4 w-auto object-contain"
-                    height={16}
-                    src="/inso-logo-white.png"
-                    width={80}
-                  />
-                )}
               </div>
             </div>
             <Button

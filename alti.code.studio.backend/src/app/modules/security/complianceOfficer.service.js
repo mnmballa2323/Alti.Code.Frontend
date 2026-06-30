@@ -32,7 +32,7 @@ Generate a strict compliance audit report, and output the exact code patches req
       userId,
       sessionId,
       compliancePrompt,
-      'gpt-5.5',
+      'gpt-5.4',
       'Compliance-Officer',
     );
 

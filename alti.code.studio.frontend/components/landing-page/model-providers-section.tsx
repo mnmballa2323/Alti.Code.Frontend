@@ -79,20 +79,12 @@ const providers = [
         metric: { label: "Cognition", value: "98%" },
       },
       {
-        name: "GPT-5.5 Pro (Sovereign)",
+        name: "GPT-5.4 (Sovereign)",
         role: "Advanced Math & Synthesis",
         description:
           "Multi-step complex logic reasoning, code validation, and deep compliance check loops.",
         tags: ["Complex Logic", "Chain-of-Thought", "High Compliance"],
         metric: { label: "Logic", value: "99%" },
-      },
-      {
-        name: "GPT-5.5 Thinking (Sovereign)",
-        role: "Deep Strategic Inference",
-        description:
-          "Chain-of-thought reasoning, solving highly complex structural codebases and formal security checks.",
-        tags: ["Thinking", "Reasoning Loop", "Auditing"],
-        metric: { label: "Inference", value: "99.9%" },
       },
     ],
   },

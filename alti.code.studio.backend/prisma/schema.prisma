@@ -135,6 +135,7 @@ model User {
   subscriptions Subscription[]
   forums        Forum[]
   vault         Vault?
+  billing       UserBilling?
   notifications Notification[]
   serverlessFunctions ServerlessFunction[]
 }
@@ -160,6 +161,24 @@ model Subscription {
 
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+// -----------------------------------------------------------------
+// Token Billing (User Level)
+// -----------------------------------------------------------------
+model UserBilling {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String   @unique @db.Uuid
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  monthlyBudgetUsd Float    @default(100.0)
+  currentSpendUsd  Float    @default(0.0)
+  hardLimitAction  String   @default("pause") // pause, warn
+  tokenBalance     Int      @default(0)
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
 
 // -----------------------------------------------------------------
 // Community: Forums & Blogs

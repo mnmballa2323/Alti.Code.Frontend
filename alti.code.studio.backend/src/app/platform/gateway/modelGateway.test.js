@@ -121,7 +121,7 @@ describe('Platform Model Gateway', () => {
   });
 
   it('should block direct integrations to unauthorized providers with FORBIDDEN exception', async () => {
-    for (const provider of ['openai', 'anthropic', 'aws', 'azure']) {
+    for (const provider of ['openai', 'anthropic', 'aws']) {
       await expect(
         routePlatformCompletion({
           provider,
@@ -129,19 +129,19 @@ describe('Platform Model Gateway', () => {
           prompt: 'test',
         }),
       ).rejects.toThrow(
-        'Security Policy Exception: Direct API connections to non-GCP providers are blocked. Please use GCP Vertex AI.',
+        'Security Policy Exception: Direct API connections to non-GCP/Azure providers are blocked. Please use GCP Vertex AI or Azure Foundry.',
       );
     }
   });
 
-  it('should route completions successfully via GCP Vertex AI (redirected to Azure OpenAI)', async () => {
+  it('should route completions successfully via GCP Vertex AI', async () => {
     const reply = await routePlatformCompletion({
       provider: 'gcp',
       model: 'gemini-3.1-pro',
       prompt: 'Hello Gemini',
     });
 
-    expect(reply).toBe('Azure OpenAI mock reply');
+    expect(reply).toContain('[GOOGLE VERTEX AI DIRECT SOVEREIGN COMPLIANT SIMULATION]');
   });
 
   it('should sanitize credentials in error responses to prevent leakage', () => {
@@ -196,8 +196,8 @@ describe('Platform Model Gateway', () => {
       });
 
       await routePlatformCompletion({
-        provider: 'gcp',
-        model: 'gemini-3.1-pro',
+        provider: 'azure',
+        model: 'azure/gpt-4o',
         prompt: 'Clean prompt',
         scrubPrompt: true,
       });
@@ -218,8 +218,8 @@ describe('Platform Model Gateway', () => {
       });
 
       await routePlatformCompletion({
-        provider: 'gcp',
-        model: 'google/gemini-3.1-pro',
+        provider: 'azure',
+        model: 'azure/gpt-4o',
         prompt: 'Hello with telemetry',
         productId: 'inso-code',
         tenantId: 'tenant-999',
@@ -227,7 +227,7 @@ describe('Platform Model Gateway', () => {
 
       expect(mockRecordLlmCall).toHaveBeenCalledWith(
         expect.objectContaining({
-          model: 'google/gemini-3.1-pro',
+          model: 'azure/gpt-4o',
           success: true,
           tokens: 150,
           productId: 'inso-code',
@@ -242,8 +242,8 @@ describe('Platform Model Gateway', () => {
 
       await expect(
         routePlatformCompletion({
-          provider: 'gcp',
-          model: 'google/gemini-3.1-pro',
+          provider: 'azure',
+          model: 'azure/gpt-4o',
           prompt: 'Failing prompt',
           productId: 'inso-ai',
           tenantId: 'tenant-111',
@@ -281,8 +281,8 @@ describe('Platform Model Gateway', () => {
       );
 
       await routePlatformCompletion({
-        provider: 'gcp',
-        model: 'google/gemini-3.1-pro',
+        provider: 'azure',
+        model: 'azure/gpt-4o',
         prompt,
         productId: 'inso-code',
         tenantId: 'tenant-999',
@@ -310,8 +310,8 @@ describe('Platform Model Gateway', () => {
 
       // Call 1: Consumes 90,000 tokens for product-pharma (limit is 80,000)
       await routePlatformCompletion({
-        provider: 'gcp',
-        model: 'google/gemini-3.1-pro',
+        provider: 'azure',
+        model: 'azure/gpt-4o',
         prompt: 'First call',
         productId: 'product-pharma',
       });
@@ -321,8 +321,8 @@ describe('Platform Model Gateway', () => {
       // Call 2: Consuming more tokens should fail because it exceeds limit (90,000 >= 80,000)
       await expect(
         routePlatformCompletion({
-          provider: 'gcp',
-          model: 'google/gemini-3.1-pro',
+          provider: 'azure',
+          model: 'azure/gpt-4o',
           prompt: 'Second call',
           productId: 'product-pharma',
         }),
@@ -338,13 +338,13 @@ describe('Platform Model Gateway', () => {
       });
 
       await routePlatformCompletion({
-        provider: 'gcp',
-        model: 'google/gemini-3.1-pro',
+        provider: 'azure',
+        model: 'azure/gpt-4o',
         prompt: 'Regional test',
         productId: 'product-healthcare',
       });
 
-      const gcpRegion = config.gcp?.location || 'us-central1';
+      const gcpRegion = 'azure-eastus';
       const metrics = getRegionalMetrics(gcpRegion);
 
       expect(metrics.totalCalls).toBe(1);

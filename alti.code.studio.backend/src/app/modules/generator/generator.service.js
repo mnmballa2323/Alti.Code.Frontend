@@ -62,8 +62,8 @@ const generateApp = async prompt => {
 
   try {
     const responseText = await modelGateway.routePlatformCompletion({
-      provider: 'azure',
-      model: 'azure/gpt-5.5-pro',
+      provider: 'gcp',
+      model: 'gemini-3.5-pro',
       prompt: `${systemPrompt}\n\n${prompt}`,
       temperature: 0.1,
     });
@@ -316,8 +316,8 @@ const refineProject = async (targetDir, prompt) => {
 
   try {
     const responseText = await modelGateway.routePlatformCompletion({
-      provider: 'azure',
-      model: 'azure/gpt-5.5-pro',
+      provider: 'gcp',
+      model: 'gemini-3.5-pro',
       prompt: systemPrompt,
       temperature: 0.1,
     });

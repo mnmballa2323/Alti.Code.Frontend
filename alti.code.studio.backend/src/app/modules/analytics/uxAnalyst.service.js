@@ -34,7 +34,7 @@ Return ONLY the raw A/B test redesign instructions, no markdown.`;
       userId,
       sessionId,
       uxPrompt,
-      'gpt-5.5',
+      'gpt-5.4',
       'UX-Analyst',
     );
 

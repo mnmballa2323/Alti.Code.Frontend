@@ -18,21 +18,21 @@ const synthesize = async (userId, sessionId, contextPrompt, taskPrompt) => {
         userId,
         sessionId,
         `${contextPrompt}\n\nTask: ${taskPrompt}\n\nFocus strictly on ARCHITECTURE and SYSTEM DESIGN.`,
-        'azure/gpt-5.5',
+        'azure/gpt-5.4',
         'Synthesis',
       ),
       LlmGatewayService.routeCompletion(
         userId,
         sessionId,
         `${contextPrompt}\n\nTask: ${taskPrompt}\n\nFocus strictly on PERFORMANCE and CODE QUALITY.`,
-        'azure/il5-gpt-5.5',
+        'azure/il5-gpt-5.4',
         'Synthesis',
       ),
       LlmGatewayService.routeCompletion(
         userId,
         sessionId,
         `${contextPrompt}\n\nTask: ${taskPrompt}\n\nFocus strictly on SECURITY VULNERABILITIES and EDGE CASES.`,
-        'azure/il6-gpt-5.5',
+        'azure/il6-gpt-5.4',
         'Synthesis',
       ),
     ]);
@@ -74,7 +74,7 @@ Your goal is to read all three expert opinions and synthesize them into a single
       userId,
       sessionId,
       synthesisPrompt,
-      'azure/gpt-5.5',
+      'azure/gpt-5.4',
       'Synthesis',
     );
 

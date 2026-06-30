@@ -7,6 +7,7 @@
 
 import { metricsService } from './metrics.service.js';
 import sendResponse from '../../../shared/sendResponse.js';
+import { tokenBilling } from '../enterprise/token.billing.js';
 
 class MetricsController {
   async getMissionControlStats(req, res) {
@@ -35,6 +36,49 @@ class MetricsController {
         statusCode: 500,
         success: false,
         message: 'Internal Server Error computing usage metrics',
+      });
+    }
+  }
+
+  async getUserStats(req, res) {
+    try {
+      // In this setup, we authenticate via req.user usually. But for safety, check query or auth object.
+      const userId = req.user?.id || req.query.userId;
+      
+      if (!userId) {
+         return sendResponse(res, {
+          statusCode: 400,
+          success: false,
+          message: 'userId is required',
+        });
+      }
+
+      const modelsUsage = await metricsService.getUserTokenUsagePerModel(userId);
+      let billingAccount = tokenBilling.getAccount(userId);
+      
+      if (!billingAccount) {
+         billingAccount = tokenBilling.createAccount(userId, 'starter');
+      }
+
+      return sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message: 'User Metrics Aggregated',
+        data: {
+          billing: {
+            plan: billingAccount.plan,
+            tokensUsed: billingAccount.tokensUsed,
+            tokensRemaining: billingAccount.tokensRemaining,
+            monthlyAllowance: billingAccount.monthlyAllowance,
+          },
+          modelsUsage,
+        },
+      });
+    } catch (error) {
+      return sendResponse(res, {
+        statusCode: 500,
+        success: false,
+        message: 'Internal Server Error computing user metrics',
       });
     }
   }

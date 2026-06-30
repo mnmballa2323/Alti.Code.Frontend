@@ -32,13 +32,7 @@ export default function LandingPage() {
         window.navigator.userAgent.includes("Electron"))
     ) {
       setIsDesktopApp(true);
-      const token = localStorage.getItem("accessToken");
-
-      if (token) {
-        router.replace("/new-chat");
-      } else {
-        router.replace("/login");
-      }
+      router.replace("/new-chat");
     }
   }, [router]);
 

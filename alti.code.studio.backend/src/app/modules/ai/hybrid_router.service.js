@@ -69,7 +69,7 @@ class HybridRouterService {
       'jules',
       {
         preferredProvider,
-        modelId: 'gpt-5.5',
+        modelId: 'gpt-5.4',
       },
     );
     return { content: result.content, venue: result.venue };

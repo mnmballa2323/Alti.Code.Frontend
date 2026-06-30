@@ -380,7 +380,7 @@ ${newErrors.join('\n\n')}
         AZURE_OPENAI_API_KEY: process.env.ARM_CLIENT_SECRET || 'dummy-key',
         AZURE_OPENAI_ENDPOINT:
           process.env.ARM_ENDPOINT || 'https://dummy-endpoint.openai.azure.com',
-        GOOSE_MODEL: config.azure.model_name || 'gpt-5.5',
+        GOOSE_MODEL: config.azure.model_name || 'gpt-5.4',
       };
 
       const gooseProcess = spawn(

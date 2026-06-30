@@ -31,7 +31,7 @@ ${criticalCode}`;
       userId,
       sessionId,
       huntPrompt,
-      'gpt-5.5',
+      'gpt-5.4',
       'AgentShield-Hunt',
     );
 

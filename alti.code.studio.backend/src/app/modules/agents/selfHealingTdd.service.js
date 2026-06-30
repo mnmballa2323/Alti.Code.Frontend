@@ -125,7 +125,7 @@ Analyze the stack trace and fix the logic. Return ONLY the fully updated raw jav
       userId,
       sessionId,
       debugPrompt,
-      'gpt-5.5',
+      'gpt-5.4',
       'TDD-Debug',
     );
     currentCode = patchedCodeResult.reply

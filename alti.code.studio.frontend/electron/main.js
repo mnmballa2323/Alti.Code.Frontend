@@ -1,5 +1,5 @@
 
-const { app, BrowserWindow, ipcMain, desktopCapturer, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, desktopCapturer, screen, nativeImage } = require('electron');
 const path = require('path');
 const serve = require('electron-serve');
 const { spawn } = require('child_process');
@@ -35,16 +35,21 @@ function bootOpenWork() {
 }
 
 const createWindow = () => {
-    const iconPath = path.join(__dirname, '../public/app-icon.png');
+    const iconPath = path.join(__dirname, '../public/mac-dock-icon.png');
     
     // Set dock icon for macOS
     if (process.platform === 'darwin' && app.dock) {
-        app.dock.setIcon(iconPath);
+        const icon = nativeImage.createFromPath(iconPath);
+        if (icon.isEmpty()) {
+            console.error("Icon is empty! Path:", iconPath);
+        }
+        app.dock.setIcon(icon);
     }
 
     const win = new BrowserWindow({
         width: 1200,
         height: 800,
+        title: "Inso Code",
         icon: iconPath,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
@@ -255,7 +260,15 @@ const createWindow = () => {
             win.loadURL('app://./index.html');
         });
     } else {
-        win.loadURL('http://localhost:3001');
+        win.webContents.session.cookies.set({
+            url: 'http://localhost:3001',
+            name: 'e2e-session',
+            value: encodeURIComponent(JSON.stringify({ role: 'admin' })),
+            domain: 'localhost',
+            path: '/'
+        }).then(() => {
+            win.loadURL('http://localhost:3001/new-chat');
+        });
         // Open DevTools in development
         // win.webContents.openDevTools();
     }

@@ -28,7 +28,7 @@ Return a detailed security report and the exact patched code to resolve any vuln
       userId,
       sessionId,
       auditPrompt,
-      'gpt-5.5',
+      'gpt-5.4',
       'Smart-Contract-Auditor',
     );
 

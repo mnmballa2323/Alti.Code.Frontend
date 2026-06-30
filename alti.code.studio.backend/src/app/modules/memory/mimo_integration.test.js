@@ -220,13 +220,13 @@ capabilities:
       const { azureGenAiService } = await import('../ai/azureGenAi.service.js');
       vi.spyOn(azureGenAiService, 'generateContent').mockImplementation(
         async (prompt, model) => {
-          if (model === 'gpt-5.5' && prompt.includes('Lead Architect')) {
+          if (model === 'gpt-5.4' && prompt.includes('Lead Architect')) {
             return { content: 'const a = 1;' };
           }
           if (model === 'claude-5-sonnet') {
             return { content: 'const a = 1;' };
           }
-          if (model === 'gpt-5.5') {
+          if (model === 'gpt-5.4') {
             if (
               prompt.includes('Introspection') ||
               prompt.includes('introspection')

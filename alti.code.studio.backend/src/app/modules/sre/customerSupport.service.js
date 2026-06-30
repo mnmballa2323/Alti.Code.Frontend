@@ -29,7 +29,7 @@ Return the exact debugging hypothesis and the specific file/function to fix.`;
       userId,
       sessionId,
       supportPrompt,
-      'gpt-5.5',
+      'gpt-5.4',
       'Customer-Support',
     );
 

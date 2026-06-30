@@ -85,7 +85,9 @@ class MultiCloudInferenceService {
     }
 
     const modelId = options.modelId || 'gemini-3.5-flash';
-    const primaryProvider = 'azure';
+    const preferred = options.preferredProvider || 'gcp-vertex';
+    const primaryProvider = preferred === 'azure' ? 'azure' : 'gcp-vertex';
+    const secondaryProvider = primaryProvider === 'gcp-vertex' ? 'azure' : 'gcp-vertex';
 
     if (process.env.AIR_GAPPED_MODE === 'true') {
       logger.warn(
@@ -95,43 +97,69 @@ class MultiCloudInferenceService {
     }
 
     logger.info(
-      `🌐 [Google Sovereign Inference] Initiating inference for Agent [${activeAgent}] on ${primaryProvider.toUpperCase()}`,
+      `🌐 [Google Sovereign Inference] Initiating inference for Agent [${activeAgent}] on ${primaryProvider.toUpperCase()} (Primary)`,
     );
 
-    const providersQueue = ['azure'];
+    const providersQueue = [primaryProvider, secondaryProvider];
     let lastError = null;
     let resultObj = null;
 
-    for (const provider of providersQueue) {
-      try {
-        if (provider === 'gcp-vertex') {
-          resultObj = await this._executeGoogleVertex(
-            finalPrompt,
-            activeAgent,
-            modelId,
-            options,
-          );
-          break;
-        } else if (provider === 'azure') {
-          resultObj = await this._executeAzureFoundry(
-            finalPrompt,
-            activeAgent,
-            modelId,
-            options,
-          );
-          break;
+    for (let i = 0; i < providersQueue.length; i++) {
+      const provider = providersQueue[i];
+      let attempt = 0;
+      const maxRetries = provider === primaryProvider ? 1 : 0; // 1 retry for primary, 0 for secondary
+
+      while (attempt <= maxRetries) {
+        try {
+          // Primary gets aggressive 10s timeout to fast-fail, Secondary gets 20s
+          const timeoutMs = provider === primaryProvider ? 10000 : 20000;
+          const abortController = new AbortController();
+          const timeoutId = setTimeout(() => abortController.abort(), timeoutMs);
+          const currentOptions = { ...options, signal: abortController.signal };
+
+          if (provider === 'gcp-vertex') {
+            resultObj = await this._executeGoogleVertex(
+              finalPrompt,
+              activeAgent,
+              modelId,
+              currentOptions,
+            );
+          } else if (provider === 'azure') {
+            resultObj = await this._executeAzureFoundry(
+              finalPrompt,
+              activeAgent,
+              modelId,
+              currentOptions,
+            );
+          }
+          
+          clearTimeout(timeoutId);
+          break; // Success, break out of retry loop
+        } catch (err) {
+          lastError = err;
+          attempt++;
+          if (attempt <= maxRetries) {
+            logger.warn(
+              `⚠️ [Google Sovereign Inference] ${provider.toUpperCase()} attempt ${attempt} failed: ${err.message}. Retrying with exponential backoff...`,
+            );
+            // Exponential backoff: 500ms * 2^attempt
+            await new Promise(resolve => setTimeout(resolve, 500 * Math.pow(2, attempt)));
+          } else {
+            logger.warn(
+              `⚠️ [Google Sovereign Inference] ${provider.toUpperCase()} provider failed entirely: ${err.message}`,
+            );
+          }
         }
-      } catch (err) {
-        logger.warn(
-          `⚠️ [Google Sovereign Inference] ${provider.toUpperCase()} provider failed: ${err.message}`,
-        );
-        lastError = err;
+      }
+
+      if (resultObj) {
+        break; // Success, break out of provider queue loop
       }
     }
 
     if (!resultObj) {
       logger.error(
-        `❌ [Google Sovereign Inference] GCP Vertex provider exhausted. Inference has failed completely.`,
+        `❌ [Google Sovereign Inference] All providers exhausted. Inference has failed completely.`,
       );
       throw new Error(
         `Google Sovereign Inference failed. Last error: ${lastError?.message}`,
@@ -292,10 +320,10 @@ class MultiCloudInferenceService {
       );
 
       let azureApiKey =
-        options.vaultCredentials?.azureApiKey || process.env.AZURE_API_KEY;
+        options.vaultCredentials?.azureApiKey || process.env.AZURE_OPENAI_API_KEY;
       let azureEndpoint =
         options.vaultCredentials?.azureEndpoint ||
-        process.env.AZURE_ENDPOINT ||
+        process.env.AZURE_OPENAI_ENDPOINT ||
         'https://my-azure-foundry-resource.openai.azure.com';
 
       if (azureApiKey) {
@@ -306,7 +334,8 @@ class MultiCloudInferenceService {
           try {
             attempt++;
             const deploymentId = modelId;
-            const url = `${azureEndpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=2024-02-15-preview`;
+            const cleanEndpoint = azureEndpoint.endsWith('/') ? azureEndpoint.slice(0, -1) : azureEndpoint;
+            const url = `${cleanEndpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=2024-02-15-preview`;
 
             // Build strict payload options
             const payload = {

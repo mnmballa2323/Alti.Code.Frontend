@@ -1,7 +1,8 @@
 "use client";
 
-import { LogOut, Shield } from "lucide-react";
+import { LogOut, Shield, Activity } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import { Button } from "./ui/button";
@@ -19,6 +20,7 @@ import { getUserData } from "@/lib/user";
 
 const MyAccountDropdown = () => {
   const { onOpen } = useModalStore();
+  const router = useRouter();
   const [profile, setProfile] = useState<any>(null);
   const [isDesktop, setIsDesktop] = useState(false);
 
@@ -62,16 +64,19 @@ const MyAccountDropdown = () => {
           <DropdownMenuGroup>
             {!isDesktop &&
               (profile?.role === "admin" || profile?.role === "ADMIN") && (
-                <DropdownMenuItem className="relative">
-                  <span className="flex items-center space-x-2">
+                <DropdownMenuItem className="relative cursor-pointer" onSelect={() => router.push('/admin')}>
+                  <span className="flex items-center space-x-2 w-full">
                     <Shield className="size-5 text-indigo-400" />
-                    <Link href="/admin">
-                      <span className="absolute inset-0" />
-                      Admin Console
-                    </Link>
+                    <span>Admin Console</span>
                   </span>
                 </DropdownMenuItem>
               )}
+            <DropdownMenuItem className="relative cursor-pointer" onSelect={() => router.push('/dashboard/token-usage')}>
+              <span className="flex items-center space-x-2 w-full">
+                <Activity className="size-5 text-green-400" />
+                <span>Token Usage</span>
+              </span>
+            </DropdownMenuItem>
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
