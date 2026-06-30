@@ -1499,8 +1499,14 @@ export default function Sidebar() {
   });
 
   useEffect(() => {
-    const handleRefresh = () => {
-      refetchRules();
+    const handleRefresh = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      if (customEvent.detail && customEvent.detail.instructions) {
+        setInstructions(customEvent.detail.instructions);
+        setGuardrails(customEvent.detail.guardrails);
+      } else {
+        refetchRules();
+      }
     };
 
     window.addEventListener("refresh-rules-sidebar", handleRefresh);
@@ -1996,7 +2002,7 @@ export default function Sidebar() {
                   : "h-[30px] w-[30px] p-0 justify-center rounded-md",
                 pathname === "/engines"
                   ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
-                  : "bg-[#F4F4F6]/50 dark:bg-default-50/50 hover:bg-[#F4F4F6] dark:hover:bg-default-50 text-default-600 dark:text-gray-300 border border-transparent",
+                  : "bg-default-100/50 dark:bg-default-50/50 hover:bg-default-100 dark:hover:bg-default-50 text-default-600 dark:text-gray-300 border border-transparent",
               )}
               onClick={() => {
                 router.push("/engines");

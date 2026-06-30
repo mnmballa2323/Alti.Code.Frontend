@@ -19,6 +19,8 @@ import httpStatus from 'http-status';
 import compression from 'compression';
 import crypto from 'crypto';
 import promClient from 'prom-client';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import { paperclipService } from './src/app/modules/paperclip/paperclip.service.js';
 // ⚡ PostgreSQL Database & Prisma DAL (MongoDB Deprecated)
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
@@ -204,6 +206,30 @@ app.use(dlpMiddleware);
 
 // 🚀 Autonomous Profiler: Self-Healing Performance Monitor
 app.use(autoProfilerService.monitor);
+
+// 🖇️ Paperclip AI Fully Entrenched Reverse Proxy
+app.use('/paperclip', async (req, res, next) => {
+    try {
+        if (!paperclipService.isReady) {
+            console.log(`[Paperclip Proxy] Request to ${req.url} queued. Waiting for daemon to boot...`);
+            await paperclipService.waitForReady();
+        }
+        next();
+    } catch (err) {
+        console.error('[Paperclip Proxy] Boot failure', err);
+        res.status(502).json({ error: 'Paperclip subsystem failed to boot.' });
+    }
+}, createProxyMiddleware({
+    target: 'http://127.0.0.1:8082',
+    router: () => `http://127.0.0.1:${paperclipService.activePort || '8082'}`,
+    changeOrigin: true,
+    ws: true,
+    pathRewrite: { '^/paperclip': '' },
+    onError: (err, req, res) => {
+        console.error('[Paperclip Proxy Error]', err);
+        res.status(502).json({ error: 'Paperclip subsystem is unreachable or crashed.' });
+    }
+}));
 
 // 📊 Universe-Level Observability: Global Audit & Cloud Logging
 app.use((req, res, next) => {

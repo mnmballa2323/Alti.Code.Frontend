@@ -98,6 +98,11 @@ async function main() {
       githubCrawlerService.init();
     }).catch(err => logger.error('❌ Failed to start GithubCrawlerService', err));
 
+    // Initialize Paperclip AI System (Headless Backend)
+    import('./src/app/modules/paperclip/paperclip.service.js').then(({ paperclipService }) => {
+      paperclipService.init().catch(err => logger.error('❌ Failed to start Paperclip AI Service', err));
+    }).catch(err => logger.error('❌ Failed to load Paperclip Service', err));
+
     // Initialize OpenClaw Deep Integration
     import('./src/app/modules/openclaw/index.js').then(async (openclaw) => {
       await openclaw.openClawCore.init();
@@ -270,6 +275,11 @@ const gracefulShutdown = async (signal) => {
         import('./src/app/modules/memory/mimo_dream.service.js').then(({ mimoDreamService }) => {
           mimoDreamService.shutdown();
         }).catch(() => {});
+
+        // Shutdown Paperclip Daemon
+        import('./src/app/modules/paperclip/paperclip.service.js').then(({ paperclipService }) => {
+          paperclipService.shutdown();
+        }).catch(() => logger.warn('Paperclip shutdown bypassed.'));
 
         logger.info('🚀 Graceful shutdown complete. Exiting process safely.');
         process.exit(0);

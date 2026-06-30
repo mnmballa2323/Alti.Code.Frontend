@@ -49,3 +49,6 @@
 [submodule "submodules/awesome-design-md"]
 	path = submodules/awesome-design-md
 	url = https://github.com/VoltAgent/awesome-design-md
+[submodule "submodules/paperclip"]
+	path = submodules/paperclip
+	url = https://github.com/paperclipai/paperclip.git

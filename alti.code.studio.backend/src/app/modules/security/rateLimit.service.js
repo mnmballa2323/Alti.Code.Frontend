@@ -38,14 +38,21 @@ const init = async () => {
       duration: 60,
     });
   } catch (err) {
-    logger.warn(
-      `⚠️ RateLimitService: Cloud Memorystore unreachable (${err.message}). Using In-Memory fallback.`,
-    );
+    if (process.env.NODE_ENV === 'production') {
+      logger.error(
+        '🚨 CRITICAL: Redis is unavailable in production. Failing closed to protect enterprise APIs.',
+      );
+      throw new Error('Redis rate limiter is required in production.');
+    } else {
+      logger.warn(
+        `⚠️ RateLimitService: Cloud Memorystore unreachable (${err.message}). Using In-Memory fallback (DEV ONLY).`,
+      );
 
-    rateLimiter = new RateLimiterMemory({
-      points: 100,
-      duration: 60,
-    });
+      rateLimiter = new RateLimiterMemory({
+        points: 100,
+        duration: 60,
+      });
+    }
   }
 
   return rateLimiter;
@@ -80,6 +87,9 @@ const middleware = (points = 10, duration = 60) => {
             duration: duration,
           });
         } else {
+          if (process.env.NODE_ENV === 'production') {
+            throw new Error('Redis rate limiter is required in production.');
+          }
           specificLimiter = new RateLimiterMemory({
             points: points,
             duration: duration,

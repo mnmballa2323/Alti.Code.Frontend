@@ -174,9 +174,49 @@ model UserBilling {
   currentSpendUsd  Float    @default(0.0)
   hardLimitAction  String   @default("pause") // pause, warn
   tokenBalance     Int      @default(0)
+
+  stripeCustomerId String?  @unique
+  activePlan       String   @default("free")
   
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+}
+
+model TokenUsageRecord {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @db.Uuid
+  agentName      String?
+  model          String   @default("default")
+  inputTokens    Int      @default(0)
+  outputTokens   Int      @default(0)
+  totalTokens    Int      @default(0)
+  cost           Float    @default(0.0)
+  isOverage      Boolean  @default(false)
+  overageTokens  Int      @default(0)
+  
+  createdAt      DateTime @default(now())
+  
+  @@index([tenantId, createdAt(sort: Desc)])
+}
+
+model Invoice {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @db.Uuid
+  plan           String
+  periodStart    DateTime
+  periodEnd      DateTime
+  subtotal       Float
+  tax            Float
+  total          Float
+  currency       String   @default("USD")
+  status         String   @default("ISSUED")
+  lineItems      Json     @default("[]")
+  
+  issuedAt       DateTime @default(now())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  @@index([tenantId, issuedAt(sort: Desc)])
 }
 
 

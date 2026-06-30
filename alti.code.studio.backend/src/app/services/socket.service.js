@@ -6,6 +6,8 @@
  */
 
 import { Server } from 'socket.io';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { memorystoreService } from '../modules/gcpCloud/gcpCache.service.js';
 import { logger } from '../../shared/logger.js';
 
 class SocketService {
@@ -24,6 +26,22 @@ class SocketService {
         methods: ['GET', 'POST'],
       },
     });
+
+    if (memorystoreService.publisher && memorystoreService.subscriber) {
+      this.io.adapter(
+        createAdapter(
+          memorystoreService.publisher,
+          memorystoreService.subscriber,
+        ),
+      );
+      logger.info(
+        '🔌 Socket.io: Connected to Redis Adapter for horizontal scaling.',
+      );
+    } else {
+      logger.warn(
+        '⚠️ Socket.io: Redis adapter not initialized. Running in single-node mode.',
+      );
+    }
 
     this.io.on('connection', socket => {
       logger.info(`🔌 Socket.io: Client connected ${socket.id}`);

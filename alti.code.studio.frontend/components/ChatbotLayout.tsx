@@ -64,7 +64,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
             "Hi! 👋 How can I assist you with your code or deployments today?",
         }}
       >
-        <div className="flex flex-col w-full h-screen overflow-hidden bg-[#F4F4F6] dark:bg-background">
+        <div className="flex flex-col w-full h-screen overflow-hidden bg-default-100 dark:bg-default-50">
           {/* Title Bar */}
           {isTauri && (
             <div
@@ -80,7 +80,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
               <div className="z-30 relative h-full shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
                 <React.Suspense
                   fallback={
-                    <div className="w-72 h-full bg-[#F4F4F6] dark:bg-sidebar" />
+                    <div className="w-72 h-full bg-default-100 dark:bg-sidebar" />
                   }
                 >
                   <Sidebar />
@@ -98,7 +98,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
               >
                 {/* Left: Ghost Editor */}
                 <Panel
-                  className="h-full flex flex-col bg-[#F4F4F6] dark:bg-background"
+                  className="h-full flex flex-col bg-default-100 dark:bg-default-50"
                   defaultSize={40}
                   minSize={20}
                 >
@@ -112,7 +112,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
 
                 {/* Right: Prompt Swarm / Chat */}
                 <Panel
-                  className="h-full bg-[#F4F4F6] dark:bg-background border-l border-default-100 flex flex-col"
+                  className="h-full bg-default-100 dark:bg-default-50 border-l border-default-100 flex flex-col"
                   defaultSize={60}
                   minSize={30}
                 >
@@ -123,7 +123,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
               </Group>
             ) : (
               /* Full-width content — no resizable panel wrapper needed */
-              <div className="flex-1 h-full bg-[#F4F4F6] dark:bg-background flex flex-col overflow-hidden z-10 relative">
+              <div className="flex-1 h-full bg-default-100 dark:bg-default-50 flex flex-col overflow-hidden z-10 relative">
                 {children}
               </div>
             )}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, Suspense, useCallback } from "react";
-import { Button } from "@heroui/button";
+import { Button, Input } from "@heroui/react";
 import {
   Paperclip,
   Search,
@@ -10,6 +10,7 @@ import {
   FolderPlus,
   Folder,
   Loader2,
+  ArrowUp,
 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -229,84 +230,41 @@ function KnowledgePageContent() {
 
   return (
     <ChatBotLayout>
-      <div className="flex flex-col h-full bg-default-50 dark:bg-[#0A0A0A]">
+      <div className="flex flex-col h-full bg-default-100 dark:bg-default-50">
         {/* Top Navbar */}
         <div className="flex items-center justify-center relative z-50 w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111] shrink-0">
           <TuningTabs />
         </div>
         <div className="flex-1 overflow-hidden bg-transparent flex flex-col font-sans">
           {!selectedFolder ? (
-            <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[20vh] overflow-hidden">
-              <div className="flex w-full flex-col items-center gap-6 z-20 px-6 max-w-xl">
-                <div className="flex flex-col items-center text-center z-30 mb-2">
-                  <Folder className="w-12 h-12 text-primary/70 mb-4 animate-pulse" />
-                  <h1 className="text-3xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-90">
-                    Knowledge Hub
-                  </h1>
-                  <p className="text-xs text-default-400 mt-2">
-                    Create secure directories to host private codebase document
-                    files and semantic vector catalogs.
-                  </p>
-                </div>
-
-                {/* Create Folder Form */}
-                <form
-                  className="w-full flex gap-2"
-                  onSubmit={handleCreateFolder}
-                >
-                  <input
-                    className="flex-1 bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 rounded-xl px-4 py-2.5 text-sm outline-none placeholder-gray-400"
-                    placeholder="New folder name..."
-                    type="text"
+            <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide flex flex-col items-center justify-center">
+              <div className="w-full max-w-2xl">
+                <form className="relative flex items-center w-full shadow-sm rounded-2xl" onSubmit={handleCreateFolder}>
+                  <Input
+                    classNames={{
+                      inputWrapper:
+                        "!bg-white dark:!bg-[#111111] data-[hover=true]:!bg-white data-[hover=true]:dark:!bg-[#111111] group-data-[focus=true]:!bg-white group-data-[focus=true]:dark:!bg-[#111111] border border-default-200 dark:border-default-100 shadow-sm rounded-2xl h-14 text-base pr-14",
+                    }}
+                    placeholder="Enter a new knowledge folder name..."
                     value={newFolderName}
                     onChange={(e) => setNewFolderName(e.target.value)}
                   />
                   <Button
-                    className="bg-black dark:bg-white text-white dark:text-black rounded-xl font-medium text-xs px-4"
+                    isIconOnly
+                    className="absolute right-2 rounded-xl h-10 w-10 bg-primary text-primary-foreground"
                     isLoading={isCreatingFolder}
                     type="submit"
                   >
-                    <FolderPlus className="w-4 h-4 mr-1" /> Create
+                    <ArrowUp className="size-5" />
                   </Button>
                 </form>
-
-                {/* Folders List */}
-                <div className="w-full flex flex-col gap-2 mt-4 max-h-[40vh] overflow-y-auto pr-1">
-                  {isLoading ? (
-                    <div className="flex justify-center items-center py-8">
-                      <Loader2 className="w-6 h-6 text-primary animate-spin" />
-                    </div>
-                  ) : folders.length === 0 ? (
-                    <p className="text-center text-xs text-default-400 py-8">
-                      No knowledge folders created yet.
-                    </p>
-                  ) : (
-                    folders.map((folder) => (
-                      <div
-                        key={folder.id}
-                        className="w-full bg-white dark:bg-[#161b22] hover:bg-default-100 dark:hover:bg-default-50 border border-default-200/50 dark:border-gray-800 shadow-sm rounded-xl px-4 py-3 flex items-center justify-between cursor-pointer transition-all"
-                        onClick={() => setSelectedFolder(folder)}
-                      >
-                        <div className="flex items-center gap-3">
-                          <Folder className="w-4 h-4 text-primary" />
-                          <span className="text-sm font-medium text-foreground">
-                            {folder.name}
-                          </span>
-                        </div>
-                        <span className="text-xs text-default-400">
-                          {folder.files?.length || 0} files
-                        </span>
-                      </div>
-                    ))
-                  )}
-                </div>
               </div>
             </div>
           ) : (
             <div className="relative flex flex-1 w-full flex-col items-center justify-start h-full overflow-y-auto animate-in fade-in duration-300 w-full px-6">
               <div className="flex w-full flex-col max-w-2xl pb-20">
                 {/* Header */}
-                <div className="sticky top-0 z-20 bg-[#F4F4F6] dark:bg-background pt-8 pb-0 flex flex-col gap-4 -mx-6 px-6">
+                <div className="sticky top-0 z-20 bg-default-100 dark:bg-default-50 pt-8 pb-0 flex flex-col gap-4 -mx-6 px-6">
                   <div className="flex items-center justify-between w-full">
                     <div className="flex items-center gap-2">
                       <button
@@ -362,7 +320,7 @@ function KnowledgePageContent() {
                     />
                   </div>
 
-                  <div className="h-4 w-full bg-[#F4F4F6] dark:bg-background" />
+                  <div className="h-4 w-full bg-default-100 dark:bg-default-50" />
                 </div>
 
                 {/* File List */}
@@ -472,7 +430,7 @@ export default function KnowledgePage() {
   return (
     <Suspense
       fallback={
-        <div className="h-full w-full bg-[#F4F4F6] dark:bg-background" />
+        <div className="h-full w-full bg-default-100 dark:bg-default-50" />
       }
     >
       <KnowledgePageContent />
