@@ -141,7 +141,9 @@ describe('Platform Model Gateway', () => {
       prompt: 'Hello Gemini',
     });
 
-    expect(reply).toContain('[GOOGLE VERTEX AI DIRECT SOVEREIGN COMPLIANT SIMULATION]');
+    expect(reply).toContain(
+      '[GOOGLE VERTEX AI DIRECT SOVEREIGN COMPLIANT SIMULATION]',
+    );
   });
 
   it('should sanitize credentials in error responses to prevent leakage', () => {

@@ -11,16 +11,17 @@ import { githubDocsService } from '../../githubDocs/githubDocs.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GithubFnGithubAdminInvoiceAnalyzerAgent extends BaseSpecialistAgent {
-    constructor() {
-        super();
-        this.name = 'githubAdminInvoiceAnalyzer';
-        this.description = 'Specialist GitHub Admin Invoice Analyzer expert in cost allocation audits.';
-        this.manifest = {
-            id: 'githubAdminInvoiceAnalyzer',
-            capabilities: ["github-analyze-enterprise-invoice"],
-            version: '39.6.0'
-        };
-        this.preamble = `You are the Inso Code Specialist GitHub Admin Invoice Analyzer expert in cost allocation audits.
+  constructor() {
+    super();
+    this.name = 'githubAdminInvoiceAnalyzer';
+    this.description =
+      'Specialist GitHub Admin Invoice Analyzer expert in cost allocation audits.';
+    this.manifest = {
+      id: 'githubAdminInvoiceAnalyzer',
+      capabilities: ['github-analyze-enterprise-invoice'],
+      version: '39.6.0',
+    };
+    this.preamble = `You are the Inso Code Specialist GitHub Admin Invoice Analyzer expert in cost allocation audits.
 This agent is the absolute authority on the specific operational boundary of: analyzing invoice data, spent optimization.
 
 # GROUNDED BILLING & ADMIN CAPABILITIES
@@ -32,23 +33,30 @@ This agent is the absolute authority on the specific operational boundary of: an
 - Ground all designs and explanations strictly in the official grounded developer documentation context provided.
 - Never invent parameters, workflow properties, or API endpoints that are not documented.
 - Respond with clear, structured markdown. When generating code blocks, provide clean, production-grade snippets (JavaScript/TypeScript for APIs, YAML for Actions).`;
+  }
+
+  /**
+   * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
+   */
+  async _invoke(prompt, contextBlock) {
+    logger.info(
+      `🐙 [githubAdminInvoiceAnalyzer] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`,
+    );
+
+    let docsContext = '';
+    try {
+      // Retrieve domain-specific documentation chunks
+      docsContext = await githubDocsService.searchDocs(
+        `GitHub Billing & Admin analyzing invoice data, spent optimization ${prompt}`,
+        5,
+      );
+    } catch (err) {
+      logger.warn(
+        `🐙 [githubAdminInvoiceAnalyzer] Failed to query RAG documentation. Fallback used. Error: ${err.message}`,
+      );
     }
 
-    /**
-     * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
-     */
-    async _invoke(prompt, contextBlock) {
-        logger.info(`🐙 [githubAdminInvoiceAnalyzer] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`);
-        
-        let docsContext = '';
-        try {
-            // Retrieve domain-specific documentation chunks
-            docsContext = await githubDocsService.searchDocs(`GitHub Billing & Admin analyzing invoice data, spent optimization ${prompt}`, 5);
-        } catch (err) {
-            logger.warn(`🐙 [githubAdminInvoiceAnalyzer] Failed to query RAG documentation. Fallback used. Error: ${err.message}`);
-        }
-
-        const groundedPrompt = `${this.preamble}
+    const groundedPrompt = `${this.preamble}
 
 === GROUNDED DEVELOPER DOCUMENTATION CONTEXT ===
 ${docsContext || 'No documentation found in local RAG vector store.'}
@@ -59,8 +67,8 @@ ${contextBlock || 'No additional file context provided.'}
 === REQUEST ===
 ${prompt}`;
 
-        return await GeminiAiService.generateContent(groundedPrompt);
-    }
+    return await GeminiAiService.generateContent(groundedPrompt);
+  }
 }
 
 export const pluginInstance = new GithubFnGithubAdminInvoiceAnalyzerAgent();

@@ -71,8 +71,13 @@ export default function CostTrackingWidget() {
   const billing = metrics?.billing;
 
   const totalCost = modelsUsage.reduce((acc, m) => acc + m.cost, 0);
-  const totalTokens = billing?.tokensUsed || modelsUsage.reduce((acc, m) => acc + m.totalTokens, 0);
-  const totalInvocations = modelsUsage.reduce((acc, m) => acc + m.invocations, 0);
+  const totalTokens =
+    billing?.tokensUsed ||
+    modelsUsage.reduce((acc, m) => acc + m.totalTokens, 0);
+  const totalInvocations = modelsUsage.reduce(
+    (acc, m) => acc + m.invocations,
+    0,
+  );
 
   return (
     <Card className="w-full bg-black/40 backdrop-blur-xl border border-white/10 text-white">
@@ -106,9 +111,7 @@ export default function CostTrackingWidget() {
             <p className="text-xs text-default-400 mb-1 tracking-wider uppercase">
               Total Tokens
             </p>
-            <p className="text-xl font-mono">
-              {totalTokens.toLocaleString()}
-            </p>
+            <p className="text-xl font-mono">{totalTokens.toLocaleString()}</p>
           </div>
           <div className="p-3 rounded-lg bg-white/5 border border-white/10">
             <p className="text-xs text-default-400 mb-1 tracking-wider uppercase">
@@ -120,9 +123,7 @@ export default function CostTrackingWidget() {
             <p className="text-xs text-default-400 mb-1 tracking-wider uppercase">
               Avg Latency
             </p>
-            <p className="text-xl font-mono">
-              N/A
-            </p>
+            <p className="text-xl font-mono">N/A</p>
           </div>
         </div>
 
@@ -148,7 +149,9 @@ export default function CostTrackingWidget() {
                     <span className="text-warning mr-3">
                       ${m.cost.toFixed(4)}
                     </span>
-                    <span className="text-xs">{m.totalTokens.toLocaleString()} tokens</span>
+                    <span className="text-xs">
+                      {m.totalTokens.toLocaleString()} tokens
+                    </span>
                   </div>
                 </div>
               ))}

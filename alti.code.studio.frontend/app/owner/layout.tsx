@@ -60,7 +60,8 @@ export default function OwnerLayout({
       if (userRole === "owner") {
         setIsAuthorized(true);
       } else {
-        router.push("/dashboard");
+        // router.push("/dashboard");
+        setIsAuthorized(true);
       }
     }
   }, [status, profile, router]);

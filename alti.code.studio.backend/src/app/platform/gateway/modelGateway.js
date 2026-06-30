@@ -190,13 +190,18 @@ export const routePlatformCompletion = async ({
   try {
     switch (activeProvider) {
       case 'gcp': {
-        const response = await executeVertexInference(activePrompt, activeModel, {
-          temperature,
-        });
+        const response = await executeVertexInference(
+          activePrompt,
+          activeModel,
+          {
+            temperature,
+          },
+        );
 
         if (response?.usage) {
           tokensConsumed =
-            (response.usage.promptTokens || 0) + (response.usage.completionTokens || 0);
+            (response.usage.promptTokens || 0) +
+            (response.usage.completionTokens || 0);
         }
 
         resultText = response.text || '';

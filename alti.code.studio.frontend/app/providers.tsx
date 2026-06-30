@@ -188,14 +188,22 @@ export function Providers({ children, themeProps }: ProvidersProps) {
   const [tauriSession, setTauriSession] = React.useState<any>(() => {
     if (typeof window !== "undefined") {
       // E2E Test Backdoor
-      const cookies = document.cookie.split(';');
-      const e2eCookie = cookies.find(c => c.trim().startsWith('e2e-session='));
+      const cookies = document.cookie.split(";");
+      const e2eCookie = cookies.find((c) =>
+        c.trim().startsWith("e2e-session="),
+      );
+
       if (e2eCookie) {
         try {
-          const sessionData = JSON.parse(decodeURIComponent(e2eCookie.split('=')[1]));
+          const sessionData = JSON.parse(
+            decodeURIComponent(e2eCookie.split("=")[1]),
+          );
+
           return {
             user: sessionData,
-            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+            expires: new Date(
+              Date.now() + 30 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
           };
         } catch (e) {}
       }
@@ -234,19 +242,27 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         "electron" in window ||
         window.navigator.userAgent.includes("Electron"))
     ) {
-      const cookies = document.cookie.split(';');
-      const e2eCookie = cookies.find(c => c.trim().startsWith('e2e-session='));
-      
+      const cookies = document.cookie.split(";");
+      const e2eCookie = cookies.find((c) =>
+        c.trim().startsWith("e2e-session="),
+      );
+
       if (e2eCookie) {
         try {
-          const sessionData = JSON.parse(decodeURIComponent(e2eCookie.split('=')[1]));
+          const sessionData = JSON.parse(
+            decodeURIComponent(e2eCookie.split("=")[1]),
+          );
+
           setTauriSession({
             user: sessionData,
-            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+            expires: new Date(
+              Date.now() + 30 * 24 * 60 * 60 * 1000,
+            ).toISOString(),
           });
           if (pathname === "/login" || pathname === "/") {
             router.replace("/new-chat");
           }
+
           return;
         } catch (e) {}
       }

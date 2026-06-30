@@ -222,7 +222,10 @@ class TokenBillingEngine {
           });
         }
       } catch (e) {
-        logger.error(`Failed to sync UserBilling to Postgres for user ${tenantId}`, e);
+        logger.error(
+          `Failed to sync UserBilling to Postgres for user ${tenantId}`,
+          e,
+        );
       }
     })();
 

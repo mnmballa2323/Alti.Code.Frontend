@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { ChevronDown, Trash2 } from "lucide-react";
 
 export default function MembersPage() {
@@ -11,6 +12,7 @@ export default function MembersPage() {
       email: "meram.michael@gmail.com",
       role: "Admin",
       isYou: true,
+      tokens: "41.2M",
     },
     {
       firstName: "Sarah",
@@ -18,6 +20,7 @@ export default function MembersPage() {
       email: "sarah.connor@sky-net.com",
       role: "Admin",
       isYou: false,
+      tokens: "12.8M",
     },
     {
       firstName: "John",
@@ -25,6 +28,7 @@ export default function MembersPage() {
       email: "john.doe@example.com",
       role: "Member",
       isYou: false,
+      tokens: "4.5M",
     },
     {
       firstName: "Alex",
@@ -32,6 +36,7 @@ export default function MembersPage() {
       email: "alex.smith@techcorp.com",
       role: "Member",
       isYou: false,
+      tokens: "890K",
     },
     {
       firstName: "Emily",
@@ -39,6 +44,7 @@ export default function MembersPage() {
       email: "emily.watson@designco.io",
       role: "Member",
       isYou: false,
+      tokens: "1.2M",
     },
     {
       firstName: "David",
@@ -46,6 +52,7 @@ export default function MembersPage() {
       email: "david.miller@devs.net",
       role: "Member",
       isYou: false,
+      tokens: "3.4M",
     },
     {
       firstName: "Jessica",
@@ -53,6 +60,7 @@ export default function MembersPage() {
       email: "jessica.taylor@startup.co",
       role: "Member",
       isYou: false,
+      tokens: "120K",
     },
   ];
 
@@ -97,6 +105,7 @@ export default function MembersPage() {
                 firstName: u.firstName || nameParts[0] || "User",
                 lastName: u.lastName || nameParts[1] || "",
                 email: emailStr,
+                tokens: "0K",
                 role: u.role === "admin" ? "Admin" : "Member",
                 isYou: emailStr.toLowerCase() === "meram.michael@gmail.com",
               };
@@ -149,23 +158,28 @@ export default function MembersPage() {
     <div className="w-full pt-6">
       <div className="w-full">
         {/* Table Header */}
-        <div className="grid grid-cols-[20%_20%_42%_18%] px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
+        <div className="grid grid-cols-[18%_18%_32%_15%_17%] px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
           <div>FIRST NAME</div>
           <div>LAST NAME</div>
           <div>EMAIL ADDRESS</div>
+          <div>30-DAY USAGE</div>
           <div>ROLE TYPE</div>
         </div>
 
         {/* Table Body */}
         <div className="flex flex-col gap-2 mt-4">
           {members.map((member, i) => (
-            <div
+            <Link
               key={i}
-              className="group grid grid-cols-[20%_20%_42%_18%] items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300"
+              className="group grid grid-cols-[18%_18%_32%_15%_17%] items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
+              href={`/admin/team-members/${encodeURIComponent(member.email)}`}
             >
               <div>{member.firstName}</div>
               <div>{member.lastName}</div>
               <div>{member.email}</div>
+              <div className="font-mono text-xs text-neutral-500">
+                {member.tokens}
+              </div>
               <div className="flex items-center justify-between w-full pr-0 relative">
                 <div
                   ref={activeDropdownIndex === i ? activeDropdownRef : null}
@@ -179,11 +193,12 @@ export default function MembersPage() {
                     <button
                       className="flex items-center gap-1 hover:bg-neutral-50 dark:hover:bg-neutral-800 px-2 py-1 -mx-2 rounded-lg transition-colors text-left font-medium text-sm text-neutral-700 dark:text-neutral-300 focus:outline-none"
                       type="button"
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.preventDefault();
                         setActiveDropdownIndex(
                           activeDropdownIndex === i ? null : i,
-                        )
-                      }
+                        );
+                      }}
                     >
                       <span>{member.role}</span>
                       <ChevronDown
@@ -197,7 +212,8 @@ export default function MembersPage() {
                       <button
                         className={`w-full px-4 py-2 text-left text-xs transition-colors ${member.role === "Admin" ? "bg-neutral-50 dark:bg-neutral-800 font-bold text-neutral-900 dark:text-white" : "text-neutral-750 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"}`}
                         type="button"
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.preventDefault();
                           handleRoleChange(i, "Admin");
                           setActiveDropdownIndex(null);
                         }}
@@ -207,7 +223,8 @@ export default function MembersPage() {
                       <button
                         className={`w-full px-4 py-2 text-left text-xs transition-colors ${member.role === "Member" ? "bg-neutral-50 dark:bg-neutral-800 font-bold text-neutral-900 dark:text-white" : "text-neutral-750 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-800"}`}
                         type="button"
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.preventDefault();
                           handleRoleChange(i, "Member");
                           setActiveDropdownIndex(null);
                         }}
@@ -226,7 +243,8 @@ export default function MembersPage() {
                     className="p-1 text-neutral-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded transition-all opacity-0 group-hover:opacity-100 focus:outline-none shrink-0"
                     title="Remove member"
                     type="button"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.preventDefault();
                       setMemberToRemove(member);
                       setIndexToRemove(i);
                     }}
@@ -235,7 +253,7 @@ export default function MembersPage() {
                   </button>
                 )}
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

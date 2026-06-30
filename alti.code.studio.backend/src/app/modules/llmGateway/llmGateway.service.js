@@ -525,7 +525,7 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
           inputTokens: result.tokens.prompt || 0,
           outputTokens: result.tokens.completion || 0,
         });
-        
+
         // Log to Mongoose metrics for granular analytics
         await metricsService.recordLLMUsage(
           tenantId,
@@ -534,7 +534,7 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
           result.tokens.prompt || 0,
           result.tokens.completion || 0,
           result.latencyMs || 0,
-          userId
+          userId,
         );
       } catch (err) {
         logger.error(

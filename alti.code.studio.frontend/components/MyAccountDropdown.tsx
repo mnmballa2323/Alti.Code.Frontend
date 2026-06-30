@@ -1,7 +1,6 @@
 "use client";
 
 import { LogOut, Shield, Activity } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -64,16 +63,22 @@ const MyAccountDropdown = () => {
           <DropdownMenuGroup>
             {!isDesktop &&
               (profile?.role === "admin" || profile?.role === "ADMIN") && (
-                <DropdownMenuItem className="relative cursor-pointer" onSelect={() => router.push('/admin')}>
+                <DropdownMenuItem
+                  className="relative cursor-pointer"
+                  onSelect={() => router.push("/admin")}
+                >
                   <span className="flex items-center space-x-2 w-full">
                     <Shield className="size-5 text-indigo-400" />
                     <span>Admin Console</span>
                   </span>
                 </DropdownMenuItem>
               )}
-            <DropdownMenuItem className="relative cursor-pointer" onSelect={() => router.push('/dashboard/token-usage')}>
+            <DropdownMenuItem
+              className="relative cursor-pointer"
+              onSelect={() => router.push("/dashboard/token-usage")}
+            >
               <span className="flex items-center space-x-2 w-full">
-                <Activity className="size-5 text-green-400" />
+                <Activity className="size-4 text-black dark:text-white" />
                 <span>Token Usage</span>
               </span>
             </DropdownMenuItem>

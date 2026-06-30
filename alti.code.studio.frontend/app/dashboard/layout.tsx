@@ -21,10 +21,14 @@ export default function DashboardLayout({
   const userRole = (profile?.role || "").toLowerCase();
   const isRedirecting =
     status === "authenticated" &&
-    (userRole === "owner" || userRole === "admin");
+    (userRole === "owner" || userRole === "admin") &&
+    !pathname.startsWith("/dashboard/token-usage");
 
   useEffect(() => {
     if (status === "authenticated" && profile) {
+      if (pathname.startsWith("/dashboard/token-usage")) {
+        return; // allow access
+      }
       if (userRole === "owner") {
         if (pathname === "/dashboard") {
           router.push("/owner/dashboard");

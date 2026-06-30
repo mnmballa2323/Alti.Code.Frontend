@@ -59,7 +59,8 @@ export default function GcpSovereignSection() {
           <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-medium max-w-5xl">
             Deploy sovereign AI agent swarms on Google Cloud, Dedicated Cloud,
             and Assured Workloads environments. Enforce absolute compliance and
-            strict physical data isolation tailored to your enterprise organization.
+            strict physical data isolation tailored to your enterprise
+            organization.
           </p>
         </div>
 

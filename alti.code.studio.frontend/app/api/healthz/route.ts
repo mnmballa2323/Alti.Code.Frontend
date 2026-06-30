@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
   let backendHealthy = false;
 
   try {
-    const response = await fetch(`${backendUrl}/healthz`, { cache: 'no-store' });
+    const response = await fetch(`${backendUrl}/healthz`, {
+      cache: "no-store",
+    });
+
     if (response.ok) {
       backendHealthy = true;
     }
@@ -21,6 +24,6 @@ export async function GET() {
       backend: backendHealthy ? "UP" : "DOWN",
       timestamp: new Date().toISOString(),
     },
-    { status }
+    { status },
   );
 }

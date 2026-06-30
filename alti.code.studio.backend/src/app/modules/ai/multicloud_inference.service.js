@@ -87,7 +87,8 @@ class MultiCloudInferenceService {
     const modelId = options.modelId || 'gemini-3.5-flash';
     const preferred = options.preferredProvider || 'gcp-vertex';
     const primaryProvider = preferred === 'azure' ? 'azure' : 'gcp-vertex';
-    const secondaryProvider = primaryProvider === 'gcp-vertex' ? 'azure' : 'gcp-vertex';
+    const secondaryProvider =
+      primaryProvider === 'gcp-vertex' ? 'azure' : 'gcp-vertex';
 
     if (process.env.AIR_GAPPED_MODE === 'true') {
       logger.warn(
@@ -114,7 +115,10 @@ class MultiCloudInferenceService {
           // Primary gets aggressive 10s timeout to fast-fail, Secondary gets 20s
           const timeoutMs = provider === primaryProvider ? 10000 : 20000;
           const abortController = new AbortController();
-          const timeoutId = setTimeout(() => abortController.abort(), timeoutMs);
+          const timeoutId = setTimeout(
+            () => abortController.abort(),
+            timeoutMs,
+          );
           const currentOptions = { ...options, signal: abortController.signal };
 
           if (provider === 'gcp-vertex') {
@@ -132,7 +136,7 @@ class MultiCloudInferenceService {
               currentOptions,
             );
           }
-          
+
           clearTimeout(timeoutId);
           break; // Success, break out of retry loop
         } catch (err) {
@@ -143,7 +147,9 @@ class MultiCloudInferenceService {
               `⚠️ [Google Sovereign Inference] ${provider.toUpperCase()} attempt ${attempt} failed: ${err.message}. Retrying with exponential backoff...`,
             );
             // Exponential backoff: 500ms * 2^attempt
-            await new Promise(resolve => setTimeout(resolve, 500 * Math.pow(2, attempt)));
+            await new Promise(resolve =>
+              setTimeout(resolve, 500 * Math.pow(2, attempt)),
+            );
           } else {
             logger.warn(
               `⚠️ [Google Sovereign Inference] ${provider.toUpperCase()} provider failed entirely: ${err.message}`,
@@ -324,7 +330,8 @@ class MultiCloudInferenceService {
       );
 
       let azureApiKey =
-        options.vaultCredentials?.azureApiKey || process.env.AZURE_OPENAI_API_KEY;
+        options.vaultCredentials?.azureApiKey ||
+        process.env.AZURE_OPENAI_API_KEY;
       let azureEndpoint =
         options.vaultCredentials?.azureEndpoint ||
         process.env.AZURE_OPENAI_ENDPOINT ||
@@ -338,7 +345,9 @@ class MultiCloudInferenceService {
           try {
             attempt++;
             const deploymentId = modelId;
-            const cleanEndpoint = azureEndpoint.endsWith('/') ? azureEndpoint.slice(0, -1) : azureEndpoint;
+            const cleanEndpoint = azureEndpoint.endsWith('/')
+              ? azureEndpoint.slice(0, -1)
+              : azureEndpoint;
             const url = `${cleanEndpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=2024-02-15-preview`;
 
             // Build strict payload options
@@ -417,8 +426,10 @@ class MultiCloudInferenceService {
       latency = Date.now() - startTime;
     }
 
-    const promptTokens = azureUsage?.prompt_tokens || Math.max(1, Math.ceil(prompt.length / 4));
-    const completionTokens = azureUsage?.completion_tokens || Math.max(1, Math.ceil(text.length / 4));
+    const promptTokens =
+      azureUsage?.prompt_tokens || Math.max(1, Math.ceil(prompt.length / 4));
+    const completionTokens =
+      azureUsage?.completion_tokens || Math.max(1, Math.ceil(text.length / 4));
     await this._recordMarketplaceBilling(
       'azure',
       promptTokens,

@@ -107,7 +107,7 @@ export default function LoginPage() {
           if (isTauri) {
             window.location.href = "/new-chat";
           } else {
-            router.push("/");
+            router.push("/admin");
             router.refresh();
           }
         }
@@ -185,7 +185,7 @@ export default function LoginPage() {
           toast.error(res.error || "Authentication session failed");
         } else if (res?.ok) {
           toast.success("Verification successful! Logging in...");
-          router.push("/");
+          router.push("/admin");
           router.refresh();
         }
       } else {
@@ -297,7 +297,7 @@ export default function LoginPage() {
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input:
-                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light [&:-webkit-autofill]:[-webkit-text-fill-color:black]",
               }}
               name="email"
               placeholder="Enter Email"
@@ -312,7 +312,7 @@ export default function LoginPage() {
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input:
-                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light [&:-webkit-autofill]:[-webkit-text-fill-color:black]",
               }}
               endContent={
                 passwordValue.length > 0 && (
