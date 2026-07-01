@@ -58,12 +58,12 @@ export function WorkspaceDock() {
   };
 
   return (
-    <div className="w-[68px] min-w-[68px] h-full bg-[#070B16] border-r border-white/5 flex flex-col items-center pt-4 select-none shrink-0 z-40 relative">
-      {/* Search Bar Alignment Border Line */}
-      <div className="absolute top-[203px] left-0 right-0 border-b border-white/5 z-50 pointer-events-none" />
+    <div className="dark w-[68px] min-w-[68px] h-full bg-[#070B16] border-r border-white/5 flex flex-col select-none shrink-0 z-40 relative">
+      {/* Top Spacer / Header Area matching Sidebar header heights (68px * 3 = 204px) */}
+      <div className="h-[204px] w-full border-b border-default-200 flex-none" />
 
       {/* Scrollable Workspaces List */}
-      <div className="flex-1 w-full flex flex-col items-center gap-3 overflow-y-auto scrollbar-none px-2">
+      <div className="flex-1 w-full flex flex-col items-center gap-3 overflow-y-auto scrollbar-none px-2 pt-4">
         {tabs.map((tab) => {
           const isActive = tab.id === activeTabId;
           const initials = getInitials(tab.title);
@@ -76,7 +76,7 @@ export function WorkspaceDock() {
               closeDelay={0}
               delay={300}
               classNames={{
-                content: "bg-white text-default-900 border border-default-200 px-3 py-1.5 text-xs rounded-lg shadow-xl font-medium tracking-wide",
+                content: "bg-white text-zinc-900 border border-zinc-200 px-3 py-1.5 text-xs rounded-lg shadow-xl font-medium tracking-wide",
               }}
             >
               <div
@@ -106,14 +106,14 @@ export function WorkspaceDock() {
       </div>
 
       {/* Footer Actions (Plus Button) */}
-      <div className="mt-auto border-t border-white/5 w-full flex flex-col items-center justify-center h-[74px] pb-5 pt-0">
+      <div className="mt-auto border-t border-default-200 w-full flex flex-col items-center justify-center h-[73px] pb-5 pt-0">
         <Tooltip
           content="Open New Project Workspace"
           placement="right"
           closeDelay={0}
           delay={300}
           classNames={{
-            content: "bg-white text-default-900 border border-default-200 px-3 py-1.5 text-xs rounded-lg shadow-xl font-medium tracking-wide",
+            content: "bg-white text-zinc-900 border border-zinc-200 px-3 py-1.5 text-xs rounded-lg shadow-xl font-medium tracking-wide",
           }}
         >
           <Button
