@@ -865,7 +865,7 @@ function PromptInputFullLineComponent({
 
   return (
     <Form
-      className="mx-auto w-full max-w-2xl flex flex-col overflow-visible bg-background/90 backdrop-blur-3xl rounded-[32px] border border-default-200/80 shadow-xl dark:border-white/10 dark:bg-content1/80"
+      className="mx-auto w-full max-w-2xl flex flex-col overflow-visible bg-white dark:bg-[#161616] rounded-[32px] border border-default-200/80 shadow-xl dark:border-white/10"
       onSubmit={onSubmit}
     >
       <div
