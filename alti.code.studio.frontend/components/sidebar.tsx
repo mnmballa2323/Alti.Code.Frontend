@@ -1839,7 +1839,7 @@ export default function Sidebar() {
         <div
           className={cn(
             "flex h-full flex-col transition-all duration-300 bg-[#0B1121] border-r border-white/5",
-            isSidebarOpen ? "w-80" : "w-10",
+            isSidebarOpen ? "w-80" : "w-14",
           )}
         >
 
@@ -1850,7 +1850,7 @@ export default function Sidebar() {
           <div
             className={cn(
               "flex items-center border-b border-transparent px-3",
-              isSidebarOpen ? "h-[52px]" : "h-auto py-2 px-1",
+              isSidebarOpen ? "h-[52px]" : "h-auto py-2 px-2",
             )}
           >
             <div
@@ -1882,7 +1882,7 @@ export default function Sidebar() {
                         "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
                         isSidebarOpen
                           ? "h-[30px] flex-1 rounded-md"
-                          : "h-[30px] w-[30px] rounded-md",
+                          : "h-[36px] w-[36px] rounded-xl",
                         item.isActive
                           ? "bg-white/10 text-white shadow-sm"
                           : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
@@ -1894,7 +1894,7 @@ export default function Sidebar() {
                         }
                       }}
                     >
-                      <IconComponent className="size-3.5" />
+                      <IconComponent className={isSidebarOpen ? "size-3.5" : "size-4"} />
                       <span className="sr-only">{item.label}</span>
                     </Link>
                   </Tooltip>
