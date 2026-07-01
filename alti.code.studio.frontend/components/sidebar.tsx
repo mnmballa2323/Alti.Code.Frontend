@@ -1849,8 +1849,8 @@ export default function Sidebar() {
           {/* 6 navigation icons toggle container (Main Menu) */}
           <div
             className={cn(
-              "h-[52px] flex items-center border-b border-transparent px-3",
-              !isSidebarOpen && "py-2 px-1",
+              "flex items-center border-b border-transparent px-3",
+              isSidebarOpen ? "h-[52px]" : "h-auto py-2 px-1",
             )}
           >
             <div
