@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { setActiveProject } from "@/lib/project";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
@@ -2814,6 +2815,7 @@ export default function Sidebar() {
                         type="button"
                         onClick={() => {
                           setSelectedAgentId(agent.id);
+                          setActiveProject({ id: agent.id, name: agent.name });
                           router.push(
                             `/agents?agentId=${agent.id}&name=${encodeURIComponent(agent.name)}`,
                           );

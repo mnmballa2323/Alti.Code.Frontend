@@ -28,6 +28,8 @@ import { toast } from "react-hot-toast";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { API_URL } from "@/lib/config";
+import { useActiveProject } from "@/hooks/useActiveProject";
+import { readProjectData, writeProjectData } from "@/lib/project";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -61,35 +63,30 @@ const VAULT_TABS: { id: VaultMode; label: string }[] = [
   { id: "env-config", label: "Environment" },
 ];
 
-// ─── Initial demo data ───────────────────────────────────────────────────────
+// ─── Per-project storage helpers ─────────────────────────────────────────────
 
-const initialSecrets: SecretEntry[] = [
-  {
-    id: "sec-1",
-    name: "Primary Build Agent",
-    service: "API Key",
-    key: "AKIAIOSFODNN7EXAMPLE",
-    lastUsed: "2 mins ago",
-  },
-  {
-    id: "sec-2",
-    name: "Synapse Production Analytics",
-    service: "Cloud IAM",
-    key: JSON.stringify({
-      provider: "GCP",
-      keyId: "gcp_prod_eu_west",
-      secret: "98127398123",
-    }),
-    lastUsed: "1 hour ago",
-  },
-  {
-    id: "sec-3",
-    name: "Telepathy Inference",
-    service: "API Key",
-    key: "az_vtx_781263871263871263",
-    lastUsed: "Just now",
-  },
-];
+/** Returns the localStorage key for a given agentId (or global fallback) */
+const vaultStorageKey = (agentId: string | null) =>
+  agentId ? `vault_secrets_${agentId}` : `vault_secrets_global`;
+
+/** Load secrets for a given project from localStorage */
+const loadSecrets = (agentId: string | null): SecretEntry[] => {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem(vaultStorageKey(agentId));
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+};
+
+/** Persist secrets for a given project to localStorage */
+const saveSecrets = (agentId: string | null, secrets: SecretEntry[]) => {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(vaultStorageKey(agentId), JSON.stringify(secrets));
+  } catch {}
+};
 
 const serviceConfig: Record<string, { icon: any; color: string }> = {
   GitHub: {
@@ -254,6 +251,10 @@ export default function VaultPage() {
   const { data: session } = useSession();
   const accessToken = session?.user?.accessToken;
 
+  // ── Project / workspace context ───────────────────────────────────────────
+  const project = useActiveProject();
+  const agentId = project?.id ?? null;
+
   const {
     isOpen: isDeleteModalOpen,
     onOpen: openDeleteModal,
@@ -262,7 +263,8 @@ export default function VaultPage() {
   const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [secretToDelete, setSecretToDelete] = useState<string | null>(null);
-  const [secrets, setSecrets] = useState<SecretEntry[]>(initialSecrets);
+  // Start empty; load from per-project localStorage after mount
+  const [secrets, setSecrets] = useState<SecretEntry[]>([]);
   const [revealedIds, setRevealedIds] = useState<Set<string>>(new Set());
   const [selectedSecretId, setSelectedSecretId] = useState<string | null>(null);
   const [editingSecretId, setEditingSecretId] = useState<string | null>(null);
@@ -364,6 +366,18 @@ export default function VaultPage() {
     setSelectedSecretId(null);
   }, []);
 
+  // ── Load secrets for the active project on mount / project switch ──────────
+  useEffect(() => {
+    const stored = readProjectData<SecretEntry[]>(agentId, "vault_secrets", []);
+    setSecrets(stored);
+    setSelectedSecretId(null);
+  }, [agentId]);
+
+  // ── Auto-save secrets to per-project storage whenever they change ───────────
+  useEffect(() => {
+    writeProjectData(agentId, "vault_secrets", secrets);
+  }, [secrets, agentId]);
+
   useEffect(() => {
     const handleOpenModal = () => resetForm();
     const handleSelectSecret = (e: any) => {
@@ -379,6 +393,7 @@ export default function VaultPage() {
       window.removeEventListener("select-secret", handleSelectSecret);
     };
   }, [resetForm]);
+
 
   const toggleReveal = (id: string) => {
     const s = new Set(revealedIds);
@@ -491,9 +506,13 @@ export default function VaultPage() {
 
     try {
       try {
+        // Prefix secretId with agentId so backend secrets are project-isolated
+        const scopedSecretId = agentId
+          ? `${agentId}__${normalizedId}`
+          : normalizedId;
         await axios.post(
           `${API_URL}/secret-manager/update`,
-          { secretId: normalizedId, payload: effectiveKey },
+          { secretId: scopedSecretId, payload: effectiveKey, agentId: agentId ?? undefined },
           {
             headers: accessToken
               ? { Authorization: `Bearer ${accessToken}` }

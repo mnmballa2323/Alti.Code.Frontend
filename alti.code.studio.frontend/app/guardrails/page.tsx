@@ -7,12 +7,17 @@ import { Button, Input } from "@heroui/react";
 
 import { TuningTabs } from "@/components/tuning-tabs";
 import ChatBotLayout from "@/components/ChatbotLayout";
+import { useActiveProject } from "@/hooks/useActiveProject";
+import { readProjectData, writeProjectData } from "@/lib/project";
+
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
 export default function GuardrailsPage() {
   const { data: session } = useSession();
   const token = session?.user?.accessToken ?? null;
-  const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+  const project = useActiveProject();
+  const agentId = project?.id ?? null;
 
   const [instructions, setInstructions] = useState<
     { id: string; name: string }[]
@@ -23,62 +28,62 @@ export default function GuardrailsPage() {
   const [inputValue, setInputValue] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // Load rules on mount
-  const fetchRules = async () => {
-    if (!token) return;
-    try {
-      const res = await axios.get(`${API_URL}/rules`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (res.data && res.data.success) {
-        setInstructions(res.data.data.instructions || []);
-        setGuardrails(res.data.data.guardrails || []);
-      }
-    } catch (err) {
-      console.error("Failed to fetch guardrails:", err);
-    }
-  };
-
+  // ── Load per-project rules ──────────────────────────────────────────────────
   useEffect(() => {
-    fetchRules();
-  }, [token]);
+    const local = readProjectData<{
+      instructions: { id: string; name: string }[];
+      guardrails: { id: string; name: string }[];
+    }>(agentId, "rules", { instructions: [], guardrails: [] });
+    setInstructions(local.instructions);
+    setGuardrails(local.guardrails);
 
-  // Synchronize rules to backend helper
-  const saveRules = async (updatedGr: { id: string; name: string }[]) => {
+    if (!token) return;
+    axios
+      .get(`${API_URL}/rules`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: agentId ? { agentId } : undefined,
+      })
+      .then((res) => {
+        if (res.data?.success) {
+          setInstructions(res.data.data.instructions || []);
+          setGuardrails(res.data.data.guardrails || []);
+        }
+      })
+      .catch(() => {});
+  }, [token, agentId]);
+
+  // ── Save to localStorage + backend ─────────────────────────────────────────
+  const saveRules = async (updatedGuard: { id: string; name: string }[]) => {
+    writeProjectData(agentId, "rules", {
+      instructions,
+      guardrails: updatedGuard,
+    });
+    window.dispatchEvent(
+      new CustomEvent("refresh-rules-sidebar", {
+        detail: { instructions, guardrails: updatedGuard },
+      }),
+    );
     if (!token) return;
     try {
       await axios.post(
         `${API_URL}/rules`,
-        {
-          instructions,
-          guardrails: updatedGr,
-        },
+        { instructions, guardrails: updatedGuard },
         {
           headers: { Authorization: `Bearer ${token}` },
+          params: agentId ? { agentId } : undefined,
         },
       );
-      // Dispatch event to sync sidebar changes instantly
-      window.dispatchEvent(
-        new CustomEvent("refresh-rules-sidebar", {
-          detail: { instructions, guardrails: updatedGr },
-        }),
-      );
-    } catch (err) {
-      console.error("Failed to save rules:", err);
-    }
+    } catch {}
   };
 
   const handleSend = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     if (!inputValue.trim()) return;
-
     setSubmitting(true);
     const updated = [
       ...guardrails,
-      { id: "gr-" + Date.now(), name: inputValue.trim() },
+      { id: "guard-" + Date.now(), name: inputValue.trim() },
     ];
-
     setGuardrails(updated);
     setInputValue("");
     await saveRules(updated);
@@ -88,10 +93,16 @@ export default function GuardrailsPage() {
   return (
     <ChatBotLayout>
       <div className="flex flex-col h-full bg-default-100 dark:bg-default-50">
-        {/* Premium top header with tabs */}
         <div className="shrink-0 w-full bg-white/80 dark:bg-[#111111]/90 backdrop-blur-md border-b border-default-200/60 dark:border-white/5 flex items-center justify-center h-14 px-8">
           <TuningTabs />
         </div>
+        {project && (
+          <div className="shrink-0 px-8 pt-3 flex justify-center">
+            <span className="text-xs text-default-400 font-medium tracking-wide">
+              Project: <span className="text-default-600">{project.name}</span>
+            </span>
+          </div>
+        )}
         <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide flex flex-col items-center justify-center">
           <div className="w-full max-w-2xl mb-14">
             <form className="relative flex items-center w-full shadow-sm rounded-2xl" onSubmit={handleSend}>
@@ -100,7 +111,7 @@ export default function GuardrailsPage() {
                   inputWrapper:
                     "!bg-white dark:!bg-[#111111] data-[hover=true]:!bg-white data-[hover=true]:dark:!bg-[#111111] group-data-[focus=true]:!bg-white group-data-[focus=true]:dark:!bg-[#111111] border border-default-200 dark:border-default-100 shadow-sm rounded-2xl h-14 text-base pr-14",
                 }}
-                placeholder="Enter a new system guardrail..."
+                placeholder={project ? `Guardrail for ${project.name}…` : "Enter a new guardrail..."}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />

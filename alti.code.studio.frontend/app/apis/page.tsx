@@ -4,105 +4,113 @@ import { useSession } from "next-auth/react";
 import { ArrowUp } from "lucide-react";
 import axios from "axios";
 import { Button, Input } from "@heroui/react";
-
 import { TuningTabs } from "@/components/tuning-tabs";
 import ChatBotLayout from "@/components/ChatbotLayout";
+import { useActiveProject } from "@/hooks/useActiveProject";
+import { readProjectData, writeProjectData } from "@/lib/project";
 
-export default function APIsPage() {
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+
+interface Api {
+  id: string;
+  name: string;
+}
+
+export default function ApisPage() {
   const { data: session } = useSession();
-  const token = session?.user?.accessToken ?? null;
-  const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+  const { project } = useActiveProject();
+  const agentId = project?.id ?? null;
 
-  const [apis, setApis] = useState<{ id: string; name: string }[]>([]);
+  const [apis, setApis] = useState<Api[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // Load rules on mount
-  const fetchRules = async () => {
-    if (!token) return;
-    try {
-      const res = await axios.get(`${API_URL}/rules`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  const placeholder = project
+    ? `API for ${project.name}…`
+    : "Enter an API endpoint...";
 
-      if (res.data && res.data.success) {
-        setApis(res.data.data.apis || []);
-      }
-    } catch (err) {
-      console.error("Failed to fetch APIs:", err);
-    }
-  };
-
+  // Load on mount / when agentId changes
   useEffect(() => {
-    fetchRules();
-  }, [token]);
+    if (!agentId) return;
 
-  // Save to backend
-  const saveRules = async (updatedApis: { id: string; name: string }[]) => {
-    if (!token) return;
-    try {
-      const current = await axios.get(`${API_URL}/rules`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = current.data?.data || {};
-
-      await axios.post(
-        `${API_URL}/rules`,
-        {
-          instructions: data.instructions || [],
-          guardrails: data.guardrails || [],
-          repositories: data.repositories || [],
-          apis: updatedApis,
-          sdks: data.sdks || [],
-          mcps: data.mcps || [],
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        },
-      );
-      window.dispatchEvent(
-        new CustomEvent("refresh-rules-sidebar", {
-          detail: { ...data, apis: updatedApis },
-        }),
-      );
-    } catch (err) {
-      console.error("Failed to save APIs:", err);
+    // Load from local storage first
+    const local = readProjectData(agentId, "rules", { apis: [] }) as Record<string, unknown>;
+    if (Array.isArray(local?.apis)) {
+      setApis(local.apis as Api[]);
     }
-  };
 
-  const handleSend = async (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    if (!inputValue.trim()) return;
+    // Then try backend
+    axios
+      .get(`${API_URL}/rules?agentId=${agentId}`)
+      .then((res) => {
+        const data = res.data as Record<string, unknown>;
+        if (Array.isArray(data?.apis)) {
+          setApis(data.apis as Api[]);
+        }
+      })
+      .catch(() => {
+        // Backend unavailable — local data already loaded
+      });
+  }, [agentId]);
+
+  const handleSend = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = inputValue.trim();
+    if (!trimmed || !agentId) return;
 
     setSubmitting(true);
-    const updated = [
-      ...apis,
-      { id: "api-" + Date.now(), name: inputValue.trim() },
-    ];
 
+    const newApi: Api = {
+      id: `api-${Date.now()}`,
+      name: trimmed,
+    };
+
+    const updated = [...apis, newApi];
     setApis(updated);
     setInputValue("");
-    await saveRules(updated);
-    setSubmitting(false);
+
+    const existing = readProjectData(agentId, "rules", {}) as Record<string, unknown>;
+    const updatedRules = {
+      ...existing,
+      apis: updated,
+    };
+
+    writeProjectData(agentId, "rules", updatedRules);
+
+    try {
+      await axios.post(`${API_URL}/rules?agentId=${agentId}`, updatedRules);
+    } catch {
+      // Backend unavailable — data persisted locally
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <ChatBotLayout>
       <div className="flex flex-col h-full bg-default-100 dark:bg-default-50">
-        {/* Premium top header with tabs */}
         <div className="shrink-0 w-full bg-white/80 dark:bg-[#111111]/90 backdrop-blur-md border-b border-default-200/60 dark:border-white/5 flex items-center justify-center h-14 px-8">
           <TuningTabs />
         </div>
+        {project && (
+          <div className="shrink-0 px-8 pt-3 flex justify-center">
+            <span className="text-xs text-default-400 font-medium tracking-wide">
+              Project: <span className="text-default-600">{project.name}</span>
+            </span>
+          </div>
+        )}
         <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide flex flex-col items-center justify-center">
           <div className="w-full max-w-2xl mb-14">
-            <form className="relative flex items-center w-full shadow-sm rounded-2xl" onSubmit={handleSend}>
+            <form
+              className="relative flex items-center w-full shadow-sm rounded-2xl"
+              onSubmit={handleSend}
+            >
               <Input
                 classNames={{
                   inputWrapper:
                     "!bg-white dark:!bg-[#111111] data-[hover=true]:!bg-white data-[hover=true]:dark:!bg-[#111111] group-data-[focus=true]:!bg-white group-data-[focus=true]:dark:!bg-[#111111] border border-default-200 dark:border-default-100 shadow-sm rounded-2xl h-14 text-base pr-14",
                 }}
-                placeholder="Enter an API endpoint URL..."
+                placeholder={placeholder}
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />
