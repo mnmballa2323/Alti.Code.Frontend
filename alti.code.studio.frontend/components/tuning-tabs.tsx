@@ -28,6 +28,24 @@ export function TuningTabs() {
 
   return (
     <div className="flex w-full items-center justify-center h-full">
+      <style dangerouslySetInnerHTML={{__html: `
+        [data-slot="prev-button"],
+        [data-slot="next-button"],
+        button[aria-label="Previous tabs"],
+        button[aria-label="Next tabs"],
+        [data-slot="base"] > button:not([role="tab"]),
+        .nextui-tabs-container > button:not([role="tab"]),
+        div[class*="tabs"] > button:not([role="tab"]) {
+          display: none !important;
+          visibility: hidden !important;
+          opacity: 0 !important;
+          width: 0 !important;
+          height: 0 !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          border: none !important;
+        }
+      `}} />
       <Tabs
         aria-label="Tuning Options"
         classNames={{
