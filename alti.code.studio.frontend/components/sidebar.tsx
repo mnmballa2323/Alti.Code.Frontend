@@ -1136,7 +1136,13 @@ export default function Sidebar() {
   };
   // const dispatch = useDispatch();
   const [currentMode, setCurrentMode] = useState<"chat" | "code">("chat");
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("inso_sidebar_open");
+      return stored === null ? true : stored === "true";
+    }
+    return true;
+  });
   const [leftSidebarSearch, setLeftSidebarSearch] = useState("");
 
   const navigationItems = [
@@ -1754,6 +1760,7 @@ export default function Sidebar() {
   };
 
   const toggleLeftSidebar = () => {
+    localStorage.setItem("inso_sidebar_open", String(!isSidebarOpen));
     setIsSidebarOpen(!isSidebarOpen);
   };
 
@@ -1788,7 +1795,7 @@ export default function Sidebar() {
         <div
           className={cn(
             "flex h-full flex-col transition-all duration-300 bg-[#0B1121] border-r border-white/5",
-            isSidebarOpen ? "w-72" : "w-10",
+            isSidebarOpen ? "w-80" : "w-10",
           )}
         >
           {/* Top Section - Brand & Toggle */}

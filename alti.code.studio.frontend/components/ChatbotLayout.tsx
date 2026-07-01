@@ -80,7 +80,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
               <div className="z-30 relative h-full shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
                 <React.Suspense
                   fallback={
-                    <div className="w-72 h-full bg-default-100 dark:bg-sidebar" />
+                    <div className="w-80 h-full bg-default-100 dark:bg-sidebar" />
                   }
                 >
                   <Sidebar />
