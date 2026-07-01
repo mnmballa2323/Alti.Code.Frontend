@@ -93,7 +93,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
           {isTauri && (
             <div
               data-tauri-drag-region
-              className="w-full h-10 bg-white dark:bg-black border-b border-default-100 flex items-center justify-between z-[100] shrink-0 cursor-default"
+              className="w-full h-10 bg-default-100 dark:bg-default-50 border-b border-default-200/50 flex items-center justify-between z-[100] shrink-0 cursor-default"
             />
           )}
 
@@ -104,7 +104,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
 
             {/* Sidebar */}
             {!isNoSidebarRoute && (
-              <div className="z-30 relative h-full shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+              <div className="z-30 relative h-full shrink-0">
                 <React.Suspense
                   fallback={
                     <div className="w-80 h-full bg-default-100 dark:bg-sidebar" />
