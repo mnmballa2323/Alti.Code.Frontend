@@ -48,3 +48,24 @@ resource "google_vpc_access_connector" "vpc_connector" {
   ip_cidr_range = "10.8.0.0/28"
   network       = google_compute_network.private_network.name
 }
+
+# Cloud Router to manage VPC route tables for outbound NAT traffic
+resource "google_compute_router" "nat_router" {
+  name    = "inso-nat-router"
+  region  = var.region
+  network = google_compute_network.private_network.id
+}
+
+# Cloud NAT to enable outbound internet access safely for VMs without public IPs
+resource "google_compute_router_nat" "nat_gateway" {
+  name                               = "inso-nat-gateway"
+  router                             = google_compute_router.nat_router.name
+  region                             = var.region
+  nat_ip_allocate_option             = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+
+  log_config {
+    enable = true
+    filter = "ERRORS_ONLY"
+  }
+}

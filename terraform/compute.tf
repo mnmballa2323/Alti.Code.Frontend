@@ -24,13 +24,11 @@ resource "google_compute_instance" "commercial_node" {
 
   network_interface {
     subnetwork = google_compute_subnetwork.commercial_subnet[0].id
-    access_config {
-      # Allocates a public IP
-    }
   }
 
   metadata = {
-    ssh-keys = "gcpuser:${file(var.ssh_public_key_path)}"
+    enable-oslogin = "TRUE"
+    ssh-keys       = "gcpuser:${file(var.ssh_public_key_path)}"
   }
 
   shielded_instance_config {
