@@ -18,7 +18,7 @@ interface Mcp {
 
 export default function McpPage() {
   const { data: session } = useSession();
-  const { project } = useActiveProject();
+  const project = useActiveProject();
   const agentId = project?.id ?? null;
 
   const [mcps, setMcps] = useState<Mcp[]>([]);

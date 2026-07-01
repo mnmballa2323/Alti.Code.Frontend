@@ -18,7 +18,7 @@ interface Sdk {
 
 export default function SdkPage() {
   const { data: session } = useSession();
-  const { project } = useActiveProject();
+  const project = useActiveProject();
   const agentId = project?.id ?? null;
 
   const [sdks, setSdks] = useState<Sdk[]>([]);

@@ -1529,7 +1529,7 @@ export default function Sidebar() {
   }, []);
 
   // ── Rules – load from per-project localStorage, react to project changes ──────
-  useEffect(() => {
+  const fetchRules = useCallback(() => {
     const rulesLocal = readProjectData<{
       instructions: { id: string; name: string }[];
       guardrails: { id: string; name: string }[];
@@ -1549,6 +1549,10 @@ export default function Sidebar() {
   }, [activeAgentId]);
 
   useEffect(() => {
+    fetchRules();
+  }, [fetchRules]);
+
+  useEffect(() => {
     const handleRefresh = (e: Event) => {
       const customEvent = e as CustomEvent;
       if (customEvent.detail) {
@@ -1559,7 +1563,7 @@ export default function Sidebar() {
         if (customEvent.detail.sdks) setTuningSdks(customEvent.detail.sdks);
         if (customEvent.detail.mcps) setTuningMcps(customEvent.detail.mcps);
       } else {
-        refetchRules();
+        fetchRules();
       }
     };
 
@@ -1568,7 +1572,7 @@ export default function Sidebar() {
     return () => {
       window.removeEventListener("refresh-rules-sidebar", handleRefresh);
     };
-  }, []);
+  }, [fetchRules]);
 
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);

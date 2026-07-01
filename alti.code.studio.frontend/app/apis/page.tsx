@@ -18,7 +18,7 @@ interface Api {
 
 export default function ApisPage() {
   const { data: session } = useSession();
-  const { project } = useActiveProject();
+  const project = useActiveProject();
   const agentId = project?.id ?? null;
 
   const [apis, setApis] = useState<Api[]>([]);

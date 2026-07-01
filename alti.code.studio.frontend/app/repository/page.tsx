@@ -18,7 +18,7 @@ interface Repository {
 
 export default function RepositoryPage() {
   const { data: session } = useSession();
-  const { project } = useActiveProject();
+  const project = useActiveProject();
   const agentId = project?.id ?? null;
 
   const [repositories, setRepositories] = useState<Repository[]>([]);

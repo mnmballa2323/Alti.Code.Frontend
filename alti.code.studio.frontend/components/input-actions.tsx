@@ -865,13 +865,13 @@ function PromptInputFullLineComponent({
 
   return (
     <Form
-      className="mx-auto w-full max-w-full flex flex-col overflow-visible bg-white dark:bg-[#161616] rounded-3xl border border-gray-300 dark:border-zinc-700 shadow-2xl"
+      className="mx-auto w-full max-w-full flex flex-col overflow-visible bg-transparent border-none shadow-none"
       onSubmit={onSubmit}
     >
       <div
         className={cn(
-          "group flex gap-2 pl-[20px] pr-3",
-          assets.length > 0 ? "pt-4" : "hidden",
+          "group flex gap-2 pl-[20px] pr-3 mb-2",
+          assets.length > 0 ? "pt-2" : "hidden",
         )}
       >
         <PromptInputAssets
@@ -882,54 +882,54 @@ function PromptInputFullLineComponent({
         />
       </div>
 
-      <PromptInput
-        ref={inputRef}
-        autoFocus
-        className="max-h-[300px] w-full resize-none border-none shadow-none outline-none placeholder:text-default-400 focus-visible:ring-0"
-        classNames={{
-          innerWrapper: "relative",
-          input:
-            "text-[15px] leading-relaxed font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
-          inputWrapper: "!bg-transparent shadow-none !border-0 px-6 pt-3.5 pb-1",
-        }}
-        maxRows={12}
-        minRows={1}
-        name="content"
-        placeholder={placeholder}
-        radius="lg"
-        spellCheck={"false"}
-        value={prompt}
-        variant="bordered"
-        onKeyDown={handleKeyDown}
-        onPaste={handlePaste}
-        onValueChange={setPrompt}
-      />
+      <div className="flex flex-row items-center w-full gap-2 pl-3 pr-2 py-1.5 bg-white dark:bg-[#161616] rounded-full border border-gray-300 dark:border-zinc-700 shadow-2xl">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 flex items-center justify-center mr-1"
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <Plus className="size-4.5" />
+              <VisuallyHidden>
+                <input
+                  ref={fileInputRef}
+                  multiple
+                  type="file"
+                  onChange={handleFileUpload}
+                />
+              </VisuallyHidden>
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="top">
+            <p>Add context (files, images)</p>
+          </TooltipContent>
+        </Tooltip>
 
-      <div className="flex w-full flex-row items-center justify-between gap-4 px-6 pb-2.5 pt-0.5 overflow-visible scrollbar-hide">
+        <PromptInput
+          ref={inputRef}
+          autoFocus
+          className="flex-1 max-h-[120px] min-h-[36px] resize-none border-none shadow-none outline-none placeholder:text-default-400 focus-visible:ring-0"
+          classNames={{
+            innerWrapper: "relative",
+            input:
+              "text-[15px] leading-normal font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-1.5",
+            inputWrapper: "!bg-transparent shadow-none !border-0 px-2 py-0",
+          }}
+          maxRows={4}
+          minRows={1}
+          name="content"
+          placeholder={placeholder}
+          radius="lg"
+          spellCheck={"false"}
+          value={prompt}
+          variant="bordered"
+          onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
+          onValueChange={setPrompt}
+        />
+
         <div className="flex flex-row items-center gap-2 flex-nowrap shrink-0">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 flex items-center justify-center mr-2"
-                type="button"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <Plus className="size-3.5" />
-                <VisuallyHidden>
-                  <input
-                    ref={fileInputRef}
-                    multiple
-                    type="file"
-                    onChange={handleFileUpload}
-                  />
-                </VisuallyHidden>
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="bottom">
-              <p>Add context (files, images)</p>
-            </TooltipContent>
-          </Tooltip>
-
           {showModelDropdown && (
             <Dropdown
               className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[245px] p-2"
@@ -1165,140 +1165,127 @@ function PromptInputFullLineComponent({
                 <DropdownItem
                   key="security"
                   className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Security Audit"
+                  textValue="Security Sweep"
                   onPress={() => handleFunctionSelect("security")}
                 >
                   <div className="flex items-center gap-3 text-left">
-                    <Shield className="size-4 text-red-500 dark:text-red-400 shrink-0" />
-                    <span className="text-[12px] font-medium text-foreground">
-                      Security Audit
-                    </span>
+                    <Icon
+                      className="size-4 text-danger shrink-0"
+                      icon="solar:shield-keyhole-bold-duotone"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-foreground text-[12px]">
+                        Security Sweep
+                      </span>
+                      <span className="text-[10px] text-default-400">
+                        Scan & patch vulnerabilities
+                      </span>
+                    </div>
                   </div>
                 </DropdownItem>
-
                 <DropdownItem
                   key="qa"
                   className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Autonomous QA Loop"
+                  textValue="Autonomous QA"
                   onPress={() => handleFunctionSelect("qa")}
                 >
                   <div className="flex items-center gap-3 text-left">
-                    <FlaskConical className="size-4 text-emerald-500 dark:text-emerald-400 shrink-0" />
-                    <span className="text-[12px] font-medium text-foreground">
-                      Autonomous QA Loop
-                    </span>
+                    <Icon
+                      className="size-4 text-warning shrink-0"
+                      icon="solar:test-tube-minimalistic-bold-duotone"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-foreground text-[12px]">
+                        Autonomous QA
+                      </span>
+                      <span className="text-[10px] text-default-400">
+                        TDD check & auto patch
+                      </span>
+                    </div>
                   </div>
                 </DropdownItem>
-
-                <DropdownItem
-                  key="graph"
-                  className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Generate Knowledge Graph"
-                  onPress={() => handleFunctionSelect("graph")}
-                >
-                  <div className="flex items-center gap-3 text-left">
-                    <Network className="size-4 text-blue-500 dark:text-blue-400 shrink-0" />
-                    <span className="text-[12px] font-medium text-foreground">
-                      Generate Knowledge Graph
-                    </span>
-                  </div>
-                </DropdownItem>
-
-                <DropdownItem
-                  key="architecture"
-                  className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="System Architecture"
-                  onPress={() => handleFunctionSelect("architecture")}
-                >
-                  <div className="flex items-center gap-3 text-left">
-                    <Cpu className="size-4 text-purple-500 dark:text-purple-400 shrink-0" />
-                    <span className="text-[12px] font-medium text-foreground">
-                      System Architecture
-                    </span>
-                  </div>
-                </DropdownItem>
-
                 <DropdownItem
                   key="refactor"
                   className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Refactor & Optimize"
+                  textValue="Dead Code Cleanup"
                   onPress={() => handleFunctionSelect("refactor")}
                 >
                   <div className="flex items-center gap-3 text-left">
-                    <Wand2 className="size-4 text-orange-500 dark:text-orange-400 shrink-0" />
-                    <span className="text-[12px] font-medium text-foreground">
-                      Refactor & Optimize
-                    </span>
+                    <Icon
+                      className="size-4 text-success shrink-0"
+                      icon="solar:magic-stick-3-bold-duotone"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-foreground text-[12px]">
+                        Dead Code Cleanup
+                      </span>
+                      <span className="text-[10px] text-default-400">
+                        Prune unused functions
+                      </span>
+                    </div>
                   </div>
                 </DropdownItem>
-
                 <DropdownItem
-                  key="documentation"
+                  key="architect"
                   className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Write Documentation"
-                  onPress={() => handleFunctionSelect("documentation")}
+                  textValue="Architecture Audit"
+                  onPress={() => handleFunctionSelect("architect")}
                 >
                   <div className="flex items-center gap-3 text-left">
-                    <BookOpen className="size-4 text-teal-500 dark:text-teal-400 shrink-0" />
-                    <span className="text-[12px] font-medium text-foreground">
-                      Write Documentation
-                    </span>
+                    <Icon
+                      className="size-4 text-primary shrink-0"
+                      icon="solar:structure-bold-duotone"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-foreground text-[12px]">
+                        Architecture Audit
+                      </span>
+                      <span className="text-[10px] text-default-400">
+                        Map scalability bottlenecks
+                      </span>
+                    </div>
                   </div>
                 </DropdownItem>
-
                 <DropdownItem
-                  key="explain"
+                  key="docs"
                   className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Explain Code"
-                  onPress={() => handleFunctionSelect("explain")}
+                  textValue="Sync Documentation"
+                  onPress={() => handleFunctionSelect("docs")}
                 >
                   <div className="flex items-center gap-3 text-left">
-                    <HelpCircle className="size-4 text-sky-500 dark:text-sky-400 shrink-0" />
-                    <span className="text-[12px] font-medium text-foreground">
-                      Explain Code
-                    </span>
+                    <Icon
+                      className="size-4 text-[#CC9980] shrink-0"
+                      icon="solar:document-text-bold-duotone"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-foreground text-[12px]">
+                        Sync Documentation
+                      </span>
+                      <span className="text-[10px] text-default-400">
+                        Update code guides
+                      </span>
+                    </div>
                   </div>
                 </DropdownItem>
-
-                <DropdownItem
-                  key="database"
-                  className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Database Designer"
-                  onPress={() => handleFunctionSelect("database")}
-                >
-                  <div className="flex items-center gap-3 text-left">
-                    <Database className="size-4 text-indigo-500 dark:text-indigo-400 shrink-0" />
-                    <span className="text-[12px] font-medium text-foreground">
-                      Database Designer
-                    </span>
-                  </div>
-                </DropdownItem>
-
-                <DropdownItem
-                  key="github"
-                  className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Push to GitHub"
-                  onPress={() => handleFunctionSelect("github")}
-                >
-                  <div className="flex items-center gap-3 text-left">
-                    <Github className="size-4 text-neutral-700 dark:text-neutral-350 shrink-0" />
-                    <span className="text-[12px] font-medium text-foreground">
-                      Push to GitHub
-                    </span>
-                  </div>
-                </DropdownItem>
-
                 <DropdownItem
                   key="deploy"
                   className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Deploy to Cloud"
+                  textValue="Deploy Cloud Infrastructure"
                   onPress={() => handleFunctionSelect("deploy")}
                 >
                   <div className="flex items-center gap-3 text-left">
-                    <CloudUpload className="size-4 text-violet-500 dark:text-violet-400 shrink-0" />
-                    <span className="text-[12px] font-medium text-foreground">
-                      Deploy to Cloud
-                    </span>
+                    <Icon
+                      className="size-4 text-purple-500 shrink-0"
+                      icon="solar:cloud-upload-bold-duotone"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-xs font-semibold text-foreground text-[12px]">
+                        Deploy Cloud Infrastructure
+                      </span>
+                      <span className="text-[10px] text-default-400">
+                        Deploy to Cloud
+                      </span>
+                    </div>
                   </div>
                 </DropdownItem>
               </DropdownMenu>
@@ -1306,26 +1293,14 @@ function PromptInputFullLineComponent({
           )}
 
           {customActions}
-        </div>
 
-        <div className="flex items-center gap-2 shrink-0">
-          {isTestWorkspace && (
-            <>
-              <LogCaptureAgent
-                onCapture={(logs) =>
-                  setPrompt(prompt ? `${prompt}\n\n${logs}` : logs)
-                }
-              />
-              <VideoEyeRecorder />
-            </>
-          )}
           {!hideAgents && (
             <>
               {showFigmaButton && (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Figma
-                      className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-[#F24E1E] hover:text-[#F24E1E]"
+                      className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-[#F24E1E] hover:text-[#F24E1E]"
                       onClick={() => {
                         const figmaPrompt =
                           prompt.trim() ||
@@ -1359,7 +1334,7 @@ function PromptInputFullLineComponent({
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Codesandbox
-                      className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-blue-400 hover:text-blue-400"
+                      className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-blue-400 hover:text-blue-400"
                       onClick={() => {
                         const sandboxPrompt =
                           prompt.trim() ||
@@ -1393,7 +1368,7 @@ function PromptInputFullLineComponent({
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <MonitorSmartphone
-                      className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-emerald-400 hover:text-emerald-400"
+                      className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-emerald-400 hover:text-emerald-400"
                       onClick={() => {
                         const responsivePrompt =
                           prompt.trim() ||
@@ -1430,7 +1405,7 @@ function PromptInputFullLineComponent({
           <Tooltip>
             <TooltipTrigger asChild>
               <ArrowUp
-                className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300"
+                className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 flex items-center justify-center"
                 onClick={prompt ? handleSubmit : undefined}
               />
             </TooltipTrigger>
