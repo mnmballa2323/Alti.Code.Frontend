@@ -574,7 +574,7 @@ export default function VaultPage() {
           )}
         </div>
         <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full">
-          <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[12vh] overflow-hidden">
+          <div className="relative flex flex-1 w-full flex-col items-center justify-center overflow-hidden">
             <div className="flex w-full flex-col items-center gap-5 z-20 px-6">
               {/* ── Saved secret detail view ── */}
               <div className="flex w-full flex-col gap-4 max-w-2xl">
