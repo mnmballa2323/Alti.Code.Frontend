@@ -910,11 +910,11 @@ function PromptInputFullLineComponent({
           <Tooltip>
             <TooltipTrigger asChild>
               <button
-                className="flex items-center justify-center w-8 h-8 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors"
+                className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 flex items-center justify-center"
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
               >
-                <Plus className="size-5" />
+                <Plus className="size-3.5" />
                 <VisuallyHidden>
                   <input
                     ref={fileInputRef}
