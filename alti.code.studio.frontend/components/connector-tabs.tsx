@@ -24,8 +24,6 @@ export function ConnectorTabs() {
           tab: "h-8 px-4",
           tabContent:
             "group-data-[selected=true]:text-foreground text-default-500 font-medium text-sm",
-          prevButton: "hidden",
-          nextButton: "hidden",
         }}
         selectedKey={selectedKey}
         onSelectionChange={(key) => router.push(key as string)}

@@ -427,3 +427,20 @@ input:-webkit-autofill:focus {
 .copilotKitButton {
   display: none !important;
 }
+
+/* Hide NextUI/HeroUI Tabs scroll/nav buttons to prevent empty box glitches */
+[data-slot="prev-button"],
+[data-slot="next-button"],
+.nextui-tabs-scroll-button,
+.heroui-tabs-scroll-button,
+button[aria-label="Previous tabs"],
+button[aria-label="Next tabs"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
