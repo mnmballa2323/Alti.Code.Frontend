@@ -128,12 +128,12 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
             "Hi! 👋 How can I assist you with your code or deployments today?",
         }}
       >
-        <div className="flex flex-col w-full h-screen overflow-hidden bg-default-100 dark:bg-default-50">
+        <div className="relative w-full h-screen overflow-hidden bg-default-100 dark:bg-default-50">
           {/* Title Bar */}
           {isTauri && (
             <div
               data-tauri-drag-region
-              className="w-full h-10 bg-default-100 dark:bg-default-50 border-b border-default-200/50 flex items-center justify-between z-[100] shrink-0 cursor-default px-4 select-none"
+              className="absolute top-0 left-0 w-full h-10 bg-transparent flex items-center justify-between z-[100] cursor-default px-4 select-none"
             >
               {/* Left spacer for macOS window traffic light buttons */}
               <div className="w-[76px] shrink-0" />
@@ -160,7 +160,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
           )}
 
           {/* Main Body */}
-          <div className="flex w-full flex-1 overflow-hidden relative">
+          <div className="flex w-full h-full overflow-hidden relative">
             {/* Workspace Dock */}
             {!isNoSidebarRoute && <WorkspaceDock />}
 
