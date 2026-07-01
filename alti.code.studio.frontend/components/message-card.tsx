@@ -73,7 +73,7 @@ const MessageCard = React.forwardRef<HTMLDivElement, MessageCardProps>(
         <div className="flex w-full flex-col gap-4">
           <div
             className={cn(
-              "relative w-full rounded-2xl bg-content2 px-4 py-3 text-default-600",
+              "relative w-full rounded-2xl px-4 py-3 text-default-600",
               messageClassName,
             )}
           >
