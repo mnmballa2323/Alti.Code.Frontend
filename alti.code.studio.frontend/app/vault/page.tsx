@@ -552,8 +552,8 @@ export default function VaultPage() {
   return (
     <ChatBotLayout>
       <div className="flex flex-col h-full bg-default-50 dark:bg-background w-full font-sans">
-        {/* Top Navbar */}
-        <div className="flex items-center justify-center relative z-50 w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111] shrink-0">
+        {/* Premium top header with tabs */}
+        <div className="shrink-0 w-full bg-white/80 dark:bg-[#111111]/90 backdrop-blur-md border-b border-default-200/60 dark:border-white/5 flex items-center justify-center h-14 px-8">
           {!selectedSecretId && (
             <div className="flex items-center bg-default-100 dark:bg-default-50 p-1 rounded-lg border-none shadow-inner">
               {VAULT_TABS.map((tab) => (
@@ -574,7 +574,7 @@ export default function VaultPage() {
           )}
         </div>
         <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full">
-          <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[20vh] overflow-hidden">
+          <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[12vh] overflow-hidden">
             <div className="flex w-full flex-col items-center gap-5 z-20 px-6">
               {/* ── Saved secret detail view ── */}
               <div className="flex w-full flex-col gap-4 max-w-2xl">
