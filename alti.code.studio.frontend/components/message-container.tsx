@@ -112,7 +112,7 @@ export default function MessageContainer() {
                   key={`user-${index}`}
                   className="justify-end"
                   message={chatMessage.prompt}
-                  messageClassName="bg-default-200 text-default-600 w-full max-w-full whitespace-pre-wrap break-words"
+                  messageClassName="bg-[#e4e4e7] dark:bg-[#27272a] text-default-600 w-full max-w-full whitespace-pre-wrap break-words"
                   showFeedback={false}
                 />
               </div>
