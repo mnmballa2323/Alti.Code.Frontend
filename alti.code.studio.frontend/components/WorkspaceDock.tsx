@@ -106,7 +106,7 @@ export function WorkspaceDock() {
       </div>
 
       {/* Footer Actions (Plus Button) */}
-      <div className="mt-auto border-t border-default-200 w-full flex flex-col items-center justify-center h-[73px] pb-5 pt-0">
+      <div className="mt-auto border-t border-default-200 w-full flex flex-col items-center justify-center h-[73px]">
         <Tooltip
           content="Open New Project Workspace"
           placement="right"
