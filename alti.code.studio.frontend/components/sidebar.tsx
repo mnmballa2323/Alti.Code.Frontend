@@ -57,6 +57,7 @@ import MyAccountDropdown from "./MyAccountDropdown";
 import NotificationBell from "./NotificationBell";
 
 import { removeDocument, setActiveWorkspace } from "@/store/systemSlice";
+import { addTab } from "@/store/tabsSlice";
 import { RootState } from "@/store";
 import { useModalStore } from "@/store/useModalStore";
 import useFetchChatHistory from "@/hooks/useFetchChatHistory";
@@ -977,6 +978,14 @@ export default function Sidebar() {
     ) {
       setIsTauri(true);
     }
+
+    const handleOpenSelector = () => {
+      handleOpenLocalWorkspace();
+    };
+    window.addEventListener("open-workspace-selector", handleOpenSelector);
+    return () => {
+      window.removeEventListener("open-workspace-selector", handleOpenSelector);
+    };
   }, []);
 
   const handleOpenLocalWorkspace = async () => {
@@ -1026,7 +1035,16 @@ export default function Sidebar() {
         const parts = directoryPath.split(/[/\\]/);
         const folderName = parts.pop() || parts.pop() || "local-workspace";
 
+        dispatch(
+          addTab({
+            title: folderName,
+            projectPath: folderName,
+            activeView: "/chat",
+            chatSessionId: null,
+          })
+        );
         dispatch(setActiveWorkspace(folderName));
+        setActiveProject({ id: folderName, name: folderName });
         toast.success(`Successfully connected workspace: ${folderName}`);
         setIsWorkspaceModalOpen(false);
       } else {
@@ -1540,12 +1558,12 @@ export default function Sidebar() {
     }>(activeAgentId, "rules", {
       instructions: [], guardrails: [], repositories: [], apis: [], sdks: [], mcps: [],
     });
-    setInstructions(rulesLocal.instructions);
-    setGuardrails(rulesLocal.guardrails);
-    setTuningRepos(rulesLocal.repositories);
-    setTuningApis(rulesLocal.apis);
-    setTuningSdks(rulesLocal.sdks);
-    setTuningMcps(rulesLocal.mcps);
+    setInstructions(rulesLocal.instructions || []);
+    setGuardrails(rulesLocal.guardrails || []);
+    setTuningRepos(rulesLocal.repositories || []);
+    setTuningApis(rulesLocal.apis || []);
+    setTuningSdks(rulesLocal.sdks || []);
+    setTuningMcps(rulesLocal.mcps || []);
   }, [activeAgentId]);
 
   useEffect(() => {
@@ -1805,7 +1823,7 @@ export default function Sidebar() {
           {/* Top Section - Brand & Toggle */}
           <div
             className={cn(
-              "h-[56px] flex items-center justify-between border-b border-default-200",
+              "h-[68px] flex items-center justify-between border-b border-default-200",
               isSidebarOpen ? "pl-4 pr-4" : "px-0 justify-center",
             )}
           >
@@ -1857,116 +1875,14 @@ export default function Sidebar() {
             </Button>
           </div>
 
-          {/* Repository Dropdown Section */}
-          <div
-            className={cn(
-              "border-b border-default-200 px-3 py-2",
-              !isSidebarOpen && "hidden",
-            )}
-          >
-            <Dropdown
-              className="w-[240px] min-w-[240px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-2xl p-1"
-              placement="bottom-start"
-            >
-              <DropdownTrigger>
-                <div className="relative">
-                  <div className="flex w-full items-center gap-2 px-2 py-2 rounded-xl hover:bg-default-200 dark:hover:bg-default-300 transition-all border-none group cursor-pointer bg-transparent">
-                    <div className="flex flex-col items-start min-w-0 flex-1">
-                      <div className="flex items-center w-full">
-                        <span className="text-[14px] font-semibold tracking-tight text-default-900 truncate">
-                          {selectedRepo}
-                        </span>
-                        <ChevronDown className="size-3 text-default-400 ml-auto shrink-0" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Select Workspace"
-                className="p-2"
-                disabledKeys={isRepoLoading ? ["searching"] : []}
-              >
-                <DropdownItem
-                  key="open-local-folder"
-                  className="text-primary hover:bg-primary/10 rounded-lg py-2"
-                  startContent={
-                    <div className="p-1 rounded-md bg-primary/10 text-primary">
-                      <Icon
-                        className="size-3.5"
-                        icon="solar:folder-opened-bold"
-                      />
-                    </div>
-                  }
-                  onPress={handleOpenLocalWorkspace}
-                >
-                  <span className="text-xs font-semibold text-primary">
-                    Open Local Folder...
-                  </span>
-                </DropdownItem>
-
-                <DropdownItem
-                  key="connect-github-repo"
-                  className="text-primary/70 hover:bg-primary/5 rounded-lg py-2 mb-2 border-b border-default-100/50"
-                  startContent={
-                    <div className="p-1 rounded-md bg-primary/5 text-primary/70">
-                      <Icon
-                        className="size-3.5"
-                        icon="solar:cloud-download-linear"
-                      />
-                    </div>
-                  }
-                  onPress={() => router.push("/connect-apps")}
-                >
-                  <span className="text-xs font-semibold text-primary/70">
-                    Connect Apps Catalog
-                  </span>
-                </DropdownItem>
-
-                <DropdownItem
-                  key="current-header"
-                  isReadOnly
-                  className="text-[10px] font-bold text-default-400 uppercase tracking-widest px-2 mb-1"
-                >
-                  Available Repositories
-                </DropdownItem>
-
-                {repos.map((repo: any) => (
-                  <DropdownItem
-                    key={repo.fullName}
-                    className="rounded-lg h-10 px-2 hover:bg-primary/5 transition-colors"
-                    description={repo.private ? "Private" : "Public"}
-                    startContent={
-                      <div className="p-1.5 rounded-md bg-default-100 text-default-500">
-                        <Icon
-                          className="size-3.5"
-                          icon="solar:folder-2-linear"
-                        />
-                      </div>
-                    }
-                    onClick={() => dispatch(setActiveWorkspace(repo.name))}
-                  >
-                    <span className="text-xs font-medium text-default-700">
-                      {repo.name}
-                    </span>
-                  </DropdownItem>
-                ))}
-
-                {repos.length === 0 && !isRepoLoading && (
-                  <DropdownItem
-                    key="no-repos"
-                    isReadOnly
-                    className="text-center py-4 text-xs text-default-400 italic"
-                  >
-                    No repositories found
-                  </DropdownItem>
-                )}
-              </DropdownMenu>
-            </Dropdown>
-          </div>
 
           {/* 6 navigation icons toggle container (Main Menu) */}
-          <div className={cn(isSidebarOpen ? "px-3 py-2" : "py-2 px-1")}>
+          <div
+            className={cn(
+              "h-[68px] flex items-center border-b border-default-200 px-3",
+              !isSidebarOpen && "py-2 px-1",
+            )}
+          >
             <div
               className={cn(
                 "bg-white/5 border border-white/5 rounded-xl p-1",
@@ -2071,7 +1987,7 @@ export default function Sidebar() {
           {/* Search bar and + icon on the same line below the main menu */}
           <div
             className={cn(
-              isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
+              "h-[68px] flex items-center border-b border-default-200 px-3",
               !isSidebarOpen && "hidden",
             )}
           >

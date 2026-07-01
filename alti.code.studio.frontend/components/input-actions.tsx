@@ -882,7 +882,7 @@ function PromptInputFullLineComponent({
         />
       </div>
 
-      <div className="flex flex-row items-center w-full gap-2 pl-3 pr-2 py-1.5 bg-white dark:bg-[#161616] rounded-full border border-gray-300 dark:border-zinc-700 shadow-2xl">
+      <div className="flex flex-row items-center w-full gap-2 pl-3 pr-3 py-1.5 bg-white dark:bg-[#161616] rounded-full border border-gray-300 dark:border-zinc-700 shadow-sm">
         <Tooltip>
           <TooltipTrigger asChild>
             <button
@@ -930,10 +930,10 @@ function PromptInputFullLineComponent({
         />
 
         <div className="flex flex-row items-center gap-2 flex-nowrap shrink-0">
-          {showModelDropdown && (
+          {showModelDropdown && !prompt && (
             <Dropdown
-              className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[245px] p-2"
-              placement="top-start"
+              className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[245px] p-2 translate-x-[48px]"
+              placement="top-end"
             >
               <DropdownTrigger>
                 <button
@@ -1141,7 +1141,7 @@ function PromptInputFullLineComponent({
             </Dropdown>
           )}
 
-          {!hideRunLocally && !hideDropdown && (
+          {false && !hideRunLocally && !hideDropdown && (
             <Dropdown
               className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[220px] p-2"
               placement="top-start"

@@ -84,7 +84,7 @@ export default function ChatHome() {
           </div>
         ) : (
           <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden">
-            <div className="flex w-full flex-col items-center gap-6 z-20 px-6">
+            <div className="flex w-full flex-col items-center gap-6 z-20 px-6 md:px-12 lg:px-16">
               <div className="flex flex-col items-center text-center z-30 mb-6">
                 <h1
                   className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80 animate-in fade-in duration-300"
@@ -93,7 +93,7 @@ export default function ChatHome() {
                   {isResearchMode ? "Deep Research" : "Let's Chat"}
                 </h1>
               </div>
-              <div className="flex w-full flex-col gap-4 max-w-2xl">
+              <div className="flex w-full flex-col gap-4 max-w-2xl lg:max-w-3xl">
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
                   hideDropdown={true}
@@ -103,9 +103,6 @@ export default function ChatHome() {
               </div>
             </div>
 
-            <p className="absolute bottom-8 text-xs font-medium text-default-400 opacity-60 z-20">
-              We don&apos;t train on your data. Your chats stay private.
-            </p>
           </div>
         )}
       </div>

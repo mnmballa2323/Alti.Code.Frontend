@@ -6,6 +6,7 @@ import messagesReducer from "./messagesSlice";
 import shadowReducer from "./shadowSlice";
 import systemReducer from "./systemSlice";
 import uiReducer from "./uiSlice";
+import tabsReducer from "./tabsSlice";
 
 export const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ export const store = configureStore({
     shadow: shadowReducer,
     system: systemReducer,
     ui: uiReducer,
+    tabs: tabsReducer,
   },
 });
 

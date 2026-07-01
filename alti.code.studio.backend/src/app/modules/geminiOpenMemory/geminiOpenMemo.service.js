@@ -14,7 +14,7 @@ import config from '../../../../config/index.js';
 import ApiError from '../../../errors/ApiError.js';
 import { logger } from '../../../shared/logger.js';
 import { prisma } from '../../../config/prisma.js';
-import { paymentController } from '../payment/payment.controller.js';
+import { PaymentController } from '../payment/payment.controller.js';
 import { GEMINI_RESPONSE_SERVICE_POST } from './geminiOpenMemo.constant.js';
 import { mcpClientService } from '../mcp/mcp.client.js';
 
@@ -243,7 +243,7 @@ Never deploy blindly. Validate the build locally, run the pre-flight checks, and
 
     try {
       const paymentResult =
-        await paymentController.incrementPromptsUsed(userId);
+        await PaymentController.incrementPromptsUsed(userId);
 
       if (!paymentResult.success) {
         throw new ApiError(httpStatus.BAD_REQUEST, paymentResult.message);

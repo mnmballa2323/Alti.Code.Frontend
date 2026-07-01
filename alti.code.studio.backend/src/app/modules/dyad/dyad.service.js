@@ -16,7 +16,7 @@ import { logger } from '../../../shared/logger.js';
 
 import UserModel from '../auth/auth.model.js';
 import Llama from './dyad.model.js';
-import { paymentController } from '../payment/payment.controller.js';
+import { PaymentController } from '../payment/payment.controller.js';
 
 /**
  * In-memory session memory store — capped at SESSION_MEMORY_MAX with LRU eviction.
@@ -76,7 +76,7 @@ const claudeResponseService = async (
     if (process.env.NODE_ENV === 'production') {
       try {
         const paymentResult =
-          await paymentController.incrementPromptsUsed(userId);
+          await PaymentController.incrementPromptsUsed(userId);
         if (!paymentResult.success) {
           throw new ApiError(httpStatus.BAD_REQUEST, paymentResult.message);
         }

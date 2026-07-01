@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Panel, Group, Separator } from "react-resizable-panels";
 import { CopilotKit } from "@copilotkit/react-core";
 import { CopilotSidebar } from "@copilotkit/react-ui";
@@ -12,18 +12,42 @@ import "@copilotkit/react-ui/styles.css";
 import { RootState } from "@/store";
 import Sidebar from "@/components/sidebar";
 import GhostEditor from "@/components/ghost-editor";
+import { WorkspaceDock } from "@/components/WorkspaceDock";
+import { addTab } from "@/store/tabsSlice";
+import { setActiveWorkspace } from "@/store/systemSlice";
+import { setActiveProject } from "@/lib/project";
 
 /**
  * Persistent layout wrapper for authenticated application routes.
  */
 export function PersistentLayout({ children }: { children: React.ReactNode }) {
+  const dispatch = useDispatch();
   const { isGhostEditorOpen } = useSelector((state: RootState) => state.ui);
   const { data: session } = useSession();
   const pathname = usePathname();
   const isNoSidebarRoute =
-    pathname?.startsWith("/admin") || pathname?.startsWith("/owner");
+    pathname?.startsWith("/admin") || pathname?.startsWith("/owner") || pathname === "/login" || pathname === "/";
   const [isTauri, setIsTauri] = useState(false);
   const [headers, setHeaders] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const searchParams = new URLSearchParams(window.location.search);
+      const projectParam = searchParams.get("project");
+      if (projectParam) {
+        dispatch(
+          addTab({
+            title: projectParam,
+            projectPath: projectParam,
+            activeView: pathname || "/chat",
+            chatSessionId: null,
+          })
+        );
+        dispatch(setActiveWorkspace(projectParam));
+        setActiveProject({ id: projectParam, name: projectParam });
+      }
+    }
+  }, [dispatch, pathname]);
 
   useEffect(() => {
     if (
@@ -75,6 +99,9 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
 
           {/* Main Body */}
           <div className="flex w-full flex-1 overflow-hidden relative">
+            {/* Workspace Dock */}
+            {!isNoSidebarRoute && <WorkspaceDock />}
+
             {/* Sidebar */}
             {!isNoSidebarRoute && (
               <div className="z-30 relative h-full shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
