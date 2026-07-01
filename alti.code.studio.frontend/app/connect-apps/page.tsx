@@ -1032,11 +1032,11 @@ function ConnectAppsContent() {
   return (
     <ChatBotLayout>
       <div className="flex flex-col h-full bg-default-50 dark:bg-background w-full">
-        {/* Top Navbar */}
-        <div className="flex items-center justify-center relative z-50 w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111] shrink-0">
-          <ConnectorTabs />
-        </div>
         <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans w-full">
+          {/* Tabs above content */}
+          <div className="flex items-center justify-center pt-6 pb-2 shrink-0">
+            <ConnectorTabs />
+          </div>
           {/* Master-Detail Split Screen Container */}
           <div className="flex flex-1 w-full overflow-hidden bg-default-100 dark:bg-default-50">
             {/* Right Column: Center Presentation Area */}

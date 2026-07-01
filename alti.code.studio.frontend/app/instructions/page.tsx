@@ -88,11 +88,10 @@ export default function InstructionsPage() {
   return (
     <ChatBotLayout>
       <div className="flex flex-col h-full bg-default-100 dark:bg-default-50">
-        {/* Top Navbar */}
-        <div className="flex items-center justify-center relative z-50 w-full h-14 px-8 border-b border-default-100 bg-white dark:bg-[#111111] shrink-0">
-          <TuningTabs />
-        </div>
         <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide flex flex-col items-center justify-center">
+          <div className="w-full max-w-2xl flex flex-col items-center gap-4 mb-8">
+            <TuningTabs />
+          </div>
           <div className="w-full max-w-2xl mb-14">
             <form className="relative flex items-center w-full shadow-sm rounded-2xl" onSubmit={handleSend}>
               <Input
