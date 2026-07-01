@@ -9,9 +9,9 @@
   },
   "license": "MIT",
   "scripts": {
-    "start": "node server.js",
-    "start:dev": "ulimit -n 4096 && nodemon server.js",
-    "dev": "ulimit -n 4096 && nodemon server.js",
+    "start": "NODE_OPTIONS=\"--no-node-snapshot\" node server.js",
+    "start:dev": "ulimit -n 4096 && NODE_OPTIONS=\"--no-node-snapshot\" nodemon server.js",
+    "dev": "ulimit -n 4096 && NODE_OPTIONS=\"--no-node-snapshot\" nodemon server.js",
     "postinstall": "node scripts/patch-agentmemory.js",
     "license-check": "node ../scripts/license_compliance_check.js",
     "pretest": "npm run license-check",

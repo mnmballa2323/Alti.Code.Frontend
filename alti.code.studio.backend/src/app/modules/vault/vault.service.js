@@ -92,7 +92,7 @@ const resolveGcpKmsKey = async (customerKmsKeyArn, bypassCache = false) => {
 const encryptField = async (value, tenantKmsKey = null) => {
   if (!value || value.startsWith('****') || value.includes('...'))
     return undefined; // Skip already masked or empty values
-  return encryptionService.encrypt(value, tenantKmsKey);
+  return encryptionService.envelopeEncrypt(value, tenantKmsKey);
 };
 
 /**
@@ -105,7 +105,7 @@ const decryptField = async (
 ) => {
   if (!encryptedValue) return '';
   try {
-    return await encryptionService.decrypt(encryptedValue, tenantKmsKey);
+    return await encryptionService.envelopeDecrypt(encryptedValue, tenantKmsKey);
   } catch (e) {
     if (throwOnError) throw e;
     logger.error('Failed to decrypt vault field:', e);

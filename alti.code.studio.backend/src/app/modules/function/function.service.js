@@ -6,7 +6,7 @@
 
 import { prismaClient } from '../../platform/db/prismaClient.js';
 import { logger } from '../../../shared/logger.js';
-import vm from 'vm';
+import ivm from 'isolated-vm';
 import crypto from 'crypto';
 
 const prisma = prismaClient.prisma;
@@ -99,43 +99,59 @@ async function deleteFunction(functionId, userId) {
  */
 async function executeCode(code) {
   const logs = [];
-
-  // Custom sandbox to capture stdout and restrict standard libraries
-  const sandbox = {
-    console: {
-      log: (...args) => {
-        logs.push(
-          args
-            .map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a)))
-            .join(' '),
-        );
-      },
-      error: (...args) => {
-        logs.push(
-          `[ERROR] ${args.map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a))).join(' ')}`,
-        );
-      },
-    },
-    setTimeout,
-    setInterval,
-    clearTimeout,
-    clearInterval,
-    Promise,
-  };
-
-  const context = vm.createContext(sandbox);
   const start = Date.now();
 
+  const isolate = new ivm.Isolate({ memoryLimit: 128 });
   try {
-    // strict 3s runtime execution timeout to protect event-loop from infinite loops
-    const script = new vm.Script(code, { filename: 'sandbox.js' });
-    const result = await script.runInContext(context, { timeout: 3000 });
+    const context = await isolate.createContext();
+    const jail = context.global;
+
+    // Set global variables inside the isolate
+    await jail.set('global', jail.derefInto());
+
+    const logCallback = (...args) => {
+      logs.push(
+        args
+          .map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a)))
+          .join(' '),
+      );
+    };
+
+    const errorCallback = (...args) => {
+      logs.push(
+        `[ERROR] ${args
+          .map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a)))
+          .join(' ')}`,
+      );
+    };
+
+    // Wire console log and error callbacks
+    await context.evalClosure(
+      `
+      global.console = {
+        log: (...args) => {
+          $0.apply(undefined, args, { arguments: { copy: true } });
+        },
+        error: (...args) => {
+          $1.apply(undefined, args, { arguments: { copy: true } });
+        }
+      };
+    `,
+      [logCallback, errorCallback],
+      { arguments: { reference: true } },
+    );
+
+    // Compile script with code payload
+    const script = await isolate.compileScript(code);
+    
+    // Run script within context and strict 3s timeout
+    const result = await script.run(context, { timeout: 3000 });
     const duration = Date.now() - start;
 
     let displayResult = 'undefined';
     if (result !== undefined) {
       displayResult =
-        typeof result === 'object'
+        typeof result === 'object' && result !== null
           ? JSON.stringify(result, null, 2)
           : String(result);
     }
@@ -154,6 +170,8 @@ async function executeCode(code) {
       logs: [...logs, `[RUNTIME ERROR] ${err.message}`],
       duration,
     };
+  } finally {
+    isolate.dispose();
   }
 }
 

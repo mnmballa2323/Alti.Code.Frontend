@@ -93,10 +93,16 @@ export const getSchemaConnectionUrl = (baseDbUrl, tenantId, productId) => {
   try {
     const url = new URL(baseDbUrl);
     url.searchParams.set('schema', schemaName);
+    if (process.env.PG_BOUNCER === 'true') {
+      url.searchParams.set('pgbouncer', 'true');
+    }
     return url.toString();
   } catch (error) {
-    const separator = baseDbUrl.includes('?') ? '&' : '?';
-    return `${baseDbUrl}${separator}schema=${schemaName}`;
+    let finalUrl = `${baseDbUrl}${baseDbUrl.includes('?') ? '&' : '?'}schema=${schemaName}`;
+    if (process.env.PG_BOUNCER === 'true') {
+      finalUrl = `${finalUrl}&pgbouncer=true`;
+    }
+    return finalUrl;
   }
 };
 

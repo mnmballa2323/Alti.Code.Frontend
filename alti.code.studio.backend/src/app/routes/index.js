@@ -35,6 +35,7 @@ import { scimRoutes } from '../modules/iam/scim.route.js';
 import { okfGovernanceMiddleware } from '../middlewares/okfGovernanceMiddleware.js';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
+import { PaymentController } from '../modules/payment/payment.controller.js';
 
 // 🛡️ Global Immutable Audit Logging (SOC 2 / FedRAMP)
 router.use(auditMiddleware('GLOBAL_API_REQUEST'));
@@ -51,6 +52,7 @@ router.use(xss());
 // Public Routes
 router.use('/auth', authRoutes);
 router.use('/scim', scimRoutes);
+router.post('/payment/webhook', PaymentController.handleWebhook);
 
 // 🛡️ Global Zero-Trust Boundary (IAP verification for all subsequent routes)
 // Note: In development, verifyIAPToken bypasses automatically if no token is present.

@@ -48,6 +48,9 @@ describe('Custom Agents and Sandboxed Functions Integration Tests', () => {
       const list = CustomAgentService.getAgents('user-123');
       expect(list.length).toBe(1);
       expect(list[0].id).toBe(created.id);
+
+      // Clean up to prevent state leakage to next tests
+      CustomAgentService.deleteAgent(created.id, 'user-123');
     });
 
     it('should delete custom agents correctly', () => {

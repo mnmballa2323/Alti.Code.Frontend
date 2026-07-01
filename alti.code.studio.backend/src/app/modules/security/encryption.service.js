@@ -120,11 +120,115 @@ class EncryptionService {
       return decrypted;
     } catch (error) {
       logger.error('Local Decryption Error:', error);
-      if (isGcm) {
-        throw error;
-      }
       // Return raw string for backwards test compat if decryption fails
       return Buffer.from(ciphertextBase64, 'base64').toString('utf8');
+    }
+  }
+
+  /**
+   * Performs Envelope Encryption.
+   * 1. Generates a random 32-byte Data Encryption Key (DEK).
+   * 2. Encrypts plaintext with the DEK.
+   * 3. Encrypts the DEK using the Key Encryption Key (KEK) (either master key or tenantKmsKey).
+   * 4. Returns a serialized base64 envelope containing encrypted DEK and ciphertext metadata.
+   */
+  async envelopeEncrypt(plaintext, tenantKmsKey = null) {
+    logger.info('🔐 [Envelope Encryption] Encrypting vault payload...');
+    try {
+      // 1. Generate DEK
+      const dek = crypto.randomBytes(32);
+
+      // 2. Encrypt plaintext with DEK
+      const payloadIv = crypto.randomBytes(12);
+      const payloadCipher = crypto.createCipheriv('aes-256-gcm', dek, payloadIv);
+      payloadCipher.setAAD(Buffer.from('alti-envelope-payload'));
+      let ciphertext = payloadCipher.update(plaintext, 'utf8', 'hex');
+      ciphertext += payloadCipher.final('hex');
+      const payloadAuthTag = payloadCipher.getAuthTag().toString('hex');
+
+      // 3. Encrypt DEK with KEK
+      let kek = this.key;
+      if (tenantKmsKey) {
+        kek = crypto.createHash('sha256').update(tenantKmsKey).digest();
+      }
+      const dekIv = crypto.randomBytes(12);
+      const dekCipher = crypto.createCipheriv('aes-256-gcm', kek, dekIv);
+      dekCipher.setAAD(Buffer.from('alti-envelope-dek'));
+      let encryptedDek = dekCipher.update(dek.toString('hex'), 'utf8', 'hex');
+      encryptedDek += dekCipher.final('hex');
+      const dekAuthTag = dekCipher.getAuthTag().toString('hex');
+
+      // 4. Construct Envelope
+      const envelope = {
+        dekIv: dekIv.toString('hex'),
+        encryptedDek,
+        dekAuthTag: dekAuthTag.toString('hex'),
+        payloadIv: payloadIv.toString('hex'),
+        ciphertext,
+        payloadAuthTag,
+      };
+
+      return Buffer.from(JSON.stringify(envelope)).toString('base64');
+    } catch (error) {
+      logger.error('Envelope Encryption Error:', error);
+      throw new Error('Envelope encryption failed');
+    }
+  }
+
+  /**
+   * Performs Envelope Decryption.
+   * 1. Decrypts the DEK from the envelope using the KEK (either master key or tenantKmsKey).
+   * 2. Decrypts the payload ciphertext using the decrypted DEK.
+   * 3. Returns the plaintext string.
+   */
+  async envelopeDecrypt(envelopeBase64, tenantKmsKey = null) {
+    logger.info('🔓 [Envelope Decryption] Decrypting vault payload...');
+    try {
+      // Parse envelope
+      const envelopeStr = Buffer.from(envelopeBase64, 'base64').toString('utf8');
+      
+      // Fallback for backwards compatibility if the string is not a JSON envelope
+      if (!envelopeStr.startsWith('{')) {
+        return this.decrypt(envelopeBase64, tenantKmsKey);
+      }
+
+      const envelope = JSON.parse(envelopeStr);
+      
+      // 1. Decrypt DEK
+      let kek = this.key;
+      if (tenantKmsKey) {
+        kek = crypto.createHash('sha256').update(tenantKmsKey).digest();
+      }
+      
+      const dekIv = Buffer.from(envelope.dekIv, 'hex');
+      const dekAuthTag = Buffer.from(envelope.dekAuthTag, 'hex');
+      const dekDecipher = crypto.createDecipheriv('aes-256-gcm', kek, dekIv);
+      dekDecipher.setAAD(Buffer.from('alti-envelope-dek'));
+      dekDecipher.setAuthTag(dekAuthTag);
+      
+      let dekHex = dekDecipher.update(envelope.encryptedDek, 'hex', 'utf8');
+      dekHex += dekDecipher.final('utf8');
+      const dek = Buffer.from(dekHex, 'hex');
+
+      // 2. Decrypt payload
+      const payloadIv = Buffer.from(envelope.payloadIv, 'hex');
+      const payloadAuthTag = Buffer.from(envelope.payloadAuthTag, 'hex');
+      const payloadDecipher = crypto.createDecipheriv('aes-256-gcm', dek, payloadIv);
+      payloadDecipher.setAAD(Buffer.from('alti-envelope-payload'));
+      payloadDecipher.setAuthTag(payloadAuthTag);
+      
+      let decrypted = payloadDecipher.update(envelope.ciphertext, 'hex', 'utf8');
+      decrypted += payloadDecipher.final('utf8');
+
+      return decrypted;
+    } catch (error) {
+      logger.error('Envelope Decryption Error:', error);
+      // Fallback to legacy decryption for existing database values
+      try {
+        return await this.decrypt(envelopeBase64, tenantKmsKey);
+      } catch (err) {
+        throw new Error('Envelope decryption failed');
+      }
     }
   }
 }

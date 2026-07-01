@@ -570,7 +570,7 @@ export default function VaultPage() {
   // ─────────────────────────────────────────────────────────────────────────
   return (
     <ChatBotLayout>
-      <div className="flex flex-col h-full bg-default-50 dark:bg-background w-full font-sans">
+      <div className="flex flex-col h-full bg-default-100 dark:bg-default-50 w-full font-sans">
         {/* Premium top header with tabs */}
         <div className="shrink-0 w-full bg-white/80 dark:bg-[#111111]/90 backdrop-blur-md border-b border-default-200/60 dark:border-white/5 flex items-center justify-center h-14 px-8">
           {!selectedSecretId && (

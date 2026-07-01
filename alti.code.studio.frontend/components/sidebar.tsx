@@ -1156,10 +1156,10 @@ export default function Sidebar() {
       },
     },
     {
-      label: "Chat",
-      icon: MessageSquare,
-      path: "/chat",
-      isActive: pathname?.startsWith("/chat"),
+      label: "Functions",
+      icon: Terminal,
+      path: "/functions",
+      isActive: pathname === "/functions",
       onClick: () => {},
     },
     {
@@ -1170,24 +1170,11 @@ export default function Sidebar() {
       onClick: () => {},
     },
     {
-      label: "Functions",
-      icon: Terminal,
-      path: "/functions",
-      isActive: pathname === "/functions",
+      label: "Chat",
+      icon: MessageSquare,
+      path: "/chat",
+      isActive: pathname?.startsWith("/chat"),
       onClick: () => {},
-    },
-    {
-      label: "Vault",
-      icon: Lock,
-      path: "/vault",
-      isActive: pathname === "/vault",
-      onClick: () => {
-        if (pathname === "/vault") {
-          window.dispatchEvent(
-            new CustomEvent("select-secret", { detail: null }),
-          );
-        }
-      },
     },
     {
       label: "Tuning",
@@ -1202,6 +1189,19 @@ export default function Sidebar() {
         pathname === "/sdk" ||
         pathname === "/mcp",
       onClick: () => {},
+    },
+    {
+      label: "Vault",
+      icon: Lock,
+      path: "/vault",
+      isActive: pathname === "/vault",
+      onClick: () => {
+        if (pathname === "/vault") {
+          window.dispatchEvent(
+            new CustomEvent("select-secret", { detail: null }),
+          );
+        }
+      },
     },
   ];
 
