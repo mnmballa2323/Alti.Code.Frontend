@@ -1823,7 +1823,7 @@ export default function Sidebar() {
           {/* Top Section - Brand & Toggle */}
           <div
             className={cn(
-              "h-[68px] flex items-center justify-between border-b border-default-200",
+              "h-[68px] flex items-center justify-between border-b border-transparent",
               isSidebarOpen ? "pl-4 pr-4" : "px-0 justify-center",
             )}
           >
@@ -1879,7 +1879,7 @@ export default function Sidebar() {
           {/* 6 navigation icons toggle container (Main Menu) */}
           <div
             className={cn(
-              "h-[68px] flex items-center border-b border-default-200 px-3",
+              "h-[68px] flex items-center border-b border-transparent px-3",
               !isSidebarOpen && "py-2 px-1",
             )}
           >

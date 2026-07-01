@@ -58,7 +58,10 @@ export function WorkspaceDock() {
   };
 
   return (
-    <div className="w-[68px] min-w-[68px] h-full bg-[#070B16] border-r border-white/5 flex flex-col items-center pt-4 select-none shrink-0 z-40">
+    <div className="w-[68px] min-w-[68px] h-full bg-[#070B16] border-r border-white/5 flex flex-col items-center pt-4 select-none shrink-0 z-40 relative">
+      {/* Search Bar Alignment Border Line */}
+      <div className="absolute top-[203px] left-0 right-0 border-b border-white/5 z-50 pointer-events-none" />
+
       {/* Scrollable Workspaces List */}
       <div className="flex-1 w-full flex flex-col items-center gap-3 overflow-y-auto scrollbar-none px-2">
         {tabs.map((tab) => {
