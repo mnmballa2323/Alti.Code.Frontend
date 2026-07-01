@@ -90,11 +90,11 @@ export function WorkspaceDock() {
       "dark h-full bg-[#070B16] border-r border-white/5 flex flex-col select-none shrink-0 z-40 relative transition-all duration-300 ease-in-out",
       isDockExpanded ? "w-64 min-w-[256px]" : "w-[68px] min-w-[68px]"
     )}>
-      {/* Top Spacer / Header Area matching Sidebar header heights (12px + 52px + 68px = 132px) */}
+      {/* Top Spacer / Header Area matching Sidebar header heights (52px + 68px = 120px) */}
       <div
         onClick={handleToggleDockClick}
         className={cn(
-          "h-[132px] w-full border-b border-default-200 flex-none flex items-center relative group transition-colors cursor-pointer hover:bg-white/[0.02]",
+          "h-[120px] w-full border-b border-default-200 flex-none flex items-center relative group transition-colors cursor-pointer hover:bg-white/[0.02]",
           isDockExpanded ? "px-4 justify-between" : "justify-center"
         )}
       >

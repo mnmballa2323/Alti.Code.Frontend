@@ -1842,10 +1842,6 @@ export default function Sidebar() {
             isSidebarOpen ? "w-80" : "w-16",
           )}
         >
-
-          {/* Top spacer below Titlebar */}
-          <div className="h-3 w-full shrink-0" />
-
           {/* 6 navigation icons toggle container (Main Menu) */}
           <div
             className={cn(
