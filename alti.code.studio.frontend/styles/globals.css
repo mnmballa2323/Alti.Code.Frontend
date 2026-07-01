@@ -434,7 +434,10 @@ input:-webkit-autofill:focus {
 .nextui-tabs-scroll-button,
 .heroui-tabs-scroll-button,
 button[aria-label="Previous tabs"],
-button[aria-label="Next tabs"] {
+button[aria-label="Next tabs"],
+[data-slot="base"] > button:not([role="tab"]),
+.nextui-tabs-container > button:not([role="tab"]),
+div[class*="tabs"] > button:not([role="tab"]) {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;
