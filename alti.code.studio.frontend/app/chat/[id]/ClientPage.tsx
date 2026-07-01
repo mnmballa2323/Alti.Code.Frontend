@@ -113,7 +113,7 @@ const SingleChatPage = () => {
       <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full font-sans w-full">
         {/* Dynamic Content */}
         <div className="flex flex-col h-full w-full items-center justify-between px-6 py-4 gap-4 relative z-10">
-          <div className="flex flex-col w-full h-full max-w-3xl">
+          <div className="flex flex-col w-full h-full max-w-4xl">
             <div className="w-full flex-grow overflow-y-auto hide-scrollbar pb-4">
               <MessageContainer />
             </div>

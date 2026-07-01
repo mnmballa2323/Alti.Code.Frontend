@@ -865,7 +865,7 @@ function PromptInputFullLineComponent({
 
   return (
     <Form
-      className="mx-auto w-full max-w-2xl flex flex-col overflow-visible bg-white dark:bg-[#161616] rounded-[32px] border border-gray-300 dark:border-zinc-700 shadow-2xl"
+      className="mx-auto w-full max-w-4xl flex flex-col overflow-visible bg-white dark:bg-[#161616] rounded-3xl border border-gray-300 dark:border-zinc-700 shadow-2xl"
       onSubmit={onSubmit}
     >
       <div
@@ -890,7 +890,7 @@ function PromptInputFullLineComponent({
           innerWrapper: "relative",
           input:
             "text-[15px] leading-relaxed font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]",
-          inputWrapper: "!bg-transparent shadow-none !border-0 px-6 pt-5 pb-2",
+          inputWrapper: "!bg-transparent shadow-none !border-0 px-6 pt-3.5 pb-1",
         }}
         maxRows={12}
         minRows={1}
@@ -905,7 +905,7 @@ function PromptInputFullLineComponent({
         onValueChange={setPrompt}
       />
 
-      <div className="flex w-full flex-row items-center justify-between gap-4 px-6 pb-4 pt-1 overflow-visible scrollbar-hide">
+      <div className="flex w-full flex-row items-center justify-between gap-4 px-6 pb-2.5 pt-0.5 overflow-visible scrollbar-hide">
         <div className="flex flex-row items-center gap-2 flex-nowrap shrink-0">
           <Tooltip>
             <TooltipTrigger asChild>

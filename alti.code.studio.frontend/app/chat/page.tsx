@@ -68,7 +68,7 @@ export default function ChatHome() {
         {/* Dynamic Content */}
         {isChatting ? (
           <div className="flex flex-col h-full w-full items-center justify-between px-6 py-4 gap-4 relative z-10">
-            <div className="flex flex-col w-full h-full max-w-3xl">
+            <div className="flex flex-col w-full h-full max-w-4xl">
               <div className="w-full flex-grow overflow-y-auto scroll-smooth scrollbar-none pb-4">
                 <MessageContainer />
               </div>
