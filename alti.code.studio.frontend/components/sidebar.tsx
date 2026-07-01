@@ -1849,8 +1849,8 @@ export default function Sidebar() {
           {/* 6 navigation icons toggle container (Main Menu) */}
           <div
             className={cn(
-              "flex items-center border-b border-transparent px-3",
-              isSidebarOpen ? "h-[52px]" : "h-auto py-2 px-2.5",
+              "flex items-center border-b border-transparent",
+              isSidebarOpen ? "h-[52px] px-3 justify-start" : "h-auto py-2 justify-center",
             )}
           >
             <div
@@ -1858,7 +1858,7 @@ export default function Sidebar() {
                 "bg-white/5 border border-white/5 rounded-xl p-1",
                 isSidebarOpen
                   ? "flex flex-row items-center justify-between gap-0.5 w-full"
-                  : "flex flex-col items-center gap-2",
+                  : "flex flex-col items-center gap-2 w-10",
               )}
             >
               {filteredNavigationItems.map((item) => {
