@@ -16,6 +16,8 @@ import { WorkspaceDock } from "@/components/WorkspaceDock";
 import { addTab } from "@/store/tabsSlice";
 import { setActiveWorkspace } from "@/store/systemSlice";
 import { setActiveProject } from "@/lib/project";
+import { Button } from "@heroui/react";
+import { PanelLeftOpen, PanelLeftClose } from "lucide-react";
 
 /**
  * Persistent layout wrapper for authenticated application routes.
@@ -29,6 +31,21 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
     pathname?.startsWith("/admin") || pathname?.startsWith("/owner") || pathname === "/login" || pathname === "/";
   const [isTauri, setIsTauri] = useState(false);
   const [headers, setHeaders] = useState<Record<string, string>>({});
+
+  const { tabs, activeTabId } = useSelector((state: RootState) => state.tabs);
+  const activeTab = tabs.find((t) => t.id === activeTabId);
+  const workspaceName = activeTab?.title || "local-workspace";
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const getPageTitle = () => {
+    if (pathname === "/new-chat" || pathname === "/chat") return "Let's Chat";
+    if (pathname?.startsWith("/chat/")) return "Chat Session";
+    const segment = pathname?.split("/").pop() || "";
+    if (!segment) return "Home";
+    return segment.charAt(0).toUpperCase() + segment.slice(1);
+  };
+  const pageTitle = getPageTitle();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -73,6 +90,29 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
     }
   }, [session]);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("inso_sidebar_open");
+      setIsSidebarOpen(stored === null ? true : stored === "true");
+    }
+
+    const handleSidebarState = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      setIsSidebarOpen(customEvent.detail);
+    };
+
+    window.addEventListener("sidebar-state-change", handleSidebarState);
+    return () => {
+      window.removeEventListener("sidebar-state-change", handleSidebarState);
+    };
+  }, []);
+
+  const handleToggleSidebar = () => {
+    window.dispatchEvent(
+      new CustomEvent("toggle-sidebar", { detail: !isSidebarOpen })
+    );
+  };
+
   const copilotRuntimeUrl =
     (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1") +
     "/copilot";
@@ -93,8 +133,30 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
           {isTauri && (
             <div
               data-tauri-drag-region
-              className="w-full h-10 bg-default-100 dark:bg-default-50 border-b border-default-200/50 flex items-center justify-between z-[100] shrink-0 cursor-default"
-            />
+              className="w-full h-10 bg-default-100 dark:bg-default-50 border-b border-default-200/50 flex items-center justify-between z-[100] shrink-0 cursor-default px-4 select-none"
+            >
+              {/* Left spacer for macOS window traffic light buttons */}
+              <div className="w-[76px] shrink-0" />
+
+              {/* Right: Sidebar Collapse Toggle Button */}
+              <div className="flex items-center gap-1 z-50">
+                {!isNoSidebarRoute && (
+                  <Button
+                    isIconOnly
+                    variant="light"
+                    size="sm"
+                    className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
+                    onClick={handleToggleSidebar}
+                  >
+                    {isSidebarOpen ? (
+                      <PanelLeftClose className="size-4" />
+                    ) : (
+                      <PanelLeftOpen className="size-4" />
+                    )}
+                  </Button>
+                )}
+              </div>
+            </div>
           )}
 
           {/* Main Body */}

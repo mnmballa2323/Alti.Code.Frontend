@@ -969,7 +969,10 @@ export default function Sidebar() {
   const [isTauri, setIsTauri] = useState(false);
   const [isWorkspaceModalOpen, setIsWorkspaceModalOpen] = useState(false);
   const [localWorkspacePath, setLocalWorkspacePath] = useState("");
+  const [localWorkspaceName, setLocalWorkspaceName] = useState("");
   const [isConnectingWorkspace, setIsConnectingWorkspace] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const [isNameInputFocused, setIsNameInputFocused] = useState(false);
 
   useEffect(() => {
     if (
@@ -999,10 +1002,10 @@ export default function Sidebar() {
         const invokeFn = tauri?.core?.invoke || tauri?.tauri?.invoke;
 
         if (invokeFn) {
-          const selectedPath = await invokeFn("select_directory");
+          const selectedPath = await invokeFn("selectdir");
 
           if (selectedPath) {
-            await connectWorkspaceDirectory(selectedPath);
+            await connectWorkspaceDirectory(selectedPath, localWorkspaceName);
 
             return;
           }
@@ -1014,7 +1017,7 @@ export default function Sidebar() {
     setIsWorkspaceModalOpen(true);
   };
 
-  const connectWorkspaceDirectory = async (directoryPath: string) => {
+  const connectWorkspaceDirectory = async (directoryPath: string, customName?: string) => {
     setIsConnectingWorkspace(true);
     try {
       const response = await fetch(
@@ -1034,10 +1037,11 @@ export default function Sidebar() {
       if (data.success) {
         const parts = directoryPath.split(/[/\\]/);
         const folderName = parts.pop() || parts.pop() || "local-workspace";
+        const titleName = customName?.trim() || folderName;
 
         dispatch(
           addTab({
-            title: folderName,
+            title: titleName,
             projectPath: folderName,
             activeView: "/chat",
             chatSessionId: null,
@@ -1152,7 +1156,6 @@ export default function Sidebar() {
         return "Code";
     }
   };
-  // const dispatch = useDispatch();
   const [currentMode, setCurrentMode] = useState<"chat" | "code">("chat");
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     if (typeof window !== "undefined") {
@@ -1161,6 +1164,25 @@ export default function Sidebar() {
     }
     return true;
   });
+
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("sidebar-state-change", { detail: isSidebarOpen })
+    );
+
+    const handleToggleSidebar = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const targetState = customEvent.detail !== undefined ? customEvent.detail : !isSidebarOpen;
+      setIsSidebarOpen(targetState);
+      localStorage.setItem("inso_sidebar_open", String(targetState));
+    };
+
+    window.addEventListener("toggle-sidebar", handleToggleSidebar);
+    return () => {
+      window.removeEventListener("toggle-sidebar", handleToggleSidebar);
+    };
+  }, [isSidebarOpen]);
+
   const [leftSidebarSearch, setLeftSidebarSearch] = useState("");
 
   const navigationItems = [
@@ -1820,66 +1842,14 @@ export default function Sidebar() {
             isSidebarOpen ? "w-80" : "w-10",
           )}
         >
-          {/* Top Section - Brand & Toggle */}
-          <div
-            className={cn(
-              "h-[68px] flex items-center justify-between border-b border-transparent",
-              isSidebarOpen ? "pl-4 pr-4" : "px-0 justify-center",
-            )}
-          >
-            <div
-              className={cn(
-                "flex-1 min-w-0 flex items-center justify-start",
-                !isSidebarOpen && "hidden",
-              )}
-            >
-              {/* Light Mode: Icon + Text */}
-              <div className="flex items-center gap-2 dark:hidden">
-                <Image
-                  alt="Inso Logo Icon"
-                  className={cn(
-                    "w-auto object-contain",
-                    isTauri ? "h-[18px]" : "h-5",
-                  )}
-                  height={20}
-                  src="/assets/logo-icon-black.png?v=2"
-                  width={24}
-                />
-              </div>
-              {/* Dark Mode: Icon + Text */}
-              <div className="hidden dark:flex items-center gap-2">
-                <Image
-                  alt="Inso Logo Icon"
-                  className={cn(
-                    "w-auto object-contain",
-                    isTauri ? "h-[18px]" : "h-5",
-                  )}
-                  height={20}
-                  src="/assets/logo-icon-white.png?v=2"
-                  width={24}
-                />
-              </div>
-            </div>
-            <Button
-              isIconOnly
-              className="-mr-2 text-default-400 hover:text-default-600"
-              size="sm"
-              variant="light"
-              onClick={toggleLeftSidebar}
-            >
-              {isSidebarOpen ? (
-                <PanelLeftClose className="size-4" />
-              ) : (
-                <PanelLeftOpen className="size-4" />
-              )}
-            </Button>
-          </div>
 
+          {/* Top spacer below Titlebar */}
+          <div className="h-3 w-full shrink-0" />
 
           {/* 6 navigation icons toggle container (Main Menu) */}
           <div
             className={cn(
-              "h-[68px] flex items-center border-b border-transparent px-3",
+              "h-[52px] flex items-center border-b border-transparent px-3",
               !isSidebarOpen && "py-2 px-1",
             )}
           >
@@ -3249,68 +3219,94 @@ export default function Sidebar() {
           </ModalHeader>
           <ModalBody className="py-4">
             <div className="flex flex-col gap-4">
+              {/* Workspace Name Input */}
+              <div className="flex flex-col gap-1.5 text-left">
+                <label className="text-xs font-semibold text-default-600">
+                  Workspace Name
+                </label>
+                <Input
+                  className="w-full"
+                  classNames={{
+                    inputWrapper:
+                      "h-11 rounded-xl bg-default-100 hover:bg-default-100 focus-within:!bg-default-100 group-data-[hover=true]:bg-default-100 group-data-[focus=true]:bg-default-100 border-none border-transparent shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all",
+                    input: "text-xs text-default-800",
+                  }}
+                  placeholder={isNameInputFocused ? "" : "e.g. My Awesome Project (Optional)"}
+                  value={localWorkspaceName}
+                  variant="flat"
+                  onFocus={() => setIsNameInputFocused(true)}
+                  onBlur={() => setIsNameInputFocused(false)}
+                  onChange={(e) => setLocalWorkspaceName(e.target.value)}
+                />
+              </div>
+
+              {/* Local Folder Path Input */}
               <div className="flex flex-col gap-1.5 text-left">
                 <label className="text-xs font-semibold text-default-600">
                   Local Folder Path
                 </label>
                 <div className="flex gap-2 items-center">
                   <Input
-                    autoFocus
                     className="flex-1"
                     classNames={{
                       inputWrapper:
-                        "h-11 rounded-xl border-default-200 focus-within:border-primary bg-transparent",
-                      input: "text-xs",
+                        "h-11 rounded-xl bg-default-100 hover:bg-default-100 focus-within:!bg-default-100 group-data-[hover=true]:bg-default-100 group-data-[focus=true]:bg-default-100 border-none border-transparent shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all",
+                      input: "text-xs text-default-800",
                     }}
-                    placeholder="/path/to/your/project"
+                    placeholder={isInputFocused ? "" : "/path/to/your/project"}
                     value={localWorkspacePath}
-                    variant="bordered"
+                    variant="flat"
+                    onFocus={() => setIsInputFocused(true)}
+                    onBlur={() => setIsInputFocused(false)}
                     onChange={(e) => setLocalWorkspacePath(e.target.value)}
                   />
                   {isTauri && (
-                    <Button
-                      isIconOnly
-                      className="h-11 w-11 rounded-xl shrink-0"
-                      color="primary"
-                      variant="flat"
-                      onPress={async () => {
-                        try {
-                          const tauri =
-                            (window as any).__TAURI__ ||
-                            (window as any).__TAURI_INTERNALS__;
-                          const invokeFn =
-                            tauri?.core?.invoke || tauri?.tauri?.invoke;
-
-                          if (invokeFn) {
-                            const selected = await invokeFn("select_directory");
-
-                            if (selected) {
-                              setLocalWorkspacePath(selected);
-                            }
-                          }
-                        } catch (err) {
-                          console.error("Browse click error:", err);
-                        }
+                    <Tooltip
+                      content="Browse Folder"
+                      placement="top"
+                      closeDelay={0}
+                      delay={300}
+                      classNames={{
+                        content: "bg-white text-zinc-900 border border-zinc-200 px-3 py-1.5 text-xs rounded-lg shadow-xl font-medium tracking-wide",
                       }}
                     >
-                      <Icon
-                        className="size-5"
-                        icon="solar:folder-with-files-bold"
-                      />
-                    </Button>
+                      <Button
+                        isIconOnly
+                        className="h-11 w-11 rounded-xl shrink-0 bg-default-100 hover:bg-default-100/90 border-none border-transparent text-default-600 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all"
+                        onPress={async () => {
+                          try {
+                            const tauri =
+                              (window as any).__TAURI__ ||
+                              (window as any).__TAURI_INTERNALS__;
+                            const invokeFn =
+                              tauri?.core?.invoke || tauri?.tauri?.invoke;
+
+                            if (invokeFn) {
+                              const selected = await invokeFn("selectdir");
+
+                              if (selected) {
+                                setLocalWorkspacePath(selected);
+                              }
+                            }
+                          } catch (err) {
+                            console.error("Browse click error:", err);
+                          }
+                        }}
+                      >
+                        <Icon
+                          className="size-5"
+                          icon="solar:folder-with-files-bold"
+                        />
+                      </Button>
+                    </Tooltip>
                   )}
                 </div>
               </div>
-              <p className="text-[10px] text-default-400 italic">
-                Tip: Connecting a local directory sets up the active environment
-                so our agent swarm can index, read, write files, and run tests.
-              </p>
             </div>
           </ModalBody>
           <ModalFooter>
             <Button
-              className="rounded-xl px-4 text-xs font-medium"
-              variant="light"
+              className="rounded-xl px-4 text-xs font-medium bg-default-100 hover:bg-default-200/80 text-default-700 transition-all"
               onPress={() => setIsWorkspaceModalOpen(false)}
             >
               Cancel
@@ -3320,7 +3316,7 @@ export default function Sidebar() {
               color="primary"
               isDisabled={!localWorkspacePath.trim()}
               isLoading={isConnectingWorkspace}
-              onPress={() => connectWorkspaceDirectory(localWorkspacePath)}
+              onPress={() => connectWorkspaceDirectory(localWorkspacePath, localWorkspaceName)}
             >
               Open Folder
             </Button>
