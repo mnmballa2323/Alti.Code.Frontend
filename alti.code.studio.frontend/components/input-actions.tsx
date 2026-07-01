@@ -910,7 +910,7 @@ function PromptInputFullLineComponent({
           <Tooltip>
             <TooltipTrigger asChild>
               <button
-                className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 flex items-center justify-center"
+                className="size-6 flex-none cursor-pointer rounded-full border-2 p-1 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 flex items-center justify-center mr-2"
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
               >
