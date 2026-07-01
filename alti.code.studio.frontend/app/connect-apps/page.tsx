@@ -15,6 +15,7 @@ import { ConnectorTabs } from "@/components/connector-tabs";
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { API_URL } from "@/lib/config";
 import { AlertWrapper } from "@/components/ui/AlertWrapper";
+import { useActiveProject } from "@/hooks/useActiveProject";
 
 type AppIntegration = {
   id: string;
@@ -402,6 +403,8 @@ const AppIcon = ({
 function ConnectAppsContent() {
   const { data: session } = useSession();
   const accessToken = session?.user?.accessToken;
+  const project = useActiveProject();
+  const agentId = project?.id ?? null;
 
   const [apps, setApps] = useState<AppIntegration[]>(FALLBACK_APPS);
   const [loading, setLoading] = useState(true);
@@ -512,6 +515,7 @@ function ConnectAppsContent() {
     try {
       const res = await axios.get(`${API_URL}/mcp/tools/local`, {
         headers: accessToken ? { Authorization: `Bearer ${accessToken}` } : {},
+        params: agentId ? { agentId } : undefined,
       });
 
       if (res.data.success) {
@@ -610,9 +614,11 @@ function ConnectAppsContent() {
           const [customRes, activeRes] = await Promise.all([
             axios.get(`${API_URL}/mcp/custom`, {
               headers: { Authorization: `Bearer ${accessToken}` },
+              params: agentId ? { agentId } : undefined,
             }),
             axios.get(`${API_URL}/integrations/active`, {
               headers: { Authorization: `Bearer ${accessToken}` },
+              params: agentId ? { agentId } : undefined,
             }),
           ]);
 
@@ -688,6 +694,7 @@ function ConnectAppsContent() {
     apps.some((a) => a.status === "connecting"),
     accessToken,
     activeTools.length,
+    agentId,
   ]);
 
   const handleConnect = async (id: string) => {
@@ -703,7 +710,7 @@ function ConnectAppsContent() {
 
     if (oauthProvider) {
       // Redirect directly to native user-scoped OAuth connection endpoint
-      const connectUrl = `${API_URL}/integrations/connect/${oauthProvider}?token=${accessToken || ""}`;
+      const connectUrl = `${API_URL}/integrations/connect/${oauthProvider}?token=${accessToken || ""}${agentId ? `&agentId=${agentId}` : ""}`;
 
       window.location.href = connectUrl;
 
@@ -730,7 +737,7 @@ function ConnectAppsContent() {
       };
       const res = await axios.post(
         `${API_URL}/mcp/connect`,
-        { name: slug, command: preset.command, args: preset.args },
+        { name: slug, command: preset.command, args: preset.args, agentId: agentId ?? undefined },
         {
           headers: accessToken
             ? { Authorization: `Bearer ${accessToken}` }
@@ -796,6 +803,7 @@ function ConnectAppsContent() {
           command,
           args: parsedArgs,
           env: parsedEnv,
+          agentId: agentId ?? undefined,
         },
         {
           headers: accessToken
@@ -832,7 +840,7 @@ function ConnectAppsContent() {
       // Direct REST dynamic transport disconnect triggers
       await axios.post(
         `${API_URL}/mcp/disconnect`,
-        { name: slug },
+        { name: slug, agentId: agentId ?? undefined },
         {
           headers: accessToken
             ? { Authorization: `Bearer ${accessToken}` }
@@ -893,6 +901,7 @@ function ConnectAppsContent() {
           command,
           args: parsedArgs,
           env: parsedEnv,
+          agentId: agentId ?? undefined,
         },
         {
           headers: accessToken

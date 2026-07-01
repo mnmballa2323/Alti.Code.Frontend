@@ -10,6 +10,8 @@ import { Icon } from "@iconify/react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { setActiveProject } from "@/lib/project";
+import { useActiveProject } from "@/hooks/useActiveProject";
+import { readProjectData } from "@/lib/project";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
@@ -1043,15 +1045,20 @@ export default function Sidebar() {
     useSelector((state: RootState) => state.system.activeWorkspace) ||
     "alti.code.studio";
 
-  const [vaultSecrets, setVaultSecrets] = useState([
-    { id: "sec-1", name: "Primary Build Agent", service: "AWS Bedrock" },
-    {
-      id: "sec-2",
-      name: "Synapse Production Analytics",
-      service: "Azure OpenAI Foundry",
-    },
-    { id: "sec-3", name: "Telepathy Inference", service: "GCP Vertex AI" },
-  ]);
+  // ── Active project context ─────────────────────────────────────────────
+  const activeProject = useActiveProject();
+  const activeAgentId = activeProject?.id ?? null;
+
+  // ── Vault secrets – per project ─────────────────────────────────
+  const [vaultSecrets, setVaultSecrets] = useState<{ id: string; name: string; service: string }[]>([]);
+
+  // Reload vault secrets whenever active project changes
+  useEffect(() => {
+    const stored = readProjectData<{ id: string; name: string; service: string }[]>(
+      activeAgentId, "vault_secrets", []
+    );
+    setVaultSecrets(stored);
+  }, [activeAgentId]);
 
   useEffect(() => {
     const handleNewSecret = (e: any) => {
@@ -1079,6 +1086,7 @@ export default function Sidebar() {
       window.removeEventListener("delete-vault-secret", handleDeleteSecret);
     };
   }, []);
+
 
   // Prefetch all key sidebar routes on mount to ensure instant 0ms transitions!
   useEffect(() => {
@@ -1514,22 +1522,25 @@ export default function Sidebar() {
     };
   }, []);
 
-  const { data: rulesData, refetch: refetchRules } = useQuery({
-    queryKey: ["codebase-rules", token, selectedRepo],
-    queryFn: async () => {
-      if (!token) return { instructions: [], guardrails: [] };
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rules`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await res.json();
-
-      return data.success ? data.data : { instructions: [], guardrails: [] };
-    },
-    enabled: !!token,
-    staleTime: 1000 * 60 * 5, // Cache rules for 5 minutes to prevent blocking fetches on page transition
-  });
+  // ── Rules – load from per-project localStorage, react to project changes ──────
+  useEffect(() => {
+    const rulesLocal = readProjectData<{
+      instructions: { id: string; name: string }[];
+      guardrails: { id: string; name: string }[];
+      repositories: { id: string; name: string }[];
+      apis: { id: string; name: string }[];
+      sdks: { id: string; name: string }[];
+      mcps: { id: string; name: string }[];
+    }>(activeAgentId, "rules", {
+      instructions: [], guardrails: [], repositories: [], apis: [], sdks: [], mcps: [],
+    });
+    setInstructions(rulesLocal.instructions);
+    setGuardrails(rulesLocal.guardrails);
+    setTuningRepos(rulesLocal.repositories);
+    setTuningApis(rulesLocal.apis);
+    setTuningSdks(rulesLocal.sdks);
+    setTuningMcps(rulesLocal.mcps);
+  }, [activeAgentId]);
 
   useEffect(() => {
     const handleRefresh = (e: Event) => {
@@ -1551,22 +1562,10 @@ export default function Sidebar() {
     return () => {
       window.removeEventListener("refresh-rules-sidebar", handleRefresh);
     };
-  }, [refetchRules]);
+  }, []);
 
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (rulesData) {
-      setInstructions(rulesData.instructions || []);
-      setGuardrails(rulesData.guardrails || []);
-      setTuningRepos(rulesData.repositories || []);
-      setTuningApis(rulesData.apis || []);
-      setTuningSdks(rulesData.sdks || []);
-      setTuningMcps(rulesData.mcps || []);
-      setIsInitialLoad(false);
-    }
-  }, [rulesData]);
 
   useEffect(() => {
     if (isInitialLoad || !token) return;
@@ -1579,14 +1578,10 @@ export default function Sidebar() {
       try {
         await axios.post(
           `${API_URL}/rules`,
+          { instructions, guardrails },
           {
-            instructions,
-            guardrails,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            headers: { Authorization: `Bearer ${token}` },
+            params: activeAgentId ? { agentId: activeAgentId } : undefined,
           },
         );
       } catch (err) {
@@ -1595,11 +1590,9 @@ export default function Sidebar() {
     }, 500);
 
     return () => {
-      if (saveTimeoutRef.current) {
-        clearTimeout(saveTimeoutRef.current);
-      }
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
     };
-  }, [instructions, guardrails, token, isInitialLoad]);
+  }, [instructions, guardrails, token, isInitialLoad, activeAgentId]);
 
   const documents = useSelector(
     (state: RootState) => state.system.documents || [],

@@ -15,6 +15,7 @@ import axios from "axios";
 
 import { TuningTabs } from "@/components/tuning-tabs";
 import ChatBotLayout from "@/components/ChatbotLayout";
+import { useActiveProject } from "@/hooks/useActiveProject";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
@@ -30,6 +31,8 @@ interface FileItem {
 export default function KnowledgePage() {
   const { data: session } = useSession();
   const token = session?.user?.accessToken ?? null;
+  const project = useActiveProject();
+  const agentId = project?.id ?? null;
 
   const [files, setFiles] = useState<FileItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,6 +48,7 @@ export default function KnowledgePage() {
     try {
       const res = await axios.get(`${API_BASE_URL}/knowledge/files`, {
         headers: { Authorization: `Bearer ${token}` },
+        params: agentId ? { agentId } : undefined,
       });
       if (res.data?.success) {
         setFiles(res.data.data || []);
@@ -60,11 +64,12 @@ export default function KnowledgePage() {
     } finally {
       setIsLoading(false);
     }
-  }, [token]);
+  }, [token, agentId]);
 
+  // Re-fetch when project changes
   useEffect(() => {
     fetchFiles();
-  }, [fetchFiles]);
+  }, [fetchFiles, agentId]);
 
   // Upload file(s)
   const handleUpload = async (fileList: FileList | null) => {
@@ -88,6 +93,7 @@ export default function KnowledgePage() {
               Authorization: `Bearer ${token}`,
               "Content-Type": "multipart/form-data",
             },
+            params: agentId ? { agentId } : undefined,
           },
         );
         toast.success(`"${file.name}" uploaded and indexed.`, { id: toastId });
@@ -106,7 +112,10 @@ export default function KnowledgePage() {
     try {
       await axios.delete(
         `${API_BASE_URL}/knowledge/files/${fileToDelete.id}`,
-        { headers: { Authorization: `Bearer ${token}` } },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          params: agentId ? { agentId } : undefined,
+        },
       );
       toast.success("File deleted.");
       fetchFiles();
