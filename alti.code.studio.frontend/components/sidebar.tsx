@@ -1839,7 +1839,7 @@ export default function Sidebar() {
         <div
           className={cn(
             "flex h-full flex-col transition-all duration-300 bg-[#0B1121] border-r border-white/5",
-            isSidebarOpen ? "w-80" : "w-14",
+            isSidebarOpen ? "w-80" : "w-16",
           )}
         >
 
@@ -1850,7 +1850,7 @@ export default function Sidebar() {
           <div
             className={cn(
               "flex items-center border-b border-transparent px-3",
-              isSidebarOpen ? "h-[52px]" : "h-auto py-2 px-2",
+              isSidebarOpen ? "h-[52px]" : "h-auto py-2 px-2.5",
             )}
           >
             <div
@@ -3068,7 +3068,7 @@ export default function Sidebar() {
 
   if (!mounted) {
     return (
-      <div className="flex h-full border-r border-white/5 bg-[#0B1121] w-[56px] transition-all" />
+      <div className="flex h-full border-r border-white/5 bg-[#0B1121] w-[64px] transition-all" />
     );
   }
 
