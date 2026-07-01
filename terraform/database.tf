@@ -6,8 +6,8 @@ resource "google_sql_database_instance" "db_instance" {
 
   depends_on = [google_service_networking_connection.private_vpc_connection]
 
-  # Enable Customer-Managed Encryption Key (CMEK) for data-at-rest sovereignty if provided
-  encryption_key_name = var.gcp_kms_crypto_key != null ? var.gcp_kms_crypto_key : null
+  # Enable Customer-Managed Encryption Key (CMEK) for data-at-rest sovereignty
+  encryption_key_name = var.gcp_kms_crypto_key != null ? var.gcp_kms_crypto_key : google_kms_crypto_key.db_disk_key.id
 
   settings {
     tier              = var.pg_db_tier # Parameterized database tier/SKU

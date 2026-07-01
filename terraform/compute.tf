@@ -19,7 +19,7 @@ resource "google_compute_instance" "commercial_node" {
       size  = 250
       type  = "pd-ssd"
     }
-    kms_key_self_link = var.gcp_kms_crypto_key != null ? var.gcp_kms_crypto_key : null
+    kms_key_self_link = var.gcp_kms_crypto_key != null ? var.gcp_kms_crypto_key : google_kms_crypto_key.db_disk_key.id
   }
 
   network_interface {
@@ -70,7 +70,7 @@ resource "google_compute_instance" "government_node" {
       size  = 500
       type  = "pd-ssd"
     }
-    kms_key_self_link = var.gcp_kms_crypto_key != null ? var.gcp_kms_crypto_key : null
+    kms_key_self_link = var.gcp_kms_crypto_key != null ? var.gcp_kms_crypto_key : google_kms_crypto_key.db_disk_key.id
   }
 
   network_interface {
@@ -135,7 +135,7 @@ resource "google_compute_instance" "dedicated_node" {
       size  = 500
       type  = "pd-ssd"
     }
-    kms_key_self_link = var.gcp_kms_crypto_key != null ? var.gcp_kms_crypto_key : null
+    kms_key_self_link = var.gcp_kms_crypto_key != null ? var.gcp_kms_crypto_key : google_kms_crypto_key.db_disk_key.id
   }
 
   network_interface {
