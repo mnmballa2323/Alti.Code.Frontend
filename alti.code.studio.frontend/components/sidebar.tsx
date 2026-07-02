@@ -1845,7 +1845,7 @@ export default function Sidebar() {
           {/* Active Workspace Name (Left Side) */}
           {isSidebarOpen && activeProject?.name && (
             <div className="absolute top-0 left-3 h-10 flex items-center max-w-[180px] select-none pointer-events-none z-50">
-              <span className="text-[11px] font-bold text-default-450 dark:text-default-400 uppercase tracking-widest truncate">
+              <span className="text-[12px] font-semibold text-default-450 dark:text-default-400 truncate">
                 {activeProject.name}
               </span>
             </div>
