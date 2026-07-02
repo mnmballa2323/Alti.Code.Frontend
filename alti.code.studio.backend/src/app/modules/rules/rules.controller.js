@@ -16,7 +16,14 @@ const getRules = catchAsync(async (req, res) => {
 const updateRules = catchAsync(async (req, res) => {
   const { instructions, guardrails, repositories, apis, sdks, mcps } = req.body;
 
-  const result = await RulesService.saveRules(instructions, guardrails, repositories, apis, sdks, mcps);
+  const result = await RulesService.saveRules(
+    instructions,
+    guardrails,
+    repositories,
+    apis,
+    sdks,
+    mcps,
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

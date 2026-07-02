@@ -6,9 +6,46 @@
  */
 
 import axios from 'axios';
+import kms from '@google-cloud/kms';
+import crypto from 'crypto';
 import { prisma } from '../../../config/prisma.js';
 import { logger } from '../../../shared/logger.js';
 import { complianceEngine } from '../enterprise/compliance.engine.js';
+
+let kmsClient = null;
+
+const signPayload = async (payloadString) => {
+  const keyName = process.env.GCP_KMS_KEY_NAME;
+  
+  if (!keyName) {
+    // Local HMAC fallback
+    const hmac = crypto.createHmac('sha256', 'mock-gcp-kms-secret');
+    return hmac.update(payloadString).digest('base64');
+  }
+
+  try {
+    if (!kmsClient) {
+      const { KeyManagementServiceClient } = kms;
+      kmsClient = new KeyManagementServiceClient();
+    }
+
+    // Digest the payload first
+    const hash = crypto.createHash('sha256').update(payloadString).digest();
+
+    const [response] = await kmsClient.asymmetricSign({
+      name: keyName,
+      digest: {
+        sha256: hash,
+      },
+    });
+
+    return response.signature.toString('base64');
+  } catch (error) {
+    logger.warn(`⚠️ [SIEM] GCP KMS asymmetric sign failed, falling back to local HMAC: ${error.message}`);
+    const hmac = crypto.createHmac('sha256', 'mock-gcp-kms-secret');
+    return hmac.update(payloadString).digest('base64');
+  }
+};
 
 class SiemService {
   /**
@@ -34,26 +71,8 @@ class SiemService {
         details,
       };
 
-      // Sign the webhook payload if GCP KMS is configured
-      let signature = null;
-      const isKmsConfigured =
-        process.env.GCP_KMS_KEY_RING && process.env.GCP_PROJECT_ID;
-      if (isKmsConfigured) {
-        try {
-          signature = await complianceEngine._signWithGcpKms(
-            JSON.stringify(payload),
-          );
-        } catch (err) {
-          logger.warn(
-            `⚠️ GCP KMS Signing for SIEM failed (${err.message}). Falling back to local mock signature.`,
-          );
-          const crypto = await import('crypto');
-          signature = crypto
-            .createHmac('sha256', 'mock-gcp-kms-secret')
-            .update(JSON.stringify(payload))
-            .digest('base64');
-        }
-      }
+      // Sign the webhook payload cryptographically
+      const signature = await signPayload(JSON.stringify(payload));
 
       for (const webhook of webhooks) {
         const headers = {

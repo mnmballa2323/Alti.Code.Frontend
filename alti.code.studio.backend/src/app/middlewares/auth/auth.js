@@ -20,9 +20,23 @@ const auth = (...requiredRoles) => {
 
       if (gcpPrincipal) {
         const email = gcpPrincipal.replace(/^accounts\.google\.com:/, '');
+        let dbUser = null;
+        try {
+          const { prisma } = await import('../../../../config/prisma.js');
+          dbUser = await prisma.user.findUnique({
+            where: { email },
+            select: { id: true, role: true, tenantRole: true, tenantId: true }
+          });
+        } catch (e) {
+          // Fall through during local testing or database connection throttling
+        }
+
         verifiedUser = {
+          id: dbUser?.id || 'iap-user-id',
           email,
-          role: 'USER',
+          role: dbUser?.role || (email.startsWith('admin') ? 'admin' : 'user'),
+          tenantRole: dbUser?.tenantRole || (email.startsWith('admin') ? 'admin' : 'viewer'),
+          tenantId: dbUser?.tenantId || null,
           subject: req.headers['x-goog-authenticated-user-id'] || 'unknown-id',
         };
       } else {

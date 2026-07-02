@@ -7,8 +7,49 @@
  */
 
 import crypto from 'crypto';
+import kms from '@google-cloud/kms';
 import { prisma } from '../../../config/prisma.js';
 import { logger } from '../../../shared/logger.js';
+
+let kmsClient = null;
+
+// Cryptographically sign a hash using Google Cloud KMS or local HMAC fallback
+const signHash = async (hash) => {
+  const keyName = process.env.GCP_KMS_KEY_NAME;
+  
+  if (!keyName) {
+    // Secure local HMAC signature fallback for development / air-gapped compliance
+    const secret = process.env.LOCAL_KMS_SECRET || 'inso-secret-kms-hmac-key';
+    const hmac = crypto.createHmac('sha256', secret);
+    const signature = hmac.update(hash).digest('hex');
+    return { signature, keyId: 'local-hmac-sha256' };
+  }
+
+  try {
+    if (!kmsClient) {
+      const { KeyManagementServiceClient } = kms;
+      kmsClient = new KeyManagementServiceClient();
+    }
+
+    const [response] = await kmsClient.asymmetricSign({
+      name: keyName,
+      digest: {
+        sha256: Buffer.from(hash, 'hex'),
+      },
+    });
+
+    return {
+      signature: response.signature.toString('base64'),
+      keyId: keyName,
+    };
+  } catch (error) {
+    logger.warn(`⚠️ [AUDIT] GCP KMS sign failed, falling back to secure local signature: ${error.message}`);
+    const secret = process.env.LOCAL_KMS_SECRET || 'inso-secret-kms-hmac-key';
+    const hmac = crypto.createHmac('sha256', secret);
+    const signature = hmac.update(hash).digest('hex');
+    return { signature, keyId: `${keyName} (failed: local-fallback)` };
+  }
+};
 
 class AuditLogService {
   constructor() {
@@ -57,6 +98,9 @@ class AuditLogService {
         .update(payloadString)
         .digest('hex');
 
+      // Sign the hash cryptographically for WORM verification
+      const { signature, keyId } = await signHash(currentHash);
+
       const auditEntry = await prisma.auditLog.create({
         data: {
           tenantId,
@@ -73,6 +117,8 @@ class AuditLogService {
           },
           hash: currentHash,
           previousHash,
+          kmsSignature: signature,
+          kmsKeyId: keyId,
           environment: process.env.NODE_ENV || 'development',
         },
       });

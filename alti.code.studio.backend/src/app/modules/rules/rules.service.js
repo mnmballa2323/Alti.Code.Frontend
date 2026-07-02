@@ -35,7 +35,14 @@ const parseRules = async () => {
       content = await fs.readFile(filePath, 'utf-8');
     } catch (err) {
       logger.info('No rules file found. Returning default empty rules.');
-      return { instructions: [], guardrails: [], repositories: [], apis: [], sdks: [], mcps: [] };
+      return {
+        instructions: [],
+        guardrails: [],
+        repositories: [],
+        apis: [],
+        sdks: [],
+        mcps: [],
+      };
     }
   }
 
@@ -68,7 +75,10 @@ const parseRules = async () => {
         currentSection = 'guardrails';
       } else if (lowerLine.includes('repositories')) {
         currentSection = 'repositories';
-      } else if (lowerLine.includes('api endpoints') || lowerLine.includes('apis')) {
+      } else if (
+        lowerLine.includes('api endpoints') ||
+        lowerLine.includes('apis')
+      ) {
         currentSection = 'apis';
       } else if (lowerLine.includes('sdk')) {
         currentSection = 'sdks';
@@ -111,7 +121,14 @@ const parseRules = async () => {
   return { instructions, guardrails, repositories, apis, sdks, mcps };
 };
 
-const saveRules = async (instructions = [], guardrails = [], repositories = [], apis = [], sdks = [], mcps = []) => {
+const saveRules = async (
+  instructions = [],
+  guardrails = [],
+  repositories = [],
+  apis = [],
+  sdks = [],
+  mcps = [],
+) => {
   const filePath = getRulesFilePath();
 
   let content = '# Inso Code - Agentic Rules\n\n';
@@ -178,7 +195,15 @@ const saveRules = async (instructions = [], guardrails = [], repositories = [], 
 
   await fs.writeFile(filePath, content, 'utf-8');
   logger.info(`💾 Rules successfully saved to ${filePath}`);
-  return { success: true, instructions, guardrails, repositories, apis, sdks, mcps };
+  return {
+    success: true,
+    instructions,
+    guardrails,
+    repositories,
+    apis,
+    sdks,
+    mcps,
+  };
 };
 
 export const RulesService = {

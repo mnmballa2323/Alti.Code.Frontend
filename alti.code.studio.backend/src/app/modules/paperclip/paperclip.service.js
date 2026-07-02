@@ -10,16 +10,19 @@ export const paperclipService = {
   _readyPromise: null,
   _resolveReady: null,
 
-  init: function() {
-    this._readyPromise = new Promise((resolve) => {
+  init: function () {
+    this._readyPromise = new Promise(resolve => {
       this._resolveReady = resolve;
     });
 
     return new Promise((resolve, reject) => {
       logger.info('🚀 Starting Paperclip Daemon Service...');
 
-      const paperclipDir = path.resolve(process.cwd(), '../submodules/paperclip');
-      
+      const paperclipDir = path.resolve(
+        process.cwd(),
+        '../submodules/paperclip',
+      );
+
       if (!fs.existsSync(paperclipDir)) {
         logger.error(`❌ Paperclip submodule not found at ${paperclipDir}`);
         return reject(new Error('Paperclip submodule missing'));
@@ -27,7 +30,10 @@ export const paperclipService = {
 
       // Cleanup stale PID if we crashed previously
       try {
-        const stalePidPath = path.resolve(process.env.HOME, '.paperclip/instances/default/db/postmaster.pid');
+        const stalePidPath = path.resolve(
+          process.env.HOME,
+          '.paperclip/instances/default/db/postmaster.pid',
+        );
         if (fs.existsSync(stalePidPath)) {
           fs.unlinkSync(stalePidPath);
           logger.info('🧹 Cleaned up stale Paperclip DB PID file');
@@ -41,7 +47,7 @@ export const paperclipService = {
       const env = {
         ...process.env,
         PORT: '8082',
-        PAPERCLIP_MIGRATION_AUTO_APPLY: 'true'
+        PAPERCLIP_MIGRATION_AUTO_APPLY: 'true',
       };
 
       // Delete DATABASE_URL so paperclip uses its own embedded postgres
@@ -50,23 +56,31 @@ export const paperclipService = {
 
       // Paperclip (specifically better-auth) requires node:sqlite which is only in Node 22+
       // Since our backend runs Node 20.18.1, we must spawn it using pnpm with --use-node-version
-      this.childProcess = spawn('npx', ['pnpm', '--use-node-version=22.23.1', 'run', 'dev:server'], {
-        cwd: paperclipDir,
-        env,
-        stdio: 'pipe'
-      });
+      this.childProcess = spawn(
+        'npx',
+        ['pnpm', '--use-node-version=22.23.1', 'run', 'dev:server'],
+        {
+          cwd: paperclipDir,
+          env,
+          stdio: 'pipe',
+        },
+      );
 
-      this.childProcess.stdout.on('data', (data) => {
+      this.childProcess.stdout.on('data', data => {
         const msg = data.toString().trim();
         if (msg) logger.info(`[Paperclip] ${msg}`);
-        
+
         // Parse the dynamic port handshake
-        const portMatch = msg.match(/Server listening on (?:127\.0\.0\.1|0\.0\.0\.0|localhost):(\d+)/);
+        const portMatch = msg.match(
+          /Server listening on (?:127\.0\.0\.1|0\.0\.0\.0|localhost):(\d+)/,
+        );
         if (portMatch) {
           this.activePort = portMatch[1];
-          logger.info(`✅ Paperclip Handshake: Bound to port ${this.activePort}`);
+          logger.info(
+            `✅ Paperclip Handshake: Bound to port ${this.activePort}`,
+          );
         }
-        
+
         // Resolve once we see it's ready, or we can just resolve immediately
         if (msg.includes('ready') || msg.includes('listening')) {
           if (!this.isReady) {
@@ -78,17 +92,17 @@ export const paperclipService = {
         }
       });
 
-      this.childProcess.stderr.on('data', (data) => {
+      this.childProcess.stderr.on('data', data => {
         const msg = data.toString().trim();
         if (msg) logger.warn(`[Paperclip WARN/ERR] ${msg}`);
       });
 
-      this.childProcess.on('error', (err) => {
+      this.childProcess.on('error', err => {
         logger.error(`❌ Failed to start Paperclip daemon: ${err.message}`);
         reject(err);
       });
 
-      this.childProcess.on('close', (code) => {
+      this.childProcess.on('close', code => {
         logger.warn(`⚠️ Paperclip daemon exited with code ${code}`);
       });
 
@@ -104,7 +118,7 @@ export const paperclipService = {
     });
   },
 
-  shutdown: function() {
+  shutdown: function () {
     if (this.childProcess) {
       logger.info('🛑 Shutting down Paperclip Daemon...');
       this.childProcess.kill('SIGTERM');
@@ -113,7 +127,7 @@ export const paperclipService = {
     }
   },
 
-  waitForReady: function() {
+  waitForReady: function () {
     return this._readyPromise || Promise.resolve();
-  }
+  },
 };

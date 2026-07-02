@@ -140,7 +140,11 @@ class EncryptionService {
 
       // 2. Encrypt plaintext with DEK
       const payloadIv = crypto.randomBytes(12);
-      const payloadCipher = crypto.createCipheriv('aes-256-gcm', dek, payloadIv);
+      const payloadCipher = crypto.createCipheriv(
+        'aes-256-gcm',
+        dek,
+        payloadIv,
+      );
       payloadCipher.setAAD(Buffer.from('alti-envelope-payload'));
       let ciphertext = payloadCipher.update(plaintext, 'utf8', 'hex');
       ciphertext += payloadCipher.final('hex');
@@ -185,27 +189,29 @@ class EncryptionService {
     logger.info('🔓 [Envelope Decryption] Decrypting vault payload...');
     try {
       // Parse envelope
-      const envelopeStr = Buffer.from(envelopeBase64, 'base64').toString('utf8');
-      
+      const envelopeStr = Buffer.from(envelopeBase64, 'base64').toString(
+        'utf8',
+      );
+
       // Fallback for backwards compatibility if the string is not a JSON envelope
       if (!envelopeStr.startsWith('{')) {
         return this.decrypt(envelopeBase64, tenantKmsKey);
       }
 
       const envelope = JSON.parse(envelopeStr);
-      
+
       // 1. Decrypt DEK
       let kek = this.key;
       if (tenantKmsKey) {
         kek = crypto.createHash('sha256').update(tenantKmsKey).digest();
       }
-      
+
       const dekIv = Buffer.from(envelope.dekIv, 'hex');
       const dekAuthTag = Buffer.from(envelope.dekAuthTag, 'hex');
       const dekDecipher = crypto.createDecipheriv('aes-256-gcm', kek, dekIv);
       dekDecipher.setAAD(Buffer.from('alti-envelope-dek'));
       dekDecipher.setAuthTag(dekAuthTag);
-      
+
       let dekHex = dekDecipher.update(envelope.encryptedDek, 'hex', 'utf8');
       dekHex += dekDecipher.final('utf8');
       const dek = Buffer.from(dekHex, 'hex');
@@ -213,11 +219,19 @@ class EncryptionService {
       // 2. Decrypt payload
       const payloadIv = Buffer.from(envelope.payloadIv, 'hex');
       const payloadAuthTag = Buffer.from(envelope.payloadAuthTag, 'hex');
-      const payloadDecipher = crypto.createDecipheriv('aes-256-gcm', dek, payloadIv);
+      const payloadDecipher = crypto.createDecipheriv(
+        'aes-256-gcm',
+        dek,
+        payloadIv,
+      );
       payloadDecipher.setAAD(Buffer.from('alti-envelope-payload'));
       payloadDecipher.setAuthTag(payloadAuthTag);
-      
-      let decrypted = payloadDecipher.update(envelope.ciphertext, 'hex', 'utf8');
+
+      let decrypted = payloadDecipher.update(
+        envelope.ciphertext,
+        'hex',
+        'utf8',
+      );
       decrypted += payloadDecipher.final('utf8');
 
       return decrypted;

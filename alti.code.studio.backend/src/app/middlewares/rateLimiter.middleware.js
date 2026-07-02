@@ -20,14 +20,17 @@ const memoryLimitStore = new Map();
 export const rateLimiter = (options = {}) => {
   return async (req, res, next) => {
     const userId = req.user?._id || req.user?.id;
-    const ip = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
-    
+    const ip =
+      req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
     // Choose key based on authentication status
     const key = userId ? `rate_limit:user:${userId}` : `rate_limit:ip:${ip}`;
-    
+
     // Check if user is subscribed (paid tier)
     const isSubscribed = req.user?.isSubscribed || false;
-    const limit = isSubscribed ? (options.paidLimit || 120) : (options.freeLimit || 30);
+    const limit = isSubscribed
+      ? options.paidLimit || 120
+      : options.freeLimit || 30;
     const windowSeconds = options.windowSeconds || 60;
 
     try {
@@ -36,7 +39,7 @@ export const rateLimiter = (options = {}) => {
         const multi = redisClient.multi();
         multi.incr(key);
         multi.ttl(key);
-        
+
         const replies = await multi.exec();
         const count = replies[0];
         const ttl = replies[1];
@@ -59,7 +62,10 @@ export const rateLimiter = (options = {}) => {
       } else {
         // In-memory fallback
         const now = Date.now();
-        const record = memoryLimitStore.get(key) || { count: 0, resetTime: now + windowSeconds * 1000 };
+        const record = memoryLimitStore.get(key) || {
+          count: 0,
+          resetTime: now + windowSeconds * 1000,
+        };
 
         if (now > record.resetTime) {
           record.count = 1;
@@ -71,7 +77,10 @@ export const rateLimiter = (options = {}) => {
         memoryLimitStore.set(key, record);
 
         res.setHeader('X-RateLimit-Limit', limit);
-        res.setHeader('X-RateLimit-Remaining', Math.max(0, limit - record.count));
+        res.setHeader(
+          'X-RateLimit-Remaining',
+          Math.max(0, limit - record.count),
+        );
 
         if (record.count > limit) {
           logger.warn(`Rate limit (in-memory) exceeded for client: ${key}`);

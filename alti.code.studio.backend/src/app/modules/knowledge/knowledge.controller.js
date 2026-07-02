@@ -76,7 +76,10 @@ const uploadFile = catchAsync(async (req, res) => {
   if (!folderId) {
     const userId = req.user?._id || req.user?.id;
     const tenantId = req.user?.tenantId;
-    const defaultFolder = await KnowledgeService.getOrCreateDefaultFolder(userId, tenantId);
+    const defaultFolder = await KnowledgeService.getOrCreateDefaultFolder(
+      userId,
+      tenantId,
+    );
     folderId = defaultFolder.id;
   }
 

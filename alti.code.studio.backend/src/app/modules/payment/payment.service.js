@@ -38,8 +38,13 @@ async function createCheckoutSession(userId, planName, successUrl, cancelUrl) {
     const priceId = priceMapping[planName.toLowerCase()] || priceMapping.launch;
 
     // Graceful fallback for mock mode if key is missing or is testing mock
-    if (!config.stripe?.stripe_secret_key || config.stripe.stripe_secret_key === 'sk_test_mock') {
-      logger.warn('⚠️ Stripe secret key missing or mock. Simulating checkout session.');
+    if (
+      !config.stripe?.stripe_secret_key ||
+      config.stripe.stripe_secret_key === 'sk_test_mock'
+    ) {
+      logger.warn(
+        '⚠️ Stripe secret key missing or mock. Simulating checkout session.',
+      );
       return {
         id: 'cs_mock_' + Math.random().toString(36).substring(2, 15),
         url: `${successUrl}?session_id=mock_session`,
@@ -78,9 +83,14 @@ async function handleWebhook(rawBody, signature) {
   let event;
 
   try {
-    if (!config.stripe?.stripe_webhook_secret_key || config.stripe.stripe_webhook_secret_key === 'whsec_mock') {
+    if (
+      !config.stripe?.stripe_webhook_secret_key ||
+      config.stripe.stripe_webhook_secret_key === 'whsec_mock'
+    ) {
       // Mock event digestion for local testing/verification
-      logger.warn('⚠️ Stripe webhook secret missing. Parsing payload directly.');
+      logger.warn(
+        '⚠️ Stripe webhook secret missing. Parsing payload directly.',
+      );
       event = JSON.parse(rawBody);
     } else {
       event = stripe.webhooks.constructEvent(
@@ -104,11 +114,18 @@ async function handleWebhook(rawBody, signature) {
       const planName = session.metadata?.planName || 'launch';
 
       if (!userId) {
-        logger.error('No client_reference_id (userId) found in checkout session completion.');
+        logger.error(
+          'No client_reference_id (userId) found in checkout session completion.',
+        );
         break;
       }
 
-      await activateUserSubscription(userId, stripeCustomerId, planName, session.id);
+      await activateUserSubscription(
+        userId,
+        stripeCustomerId,
+        planName,
+        session.id,
+      );
       break;
     }
 
@@ -144,7 +161,12 @@ async function handleWebhook(rawBody, signature) {
 /**
  * Persists the user subscription state to PostgreSQL via Prisma.
  */
-async function activateUserSubscription(userId, stripeCustomerId, planName, transactionId) {
+async function activateUserSubscription(
+  userId,
+  stripeCustomerId,
+  planName,
+  transactionId,
+) {
   try {
     const expiresAt = new Date();
     expiresAt.setMonth(expiresAt.getMonth() + 1); // Default to 1 month validity
@@ -187,9 +209,14 @@ async function activateUserSubscription(userId, stripeCustomerId, planName, tran
       }),
     ]);
 
-    logger.info(`Successfully activated ${planName} subscription for user [${userId}].`);
+    logger.info(
+      `Successfully activated ${planName} subscription for user [${userId}].`,
+    );
   } catch (err) {
-    logger.error(`Database error activating subscription for user [${userId}]:`, err);
+    logger.error(
+      `Database error activating subscription for user [${userId}]:`,
+      err,
+    );
   }
 }
 
@@ -203,7 +230,9 @@ async function deactivateUserSubscription(stripeCustomerId) {
     });
 
     if (!billing) {
-      logger.warn(`No billing profile found for Stripe Customer ID: ${stripeCustomerId}`);
+      logger.warn(
+        `No billing profile found for Stripe Customer ID: ${stripeCustomerId}`,
+      );
       return;
     }
 
@@ -224,9 +253,14 @@ async function deactivateUserSubscription(stripeCustomerId) {
       }),
     ]);
 
-    logger.info(`Successfully deactivated subscription for user [${billing.userId}].`);
+    logger.info(
+      `Successfully deactivated subscription for user [${billing.userId}].`,
+    );
   } catch (err) {
-    logger.error(`Database error deactivating subscription for customer [${stripeCustomerId}]:`, err);
+    logger.error(
+      `Database error deactivating subscription for customer [${stripeCustomerId}]:`,
+      err,
+    );
   }
 }
 
@@ -240,7 +274,9 @@ async function updateUserSubscriptionPlan(stripeCustomerId, planName) {
     });
 
     if (!billing) {
-      logger.warn(`No billing profile found for Stripe Customer ID: ${stripeCustomerId}`);
+      logger.warn(
+        `No billing profile found for Stripe Customer ID: ${stripeCustomerId}`,
+      );
       return;
     }
 
@@ -259,9 +295,14 @@ async function updateUserSubscriptionPlan(stripeCustomerId, planName) {
       }),
     ]);
 
-    logger.info(`Successfully updated subscription plan to ${planName} for user [${billing.userId}].`);
+    logger.info(
+      `Successfully updated subscription plan to ${planName} for user [${billing.userId}].`,
+    );
   } catch (err) {
-    logger.error(`Database error updating subscription plan for customer [${stripeCustomerId}]:`, err);
+    logger.error(
+      `Database error updating subscription plan for customer [${stripeCustomerId}]:`,
+      err,
+    );
   }
 }
 

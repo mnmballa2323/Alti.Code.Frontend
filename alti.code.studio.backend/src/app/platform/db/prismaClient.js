@@ -25,9 +25,31 @@ const queryExtensions = {
           'count',
         ].includes(operation);
 
+        // Helper to execute primary query with failover routing
+        const executeQuery = async () => {
+          try {
+            return await query(args);
+          } catch (queryError) {
+            const isConnError = 
+              queryError.message?.includes("Can't reach database server") ||
+              queryError.message?.includes("Connection") ||
+              queryError.message?.includes("ECONNREFUSED");
+
+            if (isReadOperation && isConnError && process.env.STANDBY_DATABASE_URL) {
+              const standby = getStandbyPrisma();
+              if (standby) {
+                logger.warn(`⚠️ [HA FALLBACK] Main database connection failed. Routing read query to standby replica: ${queryError.message}`);
+                const modelKey = model.charAt(0).toLowerCase() + model.slice(1);
+                return await standby[modelKey][operation](args);
+              }
+            }
+            throw queryError;
+          }
+        };
+
         // 2. Bypass cache if it's a mutation or if Redis is offline
         if (!isReadOperation || !memorystoreService.isInitialized) {
-          return query(args);
+          return executeQuery();
         }
 
         // 3. Optimized Cache Key Generation (MD5 for long strings, direct formatting for short strings)
@@ -49,7 +71,7 @@ const queryExtensions = {
         }
 
         // 5. Cache Miss: Execute heavy Postgres Query
-        const result = await query(args);
+        const result = await executeQuery();
 
         // 6. Asynchronous Redis Write (60s TTL to absorb traffic spikes)
         if (result !== undefined && result !== null) {
@@ -62,6 +84,22 @@ const queryExtensions = {
       },
     },
   },
+};
+
+let standbyPrisma = null;
+
+const getStandbyPrisma = () => {
+  if (!standbyPrisma && process.env.STANDBY_DATABASE_URL) {
+    standbyPrisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.STANDBY_DATABASE_URL,
+        },
+      },
+      log: ['error', 'warn'],
+    });
+  }
+  return standbyPrisma;
 };
 
 export const prisma = basePrisma.$extends(queryExtensions);
@@ -174,8 +212,20 @@ export async function connectPrisma() {
       '🚀 Universal Redis Caching Layer injected into Prisma Client.',
     );
   } catch (error) {
-    logger.error('❌ Failed to connect to PostgreSQL:', error);
-    if (process.env.NODE_ENV === 'production') {
+    logger.error('❌ Failed to connect to PostgreSQL primary database:', error);
+    
+    // Check if standby database is configured and try connecting to it
+    if (process.env.STANDBY_DATABASE_URL) {
+      try {
+        const standby = getStandbyPrisma();
+        await standby.$connect();
+        logger.warn('⚠️ [HA FALLBACK] Successfully established standby replica database connection.');
+      } catch (standbyError) {
+        logger.error('❌ Failed to connect to PostgreSQL standby database:', standbyError);
+      }
+    }
+
+    if (process.env.NODE_ENV === 'production' && !process.env.STANDBY_DATABASE_URL) {
       logger.error(
         '❌ FATAL: PostgreSQL connection is mandatory in production. Exiting process.',
       );

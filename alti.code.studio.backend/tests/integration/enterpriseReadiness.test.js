@@ -187,4 +187,80 @@ describe('Enterprise Readiness: Isolation, Tracing & Sandboxing Integration Test
       }).toThrow('Security Violation');
     });
   });
+
+  describe('Enterprise Hardening: SSO, RBAC & HA Fallback', () => {
+    it('should allow Admin to update Vault credentials but reject Viewer with 403 Forbidden', async () => {
+      const { VaultController } = await import('../../src/app/modules/vault/vault.controller.js');
+      const { VaultService } = await import('../../src/app/modules/vault/vault.service.js');
+      
+      const updateSpy = vi.spyOn(VaultService, 'updateCredentials').mockResolvedValue({ success: true });
+      
+      // 1. Mock Request for Admin user (authorized)
+      const reqAdmin = {
+        user: { id: 'usr-admin', role: 'admin', tenantRole: 'admin' },
+        body: { githubToken: 'gh_token' },
+      };
+      
+      const res = {
+        status: vi.fn().mockReturnThis(),
+        json: vi.fn(),
+      };
+      
+      await VaultController.updateKeys(reqAdmin, res, () => {});
+      expect(updateSpy).toHaveBeenCalledTimes(1);
+      
+      // 2. Mock Request for Viewer user (unauthorized)
+      const reqViewer = {
+        user: { id: 'usr-viewer', role: 'user', tenantRole: 'viewer' },
+        body: { githubToken: 'gh_token' },
+      };
+      
+      let nextError = null;
+      await VaultController.updateKeys(reqViewer, res, (err) => {
+        nextError = err;
+      });
+      
+      expect(nextError).toBeDefined();
+      expect(nextError.message).toContain('Forbidden: You do not have permissions to modify vault credentials');
+    });
+
+    it('should fallback read operations to standby replica upon primary DB connection failure', async () => {
+      const { prisma } = await import('../../src/app/platform/db/prismaClient.js');
+      const { logger } = await import('../../src/shared/logger.js');
+      
+      process.env.STANDBY_DATABASE_URL = 'postgresql://postgres:password@127.0.0.1:5432/standby_db';
+      const warnSpy = vi.spyOn(logger, 'warn');
+
+      try {
+        await prisma.userBilling.findUnique({ where: { userId: 'tenant-1' } });
+      } catch (err) {
+        console.log("ACTUAL DB ERROR:", err.message || err);
+      }
+
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Main database connection failed. Routing read query to standby replica')
+      );
+    });
+
+    it('should generate secure HMAC signature for SIEM dispatches when KMS is offline', async () => {
+      const { siemService } = await import('../../src/app/modules/security/siem.service.js');
+      const { prisma } = await import('../../src/config/prisma.js');
+      
+      const webhookSpy = vi.spyOn(prisma.siemWebhook, 'findMany').mockResolvedValueOnce([
+        { id: '1', tenantId: 'tenant-1', endpoint: 'http://siem.internal/log', isActive: true, authToken: 'tok' }
+      ]);
+      
+      const axios = (await import('axios')).default;
+      const postSpy = vi.spyOn(axios, 'post').mockResolvedValueOnce({ status: 200 });
+
+      await siemService.dispatchEvent('tenant-1', 'ABAC_CLEARANCE_DENIED', { user: 'hack' });
+      
+      expect(webhookSpy).toHaveBeenCalledWith({
+        where: { tenantId: 'tenant-1', isActive: true }
+      });
+      expect(postSpy).toHaveBeenCalled();
+      const headers = postSpy.mock.calls[0][2].headers;
+      expect(headers['X-Alti-Signature']).toBeDefined();
+    });
+  });
 });

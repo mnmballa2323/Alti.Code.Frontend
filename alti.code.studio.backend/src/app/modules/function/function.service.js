@@ -143,7 +143,7 @@ async function executeCode(code) {
 
     // Compile script with code payload
     const script = await isolate.compileScript(code);
-    
+
     // Run script within context and strict 3s timeout
     const result = await script.run(context, { timeout: 3000 });
     const duration = Date.now() - start;

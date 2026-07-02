@@ -38,10 +38,14 @@ const startMission = catchAsync(async (req, res) => {
 
       if (billing) {
         // Enforce hard spend budget limit
-        if (billing.currentSpendUsd >= billing.monthlyBudgetUsd && billing.hardLimitAction === 'pause') {
+        if (
+          billing.currentSpendUsd >= billing.monthlyBudgetUsd &&
+          billing.hardLimitAction === 'pause'
+        ) {
           return res.status(httpStatus.PAYMENT_REQUIRED).json({
             success: false,
-            message: 'Monthly compute budget limit reached. Please increase your budget limit.',
+            message:
+              'Monthly compute budget limit reached. Please increase your budget limit.',
           });
         }
 
@@ -51,13 +55,16 @@ const startMission = catchAsync(async (req, res) => {
           if (user && user.promptsUsed >= 100) {
             return res.status(httpStatus.PAYMENT_REQUIRED).json({
               success: false,
-              message: 'Free tier prompt limit (100) reached. Please upgrade to Pro.',
+              message:
+                'Free tier prompt limit (100) reached. Please upgrade to Pro.',
             });
           }
         }
       }
     } catch (err) {
-      logger.warn(`⚠️ Billing check skipped due to DB connection: ${err.message}`);
+      logger.warn(
+        `⚠️ Billing check skipped due to DB connection: ${err.message}`,
+      );
     }
   }
 
@@ -70,7 +77,7 @@ const startMission = catchAsync(async (req, res) => {
     try {
       const tokensSpent = 2500; // Mock average 2.5k tokens spent per agent loop
       const costUsd = 0.05; // Mock average $0.05 cost
-      
+
       await prisma.$transaction([
         prisma.userBilling.update({
           where: { userId },

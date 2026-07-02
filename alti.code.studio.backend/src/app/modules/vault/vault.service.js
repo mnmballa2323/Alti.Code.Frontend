@@ -105,7 +105,10 @@ const decryptField = async (
 ) => {
   if (!encryptedValue) return '';
   try {
-    return await encryptionService.envelopeDecrypt(encryptedValue, tenantKmsKey);
+    return await encryptionService.envelopeDecrypt(
+      encryptedValue,
+      tenantKmsKey,
+    );
   } catch (e) {
     if (throwOnError) throw e;
     logger.error('Failed to decrypt vault field:', e);

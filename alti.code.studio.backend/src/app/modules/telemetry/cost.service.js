@@ -13,11 +13,13 @@ class CostService {
   constructor() {
     // Prices per 1M tokens (USD) — source: Google AI pricing page
     this.prices = {
+      'gemini-3.5-pro': { input: 3.0, output: 9.0 },
+      'gemini-3.5-flash': { input: 0.075, output: 0.3 },
       'gemini-3.1-pro': { input: 3.5, output: 10.5 },
-      'gemini-3.1-pro': { input: 0.35, output: 1.05 },
-      'gemini-3.1-pro': { input: 0.5, output: 1.5 },
+      'gemini-3.1-flash': { input: 0.35, output: 1.05 },
       'gemini-3.1-pro-002': { input: 3.5, output: 10.5 },
-      'gemini-3.1-pro-002': { input: 0.35, output: 1.05 },
+      'gemini-2.5-pro': { input: 1.25, output: 3.75 },
+      'gemini-2.5-flash': { input: 0.075, output: 0.3 },
     };
     /** @type {Map<string, number>} userId → accumulated cost */
     this._userTotals = new Map();

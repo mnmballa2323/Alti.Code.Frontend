@@ -54,8 +54,10 @@ function getAgentsCache() {
       {
         id: 'google-adk-agent',
         name: 'Agents ADK (Google)',
-        description: 'Google Agent Development Kit (ADK) specialist for compiling, debugging, and deploying high-performance autonomous AI workflows.',
-        prompt: 'You are the Google Agents ADK (Agent Development Kit) expert. Your goal is to help users design, configure, compile, and optimize custom agent pipelines using Google\'s modular agent architecture. Provide precise syntax, configuration guidelines, and debugging support for agent definitions.',
+        description:
+          'Google Agent Development Kit (ADK) specialist for compiling, debugging, and deploying high-performance autonomous AI workflows.',
+        prompt:
+          "You are the Google Agents ADK (Agent Development Kit) expert. Your goal is to help users design, configure, compile, and optimize custom agent pipelines using Google's modular agent architecture. Provide precise syntax, configuration guidelines, and debugging support for agent definitions.",
         tools: ['codebase-search', 'compiler-diagnostic'],
         userId: null,
         createdAt: new Date().toISOString(),
@@ -63,8 +65,10 @@ function getAgentsCache() {
       {
         id: 'google-a2a-agent',
         name: 'Agents A2A (Google)',
-        description: 'Google Agent-to-Agent (A2A) protocol router for orchestrating cross-agent handshakes, task delegation, and distributed consensus.',
-        prompt: 'You are the Google Agents A2A (Agent-to-Agent) coordinator. You manage multi-agent orchestration, communication protocols, request delegation, and secure state handoffs. Guide the user on structuring agent collaboration networks, message passing formats, and A2A handshake verification.',
+        description:
+          'Google Agent-to-Agent (A2A) protocol router for orchestrating cross-agent handshakes, task delegation, and distributed consensus.',
+        prompt:
+          'You are the Google Agents A2A (Agent-to-Agent) coordinator. You manage multi-agent orchestration, communication protocols, request delegation, and secure state handoffs. Guide the user on structuring agent collaboration networks, message passing formats, and A2A handshake verification.',
         tools: ['network-ping', 'broadcaster-status'],
         userId: null,
         createdAt: new Date().toISOString(),

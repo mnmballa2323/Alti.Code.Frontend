@@ -46,6 +46,22 @@ const updateKeys = catchAsync(async (req, res) => {
     );
   }
 
+  // Enforce fine-grained RBAC roles: restrict credentials writing to Admins or Owners
+  if (req.user) {
+    const role = req.user.role;
+    const tenantRole = req.user.tenantRole;
+    const isAuthorized =
+      ['admin', 'owner', 'super_admin'].includes(role) ||
+      ['admin', 'owner'].includes(tenantRole);
+
+    if (!isAuthorized) {
+      throw new ApiError(
+        httpStatus.FORBIDDEN,
+        'Forbidden: You do not have permissions to modify vault credentials (Admin/Owner role required).'
+      );
+    }
+  }
+
   const result = await VaultService.updateCredentials(userId, req.body);
 
   sendResponse(res, {
