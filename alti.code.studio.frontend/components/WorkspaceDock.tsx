@@ -94,7 +94,7 @@ export function WorkspaceDock() {
       <div
         onClick={handleToggleDockClick}
         className={cn(
-          "h-[160px] w-full border-b border-default-200 flex-none flex items-start relative group transition-colors cursor-pointer hover:bg-white/[0.02] pt-[63px]",
+          "h-[160px] w-full border-b border-default-200 flex-none flex items-start relative group transition-colors cursor-pointer hover:bg-white/[0.02] pt-[76px]",
           isDockExpanded ? "px-4 justify-between" : "justify-center"
         )}
       >
