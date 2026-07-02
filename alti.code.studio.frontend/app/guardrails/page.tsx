@@ -96,13 +96,7 @@ export default function GuardrailsPage() {
         <div className="shrink-0 w-full bg-white/80 dark:bg-[#111111]/90 backdrop-blur-md border-b border-default-200/60 dark:border-white/5 flex items-center justify-center h-14 px-8">
           <TuningTabs />
         </div>
-        {project && (
-          <div className="shrink-0 px-8 pt-3 flex justify-center">
-            <span className="text-xs text-default-400 font-medium tracking-wide">
-              Project: <span className="text-default-600">{project.name}</span>
-            </span>
-          </div>
-        )}
+
         <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide flex flex-col items-center justify-center">
           <div className="w-full max-w-2xl mb-14">
             <form className="relative flex items-center w-full shadow-sm rounded-2xl" onSubmit={handleSend}>

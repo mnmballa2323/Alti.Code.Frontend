@@ -1847,7 +1847,7 @@ export default function Sidebar() {
               "flex border-b border-transparent",
               isSidebarOpen
                 ? "h-[92px] pt-10 pb-1.5 px-3 items-end justify-start"
-                : "h-auto pt-[52px] pb-2 items-center justify-center",
+                : "h-auto pt-11 pb-2 items-center justify-center",
             )}
           >
             <div
