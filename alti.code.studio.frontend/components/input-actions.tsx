@@ -868,7 +868,7 @@ function PromptInputFullLineComponent({
     >
       <div
         className={cn(
-          "group flex gap-2 pl-[20px] pr-3 mb-2",
+          "group flex flex-wrap gap-2 max-h-[100px] overflow-y-auto pl-[20px] pr-3 mb-2 scrollbar-thin scrollbar-thumb-default-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent",
           assets.length > 0 ? "pt-2" : "hidden",
         )}
       >
