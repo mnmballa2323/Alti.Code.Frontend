@@ -208,11 +208,12 @@ function PromptInputAssets({
   return (
     <>
       {assets.map((asset, index) => {
+        if (!asset) return null;
         const isString = typeof asset === "string";
-        const dataUrl = isString ? asset : asset.data;
+        const dataUrl = (isString ? asset : asset.data) || "";
         const name = isString
           ? (asset.startsWith("data:image/") ? "Image Attachment" : "Document Attachment")
-          : asset.name;
+          : (asset.name || "Attachment");
         const isImage = dataUrl.startsWith("data:image/");
 
         return (
@@ -375,8 +376,8 @@ function PromptInputFullLineComponent({
       if (customEvent.detail) {
         const detail = customEvent.detail;
         const exists = assets.some((asset) => {
-          const assetData = typeof asset === "string" ? asset : asset.data;
-          const detailData = typeof detail === "string" ? detail : detail.data;
+          const assetData = typeof asset === "string" ? asset : (asset?.data || "");
+          const detailData = typeof detail === "string" ? detail : (detail?.data || "");
           return assetData === detailData;
         });
 
@@ -468,7 +469,8 @@ function PromptInputFullLineComponent({
 
         reader.onload = () => {
           const base64data = reader.result as string;
-          const name = `pasted_image_${count++}.png`;
+          // Generate unique name via timestamp to prevent duplicate key/pasting collisions
+          const name = `pasted_image_${Date.now()}_${count++}.png`;
 
           setAssets((prev) => [...prev, { name, data: base64data, type: item.type }]);
         };
