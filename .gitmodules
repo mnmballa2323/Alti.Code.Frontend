@@ -79,3 +79,168 @@
 [submodule "submodules/alloydb-omni"]
 	path = submodules/alloydb-omni
 	url = https://github.com/gemini-cli-extensions/alloydb-omni.git
+[submodule "submodules/workspace"]
+	path = submodules/workspace
+	url = https://github.com/gemini-cli-extensions/workspace.git
+[submodule "submodules/security"]
+	path = submodules/security
+	url = https://github.com/gemini-cli-extensions/security.git
+[submodule "submodules/cicd"]
+	path = submodules/cicd
+	url = https://github.com/gemini-cli-extensions/cicd.git
+[submodule "submodules/code-review"]
+	path = submodules/code-review
+	url = https://github.com/gemini-cli-extensions/code-review.git
+[submodule "submodules/bigquery-data-analytics"]
+	path = submodules/bigquery-data-analytics
+	url = https://github.com/gemini-cli-extensions/bigquery-data-analytics.git
+[submodule "submodules/cloud-sql-postgresql"]
+	path = submodules/cloud-sql-postgresql
+	url = https://github.com/gemini-cli-extensions/cloud-sql-postgresql.git
+[submodule "submodules/cloud-sql-mysql"]
+	path = submodules/cloud-sql-mysql
+	url = https://github.com/gemini-cli-extensions/cloud-sql-mysql.git
+[submodule "submodules/cloud-sql-sqlserver"]
+	path = submodules/cloud-sql-sqlserver
+	url = https://github.com/gemini-cli-extensions/cloud-sql-sqlserver.git
+[submodule "submodules/knowledge-catalog"]
+	path = submodules/knowledge-catalog
+	url = https://github.com/gemini-cli-extensions/knowledge-catalog.git
+[submodule "submodules/firestore-native"]
+	path = submodules/firestore-native
+	url = https://github.com/gemini-cli-extensions/firestore-native.git
+[submodule "submodules/looker"]
+	path = submodules/looker
+	url = https://github.com/gemini-cli-extensions/looker.git
+[submodule "submodules/spanner"]
+	path = submodules/spanner
+	url = https://github.com/gemini-cli-extensions/spanner.git
+[submodule "submodules/postgres"]
+	path = submodules/postgres
+	url = https://github.com/gemini-cli-extensions/postgres.git
+[submodule "submodules/mysql"]
+	path = submodules/mysql
+	url = https://github.com/gemini-cli-extensions/mysql.git
+[submodule "submodules/sql-server"]
+	path = submodules/sql-server
+	url = https://github.com/gemini-cli-extensions/sql-server.git
+[submodule "submodules/cloud-sql-postgresql-observability"]
+	path = submodules/cloud-sql-postgresql-observability
+	url = https://github.com/gemini-cli-extensions/cloud-sql-postgresql-observability.git
+[submodule "submodules/cloud-sql-mysql-observability"]
+	path = submodules/cloud-sql-mysql-observability
+	url = https://github.com/gemini-cli-extensions/cloud-sql-mysql-observability.git
+[submodule "submodules/cloud-sql-sqlserver-observability"]
+	path = submodules/cloud-sql-sqlserver-observability
+	url = https://github.com/gemini-cli-extensions/cloud-sql-sqlserver-observability.git
+[submodule "submodules/alloydb-observability"]
+	path = submodules/alloydb-observability
+	url = https://github.com/gemini-cli-extensions/alloydb-observability.git
+[submodule "submodules/gcloud"]
+	path = submodules/gcloud
+	url = https://github.com/gemini-cli-extensions/gcloud.git
+[submodule "submodules/bigquery-conversational-analytics"]
+	path = submodules/bigquery-conversational-analytics
+	url = https://github.com/gemini-cli-extensions/bigquery-conversational-analytics.git
+[submodule "submodules/observability"]
+	path = submodules/observability
+	url = https://github.com/gemini-cli-extensions/observability.git
+[submodule "submodules/nanobanana"]
+	path = submodules/nanobanana
+	url = https://github.com/gemini-cli-extensions/nanobanana.git
+[submodule "submodules/firebase"]
+	path = submodules/firebase
+	url = https://github.com/gemini-cli-extensions/firebase.git
+[submodule "submodules/genkit"]
+	path = submodules/genkit
+	url = https://github.com/gemini-cli-extensions/genkit.git
+[submodule "submodules/jules"]
+	path = submodules/jules
+	url = https://github.com/gemini-cli-extensions/jules.git
+[submodule "submodules/datacommons"]
+	path = submodules/datacommons
+	url = https://github.com/gemini-cli-extensions/datacommons.git
+[submodule "submodules/looker-conversational-analytics"]
+	path = submodules/looker-conversational-analytics
+	url = https://github.com/gemini-cli-extensions/looker-conversational-analytics.git
+[submodule "submodules/stitch"]
+	path = submodules/stitch
+	url = https://github.com/gemini-cli-extensions/stitch.git
+[submodule "submodules/angular"]
+	path = submodules/angular
+	url = https://github.com/gemini-cli-extensions/angular.git
+[submodule "submodules/oracledb"]
+	path = submodules/oracledb
+	url = https://github.com/gemini-cli-extensions/oracledb.git
+[submodule "submodules/ralph"]
+	path = submodules/ralph
+	url = https://github.com/gemini-cli-extensions/ralph.git
+[submodule "submodules/developer-knowledge"]
+	path = submodules/developer-knowledge
+	url = https://github.com/gemini-cli-extensions/developer-knowledge.git
+[submodule "submodules/data-agent-kit-starter-pack"]
+	path = submodules/data-agent-kit-starter-pack
+	url = https://github.com/gemini-cli-extensions/data-agent-kit-starter-pack.git
+[submodule "submodules/dataproc"]
+	path = submodules/dataproc
+	url = https://github.com/gemini-cli-extensions/dataproc.git
+[submodule "submodules/cloud-logging"]
+	path = submodules/cloud-logging
+	url = https://github.com/gemini-cli-extensions/cloud-logging.git
+[submodule "submodules/customer-experience-agent-studio"]
+	path = submodules/customer-experience-agent-studio
+	url = https://github.com/gemini-cli-extensions/customer-experience-agent-studio.git
+[submodule "submodules/gke-mcp-remote"]
+	path = submodules/gke-mcp-remote
+	url = https://github.com/gemini-cli-extensions/gke-mcp-remote.git
+[submodule "submodules/cloud-composer"]
+	path = submodules/cloud-composer
+	url = https://github.com/gemini-cli-extensions/cloud-composer.git
+[submodule "submodules/memorystore-for-redis"]
+	path = submodules/memorystore-for-redis
+	url = https://github.com/gemini-cli-extensions/memorystore-for-redis.git
+[submodule "submodules/bigquery-data-transfer-service"]
+	path = submodules/bigquery-data-transfer-service
+	url = https://github.com/gemini-cli-extensions/bigquery-data-transfer-service.git
+[submodule "submodules/managed-kafka"]
+	path = submodules/managed-kafka
+	url = https://github.com/gemini-cli-extensions/managed-kafka.git
+[submodule "submodules/database-migration-service"]
+	path = submodules/database-migration-service
+	url = https://github.com/gemini-cli-extensions/database-migration-service.git
+[submodule "submodules/cloud-resource-manager"]
+	path = submodules/cloud-resource-manager
+	url = https://github.com/gemini-cli-extensions/cloud-resource-manager.git
+[submodule "submodules/memorystore-for-valkey"]
+	path = submodules/memorystore-for-valkey
+	url = https://github.com/gemini-cli-extensions/memorystore-for-valkey.git
+[submodule "submodules/datastream"]
+	path = submodules/datastream
+	url = https://github.com/gemini-cli-extensions/datastream.git
+[submodule "submodules/android-management-api"]
+	path = submodules/android-management-api
+	url = https://github.com/gemini-cli-extensions/android-management-api.git
+[submodule "submodules/firestore"]
+	path = submodules/firestore
+	url = https://github.com/gemini-cli-extensions/firestore.git
+[submodule "submodules/pay-and-wallet-developer"]
+	path = submodules/pay-and-wallet-developer
+	url = https://github.com/gemini-cli-extensions/pay-and-wallet-developer.git
+[submodule "submodules/compute-engine"]
+	path = submodules/compute-engine
+	url = https://github.com/gemini-cli-extensions/compute-engine.git
+[submodule "submodules/bigquery-migration-service"]
+	path = submodules/bigquery-migration-service
+	url = https://github.com/gemini-cli-extensions/bigquery-migration-service.git
+[submodule "submodules/cloud-monitoring"]
+	path = submodules/cloud-monitoring
+	url = https://github.com/gemini-cli-extensions/cloud-monitoring.git
+[submodule "submodules/pubsub"]
+	path = submodules/pubsub
+	url = https://github.com/gemini-cli-extensions/pubsub.git
+[submodule "submodules/maps-grounding-lite"]
+	path = submodules/maps-grounding-lite
+	url = https://github.com/gemini-cli-extensions/maps-grounding-lite.git
+[submodule "submodules/vertex-ai-search"]
+	path = submodules/vertex-ai-search
+	url = https://github.com/gemini-cli-extensions/vertex-ai-search.git

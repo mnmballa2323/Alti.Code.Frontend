@@ -70,17 +70,11 @@ const preloadExtensions = async () => {
       submodulesDir = path.join(process.cwd(), '..', 'submodules');
     }
 
-    const prebundled = [
-      'conductor',
-      'web-accessibility',
-      'mcp-toolbox',
-      'sre',
-      'google-cloud-storage',
-      'cloud-run',
-      'vertex',
-      'google-secops',
-      'alloydb-omni'
-    ];
+    // Dynamically list all directories in the submodules/ directory
+    const prebundled = fs.readdirSync(submodulesDir).filter(item => {
+      const fullPath = path.join(submodulesDir, item);
+      return fs.statSync(fullPath).isDirectory();
+    });
 
     const installed = await listExtensions();
     const installedNames = (installed || []).map(ext => ext.name?.toLowerCase() || '');
