@@ -112,6 +112,17 @@ async function main() {
       logger.info('✅ OpenClaw Deep Integration Active');
     }).catch(err => logger.error('❌ Failed to start OpenClaw Integration', err));
 
+    // Auto-Preload 9 Gemini CLI Extensions from Local Submodules
+    import('./src/app/modules/geminiExtensions/geminiExtension.service.js')
+      .then(({ GeminiExtensionService }) => {
+        GeminiExtensionService.preloadExtensions().catch(err => {
+          logger.error('❌ Failed to run Gemini extensions preloader', err);
+        });
+      })
+      .catch(err => {
+        logger.error('❌ Failed to import GeminiExtensionService for preloading', err);
+      });
+
     import('./src/app/modules/ossAgents/oss.trending.scheduler.js').then(({ ossTrendingScheduler }) => {
       ossTrendingScheduler.start().catch(err => logger.error('❌ OssTrendingScheduler start error', err));
       logger.info('✅ OSS Trending Agent System Active');

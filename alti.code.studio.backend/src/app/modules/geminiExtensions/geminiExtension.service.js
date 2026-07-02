@@ -2,6 +2,8 @@ import { exec } from 'child_process';
 import util from 'util';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError.js';
+import fs from 'fs';
+import path from 'path';
 
 const execPromise = util.promisify(exec);
 
@@ -61,9 +63,53 @@ const uninstallExtension = async extensionName => {
   }
 };
 
+const preloadExtensions = async () => {
+  try {
+    let submodulesDir = path.join(process.cwd(), 'submodules');
+    if (!fs.existsSync(submodulesDir)) {
+      submodulesDir = path.join(process.cwd(), '..', 'submodules');
+    }
+
+    const prebundled = [
+      'conductor',
+      'web-accessibility',
+      'mcp-toolbox',
+      'sre',
+      'google-cloud-storage',
+      'cloud-run',
+      'vertex',
+      'google-secops',
+      'alloydb-omni'
+    ];
+
+    const installed = await listExtensions();
+    const installedNames = (installed || []).map(ext => ext.name?.toLowerCase() || '');
+
+    for (const name of prebundled) {
+      if (!installedNames.includes(name.toLowerCase())) {
+        const localPath = path.join(submodulesDir, name);
+        if (fs.existsSync(localPath)) {
+          console.log(`🚀 Preloading Gemini extension: ${name} from ${localPath}`);
+          try {
+            await execPromise(`gemini extensions install "${localPath}"`);
+            console.log(`✅ Successfully preloaded Gemini extension: ${name}`);
+          } catch (err) {
+            console.error(`❌ Failed to preload Gemini extension ${name}:`, err.message);
+          }
+        } else {
+          console.warn(`⚠️ Submodule path for ${name} not found: ${localPath}`);
+        }
+      }
+    }
+  } catch (error) {
+    console.error('❌ Failed to run Gemini extensions auto-preloading loop:', error.message);
+  }
+};
+
 export const GeminiExtensionService = {
   listExtensions,
   invokeExtension,
   installExtension,
   uninstallExtension,
+  preloadExtensions,
 };
