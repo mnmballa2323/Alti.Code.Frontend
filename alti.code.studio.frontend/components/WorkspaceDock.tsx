@@ -88,7 +88,7 @@ export function WorkspaceDock() {
   return (
     <div className={cn(
       "dark h-full bg-[#070B16] border-r border-white/5 flex flex-col select-none shrink-0 z-40 relative transition-all duration-300 ease-in-out",
-      isDockExpanded ? "w-64 min-w-[256px]" : "w-[80px] min-w-[80px]"
+      isDockExpanded ? "w-64 min-w-[256px]" : "w-[88px] min-w-[88px]"
     )}>
       {/* Top Spacer / Header Area matching Sidebar header heights (40px titlebar + 52px menu + 68px search = 160px) */}
       <div
