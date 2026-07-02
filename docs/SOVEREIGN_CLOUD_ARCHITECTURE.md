@@ -67,6 +67,14 @@ The **Cicero Law Enforcement Matrix** provides fully automated compliance and SL
 
 ---
 
+## Pre-Bundled Gemini CLI Extensions Engine (Phase 9)
+To deliver a fully sterile, offline-ready developer execution engine, Alti Code Studio integrates the complete public catalog of Gemini CLI extensions:
+*   **Sovereign Compliance**: All **65 public repositories** from the `gemini-cli-extensions` organization that are licensed under the Apache-2.0 standard are pre-packaged as local git submodules inside `submodules/`.
+*   **Docker Container Sandbox**: The backend builder copies the entire `/submodules` folder into the runner image (configured via parent context redirection in `docker-compose.yml` and COPY targets in the `Dockerfile`), providing complete runtime isolation.
+*   **Startup Auto-Preloader & Caching**: The backend dynamically scans the submodules folder on startup. It runs concurrent installations (batches of 5) and creates a `.preloaded_cache.json` ledger file to bypass redundant startup shell checks on subsequent boots (0ms startup overhead).
+
+---
+
 ## Elite Shard Specialists
 Within the Swarm Brain, heavily restricted **Elite Agents** handle sovereign orchestration:
 - `zero_trust_architect`: Specializes in BeyondCorp mTLS and Envoy proxy networks.
