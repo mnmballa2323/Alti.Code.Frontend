@@ -52,3 +52,9 @@
 [submodule "submodules/paperclip"]
 	path = submodules/paperclip
 	url = https://github.com/paperclipai/paperclip.git
+[submodule "submodules/conductor"]
+	path = submodules/conductor
+	url = https://github.com/gemini-cli-extensions/conductor.git
+[submodule "submodules/web-accessibility"]
+	path = submodules/web-accessibility
+	url = https://github.com/gemini-cli-extensions/web-accessibility.git
