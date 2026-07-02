@@ -149,7 +149,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
 
             {/* Sidebar */}
             {!isNoSidebarRoute && (
-              <div className="z-30 relative h-full shrink-0">
+              <div className="z-[110] relative h-full shrink-0">
                 <React.Suspense
                   fallback={
                     <div className="w-80 h-full bg-default-100 dark:bg-sidebar" />
