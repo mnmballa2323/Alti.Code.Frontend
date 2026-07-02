@@ -58,3 +58,24 @@
 [submodule "submodules/web-accessibility"]
 	path = submodules/web-accessibility
 	url = https://github.com/gemini-cli-extensions/web-accessibility.git
+[submodule "submodules/mcp-toolbox"]
+	path = submodules/mcp-toolbox
+	url = https://github.com/gemini-cli-extensions/mcp-toolbox.git
+[submodule "submodules/sre"]
+	path = submodules/sre
+	url = https://github.com/gemini-cli-extensions/sre.git
+[submodule "submodules/google-cloud-storage"]
+	path = submodules/google-cloud-storage
+	url = https://github.com/gemini-cli-extensions/google-cloud-storage.git
+[submodule "submodules/cloud-run"]
+	path = submodules/cloud-run
+	url = https://github.com/gemini-cli-extensions/cloud-run.git
+[submodule "submodules/vertex"]
+	path = submodules/vertex
+	url = https://github.com/gemini-cli-extensions/vertex.git
+[submodule "submodules/google-secops"]
+	path = submodules/google-secops
+	url = https://github.com/gemini-cli-extensions/google-secops.git
+[submodule "submodules/alloydb-omni"]
+	path = submodules/alloydb-omni
+	url = https://github.com/gemini-cli-extensions/alloydb-omni.git
