@@ -200,7 +200,7 @@ function PromptInputAssets({
   assets,
   onRemoveAsset,
 }: {
-  assets: string[];
+  assets: (string | { name: string; data: string; type: string })[];
   onRemoveAsset: (index: number) => void;
 }) {
   if (assets.length === 0) return null;
@@ -208,45 +208,32 @@ function PromptInputAssets({
   return (
     <>
       {assets.map((asset, index) => {
-        const isImage = asset.startsWith("data:image/");
+        const isString = typeof asset === "string";
+        const dataUrl = isString ? asset : asset.data;
+        const name = isString
+          ? (asset.startsWith("data:image/") ? "Image Attachment" : "Document Attachment")
+          : asset.name;
+        const isImage = dataUrl.startsWith("data:image/");
 
         return (
-          <Badge
+          <div
             key={index}
-            isOneChar
-            className="opacity-0 group-hover:opacity-100"
-            content={
-              <Button
-                isIconOnly
-                radius="full"
-                size="sm"
-                variant="light"
-                onPress={() => onRemoveAsset(index)}
-              >
-                <Icon
-                  className="text-foreground"
-                  icon="iconamoon:close-thin"
-                  width={16}
-                />
-              </Button>
-            }
+            className="flex items-center gap-2 pl-3 pr-2 py-1.5 bg-slate-100 dark:bg-[#1f1f23] border border-slate-200 dark:border-zinc-700/50 rounded-full text-xs text-slate-700 dark:text-slate-300 shadow-sm"
           >
-            {isImage ? (
-              <Image
-                alt="uploaded image"
-                className="h-14 w-14 rounded-small border-small border-default-200/50 object-cover"
-                src={asset}
-              />
-            ) : (
-              <div className="h-14 w-14 flex items-center justify-center rounded-small border-small border-default-200/50 bg-default-200 text-xs text-default-700">
-                <Icon
-                  className="text-default-500"
-                  icon="solar:file-linear"
-                  width={24}
-                />
-              </div>
-            )}
-          </Badge>
+            <Icon
+              className="text-slate-500 dark:text-slate-400"
+              icon={isImage ? "solar:gallery-linear" : "solar:file-linear"}
+              width={16}
+            />
+            <span className="max-w-[150px] truncate font-medium">{name}</span>
+            <button
+              type="button"
+              className="size-5 flex items-center justify-center cursor-pointer rounded-full bg-slate-200 dark:bg-zinc-700/60 hover:bg-slate-300 dark:hover:bg-zinc-600/80 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+              onClick={() => onRemoveAsset(index)}
+            >
+              <Icon icon="iconamoon:close-thin" width={14} />
+            </button>
+          </div>
         );
       })}
     </>
@@ -325,7 +312,7 @@ function PromptInputFullLineComponent({
   const connectedClouds = useSelector(
     (state: RootState) => state.system.connectedClouds,
   );
-  const [assets, setAssets] = useState<string[]>([]);
+  const [assets, setAssets] = useState<(string | { name: string; data: string; type: string })[]>([]);
   const [selectedLanguage, setSelectedLanguage] = useState("Mode");
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const langDropdownRef = useRef<HTMLDivElement>(null);
@@ -383,10 +370,19 @@ function PromptInputFullLineComponent({
   // Listen for file drops from the Data / Vault Workspace
   useEffect(() => {
     const handleAddDocument = (e: Event) => {
-      const customEvent = e as CustomEvent<string>;
+      const customEvent = e as CustomEvent<any>;
 
-      if (customEvent.detail && !assets.includes(customEvent.detail)) {
-        setAssets((prev) => [...prev, customEvent.detail]);
+      if (customEvent.detail) {
+        const detail = customEvent.detail;
+        const exists = assets.some((asset) => {
+          const assetData = typeof asset === "string" ? asset : asset.data;
+          const detailData = typeof detail === "string" ? detail : detail.data;
+          return assetData === detailData;
+        });
+
+        if (!exists) {
+          setAssets((prev) => [...prev, detail]);
+        }
       }
     };
 
@@ -461,6 +457,7 @@ function PromptInputFullLineComponent({
 
   const handlePaste = useCallback((e: React.ClipboardEvent) => {
     const items = Array.from(e.clipboardData.items);
+    let count = 1;
 
     for (const item of items) {
       if (item.type.indexOf("image") !== -1) {
@@ -471,8 +468,9 @@ function PromptInputFullLineComponent({
 
         reader.onload = () => {
           const base64data = reader.result as string;
+          const name = `pasted_image_${count++}.png`;
 
-          setAssets((prev) => [...prev, base64data]);
+          setAssets((prev) => [...prev, { name, data: base64data, type: item.type }]);
         };
         reader.readAsDataURL(blob);
       }
@@ -489,7 +487,7 @@ function PromptInputFullLineComponent({
         reader.onload = () => {
           const base64data = reader.result as string;
 
-          setAssets((prev) => [...prev, base64data]);
+          setAssets((prev) => [...prev, { name: file.name, data: base64data, type: file.type }]);
         };
         reader.readAsDataURL(file);
       });
