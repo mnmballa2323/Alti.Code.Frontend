@@ -20,7 +20,9 @@ services:
 
   # ⚙️ The Engine: Backend
   backend:
-    build: ./alti.code.studio.backend
+    build:
+      context: .
+      dockerfile: alti.code.studio.backend/Dockerfile
     container_name: alti_backend
     ports:
       - "5000:5000"

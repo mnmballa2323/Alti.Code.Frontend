@@ -10,7 +10,7 @@ WORKDIR /app
 # Install build tools for native modules (bcrypt, re2, etc.)
 RUN apk add --no-cache python3 make g++ linux-headers
 
-COPY package.json package-lock.json* ./
+COPY alti.code.studio.backend/package.json alti.code.studio.backend/package-lock.json* ./
 
 # Install all dependencies (need devDeps for prisma generate)
 RUN npm ci --legacy-peer-deps
@@ -20,7 +20,8 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY alti.code.studio.backend/ .
+COPY submodules/ ./submodules/
 
 # Generate Prisma client
 RUN npx prisma generate
@@ -48,6 +49,7 @@ COPY --from=builder --chown=appuser:appgroup /app/index.js ./index.js
 COPY --from=builder --chown=appuser:appgroup /app/server.js ./server.js
 COPY --from=builder --chown=appuser:appgroup /app/package.json ./package.json
 COPY --from=builder --chown=appuser:appgroup /app/users_mock.json ./users_mock.json
+COPY --from=builder --chown=appuser:appgroup /app/submodules ./submodules
 
 # Copy generated Prisma client
 COPY --from=builder --chown=appuser:appgroup /app/node_modules/.prisma ./node_modules/.prisma
