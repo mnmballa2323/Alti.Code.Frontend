@@ -23,11 +23,13 @@ export const auditMiddleware = (actionName = 'API_REQUEST') => {
       const userId = req.user?.id || req.user?.sub;
       const userEmail = req.user?.email;
       const tenantId = req.user?.tenantId || req.tenant?.id;
+      const productId = req.headers?.['x-product-id'] || req.user?.productId || null;
       const ipAddress =
         req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
       auditLogService.logAction({
         tenantId,
+        productId,
         userId,
         userEmail,
         action: actionName,

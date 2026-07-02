@@ -254,7 +254,7 @@ describe('Platform Model Gateway', () => {
 
       expect(mockRecordLlmCall).toHaveBeenCalledWith(
         expect.objectContaining({
-          model: 'google/gemini-3.1-pro',
+          model: 'azure/gpt-4o',
           success: false,
           error: 'Inference error',
           productId: 'inso-ai',

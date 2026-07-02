@@ -100,6 +100,9 @@ const getProviderRegion = provider => {
   if (provider === 'gcp') {
     return config.gcp?.location || 'us-central1';
   }
+  if (provider === 'azure') {
+    return 'azure-eastus';
+  }
   return 'unknown';
 };
 

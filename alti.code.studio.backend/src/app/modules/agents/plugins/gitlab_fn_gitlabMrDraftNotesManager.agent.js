@@ -11,17 +11,16 @@ import { gitlabDocsService } from '../../gitlabDocs/gitlabDocs.service.js';
 import { logger } from '../../../../shared/logger.js';
 
 class GitlabFnGitlabMrDraftNotesManagerAgent extends BaseSpecialistAgent {
-  constructor() {
-    super();
-    this.name = 'gitlabMrDraftNotesManager';
-    this.description =
-      'Specialist GitLab MR Draft Notes Manager expert in managing draft notes and batch publishing comments.';
-    this.manifest = {
-      id: 'gitlabMrDraftNotesManager',
-      capabilities: ['gitlab-create-draft-note', 'gitlab-publish-draft-notes'],
-      version: '39.6.0',
-    };
-    this.preamble = `You are the Inso Code Specialist GitLab MR Draft Notes Manager expert in managing draft notes and batch publishing comments.
+    constructor() {
+        super();
+        this.name = 'gitlabMrDraftNotesManager';
+        this.description = 'Specialist GitLab MR Draft Notes Manager expert in managing draft notes and batch publishing comments.';
+        this.manifest = {
+            id: 'gitlabMrDraftNotesManager',
+            capabilities: ["gitlab-create-draft-note","gitlab-publish-draft-notes"],
+            version: '39.6.0'
+        };
+        this.preamble = `You are the Inso Code Specialist GitLab MR Draft Notes Manager expert in managing draft notes and batch publishing comments.
 This agent is the absolute authority on the specific operational boundary of: draft notes, batch review threads, publishing drafts.
 
 # GROUNDED MERGE REQUESTS CAPABILITIES
@@ -33,60 +32,45 @@ This agent is the absolute authority on the specific operational boundary of: dr
 - Ground all designs and explanations strictly in the official grounded developer documentation context provided.
 - Never invent parameters, workflow properties, or API endpoints that are not documented.
 - Respond with clear, structured markdown. When generating code blocks, provide clean, production-grade snippets (JavaScript/TypeScript for APIs).`;
-  }
-
-  /**
-   * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
-   */
-  async _invoke(prompt, contextBlock, tenantId, spanId) {
-    if (prompt.startsWith('execute:') || prompt.startsWith('run:')) {
-      const code = prompt.replace(/^(execute|run):/, '').trim();
-      const runResult = this.runSandboxed(code);
-      return typeof runResult === 'string'
-        ? runResult
-        : JSON.stringify(runResult);
     }
 
-    logger.info(
-      `🦊 [gitlabMrDraftNotesManager] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`,
-    );
-
-    let docsContext = '';
-    try {
-      // Retrieve domain-specific documentation chunks
-      docsContext = await gitlabDocsService.searchDocs(
-        `GitLab Merge Requests draft notes, batch review threads, publishing drafts ${prompt}`,
-        5,
-        tenantId,
-      );
-    } catch (err) {
-      logger.warn(
-        `🦊 [gitlabMrDraftNotesManager] Failed to query RAG documentation. Fallback used. Error: ${err.message}`,
-      );
-    }
-
-    let memoryContext = '';
-    try {
-      const { agentMemoryService } =
-        await import('../../memory/agentmemory.service.js');
-      if (agentMemoryService.isReady) {
-        const recentMemories = await agentMemoryService.smartSearch({
-          query: prompt,
-          limit: 3,
-        });
-        if (recentMemories && recentMemories.documents) {
-          memoryContext = recentMemories.documents
-            .map(d => `- Memory: ${d}`)
-            .join('\n');
+    /**
+     * Specialized LLM invocation grounded dynamically by domain-specific RAG search.
+     */
+    async _invoke(prompt, contextBlock, tenantId, spanId) {
+        if (prompt.startsWith('execute:') || prompt.startsWith('run:')) {
+            const code = prompt.replace(/^(execute|run):/, '').trim();
+            const runResult = this.runSandboxed(code);
+            return typeof runResult === 'string' ? runResult : JSON.stringify(runResult);
         }
-      }
-    } catch (memErr) {
-      logger.debug(
-        `🦊 [gitlabMrDraftNotesManager] Memory retrieval bypassed: ${memErr.message}`,
-      );
-    }
 
-    const groundedPrompt = `${this.preamble}
+        logger.info(`🦊 [gitlabMrDraftNotesManager] Grounding specialized query in ingested developer docs: "${prompt.substring(0, 60)}..."`);
+        
+        let docsContext = '';
+        try {
+            // Retrieve domain-specific documentation chunks
+            docsContext = await gitlabDocsService.searchDocs(`GitLab Merge Requests draft notes, batch review threads, publishing drafts ${prompt}`, 5, tenantId);
+        } catch (err) {
+            logger.warn(`🦊 [gitlabMrDraftNotesManager] Failed to query RAG documentation. Fallback used. Error: ${err.message}`);
+        }
+
+        let memoryContext = '';
+        try {
+            const { agentMemoryService } = await import('../../memory/agentmemory.service.js');
+            if (agentMemoryService.isReady) {
+                const recentMemories = await agentMemoryService.smartSearch({
+                    query: prompt,
+                    limit: 3
+                });
+                if (recentMemories && recentMemories.documents) {
+                    memoryContext = recentMemories.documents.map(d => `- Memory: ${d}`).join('\n');
+                }
+            }
+        } catch (memErr) {
+            logger.debug(`🦊 [gitlabMrDraftNotesManager] Memory retrieval bypassed: ${memErr.message}`);
+        }
+
+        const groundedPrompt = `${this.preamble}
 
 === GROUNDED DEVELOPER DOCUMENTATION CONTEXT ===
 ${docsContext || 'No documentation found in local RAG vector store.'}
@@ -100,27 +84,22 @@ ${contextBlock || 'No additional file context provided.'}
 === REQUEST ===
 ${prompt}`;
 
-    let response = await GeminiAiService.generateContent(groundedPrompt);
+        let response = await GeminiAiService.generateContent(groundedPrompt);
 
-    // Reflection self-correction loop (1-pass review and correction if code blocks are present)
-    if (response.includes('```') && !prompt.includes('no-reflect')) {
-      logger.info(
-        `🦊 [gitlabMrDraftNotesManager] Code blocks detected. Initiating automated reflection loop...`,
-      );
-      try {
-        const reflectionPrompt = `You are the critic evaluator for [gitlabMrDraftNotesManager].
+        // Reflection self-correction loop (1-pass review and correction if code blocks are present)
+        if (response.includes('```') && !prompt.includes('no-reflect')) {
+            logger.info(`🦊 [gitlabMrDraftNotesManager] Code blocks detected. Initiating automated reflection loop...`);
+            try {
+                const reflectionPrompt = `You are the critic evaluator for [gitlabMrDraftNotesManager].
 Review the following proposed output for correctness, safety, and adherence to GitLab best practices.
 Provide 1-2 points of critical feedback. If it is perfect and compliant, return "APPROVED".
 
 PROPOSED OUTPUT:
 ${response}`;
-        const reviewResult =
-          await GeminiAiService.generateContent(reflectionPrompt);
-        if (!reviewResult.includes('APPROVED')) {
-          logger.info(
-            `🦊 [gitlabMrDraftNotesManager] Reflection loop identified feedback. Correcting response...`,
-          );
-          const correctionPrompt = `${groundedPrompt}
+                const reviewResult = await GeminiAiService.generateContent(reflectionPrompt);
+                if (!reviewResult.includes('APPROVED')) {
+                    logger.info(`🦊 [gitlabMrDraftNotesManager] Reflection loop identified feedback. Correcting response...`);
+                    const correctionPrompt = `${groundedPrompt}
                     
 === PREVIOUS ATTEMPT ===
 ${response}
@@ -129,36 +108,29 @@ ${response}
 ${reviewResult}
 
 Please correct the previous attempt based on the feedback above.`;
-          response = await GeminiAiService.generateContent(correctionPrompt);
+                    response = await GeminiAiService.generateContent(correctionPrompt);
+                }
+            } catch (reflectErr) {
+                logger.warn(`🦊 [gitlabMrDraftNotesManager] Reflection loop failed (non-blocking): ${reflectErr.message}`);
+            }
         }
-      } catch (reflectErr) {
-        logger.warn(
-          `🦊 [gitlabMrDraftNotesManager] Reflection loop failed (non-blocking): ${reflectErr.message}`,
-        );
-      }
-    }
 
-    // Asynchronously record this consultation back to the memory store
-    try {
-      const { agentMemoryService } =
-        await import('../../memory/agentmemory.service.js');
-      if (agentMemoryService.isReady) {
-        agentMemoryService
-          .observe({
-            content: `Agent [gitlabMrDraftNotesManager] processed query: "${prompt.substring(0, 150)}..." and generated output.`,
-            type: 'agent_consultation',
-            metadata: { agentId: 'gitlabMrDraftNotesManager', query: prompt },
-          })
-          .catch(() => {});
-      }
-    } catch (observeErr) {
-      logger.debug(
-        `🦊 [gitlabMrDraftNotesManager] Storing consultation observation failed (non-blocking): ${observeErr.message}`,
-      );
-    }
+        // Asynchronously record this consultation back to the memory store
+        try {
+            const { agentMemoryService } = await import('../../memory/agentmemory.service.js');
+            if (agentMemoryService.isReady) {
+                agentMemoryService.observe({
+                    content: `Agent [gitlabMrDraftNotesManager] processed query: "${prompt.substring(0, 150)}..." and generated output.`,
+                    type: 'agent_consultation',
+                    metadata: { agentId: 'gitlabMrDraftNotesManager', query: prompt }
+                }).catch(() => {});
+            }
+        } catch (observeErr) {
+            logger.debug(`🦊 [gitlabMrDraftNotesManager] Storing consultation observation failed (non-blocking): ${observeErr.message}`);
+        }
 
-    return response;
-  }
+        return response;
+    }
 }
 
 export const pluginInstance = new GitlabFnGitlabMrDraftNotesManagerAgent();
