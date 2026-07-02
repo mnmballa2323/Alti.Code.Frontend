@@ -138,24 +138,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
               {/* Left spacer for macOS window traffic light buttons */}
               <div className="w-[76px] shrink-0" />
 
-              {/* Right: Sidebar Collapse Toggle Button */}
-              <div className="flex items-center gap-1 z-50">
-                {!isNoSidebarRoute && (
-                  <Button
-                    isIconOnly
-                    variant="light"
-                    size="sm"
-                    className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
-                    onClick={handleToggleSidebar}
-                  >
-                    {isSidebarOpen ? (
-                      <PanelLeftClose className="size-4" />
-                    ) : (
-                      <PanelLeftOpen className="size-4" />
-                    )}
-                  </Button>
-                )}
-              </div>
+
             </div>
           )}
 

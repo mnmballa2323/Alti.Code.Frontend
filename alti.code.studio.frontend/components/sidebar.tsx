@@ -1838,16 +1838,38 @@ export default function Sidebar() {
         {/* Primary Column (Left Side Menu) */}
         <div
           className={cn(
-            "flex h-full flex-col transition-all duration-300 bg-[#0B1121] border-r border-white/5",
+            "flex h-full flex-col transition-all duration-300 bg-[#0B1121] border-r border-white/5 relative",
             isSidebarOpen ? "w-80" : "w-16",
           )}
         >
+          {/* Sidebar Collapse Toggle Button */}
+          <div
+            className={cn(
+              "absolute top-1 z-50",
+              isSidebarOpen ? "left-3" : "left-4"
+            )}
+          >
+            <Button
+              isIconOnly
+              variant="light"
+              size="sm"
+              className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
+              onClick={toggleLeftSidebar}
+            >
+              {isSidebarOpen ? (
+                <PanelLeftClose className="size-4" />
+              ) : (
+                <PanelLeftOpen className="size-4" />
+              )}
+            </Button>
+          </div>
+
           <div
             className={cn(
               "flex border-b border-transparent",
               isSidebarOpen
                 ? "h-[92px] pt-10 pb-1.5 px-3 items-end justify-start"
-                : "h-auto pt-6 pb-2 items-center justify-center",
+                : "h-auto pt-12 pb-2 items-center justify-center",
             )}
           >
             <div
