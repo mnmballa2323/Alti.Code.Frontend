@@ -1846,7 +1846,7 @@ export default function Sidebar() {
           <div
             className={cn(
               "absolute top-1 z-50",
-              isSidebarOpen ? "left-3" : "left-4"
+              isSidebarOpen ? "right-3" : "right-4"
             )}
           >
             <Button
