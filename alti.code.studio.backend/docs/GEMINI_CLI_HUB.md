@@ -99,6 +99,31 @@ interface GeminiExtension {
 
 ---
 
+## Pre-Bundled & Dockerized Extensions Engine
+
+To deliver a sovereign-compliant, offline-capable, and hyper-performance developer workspace, the Gemini CLI Hub preloads all extensions natively inside isolated environments.
+
+### 1. Git Submodule Pre-Bundling
+
+All **65 Apache-2.0 licensed repositories** from the `gemini-cli-extensions` organization are cloned and integrated directly inside the workspace as git submodules under `submodules/`. This covers the full suite of developer tools, database connectors, and cloud execution environments locally.
+
+### 2. Dynamic Backend Preloading Lifecycle
+
+On backend startup, an automatic preloader is triggered via `GeminiExtensionService.preloadExtensions()`:
+- **Dynamic Discovery**: It dynamically reads and scans the `submodules/` directory using a filesystem `readdirSync` directory filter.
+- **Fast-Path Verification (0ms Startup Overhead)**: It compares directory listings against a local cache ledger file at `submodules/.preloaded_cache.json`. If they match, it skips startup shells completely.
+- **Parallel Batch Installation**: If changes are detected, it performs a parallel installation cycle in concurrent batches of `5` (`Promise.all` chunks) using local filesystem paths: `gemini extensions install submodules/<repo-name>`.
+- **Folder Sanitization Security**: Folder inputs are validated using a strict alphanumeric regex pattern (`/^[a-zA-Z0-9_\-]+$/`) to block path traversal vulnerabilities.
+
+### 3. Dockerized Isolation
+
+To guarantee runtime isolation:
+- **Build Context**: The build context in [docker-compose.yml](file:///Users/michaelmeram/workspace/alti.code.studio/docker-compose.yml#L20) is set to the parent workspace root.
+- **Image Bundling**: The [Dockerfile](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/Dockerfile#L10) copies the entire `/submodules` directory into the final production runner stage.
+- **Container Sandbox**: On container startup, all 65 extensions are automatically registered and isolated inside the container's private filesystem, preventing cross-tenant leakage.
+
+---
+
 ## Backend API
 
 ### `POST /api/gemini-cli/run`
