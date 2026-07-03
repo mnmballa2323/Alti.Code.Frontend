@@ -25,12 +25,11 @@ class Particle {
 
     this.size = Math.random() * 2 + 1;
     const colors = [
-      "#4285F4",
-      "#34A853",
-      "#FBBC05",
-      "#EA4335",
-      "#111111",
-      "#444444",
+      "#3b82f6", // Blue
+      "#1d4ed8", // Dark Blue
+      "#60a5fa", // Light Blue
+      "#06b6d4", // Cyan
+      "#0ea5e9", // Sky Blue
     ];
 
     this.color = colors[Math.floor(Math.random() * colors.length)];
@@ -102,8 +101,8 @@ export default function SwarmCanvas() {
     let animationFrameId: number;
 
     const render = () => {
-      // Clear canvas with a slight trail effect to create motion blur
-      ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+      // Clear canvas with a slight trail effect to create motion blur (clearing with deep dark navy)
+      ctx.fillStyle = "rgba(3, 0, 20, 0.25)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Update and draw particles
@@ -117,14 +116,14 @@ export default function SwarmCanvas() {
           const dy = particles[i].y - particles[j].y;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          // Connecting lines emphasize the swirling vortex arms
+          // Connecting lines emphasize the swirling vortex arms (using purple/blue glowing lines)
           if (distance < 45) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             const opacity = 1 - distance / 45;
 
-            ctx.strokeStyle = `rgba(80, 80, 80, ${opacity * 0.3})`;
+            ctx.strokeStyle = `rgba(168, 85, 247, ${opacity * 0.25})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
@@ -143,10 +142,11 @@ export default function SwarmCanvas() {
   }, []);
 
   return (
-    <div className="relative w-full max-w-[360px] aspect-square rounded-[2rem] bg-white border border-gray-200 overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.08)] flex items-center justify-center">
+    <div className="relative w-full max-w-[360px] aspect-square rounded-[2rem] bg-white/[0.03] backdrop-blur-xl border border-white/10 overflow-hidden shadow-2xl group flex items-center justify-center shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]">
+      <div className="absolute top-0 right-0 w-[180px] h-[180px] bg-blue-600/10 rounded-full blur-[50px] group-hover:bg-blue-500/20 transition-all duration-500 pointer-events-none" />
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 w-full h-full pointer-events-none"
+        className="absolute inset-0 w-full h-full pointer-events-none z-10"
       />
     </div>
   );

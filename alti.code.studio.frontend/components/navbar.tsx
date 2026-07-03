@@ -332,7 +332,7 @@ function Navbar() {
         className={cn(
           "flex items-center justify-between h-[80px] z-[100] fixed top-0 left-0 right-0 w-full transition-all duration-300",
           !isTransparent
-            ? "bg-white border-b border-black/5 shadow-sm"
+            ? "bg-[#030014]/90 border-b border-white/10 backdrop-blur-md shadow-lg"
             : "bg-transparent border-b border-transparent",
         )}
       >
@@ -342,35 +342,7 @@ function Navbar() {
             className="flex-shrink-0 flex items-center gap-2 md:gap-3 lg:-translate-x-4"
             href="/"
           >
-            <div
-              className={cn(
-                "flex items-center gap-2 md:gap-3",
-                isTransparent ? "hidden" : "flex",
-              )}
-            >
-              <Image
-                priority
-                alt="Inso Logo Icon"
-                className="h-8 w-auto object-contain"
-                height={32}
-                src="/logo-black.png"
-                width={37}
-              />
-              <Image
-                priority
-                alt="Inso Code"
-                className="h-6 w-auto object-contain"
-                height={24}
-                src="/inso-logo-black.png"
-                width={120}
-              />
-            </div>
-            <div
-              className={cn(
-                "flex items-center gap-2 md:gap-3",
-                isTransparent ? "flex" : "hidden",
-              )}
-            >
+            <div className="flex items-center gap-2 md:gap-3">
               <Image
                 priority
                 alt="Inso Logo Icon"
@@ -394,10 +366,7 @@ function Navbar() {
           <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <div
               className={cn(
-                "flex items-center gap-1.5 p-1.5 rounded-full transition-all duration-300",
-                !isTransparent
-                  ? "bg-black/5 border border-black/10 shadow-inner"
-                  : "bg-white/10 backdrop-blur-md border border-white/20 shadow-lg",
+                "flex items-center gap-1.5 p-1.5 rounded-full transition-all duration-300 bg-white/5 border border-white/10 backdrop-blur-md shadow-lg"
               )}
             >
               {sections.map((sec, index) => {
@@ -411,9 +380,7 @@ function Navbar() {
                       "relative group p-2.5 rounded-full transition-all duration-300",
                       isActive
                         ? "bg-white text-black shadow-md scale-105"
-                        : !isTransparent
-                          ? "text-gray-500 hover:text-black hover:bg-black/5"
-                          : "text-white/70 hover:text-white hover:bg-white/20",
+                        : "text-white/70 hover:text-white hover:bg-white/20",
                     )}
                     onClick={() => handleSectionClick(index)}
                   >
@@ -435,19 +402,14 @@ function Navbar() {
               <>
                 <Button
                   className={cn(
-                    "rounded-full bg-transparent px-6 transition-colors border",
-                    !isTransparent
-                      ? "border-black/20 text-black hover:bg-black/5"
-                      : "border-white/25 text-white hover:bg-white/10",
+                    "rounded-full bg-transparent px-6 transition-colors border border-white/25 text-white hover:bg-white/10 micro-beam-btn"
                   )}
                   size="sm"
                   onClick={() => {
                     const userRole = (profile?.role || "").toLowerCase();
 
-                    if (userRole === "owner") {
-                      router.push("/owner/dashboard");
-                    } else if (userRole === "admin") {
-                      router.push("/admin/dashboard");
+                    if (userRole === "owner" || userRole === "admin") {
+                      router.push("/dashboard");
                     } else {
                       router.push("/new-chat");
                     }
@@ -457,10 +419,7 @@ function Navbar() {
                 </Button>
                 <Button
                   className={cn(
-                    "rounded-full px-6 transition-all duration-200 shadow-sm",
-                    isScrolled || !isTransparent
-                      ? "bg-black text-white hover:opacity-90"
-                      : "bg-white text-black hover:bg-zinc-100",
+                    "rounded-full px-6 transition-all duration-200 shadow-sm bg-white text-black hover:bg-zinc-100 micro-beam-btn"
                   )}
                   size="sm"
                   onClick={() => {
@@ -474,10 +433,7 @@ function Navbar() {
               <>
                 <Button
                   className={cn(
-                    "rounded-full px-6 transition-all duration-200 shadow-sm",
-                    isScrolled || !isTransparent
-                      ? "bg-black text-white hover:opacity-90"
-                      : "bg-white text-black hover:bg-zinc-100",
+                    "rounded-full px-6 transition-all duration-200 shadow-sm bg-white text-black hover:bg-zinc-100 micro-beam-btn",
                     isDesktopApp && "w-[160px]",
                   )}
                   size="sm"
@@ -494,10 +450,7 @@ function Navbar() {
                 {!isDesktopApp && (
                   <Button
                     className={cn(
-                      "rounded-full px-6 transition-all duration-200 shadow-sm",
-                      !isTransparent
-                        ? "bg-transparent border border-black/20 text-black hover:bg-black/5"
-                        : "bg-white text-black hover:bg-zinc-100",
+                      "rounded-full px-6 transition-all duration-200 shadow-sm bg-transparent border border-white/20 text-white hover:bg-white/10 micro-beam-btn"
                     )}
                     size="sm"
                     onClick={() => router.push("/register")}

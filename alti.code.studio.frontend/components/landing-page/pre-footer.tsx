@@ -14,7 +14,7 @@ function PreFooter() {
   );
 
   return (
-    <div className="w-full bg-[#030014] py-6 md:py-8 lg:py-10 border-t border-white/5">
+    <div className="landing-footer w-full bg-[#030014] py-6 md:py-8 lg:py-10 relative z-20">
       <div className="wrapper px-4 md:px-6 lg:px-8">
         {/* Main Footer Content */}
         <div className="flex flex-col lg:flex-row justify-between gap-8 lg:gap-12">
@@ -38,11 +38,11 @@ function PreFooter() {
                 />
               </div>
               <div className="flex flex-col gap-2">
-                <p className="max-w-[400px] font-normal text-sm md:text-base leading-6 md:leading-8 text-neutral-400">
+                <p className="footer-muted max-w-[400px] font-normal text-sm md:text-base leading-6 md:leading-8">
                   Secure local swarms with cloud orchestration. Engineered for
                   absolute speed and precision.
                 </p>
-                <p className="text-xs text-neutral-500 mt-4 text-center lg:text-left">
+                <p className="footer-dimmed text-xs mt-4 text-center lg:text-left">
                   © {new Date().getFullYear()} Inso Code Technologies, Inc. All
                   rights reserved.
                 </p>
@@ -56,11 +56,11 @@ function PreFooter() {
             <div className="hidden sm:grid grid-cols-2 gap-8 lg:gap-16 max-w-2xl lg:max-w-none mx-auto lg:mx-0">
               {/* Legal Column */}
               <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[150px]">
-                <p className="text-white font-medium text-base">Legal</p>
+                <p className="font-medium text-base">Legal</p>
                 <ul className="flex flex-col gap-2 lg:gap-3">
                   <li>
                     <Link
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
+                      className="footer-muted font-secondary font-normal text-sm transition-colors"
                       href="/"
                     >
                       Privacy Policy
@@ -68,7 +68,7 @@ function PreFooter() {
                   </li>
                   <li>
                     <Link
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
+                      className="footer-muted font-secondary font-normal text-sm transition-colors"
                       href="/"
                     >
                       Terms of Use
@@ -76,7 +76,7 @@ function PreFooter() {
                   </li>
                   <li>
                     <Link
-                      className="text-neutral-400 font-secondary font-normal text-sm hover:text-white transition-colors"
+                      className="footer-muted font-secondary font-normal text-sm transition-colors"
                       href="/"
                     >
                       Cookies Policy
@@ -87,8 +87,8 @@ function PreFooter() {
 
               {/* Office Column */}
               <div className="flex flex-col gap-3 lg:gap-4 w-full lg:w-[200px]">
-                <p className="text-white font-medium text-base">Office</p>
-                <ul className="flex flex-col gap-2 lg:gap-3 text-neutral-400 font-secondary font-normal text-sm leading-relaxed">
+                <p className="font-medium text-base">Office</p>
+                <ul className="footer-muted flex flex-col gap-2 lg:gap-3 font-secondary font-normal text-sm leading-relaxed">
                   <li>
                     755 W Big Beaver Rd
                     <br />
@@ -101,24 +101,24 @@ function PreFooter() {
             {/* Mobile Layout */}
             <div className="sm:hidden flex flex-col gap-6">
               <div className="flex flex-col gap-4">
-                <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
+                <p className="font-medium text-base border-b border-gray-600 pb-2">
                   Legal
                 </p>
                 <div className="grid grid-cols-1 gap-3">
                   <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm"
+                    className="footer-muted font-secondary font-normal text-sm"
                     href="/"
                   >
                     Privacy Policy
                   </Link>
                   <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm"
+                    className="footer-muted font-secondary font-normal text-sm"
                     href="/"
                   >
                     Terms of Use
                   </Link>
                   <Link
-                    className="text-neutral-400 font-secondary font-normal text-sm"
+                    className="footer-muted font-secondary font-normal text-sm"
                     href="/"
                   >
                     Cookies Policy
@@ -127,10 +127,10 @@ function PreFooter() {
               </div>
 
               <div className="flex flex-col gap-4">
-                <p className="text-white font-medium text-base border-b border-gray-600 pb-2">
+                <p className="font-medium text-base border-b border-gray-600 pb-2">
                   Office
                 </p>
-                <div className="flex flex-col gap-2 text-neutral-400 font-secondary font-normal text-sm leading-6">
+                <div className="footer-muted flex flex-col gap-2 font-secondary font-normal text-sm leading-6">
                   <p>
                     755 W Big Beaver Rd
                     <br />

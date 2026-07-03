@@ -99,7 +99,7 @@ export default function ModelProvidersSection() {
       {/* Decorative background glow blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-1/4 left-[10%] w-[30vw] h-[30vh] rounded-full bg-blue-500/5 dark:bg-blue-500/3 blur-[120px]" />
-        <div className="absolute bottom-1/4 right-[10%] w-[30vw] h-[30vh] rounded-full bg-purple-500/5 dark:bg-purple-500/3 blur-[120px]" />
+        <div className="absolute bottom-1/4 right-[10%] w-[30vw] h-[30vh] rounded-full bg-blue-500/5 dark:bg-blue-500/3 blur-[120px]" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto flex flex-col items-center gap-20">

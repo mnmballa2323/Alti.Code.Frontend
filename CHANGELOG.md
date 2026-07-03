@@ -5,7 +5,15 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.1.5] - 2026-07-02 — OpenWiki Integration and Local Proxy
+
+### Added
+- **OpenWiki CLI Integration**: Added `openwiki` command-line utility by LangChain to automate documentation generation and management for coding agents.
+- **Sovereign Local Proxy Route**: Implemented `openwiki.route.js` Express proxy route to intercept OpenWiki's OpenAI completion queries and map them to GCP Vertex AI or Azure OpenAI models, maintaining strict compliance with model inference strategy.
+- **Onboarding Automation Script**: Created `scripts/init-openwiki.js` to automate OpenWiki initialization pointing to the local proxy.
+
 ## [53.1.4] - 2026-06-29 — Navbar Logo SSR Support
+
 
 ### Fixed
 - **Navbar Logo Rendering**: Removed client-only `mounted` guard from desktop logo in `components/navbar.tsx`, ensuring the logo loads immediately during SSR/first-paint and resolving the grey fallback box issue on the website.

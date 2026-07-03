@@ -36,6 +36,7 @@ import { okfGovernanceMiddleware } from '../middlewares/okfGovernanceMiddleware.
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import { PaymentController } from '../modules/payment/payment.controller.js';
+import { openWikiProxyRouter } from '../modules/ai/openwiki.route.js';
 
 // 🛡️ Global Immutable Audit Logging (SOC 2 / FedRAMP)
 router.use(auditMiddleware('GLOBAL_API_REQUEST'));
@@ -53,6 +54,7 @@ router.use(xss());
 router.use('/auth', authRoutes);
 router.use('/scim', scimRoutes);
 router.post('/payment/webhook', PaymentController.handleWebhook);
+router.use('/openwiki-proxy', openWikiProxyRouter);
 
 // 🛡️ Global Zero-Trust Boundary (IAP verification for all subsequent routes)
 // Note: In development, verifyIAPToken bypasses automatically if no token is present.

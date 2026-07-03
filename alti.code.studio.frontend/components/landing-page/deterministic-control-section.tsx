@@ -146,7 +146,7 @@ export default function DeterministicControlSection() {
   }, [agents.length]);
 
   return (
-    <section className="w-full py-32 bg-[#030014] text-white px-4 sm:px-6 lg:px-8 border-t border-slate-800">
+    <section className="w-full py-32 bg-[#030014] text-white px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
         {/* Left Column */}
         <div className="flex flex-col gap-8">
@@ -154,16 +154,13 @@ export default function DeterministicControlSection() {
             Deterministic Output. <br />
             Absolute Security.
           </h3>
-          <p className="text-xl text-zinc-400 leading-relaxed font-medium text-balance">
-            Most AI coding tools are unpredictable black boxes. Inso Code is
-            built for enterprise engineering teams who demand absolute control.
-            With native guardrails, deterministic instruction steering, and
-            mandatory TDD workflows, our agents build robust production systems.
+          <p className="text-xl text-zinc-400 leading-relaxed font-medium text-balance max-w-3xl">
+            Most AI tools are unpredictable. Inso Code is built for enterprise engineering teams, combining native guardrails and mandatory TDD workflows to build robust production systems.
           </p>
         </div>
 
         {/* Right Column (Animation Window) */}
-        <div className="relative w-full aspect-[4/3] sm:aspect-[1.2/1] max-w-md mx-auto bg-white border border-zinc-200 shadow-2xl p-5 flex flex-col justify-between overflow-hidden text-zinc-900 select-none rounded-2xl">
+        <div className="relative w-full aspect-[4/3] sm:aspect-[1.2/1] max-w-md mx-auto bg-white/[0.02] border border-white/10 backdrop-blur-xl shadow-2xl p-5 flex flex-col justify-between overflow-hidden text-white select-none rounded-2xl">
           {/* SVG Swarm Canvas */}
           <div className="flex-1 min-h-0 relative flex items-center justify-center py-2">
             <style
@@ -176,13 +173,13 @@ export default function DeterministicControlSection() {
               }
               .flow-dots-active {
                 animation: flow-dots 0.8s linear infinite;
-                stroke: #09090b;
+                stroke: #3b82f6;
                 stroke-width: 2.5px;
                 stroke-dasharray: 6 4;
               }
               .flow-dots-inactive {
                 animation: flow-dots 2s linear infinite;
-                stroke: #27272a;
+                stroke: #3f3f46;
                 stroke-width: 2px;
                 stroke-dasharray: 6 4;
               }
@@ -219,7 +216,7 @@ export default function DeterministicControlSection() {
                 return (
                   <circle
                     key={`ping-${agent.id}`}
-                    className="fill-none stroke-zinc-950/30 stroke-[1.5px] animate-ping"
+                    className="fill-none stroke-blue-500/30 stroke-[1.5px] animate-ping"
                     cx={agent.x}
                     cy={agent.y}
                     r="24"
@@ -237,8 +234,8 @@ export default function DeterministicControlSection() {
                     <circle
                       className={`transition-colors duration-500 ${
                         isActive
-                          ? "fill-zinc-950 stroke-zinc-950"
-                          : "fill-white stroke-zinc-950"
+                          ? "fill-blue-950 stroke-blue-500"
+                          : "fill-[#0A0A0A] stroke-zinc-700"
                       }`}
                       cx={agent.x}
                       cy={agent.y}
@@ -249,8 +246,8 @@ export default function DeterministicControlSection() {
                     {/* Icon Container */}
                     <g
                       className={`transition-colors duration-500 ${
-                        isActive ? "text-white" : "text-zinc-950"
-                      }`}
+                        isActive ? "text-white" : "text-zinc-400"
+                    }`}
                     >
                       {agent.iconPath}
                     </g>
@@ -262,13 +259,13 @@ export default function DeterministicControlSection() {
               <g>
                 {/* Pulse wave for commander */}
                 <circle
-                  className="fill-none stroke-zinc-950/10 stroke-1 animate-pulse"
+                  className="fill-none stroke-blue-500/20 stroke-1 animate-pulse"
                   cx="200"
                   cy="180"
                   r="36"
                 />
                 <circle
-                  className="fill-white stroke-zinc-950"
+                  className="fill-blue-950 stroke-blue-500"
                   cx="200"
                   cy="180"
                   r="26"
@@ -277,7 +274,7 @@ export default function DeterministicControlSection() {
                 {/* Supreme Commander Logo Icon */}
                 <image
                   height="32"
-                  href="/inso-logo-black.png"
+                  href="/logo-white.png"
                   width="32"
                   x="184"
                   y="164"

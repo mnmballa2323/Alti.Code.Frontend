@@ -9,7 +9,7 @@ export default function CapabilitiesBentoGrid() {
       className="w-full lg:h-screen lg:min-h-[720px] flex flex-col justify-center bg-[#030014] text-white px-4 sm:px-6 lg:px-8 border-t border-white/5 py-16 lg:py-0 overflow-hidden relative"
       id="features"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-[#030014] via-purple-900/10 to-[#030014] z-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#030014] via-blue-900/10 to-[#030014] z-0 pointer-events-none" />
       <motion.div
         className="max-w-7xl mx-auto flex flex-col gap-6 lg:gap-8 xl:gap-10 w-full relative z-10"
         initial="hidden"
@@ -45,7 +45,7 @@ export default function CapabilitiesBentoGrid() {
         <div className="grid grid-cols-12 gap-4 lg:gap-4 xl:gap-5 auto-rows-auto lg:auto-rows-[150px] xl:auto-rows-[180px]">
           {/* Card 1: Desktop IPC & CLI */}
           <motion.div
-            className="col-span-12 lg:col-span-6 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+            className="col-span-12 lg:col-span-6 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-blue-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: {
@@ -55,8 +55,8 @@ export default function CapabilitiesBentoGrid() {
               },
             }}
           >
-            <div className="absolute top-0 right-0 w-[400px] h-[300px] bg-blue-500/5 rounded-full blur-[100px] group-hover:bg-blue-500/10 transition-all duration-500" />
-            <div className="flex flex-col gap-2 xl:gap-3 max-w-xs w-full">
+            <div className="absolute top-0 right-0 w-[240px] h-[240px] bg-blue-600/10 rounded-full blur-[65px] group-hover:bg-blue-500/20 transition-all duration-500 pointer-events-none" />
+            <div className="flex flex-col gap-2 xl:gap-3 max-w-xs w-full relative z-10">
               <h4 className="text-lg xl:text-xl font-bold tracking-tight text-white">
                 Desktop IPC & CLI Steering
               </h4>
@@ -68,11 +68,11 @@ export default function CapabilitiesBentoGrid() {
             </div>
 
             {/* Visual Terminal */}
-            <div className="flex-1 bg-[#050015] border border-purple-900/30 rounded-2xl p-2 xl:p-2.5 font-mono text-[9px] xl:text-[10px] text-zinc-400 flex flex-col justify-between shadow-inner select-none w-full max-w-sm">
-              <div className="flex items-center gap-1.5 pb-1.5 border-b border-purple-900/30 text-zinc-500">
-                <span className="w-2 h-2 rounded-full bg-purple-900/50" />
-                <span className="w-2 h-2 rounded-full bg-purple-900/50" />
-                <span className="w-2 h-2 rounded-full bg-purple-900/50" />
+            <div className="flex-1 bg-[#050015] border border-blue-900/30 rounded-2xl p-2 xl:p-2.5 font-mono text-[9px] xl:text-[10px] text-zinc-400 flex flex-col justify-between shadow-inner select-none w-full max-w-sm relative z-10">
+              <div className="flex items-center gap-1.5 pb-1.5 border-b border-blue-900/30 text-zinc-500">
+                <span className="w-2 h-2 rounded-full bg-blue-900/50" />
+                <span className="w-2 h-2 rounded-full bg-blue-900/50" />
+                <span className="w-2 h-2 rounded-full bg-blue-900/50" />
                 <span className="ml-2">ipc_stream::localhost:5000</span>
               </div>
               <div>
@@ -92,7 +92,7 @@ export default function CapabilitiesBentoGrid() {
 
           {/* Card 2: AST Traversal */}
           <motion.div
-            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-blue-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: {
@@ -102,7 +102,8 @@ export default function CapabilitiesBentoGrid() {
               },
             }}
           >
-            <div className="flex flex-col gap-2 xl:gap-3">
+            <div className="absolute top-0 right-0 w-[180px] h-[180px] bg-blue-600/10 rounded-full blur-[55px] group-hover:bg-blue-500/20 transition-all duration-500 pointer-events-none" />
+            <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 AST Traversal Edits
               </h4>
@@ -115,7 +116,7 @@ export default function CapabilitiesBentoGrid() {
 
           {/* Card 3: Gossip Mesh Coordination */}
           <motion.div
-            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-blue-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: {
@@ -125,7 +126,8 @@ export default function CapabilitiesBentoGrid() {
               },
             }}
           >
-            <div className="flex flex-col gap-2 xl:gap-3">
+            <div className="absolute top-0 right-0 w-[180px] h-[180px] bg-blue-700/10 rounded-full blur-[55px] group-hover:bg-blue-600/20 transition-all duration-500 pointer-events-none" />
+            <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Gossip Mesh Coordination
               </h4>
@@ -138,7 +140,7 @@ export default function CapabilitiesBentoGrid() {
 
           {/* Card 4: Semantic Prompt Cache */}
           <motion.div
-            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-blue-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: {
@@ -148,7 +150,8 @@ export default function CapabilitiesBentoGrid() {
               },
             }}
           >
-            <div className="flex flex-col gap-2 xl:gap-3">
+            <div className="absolute top-0 right-0 w-[180px] h-[180px] bg-cyan-600/10 rounded-full blur-[55px] group-hover:bg-cyan-500/20 transition-all duration-500 pointer-events-none" />
+            <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Semantic Cache
               </h4>
@@ -162,7 +165,7 @@ export default function CapabilitiesBentoGrid() {
 
           {/* Card 5: Git Submodule Auto-Sync */}
           <motion.div
-            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+            className="col-span-12 sm:col-span-6 lg:col-span-3 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-blue-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: {
@@ -172,7 +175,8 @@ export default function CapabilitiesBentoGrid() {
               },
             }}
           >
-            <div className="flex flex-col gap-2 xl:gap-3">
+            <div className="absolute top-0 right-0 w-[180px] h-[180px] bg-sky-600/10 rounded-full blur-[55px] group-hover:bg-sky-500/20 transition-all duration-500 pointer-events-none" />
+            <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
               <h4 className="text-base xl:text-lg font-bold tracking-tight text-white">
                 Submodule Auto Sync
               </h4>
@@ -185,7 +189,7 @@ export default function CapabilitiesBentoGrid() {
 
           {/* Card 6: Private Vault */}
           <motion.div
-            className="col-span-12 lg:col-span-6 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+            className="col-span-12 lg:col-span-6 rounded-[32px] bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-blue-500/50 hover:bg-white/[0.06] hover:shadow-2xl hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col lg:flex-row gap-5 lg:gap-6 justify-between items-center transition-all duration-500 overflow-hidden relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
             variants={{
               hidden: { opacity: 0, y: 20 },
               visible: {
@@ -195,7 +199,8 @@ export default function CapabilitiesBentoGrid() {
               },
             }}
           >
-            <div className="flex flex-col gap-2 xl:gap-3 max-w-xs w-full">
+            <div className="absolute top-0 right-0 w-[240px] h-[240px] bg-blue-600/10 rounded-full blur-[65px] group-hover:bg-blue-500/20 transition-all duration-500 pointer-events-none" />
+            <div className="flex flex-col gap-2 xl:gap-3 max-w-xs w-full relative z-10">
               <h4 className="text-lg xl:text-xl font-bold tracking-tight text-white">
                 Hardware Secure Vault
               </h4>
@@ -206,11 +211,11 @@ export default function CapabilitiesBentoGrid() {
             </div>
 
             {/* Keyring Visual */}
-            <div className="w-full max-w-sm h-[100px] lg:h-[95px] xl:h-[115px] bg-[#050015] border border-purple-900/30 rounded-2xl p-2 xl:p-3 font-mono text-[9px] xl:text-[10px] text-zinc-400 flex flex-col justify-between shadow-inner select-none">
-              <div className="flex items-center gap-1.5 pb-1.5 border-b border-purple-900/30 text-zinc-500">
-                <span className="w-2 h-2 rounded-full bg-purple-900/50" />
-                <span className="w-2 h-2 rounded-full bg-purple-900/50" />
-                <span className="w-2 h-2 rounded-full bg-purple-900/50" />
+            <div className="w-full max-w-sm h-[100px] lg:h-[95px] xl:h-[115px] bg-[#050015] border border-blue-900/30 rounded-2xl p-2 xl:p-3 font-mono text-[9px] xl:text-[10px] text-zinc-400 flex flex-col justify-between shadow-inner select-none relative z-10">
+              <div className="flex items-center gap-1.5 pb-1.5 border-b border-blue-900/30 text-zinc-500">
+                <span className="w-2 h-2 rounded-full bg-blue-900/50" />
+                <span className="w-2 h-2 rounded-full bg-blue-900/50" />
+                <span className="w-2 h-2 rounded-full bg-blue-900/50" />
                 <span className="ml-2">secure_keyring::aes256gcm</span>
               </div>
               <div className="flex justify-between">

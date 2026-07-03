@@ -1,0 +1,58 @@
+#!/bin/sh
+# OpenWiki Pre-commit Hook
+# Ensures documentation is automatically updated and committed before every commit.
+
+# Skip if we are running in CI or OPENWIKI_SKIP is set
+if [ -n "$CI" ] || [ "$OPENWIKI_SKIP" = "true" ]; then
+  exit 0
+fi
+
+echo "🔍 [OpenWiki] Running automatic documentation update..."
+
+# Resolve absolute path to git root
+GIT_ROOT="$(git rev-parse --show-toplevel)"
+
+# If git root is already the backend submodule, use it directly
+if [ "${GIT_ROOT##*/}" = "alti.code.studio.backend" ]; then
+  BACKEND_DIR="$GIT_ROOT"
+else
+  BACKEND_DIR="$GIT_ROOT/alti.code.studio.backend"
+fi
+
+# Run openwiki --update inside backend directory
+cd "$BACKEND_DIR" || exit 1
+
+# Load environment variables from .env if present
+if [ -f .env ]; then
+  while read -r line || [ -n "$line" ]; do
+    case "$line" in
+      \#*|""|" ") continue ;;
+    esac
+    name="${line%%=*}"
+    value="${line#*=}"
+    value="${value%\"}"
+    value="${value#\"}"
+    export "$name=$value"
+  done < .env
+fi
+
+# Set up proxy settings for openwiki if provider is azure
+if [ "$OPENWIKI_PROVIDER" = "azure" ]; then
+  export OPENWIKI_PROVIDER="openai"
+  export OPENWIKI_MODEL_ID="azure/gpt-5.4"
+  export OPENAI_API_KEY="mock-openwiki-key"
+  export OPENAI_BASE_URL="http://localhost:5001/api/v1/openwiki-proxy"
+  export OPENAI_API_BASE="http://localhost:5001/api/v1/openwiki-proxy"
+fi
+
+# Run OpenWiki
+npx openwiki --update -p
+
+# Automatically stage any new or modified openwiki docs
+cd "$(git rev-parse --show-toplevel)" || exit 1
+if [ -d "alti.code.studio.backend/openwiki" ]; then
+  git add "alti.code.studio.backend/openwiki/"
+fi
+
+echo "✅ [OpenWiki] Documentation sync complete."
+exit 0

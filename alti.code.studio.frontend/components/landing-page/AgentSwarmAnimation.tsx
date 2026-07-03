@@ -44,8 +44,8 @@ export default function AgentSwarmAnimation() {
       name: "Cloud Hub",
       icon: Cloud,
       angle: 270,
-      color: "from-violet-500 to-purple-500",
-      glow: "rgba(139,92,246,0.4)",
+      color: "from-blue-500 to-sky-500",
+      glow: "rgba(59,130,246,0.4)",
     },
   ];
 
@@ -60,7 +60,7 @@ export default function AgentSwarmAnimation() {
           scale: [1, 1.15, 1],
           opacity: [0.3, 0.45, 0.3],
         }}
-        className="absolute w-[250px] h-[250px] bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full blur-[60px] pointer-events-none"
+        className="absolute w-[250px] h-[250px] bg-gradient-to-r from-blue-600/20 to-sky-500/20 rounded-full blur-[60px] pointer-events-none"
         transition={{
           duration: 6,
           repeat: Infinity,
@@ -73,12 +73,12 @@ export default function AgentSwarmAnimation() {
         <motion.div
           animate={{
             boxShadow: [
-              "0 0 20px rgba(139, 92, 246, 0.4)",
-              "0 0 40px rgba(139, 92, 246, 0.7)",
-              "0 0 20px rgba(139, 92, 246, 0.4)",
+              "0 0 20px rgba(59, 130, 246, 0.4)",
+              "0 0 40px rgba(59, 130, 246, 0.7)",
+              "0 0 20px rgba(59, 130, 246, 0.4)",
             ],
           }}
-          className="w-16 h-16 rounded-full bg-gradient-to-tr from-violet-600 via-purple-600 to-pink-500 flex items-center justify-center text-white border border-white/20 relative z-20 cursor-pointer"
+          className="w-16 h-16 rounded-full bg-gradient-to-tr from-blue-700 via-blue-600 to-sky-400 flex items-center justify-center text-white border border-white/20 relative z-20 cursor-pointer"
           transition={{
             duration: 3,
             repeat: Infinity,

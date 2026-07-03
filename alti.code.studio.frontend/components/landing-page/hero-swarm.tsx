@@ -221,8 +221,8 @@ export default function HeroSwarm() {
       {/* Premium Apple/OpenAI-style background gradient mesh */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         {/* Ambient Magical Glows */}
-        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vh] rounded-[100%] bg-gradient-to-br from-purple-900/40 to-transparent blur-[120px] animate-[spin_45s_linear_infinite]" />
-        <div className="absolute top-[20%] right-[-10%] w-[45vw] h-[60vh] rounded-[100%] bg-gradient-to-bl from-fuchsia-900/30 to-transparent blur-[150px] animate-[spin_55s_linear_infinite_reverse]" />
+        <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vh] rounded-[100%] bg-gradient-to-br from-blue-900/40 to-transparent blur-[120px] animate-[spin_45s_linear_infinite]" />
+        <div className="absolute top-[20%] right-[-10%] w-[45vw] h-[60vh] rounded-[100%] bg-gradient-to-bl from-indigo-900/30 to-transparent blur-[150px] animate-[spin_55s_linear_infinite_reverse]" />
         <div className="absolute bottom-[-10%] left-[25%] w-[60vw] h-[50vh] rounded-[100%] bg-gradient-to-tr from-cyan-900/20 to-transparent blur-[120px] animate-[spin_65s_linear_infinite]" />
       </div>
 
@@ -230,10 +230,10 @@ export default function HeroSwarm() {
         {/* Apple-style Headline */}
         <div className="flex flex-col items-center gap-6 relative top-2 md:top-4">
           <h1 className="flex flex-col items-center justify-center font-bold tracking-tighter leading-[1.0] text-center">
-            <span className="text-5xl md:text-7xl lg:text-[5.5rem] text-white">
+            <span className="text-5xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-tight text-white gradient-text-shifting">
               Private and Secure
             </span>
-            <span className="text-[1.6rem] sm:text-[2.2rem] md:text-[2.8rem] lg:text-[3.2rem] tracking-tight text-white mt-3 whitespace-nowrap">
+            <span className="text-[1.6rem] sm:text-[2.2rem] md:text-[2.8rem] lg:text-[3.2rem] tracking-tight text-zinc-100 mt-3 whitespace-nowrap">
               Autonomous Software Engineering
             </span>
           </h1>

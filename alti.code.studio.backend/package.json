@@ -12,7 +12,7 @@
     "start": "NODE_OPTIONS=\"--no-node-snapshot\" node server.js",
     "start:dev": "ulimit -n 4096 && NODE_OPTIONS=\"--no-node-snapshot\" nodemon server.js",
     "dev": "ulimit -n 4096 && NODE_OPTIONS=\"--no-node-snapshot\" nodemon server.js",
-    "postinstall": "node scripts/patch-agentmemory.js",
+    "postinstall": "node scripts/patch-agentmemory.js && node scripts/patch-langgraph-sdk.js && node scripts/setup-git-hooks.js",
     "license-check": "node ../scripts/license_compliance_check.js",
     "pretest": "npm run license-check",
     "test": "wireit",
@@ -23,7 +23,10 @@
     "db:seed": "npx prisma db seed",
     "db:studio": "npx prisma studio",
     "db:generate": "npx prisma generate",
-    "security:audit": "npm audit --audit-level=high"
+    "security:audit": "npm audit --audit-level=high",
+    "openwiki": "openwiki",
+    "openwiki:init": "node scripts/init-openwiki.js",
+    "openwiki:update": "openwiki --update"
   },
   "wireit": {
     "test": {
@@ -555,10 +558,24 @@
     "eslint-plugin-security": "^4.0.1",
     "gts": "^7.0.0",
     "json-server": "^1.0.0-beta.9",
+    "openwiki": "^0.0.1",
     "prisma": "^5.22.0",
     "vitest": "^4.0.18"
   },
   "overrides": {
-    "chalk": "^4.1.2"
+    "chalk": "^4.1.2",
+    "langchain": {
+      "@langchain/core": "~0.1.60"
+    },
+    "openwiki": {
+      "@langchain/core": "^1.2.1",
+      "@langchain/langgraph": "^1.4.7",
+      "langchain": "^1.5.2"
+    },
+    "deepagents": {
+      "@langchain/core": "^1.2.1",
+      "@langchain/langgraph": "^1.4.7",
+      "langchain": "^1.5.2"
+    }
   }
 }

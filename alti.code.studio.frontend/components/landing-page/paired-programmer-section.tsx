@@ -83,7 +83,7 @@ function FeatureCard({
 }) {
   return (
     <motion.div
-      className="flex flex-col items-start text-left p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-purple-500/50 hover:bg-white/[0.06] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[0_0_30px_rgba(168,85,247,0.2)] transition-all duration-300 relative group overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
+      className="flex flex-col items-start text-left p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-blue-500/50 hover:bg-white/[0.06] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-300 relative group overflow-hidden shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]"
       variants={{
         hidden: { opacity: 0, y: 20 },
         visible: {

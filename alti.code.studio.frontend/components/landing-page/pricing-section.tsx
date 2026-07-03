@@ -27,7 +27,7 @@ const plans = [
     ],
     cta: "Deploy Cloud",
     buttonClass:
-      "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
+      "bg-white text-black hover:bg-zinc-100",
     isContact: false,
   },
   {
@@ -50,7 +50,7 @@ const plans = [
     ],
     cta: "Deploy Dedicated",
     buttonClass:
-      "bg-black hover:bg-neutral-900 text-white dark:bg-white dark:hover:bg-neutral-100 dark:text-black",
+      "bg-white text-black hover:bg-zinc-100",
     isContact: false,
   },
   {
@@ -73,7 +73,7 @@ const plans = [
     ],
     cta: "Contact Us",
     buttonClass:
-      "bg-blue-600 hover:bg-blue-700 text-white dark:bg-blue-500 dark:hover:bg-blue-600",
+      "bg-blue-600 hover:bg-blue-700 text-white",
     isContact: true,
   },
 ];
@@ -143,16 +143,18 @@ export default function PricingSection() {
 
   return (
     <section
-      className="w-full py-24 bg-white dark:bg-[#0A0A0A] px-4 sm:px-6 lg:px-8 border-t border-gray-100 dark:border-gray-900 transition-colors duration-300"
+      className="w-full py-24 bg-[#030014] text-white px-4 sm:px-6 lg:px-8 relative overflow-hidden"
       id="pricing"
     >
-      <div className="max-w-7xl mx-auto w-full flex flex-col items-center">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-blue-900/10 rounded-full blur-[140px] pointer-events-none z-0" />
+      
+      <div className="max-w-7xl mx-auto w-full flex flex-col items-center relative z-10">
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-4 max-w-3xl mb-20">
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-black dark:text-white leading-tight">
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-white leading-tight">
             Predictable Pricing.
           </h2>
-          <p className="text-base sm:text-lg text-gray-500 dark:text-gray-400 leading-relaxed font-medium">
+          <p className="text-base sm:text-lg text-zinc-400 leading-relaxed font-medium">
             Enterprise licensing for sovereign agent orchestration and secure
             sandboxing.
             <br />
@@ -166,13 +168,13 @@ export default function PricingSection() {
           {plans.map((plan, idx) => (
             <div
               key={idx}
-              className="relative flex flex-col justify-between p-6 xl:p-8 rounded-[32px] border bg-gray-50 dark:bg-black/40 border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md hover:border-gray-200 dark:hover:border-gray-700 transition-all duration-300"
+              className="relative flex flex-col justify-between p-6 xl:p-8 rounded-[32px] border border-blue-500/50 shadow-sm transition-all duration-300 lightning-glow-card-active"
             >
               <div className="flex-1 flex flex-col justify-between mb-8">
                 <div>
                   {/* Plan Name */}
                   <div className="mb-6">
-                    <h3 className="text-xl md:text-2xl font-bold text-black dark:text-white tracking-tight text-left whitespace-nowrap">
+                    <h3 className="text-xl md:text-2xl font-bold text-white tracking-tight text-left whitespace-nowrap">
                       {plan.name}
                     </h3>
                   </div>
@@ -180,21 +182,21 @@ export default function PricingSection() {
                   {/* Price Display */}
                   <div className="flex flex-col gap-1.5 mb-6 text-left">
                     <div className="flex items-baseline gap-1">
-                      <span className="text-3xl md:text-4xl font-extrabold text-black dark:text-white tracking-tight shrink-0">
+                      <span className="text-3xl md:text-4xl font-extrabold text-white tracking-tight shrink-0">
                         ${plan.price}
                       </span>
-                      <span className="text-gray-500 dark:text-gray-400 text-sm font-medium whitespace-nowrap">
+                      <span className="text-zinc-500 text-sm font-medium whitespace-nowrap">
                         / user / mo
                       </span>
                     </div>
-                    <span className="text-gray-400 dark:text-gray-500 text-[10px] font-bold uppercase tracking-wider">
+                    <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-wider">
                       {plan.commitment} • Billed Annually
                     </span>
                   </div>
                 </div>
 
                 <div className="flex flex-col gap-6 mt-auto">
-                  <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed font-medium text-left">
+                  <p className="text-zinc-400 text-sm leading-relaxed font-medium text-left">
                     {plan.description}
                   </p>
                 </div>
@@ -202,7 +204,7 @@ export default function PricingSection() {
 
               {/* Action Button */}
               <button
-                className={`w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 border border-transparent active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed ${plan.buttonClass}`}
+                className={`w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 border border-transparent active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed micro-beam-btn ${plan.buttonClass}`}
                 disabled={loading === plan.backendPlan}
                 onClick={() => handleCheckout(plan)}
               >

@@ -102,30 +102,31 @@ export default function AgentForgeSection() {
   }, []);
 
   return (
-    <section className="w-full py-32 bg-white text-black px-4 sm:px-6 lg:px-8 border-t border-gray-100 overflow-hidden">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+    <section className="w-full py-32 bg-[#030014] text-white px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <div className="absolute top-1/2 left-3/4 w-[450px] h-[450px] bg-blue-900/10 rounded-full blur-[130px] pointer-events-none z-0" />
+      
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center relative z-10">
         {/* Left Side: Copy */}
         <div className="flex flex-col gap-8 lg:order-2 lg:-translate-x-12">
           <div className="flex flex-col gap-6">
-            <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] text-black lg:whitespace-nowrap">
+            <h3 className="text-4xl lg:text-5xl font-bold tracking-tight leading-[1.1] text-white lg:whitespace-nowrap">
               Autonomous Agent Forge. <br />
               Self Expanding Swarm.
             </h3>
-            <p className="text-xl text-gray-500 leading-relaxed font-medium">
-              Need a specialized agent for a database migration, custom third
-              party integration, or proprietary API? Specify your requirements
-              and allow the forge to autonomously construct tools, execute test
-              suites, enforce safety guardrails, and deploy the new expert to
-              your swarm mesh in three seconds.
+            <p className="text-xl text-zinc-400 leading-relaxed font-medium max-w-3xl">
+              Specify your database, API, or integration requirements and allow the forge to autonomously construct, test, and deploy a new specialized expert to your swarm in seconds.
             </p>
           </div>
         </div>
 
         {/* Right Side: Interactive Panel */}
         <div className="w-full flex flex-col gap-4 lg:order-1">
-          <div className="w-full max-w-[420px] mx-auto lg:ml-0 lg:mr-auto bg-gray-950 border border-gray-900 rounded-[32px] overflow-hidden shadow-2xl p-6 flex flex-col gap-5 text-white min-h-[370px]">
+          <div className="w-full max-w-[420px] mx-auto lg:ml-0 lg:mr-auto bg-white/[0.03] backdrop-blur-xl border border-white/10 hover:border-blue-500/50 hover:bg-white/[0.06] hover:-translate-y-1 hover:shadow-2xl hover:shadow-[0_0_30px_rgba(59,130,246,0.2)] transition-all duration-300 rounded-[32px] overflow-hidden p-6 flex flex-col gap-5 text-white min-h-[370px] relative group shadow-[0_0_0_1px_rgba(255,255,255,0.05)_inset]">
+            {/* Card Absolute Glow */}
+            <div className="absolute top-0 right-0 w-[220px] h-[220px] bg-blue-600/10 rounded-full blur-[65px] group-hover:bg-blue-500/20 transition-all duration-500 pointer-events-none" />
+
             {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-zinc-800/80">
+            <div className="flex items-center justify-between pb-4 border-b border-white/10 relative z-10">
               <div className="flex items-center gap-2.5">
                 <div className="w-3 h-3 rounded-full bg-red-500/80" />
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
@@ -135,7 +136,7 @@ export default function AgentForgeSection() {
                 </span>
               </div>
               <button
-                className="flex items-center gap-2 px-4 py-2 bg-white text-black text-xs font-bold rounded-xl hover:bg-zinc-200 transition-colors disabled:opacity-50"
+                className="flex items-center gap-2 px-4 py-2 bg-white text-black text-xs font-bold rounded-xl hover:bg-zinc-200 transition-colors disabled:opacity-50 micro-beam-btn"
                 disabled={isForging}
                 onClick={runForgeSimulation}
               >
@@ -154,7 +155,7 @@ export default function AgentForgeSection() {
             </div>
 
             {/* Content Layout */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-auto md:h-[245px]">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-5 h-auto md:h-[245px] relative z-10">
               {/* Progress Steps */}
               <div className="md:col-span-6 flex flex-col gap-3 justify-center py-2">
                 {steps.map((step) => (
@@ -212,7 +213,7 @@ export default function AgentForgeSection() {
                   className="flex-1 overflow-y-auto space-y-1.5 pr-2 pt-2 scrollbar-thin"
                 >
                   {logs.length === 0 && (
-                    <span className="text-zinc-600 block animate-pulse">
+                    <span className="text-zinc-600 block terminal-cursor-blink">
                       Waiting to start forge...
                     </span>
                   )}
@@ -221,7 +222,7 @@ export default function AgentForgeSection() {
                       key={index}
                       className={`leading-relaxed transition-all duration-300 ${
                         index === logs.length - 1
-                          ? "text-emerald-400 font-bold"
+                          ? "text-emerald-400 font-bold terminal-cursor-blink"
                           : "text-zinc-400"
                       }`}
                     >

@@ -1,0 +1,78 @@
+name: OpenWiki Auto-Doc Update
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'alti.code.studio.backend/openwiki/**'
+
+permissions:
+  contents: write
+
+jobs:
+  update-docs:
+    name: Run and Commit OpenWiki Updates
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: alti.code.studio.backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: alti.code.studio.backend
+        run: npm install --legacy-peer-deps
+
+      - name: Start Backend Proxy Server
+        working-directory: alti.code.studio.backend
+        run: |
+          npm run start:dev &
+          echo "⏳ Waiting for backend proxy server to start..."
+          for i in {1..40}; do
+            if curl -s http://localhost:5001/api/v1/health | grep -q "UP"; then
+              echo "✅ Backend proxy server is UP!"
+              break
+            fi
+            sleep 1
+          done
+        env:
+          PORT: 5001
+          DISABLE_REDIS: true
+          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
+          AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+
+      - name: Run OpenWiki Documentation Update
+        working-directory: alti.code.studio.backend
+        run: npx openwiki --update -p
+        env:
+          OPENWIKI_PROVIDER: openai
+          OPENWIKI_MODEL_ID: azure/gpt-5.4
+          OPENAI_API_KEY: mock-openwiki-key
+          OPENAI_BASE_URL: http://localhost:5001/api/v1/openwiki-proxy
+          OPENAI_API_BASE: http://localhost:5001/api/v1/openwiki-proxy
+
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Stage the updated openwiki directory
+          git add alti.code.studio.backend/openwiki/ || true
+          
+          # Check if there are staged changes to commit
+          if ! git diff --cached --quiet; then
+            echo "📝 Documentation changes detected. Committing..."
+            git commit -m "docs: auto-update codebase documentation via OpenWiki [skip ci]"
+            git push
+          else
+            echo "✅ No documentation changes detected."
+          fi
