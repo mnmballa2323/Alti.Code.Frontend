@@ -29,6 +29,9 @@ import { webhookEngine } from './webhookEngine.js';
 import { breakers } from './circuitBreaker.js';
 import { rateLimiter } from './rateLimiter.js';
 import { stripeWebhookHandler } from './stripeWebhookHandler.js';
+import { dlpScanner } from './dlpScanner.js';
+import { privacyEngine } from './privacyEngine.js';
+import { conflictResolver } from './conflictResolver.js';
 
 class ServiceRegistry {
   constructor() {
@@ -44,6 +47,8 @@ class ServiceRegistry {
 
     try {
       // Phase 1: Data layer
+      await this._initService('conflictResolver', () => conflictResolver.init());
+
       await this._initService('database', async () => {
         const client = await database.init();
         return { status: client ? 'connected' : 'skipped' };
@@ -57,6 +62,8 @@ class ServiceRegistry {
 
       // Phase 2: Core services
       await this._initService('rateLimiter', () => rateLimiter.init());
+
+      await this._initService('dlpScanner', () => dlpScanner.init());
 
       await this._initService('auditLogger', async () => {
         const prisma = database.getClient();
@@ -106,6 +113,8 @@ class ServiceRegistry {
       });
 
       // Phase 5: Operational
+      await this._initService('privacyEngine', () => privacyEngine.init());
+
       await this._initService('backupVerifier', async () => {
         await backupVerifier.init();
         return { status: 'initialized' };

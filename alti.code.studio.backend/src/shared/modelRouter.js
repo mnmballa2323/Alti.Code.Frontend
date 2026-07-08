@@ -11,6 +11,7 @@
 
 import { logger } from './logger.js';
 import { metrics } from './metrics.js';
+import { dlpScanner } from './dlpScanner.js';
 
 const MODELS = {
   'gemini-2.5-pro': {
@@ -77,7 +78,11 @@ class ModelRouter {
     this.overrides = new Map(); // tenant-level overrides
   }
 
-  route(request) {
+  async route(request) {
+    if (request.prompt) {
+      request.prompt = await dlpScanner.scanAndRedact(request.prompt, request.tenantId || 'platform');
+    }
+
     const {
       complexity = 'medium',
       tenantTier = 'cloud',
