@@ -65,7 +65,7 @@ describe('Platform Model Gateway', () => {
   });
 
   it('should block direct integrations to unauthorized providers with FORBIDDEN exception', async () => {
-    for (const provider of ['openai', 'anthropic', 'aws']) {
+    for (const provider of ['openai', 'anthropic', 'external']) {
       await expect(
         routePlatformCompletion({
           provider,

@@ -2,7 +2,7 @@
 
 global:
   environment: "production"
-  # Target cloud provider: aws, azure, or gcp
+  # Target cloud provider: gcp
   cloudProvider: "gcp"
   
   # Connection tether back to Liberty Center One Control Plane

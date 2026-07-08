@@ -73,24 +73,7 @@ class ElasticTerraformService {
   }
 
   _synthesizeTerraformManifest(requirements) {
-    if (requirements.provider === 'aws') {
-      return `
-provider "aws" {
-  region = "us-east-1"
-}
-
-resource "aws_instance" "swarm_elastic_node" {
-  ami           = "ami-0c55b159cbfafe1f0" # Amazon Linux 2
-  instance_type = "c6g.metal" # High compute, 64 vCPU mock
-  
-  tags = {
-    Name = "Alti-Swarm-Elastic-Node"
-    AutoTearDown = "true"
-  }
-}
-            `.trim();
-    } else {
-      return `
+    return `
 provider "google" {
   project = "alti-code-studio"
   region  = "us-central1"
@@ -113,7 +96,6 @@ resource "google_compute_instance" "swarm_elastic_node" {
   }
 }
             `.trim();
-    }
   }
 }
 

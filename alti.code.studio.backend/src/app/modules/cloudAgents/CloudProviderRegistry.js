@@ -13,7 +13,7 @@ class CloudProviderRegistry {
 
   /**
    * Dynamically resolves and spawns the correct cloud provider adapter based on the frontend request.
-   * If a bespoke SDK is needed (e.g., AWS/GCP), it resolves that. Otherwise, it falls back to the Universal Adapter.
+   * If a bespoke SDK is needed (e.g., GCP/Core), it resolves that. Otherwise, it falls back to the Universal Adapter.
    */
   getProviderAdapter(providerName) {
     if (this.activeProviders.has(providerName)) {
@@ -25,8 +25,8 @@ class CloudProviderRegistry {
       `[CloudProviderRegistry] Initializing orchestration adapter for ${providerName}`,
     );
 
-    // In a full production environment, this would dynamically import('@aws-sdk/client-ec2')
-    // or '@gcp/arm-compute' depending on the exact string. For total coverage, we wrap it.
+    // In a full production environment, this would dynamically import('@google-cloud/compute')
+    // depending on the exact string. For total coverage, we wrap it.
     const adapter = new UniversalCloudAdapter(providerName);
 
     this.activeProviders.set(providerName, adapter);

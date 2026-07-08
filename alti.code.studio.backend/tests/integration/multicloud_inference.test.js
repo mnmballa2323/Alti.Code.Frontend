@@ -49,8 +49,8 @@ describe('Multi-Cloud Inference & Marketplace Procurement Integration Tests', ()
         expect(tx.financials.totalCostUsd).toBeGreaterThan(0);
     });
 
-    it('should route AWS Bedrock prompts to GCP under Sovereign mode and log GCP Billing', async () => {
-        const prompt = 'Use AWS Bedrock to build a custom agent loop.';
+    it('should route external provider prompts to GCP under Sovereign mode and log GCP Billing', async () => {
+        const prompt = 'Use external providers to build a custom agent loop.';
         const result = await hybridRouterService.executeAgent(prompt);
 
         expect(result).toBeDefined();

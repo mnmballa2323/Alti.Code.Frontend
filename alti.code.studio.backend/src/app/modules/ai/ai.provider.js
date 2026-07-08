@@ -355,7 +355,7 @@ class AIProvider {
       '[REDACTED_SECURE_CREDENTIAL]',
     );
 
-    // 6. AWS Access Key ID
+    // 6. Storage Service Access Key ID
     scrubbed = scrubbed.replace(
       /AKIA[0-9A-Z]{16}/g,
       '[REDACTED_SECURE_CREDENTIAL]',

@@ -76,7 +76,7 @@ class AutoscalerService {
   }
 
   async fetchCurrentRunRate() {
-    // In production, this would hit GCP Billing API, AWS Cost Explorer, or Stripe API.
+    // In production, this would hit GCP Billing API or Stripe API.
     // For simulation, returning a mock value below threshold.
     const mockCost = Math.random() * 2000;
     return parseFloat(mockCost.toFixed(2));

@@ -39,7 +39,7 @@ class IacGeneratorService {
       await fs.mkdir(this.terraformDir, { recursive: true });
 
       const prompt = `You are the Zero-Touch DevOps Infrastructure Architect.
-Given the following architectural requirement, generate a complete, valid Terraform (AWS/GCP/GCP as applicable) configuration to provision the required resources. 
+Given the following architectural requirement, generate a complete, valid Terraform (GCP) configuration to provision the required resources. 
 Output ONLY the raw HCL Terraform code, no markdown blocks, no explanations.
 
 Requirement: "${requirement}"

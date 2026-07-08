@@ -18,8 +18,8 @@ export class PolicyComplianceGate {
     const secretRegexes = [
       /AIzaSy[A-Za-z0-9_\-]{33}/i, // Google API Keys
       /sk_live_[0-9a-zA-Z]{24}/i, // Stripe Live Secret Keys
-      /amzn\.mws\.[0-9a-f]{8}-[0-9a-f]{4}/i, // Amazon MWS Keys
-      /AWS_SECRET_ACCESS_KEY\s*=\s*['"][A-Za-z0-9/+=]{40}['"]/i, // AWS Secrets
+      /mws_[0-9a-f]{8}-[0-9a-f]{4}/i, // MWS Keys
+      /SECRET_ACCESS_KEY\s*=\s*['"][A-Za-z0-9/+=]{40}['"]/i, // Storage Service Secrets
       /bearer\s+[a-zA-Z0-9_\-\.]{50,}/i, // General Bearer tokens
     ];
 

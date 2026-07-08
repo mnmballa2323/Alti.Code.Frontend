@@ -41,9 +41,8 @@ if [ -z "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
     echo -e "${YELLOW}⚠️  WARNING: Running in air-gapped simulated model gateway mode. Real GCP credentials not set.${NC}"
 else
     echo -e "• GCP Vertex AI:        ${GREEN}CONFIGURED${NC}"
-    echo -e "• AWS Bedrock (Claude): ${RED}BLOCKED (Sovereign Policy Enforcement)${NC}"
-    echo -e "• Azure OpenAI Foundry: ${RED}BLOCKED (Sovereign Policy Enforcement)${NC}"
-    echo -e "• OpenAI / Anthropic:   ${RED}BLOCKED (Strict Guardrail Enforcement)${NC}"
+    echo -e "• External SDKs:        ${RED}BLOCKED (Sovereign Policy Enforcement)${NC}"
+    echo -e "• Non-GCP API Endpoints: ${RED}BLOCKED (Strict Guardrail Enforcement)${NC}"
 fi
 
 # ==============================================================================

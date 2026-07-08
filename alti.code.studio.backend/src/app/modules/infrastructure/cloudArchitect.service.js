@@ -24,8 +24,8 @@ const provisionInfrastructure = async (
   try {
     // Step 1: Claude 3.5 Sonnet analyzes code and writes Terraform
     const tfPrompt = `You are the Autonomous Cloud Architect.
-Analyze the following microservice code and deduce its infrastructure dependencies (e.g., PostgreSQL, Redis, Cloud Run, S3, etc.).
-Generate a complete, production-ready Terraform (.tf) script to provision these resources on AWS.
+Analyze the following microservice code and deduce its infrastructure dependencies (e.g., PostgreSQL, Redis, Cloud Run, GCS, etc.).
+Generate a complete, production-ready Terraform (.tf) script to provision these resources on GCP.
 
 Return ONLY the raw HCL (Terraform) code, no markdown or explanations.
 
