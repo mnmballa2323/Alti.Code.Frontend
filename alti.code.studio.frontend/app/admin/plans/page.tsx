@@ -98,7 +98,7 @@ export default function PlansPage() {
 
     try {
       const API_URL =
-        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+        process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001/api/v1";
 
       const token =
         (session.user as any).accessToken ||
@@ -113,8 +113,6 @@ export default function PlansPage() {
         },
         body: JSON.stringify({
           plan_name: plan.backendPlan,
-          price: plan.backendPrice,
-          duration: "year",
         }),
       });
 
@@ -122,8 +120,8 @@ export default function PlansPage() {
 
       if (data?.data?.url) {
         window.location.href = data.data.url;
-      } else if (data?.data) {
-        window.location.href = data.data;
+      } else if (data?.data?.checkoutUrl) {
+        window.location.href = data.data.checkoutUrl;
       } else {
         console.error("Checkout session response:", data);
         alert("Unable to start checkout. Please try again.");

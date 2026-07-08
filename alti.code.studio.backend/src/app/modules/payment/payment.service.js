@@ -2,6 +2,7 @@
  * Copyright (c) 2026 Inso Code
  *
  * payment.service.js — Stripe Billing & subscription management service.
+ * Supports Credit Card and ACH Bank Debit for monthly SaaS billing.
  */
 
 import Stripe from 'stripe';
@@ -15,9 +16,37 @@ const stripe = new Stripe(config.stripe?.stripe_secret_key || 'sk_test_mock', {
 });
 
 /**
- * Creates a Stripe checkout session for subscription upgrade.
+ * Plan pricing configuration.
+ * Maps backend plan names to Stripe Price IDs and display amounts.
+ * Replace the price IDs with your actual Stripe Price IDs from the Stripe Dashboard.
  */
-async function createCheckoutSession(userId, planName, successUrl, cancelUrl) {
+const PLAN_CONFIG = {
+  launch: {
+    stripePriceId: process.env.STRIPE_PRICE_LAUNCH || 'price_launch_placeholder',
+    displayName: 'Cloud',
+    amountCents: 100000, // $1,000/mo
+  },
+  build: {
+    stripePriceId: process.env.STRIPE_PRICE_BUILD || 'price_build_placeholder',
+    displayName: 'Dedicated',
+    amountCents: 250000, // $2,500/mo
+  },
+  scale: {
+    stripePriceId: process.env.STRIPE_PRICE_SCALE || 'price_scale_placeholder',
+    displayName: 'Sovereign',
+    amountCents: 500000, // $5,000/mo
+  },
+};
+
+// ─── Customer Management ─────────────────────────────────────────────────────
+
+/**
+ * Creates or retrieves a Stripe Customer for the given user.
+ * Ensures idempotency: if a stripeCustomerId already exists in the billing
+ * record, it returns that. Otherwise, it creates a new Stripe Customer and
+ * persists the ID.
+ */
+async function createOrGetStripeCustomer(userId) {
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -28,16 +57,149 @@ async function createCheckoutSession(userId, planName, successUrl, cancelUrl) {
       throw new Error('User not found.');
     }
 
-    // Define price mappings (mock pricing IDs for plan options)
-    const priceMapping = {
-      launch: 'price_launch_mock',
-      build: 'price_build_mock',
-      scale: 'price_scale_mock',
+    // If customer already exists in Stripe, return it
+    if (user.billing?.stripeCustomerId) {
+      logger.info(
+        `Stripe customer already exists for user [${userId}]: ${user.billing.stripeCustomerId}`,
+      );
+      return user.billing.stripeCustomerId;
+    }
+
+    // Mock mode fallback
+    if (
+      !config.stripe?.stripe_secret_key ||
+      config.stripe.stripe_secret_key === 'sk_test_mock'
+    ) {
+      const mockCustomerId =
+        'cus_mock_' + Math.random().toString(36).substring(2, 15);
+      logger.warn(
+        `⚠️ Stripe secret key missing or mock. Returning mock customer: ${mockCustomerId}`,
+      );
+
+      await prisma.userBilling.upsert({
+        where: { userId },
+        update: { stripeCustomerId: mockCustomerId },
+        create: {
+          userId,
+          stripeCustomerId: mockCustomerId,
+          activePlan: user.subscriptionPlan || 'launch',
+          tokenBalance: 0,
+        },
+      });
+
+      return mockCustomerId;
+    }
+
+    // Create a real Stripe customer
+    const customer = await stripe.customers.create({
+      email: user.email,
+      name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email,
+      metadata: {
+        userId: userId,
+        plan: user.subscriptionPlan || 'launch',
+      },
+    });
+
+    // Persist the Stripe Customer ID
+    await prisma.userBilling.upsert({
+      where: { userId },
+      update: { stripeCustomerId: customer.id },
+      create: {
+        userId,
+        stripeCustomerId: customer.id,
+        activePlan: user.subscriptionPlan || 'launch',
+        tokenBalance: 0,
+      },
+    });
+
+    logger.info(
+      `Created Stripe customer [${customer.id}] for user [${userId}].`,
+    );
+    return customer.id;
+  } catch (err) {
+    logger.error(`Failed to create/get Stripe customer for user [${userId}]:`, err);
+    throw err;
+  }
+}
+
+// ─── SetupIntent (Save Payment Method) ───────────────────────────────────────
+
+/**
+ * Creates a Stripe SetupIntent for securely collecting a payment method
+ * (credit card or ACH bank account) without charging the user immediately.
+ * Used on the Billing page to save/update payment methods.
+ */
+async function createSetupIntent(userId, paymentMethodType = 'card') {
+  try {
+    const customerId = await createOrGetStripeCustomer(userId);
+
+    // Mock mode fallback
+    if (
+      !config.stripe?.stripe_secret_key ||
+      config.stripe.stripe_secret_key === 'sk_test_mock'
+    ) {
+      logger.warn('⚠️ Stripe secret key missing or mock. Returning mock SetupIntent.');
+      return {
+        id: 'seti_mock_' + Math.random().toString(36).substring(2, 15),
+        client_secret: 'seti_mock_secret_' + Math.random().toString(36).substring(2, 15),
+        customer: customerId,
+      };
+    }
+
+    const paymentMethodTypes =
+      paymentMethodType === 'us_bank_account'
+        ? ['us_bank_account']
+        : ['card'];
+
+    const setupIntentParams = {
+      customer: customerId,
+      payment_method_types: paymentMethodTypes,
+      metadata: {
+        userId,
+      },
     };
 
-    const priceId = priceMapping[planName.toLowerCase()] || priceMapping.launch;
+    // ACH requires additional mandate data for recurring billing
+    if (paymentMethodType === 'us_bank_account') {
+      setupIntentParams.payment_method_options = {
+        us_bank_account: {
+          financial_connections: {
+            permissions: ['payment_method', 'balances'],
+          },
+          verification_method: 'instant',
+        },
+      };
+    }
 
-    // Graceful fallback for mock mode if key is missing or is testing mock
+    const setupIntent = await stripe.setupIntents.create(setupIntentParams);
+
+    logger.info(
+      `Created SetupIntent [${setupIntent.id}] for user [${userId}] (type: ${paymentMethodType}).`,
+    );
+
+    return {
+      id: setupIntent.id,
+      client_secret: setupIntent.client_secret,
+      customer: customerId,
+    };
+  } catch (err) {
+    logger.error(`Failed to create SetupIntent for user [${userId}]:`, err);
+    throw err;
+  }
+}
+
+// ─── Checkout Session (Plan Selection) ───────────────────────────────────────
+
+/**
+ * Creates a Stripe Checkout Session for subscription upgrade.
+ * Supports both credit card and ACH bank debit payment methods.
+ */
+async function createCheckoutSession(userId, planName, successUrl, cancelUrl) {
+  try {
+    const customerId = await createOrGetStripeCustomer(userId);
+    const plan = PLAN_CONFIG[planName.toLowerCase()] || PLAN_CONFIG.launch;
+
+    // Mock mode fallback
     if (
       !config.stripe?.stripe_secret_key ||
       config.stripe.stripe_secret_key === 'sk_test_mock'
@@ -52,20 +214,28 @@ async function createCheckoutSession(userId, planName, successUrl, cancelUrl) {
     }
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
+      payment_method_types: ['card', 'us_bank_account'],
       line_items: [
         {
-          price: priceId,
+          price: plan.stripePriceId,
           quantity: 1,
         },
       ],
       mode: 'subscription',
       success_url: successUrl,
       cancel_url: cancelUrl,
+      customer: customerId,
       client_reference_id: userId,
-      customer_email: user.email,
       metadata: {
         planName,
+      },
+      payment_method_options: {
+        us_bank_account: {
+          financial_connections: {
+            permissions: ['payment_method'],
+          },
+          verification_method: 'instant',
+        },
       },
     });
 
@@ -76,8 +246,12 @@ async function createCheckoutSession(userId, planName, successUrl, cancelUrl) {
   }
 }
 
+// ─── Webhook Handler ─────────────────────────────────────────────────────────
+
 /**
  * Handles Stripe webhook events to keep subscription status in sync.
+ * Covers checkout completion, subscription lifecycle, SetupIntent results,
+ * and invoice payment outcomes for recurring billing.
  */
 async function handleWebhook(rawBody, signature) {
   let event;
@@ -87,7 +261,6 @@ async function handleWebhook(rawBody, signature) {
       !config.stripe?.stripe_webhook_secret_key ||
       config.stripe.stripe_webhook_secret_key === 'whsec_mock'
     ) {
-      // Mock event digestion for local testing/verification
       logger.warn(
         '⚠️ Stripe webhook secret missing. Parsing payload directly.',
       );
@@ -107,6 +280,7 @@ async function handleWebhook(rawBody, signature) {
   logger.info(`Stripe Webhook Event Received: ${event.type}`);
 
   switch (event.type) {
+    // ── Checkout Flow ──
     case 'checkout.session.completed': {
       const session = event.data.object;
       const userId = session.client_reference_id;
@@ -129,6 +303,7 @@ async function handleWebhook(rawBody, signature) {
       break;
     }
 
+    // ── Subscription Lifecycle ──
     case 'customer.subscription.deleted': {
       const subscription = event.data.object;
       const stripeCustomerId = subscription.customer;
@@ -151,12 +326,73 @@ async function handleWebhook(rawBody, signature) {
       break;
     }
 
+    // ── SetupIntent (Payment Method Saved from Billing Page) ──
+    case 'setup_intent.succeeded': {
+      const setupIntent = event.data.object;
+      const userId = setupIntent.metadata?.userId;
+      const customerId = setupIntent.customer;
+      const paymentMethodId = setupIntent.payment_method;
+
+      if (customerId && paymentMethodId) {
+        try {
+          // Set as default payment method for future invoices
+          await stripe.customers.update(customerId, {
+            invoice_settings: {
+              default_payment_method: paymentMethodId,
+            },
+          });
+          logger.info(
+            `Set payment method [${paymentMethodId}] as default for customer [${customerId}].`,
+          );
+        } catch (err) {
+          logger.error(
+            `Failed to set default payment method for customer [${customerId}]:`,
+            err,
+          );
+        }
+      }
+      break;
+    }
+
+    // ── Invoice Events (Recurring Billing) ──
+    case 'invoice.payment_succeeded': {
+      const invoice = event.data.object;
+      const customerId = invoice.customer;
+      const amountPaid = invoice.amount_paid;
+
+      logger.info(
+        `Invoice payment succeeded for customer [${customerId}]. Amount: $${(amountPaid / 100).toFixed(2)}.`,
+      );
+      break;
+    }
+
+    case 'invoice.payment_failed': {
+      const invoice = event.data.object;
+      const customerId = invoice.customer;
+      const attemptCount = invoice.attempt_count;
+
+      logger.warn(
+        `Invoice payment FAILED for customer [${customerId}]. Attempt #${attemptCount}.`,
+      );
+
+      // After 3 failed attempts, deactivate
+      if (attemptCount >= 3) {
+        logger.error(
+          `Customer [${customerId}] has exceeded max payment retries. Deactivating subscription.`,
+        );
+        await deactivateUserSubscription(customerId);
+      }
+      break;
+    }
+
     default:
       logger.debug(`Unhandled Stripe event type: ${event.type}`);
   }
 
   return { received: true };
 }
+
+// ─── Subscription Persistence ────────────────────────────────────────────────
 
 /**
  * Persists the user subscription state to PostgreSQL via Prisma.
@@ -168,8 +404,9 @@ async function activateUserSubscription(
   transactionId,
 ) {
   try {
+    const plan = PLAN_CONFIG[planName.toLowerCase()] || PLAN_CONFIG.launch;
     const expiresAt = new Date();
-    expiresAt.setMonth(expiresAt.getMonth() + 1); // Default to 1 month validity
+    expiresAt.setMonth(expiresAt.getMonth() + 1); // 1 month validity
 
     await prisma.$transaction([
       prisma.user.update({
@@ -200,7 +437,7 @@ async function activateUserSubscription(
         data: {
           userId,
           transactionId,
-          price: planName === 'scale' ? 99.0 : 49.0,
+          price: plan.amountCents / 100, // Store as dollars
           planName,
           duration: 'month',
           expiresAt,
@@ -210,7 +447,7 @@ async function activateUserSubscription(
     ]);
 
     logger.info(
-      `Successfully activated ${planName} subscription for user [${userId}].`,
+      `Successfully activated ${plan.displayName} (${planName}) subscription for user [${userId}].`,
     );
   } catch (err) {
     logger.error(
@@ -307,6 +544,8 @@ async function updateUserSubscriptionPlan(stripeCustomerId, planName) {
 }
 
 export const PaymentService = {
+  createOrGetStripeCustomer,
+  createSetupIntent,
   createCheckoutSession,
   handleWebhook,
 };
