@@ -36,10 +36,10 @@ if [ -f .env ]; then
   done < .env
 fi
 
-# Set up proxy settings for openwiki if provider is azure
-if [ "$OPENWIKI_PROVIDER" = "azure" ]; then
+# Set up proxy settings for openwiki if provider is gcp
+if [ "$OPENWIKI_PROVIDER" = "gcp" ]; then
   export OPENWIKI_PROVIDER="openai"
-  export OPENWIKI_MODEL_ID="azure/gpt-5.4"
+  export OPENWIKI_MODEL_ID="gcp/gemini-3.5-pro"
   export OPENAI_API_KEY="mock-openwiki-key"
   export OPENAI_BASE_URL="http://localhost:5001/api/v1/openwiki-proxy"
   export OPENAI_API_BASE="http://localhost:5001/api/v1/openwiki-proxy"

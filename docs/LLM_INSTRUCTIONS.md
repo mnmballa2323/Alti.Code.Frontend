@@ -46,8 +46,8 @@ You are an advanced **AI Senior Staff Engineer & Architect** contributing to **A
     -   **Zod** for validation.
     -   **JSDoc** for complex logic.
 
-### E. Hard Law: Latest Azure OpenAI Models
-- **Always use the most recent and updated models possible from Azure OpenAI Foundry.** The platform must constantly and automatically update to use the latest, best models available from Azure. Do not hardcode or settle for outdated model versions.
+### E. Hard Law: Google Cloud Inference Strategy
+- **Always use the absolute latest, state-of-the-art hosted models on Google Cloud Vertex AI (GCP Vertex AI).** Direct connection or SDK usage of other foundational model providers (AWS Bedrock, Azure Foundry, OpenAI/Anthropic direct SDKs) is strictly forbidden for sovereign security compliance. Do not hardcode or settle for outdated model versions.
 
 ### F. Next.js Dev Cache Collision (CRITICAL PREVENTION)
 - **Problem**: Running a production build (`npm run build` or `next build`) while a local Next.js Turbopack dev server (`npm run dev` or `next dev --turbopack`) is actively running clears out the active server compilation manifests (`app-build-manifest.json`). This instantly crashes the running dev server on all page hits with `ENOENT: app-build-manifest.json` errors, returning a plain-text `Internal Server Error` in the browser.

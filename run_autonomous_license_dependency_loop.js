@@ -5,7 +5,7 @@ const { execSync } = require('child_process');
 // ==============================================================================
 // ALTI CODE STUDIO: NON-STOP AUTONOMOUS LICENSE COMPLIANT DEPENDENCY RUNNER
 // ==============================================================================
-// Configured for Azure Sovereign deployments
+// Configured for GCP Sovereign deployments
 // ==============================================================================
 
 const phases = [

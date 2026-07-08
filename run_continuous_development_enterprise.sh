@@ -2,8 +2,8 @@
 # ==============================================================================
 # ALTI CODE STUDIO: NON-STOP AUTONOMOUS ENTERPRISE DEVELOPMENT RUNNER
 # ==============================================================================
-# Optimized for: Azure Sovereign Cloud (Commercial, Government, and Classified)
-# Backed by: Azure Sovereign Inference Strategy (Azure OpenAI Foundry)
+# Optimized for: GCP Sovereign Cloud (Commercial, Government, and Classified)
+# Backed by: GCP Sovereign Inference Strategy (Vertex AI)
 # ==============================================================================
 # Runs autonomously in a loop with safety gates, automatic quality reviews,
 # de-sloppify cleanup, and strict 2-hour execution limits.
@@ -22,27 +22,27 @@ NC='\033[0m' # No Color
 
 echo -e "${CYAN}================================================================${NC}"
 echo -e "${CYAN}  🛡️  ALTI CODE STUDIO: AUTONOMOUS ENTERPRISE PIPELINE RUNNER     ${NC}"
-echo -e "${CYAN}  ☁️  Optimized for Azure Sovereign Cloud & Azure OpenAI Foundry   ${NC}"
+echo -e "${CYAN}  ☁️  Optimized for GCP Sovereign Cloud & Vertex AI              ${NC}"
 echo -e "${CYAN}================================================================${NC}"
 
 # ==============================================================================
-# 1. Environment & Azure Credentials Validation
+# 1. Environment & GCP Credentials Validation
 # ==============================================================================
-echo -e "\n[1/5] ${YELLOW}Initializing Azure Environment Context...${NC}"
+echo -e "\n[1/5] ${YELLOW}Initializing GCP Environment Context...${NC}"
 
-export CLOUD_PROVIDER="azure"
+export CLOUD_PROVIDER="gcp"
 
-echo -e "• Target Private Cloud: ${GREEN}Microsoft Azure Sovereign Cloud${NC}"
+echo -e "• Target Private Cloud: ${GREEN}Google Cloud Sovereign Cloud${NC}"
 
-# Verify Azure Inference configuration (strictly block other clouds and direct SDKs)
-echo -e "\n[2/5] ${YELLOW}Verifying Azure Sovereign Inference Gateway Guardrails...${NC}"
+# Verify GCP Inference configuration (strictly block other clouds and direct SDKs)
+echo -e "\n[2/5] ${YELLOW}Verifying GCP Sovereign Inference Gateway Guardrails...${NC}"
 
-if [ -z "$AZURE_OPENAI_API_KEY" ]; then
-    echo -e "${YELLOW}⚠️  WARNING: Running in air-gapped simulated model gateway mode. Real Azure OpenAI credentials not set.${NC}"
+if [ -z "$GOOGLE_APPLICATION_CREDENTIALS" ]; then
+    echo -e "${YELLOW}⚠️  WARNING: Running in air-gapped simulated model gateway mode. Real GCP credentials not set.${NC}"
 else
-    echo -e "• Azure OpenAI Foundry: ${GREEN}CONFIGURED${NC}"
+    echo -e "• GCP Vertex AI:        ${GREEN}CONFIGURED${NC}"
     echo -e "• AWS Bedrock (Claude): ${RED}BLOCKED (Sovereign Policy Enforcement)${NC}"
-    echo -e "• Google Cloud Vertex:  ${RED}BLOCKED (Sovereign Policy Enforcement)${NC}"
+    echo -e "• Azure OpenAI Foundry: ${RED}BLOCKED (Sovereign Policy Enforcement)${NC}"
     echo -e "• OpenAI / Anthropic:   ${RED}BLOCKED (Strict Guardrail Enforcement)${NC}"
 fi
 
@@ -148,7 +148,7 @@ done
 echo -e "\n[5/5] ${YELLOW}Loop Execution Completed.${NC}"
 echo -e "================================================================"
 echo -e "${GREEN}🎉 AUTONOMOUS DEVELOPMENT ITERATIONS LANDED SAFELY! ${NC}"
-echo -e "• Environment:    ${CYAN}Azure Sovereign Cloud${NC}"
+echo -e "• Environment:    ${CYAN}GCP Sovereign Cloud${NC}"
 echo -e "• Version Landed: ${CYAN}$(cat VERSION)${NC}"
 echo -e "• Duration:       ${CYAN}$(( ($(date +%s) - START_TIME) / 60 )) minutes${NC}"
 echo -e "================================================================"
