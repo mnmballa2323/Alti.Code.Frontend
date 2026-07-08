@@ -137,7 +137,7 @@ function Navbar() {
   const sections = [
     { name: "Home", icon: Home },
     { name: "Paired Programmer", icon: Laptop },
-    { name: "Azure Sovereign", icon: Cloud },
+    { name: "GCP Sovereign", icon: Cloud },
     { name: "Agent Swarm", icon: Network },
     { name: "Enterprise Connectors", icon: Lock },
     { name: "App Connectors", icon: Puzzle },
