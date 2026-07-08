@@ -82,15 +82,15 @@ export default function LogsPage() {
           {paginatedLogs.map((log) => (
             <div
               key={log.id}
-              className="group grid grid-cols-[25%_25%_25%_15%_10%] items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
+              className="group grid grid-cols-[25%_25%_25%_15%_10%] items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
             >
-              <div className="text-neutral-900 dark:text-white">
+              <div className="text-[13px] text-neutral-900 dark:text-white">
                 {log.actor}
               </div>
-              <div>{log.action}</div>
-              <div>{log.target}</div>
-              <div>{log.date}</div>
-              <div>{log.time}</div>
+              <div className="text-[13px]">{log.action}</div>
+              <div className="text-[13px]">{log.target}</div>
+              <div className="text-[13px]">{log.date}</div>
+              <div className="text-[13px]">{log.time}</div>
             </div>
           ))}
         </div>
