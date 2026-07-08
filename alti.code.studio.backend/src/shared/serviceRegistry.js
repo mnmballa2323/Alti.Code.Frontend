@@ -17,6 +17,7 @@
 import { logger } from './logger.js';
 import { metrics } from './metrics.js';
 import { database } from './database.js';
+import { shardRouter } from './shardRouter.js';
 import { cacheStrategy } from './cacheStrategy.js';
 import { backupVerifier } from './backupVerifier.js';
 import { auditLogger } from './auditLogger.js';
@@ -41,6 +42,8 @@ import { configManager } from './configManager.js';
 import { soc2Snapshotter } from './soc2Snapshotter.js';
 import { secretsVault } from './secretsVault.js';
 import { chaosMonkey } from './chaosMonkey.js';
+import { webrtcSignaling } from './webrtcSignaling.js';
+import { predictiveScaler } from './predictiveScaler.js';
 
 class ServiceRegistry {
   constructor() {
@@ -59,6 +62,7 @@ class ServiceRegistry {
       await this._initService('secretsVault', () => secretsVault.init());
 
       // Phase 1: Data layer
+      await this._initService('shardRouter', () => shardRouter.init());
       await this._initService('conflictResolver', () => conflictResolver.init());
 
       await this._initService('database', async () => {
@@ -126,6 +130,8 @@ class ServiceRegistry {
       // Phase 4: Integration services
       await this._initService('stripeWebhookHandler', () => stripeWebhookHandler.init());
 
+      await this._initService('webrtcSignaling', () => webrtcSignaling.init());
+
       await this._initService('webhookEngine', () => {
         return { status: 'initialized', events: 16 };
       });
@@ -136,6 +142,7 @@ class ServiceRegistry {
 
       // Phase 5: Operational
       await this._initService('chaosMonkey', () => chaosMonkey.init());
+      await this._initService('predictiveScaler', () => predictiveScaler.init());
       await this._initService('privacyEngine', () => privacyEngine.init());
       
       await this._initService('dlqManager', () => dlqManager.init());
