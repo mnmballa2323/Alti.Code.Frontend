@@ -7,12 +7,27 @@ export default function BalancePage() {
   const currentBalance = 4250.00;
   const isAutoRechargeEnabled = true;
   
+  const [isAddFundsOpen, setIsAddFundsOpen] = React.useState(false);
+  const [selectedPreset, setSelectedPreset] = React.useState<number | null>(100);
+  const [customAmount, setCustomAmount] = React.useState<string>("");
+  const [isCustomAmountFocused, setIsCustomAmountFocused] = React.useState(false);
+  const [isProcessing, setIsProcessing] = React.useState(false);
+
+  const finalAmount = customAmount ? Number(customAmount) : (selectedPreset || 0);
+
+  const handleAddFunds = () => {
+    setIsProcessing(true);
+    // Mock processing delay
+    setTimeout(() => {
+      setIsProcessing(false);
+      setIsAddFundsOpen(false);
+    }, 1500);
+  };
+
   return (
     <div className="flex-1 bg-[#F4F4F6] dark:bg-background min-h-screen p-8 lg:p-12 overflow-y-auto">
       <div className="max-w-4xl mx-auto space-y-8">
         
-
-
         {/* Balance Card */}
         <div className="bg-black rounded-3xl p-8 md:p-10 text-white relative overflow-hidden shadow-2xl border border-neutral-800">
           
@@ -33,7 +48,10 @@ export default function BalancePage() {
             </div>
             
             <div className="flex flex-col gap-3 min-w-[200px]">
-              <button className="w-full bg-white hover:bg-zinc-100 text-black py-4 px-6 rounded-2xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2">
+              <button 
+                onClick={() => setIsAddFundsOpen(true)}
+                className="w-full bg-white hover:bg-zinc-100 text-black py-4 px-6 rounded-2xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2"
+              >
                 <Plus className="w-4 h-4" />
                 Add Funds
               </button>
@@ -46,6 +64,81 @@ export default function BalancePage() {
         </div>
 
       </div>
+
+      {/* Add Funds Modal */}
+      {isAddFundsOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="bg-white dark:bg-neutral-900 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-neutral-200 dark:border-neutral-800 animate-in zoom-in-95 duration-200">
+            <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-8">Add Funds</h3>
+            
+            <div className="grid grid-cols-3 gap-3 mb-6">
+              {[100, 250, 500].map((amount) => (
+                <button
+                  key={amount}
+                  onClick={() => {
+                    setSelectedPreset(amount);
+                    setCustomAmount("");
+                  }}
+                  className={`py-3 rounded-xl font-bold text-lg transition-colors border ${
+                    selectedPreset === amount
+                      ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                      : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 border-transparent hover:bg-neutral-200 dark:hover:bg-neutral-700'
+                  }`}
+                >
+                  ${amount.toLocaleString()}
+                </button>
+              ))}
+            </div>
+
+            <div className="mb-8">
+              <div className="relative">
+                {(isCustomAmountFocused || customAmount) && (
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black dark:text-white font-bold text-lg">$</span>
+                )}
+                <input 
+                  type="text" 
+                  placeholder={isCustomAmountFocused ? "" : "Enter Custom Amount"}
+                  value={customAmount ? Number(customAmount).toLocaleString() : ""}
+                  onFocus={() => setIsCustomAmountFocused(true)}
+                  onBlur={() => setIsCustomAmountFocused(false)}
+                  onChange={(e) => {
+                    const raw = e.target.value.replace(/\D/g, "");
+                    setCustomAmount(raw);
+                    if (raw) setSelectedPreset(null);
+                  }}
+                  className={`w-full h-12 pr-4 rounded-xl border border-transparent bg-neutral-100 dark:bg-neutral-800 font-bold text-lg placeholder:font-normal placeholder:text-sm focus:outline-none transition-all ${isCustomAmountFocused || customAmount ? 'pl-8' : 'pl-4'}`}
+                />
+              </div>
+            </div>
+
+            <div className="bg-neutral-100 dark:bg-neutral-800 p-4 rounded-xl border border-transparent mb-8 flex items-center gap-3">
+              <div className="w-10 h-6 bg-white dark:bg-neutral-800 rounded shadow-sm border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-[10px] font-black text-blue-600">
+                VISA
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-neutral-900 dark:text-white">Visa ending in 4242</p>
+                <p className="text-xs text-neutral-500">Saved Payment Method</p>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <button 
+                onClick={() => setIsAddFundsOpen(false)}
+                className="flex-1 py-3.5 rounded-xl font-bold text-sm bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleAddFunds}
+                disabled={isProcessing || finalAmount === 0}
+                className="flex-1 py-3.5 rounded-xl font-bold text-sm bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {isProcessing ? "Processing..." : `Pay $${finalAmount.toLocaleString()}`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
