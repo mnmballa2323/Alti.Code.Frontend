@@ -35,6 +35,9 @@ import { conflictResolver } from './conflictResolver.js';
 import { sandboxManager } from './sandboxManager.js';
 import { migrationOrchestrator } from './migrationOrchestrator.js';
 import { cacheManager } from './cacheManager.js';
+import { dlqManager } from './dlqManager.js';
+import { configManager } from './configManager.js';
+import { soc2Snapshotter } from './soc2Snapshotter.js';
 
 class ServiceRegistry {
   constructor() {
@@ -66,6 +69,8 @@ class ServiceRegistry {
       });
 
       await this._initService('cacheManager', () => cacheManager.init());
+
+      await this._initService('configManager', () => configManager.init());
 
       // Phase 2: Core services
       await this._initService('rateLimiter', () => rateLimiter.init());
@@ -123,6 +128,10 @@ class ServiceRegistry {
 
       // Phase 5: Operational
       await this._initService('privacyEngine', () => privacyEngine.init());
+      
+      await this._initService('dlqManager', () => dlqManager.init());
+      
+      await this._initService('soc2Snapshotter', () => soc2Snapshotter.init());
 
       await this._initService('backupVerifier', async () => {
         await backupVerifier.init();
