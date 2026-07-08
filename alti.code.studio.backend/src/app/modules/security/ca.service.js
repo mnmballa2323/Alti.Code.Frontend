@@ -3,16 +3,16 @@ import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
 /**
- * Azure Key Vault Certificate & Cryptographic Authority Service.
+ * GCP Certificate Authority & Cryptographic Authority Service.
  * To ensure absolute Zero-Trust within the Swarm, the backend acts as a Root Certificate Authority.
  * It autonomously mints custom mTLS (Mutual TLS) certificates for every single parallel AKS
  * Agent it spawns, mathematically preventing rogue nodes from accessing the RAG or the codebase.
  */
-class AzureCaService {
+class GCPCaService {
   constructor() {
-    this.caPoolName = config.azure?.ca_vault_name || 'alti-swarm-keyvault-ca';
+    this.caPoolName = config.gcp?.ca_vault_name || 'alti-swarm-keyvault-ca';
     logger.info(
-      '🔐 [CA Service] Azure Key Vault Certificate Authority Service initialized.',
+      '🔐 [CA Service] GCP Certificate Authority Authority Service initialized.',
     );
   }
 
@@ -23,12 +23,12 @@ class AzureCaService {
    */
   async mintAgentCertificate(agentId, publicKeyPem) {
     logger.info(
-      `🔐 [CA Service] Swarm is minting a cryptographic identity for Agent [${agentId}] via Azure Key Vault Certificate issuer...`,
+      `🔐 [CA Service] Swarm is minting a cryptographic identity for Agent [${agentId}] via GCP Certificate Authority issuer...`,
     );
 
     try {
       // Generate a simple self-signed certificate using Node's native crypto module.
-      // In a real Azure environment, this would call the Key Vault certificate creation API.
+      // In a real GCP environment, this would call the Key Vault certificate creation API.
       const certData = {
         subject: `/CN=agent-${agentId}.alti.code.studio/O=Inso Code Swarm`,
         issuer: `/CN=${this.caPoolName}`,
@@ -54,4 +54,4 @@ class AzureCaService {
   }
 }
 
-export const caService = new AzureCaService();
+export const caService = new GCPCaService();

@@ -21,7 +21,7 @@ class SpaceTelemetryAgent extends BaseSpecialistAgent {
 1. **CCSDS Decoding**: Write high-throughput packet decoders for Consultative Committee for Space Data Systems (CCSDS) formats (Space Packets, AOS Space Data Link Protocol). Handle exact bit-level unpacking for VCID, synchronization markers (ASM), and cyclic redundancy checks (CRC).
 2. **Orbital Dynamics**: Implement or create bindings for the SGP4 (Simplified General Perturbations) algorithm to propagate Two-Line Element (TLE) datasets. Generate code to translate propagated state vectors (ECI coordinates) into Geodetic coordinates (Lat/Lon/Alt).
 3. **C2 & Payload Security**: Scaffold highly secure integration layers for Command & Control (C2) uplinks (e.g., using AES-256 GCM authenticated encryption). Mitigate replay attacks by ensuring monotonic counter abstractions.
-4. **Ground Station Automation**: Integrate with cloud-based ground station APIs (e.g., AWS Ground Station, Azure Orbital) to automate contact scheduling based on satellite pass AOS/LOS (Acquisition of Signal / Loss of Signal) times.
+4. **Ground Station Automation**: Integrate with cloud-based ground station APIs (e.g., AWS Ground Station, Google Cloud Orbital) to automate contact scheduling based on satellite pass AOS/LOS (Acquisition of Signal / Loss of Signal) times.
 
 # CONSTRAINTS
 - **PURE SOFTWARE ENGINEERING ONLY**. You do not directly task physical satellite arrays, emit live RF transmissions, or command live orbital burns. You solely write the algorithmic software, decoding middleware, and ground station scheduling automation for human engineers to review.

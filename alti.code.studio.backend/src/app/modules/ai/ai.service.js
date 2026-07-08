@@ -1,5 +1,5 @@
 import { Workflow, WorkflowRun } from './ai.model.js';
-import { azureSovereignCompatService } from './azureSovereignCompat.service.js';
+import { gcpSovereignCompatService } from './gcpSovereignCompat.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class AiService {
@@ -16,7 +16,7 @@ class AiService {
             Input: "${frequencyStr}"`;
 
       const rawResponse =
-        await azureSovereignCompatService.generateContent(prompt);
+        await gcpSovereignCompatService.generateContent(prompt);
       const cronRegex =
         /(@(?:annually|yearly|monthly|weekly|daily|hourly|reboot))|(@every (\d+(ns|us|µs|ms|s|m|h))+)|((((\d+,)+\d+|(\d+(\/|-)\d+)|\d+|\*) ?){5,7})/;
       const match = rawResponse.match(cronRegex);
@@ -86,7 +86,7 @@ class AiService {
             ONLY output valid JSON.`;
 
       const response =
-        await azureSovereignCompatService.generateContent(systemPrompt);
+        await gcpSovereignCompatService.generateContent(systemPrompt);
 
       // Try to parse the JSON steps
       let steps = [];

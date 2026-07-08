@@ -11,7 +11,7 @@
 import { exec } from 'child_process';
 import { resolve, join } from 'path';
 import { mkdirSync, existsSync } from 'fs';
-import { azureContainerService } from '../../../shared/gcpContainer.service.js';
+import { gcpContainerService } from '../../../shared/gcpContainer.service.js';
 
 export class TenantContainerOrchestrator {
   constructor(baseDataDir = './tenant_data') {
@@ -69,14 +69,14 @@ export class TenantContainerOrchestrator {
     const networkName = `tenant_net_${cleanTenantId}`;
     const volumePath = join(this.baseDataDir, containerName);
 
-    // ------------------ AZURE ACI PATH ------------------
-    if (process.env.ARM_SUBSCRIPTION_ID) {
+    // ------------------ GCP ACI PATH ------------------
+    if (process.env.GCP_PROJECT_ID) {
       console.log(
-        `[Enterprise/Azure] Provisioning isolated database for Tenant ${tenantId} on ACI...`,
+        `[Enterprise/GCP] Provisioning isolated database for Tenant ${tenantId} on ACI...`,
       );
 
       // 1. Check if DB is already running
-      const activeGroups = await azureContainerService.listContainers();
+      const activeGroups = await gcpContainerService.listContainers();
       const existingGroup = activeGroups.find(g =>
         g.Names.includes(containerName),
       );
@@ -92,7 +92,7 @@ export class TenantContainerOrchestrator {
         this.activeTenants.set(tenantId, {
           containerName,
           databaseUrl,
-          networkName: 'azure-virtual-network',
+          networkName: 'gcp-virtual-network',
         });
         return databaseUrl;
       }
@@ -103,7 +103,7 @@ export class TenantContainerOrchestrator {
         { name: 'POSTGRES_DB', value: `tenant_${cleanTenantId}` },
       ];
 
-      const groupResult = await azureContainerService.createContainerGroup(
+      const groupResult = await gcpContainerService.createContainerGroup(
         containerName,
         'pgvector/pgvector:pg15',
         1.0,
@@ -127,7 +127,7 @@ export class TenantContainerOrchestrator {
       for (let i = 0; i < 20; i++) {
         await new Promise(r => setTimeout(r, 1500));
         try {
-          const check = await azureContainerService.executeCommandAndGetOutput(
+          const check = await gcpContainerService.executeCommandAndGetOutput(
             containerName,
             containerName,
             'pg_isready -U postgres',
@@ -143,7 +143,7 @@ export class TenantContainerOrchestrator {
 
       if (!isReady) {
         throw new Error(
-          `Azure ACI database for tenant ${tenantId} failed to start in time.`,
+          `GCP ACI database for tenant ${tenantId} failed to start in time.`,
         );
       }
 
@@ -151,15 +151,15 @@ export class TenantContainerOrchestrator {
       this.activeTenants.set(tenantId, {
         containerName,
         databaseUrl,
-        networkName: 'azure-virtual-network',
+        networkName: 'gcp-virtual-network',
       });
 
       console.log(
-        `[Enterprise/Azure] Successfully provisioned isolated database at IP ${ipAddress}`,
+        `[Enterprise/GCP] Successfully provisioned isolated database at IP ${ipAddress}`,
       );
       return databaseUrl;
     }
-    // ------------------ END AZURE ACI PATH ------------------
+    // ------------------ END GCP ACI PATH ------------------
 
     mkdirSync(volumePath, { recursive: true });
 

@@ -1,6 +1,6 @@
 import { logger } from '../../../shared/logger.js';
 
-class GcpSearchService {
+class GcpSearchServiceImpl {
   /**
    * Executes a semantic search query against Vertex AI Search / Discovery Engine.
    * @param {string} query - Natural language query or code snippet
@@ -23,10 +23,10 @@ class GcpSearchService {
     );
 
     try {
-      const { azureGenAiService } = await import('../ai/azureGenAi.service.js');
+      const { gcpGenAiService } = await import('../ai/gcpGenAi.service.js');
       const prompt = `Search the web for the following query and provide a highly detailed, fact-based summary. Query: "${query}"`;
 
-      const result = await azureGenAiService.generateContent(
+      const result = await gcpGenAiService.generateContent(
         `[Google Cloud Search Grounding Tool] ${prompt}`,
       );
       const responseText = result.content;
@@ -53,7 +53,7 @@ class GcpSearchService {
   }
 }
 
-export const discoveryEngineService = new GcpSearchService();
-export const azureSearchService = discoveryEngineService;
+export const discoveryEngineService = new GcpSearchServiceImpl();
+export const gcpSearchService = discoveryEngineService;
 export const GcpSearchServiceInstance = discoveryEngineService;
-export const AzureSearchService = discoveryEngineService;
+export const GcpSearchService = discoveryEngineService;

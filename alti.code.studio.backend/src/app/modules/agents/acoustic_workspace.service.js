@@ -18,7 +18,7 @@ class AcousticWorkspaceService {
     );
 
     try {
-      // Unmocked: Using Azure Cognitive Services Speech API
+      // Unmocked: Using GCP Text-to-Speech API
       const { speechClient } = await import('../gcpCloud/gcpSpeech.service.js');
 
       const audioBytes = audioBuffer.toString('base64');

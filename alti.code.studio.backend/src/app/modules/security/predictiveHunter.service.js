@@ -16,7 +16,7 @@ const huntAndFixVulnerabilities = async (userId, sessionId, targetDir) => {
     // Mocking a file system read of critical files (in reality, would use glob or tree to ingest target code)
     const criticalCode = `// Sample Target Code\nfunction authenticate(req, res) { if(req.body.admin === true) { req.session.admin = true; } res.send('OK'); }`;
 
-    // Step 1: GPT-5.5 (Azure) Hunts for Zero-Days and Logic Flaws
+    // Step 1: GPT-5.5 (GCP) Hunts for Zero-Days and Logic Flaws
     const huntPrompt = `You are AgentShield, a military-grade autonomous Red-Team hacker.
 Analyze the following codebase and find deep architectural flaws, race conditions, or zero-days.
 If you find a vulnerability, output exactly two sections separated by "---":

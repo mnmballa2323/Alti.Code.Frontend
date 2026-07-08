@@ -2,7 +2,7 @@
  * Copyright (c) 2026 Alti.Code.Studio
  *
  * SCIM 2.0 Provisioning Service
- * Automates Identity Access Management (IAM) sync with IdPs like Okta, Azure AD, Ping.
+ * Automates Identity Access Management (IAM) sync with IdPs like Okta, GCP Workforce Identity, Ping.
  */
 
 import { prisma } from '../../../config/prisma.js';

@@ -83,9 +83,9 @@ describe('OpenWiki Local Proxy Route Handler', () => {
     expect(jsonCaptured.usage.completion_tokens).toBeGreaterThan(0);
   });
 
-  it('should route to Azure OpenAI when OPENWIKI_PROVIDER is set to azure', async () => {
-    vi.mocked(routePlatformCompletion).mockResolvedValue('Azure mock answer.');
-    process.env.OPENWIKI_PROVIDER = 'azure';
+  it('should ignore gcp provider and default to GCP Vertex AI when OPENWIKI_PROVIDER is set to gcp', async () => {
+    vi.mocked(routePlatformCompletion).mockResolvedValue('GCP mock answer.');
+    process.env.OPENWIKI_PROVIDER = 'gcp';
 
     const mockReq = {
       body: {
@@ -105,13 +105,13 @@ describe('OpenWiki Local Proxy Route Handler', () => {
     await handleChatCompletions(mockReq, mockRes);
 
     expect(routePlatformCompletion).toHaveBeenCalledWith({
-      provider: 'azure',
-      model: 'azure/gpt-4o',
+      provider: 'gcp',
+      model: 'gemini-3.5-flash',
       prompt: '[USER]: Hello',
       temperature: 0.2, // Default temperature
     });
 
-    expect(jsonCaptured.choices[0].message.content).toBe('Azure mock answer.');
+    expect(jsonCaptured.choices[0].message.content).toBe('GCP mock answer.');
   });
 
   it('should support streaming and yield server-sent events chunked chunks', async () => {

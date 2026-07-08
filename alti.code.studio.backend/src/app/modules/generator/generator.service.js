@@ -11,7 +11,7 @@ import { exec } from 'child_process';
 import util from 'util';
 
 const execAsync = util.promisify(exec);
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 import config from '../../../../config/index.js';
 import { logger } from '../../../shared/logger.js';
 import { GuardianService } from '../guardian/guardian.service.js';
@@ -149,20 +149,20 @@ const generateProject = async (prompt, type = 'react') => {
     `;
 
   try {
-    // 🧠 The Ultimate Azure RAG: Azure AI Search + Cosmos DB Graph
-    logger.info(`🔍 [RAG] Querying Azure AI Search...`);
+    // 🧠 The Ultimate GCP RAG: GCP Vertex AI Search + Cosmos DB Graph
+    logger.info(`🔍 [RAG] Querying GCP Vertex AI Search...`);
     const discoveryResults =
       await discoveryEngineService.searchCodebase(prompt);
 
     logger.info(
-      `🕸️ [RAG] Querying Azure Cosmos DB Graph for architectural topology...`,
+      `🕸️ [RAG] Querying GCP Firestore Graph for architectural topology...`,
     );
     const graphResults =
       await spannerGraphService.queryArchitectureDependencies(type);
 
     let ragContext = '';
     if (discoveryResults.length > 0) {
-      ragContext += `\n\n### Azure AI Search Context (Highly Relevant Proprietary Code):\n`;
+      ragContext += `\n\n### GCP Vertex AI Search Context (Highly Relevant Proprietary Code):\n`;
       discoveryResults.slice(0, 3).forEach(res => {
         const snippet =
           res.document?.derivedStructData?.snippets?.[0]?.snippet || '';
@@ -171,7 +171,7 @@ const generateProject = async (prompt, type = 'react') => {
     }
 
     if (graphResults.length > 0) {
-      ragContext += `\n\n### Azure Cosmos DB Graph Context (Architectural Topology):\n`;
+      ragContext += `\n\n### GCP Firestore Graph Context (Architectural Topology):\n`;
       ragContext += JSON.stringify(graphResults, null, 2);
     }
 
@@ -198,7 +198,7 @@ const generateProject = async (prompt, type = 'react') => {
 
     // Execute the generation using Google Vertex AI (Gemini) instead of OpenAI
     const geminiPrompt = `${systemPrompt}\n\n${finalPrompt}\n\nOUTPUT ONLY VALID JSON.`;
-    const response = await AzureGenAiService.generateContent(
+    const response = await GcpGenAiService.generateContent(
       geminiPrompt,
       'gemini-3.1-pro',
       0.2,

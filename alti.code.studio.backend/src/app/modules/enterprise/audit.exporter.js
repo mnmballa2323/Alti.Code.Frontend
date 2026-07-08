@@ -256,26 +256,26 @@ class AuditLogExporter {
     this.stats.totalExported += data.results.length;
 
     try {
-      const { azureStorageService } =
+      const { gcpStorageService } =
         await import('../gcpCloud/gcpStorage.service.js');
       const config = (await import('../../../../config/index.js')).default;
 
       const container =
-        (config.azure && config.azure.audit_blob_container) ||
+        (config.gcp && config.gcp.audit_blob_container) ||
         'alti-code-studio-worm-audit';
 
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
       const fileName = `audit_export_${timestamp}.json`;
       const fileKey = `exports/${fileName}`;
 
-      await azureStorageService.uploadContent(
+      await gcpStorageService.uploadContent(
         container,
         fileKey,
         JSON.stringify(data.results, null, 2),
       );
 
       logger.info(
-        `✅ AuditExporter: WORM export saved to azure://${container}/${fileKey}`,
+        `✅ AuditExporter: WORM export saved to gcp://${container}/${fileKey}`,
       );
       return {
         message: 'Export successful',
@@ -285,7 +285,7 @@ class AuditLogExporter {
       };
     } catch (error) {
       logger.error(
-        '❌ AuditExporter: Failed to export to Azure Blob Storage',
+        '❌ AuditExporter: Failed to export to GCP Cloud Storage',
         error.message,
       );
       throw error;

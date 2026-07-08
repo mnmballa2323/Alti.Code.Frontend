@@ -121,4 +121,3 @@ class GcpPubSubService {
 
 export const gcpPubSubService = new GcpPubSubService();
 export const pubsubService = gcpPubSubService;
-export const azurePubSubService = gcpPubSubService;

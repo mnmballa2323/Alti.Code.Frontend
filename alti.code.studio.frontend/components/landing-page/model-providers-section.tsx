@@ -63,31 +63,7 @@ const providers = [
       },
     ],
   },
-  {
-    name: "Open AI",
-    brand: "GPT Models",
-    glowClass: "from-[#10a37f]/10 via-[#10a37f]/2 to-transparent",
-    borderHoverClass:
-      "hover:border-[#10a37f]/30 dark:hover:border-[#10a37f]/30 hover:shadow-lg hover:shadow-[#10a37f]/5",
-    models: [
-      {
-        name: "GPT-5.4 Mini (Sovereign)",
-        role: "Multimodal Reasoning & Processing",
-        description:
-          "Executes enterprise-grade reasoning, document parsing, and sovereign agent planning.",
-        tags: ["Reasoning", "Multimodal", "Sovereign"],
-        metric: { label: "Cognition", value: "98%" },
-      },
-      {
-        name: "GPT-5.4 (Sovereign)",
-        role: "Advanced Math & Synthesis",
-        description:
-          "Multi-step complex logic reasoning, code validation, and deep compliance check loops.",
-        tags: ["Complex Logic", "Chain-of-Thought", "High Compliance"],
-        metric: { label: "Logic", value: "99%" },
-      },
-    ],
-  },
+
 ];
 
 export default function ModelProvidersSection() {

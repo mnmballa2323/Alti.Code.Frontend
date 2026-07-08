@@ -127,7 +127,7 @@ Every agent inherits `BaseSpecialistAgent` which provides:
 |----------|-----------|
 | AWS | `aws.agent.js` |
 | Google Cloud | `gcp.agent.js` |
-| Microsoft Azure | `azure.agent.js` |
+| Microsoft GCP | `gcp.agent.js` |
 | Cloudflare | `cloudflare.agent.js` |
 | Vercel | `vercel.agent.js` |
 | Netlify | `netlify.agent.js` |
@@ -166,7 +166,7 @@ Every agent inherits `BaseSpecialistAgent` which provides:
 
 Built for Single-Tenant Private Cloud and Air-Gapped deployments (FedRAMP High, DoD IL5/IL6, SOC 2, PCI-DSS):
 1. **Identity & Access (ABAC)**: Strict SAML 2.0 / OIDC enforcement for Enterprise SSO with JIT provisioning.
-2. **KMS / HSM**: AWS KMS and Azure Key Vault integration for hardware-backed master key derivation.
+2. **KMS / HSM**: AWS KMS and GCP Secret Manager integration for hardware-backed master key derivation.
 3. **Inline DLP**: Real-time regex and Luhn interception stripping PII, PCI, and Credentials from LLM Prompts.
 4. **Immutable Audit Ledger**: Blockchain-backed WORM logs inside PostgreSQL, streaming out via TLS to Splunk/Datadog SIEM.
 5. **Air-Gapped LLMs**: `AIR_GAPPED_MODE` strictly routes inference locally to Ollama clusters (Llama 3 / CodeLlama), never touching public internet.

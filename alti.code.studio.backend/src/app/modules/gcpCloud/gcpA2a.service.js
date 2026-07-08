@@ -92,4 +92,4 @@ export const A2aService = {
   negotiateTask,
   handleIncomingNegotiation,
 };
-export const azureA2aService = A2aService;
+export const gcpA2aService = A2aService;

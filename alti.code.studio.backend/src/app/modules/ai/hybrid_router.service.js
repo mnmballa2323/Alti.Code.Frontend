@@ -58,18 +58,18 @@ class HybridRouterService {
       }
     }
 
-    // Sovereign Azure-Exclusive Execution (Heavy Lifting)
-    let preferredProvider = 'azure';
+    // Sovereign GCP-Exclusive Execution (Heavy Lifting)
+    let preferredProvider = 'gcp-vertex';
 
     logger.info(
-      `☁️ [HybridRouter] Task requires heavy intelligence. Routing to Sovereign Azure OpenAI Foundry...`,
+      `☁️ [HybridRouter] Task requires heavy intelligence. Routing to Sovereign Google Cloud Vertex AI...`,
     );
     const result = await multiCloudInferenceService.executeMultiCloudInference(
       prompt,
       'jules',
       {
         preferredProvider,
-        modelId: 'gpt-5.4',
+        modelId: 'gemini-3.5-pro',
       },
     );
     return { content: result.content, venue: result.venue };

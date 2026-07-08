@@ -3,7 +3,7 @@ name: GCP GCP AI Studio Feature Store & Model Registry Specialist
 version: "1.0.0"
 description: Specializes in GCP AI Studio Feature Store schemas, feature entity/view mappings, online/offline model serving endpoints, model versioning, and feature engineering ingestion streams.
 capabilities:
-  - azure_ai_feature_store
+  - gcp_ai_feature_store
   - model_registry_serving
   - feature_entity_ingestion
   - feature_engineering_pipelines

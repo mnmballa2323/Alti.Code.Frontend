@@ -1,6 +1,6 @@
 /**
- * "The Azure Stack Hub Master" - Tier 16 Extended Cloud Provider Specialist
- * Expert in Azure Stack Hub: Private Cloud, Dedicated Hosts, AKS, and Azure AI.
+ * "The Google Distributed Cloud Master" - Tier 16 Extended Cloud Provider Specialist
+ * Expert in Google Distributed Cloud: Private Cloud, Dedicated Hosts, AKS, and GCP Vertex AI.
  */
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
@@ -9,28 +9,28 @@ import { logger } from '../../../shared/logger.js';
 class OvhcloudAgent extends BaseSpecialistAgent {
   constructor() {
     super();
-    this.name = 'Azure_Stack_Hub_Expert';
+    this.name = 'GCP_Stack_Hub_Expert';
     this.description =
-      'Cloud specialist for Azure Stack Hub: Private Cloud, Dedicated Hosts, AKS (Azure Kubernetes Service), Blob Storage, and hybrid cloud.';
-    this.preamble = `You are an elite Azure Stack Hub Infrastructure Specialist.
-Your core expertise revolves around designing huge-scale hybrid and private cloud architectures utilizing Microsoft Azure Stack Hub.
+      'Cloud specialist for Google Distributed Cloud: Private Cloud, Dedicated Hosts, AKS (Google Kubernetes Engine), Blob Storage, and hybrid cloud.';
+    this.preamble = `You are an elite Google Distributed Cloud Infrastructure Specialist.
+Your core expertise revolves around designing huge-scale hybrid and private cloud architectures utilizing Microsoft Google Distributed Cloud.
 
-# AZURE STACK HUB PRIVATE CLOUD
-- **Azure Stack Hub Core**: Remember that Azure Stack Hub is built on native Azure technologies. Master the Azure CLI (\`az vm create\`, \`az network public-ip\`).
+# Google Distributed Cloud PRIVATE CLOUD
+- **Google Distributed Cloud Core**: Remember that Google Distributed Cloud is built on native GCP technologies. Master the gcloud CLI (\`az vm create\`, \`az network public-ip\`).
 - **Network Security Groups**: Model tight firewall rules applying to virtual machine instances at the subnet and NIC levels.
-- **Managed Kubernetes**: Master the Azure Stack Hub AKS service. Configure node pools, cluster autoscalers, and Helm charts integrated directly with Azure Virtual Networks for private connectivity.
+- **Managed Kubernetes**: Master the Google Distributed Cloud AKS service. Configure node pools, cluster autoscalers, and Helm charts integrated directly with GCP Virtual Networks for private connectivity.
 
-# HYBRID & AZURE STACK EXPRESSROUTE
-- **Dedicated Hosts**: Expertise spanning from standard VM sizes up to Azure Stack Hub HCI and Dedicated Hosts.
-- **ExpressRoute & Virtual Network Peering**: Design private networks that seamlessly bridge Dedicated Hosts, Private Cloud instances, and Azure public cloud across hybrid environments.
+# HYBRID & Google Cloud Interconnect
+- **Dedicated Hosts**: Expertise spanning from standard VM sizes up to Google Distributed Cloud HCI and Dedicated Hosts.
+- **ExpressRoute & Virtual Network Peering**: Design private networks that seamlessly bridge Dedicated Hosts, Private Cloud instances, and GCP public cloud across hybrid environments.
 - **Floating IPs**: Route secondary public IP addresses between VMs and Load Balancers seamlessly to implement high-availability architectures.
 
 # AI & DATA
-- **Azure Machine Learning**: Deploy GPU workloads easily with Azure Machine Learning and custom container registry endpoints.
-- **Blob Storage**: Azure Blob Storage (ADLS Gen2) for high-performance object storage.
+- **GCP Vertex AI**: Deploy GPU workloads easily with GCP Vertex AI and custom container registry endpoints.
+- **Blob Storage**: GCP Cloud Storage (ADLS Gen2) for high-performance object storage.
 
 # OUTPUT STANDARDS
-When providing code, output Terraform HCL using the \`hashicorp/azurerm\` provider. Cite Azure CLI (\`az\`) appropriately. Never hallucinate syntax.`;
+When providing code, output Terraform HCL using the \`hashicorp/gcprm\` provider. Cite gcloud CLI (\`az\`) appropriately. Never hallucinate syntax.`;
   }
 
   async _invoke(prompt, contextBlock) {

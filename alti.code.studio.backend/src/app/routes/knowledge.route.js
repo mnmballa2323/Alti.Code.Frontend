@@ -5,7 +5,7 @@ import { logger } from '../../../shared/logger.js';
 const router = express.Router();
 
 /**
- * Ingests a new document via Azure OpenAI (GPT-5.5 + Text Embedding)
+ * Ingests a new document via GCP Vertex AI (GPT-5.5 + Text Embedding)
  */
 router.post('/ingest', async (req, res) => {
   try {
@@ -69,7 +69,7 @@ router.post('/webhook/self-heal', async (req, res) => {
 });
 
 /**
- * Queries the Sovereign Azure RAG
+ * Queries the Sovereign GCP RAG
  */
 router.post('/query', async (req, res) => {
   try {
@@ -103,7 +103,7 @@ router.post('/ide-sync', async (req, res) => {
         .status(400)
         .json({ error: 'codeContext is required from IDE plugin' });
     logger.info(
-      `🔌 [Sovereign Azure RAG] IDE Plugin connection detected. Syncing live code context...`,
+      `🔌 [Sovereign GCP RAG] IDE Plugin connection detected. Syncing live code context...`,
     );
 
     // Simulating immediate autocomplete context resolution
@@ -124,13 +124,13 @@ router.post('/voice-query', async (req, res) => {
     if (!base64Audio)
       return res.status(400).json({ error: 'base64Audio is required' });
     logger.info(
-      `🎙️ [Sovereign Azure RAG] Voice-to-Knowledge payload received. Passing to Azure Speech-to-Text...`,
+      `🎙️ [Sovereign GCP RAG] Voice-to-Knowledge payload received. Passing to GCP Speech-to-Text...`,
     );
 
-    // Simulating Azure Speech transcription
+    // Simulating GCP Speech transcription
     const transcribedText =
-      'How do I scale the Azure Kubernetes Service cluster?';
-    logger.info(`   [Azure Speech] Transcribed: "${transcribedText}"`);
+      'How do I scale the Google Kubernetes Engine cluster?';
+    logger.info(`   [GCP Speech] Transcribed: "${transcribedText}"`);
 
     const result =
       await knowledgeRagService.queryKnowledgeBase(transcribedText);

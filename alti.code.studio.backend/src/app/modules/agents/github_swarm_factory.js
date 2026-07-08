@@ -502,7 +502,7 @@ export const GITHUB_SPECIALISTS_TAXONOMY = [
     id: 'githubEnterpriseTeamSyncer',
     capabilities: ['github-enterprise-team-sync'],
     domain: 'Governance & Enterprise',
-    focus: 'external directory team sync, okta/azure ad groups sync',
+    focus: 'external directory team sync, okta/GCP Workforce Identity groups sync',
     description:
       'Specialist GitHub Enterprise Team Syncer expert in synchronizing organization teams with external directory groups.',
   },

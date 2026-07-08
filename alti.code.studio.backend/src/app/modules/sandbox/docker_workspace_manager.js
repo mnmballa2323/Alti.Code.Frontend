@@ -18,7 +18,7 @@ import { join, resolve } from 'path';
 import vm from 'vm';
 import hostPath from 'path';
 import hostCrypto from 'crypto';
-import { azureContainerService } from '../../../shared/gcpContainer.service.js';
+import { gcpContainerService } from '../../../shared/gcpContainer.service.js';
 
 export class DockerWorkspaceManager {
   /**
@@ -62,7 +62,7 @@ export class DockerWorkspaceManager {
    * Detects if the Docker daemon is responsive.
    */
   async checkDockerAvailability() {
-    if (process.env.ARM_SUBSCRIPTION_ID) {
+    if (process.env.GCP_PROJECT_ID) {
       return true;
     }
     if (this.isDockerAvailable !== null) {
@@ -207,12 +207,12 @@ export class DockerWorkspaceManager {
     this.activeContainers.delete(containerName);
     const hasDocker = await this.checkDockerAvailability();
 
-    // ------------------ AZURE ACI PATH ------------------
-    if (process.env.ARM_SUBSCRIPTION_ID) {
+    // ------------------ GCP ACI PATH ------------------
+    if (process.env.GCP_PROJECT_ID) {
       try {
-        await azureContainerService.deleteContainerGroup(containerName);
+        await gcpContainerService.deleteContainerGroup(containerName);
         console.log(
-          `🧹 [Azure/ACI] Stopped and pruned user container group: [${containerName}]`,
+          `🧹 [GCP/ACI] Stopped and pruned user container group: [${containerName}]`,
         );
       } catch (e) {
         console.warn(`Failed to stop user ACI container group: ${e.message}`);
@@ -437,14 +437,14 @@ export class DockerWorkspaceManager {
       options.provider || process.env.SANDBOX_PROVIDER || 'local';
     const startTime = Date.now();
 
-    // ------------------ AZURE ACI PATH ------------------
-    if (process.env.ARM_SUBSCRIPTION_ID) {
+    // ------------------ GCP ACI PATH ------------------
+    if (process.env.GCP_PROJECT_ID) {
       const tempFileName = `temp_exec_${Math.random().toString(36).substring(2, 9)}.js`;
       await this.startUserContainer(userId, options);
 
       try {
         // Write file inside ACI
-        await azureContainerService.writeFileToContainer(
+        await gcpContainerService.writeFileToContainer(
           containerName,
           containerName,
           `/workspace/${tempFileName}`,
@@ -452,14 +452,14 @@ export class DockerWorkspaceManager {
         );
 
         const execResult =
-          await azureContainerService.executeCommandAndGetOutput(
+          await gcpContainerService.executeCommandAndGetOutput(
             containerName,
             containerName,
             `node /workspace/${tempFileName}`,
           );
 
         // Cleanup temp file inside ACI
-        await azureContainerService.executeCommandAndGetOutput(
+        await gcpContainerService.executeCommandAndGetOutput(
           containerName,
           containerName,
           `rm /workspace/${tempFileName}`,
@@ -483,7 +483,7 @@ export class DockerWorkspaceManager {
         };
       }
     }
-    // ------------------ END AZURE ACI PATH ------------------
+    // ------------------ END GCP ACI PATH ------------------
 
     if (provider === 'crabbox') {
       const { crabboxService } = await import('../crabbox/crabbox.service.js');
@@ -575,9 +575,9 @@ export class DockerWorkspaceManager {
 
     const hasDocker = await this.checkDockerAvailability();
 
-    // ------------------ AZURE ACI PATH ------------------
-    if (process.env.ARM_SUBSCRIPTION_ID) {
-      const activeGroups = await azureContainerService.listContainers();
+    // ------------------ GCP ACI PATH ------------------
+    if (process.env.GCP_PROJECT_ID) {
+      const activeGroups = await gcpContainerService.listContainers();
       const existingGroup = activeGroups.find(g =>
         g.Names.includes(containerName),
       );
@@ -587,7 +587,7 @@ export class DockerWorkspaceManager {
       }
 
       try {
-        await azureContainerService.deleteContainerGroup(containerName);
+        await gcpContainerService.deleteContainerGroup(containerName);
       } catch (e) {}
 
       const memoryLimit = options.memory || '256m';
@@ -601,9 +601,9 @@ export class DockerWorkspaceManager {
       const image = isPython ? 'python:3.11-alpine' : this.baseImage;
 
       console.log(
-        `[Azure/ACI] Spawning OSS container group ${containerName} using image ${image}...`,
+        `[GCP/ACI] Spawning OSS container group ${containerName} using image ${image}...`,
       );
-      await azureContainerService.createContainerGroup(
+      await gcpContainerService.createContainerGroup(
         containerName,
         image,
         cpuLimit,
@@ -616,7 +616,7 @@ export class DockerWorkspaceManager {
       this.activeContainers.add(containerName);
       return { containerName, hostPath: targetHostPath, isMock: false };
     }
-    // ------------------ END AZURE ACI PATH ------------------
+    // ------------------ END GCP ACI PATH ------------------
 
     if (!hasDocker) {
       this.activeContainers.add(containerName);
@@ -704,15 +704,15 @@ export class DockerWorkspaceManager {
       options.provider || process.env.SANDBOX_PROVIDER || 'local';
     const startTime = Date.now();
 
-    // ------------------ AZURE ACI PATH ------------------
-    if (process.env.ARM_SUBSCRIPTION_ID) {
+    // ------------------ GCP ACI PATH ------------------
+    if (process.env.GCP_PROJECT_ID) {
       const tempExt = isPython ? 'py' : 'js';
       const tempFileName = `temp_exec_oss_${Math.random().toString(36).substring(2, 9)}.${tempExt}`;
       await this.startOssContainer(moduleName, targetHostPath, options);
 
       try {
         // Write file inside ACI
-        await azureContainerService.writeFileToContainer(
+        await gcpContainerService.writeFileToContainer(
           containerName,
           containerName,
           `/workspace/${tempFileName}`,
@@ -721,14 +721,14 @@ export class DockerWorkspaceManager {
 
         const runtimeCmd = isPython ? 'python' : 'node';
         const execResult =
-          await azureContainerService.executeCommandAndGetOutput(
+          await gcpContainerService.executeCommandAndGetOutput(
             containerName,
             containerName,
             `${runtimeCmd} /workspace/${tempFileName}`,
           );
 
         // Cleanup temp file inside ACI
-        await azureContainerService.executeCommandAndGetOutput(
+        await gcpContainerService.executeCommandAndGetOutput(
           containerName,
           containerName,
           `rm /workspace/${tempFileName}`,
@@ -756,7 +756,7 @@ export class DockerWorkspaceManager {
         };
       }
     }
-    // ------------------ END AZURE ACI PATH ------------------
+    // ------------------ END GCP ACI PATH ------------------
 
     if (provider === 'crabbox') {
       const { crabboxService } = await import('../crabbox/crabbox.service.js');
@@ -857,8 +857,8 @@ export class DockerWorkspaceManager {
    * Scans and automatically stops/prunes any orphaned containers left behind from past crashed runs.
    */
   async pruneOrphanedContainers() {
-    if (process.env.ARM_SUBSCRIPTION_ID) {
-      const containers = await azureContainerService.listContainers();
+    if (process.env.GCP_PROJECT_ID) {
+      const containers = await gcpContainerService.listContainers();
       for (const c of containers) {
         if (
           c.Names[0] &&
@@ -866,10 +866,10 @@ export class DockerWorkspaceManager {
             c.Names[0].startsWith('oss-container-'))
         ) {
           console.log(
-            `🧹 Self-Healing [Azure]: Pruning orphaned container: [${c.Names[0]}]`,
+            `🧹 Self-Healing [GCP]: Pruning orphaned container: [${c.Names[0]}]`,
           );
           try {
-            await azureContainerService.deleteContainerGroup(c.Names[0]);
+            await gcpContainerService.deleteContainerGroup(c.Names[0]);
           } catch (e) {}
         }
       }

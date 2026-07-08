@@ -35,15 +35,15 @@ vi.mock('../../src/app/modules/ai/multicloud_inference.service.js', () => ({
 }));
 
 import { ultimateRagService } from '../../src/app/modules/rag/ultimate_rag.service.js';
-import { azureGenAiService as AzureGenAiService } from '../../src/app/modules/ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../../src/app/modules/ai/gcpGenAi.service.js';
 import { discoveryEngineService } from '../../src/app/modules/gcpCloud/gcpSearch.service.js';
 import { spannerGraphService } from '../../src/app/modules/gcpCloud/gcpSpannerGraph.service.js';
 import { GeminiCliService } from '../../src/app/modules/geminiCli/geminiCli.service.js';
 import { fileSearchService } from '../../src/app/modules/fileSearch/fileSearch.service.js';
 import { ragCacheService } from '../../src/app/modules/gcpCloud/gcpCache.service.js';
 
-vi.mock('../../src/app/modules/ai/azureGenAi.service.js', () => ({
-    azureGenAiService: {
+vi.mock('../../src/app/modules/ai/gcpGenAi.service.js', () => ({
+    gcpGenAiService: {
         generateContent: vi.fn()
     }
 }));
@@ -117,8 +117,8 @@ vi.mock('../../src/config/prisma.js', () => ({
                 openaiApiKey: 'mocked-key',
                 anthropicApiKey: 'mocked-key',
                 geminiApiKey: 'mocked-key',
-                azureEndpoint: 'mocked-endpoint',
-                azureApiKey: 'mocked-key',
+                gcpEndpoint: 'mocked-endpoint',
+                gcpApiKey: 'mocked-key',
                 gcpProjectId: 'mocked-gcp-project',
                 gcpClientEmail: 'mocked-email',
                 gcpPrivateKey: 'mocked-key',
@@ -139,7 +139,7 @@ describe('Ultimate RAG Service - Secure Chat Sandbox Integration Tests', () => {
 
     it('should inject Chat Workspace guardrails and block raw code output when domain is "Chat"', async () => {
         let capturedPrompt = '';
-        AzureGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
+        GcpGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
             // Capture the main synthesis prompt containing context
             if (prompt.includes('GOOGLE RAG CONTEXT')) {
                 capturedPrompt = prompt;
@@ -160,7 +160,7 @@ describe('Ultimate RAG Service - Secure Chat Sandbox Integration Tests', () => {
 
     it('should NOT inject Chat Workspace guardrails when domain is "Full Stack"', async () => {
         let capturedPrompt = '';
-        AzureGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
+        GcpGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
             if (prompt.includes('GOOGLE RAG CONTEXT')) {
                 capturedPrompt = prompt;
                 return { content: 'Here is the code block: ```javascript\nconst express = require("express");\n```' };
@@ -188,7 +188,7 @@ describe('Ultimate RAG Service - Secure Chat Sandbox Integration Tests', () => {
             return { content: 'mocked content', model: 'gpt-5.5' };
         });
 
-        AzureGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
+        GcpGenAiService.generateContent.mockImplementation(async (prompt, model, temp) => {
             if (prompt.includes('GOOGLE RAG CONTEXT')) {
                 return { content: 'This is the RAG answer explaining architecture conceptually.' };
             }

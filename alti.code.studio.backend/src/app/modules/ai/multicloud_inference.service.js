@@ -21,7 +21,7 @@ class MultiCloudInferenceService {
       'marketplace_billing.log',
     );
     this.marketplaceSkus = {
-      azure: {
+      gcp: {
         sku: 'AZ-FOUNDRY-ALTI-SAAS-109',
         pricePerKPrompt: 0.0025,
         pricePerKCompletion: 0.01,
@@ -85,10 +85,7 @@ class MultiCloudInferenceService {
     }
 
     const modelId = options.modelId || 'gemini-3.5-flash';
-    const preferred = options.preferredProvider || 'gcp-vertex';
-    const primaryProvider = preferred === 'azure' ? 'azure' : 'gcp-vertex';
-    const secondaryProvider =
-      primaryProvider === 'gcp-vertex' ? 'azure' : 'gcp-vertex';
+    const primaryProvider = 'gcp-vertex';
 
     if (process.env.AIR_GAPPED_MODE === 'true') {
       logger.warn(
@@ -101,7 +98,7 @@ class MultiCloudInferenceService {
       `🌐 [Google Sovereign Inference] Initiating inference for Agent [${activeAgent}] on ${primaryProvider.toUpperCase()} (Primary)`,
     );
 
-    const providersQueue = [primaryProvider, secondaryProvider];
+    const providersQueue = [primaryProvider];
     let lastError = null;
     let resultObj = null;
 
@@ -123,13 +120,6 @@ class MultiCloudInferenceService {
 
           if (provider === 'gcp-vertex') {
             resultObj = await this._executeGoogleVertex(
-              finalPrompt,
-              activeAgent,
-              modelId,
-              currentOptions,
-            );
-          } else if (provider === 'azure') {
-            resultObj = await this._executeAzureFoundry(
               finalPrompt,
               activeAgent,
               modelId,
@@ -281,174 +271,6 @@ class MultiCloudInferenceService {
   }
 
   /**
-   * Executes inference on Azure Foundry (Marketplace Integrated) - Backwards compatible fallback
-   * Feature-hardened with exponential backoff, circuit-protection, and json_object response enforcement.
-   */
-  async _executeAzureFoundry(prompt, activeAgent, modelId, options = {}) {
-    logger.info(
-      `☁️ [Azure Sovereign Inference] Executing on Azure AI Studio Foundry using model ${modelId}...`,
-    );
-    const startTime = Date.now();
-    let text = '';
-    let latency = 0;
-    let azureUsage = null;
-    const maxRetries = 3;
-
-    const azureUrl =
-      process.env.AZURE_INFERENCE_URL ||
-      'http://localhost:5002/api/v1/azure/invoke';
-
-    // 1. Try resolving via Microservice routing proxy
-    try {
-      logger.info(`Sending Azure request to microservice: ${azureUrl}`);
-      const res = await fetch(azureUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt,
-          model: modelId,
-          credentials: options.vaultCredentials
-            ? {
-                azureApiKey: options.vaultCredentials.azureApiKey,
-                azureEndpoint: options.vaultCredentials.azureEndpoint,
-              }
-            : null,
-        }),
-        signal: AbortSignal.timeout(15000),
-      });
-      if (!res.ok)
-        throw new Error(`Microservice responded with status ${res.status}`);
-      const data = await res.json();
-      text = data.content;
-      if (data.usage) {
-        azureUsage = data.usage;
-      }
-      latency = Date.now() - startTime;
-    } catch (e) {
-      logger.warn(
-        `Azure Microservice unavailable (${e.message}). Falling back to local Azure Foundry client with retries...`,
-      );
-
-      let azureApiKey =
-        options.vaultCredentials?.azureApiKey ||
-        process.env.AZURE_OPENAI_API_KEY;
-      let azureEndpoint =
-        options.vaultCredentials?.azureEndpoint ||
-        process.env.AZURE_OPENAI_ENDPOINT ||
-        'https://my-azure-foundry-resource.openai.azure.com';
-
-      if (azureApiKey) {
-        let attempt = 0;
-        let success = false;
-
-        while (attempt < maxRetries && !success) {
-          try {
-            attempt++;
-            const deploymentId = modelId;
-            const cleanEndpoint = azureEndpoint.endsWith('/')
-              ? azureEndpoint.slice(0, -1)
-              : azureEndpoint;
-            const url = `${cleanEndpoint}/openai/deployments/${deploymentId}/chat/completions?api-version=2024-02-15-preview`;
-
-            // Build strict payload options
-            const payload = {
-              messages: [{ role: 'user', content: prompt }],
-              max_tokens: 4096,
-              temperature: options.temperature || 0.1,
-              ...(options.responseMimeType === 'application/json'
-                ? { response_format: { type: 'json_object' } }
-                : {}),
-            };
-
-            logger.info(
-              `Sending Azure Foundry Request (Attempt ${attempt}/${maxRetries}) to endpoint: ${azureEndpoint}`,
-            );
-
-            const headers = {
-              'Content-Type': 'application/json',
-            };
-            if (azureApiKey.startsWith('ey') || process.env.AZURE_AD_TOKEN) {
-              const token = process.env.AZURE_AD_TOKEN || azureApiKey;
-              headers['Authorization'] = `Bearer ${token}`;
-            } else {
-              headers['api-key'] = azureApiKey;
-            }
-
-            const res = await fetch(url, {
-              method: 'POST',
-              headers,
-              body: JSON.stringify(payload),
-              signal: AbortSignal.timeout(20000), // robust 20s timeout per attempt
-            });
-
-            if (!res.ok) {
-              const errBody = await res.text();
-              throw new Error(
-                `Azure API returned status ${res.status}: ${errBody}`,
-              );
-            }
-
-            const data = await res.json();
-            text = data.choices?.[0]?.message?.content || '';
-            if (data.usage) {
-              azureUsage = data.usage;
-            }
-            success = true;
-            logger.info(
-              `✨ Successfully completed Azure Foundry LLM call on attempt ${attempt}`,
-            );
-          } catch (err) {
-            logger.error(
-              `⚠️ [Azure Connection Attempt ${attempt} Failed]: ${err.message}`,
-            );
-            if (attempt >= maxRetries) {
-              logger.error(
-                `❌ All ${maxRetries} Azure Foundry connection attempts failed. Falling back to secure simulation.`,
-              );
-              text = this._getSimulatedResponse(
-                prompt,
-                `Azure Foundry ${modelId}`,
-              );
-            } else {
-              // Exponential backoff sleep: 1s, 2s, 4s...
-              const backoffMs = Math.pow(2, attempt) * 500;
-              logger.info(`Sleeping for ${backoffMs}ms before retry...`);
-              await new Promise(r => setTimeout(r, backoffMs));
-            }
-          }
-        }
-      } else {
-        logger.warn(
-          '⚠️ No Azure Foundry credentials found. Executing in secure Azure Marketplace simulated mode.',
-        );
-        text = this._getSimulatedResponse(prompt, `Azure Foundry ${modelId}`);
-      }
-      latency = Date.now() - startTime;
-    }
-
-    const promptTokens =
-      azureUsage?.prompt_tokens || Math.max(1, Math.ceil(prompt.length / 4));
-    const completionTokens =
-      azureUsage?.completion_tokens || Math.max(1, Math.ceil(text.length / 4));
-    await this._recordMarketplaceBilling(
-      'azure',
-      promptTokens,
-      completionTokens,
-      modelId,
-      latency,
-    );
-
-    return {
-      content: text,
-      venue: 'AZURE_FOUNDRY_MARKETPLACE',
-      provider: 'azure',
-      model: modelId,
-      latencyMs: latency,
-      tokens: { prompt: promptTokens, completion: completionTokens },
-    };
-  }
-
-  /**
    * Executes inference using Vercel AI SDK (GCP Vertex Mode)
    */
   async _executeVercelAi(prompt, activeAgent, modelId, options = {}) {
@@ -542,7 +364,7 @@ class MultiCloudInferenceService {
    */
   async getMarketplaceProcurementStats() {
     const stats = {
-      azure: { totalBilledUsd: 0, totalTokens: 0, transactionCount: 0 },
+      gcp: { totalBilledUsd: 0, totalTokens: 0, transactionCount: 0 },
       gcp: { totalBilledUsd: 0, totalTokens: 0, transactionCount: 0 },
       global: { totalBilledUsd: 0, totalTokens: 0, totalTransactions: 0 },
     };
@@ -569,8 +391,8 @@ class MultiCloudInferenceService {
     }
 
     // Format floats
-    stats.azure.totalBilledUsd = parseFloat(
-      stats.azure.totalBilledUsd.toFixed(4),
+    stats.gcp.totalBilledUsd = parseFloat(
+      stats.gcp.totalBilledUsd.toFixed(4),
     );
     stats.gcp.totalBilledUsd = parseFloat(stats.gcp.totalBilledUsd.toFixed(4));
     stats.global.totalBilledUsd = parseFloat(

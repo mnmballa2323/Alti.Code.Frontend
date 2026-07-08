@@ -67,4 +67,3 @@ class GcpSpannerGraphService {
 
 export const gcpSpannerGraphService = new GcpSpannerGraphService();
 export const spannerGraphService = gcpSpannerGraphService;
-export const azureCosmosGraphService = gcpSpannerGraphService;

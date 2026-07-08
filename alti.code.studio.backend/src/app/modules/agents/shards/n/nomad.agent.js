@@ -14,7 +14,7 @@ import { logger } from '../../../../shared/logger.js';
 
 /**
  * The 'Nomad' Agent — Cross-Cloud Migration & Mobility.
- * Autonomously moves applications between AWS, GCP, Azure, and Vercel.
+ * Autonomously moves applications between AWS, GCP, GCP, and Vercel.
  */
 class NomadAgent extends BaseSpecialistAgent {
   constructor() {

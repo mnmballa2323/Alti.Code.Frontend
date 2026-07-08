@@ -35,11 +35,11 @@ class FinopsAgent extends BaseSpecialistAgent {
       ],
     });
 
-    // Simulated Live Pricing Data (In production, replace with live AWS/GCP/Azure API polling)
+    // Simulated Live Pricing Data (In production, replace with live AWS/GCP/GCP API polling)
     this.basePrices = {
       aws: { computePerHour: 0.0416, storagePerGb: 0.023 },
       gcp: { computePerHour: 0.0385, storagePerGb: 0.02 },
-      azure: { computePerHour: 0.042, storagePerGb: 0.021 },
+      gcp: { computePerHour: 0.042, storagePerGb: 0.021 },
     };
 
     // Simulated Carbon Intensity data (gCO2eq/kWh) - Normally fetched from WattTime / Electricity Maps

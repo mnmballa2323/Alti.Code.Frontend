@@ -14,7 +14,7 @@ import { GeminiCliService } from '../geminiCli/geminiCli.service.js';
 import { GeminiExtensionService } from '../geminiExtensions/geminiExtension.service.js';
 import { logger } from '../../../shared/logger.js';
 import { semanticCacheService } from '../memory/semantic_cache.service.js';
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 
 export class GeminiCliBaseAgent extends BaseSpecialistAgent {
   constructor(name, description, preamble = '') {
@@ -98,11 +98,11 @@ ${safePrompt}
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
         logger.info(
-          `⚡ [${this.name}] [cid:${correlationId}] Executing Vertex AI generation via AzureGenAiService (Attempt ${attempt}/${maxRetries})...`,
+          `⚡ [${this.name}] [cid:${correlationId}] Executing Vertex AI generation via GcpGenAiService (Attempt ${attempt}/${maxRetries})...`,
         );
 
-        // Use AzureGenAiService (Vertex AI integrated) instead of the raw native CLI
-        const result = await AzureGenAiService.generateContent(fullPayload);
+        // Use GcpGenAiService (Vertex AI integrated) instead of the raw native CLI
+        const result = await GcpGenAiService.generateContent(fullPayload);
         const output = result.content;
 
         // 🧠 Store the successful outcome into the pgvector semantic cache

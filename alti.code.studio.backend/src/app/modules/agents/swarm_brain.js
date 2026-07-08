@@ -21,7 +21,7 @@ import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
 import { socketService } from '../../services/socket.service.js';
 import { capabilityRouter } from './capability.router.js';
 import { agentRegistry } from './agent.registry.js';
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 import { dynamicAgentLoaderService } from './dynamic_agent_loader.service.js';
 
 import { superpowersLoaderService } from './superpowers_loader.service.js';
@@ -53,7 +53,7 @@ import { GcsService } from '../gcpCloud/gcpStorage.service.js';
 import { pubsubService } from '../gcpCloud/gcpPubSub.service.js';
 
 import { browserService } from '../senses/browser.service.js';
-/* DIRECT GEMINI BLOCKED - USE AZURE VIA GATEWAY */
+/* DIRECT GEMINI ROUTED VIA GCP VERTEX AI GATEWAY */
 
 class SwarmBrain {
   constructor() {
@@ -61,7 +61,7 @@ class SwarmBrain {
     this.hiveMindMesh = new EventEmitter(); // Local memory bus
     this.hiveMindMesh.setMaxListeners(100);
 
-    // 🌐 Distributed Swarm Sync (Redis Pub/Sub via Azure Cache)
+    // 🌐 Distributed Swarm Sync (Redis Pub/Sub via GCP Memorystore)
     // This bridges the local EventEmitter to the global Redis cluster.
     import('../gcpCloud/gcpCache.service.js').then(({ memorystoreService }) => {
       memorystoreService.subscribeToCrdt('global_hive_mind', message => {
@@ -559,8 +559,8 @@ If you require assistance from another specialized agent to complete your task, 
 
       if (isCodeTask) {
         // Determine preferred agent based on Sovereign Cloud keys
-        const hasAzure = !!(
-          process.env.AZURE_OPENAI_API_KEY || config.azure_api_key
+        const hasGcp = !!(
+          config.gcp?.project_id || process.env.GCP_PROJECT_ID
         );
         const hasGemini = !!(
           config.gemini_secret_key ||
@@ -573,7 +573,7 @@ If you require assistance from another specialized agent to complete your task, 
         if (
           clawBinaryExists &&
           (process.env.PREFERRED_AGENT === 'claw' || !hasGemini) &&
-          hasAzure
+          hasGcp
         ) {
           preferredAgent = 'claw';
         }
@@ -914,7 +914,7 @@ If you require assistance from another specialized agent to complete your task, 
         const staffPrompt = `You are a Staff Software Engineer. Review this code for architectural flaws, performance, and best practices. If it is mathematically perfect, respond with exactly "APPROVED". Otherwise, explain the exact flaws in detail.\n\nCODE:\n${result}`;
 
         try {
-          const review = await AzureGenAiService.generateContent(
+          const review = await GcpGenAiService.generateContent(
             staffPrompt,
             'gemini-3.1-pro',
             0.1,
@@ -1007,7 +1007,7 @@ If you require assistance from another specialized agent to complete your task, 
 
           try {
             const generativeModel =
-              AzureGenAiService.getGenerativeModel('gemini-3.1-pro');
+              GcpGenAiService.getGenerativeModel('gemini-3.1-pro');
             const visionResult = await generativeModel.generateContent([
               { text: aguiPrompt },
               {
@@ -1043,7 +1043,7 @@ If you require assistance from another specialized agent to complete your task, 
             );
             const playwrightPrompt = `You are a strict QA Automation Engineer. Write a complete Playwright test suite (in TypeScript) for the following frontend code to verify all interactive elements, states, and assertions. Output ONLY valid TypeScript code inside a markdown block.\n\nCODE:\n${result}`;
             try {
-              const e2eResult = await AzureGenAiService.generateContent(
+              const e2eResult = await GcpGenAiService.generateContent(
                 playwrightPrompt,
                 'gemini-3.1-pro',
                 0.1,
@@ -1441,7 +1441,7 @@ If you require assistance from another specialized agent to complete your task, 
                 `🛠️ SwarmBrain: Autonomously resolving Git Merge Markers...`,
               );
               const resolvePrompt = `You are a Principal DevOps Engineer. The codebase has a Git Merge Conflict.\nHere is the diff with conflict markers:\n\`\`\`\n${diff}\n\`\`\`\nProvide the exact resolved file content, mathematically resolving the structural conflicts.`;
-              const resolution = await AzureGenAiService.generateContent(
+              const resolution = await GcpGenAiService.generateContent(
                 resolvePrompt,
                 'gemini-3.1-pro',
                 0.1,
@@ -1542,13 +1542,13 @@ If you require assistance from another specialized agent to complete your task, 
       }
     }
 
-    // 10. Live Cloud IDE Provisioning (Azure Dev Box)
+    // 10. Live Cloud IDE Provisioning (Google Cloud Workstation)
     if (
       prompt.toLowerCase().includes('preview') ||
       prompt.toLowerCase().includes('live environment')
     ) {
       logger.info(
-        `💻 SwarmBrain: User requested live preview. Provisioning Azure Dev Box...`,
+        `💻 SwarmBrain: User requested live preview. Provisioning Google Cloud Workstation...`,
       );
       const workstationId = `swarm-preview-${Date.now()}`;
       const hostUrl =
@@ -1556,35 +1556,35 @@ If you require assistance from another specialized agent to complete your task, 
 
       if (hostUrl) {
         await cloudWorkstationsService.injectCodeAndStart(hostUrl, finalResult);
-        finalResult += `\n\n### 🚀 Live Cloud IDE Environment\nI have provisioned an Azure Dev Box for you to test this code live. Access it here: [${hostUrl}](${hostUrl})`;
+        finalResult += `\n\n### 🚀 Live Cloud IDE Environment\nI have provisioned a Google Cloud Workstation for you to test this code live. Access it here: [${hostUrl}](${hostUrl})`;
       }
     }
 
-    // 11. Autonomous CI/CD Pipeline (Azure Pipelines)
+    // 11. Autonomous CI/CD Pipeline (Google Cloud Build)
     if (
       prompt.toLowerCase().includes('deploy') ||
       prompt.toLowerCase().includes('build') ||
       prompt.toLowerCase().includes('release')
     ) {
       logger.info(
-        `🏗️ SwarmBrain: User requested deployment. Triggering Autonomous CI/CD Pipeline via Azure Pipelines...`,
+        `🏗️ SwarmBrain: User requested deployment. Triggering Autonomous CI/CD Pipeline via Google Cloud Build...`,
       );
       try {
-        const imageName = `${config.azure.client_id || 'azure-tenant'}.azurecr.io/alti-artifacts/swarm-app-${Date.now()}`;
+        const imageName = `gcr.io/${config.gcp?.project_id || 'gcp-project'}/alti-artifacts/swarm-app-${Date.now()}`;
         const buildOp = await cloudBuildService.triggerContainerBuild(
           'github.com/alti/temp-workspace',
           imageName,
         );
-        finalResult += `\n\n### 🏗️ Autonomous CI/CD Deployment\nI have successfully bypassed human intervention and triggered an autonomous container build on Azure Pipelines. Your artifact is being packaged and deployed to Azure Container Registry.\n- **Image:** \`${imageName}\`\n- **Operation ID:** \`${buildOp.operationId}\``;
+        finalResult += `\n\n### 🏗️ Autonomous CI/CD Deployment\nI have successfully bypassed human intervention and triggered an autonomous container build on Google Cloud Build. Your artifact is being packaged and deployed to Google Artifact Registry.\n- **Image:** \`${imageName}\`\n- **Operation ID:** \`${buildOp.operationId}\``;
       } catch (e) {
         logger.warn(
-          `⚠️ SwarmBrain: Azure Pipelines triggered failed: ${e.message}`,
+          `⚠️ SwarmBrain: Google Cloud Build triggered failed: ${e.message}`,
         );
-        finalResult += `\n\n### 🏗️ Autonomous CI/CD Deployment\nAn error occurred while attempting to trigger Azure Pipelines: ${e.message}`;
+        finalResult += `\n\n### 🏗️ Autonomous CI/CD Deployment\nAn error occurred while attempting to trigger Google Cloud Build: ${e.message}`;
       }
     }
 
-    // Asynchronously stream enterprise analytics to Azure Synapse Analytics
+    // Asynchronously stream enterprise analytics to Google Cloud BigQuery
     // Tracking: Execution time, Token heuristics, and routing metrics
     BigQueryService.streamMetrics('alti_metrics', 'agent_executions', [
       {
@@ -1595,10 +1595,10 @@ If you require assistance from another specialized agent to complete your task, 
         status: evalScore.isApproved ? 'SUCCESS' : 'REJECTED',
       },
     ]).catch(err => {
-      logger.warn(`📊 [Synapse] Telemetry drop: ${err.message}`);
+      logger.warn(`📊 [BigQuery] Telemetry drop: ${err.message}`);
     });
 
-    // 12. Infinite ML Compute (Azure ND H100 v5 VM Orchestration)
+    // 12. Infinite ML Compute (Google Cloud TPU Pod Orchestration)
     if (
       prompt
         .toLowerCase()
@@ -1607,14 +1607,14 @@ If you require assistance from another specialized agent to complete your task, 
         )
     ) {
       logger.info(
-        `🚀 SwarmBrain: Deep Learning payload detected. Provisioning Azure ND H100 v5 VM...`,
+        `🚀 SwarmBrain: Deep Learning payload detected. Provisioning Google Cloud TPU Pod...`,
       );
       const tpuNodeId = `swarm-tpu-pod-${Date.now()}`;
       const tpuOp =
         await tpuOrchestratorService.provisionDedicatedTpu(tpuNodeId);
 
       if (tpuOp) {
-        finalResult += `\n\n### 🚀 Autonomous GPU Hardware Provisioning\nI detected a massive Machine Learning workload. Standard CPU/GPU limits are insufficient. I have autonomously bypassed local constraints and provisioned a dedicated **Azure ND H100 v5 VM** (\`${tpuNodeId}\`) to accelerate this physical computation by 400x. The Swarm is now routing training epochs directly to the GPU cores.`;
+        finalResult += `\n\n### 🚀 Autonomous TPU Hardware Provisioning\nI detected a massive Machine Learning workload. Standard CPU/TPU limits are insufficient. I have autonomously bypassed local constraints and provisioned a dedicated **Google Cloud TPU Pod** (\`${tpuNodeId}\`) to accelerate this physical computation by 400x. The Swarm is now routing training epochs directly to the TPU cores.`;
       }
     }
 

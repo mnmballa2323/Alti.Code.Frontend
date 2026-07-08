@@ -301,10 +301,6 @@ function PromptInputFullLineComponent({
         return "Gemini 3.5 Flash";
       case "gemini-3.5-pro":
         return "Gemini 3.1 Pro";
-      case "gpt-5.4-mini":
-        return "GPT-5.4 Mini";
-      case "gpt-5.4":
-        return "GPT-5.4";
       default:
         return "Gemini 3.5 Flash";
     }
@@ -1065,46 +1061,6 @@ function PromptInputFullLineComponent({
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
                         Claude Sonnet 4.6
-                      </span>
-                    </div>
-                  </DropdownItem>
-                </DropdownSection>
-                <DropdownSection
-                  classNames={{
-                    heading:
-                      "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
-                  }}
-                  title="OpenAI GPT"
-                >
-                  <DropdownItem
-                    key="gpt-5.4"
-                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="GPT-5.4"
-                    onPress={() => setDefaultModel("gpt-5.4")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-black dark:text-white shrink-0"
-                        icon="simple-icons:openai"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        GPT-5.4
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gpt-5.4-mini"
-                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="GPT-5.4 Mini"
-                    onPress={() => setDefaultModel("gpt-5.4-mini")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-black dark:text-white shrink-0"
-                        icon="simple-icons:openai"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        GPT-5.4 Mini
                       </span>
                     </div>
                   </DropdownItem>

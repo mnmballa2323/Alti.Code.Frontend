@@ -9,7 +9,7 @@ import { okfGovernanceMiddleware } from '../../src/app/middlewares/okfGovernance
 import { prisma } from '../../src/config/prisma.js';
 import { socketService } from '../../src/app/services/socket.service.js';
 import { neo4jService } from '../../src/app/services/neo4j.service.js';
-import { azureSovereignCompatService } from '../../src/app/modules/ai/azureSovereignCompat.service.js';
+import { gcpSovereignCompatService } from '../../src/app/modules/ai/gcpSovereignCompat.service.js';
 
 vi.mock('../../src/app/modules/ai/ai.provider.js', () => ({
     aiProvider: {
@@ -51,8 +51,8 @@ vi.mock('../../src/app/services/neo4j.service.js', () => ({
     }
 }));
 
-vi.mock('../../src/app/modules/ai/azureSovereignCompat.service.js', () => ({
-    azureSovereignCompatService: {
+vi.mock('../../src/app/modules/ai/gcpSovereignCompat.service.js', () => ({
+    gcpSovereignCompatService: {
         getEmbeddings: vi.fn().mockResolvedValue(new Array(768).fill(0.1))
     }
 }));
@@ -174,7 +174,7 @@ describe('Knowledge Catalog Integration & Middleware', () => {
         await knowledgeCatalogService.syncLocalToServices();
 
         expect(prisma.okfConcept.upsert).toHaveBeenCalled();
-        expect(azureSovereignCompatService.getEmbeddings).toHaveBeenCalledWith('# Schema\n\n[1] [User Schema](file://prisma/schema.prisma)\n');
+        expect(gcpSovereignCompatService.getEmbeddings).toHaveBeenCalledWith('# Schema\n\n[1] [User Schema](file://prisma/schema.prisma)\n');
         expect(prisma.$executeRawUnsafe).toHaveBeenCalled();
         expect(neo4jService.executeCypher).toHaveBeenCalled();
         expect(socketService.broadcast).toHaveBeenCalledWith('swarm', 'okf_concept_updated', expect.any(Object));
@@ -182,7 +182,7 @@ describe('Knowledge Catalog Integration & Middleware', () => {
 
     it('should query the catalog semantically via pgvector', async () => {
         const results = await knowledgeCatalogService.searchCatalogSemantically('query text', 3);
-        expect(azureSovereignCompatService.getEmbeddings).toHaveBeenCalledWith('query text');
+        expect(gcpSovereignCompatService.getEmbeddings).toHaveBeenCalledWith('query text');
         expect(prisma.$queryRawUnsafe).toHaveBeenCalled();
         expect(results[0].conceptId).toBe('tables/users');
     });

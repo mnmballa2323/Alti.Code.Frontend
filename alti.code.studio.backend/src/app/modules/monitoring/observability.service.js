@@ -9,7 +9,7 @@ import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
 import axios from 'axios';
 import os from 'os';
-import { AzureLoggingService } from '../gcpCloud/gcpLogging.service.js';
+import { GcpLoggingService } from '../gcpCloud/gcpLogging.service.js';
 import otelNode from '@opentelemetry/sdk-trace-node';
 const { NodeTracerProvider } = otelNode;
 import otelBase from '@opentelemetry/sdk-trace-base';
@@ -30,22 +30,22 @@ class ObservabilityService extends EventEmitter {
 
     this.localTraces = []; // Buffer for "Glass Cockpit"
     this.maxTraces = 50;
-    this.azureLogging = null;
+    this.gcpLogging = null;
     this.logName = 'alti-agent-trace-log';
     this.init();
   }
 
   init() {
-    // Initialize Azure Logging client in production environments
+    // Initialize GCP Logging client in production environments
     if (
       process.env.NODE_ENV === 'production' &&
       process.env.PRIVATE_CLOUD_MODE !== 'true'
     ) {
-      this.azureLogging = AzureLoggingService;
-      logger.info('🔭 Observability: Azure Logging client initialized.');
+      this.gcpLogging = GcpLoggingService;
+      logger.info('🔭 Observability: GCP Logging client initialized.');
     } else {
       logger.info(
-        '🔭 Observability: Azure Logging client not initialized (private cloud or local dev).',
+        '🔭 Observability: GCP Logging client not initialized (private cloud or local dev).',
       );
     }
 
@@ -76,7 +76,7 @@ class ObservabilityService extends EventEmitter {
 
   /**
    * Create a new trace for a mission or task
-   * Emits a standard observability trace for any Agent execution to both Local UI & Azure Monitor
+   * Emits a standard observability trace for any Agent execution to both Local UI & GCP Cloud Monitoring
    */
   async emitTrace(agentName, action, metadata = {}) {
     const traceId = `trace-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
@@ -92,10 +92,10 @@ class ObservabilityService extends EventEmitter {
     this.localTraces.unshift(localTrace);
     if (this.localTraces.length > this.maxTraces) this.localTraces.pop();
 
-    // Broadcast to Azure Monitor if enabled
-    if (this.azureLogging) {
+    // Broadcast to GCP Cloud Monitoring if enabled
+    if (this.gcpLogging) {
       try {
-        await this.azureLogging.writeAuditLog(this.logName, localTrace, 'INFO');
+        await this.gcpLogging.writeAuditLog(this.logName, localTrace, 'INFO');
       } catch (e) {
         // Fail gracefully
       }
@@ -127,16 +127,16 @@ class ObservabilityService extends EventEmitter {
   }
 
   /**
-   * Parse and format incoming webhooks from Azure Monitor / Cloud Alerts
-   * @param {object} payload - The raw Azure Monitor JSON payload
+   * Parse and format incoming webhooks from GCP Cloud Monitoring / Cloud Alerts
+   * @param {object} payload - The raw GCP Cloud Monitoring JSON payload
    */
   ingestCloudAlert(payload) {
-    logger.info('🔭 Observability: Ingesting Azure Monitor Alert...');
+    logger.info('🔭 Observability: Ingesting GCP Cloud Monitoring Alert...');
 
-    // Handle standard Azure Monitor Alert shape or fallback
+    // Handle standard GCP Cloud Monitoring Alert shape or fallback
     const incidentId =
       payload?.data?.essentials?.alertId ||
-      `azure-alert-${crypto.randomUUID().slice(0, 8)}`;
+      `gcp-alert-${crypto.randomUUID().slice(0, 8)}`;
 
     const summary =
       payload?.data?.essentials?.description || 'Unknown Production Alert';
@@ -145,7 +145,7 @@ class ObservabilityService extends EventEmitter {
     let stackTrace = 'No stack trace provided in alert payload.';
 
     // Add to recent traces for visibility
-    this.emitTrace(`Azure Alert: ${incidentId}`, 'system', { incidentId });
+    this.emitTrace(`GCP Alert: ${incidentId}`, 'system', { incidentId });
 
     return {
       incidentId,

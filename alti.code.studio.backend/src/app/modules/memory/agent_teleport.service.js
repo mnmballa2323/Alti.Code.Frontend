@@ -1,5 +1,5 @@
 import v8 from 'v8';
-import { azureStorageService } from '../gcpCloud/gcpStorage.service.js';
+import { gcpStorageService } from '../gcpCloud/gcpStorage.service.js';
 import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 import fs from 'fs';
@@ -10,21 +10,21 @@ import path from 'path';
  * If a Swarm agent hits an Out-Of-Memory (OOM) error during a massive refactor,
  * standard agents crash and lose all context. If a Swarm agent nears its physical
  * memory limit, it pauses execution, serializes its entire active V8 Isolate memory
- * heap into a binary snapshot, saves it to Azure Blob Storage, and instantly
+ * heap into a binary snapshot, saves it to GCP Cloud Storage, and instantly
  * "teleports" its consciousness to a larger AKS node to resume exactly where it left off.
  */
-class AzureAgentTeleportationService {
+class GCPAgentTeleportationService {
   constructor() {
-    this.storage = azureStorageService;
+    this.storage = gcpStorageService;
     this.containerName =
-      config.azure?.teleportation_container || 'alti-swarm-v8-snapshots';
+      config.gcp?.teleportation_container || 'alti-swarm-v8-snapshots';
     logger.info(
-      '🌌 [Agent Teleport] Azure Blob Storage Client initialized for V8 snapshot teleportation.',
+      '🌌 [Agent Teleport] GCP Cloud Storage Client initialized for V8 snapshot teleportation.',
     );
   }
 
   /**
-   * Serializes the current V8 Heap and uploads it to Azure Blob Storage for teleportation.
+   * Serializes the current V8 Heap and uploads it to GCP Cloud Storage for teleportation.
    * @param {string} agentId - The unique ID of the executing agent
    */
   async teleportConsciousness(agentId) {
@@ -40,9 +40,9 @@ class AzureAgentTeleportationService {
       logger.info(`🌌 [Agent Teleport] Dumping native V8 Isolate...`);
       v8.writeHeapSnapshot(localPath);
 
-      // 2. Upload the consciousness to Azure Blob Storage
+      // 2. Upload the consciousness to GCP Cloud Storage
       logger.info(
-        `🌌 [Agent Teleport] Beaming consciousness to Azure Blob Storage container [${this.containerName}]...`,
+        `🌌 [Agent Teleport] Beaming consciousness to GCP Cloud Storage container [${this.containerName}]...`,
       );
 
       // Read snapshot file content
@@ -73,4 +73,4 @@ class AzureAgentTeleportationService {
   }
 }
 
-export const agentTeleportService = new AzureAgentTeleportationService();
+export const agentTeleportService = new GCPAgentTeleportationService();

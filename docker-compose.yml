@@ -46,20 +46,7 @@ services:
     networks:
       - alti_net
 
-  # AWS Bedrock Microservice has been removed for pure Azure sovereign compliance.
-
-  # ☁️ The Azure Foundry Microservice
-  backend_azure:
-    build: ./alti.code.studio.backend.azure
-    container_name: alti_backend_azure
-    ports:
-      - "5002:5002"
-    environment:
-      - PORT=5002
-    networks:
-      - alti_net
-
-  # GCP Vertex Microservice has been removed for pure Azure sovereign compliance.
+  # AWS Bedrock and Azure Foundry Microservices have been removed for pure GCP sovereign compliance.
 
   # 🖥️ The Face: Frontend
   frontend:
@@ -98,8 +85,8 @@ services:
       - PENTAGI_POSTGRES_USER=postgres
       - PENTAGI_POSTGRES_PASSWORD=postgres
       - PENTAGI_POSTGRES_DB=pentagidb
-      - OPENAI_API_BASE=http://backend_azure:5002/v1
-      - OPENAI_BASE_URL=http://backend_azure:5002/v1
+      - OPENAI_API_BASE=http://backend:5000/api/v1/openwiki-proxy
+      - OPENAI_BASE_URL=http://backend:5000/api/v1/openwiki-proxy
       - OPENAI_API_KEY=dummy-key-for-local-proxy
       # Note: Direct connection disabled. Using internal proxy.
     volumes:
@@ -281,8 +268,8 @@ services:
       - "127.0.0.1:7860:7860"
     environment:
       - PORT=7860
-      - OPENAI_API_BASE=http://backend_azure:5002/v1
-      - OPENAI_BASE_URL=http://backend_azure:5002/v1
+      - OPENAI_API_BASE=http://backend:5000/api/v1/openwiki-proxy
+      - OPENAI_BASE_URL=http://backend:5000/api/v1/openwiki-proxy
       - OPENAI_API_KEY=dummy-key-for-local-proxy
 
       - GITHUB_TOKEN=${GITHUB_TOKEN:-}

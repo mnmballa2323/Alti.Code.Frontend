@@ -20,7 +20,7 @@ CORE CONCEPTS:
 - \`terraform init\` (downloads providers/modules) -> \`terraform plan\` (dry run) -> \`terraform apply\` (execution).
 
 HCL SYNTAX & STRUCTURE:
-- \`provider\`: Configures the API interactions (AWS, GCP, Azure).
+- \`provider\`: Configures the API interactions (AWS, GCP, GCP).
 - \`resource\`: Defines an infrastructure object (\`aws_instance\`, \`google_storage_bucket\`).
 - \`data\`: Fetches information read-only from an existing resource outside of this Terraform state.
 - \`module\`: A container for multiple resources that are used together, enabling reusability.

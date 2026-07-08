@@ -6,7 +6,7 @@
  */
 
 import { logger } from '../../../shared/logger.js';
-import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
+import { gcpSovereignCompatService } from '../ai/gcpSovereignCompat.service.js';
 
 export class ElizaAgentService {
   /**
@@ -71,7 +71,7 @@ ${styleStr || 'Stay polite, concise, and helpful.'}`;
     const systemPrompt = this.formatSystemPrompt(character);
     const finalPrompt = `${systemPrompt}\n\nUser request: ${userPrompt}\n\nResponse:`;
 
-    return await azureSovereignCompatService.generateContent(finalPrompt);
+    return await gcpSovereignCompatService.generateContent(finalPrompt);
   }
 }
 

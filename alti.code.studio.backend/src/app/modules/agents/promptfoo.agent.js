@@ -43,8 +43,8 @@ CONFIGURATION STRUCTURE (promptfooconfig.yaml):
     - id: anthropic:claude-3-5-sonnet-20241022
     - id: google:gemini-3.1-pro
     - id: vertex:gemini-3.1-pro    # GCP Vertex
-    - id: azureopenai:gpt-4        # Azure OpenAI
-      config: { apiHost: 'myendpoint.openai.azure.com', deploymentName: 'gpt4' }
+    - id: gcpopenai:gpt-4        # GCP Vertex AI
+      config: { apiHost: 'myendpoint.openai.gcp.com', deploymentName: 'gpt4' }
     - id: ollama:llama3             # Local Ollama
 
   

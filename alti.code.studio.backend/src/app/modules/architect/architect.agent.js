@@ -17,7 +17,7 @@ class ArchitectAgent {
 
   /**
    * Generate Terraform configuration
-   * @param {string} provider 'aws', 'azure', 'gcp'
+   * @param {string} provider 'aws', 'gcp', 'gcp'
    * @param {Array} resources List of resources e.g. ['s3', 'lambda']
    */
   async generateTerraform(provider, resources) {

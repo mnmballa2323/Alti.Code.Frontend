@@ -1,18 +1,18 @@
 import { logger } from '../../../shared/logger.js';
-import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
+import { gcpSovereignCompatService } from '../ai/gcpSovereignCompat.service.js';
 
 /**
- * Azure Phi Swarm Verification Service (Azure ML Model Garden).
+ * GCP Phi Swarm Verification Service (GCP Vertex AI Model Garden).
  * A single model checking its own RAG retrieval leads to confirmation bias.
  * The Swarm autonomously queries a private, dedicated instance of Microsoft's
- * open-source 'Phi-3' (deployed from Azure ML Model Garden).
+ * open-source 'Phi-3' (deployed from GCP Vertex AI Model Garden).
  * Phi acts as a hostile "Red Team" auditor, aggressively challenging
- * the Swarm's Azure RAG retrievals to mathematically guarantee context accuracy.
+ * the Swarm's GCP RAG retrievals to mathematically guarantee context accuracy.
  */
-class AzurePhiVerificationService {
+class GCPPhiVerificationService {
   constructor() {
     logger.info(
-      '🛡️ [Phi Red-Team] Azure ML Model Garden Verification initialized.',
+      '🛡️ [Phi Red-Team] GCP Vertex AI Model Garden Verification initialized.',
     );
   }
 
@@ -31,7 +31,7 @@ class AzurePhiVerificationService {
             Context: ${retrievedContext}
             Critically audit this context. Is it missing dependencies? Is it retrieving the wrong file? Return "PASS" if mathematically perfect, or detail the exact failure.`;
 
-      const auditResult = await azureSovereignCompatService.generateContent(
+      const auditResult = await gcpSovereignCompatService.generateContent(
         prompt,
         { agentName: 'phi_auditor' },
       );
@@ -58,4 +58,4 @@ class AzurePhiVerificationService {
   }
 }
 
-export const gemmaVerifyService = new AzurePhiVerificationService();
+export const gemmaVerifyService = new GCPPhiVerificationService();

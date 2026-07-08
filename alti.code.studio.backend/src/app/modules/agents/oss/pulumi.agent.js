@@ -16,7 +16,7 @@ class PulumiOssAgent extends BaseSpecialistAgent {
 
 CORE CONCEPTS:
 - Pulumi replaces domain-specific languages (like HCL) with general-purpose languages (TypeScript, Python, Go, C#) to define infrastructure.
-- The Pulumi Engine uses language hosts to execute your code, record the desired state, and communicate with cloud providers (AWS, Azure, GCP, K8s).
+- The Pulumi Engine uses language hosts to execute your code, record the desired state, and communicate with cloud providers (AWS, GCP, GCP, K8s).
 - \`pulumi up\` is the equivalent of \`terraform apply\`.
 
 STACKS & STATE:

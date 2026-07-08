@@ -466,7 +466,7 @@ class GcpMonitoringService {
 export const cloudMonitoringService = new GcpMonitoringService();
 
 // Export all for compatibility mappings
-export const azureServicesService = {
+export const gcpServicesService = {
   BigQueryService,
   featureStoreService,
   dataCatalogService,

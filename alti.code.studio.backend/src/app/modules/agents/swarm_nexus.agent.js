@@ -15,7 +15,7 @@ if (!apiKey) {
   );
 }
 
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 
 // DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY
 export class SwarmNexusAgent extends BaseSpecialistAgent {
@@ -41,7 +41,7 @@ You integrate:
   get model() {
     if (!this._cachedModel) {
       this._cachedModel =
-        AzureGenAiService.getGenerativeModel('gemini-2.5-flash');
+        GcpGenAiService.getGenerativeModel('gemini-2.5-flash');
     }
     return this._cachedModel;
   }

@@ -33,10 +33,10 @@ vi.mock('./skillopt.model.js', () => {
   };
 });
 
-// Mock AzureGenAiService to prevent real API calls in testing
-vi.mock('../googleGenAi/azureGenAi.service.js', () => {
+// Mock GcpGenAiService to prevent real API calls in testing
+vi.mock('../googleGenAi/gcpGenAi.service.js', () => {
   return {
-    AzureGenAiService: {
+    GcpGenAiService: {
       getGenerativeModel: vi.fn().mockReturnValue({
         generateContent: vi.fn().mockResolvedValue({
           response: {

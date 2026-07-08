@@ -45,7 +45,7 @@ if (!privateKeyPem) {
 
 const getKeys = async () => {
   return {
-    azure_openai_api_key: process.env.AZURE_OPENAI_API_KEY || '',
+    gcp_openai_api_key: process.env.GCP_OPENAI_API_KEY || '',
     deepgram_api_key:
       config.deepgram_api_key || process.env.DEEPGRAM_API_KEY || '',
     gemini_api_key:

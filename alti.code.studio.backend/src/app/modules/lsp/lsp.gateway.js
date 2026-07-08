@@ -146,7 +146,7 @@ class LspGateway {
               );
               const prompt = `You are a sub-100ms latency autocomplete engine. Provide only the exact next lines of code to complete this buffer. Do not use markdown. Do not repeat the prompt. BUFFER:\n${newText}\n\nCOMPLETE HERE:\n`;
 
-              // Use Tri-Brain Fast Inference (AWS Bedrock -> Azure -> GCP Vertex)
+              // Use Tri-Brain Fast Inference (AWS Bedrock -> GCP -> GCP Vertex)
               const completionText =
                 await triBrainService.fastInference(prompt);
 

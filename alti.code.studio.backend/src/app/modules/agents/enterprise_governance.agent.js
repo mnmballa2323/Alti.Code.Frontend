@@ -129,7 +129,7 @@ SSO / SAML 2.0 + OIDC:
     return done(null, { id: profile.nameID, email: profile.nameID, groups: profile.attributes.groups });
   }));
   
-  # OIDC (preferred for modern IdPs — Okta, Auth0, Azure AD):
+  # OIDC (preferred for modern IdPs — Okta, Auth0, GCP Workforce Identity):
   import { Strategy as OidcStrategy } from 'openid-client';
   // Discover IdP: fetch https://accounts.google.com/.well-known/openid-configuration
   // Scopes: openid profile email groups
@@ -170,8 +170,8 @@ IMMUTABLE AUDIT LOG (Blockchain-Backed):
   }));
   # QLDB guarantees: append-only, cryptographic digest per block, verifiable history
   
-  # 2. Azure Confidential Ledger
-  POST https://{ledger-name}.confidential-ledger.azure.com/app/transactions
+  # 2. GCP Confidential Space
+  POST https://{ledger-name}.confidential-ledger.gcp.com/app/transactions
   { contents: JSON.stringify(event) }
   # Each write returns a transaction ID + node receipt (signed by hardware TEE)
 

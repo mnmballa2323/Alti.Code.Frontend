@@ -42,7 +42,7 @@ The backend is structured as a **layered AI orchestration platform** with a clea
 │  (Lazy-loaded via DynamicAgentLoaderService)     │
 ├──────────────────────────────────────────────────┤
 │     GeminiAiService  │  MongoDB  │  Redis         │
-│     Qdrant Vector    │  PgBouncer│  Azure Monitor │
+│     Qdrant Vector    │  PgBouncer│  GCP Cloud Monitoring │
 └──────────────────────────────────────────────────┘
 ```
 
@@ -186,7 +186,7 @@ export const xxxAgent = new XxxAgent();
 
 For DoD IL5/IL6, FedRAMP High, and PCI-DSS compliance, the backend is secured with a 6-pillar Nation-State defense architecture:
 1. **Identity (ABAC/SAML)**: `enterprise.strategy.js` strictly enforces SAML 2.0 / OIDC flows. Regular JWT login is blocked for Enterprise tenants via `auth.service.js`.
-2. **KMS / HSM**: Environment variables no longer store plain-text secrets. `kms.service.js` fetches ciphertext and uses AWS KMS or Azure Key Vault to dynamically decrypt master keys in memory.
+2. **KMS / HSM**: Environment variables no longer store plain-text secrets. `kms.service.js` fetches ciphertext and uses AWS KMS or GCP Secret Manager to dynamically decrypt master keys in memory.
 3. **Inline DLP**: `dlp.service.js` acts as a regex/Luhn middleware inside `guardian.service.js`, intercepting and redacting PII/PCI/Secrets *before* LLMs can ingest them.
 4. **Immutable Audit Ledger**: `audit.service.js` creates a cryptographically chained WORM database log for every AI action, and streams over TLS to Splunk/Datadog SIEM.
 5. **Air-Gapped LLM Inference**: `multicloud_inference.service.js` supports an `AIR_GAPPED_MODE` which short-circuits all public cloud endpoints (OpenAI, Anthropic, Gemini, Bedrock) and routes exclusively to an internal Ollama cluster over localhost/VPC.
@@ -215,27 +215,27 @@ Runs a sweep every 5 minutes after orchestrator init. Each agent's health is tra
 
 ## Infrastructure & Data Layer
 
-As of v9.0.0, the platform is deployed exclusively on **Microsoft Azure** as a native, non-containerized application via Terraform and declarative GitOps.
+As of v9.0.0, the platform is deployed exclusively on **Microsoft GCP** as a native, non-containerized application via Terraform and declarative GitOps.
 
 ### App Service (Native Express API Host)
 - **Linux Web App**: Natively hosts the Express API and LangGraph orchestrator using a managed Linux environment with Node.js runtime (no Docker containers or orchestration overhead).
-- **VNet Integration**: Restricts inbound and outbound app traffic within a secure Azure Virtual Network (VNet).
+- **VNet Integration**: Restricts inbound and outbound app traffic within a secure GCP Virtual Network (VNet).
 - **Zero Trust**: Restricts public endpoints, allowing traffic only through secure network policies and API Gateways.
 
-### Azure Key Vault
-- All production secrets (Stripe, DB passwords, API keys) are stored securely in Azure Key Vault, completely eliminating `.env` file dependencies in production.
+### GCP Secret Manager
+- All production secrets (Stripe, DB passwords, API keys) are stored securely in GCP Secret Manager, completely eliminating `.env` file dependencies in production.
 
-### Azure Cosmos DB (with MongoDB API)
+### GCP Firestore (with MongoDB API)
 - Highly-available distributed database cluster managed via Terraform.
 - Users, sessions, audit logs, analytics events, and compliance records.
 - Agent execution history and task states.
 
-### Azure Cache for Redis
+### GCP Cache for Redis
 - Session caching (sub-10ms agent comms).
 - Rate limiting counters and pubsub for socket events.
 - Central state store for distributed Autonomic jobs (mutex locks).
 
-### Azure Database for PostgreSQL (Flexible Server)
+### GCP Database for PostgreSQL (Flexible Server)
 - Managed PostgreSQL 15 for autonomous Pentesting agent (`vxcontrol/pentagi`).
 - `pgvector` extension for RAG-powered memory retrieval and code snippet similarity search.
 
@@ -248,9 +248,9 @@ As of v9.0.0, the platform is deployed exclusively on **Microsoft Azure** as a n
 
 | Tool | Integration |
 |------|------------|
-| Azure Application Insights | Native application trace and metric telemetry |
-| Azure Log Analytics Workspace | Tenant-level cost attribution and FinOps analytics |
-| Azure Event Grid / Event Hubs | Real-time SIEM log exporting (Splunk, Datadog) |
+| GCP Application Insights | Native application trace and metric telemetry |
+| GCP Log Analytics Workspace | Tenant-level cost attribution and FinOps analytics |
+| GCP Pub/Sub / Event Hubs | Real-time SIEM log exporting (Splunk, Datadog) |
 | OpenTelemetry | Distributed tracing across all services |
 | Grafana | Dashboard for system performance |
 | `/api/swarm/health` | Live swarm health endpoint |
@@ -273,8 +273,8 @@ As of v9.0.0, the platform is deployed exclusively on **Microsoft Azure** as a n
 - `SwarmValidation` and `OrchestratorValidation` enforce strict Zod schemas on core API payloads
 
 ### User & Sandbox Isolation
-- **Azure Container Instances (ACI)**: In Azure production environments, every user session/task runs inside a dynamically provisioned, hypervisor-isolated sandbox container.
-- **Docker Bridge Integration**: A native abstraction layer maps containerized tasks (such as run commands) to ACI instances via the `@azure/arm-containerinstance` SDK, avoiding multi-tenant crosstalk.
+- **GCP Container Instances (ACI)**: In GCP production environments, every user session/task runs inside a dynamically provisioned, hypervisor-isolated sandbox container.
+- **Docker Bridge Integration**: A native abstraction layer maps containerized tasks (such as run commands) to ACI instances via the `@gcp/arm-containerinstance` SDK, avoiding multi-tenant crosstalk.
 - **Local Fallback**: Local development defaults to a local Docker socket `/var/run/docker.sock` or in-memory mock modes.
 
 ### Data Protection

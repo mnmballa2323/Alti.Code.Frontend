@@ -7,7 +7,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { authService } from './auth.service.js';
 import { UserRepository } from './prisma.user.repository.js';
-import { authenticateAzureAD } from './gcpIap.service.js';
+import { authenticateGCPAD } from './gcpIap.service.js';
 import config from '../../../../config/index.js';
 
 // Mock dependencies
@@ -20,7 +20,7 @@ vi.mock('./prisma.user.repository.js', () => ({
 }));
 
 vi.mock('./gcpIap.service.js', () => ({
-  authenticateAzureAD: vi.fn(),
+  authenticateGCPAD: vi.fn(),
 }));
 
 vi.mock('../../../shared/logger.js', () => ({
@@ -79,29 +79,29 @@ describe('AuthService - Login Integration', () => {
     });
   });
 
-  describe('loginService with Azure AD Auth', () => {
+  describe('loginService with GCP Workforce Identity Auth', () => {
     beforeEach(() => {
       config.private_cloud_mode = true;
     });
 
-    it('should authenticate via Azure AD and return tokens if local user already exists', async () => {
-      const mockAzureUser = {
+    it('should authenticate via GCP Workforce Identity and return tokens if local user already exists', async () => {
+      const mockGCPUser = {
         username: 'cloud-admin',
         email: 'cloud-admin@Default',
         roles: ['user'],
-        projectName: 'Azure-Sovereign-Workspace',
+        projectName: 'GCP-Sovereign-Workspace',
       };
 
       const mockLocalUser = {
         id: 'db-usr-1',
         email: 'cloud-admin@Default',
-        provider: 'azure',
+        provider: 'gcp',
         role: 'user',
         tenantId: 'tenant-1',
         tenantRole: 'owner',
       };
 
-      authenticateAzureAD.mockResolvedValueOnce(mockAzureUser);
+      authenticateGCPAD.mockResolvedValueOnce(mockGCPUser);
       UserRepository.findByEmail.mockResolvedValueOnce(mockLocalUser);
 
       const result = await authService.loginService(
@@ -109,7 +109,7 @@ describe('AuthService - Login Integration', () => {
         'password',
       );
 
-      expect(authenticateAzureAD).toHaveBeenCalledWith(
+      expect(authenticateGCPAD).toHaveBeenCalledWith(
         'cloud-admin@Default',
         'password',
       );
@@ -118,15 +118,15 @@ describe('AuthService - Login Integration', () => {
       expect(result._id).toBe(mockLocalUser.id);
     });
 
-    it('should authenticate via Azure AD and provision a new user if not found locally', async () => {
-      const mockAzureUser = {
+    it('should authenticate via GCP Workforce Identity and provision a new user if not found locally', async () => {
+      const mockGCPUser = {
         username: 'cloud-admin',
         email: 'cloud-admin@Default',
         roles: ['admin'],
-        projectName: 'Azure-Sovereign-Workspace',
+        projectName: 'GCP-Sovereign-Workspace',
       };
 
-      authenticateAzureAD.mockResolvedValueOnce(mockAzureUser);
+      authenticateGCPAD.mockResolvedValueOnce(mockGCPUser);
       UserRepository.findByEmail.mockResolvedValueOnce(null); // Not found locally
 
       const result = await authService.loginService(
@@ -134,7 +134,7 @@ describe('AuthService - Login Integration', () => {
         'password',
       );
 
-      expect(authenticateAzureAD).toHaveBeenCalledWith(
+      expect(authenticateGCPAD).toHaveBeenCalledWith(
         'cloud-admin@Default',
         'password',
       );

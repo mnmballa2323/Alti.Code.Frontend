@@ -16,7 +16,7 @@ const enforceResponseSchema = fastJson({
     breach_detected: { type: 'boolean' },
     severity: { type: 'string' },
     legal_notice_draft: { type: 'string', nullable: true },
-    azure_routing_metadata: {
+    gcp_routing_metadata: {
       type: 'object',
       properties: {
         success: { type: 'boolean' },
@@ -354,7 +354,7 @@ router.post('/integration/automotive/telemetry', async (req, res) => {
 
 /**
  * POST /api/governance/legal/enforce
- * Cicero Law Enforcement Matrix SLA compliance check, notice generation, and Azure routing.
+ * Cicero Law Enforcement Matrix SLA compliance check, notice generation, and GCP routing.
  */
 router.post('/legal/enforce', async (req, res) => {
   try {

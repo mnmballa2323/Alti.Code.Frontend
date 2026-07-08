@@ -9,7 +9,7 @@ import httpStatus from 'http-status';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
 import { AuditLog } from './audit.model.js';
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 import { lighthouseService } from './lighthouse.service.js';
 import { genkitService } from '../genkit/genkit.service.js';
 
@@ -83,8 +83,8 @@ const analyzeLogs = catchAsync(async (req, res) => {
   const recentLogs = await AuditLog.find({}).sort({ timestamp: -1 }).limit(50);
   const logContext = JSON.stringify(recentLogs);
 
-  const model = AzureGenAiService.getGenerativeModel(
-    AzureGenAiService.PRIMARY_MODEL,
+  const model = GcpGenAiService.getGenerativeModel(
+    GcpGenAiService.PRIMARY_MODEL,
     0.2,
   );
 

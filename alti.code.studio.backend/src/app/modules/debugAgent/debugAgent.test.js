@@ -25,11 +25,11 @@ vi.mock('../../shared/memory.js', () => ({
 }));
 
 describe('DebugAgent — Autonomic Webhook Pipeline', () => {
-  it('should ingest an Azure Monitor payload and trigger the debugger', async () => {
+  it('should ingest an GCP Cloud Monitoring payload and trigger the debugger', async () => {
     const mockPayload = {
       data: {
         essentials: {
-          alertId: 'azure-alert-999',
+          alertId: 'gcp-alert-999',
           description:
             'TypeError: Cannot read properties of undefined (reading "length")',
         },
@@ -43,7 +43,7 @@ describe('DebugAgent — Autonomic Webhook Pipeline', () => {
     };
 
     observabilityService.ingestCloudAlert.mockReturnValue({
-      incidentId: 'azure-alert-999',
+      incidentId: 'gcp-alert-999',
       errorLog:
         'TypeError: Cannot read properties of undefined (reading "length")',
       stackTrace: 'No stack trace provided in alert payload.',
@@ -60,14 +60,14 @@ describe('DebugAgent — Autonomic Webhook Pipeline', () => {
     expect(DebugAgentService.analyzeError).toHaveBeenCalledWith(
       'TypeError: Cannot read properties of undefined (reading "length")',
       'No stack trace provided in alert payload.',
-      'system-azure-alert',
-      'azure-alert-999',
+      'system-gcp-alert',
+      'gcp-alert-999',
     );
     expect(mockRes.status).toHaveBeenCalledWith(httpStatus.ACCEPTED);
     const jsonResponse = mockRes.json.mock.calls[0][0];
     expect(jsonResponse.success).toBe(true);
     expect(jsonResponse.message).toContain('Autonomic debugging initiated');
-    expect(jsonResponse.data.incidentId).toBe('azure-alert-999');
+    expect(jsonResponse.data.incidentId).toBe('gcp-alert-999');
   });
 });
 

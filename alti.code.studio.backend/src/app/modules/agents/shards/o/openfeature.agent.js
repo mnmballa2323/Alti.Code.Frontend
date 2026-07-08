@@ -32,7 +32,7 @@ class OpenFeatureAgent extends BaseSpecialistAgent {
 4. **Hooks**: Add lifecycle hooks for cross-cutting concerns:
    \`client.addHooks({ before: (ctx) => logger.info('Flag evaluated', ctx.flagKey), error: (ctx, err) => logger.error('Evaluation failed', err) })\`
    Use hooks for logging, metrics, caching invalidation, and A/B test exposure tracking.
-5. **Supported Providers**: OpenFeature providers available for: LaunchDarkly, Flagsmith, Unleash, Harness, CloudBees, Flagd, AWS AppConfig, Azure Feature Management, Go Feature Flag, Statsig.
+5. **Supported Providers**: OpenFeature providers available for: LaunchDarkly, Flagsmith, Unleash, Harness, CloudBees, Flagd, AWS AppConfig, GCP Vertex AI Feature Store, Go Feature Flag, Statsig.
 6. **flagd (Self-Hosted Engine)**: Run flagd alongside your app: \`docker run ghcr.io/open-feature/flagd --port 8013 --sync-provider file --sources flag-config.json\`. Connect with \`FlagdProvider\` — evaluates flags locally with gRPC/REST. No vendor lock-in.
 7. **React SDK**: \`<OpenFeatureProvider domain="my-domain"><App /></OpenFeatureProvider>\`. Use \`const { value: isEnabled } = useBooleanFlagValue('new-ui', false)\`. Handles async provider initialization with Suspense.
 # MIGRATION PATH

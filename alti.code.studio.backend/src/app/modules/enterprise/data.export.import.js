@@ -30,7 +30,7 @@ const EXPORT_FORMATS = {
   },
 };
 
-const DELIVERY_TARGETS = ['local', 's3', 'gcs', 'azure-blob', 'sftp', 'email'];
+const DELIVERY_TARGETS = ['local', 's3', 'gcs', 'gcp-blob', 'sftp', 'email'];
 
 const CONFLICT_STRATEGIES = {
   skip: 'Skip existing records',

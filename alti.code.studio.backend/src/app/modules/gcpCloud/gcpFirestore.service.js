@@ -102,4 +102,3 @@ class GcpFirestoreService {
 
 export const gcpFirestoreService = new GcpFirestoreService();
 export const FirestoreSyncService = gcpFirestoreService;
-export const azureCosmosDbService = gcpFirestoreService;

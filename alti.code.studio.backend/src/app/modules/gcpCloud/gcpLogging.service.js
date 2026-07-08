@@ -1,7 +1,7 @@
 import { Logging } from '@google-cloud/logging';
 import { logger } from '../../../shared/logger.js';
 
-class GcpLoggingService {
+class GcpLoggingServiceImpl {
   constructor() {
     this.logging = null;
     this.isInitialized = false;
@@ -70,7 +70,7 @@ class GcpLoggingService {
   }
 }
 
-const service = new GcpLoggingService();
+const service = new GcpLoggingServiceImpl();
 
 export const GcpLoggingServiceInstance = {
   writeAuditLog: (logName, entry, severity) =>
@@ -78,6 +78,5 @@ export const GcpLoggingServiceInstance = {
 };
 
 export const CloudLoggingService = GcpLoggingServiceInstance;
-export const AzureLoggingService = GcpLoggingServiceInstance;
-export const azureLoggingService = GcpLoggingServiceInstance;
+export const GcpLoggingService = GcpLoggingServiceInstance;
 export const gcpLoggingService = GcpLoggingServiceInstance;

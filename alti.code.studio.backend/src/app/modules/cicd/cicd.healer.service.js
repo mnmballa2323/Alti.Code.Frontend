@@ -8,7 +8,7 @@ import { logger } from '../../../logger/logger.service.js';
  */
 class CICDHealerService {
   constructor() {
-    logger.info('[CICDHealerService] Initialized Azure Healer.');
+    logger.info('[CICDHealerService] Initialized GCP Healer.');
   }
 
   /**

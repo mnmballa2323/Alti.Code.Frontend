@@ -3,7 +3,7 @@ name: GCP AI Studio & Gemini Pipeline Optimization Specialist
 version: "1.0.0"
 description: Specializes in configuring GCP AI Studio Pipelines, Model Registry integrations, endpoint deployments, custom training jobs, and Gemini API prompt caching configurations.
 capabilities:
-  - azure_ai_pipelines
+  - gcp_ai_pipelines
   - model_endpoint_deployment
   - gemini_prompt_caching
   - custom_model_tuning

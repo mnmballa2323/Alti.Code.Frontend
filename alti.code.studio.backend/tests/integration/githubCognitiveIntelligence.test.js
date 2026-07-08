@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { githubDocsService } from '../../src/app/modules/githubDocs/githubDocs.service.js';
 import { ragService } from '../../src/app/modules/memory/rag.service.js';
-import { azureGenAiService as AzureGenAiService } from '../../src/app/modules/ai/azureGenAi.service.js';
-import { AzureSearchService } from '../../src/app/modules/gcpCloud/gcpSearch.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../../src/app/modules/ai/gcpGenAi.service.js';
+import { GcpSearchService } from '../../src/app/modules/gcpCloud/gcpSearch.service.js';
 import { spannerGraphService } from '../../src/app/modules/gcpCloud/gcpSpannerGraph.service.js';
 import { visionService } from '../../src/app/modules/senses/vision.service.js';
 import { agentRegistry } from '../../src/app/modules/agents/agent.registry.js';
@@ -38,7 +38,7 @@ describe('GitHub Swarm Phase 7: Cognitive Intelligence Integration Tests', () =>
                 })
             };
 
-            const getModelSpy = vi.spyOn(AzureGenAiService, 'getGenerativeModel').mockReturnValue(mockModel);
+            const getModelSpy = vi.spyOn(GcpGenAiService, 'getGenerativeModel').mockReturnValue(mockModel);
 
             // Mock Swarm Dispatch consultations
             const dispatchSpy = vi.spyOn(githubDocsService, 'dispatchQueryToSwarm').mockImplementation(async (taskQuery, agentId) => {
@@ -122,8 +122,8 @@ describe('GitHub Swarm Phase 7: Cognitive Intelligence Integration Tests', () =>
             // Mock local RAG query returning a low confidence or empty string
             const ragSpy = vi.spyOn(ragService, 'query').mockResolvedValue('No relevant context found in Enterprise Memory to answer the query.');
             
-            // Mock AzureSearchService
-            const searchSpy = vi.spyOn(AzureSearchService, 'getSearchContext').mockResolvedValue('Latest real-time details from GitHub Actions 2026 documentation index.');
+            // Mock GcpSearchService
+            const searchSpy = vi.spyOn(GcpSearchService, 'getSearchContext').mockResolvedValue('Latest real-time details from GitHub Actions 2026 documentation index.');
 
             const query = 'How do I use keyless OIDC federation in actions in May 2026?';
             const result = await githubDocsService.searchDocs(query);

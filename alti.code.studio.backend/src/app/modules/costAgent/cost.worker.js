@@ -16,7 +16,7 @@ export const costWorkerProcessor = async job => {
   const analysis = await aiProvider.reason(`
 You are a cloud FinOps expert. Analyze infrastructure costs and recommend savings.
 
-Cloud Provider: ${provider || 'AWS/GCP/Azure'}
+Cloud Provider: ${provider || 'AWS/GCP/GCP'}
 Infrastructure: ${JSON.stringify(infrastructure || {})}
 Usage Patterns: ${JSON.stringify(usage || {})}
 

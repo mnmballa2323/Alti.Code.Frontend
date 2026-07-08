@@ -210,9 +210,9 @@ class GithubDocsService {
         `🪐 [GitHub Docs] Local RAG confidence low/empty. Falling back to live web search grounding...`,
       );
       try {
-        const { AzureSearchService } =
+        const { GcpSearchService } =
           await import('../gcpCloud/gcpSearch.service.js');
-        const webResult = await AzureSearchService.getSearchContext(query);
+        const webResult = await GcpSearchService.getSearchContext(query);
         return `[Live Web Grounding Fallback]\n\n${webResult}`;
       } catch (error) {
         logger.warn(
@@ -357,10 +357,10 @@ class GithubDocsService {
 
     let dag = null;
     try {
-      const { azureGenAiService: AzureGenAiService } =
-        await import('../ai/azureGenAi.service.js');
-      const model = AzureGenAiService.getGenerativeModel(
-        AzureGenAiService.PRIMARY_MODEL,
+      const { gcpGenAiService: GcpGenAiService } =
+        await import('../ai/gcpGenAi.service.js');
+      const model = GcpGenAiService.getGenerativeModel(
+        GcpGenAiService.PRIMARY_MODEL,
       );
       const prompt = `Decompose the following complex user query into a topological Directed Acyclic Graph (DAG) of task nodes to solve it using the specialized GitHub Swarm.
 Each node must represent a distinct task and must specify:
@@ -561,10 +561,10 @@ Respond ONLY with a valid JSON object matching this schema:
 
     let synthesizedContent = '';
     try {
-      const { azureGenAiService: AzureGenAiService } =
-        await import('../ai/azureGenAi.service.js');
-      const model = AzureGenAiService.getGenerativeModel(
-        AzureGenAiService.PRIMARY_MODEL,
+      const { gcpGenAiService: GcpGenAiService } =
+        await import('../ai/gcpGenAi.service.js');
+      const model = GcpGenAiService.getGenerativeModel(
+        GcpGenAiService.PRIMARY_MODEL,
       );
       const prompt = `ACT AS THE MASTER ARCHITECT OF INSO CODE.
 You are synthesizing the topological execution of a multi-agent Swarm DAG workflow.

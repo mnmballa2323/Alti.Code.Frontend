@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2026 Inso Code
  *
- * Model Gateway Unit Tests
+ * Model Gateway Unit Tests (GCP Sovereign Inference Only)
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
@@ -28,64 +28,16 @@ vi.mock('../../modules/telemetry/telemetry.service.js', () => ({
   },
 }));
 
-// Define shared spy mocks that can be asserted on in individual tests
-const vertexGenerateContentMock = vi.fn().mockResolvedValue({
-  response: {
-    candidates: [
-      { content: { parts: [{ text: 'Gemini Vertex AI mock reply' }] } },
-    ],
-  },
+// Mock executeVertexInference
+const executeVertexInferenceMock = vi.fn().mockResolvedValue({
+  text: 'Google Vertex AI mock reply',
+  usage: { promptTokens: 10, completionTokens: 20 },
+  provider: 'gcp-vertex',
 });
 
-const bedrockCreateMock = vi.fn().mockResolvedValue({
-  content: [{ text: 'AWS Bedrock mock reply' }],
-});
-
-const azureCreateMock = vi.fn().mockResolvedValue({
-  choices: [{ message: { content: 'Azure OpenAI mock reply' } }],
-});
-
-// Mock GCP Vertex AI using Class syntax to satisfy constructor constraints
-vi.mock('nonexistent-vertexai', () => {
-  return {
-    VertexAI: class {
-      constructor() {}
-      getGenerativeModel() {
-        return {
-          generateContent: vertexGenerateContentMock,
-        };
-      }
-    },
-  };
-});
-
-// Mock AWS Bedrock using Class syntax to satisfy constructor constraints
-vi.mock('nonexistent-bedrock', () => {
-  return {
-    AnthropicBedrock: class {
-      constructor() {
-        this.messages = {
-          create: bedrockCreateMock,
-        };
-      }
-    },
-  };
-});
-
-// Mock Azure OpenAI using Class syntax to satisfy constructor constraints
-vi.mock('openai', () => {
-  return {
-    AzureOpenAI: class {
-      constructor() {
-        this.chat = {
-          completions: {
-            create: azureCreateMock,
-          },
-        };
-      }
-    },
-  };
-});
+vi.mock('../../modules/ai/vertex_ai.helper.js', () => ({
+  executeVertexInference: (...args) => executeVertexInferenceMock(...args),
+}));
 
 // Mock Google DLP Service
 vi.mock('../../modules/ai/gcpDlp.service.js', () => ({
@@ -96,28 +48,20 @@ vi.mock('../../modules/ai/gcpDlp.service.js', () => ({
 
 describe('Platform Model Gateway', () => {
   const originalGcpProject = config.gcp?.project_id;
-  const originalAccessKey = process.env.AWS_ACCESS_KEY_ID;
-  const originalSecretKey = process.env.AWS_SECRET_ACCESS_KEY;
-  const originalAzureKey = process.env.AZURE_OPENAI_API_KEY;
-  const originalAzureEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
+  const originalGcpLocation = config.gcp?.location;
 
   beforeEach(() => {
     vi.clearAllMocks();
     if (!config.gcp) config.gcp = {};
     config.gcp.project_id = 'test-gcp-project';
-    process.env.AWS_ACCESS_KEY_ID = 'test-aws-key';
-    process.env.AWS_SECRET_ACCESS_KEY = 'test-aws-secret';
-    process.env.AZURE_OPENAI_API_KEY = 'test-azure-key';
-    process.env.AZURE_OPENAI_ENDPOINT =
-      'https://test-azure-endpoint.openai.azure.com';
+    config.gcp.location = 'us-central1';
   });
 
   afterEach(() => {
-    config.gcp.project_id = originalGcpProject;
-    process.env.AWS_ACCESS_KEY_ID = originalAccessKey;
-    process.env.AWS_SECRET_ACCESS_KEY = originalSecretKey;
-    process.env.AZURE_OPENAI_API_KEY = originalAzureKey;
-    process.env.AZURE_OPENAI_ENDPOINT = originalAzureEndpoint;
+    if (config.gcp) {
+      config.gcp.project_id = originalGcpProject;
+      config.gcp.location = originalGcpLocation;
+    }
   });
 
   it('should block direct integrations to unauthorized providers with FORBIDDEN exception', async () => {
@@ -129,21 +73,25 @@ describe('Platform Model Gateway', () => {
           prompt: 'test',
         }),
       ).rejects.toThrow(
-        'Security Policy Exception: Direct API connections to non-GCP/Azure providers are blocked. Please use GCP Vertex AI or Azure Foundry.',
+        'Security Policy Exception: Direct API connections to non-GCP providers are blocked. Please use GCP Vertex AI.',
       );
     }
   });
 
   it('should route completions successfully via GCP Vertex AI', async () => {
+    executeVertexInferenceMock.mockResolvedValueOnce({
+      text: 'Gemini Vertex AI mock reply',
+      usage: { promptTokens: 10, completionTokens: 20 },
+      provider: 'gcp-vertex',
+    });
+
     const reply = await routePlatformCompletion({
       provider: 'gcp',
       model: 'gemini-3.1-pro',
       prompt: 'Hello Gemini',
     });
 
-    expect(reply).toContain(
-      '[GOOGLE VERTEX AI DIRECT SOVEREIGN COMPLIANT SIMULATION]',
-    );
+    expect(reply).toBe('Gemini Vertex AI mock reply');
   });
 
   it('should sanitize credentials in error responses to prevent leakage', () => {
@@ -193,35 +141,38 @@ describe('Platform Model Gateway', () => {
 
   describe('Pipeline Pre-processing: DLP', () => {
     it('should run prompt through DLP scrubbing when requested', async () => {
-      azureCreateMock.mockResolvedValueOnce({
-        choices: [{ message: { content: 'Azure OpenAI mock reply' } }],
+      executeVertexInferenceMock.mockResolvedValueOnce({
+        text: 'GCP mock reply',
+        usage: { promptTokens: 5, completionTokens: 10 },
+        provider: 'gcp-vertex',
       });
 
       await routePlatformCompletion({
-        provider: 'azure',
-        model: 'azure/gpt-4o',
+        provider: 'gcp',
+        model: 'gemini-3.5-pro',
         prompt: 'Clean prompt',
         scrubPrompt: true,
       });
 
-      expect(azureCreateMock).toHaveBeenCalledWith(
-        expect.objectContaining({
-          messages: [{ role: 'user', content: '[REDACTED] Clean prompt' }],
-        }),
+      expect(executeVertexInferenceMock).toHaveBeenCalledWith(
+        '[REDACTED] Clean prompt',
+        'gemini-3.5-pro',
+        expect.any(Object),
       );
     });
   });
 
   describe('Product-Level Telemetry Metrics', () => {
     it('should record telemetry with productId, tenantId, latency, and tokens consumed', async () => {
-      azureCreateMock.mockResolvedValueOnce({
-        choices: [{ message: { content: 'Gemini reply' } }],
-        usage: { total_tokens: 150 },
+      executeVertexInferenceMock.mockResolvedValueOnce({
+        text: 'GCP reply',
+        usage: { promptTokens: 50, completionTokens: 100 },
+        provider: 'gcp-vertex',
       });
 
       await routePlatformCompletion({
-        provider: 'azure',
-        model: 'azure/gpt-4o',
+        provider: 'gcp',
+        model: 'gemini-3.5-pro',
         prompt: 'Hello with telemetry',
         productId: 'inso-code',
         tenantId: 'tenant-999',
@@ -229,7 +180,7 @@ describe('Platform Model Gateway', () => {
 
       expect(mockRecordLlmCall).toHaveBeenCalledWith(
         expect.objectContaining({
-          model: 'azure/gpt-4o',
+          model: 'gemini-3.5-pro',
           success: true,
           tokens: 150,
           productId: 'inso-code',
@@ -240,12 +191,12 @@ describe('Platform Model Gateway', () => {
     });
 
     it('should record failure telemetry when inference fails', async () => {
-      azureCreateMock.mockRejectedValueOnce(new Error('Inference error'));
+      executeVertexInferenceMock.mockRejectedValueOnce(new Error('Inference error'));
 
       await expect(
         routePlatformCompletion({
-          provider: 'azure',
-          model: 'azure/gpt-4o',
+          provider: 'gcp',
+          model: 'gemini-3.5-pro',
           prompt: 'Failing prompt',
           productId: 'inso-ai',
           tenantId: 'tenant-111',
@@ -254,7 +205,7 @@ describe('Platform Model Gateway', () => {
 
       expect(mockRecordLlmCall).toHaveBeenCalledWith(
         expect.objectContaining({
-          model: 'azure/gpt-4o',
+          model: 'gemini-3.5-pro',
           success: false,
           error: 'Inference error',
           productId: 'inso-ai',
@@ -273,18 +224,20 @@ describe('Platform Model Gateway', () => {
     });
 
     it('should fall back to estimated tokens when GCP response lacks usageMetadata', async () => {
-      azureCreateMock.mockResolvedValueOnce({
-        choices: [{ message: { content: 'Gemini reply no metadata' } }],
+      executeVertexInferenceMock.mockResolvedValueOnce({
+        text: 'GCP reply no metadata',
+        usage: null,
+        provider: 'gcp-vertex',
       });
 
-      const prompt = 'Hello Gemini fallback';
+      const prompt = 'Hello GCP fallback';
       const expectedTokens = Math.ceil(
-        (prompt.length + 'Gemini reply no metadata'.length) / 4,
+        (prompt.length + 'GCP reply no metadata'.length) / 4,
       );
 
       await routePlatformCompletion({
-        provider: 'azure',
-        model: 'azure/gpt-4o',
+        provider: 'gcp',
+        model: 'gemini-3.5-pro',
         prompt,
         productId: 'inso-code',
         tenantId: 'tenant-999',
@@ -305,15 +258,16 @@ describe('Platform Model Gateway', () => {
     });
 
     it('should count tokens per product and enforce billing tier limits', async () => {
-      azureCreateMock.mockResolvedValue({
-        choices: [{ message: { content: 'Gemini reply' } }],
-        usage: { total_tokens: 90000 },
+      executeVertexInferenceMock.mockResolvedValue({
+        text: 'GCP reply',
+        usage: { promptTokens: 40000, completionTokens: 50000 },
+        provider: 'gcp-vertex',
       });
 
       // Call 1: Consumes 90,000 tokens for product-pharma (limit is 80,000)
       await routePlatformCompletion({
-        provider: 'azure',
-        model: 'azure/gpt-4o',
+        provider: 'gcp',
+        model: 'gemini-3.5-pro',
         prompt: 'First call',
         productId: 'product-pharma',
       });
@@ -323,8 +277,8 @@ describe('Platform Model Gateway', () => {
       // Call 2: Consuming more tokens should fail because it exceeds limit (90,000 >= 80,000)
       await expect(
         routePlatformCompletion({
-          provider: 'azure',
-          model: 'azure/gpt-4o',
+          provider: 'gcp',
+          model: 'gemini-3.5-pro',
           prompt: 'Second call',
           productId: 'product-pharma',
         }),
@@ -334,19 +288,20 @@ describe('Platform Model Gateway', () => {
     });
 
     it('should track regional metrics correctly per provider', async () => {
-      azureCreateMock.mockResolvedValueOnce({
-        choices: [{ message: { content: 'GCP reply' } }],
-        usage: { total_tokens: 100 },
+      executeVertexInferenceMock.mockResolvedValueOnce({
+        text: 'GCP reply',
+        usage: { promptTokens: 40, completionTokens: 60 },
+        provider: 'gcp-vertex',
       });
 
       await routePlatformCompletion({
-        provider: 'azure',
-        model: 'azure/gpt-4o',
+        provider: 'gcp',
+        model: 'gemini-3.5-pro',
         prompt: 'Regional test',
         productId: 'product-healthcare',
       });
 
-      const gcpRegion = 'azure-eastus';
+      const gcpRegion = 'us-central1';
       const metrics = getRegionalMetrics(gcpRegion);
 
       expect(metrics.totalCalls).toBe(1);

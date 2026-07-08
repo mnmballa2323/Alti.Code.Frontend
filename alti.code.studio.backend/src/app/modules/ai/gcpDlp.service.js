@@ -138,4 +138,4 @@ export const GoogleDlpService = {
 
 export const gcpDlpService = GoogleDlpService;
 export const dlpService = GoogleDlpService;
-export const AzureDlpService = GoogleDlpService; // Compatibility mapping
+export const GCPDlpService = GoogleDlpService; // Compatibility mapping

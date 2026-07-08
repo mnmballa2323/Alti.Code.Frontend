@@ -1,15 +1,15 @@
 import express from 'express';
 import puppeteer from 'puppeteer-core';
-import { azureStorageService } from '../gcpCloud/gcpStorage.service.js';
+import { gcpStorageService } from '../gcpCloud/gcpStorage.service.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
 import config from '../../../../config/index.js';
 
-// Standalone express app for the Azure Container Apps scraping fleet
+// Standalone express app for the GCP Cloud Run scraping fleet
 const app = express();
 app.use(express.json());
 
-const azureStorage = azureStorageService;
+const gcpStorage = gcpStorageService;
 
 /**
  * The deep research headless scraper
@@ -50,18 +50,18 @@ app.post('/api/v1/research/scrape', async (req, res) => {
     // Hash the URL for storage blob name
     const urlHash = crypto.createHash('md5').update(url).digest('hex');
     const containerName =
-      config.azure?.researchContainer || 'alti-research-data';
+      config.gcp?.researchContainer || 'alti-research-data';
     const blobName = `research/${topicId || 'general'}/${urlHash}.txt`;
 
     logger.info(
-      `💾 [Deep Researcher] Pushing ${textContent.length} characters to Azure Blob Storage (Container: ${containerName}, Blob: ${blobName})`,
+      `💾 [Deep Researcher] Pushing ${textContent.length} characters to GCP Cloud Storage (Container: ${containerName}, Blob: ${blobName})`,
     );
 
-    await azureStorage.uploadContent(containerName, blobName, textContent);
+    await gcpStorage.uploadContent(containerName, blobName, textContent);
 
     res.status(200).json({
       success: true,
-      message: 'Successfully scraped and ingested to Azure Blob Storage',
+      message: 'Successfully scraped and ingested to GCP Cloud Storage',
       blobName,
       contentLength: textContent.length,
     });
@@ -77,7 +77,7 @@ const PORT = process.env.PORT || 8080;
 if (process.env.RUN_AS_WORKER === 'true') {
   app.listen(PORT, () => {
     logger.info(
-      `🚀 [Deep Researcher] Azure Container Apps Scraper Fleet Agent listening on port ${PORT}`,
+      `🚀 [Deep Researcher] GCP Cloud Run Scraper Fleet Agent listening on port ${PORT}`,
     );
   });
 }

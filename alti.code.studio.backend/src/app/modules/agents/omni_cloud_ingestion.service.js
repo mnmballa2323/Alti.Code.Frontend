@@ -3,7 +3,7 @@
  *
  * Omni-Cloud Ingestion Engine
  * Massively overhauls the AI's Cloud knowledge by autonomously syncing every single
- * Open-Source repository from AWS, GCP, and Azure that strictly adheres to the
+ * Open-Source repository from AWS, GCP, and GCP that strictly adheres to the
  * MIT or Apache 2.0 Hard Law licenses.
  */
 
@@ -36,7 +36,7 @@ class OmniCloudIngestionService {
     }
 
     logger.info(
-      '🌌 [Omni-Cloud Ingestion] Initialized. Beginning strict MIT/Apache 2.0 sync for AWS, GCP, and Azure...',
+      '🌌 [Omni-Cloud Ingestion] Initialized. Beginning strict MIT/Apache 2.0 sync for AWS, GCP, and GCP...',
     );
 
     // Schedule to run weekly for continuous updates

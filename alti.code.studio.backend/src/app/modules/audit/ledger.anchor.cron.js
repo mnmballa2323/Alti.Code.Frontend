@@ -10,14 +10,14 @@ import crypto from 'crypto';
 import cron from 'node-cron';
 import { logger } from '../../../shared/logger.js';
 import { AuditLog } from './audit.model.js';
-import { azureStorageService } from '../gcpCloud/gcpStorage.service.js';
+import { gcpStorageService } from '../gcpCloud/gcpStorage.service.js';
 import config from '../../../../config/index.js';
 
 class DailyHashAnchor {
   constructor() {
-    this.subscriptionId = config.azure?.subscription_id;
+    this.subscriptionId = config.gcp?.subscription_id;
 
-    // Simulating the enterprise anchor target (Could be Ethereum Mainnet via Infura, Azure Ledger, or Azure Confidential Space)
+    // Simulating the enterprise anchor target (Could be Ethereum Mainnet via Infura, GCP Blockchain Node Engine, or GCP Confidential Space)
     this.anchorContainer = 'alti-code-studio-worm-audit';
 
     // Run every night at midnight (0 0 * * *)
@@ -56,22 +56,22 @@ class DailyHashAnchor {
         date: startOfDay.toISOString().split('T')[0],
         totalRecords: logCount,
         terminalMerkleHash: terminalHash,
-        // Assuming we simulate dropping this hash onto Ethereum Blockchain or Azure Confidential Ledger
+        // Assuming we simulate dropping this hash onto Ethereum Blockchain or GCP Confidential Space
         // E.g., const ethTx = await web3.eth.sendTransaction({ data: web3.utils.toHex(terminalHash) });
         ledgerTransactionId: crypto.randomBytes(32).toString('hex'),
-        ledgerNetwork: 'AZURE_CONFIDENTIAL_SPACE_SIMULATION',
+        ledgerNetwork: 'GCP_CONFIDENTIAL_SPACE_SIMULATION',
       };
 
       // In our S&P500 architecture, we persist this anchor payload independently into the WORM container
       if (this.anchorContainer) {
         const fileName = `anchors/anchor_${anchorProof.date}.json`;
-        await azureStorageService.uploadContent(
+        await gcpStorageService.uploadContent(
           this.anchorContainer,
           fileName,
           JSON.stringify(anchorProof, null, 2),
         );
         logger.info(
-          `✅ Daily Audit Anchor successful! Terminal Hash [${terminalHash.substring(0, 8)}] locked to Ledger: azure://${this.anchorContainer}/${fileName}`,
+          `✅ Daily Audit Anchor successful! Terminal Hash [${terminalHash.substring(0, 8)}] locked to Ledger: gcp://${this.anchorContainer}/${fileName}`,
         );
       }
 

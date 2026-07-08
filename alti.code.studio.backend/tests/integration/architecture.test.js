@@ -2,11 +2,11 @@ global.self = global;
 import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest';
 import * as ArchitectureService from '../../src/app/modules/architecture/architecture.service.js';
 import { ultimateRagService } from '../../src/app/modules/rag/ultimate_rag.service.js';
-import { AzureGenAiService } from '../../src/app/modules/ai/azureGenAi.service.js';
+import { GcpGenAiService } from '../../src/app/modules/ai/gcpGenAi.service.js';
 import { ArchitectureNode, ArchitectureEdge } from '../../src/app/modules/architecture/architecture.model.js';
 
-vi.mock('../../src/app/modules/ai/azureGenAi.service.js', () => ({
-    AzureGenAiService: {
+vi.mock('../../src/app/modules/ai/gcpGenAi.service.js', () => ({
+    GcpGenAiService: {
         generateContent: vi.fn()
     }
 }));

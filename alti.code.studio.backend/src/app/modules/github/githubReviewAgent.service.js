@@ -50,7 +50,7 @@ Provide a comprehensive, senior-level code review comment suitable for posting d
       owner,
       repo,
       issue_number: pull_number,
-      body: `### 🧠 Tri-Brain Auto-Review (AWS/GCP/Azure Consensus)\n\n${finalReview}`,
+      body: `### 🧠 Tri-Brain Auto-Review (AWS/GCP/GCP Consensus)\n\n${finalReview}`,
     });
 
     logger.info(

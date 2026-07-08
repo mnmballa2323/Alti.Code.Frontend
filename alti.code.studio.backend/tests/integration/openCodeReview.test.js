@@ -51,7 +51,7 @@ describe('OpenCodeReview Integration & Worker Tests', () => {
             expect(cmd).toBe('npx');
             expect(args).toEqual(['ocr', 'review']);
             expect(opts.env.OCR_LLM_URL).toContain('http://localhost:4000/v1');
-            expect(opts.env.OCR_LLM_MODEL).toBe(config.azure.model_name || 'gpt-5.5');
+            expect(opts.env.OCR_LLM_MODEL).toBe(config.gcp.model_name || 'gpt-5.5');
         });
 
         it('should correctly execute the reviewRange command', async () => {

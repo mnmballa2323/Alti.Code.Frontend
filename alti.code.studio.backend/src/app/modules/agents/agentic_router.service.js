@@ -5,7 +5,7 @@ import { agentRegistry } from './agent.registry.js';
 import { swarmNexusAgent } from './swarm_nexus.agent.js';
 import { vectorStoreService } from '../memory/vector.store.js';
 
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 
 // DIRECT GEMINI BLOCKED - USE VERTEX VIA GATEWAY
 /**
@@ -14,13 +14,13 @@ import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service
  */
 class AgenticRouterService {
   constructor() {
-    // model generation is lazy or uses the valid Azure AI Studio gateway
+    // model generation is lazy or uses the valid GCP Vertex AI Studio gateway
   }
 
   get model() {
     if (!this._cachedModel) {
-      this._cachedModel = AzureGenAiService.getGenerativeModel(
-        AzureGenAiService.PRIMARY_MODEL || 'gemini-3.1-pro',
+      this._cachedModel = GcpGenAiService.getGenerativeModel(
+        GcpGenAiService.PRIMARY_MODEL || 'gemini-3.1-pro',
       );
     }
     return this._cachedModel;
@@ -1410,7 +1410,7 @@ class AgenticRouterService {
         },
         {
           agentId: 'Spatial Computing & High-Fidelity Metaverse Specialist',
-          task: 'Optimize WebGL glTF azure_ai shaders and synchronize avatar collision parameters',
+          task: 'Optimize WebGL glTF gcp_ai shaders and synchronize avatar collision parameters',
         },
       );
       strategy = 'Economic Sector Swarm: Technology & Media';
@@ -2852,7 +2852,7 @@ class AgenticRouterService {
     const isWebGpuPipelineOutput =
       outputLower.includes('webgpu_gpu_render_passes') ||
       outputLower.includes('wgsl_glsl_shader_compile') ||
-      outputLower.includes('bind_groups_azure_ai_buffers') ||
+      outputLower.includes('bind_groups_gcp_ai_buffers') ||
       outputLower.includes('gpu_compute_pipelines');
     if (isWebGpuPipelineOutput) {
       downstreamSequence.push({
@@ -2878,7 +2878,7 @@ class AgenticRouterService {
 
     // 162. Graphics: Creative Shader & Visual Effects Artist
     const isShaderArtistOutput =
-      outputLower.includes('fragment_azure_ai_shader_effects') ||
+      outputLower.includes('fragment_gcp_ai_shader_effects') ||
       outputLower.includes('simplex_perlin_noise_functions') ||
       outputLower.includes('post_processing_effects_filters') ||
       outputLower.includes('raymarching_signed_distance_fields');

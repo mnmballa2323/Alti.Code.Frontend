@@ -23,7 +23,7 @@ const modulesPath = path.join(__dirname, '../modules');
 import { authRoutes } from '../modules/auth/auth.route.js';
 import { mcpRoutes } from '../modules/mcp/mcp.route.js';
 import { aiRoutes } from '../modules/ai/ai.route.js';
-import { verifyAzureToken } from '../modules/auth/gcpIap.service.js';
+import { verifyGCPToken } from '../modules/auth/gcpIap.service.js';
 import { ResearchRoutes } from '../modules/research/research.route.js';
 import { enterpriseWAF } from '../modules/security/enterprise_waf.middleware.js';
 import { rbacService } from '../modules/security/rbac.middleware.js';
@@ -58,7 +58,7 @@ router.use('/openwiki-proxy', openWikiProxyRouter);
 
 // 🛡️ Global Zero-Trust Boundary (IAP verification for all subsequent routes)
 // Note: In development, verifyIAPToken bypasses automatically if no token is present.
-router.use(verifyAzureToken);
+router.use(verifyGCPToken);
 
 // 🔌 Dynamic Database Context Router per Tenant
 router.use(tenantDbRouter);
@@ -137,7 +137,7 @@ try {
                 basePath = '/gemini-extensions';
               if (file === 'geminiOpenMemo.route.js')
                 basePath = '/gemini-open-memory';
-              if (file === 'azureGenAi.route.js') basePath = '/azure-gen-ai';
+              if (file === 'gcpGenAi.route.js') basePath = '/gcp-gen-ai';
               if (file === 'gcpSearch.route.js') basePath = '/gcp-search';
               if (file === 'borg.route.js') basePath = '/borg';
               if (file === 'oss.agents.route.js') basePath = '/oss-agents';

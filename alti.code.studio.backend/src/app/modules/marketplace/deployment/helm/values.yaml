@@ -1,5 +1,5 @@
 # Inso Code Enterprise Swarm Helm Configuration
-# Designed for secure VPC deployments via GCP, AWS, and Azure marketplaces.
+# Designed for secure VPC deployments via GCP, AWS, and GCP marketplaces.
 
 replicaCount: 3
 
@@ -89,7 +89,7 @@ env:
 
   # Marketplace Metering Credentials
   - name: MARKETPLACE_PROVIDER
-    value: "gcp" # Options: gcp, aws, azure
+    value: "gcp" # Options: gcp, aws, gcp
   - name: MARKETPLACE_METERING_SECRET
     valueFrom:
       secretKeyRef:

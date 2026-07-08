@@ -16,20 +16,20 @@ import { OpenAI, OpenAIEmbedding } from '@llamaindex/openai';
 import fs from 'node:fs/promises';
 import config from '../../../../config/index.js';
 
-// ✅ Required by LlamaIndex (Azure Configuration)
+// ✅ Required by LlamaIndex (GCP Configuration)
 Settings.llm = new OpenAI({
-  azure: {
-    apiKey: process.env.AZURE_OPENAI_API_KEY || config.azureOpenAi?.apiKey,
-    endpoint: process.env.AZURE_OPENAI_ENDPOINT || config.azureOpenAi?.endpoint,
+  gcp: {
+    apiKey: process.env.GCP_OPENAI_API_KEY || config.gcpOpenAi?.apiKey,
+    endpoint: process.env.GCP_OPENAI_ENDPOINT || config.gcpOpenAi?.endpoint,
     apiVersion: '2024-02-15-preview',
     deployment: 'gpt-4o',
   },
 });
 
 Settings.embedModel = new OpenAIEmbedding({
-  azure: {
-    apiKey: process.env.AZURE_OPENAI_API_KEY || config.azureOpenAi?.apiKey,
-    endpoint: process.env.AZURE_OPENAI_ENDPOINT || config.azureOpenAi?.endpoint,
+  gcp: {
+    apiKey: process.env.GCP_OPENAI_API_KEY || config.gcpOpenAi?.apiKey,
+    endpoint: process.env.GCP_OPENAI_ENDPOINT || config.gcpOpenAi?.endpoint,
     apiVersion: '2024-02-15-preview',
     deployment: 'text-embedding-3-small',
   },
@@ -60,11 +60,11 @@ export async function createIndexFromFiles(filePaths) {
 
   const llm = new ChatOpenAI({
     temperature: 0.3,
-    azureOpenAIApiKey:
-      process.env.AZURE_OPENAI_API_KEY || config.azureOpenAi?.apiKey,
-    azureOpenAIBasePath: `${process.env.AZURE_OPENAI_ENDPOINT || config.azureOpenAi?.endpoint}/openai/deployments`,
-    azureOpenAIApiDeploymentName: 'gpt-4o',
-    azureOpenAIApiVersion: '2024-02-15-preview',
+    gcpOpenAIApiKey:
+      process.env.GCP_OPENAI_API_KEY || config.gcpOpenAi?.apiKey,
+    gcpOpenAIBasePath: `${process.env.GCP_OPENAI_ENDPOINT || config.gcpOpenAi?.endpoint}/openai/deployments`,
+    gcpOpenAIApiDeploymentName: 'gpt-4o',
+    gcpOpenAIApiVersion: '2024-02-15-preview',
   });
 
   const memory = new BufferMemory({

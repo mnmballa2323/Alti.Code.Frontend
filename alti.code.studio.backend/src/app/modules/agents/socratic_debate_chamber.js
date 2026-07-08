@@ -107,7 +107,7 @@ Provide the updated, refactored solution. Output only the updated technical spec
       );
       logger.info(`🗣️ [Socratic Debate] Proposer has refactored the design.`);
 
-      // 3. The Auditor evaluates consensus (Model: Azure OpenAI / GPT)
+      // 3. The Auditor evaluates consensus (Model: GCP Vertex AI / GPT)
       const auditorPrompt = `
 You are the principal systems compliance Auditor. Evaluate the refined proposal and the history of criticisms to determine if all security, scale, and functional concerns have been completely resolved.
 

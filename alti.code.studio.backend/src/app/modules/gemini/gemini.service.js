@@ -1,5 +1,5 @@
 import { LlmGatewayService } from '../llmGateway/llmGateway.service.js';
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 
 /**
  * Route chat responses securely through the new unified LlmGateway Service.
@@ -40,7 +40,7 @@ const generateContentWithImage = async (
   textPrompt = 'Describe this image in detail.',
   sessionId,
 ) => {
-  const model = AzureGenAiService.getGenerativeModel('gpt-4o', 0.5);
+  const model = GcpGenAiService.getGenerativeModel('gpt-4o', 0.5);
   const imagePart = {
     inlineData: {
       data: base64Image,
@@ -52,7 +52,7 @@ const generateContentWithImage = async (
 };
 
 const gemini25PreviewService = async (sessionId, prompt, userId) => {
-  const model = AzureGenAiService.getGenerativeModel('gpt-4o', 0.5);
+  const model = GcpGenAiService.getGenerativeModel('gpt-4o', 0.5);
   const result = await model.generateContent(prompt);
   return result.response.text();
 };

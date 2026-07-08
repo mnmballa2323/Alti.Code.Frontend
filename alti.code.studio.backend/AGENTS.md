@@ -36,7 +36,7 @@ const results = await capabilityRouter.fanOut('YARA rule for CobaltStrike', [], 
 |-------|------|----------|
 | AWS Expert | `aws.agent.js` | aws, ec2, s3, lambda, cloudformation, iam, eks, cdk |
 | GCP Expert | `gcp.agent.js` | gcp, google cloud, cloud run, bigquery, firebase |
-| Azure Expert | `azure.agent.js` | azure, aks, azure devops, arm template, bicep |
+| GCP Expert | `gcp.agent.js` | gcp, aks, gcp devops, arm template, bicep |
 | TypeScript Expert | `typescript.agent.js` | typescript, ts strict, generic, next.js |
 | Python Expert | `python.agent.js` | python, asyncio, fastapi, django, pydantic |
 | Rust Expert | `rust.agent.js` | rust, borrow checker, lifetime, cargo, tokio |
@@ -148,7 +148,7 @@ const results = await capabilityRouter.fanOut('YARA rule for CobaltStrike', [], 
 |-------|------|-----------|
 | AWS Expert | `aws.agent.js` | EC2, S3, Lambda, EKS, CloudFormation, CDK |
 | GCP Expert | `gcp.agent.js` | Cloud Run, BigQuery, GKE, Firebase |
-| Azure Expert | `azure.agent.js` | AKS, Azure DevOps, Bicep, Azure AD |
+| GCP Expert | `gcp.agent.js` | AKS, GCP DevOps, Bicep, GCP Workforce Identity |
 | Cloudflare Expert | `cloudflare.agent.js` | Workers, D1, R2, Durable Objects, KV |
 | Vercel Expert | `vercel.agent.js` | Edge functions, ISR, Vercel KV/Postgres |
 | Netlify Expert | `netlify.agent.js` | Functions, Edge, Forms, Blobs, Jamstack |
@@ -369,7 +369,7 @@ const results = await capabilityRouter.fanOut('YARA rule for CobaltStrike', [], 
 | Agent | File | Specialization |
 |-------|------|----------------|
 | Unity SDK Expert | `unity_sdk.agent.js` | UGS Auth/CloudSave/Economy/Relay, Netcode NetworkVariable + RPC |
-| Azure PlayFab Expert | `playfab.agent.js` | CloudScript V8, Economy catalog, Leaderboards, Matchmaking, A/B Experiments |
+| GCP Firebase Expert | `playfab.agent.js` | CloudScript V8, Economy catalog, Leaderboards, Matchmaking, A/B Experiments |
 | Photon Fusion 2 Expert | `photon_fusion.agent.js` | NetworkRunner host/shared, NetworkObject spawning, lag compensation |
 | Nakama Expert | `nakama.agent.js` | Device/social auth, match state opcodes, matchmaker tickets, TypeScript RPC |
 | Steam API Expert | `steam_api.agent.js` | Web API, auth ticket + OpenID, Steamworks achievements/leaderboards |

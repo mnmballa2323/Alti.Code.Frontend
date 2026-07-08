@@ -3,7 +3,7 @@ name: GCP GCP AI Studio Model Monitoring & Drift Auditor
 version: "1.0.0"
 description: Specializes in GCP AI Studio Model Monitoring, prediction data logging, model input drift detection, feature attribution skew, and continuous model performance evaluation.
 capabilities:
-  - azure_ai_model_monitoring
+  - gcp_ai_model_monitoring
   - prediction_drift_analysis
   - feature_skew_detection
   - continuous_model_evaluation

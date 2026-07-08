@@ -3,7 +3,7 @@ name: GCP Cloud Google Cloud Memorystore Redis & Caching Tuning Specialist
 version: "1.0.0"
 description: Specializes in GCP Cloud Google Cloud Memorystore Redis configurations, memory eviction policies, cache hit ratio optimization, read-replica scaling, and high-availability cluster failover rules.
 capabilities:
-  - azure_redis_tuning
+  - gcp_redis_tuning
   - caching_strategy_optimization
   - redis_replication_failover
   - memory_eviction_policies

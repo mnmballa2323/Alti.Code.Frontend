@@ -17,7 +17,7 @@ const metricClient = {
   createTimeSeries: async () => {},
   projectPath: id => `projects/${id}`,
 };
-const PROJECT_ID = process.env.ARM_SUBSCRIPTION_ID || 'azure-active';
+const PROJECT_ID = process.env.GCP_PROJECT_ID || 'gcp-active';
 
 // ═══════════════════════════════════════════════
 // Metric Collector (exportable to Cloud Monitoring)

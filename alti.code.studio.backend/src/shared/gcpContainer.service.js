@@ -204,4 +204,4 @@ class GcpContainerService {
 }
 
 export const gcpContainerService = new GcpContainerService();
-export const azureContainerService = gcpContainerService; // Compatibility mapping
+export const gcpContainerService = gcpContainerService; // Compatibility mapping

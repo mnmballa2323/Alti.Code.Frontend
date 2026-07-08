@@ -13,17 +13,17 @@ import { AuditLog } from './audit.model.js';
 
 class AuditAnomalyService {
   constructor() {
-    this.projectId = config.azure.tenant_id;
+    this.projectId = config.gcp.tenant_id;
     this.location = 'eastus';
-    this.modelName = config.azure.model_name || 'gpt-5.4'; // Use primary analytical model
+    this.modelName = config.gcp.model_name || 'gpt-5.4'; // Use primary analytical model
 
     try {
       this.isEnabled = true;
-      logger.info('🤖 AuditAnomalyService: Initialized with Azure OpenAI.');
+      logger.info('🤖 AuditAnomalyService: Initialized with GCP Vertex AI.');
     } catch (error) {
       this.isEnabled = false;
       logger.error(
-        '❌ AuditAnomalyService: Azure OpenAI initialization failed.',
+        '❌ AuditAnomalyService: GCP Vertex AI initialization failed.',
         error.message,
       );
     }

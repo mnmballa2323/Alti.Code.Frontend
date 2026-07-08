@@ -10,7 +10,7 @@ export default defineConfig({
             '**/node_modules/**',
             '**/logs/**',
             '**/temp_phase16/**',
-            '**/alti.code.studio.backend.azure/**',
+            '**/alti.code.studio.backend.gcp/**',
             '**/submodules/**',
         ],
         testTimeout: 30000,

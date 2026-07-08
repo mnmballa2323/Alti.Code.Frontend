@@ -4,7 +4,7 @@ import fs from 'fs/promises';
 import path from 'path';
 
 async function run() {
-    const clouds = ['aws', 'azure', 'gcp'];
+    const clouds = ['aws', 'gcp', 'gcp'];
     const iacTools = ['terraform', 'kubernetes'];
 
     console.log("🚀 Starting isolated cloud environment generation...");
@@ -34,12 +34,12 @@ async function run() {
     const expectedFiles = [
         path.join(projectRoot, 'infrastructure', 'aws-isolated', 'main.tf'),
         path.join(projectRoot, 'infrastructure', 'aws-isolated', 'deployment.yaml'),
-        path.join(projectRoot, 'infrastructure', 'azure-isolated', 'main.tf'),
-        path.join(projectRoot, 'infrastructure', 'azure-isolated', 'deployment.yaml'),
+        path.join(projectRoot, 'infrastructure', 'gcp-isolated', 'main.tf'),
+        path.join(projectRoot, 'infrastructure', 'gcp-isolated', 'deployment.yaml'),
         path.join(projectRoot, 'infrastructure', 'gcp-isolated', 'main.tf'),
         path.join(projectRoot, 'infrastructure', 'gcp-isolated', 'deployment.yaml'),
         path.join(projectRoot, '.github', 'workflows', 'deploy-aws.yml'),
-        path.join(projectRoot, '.github', 'workflows', 'deploy-azure.yml'),
+        path.join(projectRoot, '.github', 'workflows', 'deploy-gcp.yml'),
         path.join(projectRoot, '.github', 'workflows', 'deploy-gcp.yml'),
         path.join(projectRoot, 'docker-compose.yml')
     ];

@@ -7,7 +7,7 @@
 
 import { Agent } from '@mastra/core';
 import config from '../../../../config/index.js';
-import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
+import { gcpSovereignCompatService } from '../ai/gcpSovereignCompat.service.js';
 
 export class MastraAgentService {
   /**
@@ -16,7 +16,7 @@ export class MastraAgentService {
    * @returns {Agent} Mastra Agent
    */
   static createAgent(options = {}) {
-    const modelName = options.model || config.azure.model_name || 'gpt-5.4';
+    const modelName = options.model || config.gcp.model_name || 'gpt-5.4';
 
     return new Agent({
       id: options.id || 'mastra-agent',
@@ -37,7 +37,7 @@ export class MastraAgentService {
    */
   static async generate(agent, prompt) {
     if (
-      azureSovereignCompatService.isMockMode ||
+      gcpSovereignCompatService.isMockMode ||
       process.env.NODE_ENV === 'test'
     ) {
       return {

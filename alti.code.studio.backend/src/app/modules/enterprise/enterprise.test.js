@@ -1027,14 +1027,14 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       const { VaultService } = await import('../vault/vault.service.js');
 
       vi.spyOn(VaultService, 'getRawCredentials').mockResolvedValue({
-        azureApiKey: 'vault-azure-api-key',
-        azureEndpoint: 'vault-azure-endpoint',
+        gcpApiKey: 'vault-gcp-api-key',
+        gcpEndpoint: 'vault-gcp-endpoint',
       });
 
       const mockInference = vi
         .spyOn(multiCloudInferenceService, 'executeMultiCloudInference')
         .mockResolvedValue({
-          content: 'Azure response with custom vault keys',
+          content: 'GCP response with custom vault keys',
           model: 'gpt-5.4',
         });
 
@@ -1049,9 +1049,9 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         expect.any(String),
         'gateway',
         expect.objectContaining({
-          preferredProvider: 'azure',
+          preferredProvider: 'gcp',
           vaultCredentials: expect.objectContaining({
-            azureApiKey: 'vault-azure-api-key',
+            gcpApiKey: 'vault-gcp-api-key',
           }),
         }),
       );

@@ -30,7 +30,7 @@ const deployToCloud = async (provider, config) => {
   try {
     switch (provider.toLowerCase()) {
       case 'aws':
-      case 'azure':
+      case 'gcp':
       case 'gcp':
         result = await generatePipelineFiles(
           projectRoot,

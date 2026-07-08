@@ -110,9 +110,9 @@ export const verifyGcpIapToken = async (req, res, next) => {
 };
 
 // ─── BACKWARD COMPATIBILITY ALIASES ───
-export const authenticateAzureAD = authenticateGcpIAP;
-export const verifyAzureADToken = verifyGcpIapToken;
-export const verifyAzureToken = verifyGcpIapToken;
+export const authenticateGCPAD = authenticateGcpIAP;
+export const verifyGCPADToken = verifyGcpIapToken;
+export const verifyGCPToken = verifyGcpIapToken;
 
 export const iapService = {
   verifyIAPToken: verifyGcpIapToken,

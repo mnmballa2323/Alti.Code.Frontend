@@ -183,44 +183,6 @@ const createWindow = () => {
         return { success: true, message: `${skill.name} integrated with Moltbot.` };
     });
 
-    // ─────────────────────────────────────────────────────────────────────────────
-    // Azure Skills Registry (Phase 14)
-    // ─────────────────────────────────────────────────────────────────────────────
-    ipcMain.removeHandler('azure-skills:fetch');
-    ipcMain.handle('azure-skills:fetch', async () => {
-        console.log('☁️ Azure Skills: Fetching from azure/skills repository...');
-        try {
-            // For Desktop UI simulation, we return the verified 13 skills
-            // In the backend, we already ingest these automatically via azure_skills_loader.service.js
-            const skills = [
-                { id: 'azure-sql-basics', name: 'Azure SQL Basics', description: 'Manages databases, elastic pools, and backups for Azure SQL.', category: 'Database' },
-                { id: 'synapse-analytics-basics', name: 'Synapse Analytics Basics', description: 'Interact with workspaces, SQL pools, and analytics pipelines.', category: 'Data' },
-                { id: 'container-apps-basics', name: 'Container Apps Basics', description: 'Manages Azure Container Apps, jobs, and scale rules.', category: 'Compute' },
-                { id: 'azure-postgres-basics', name: 'Azure Postgres Basics', description: 'Manages Azure Database for PostgreSQL servers and databases.', category: 'Database' },
-                { id: 'azure-app-service', name: 'Azure App Service', description: 'Azure Web Apps, Deployment Slots, and App Service Plans.', category: 'Mobile & Web' },
-                { id: 'azure-openai-api', name: 'Azure OpenAI API', description: 'Build generative AI apps with Azure OpenAI GPT models.', category: 'AI' },
-                { id: 'aks-basics', name: 'AKS Basics', description: 'Manages Azure Kubernetes Service clusters and namespace workloads.', category: 'Containers' },
-                { id: 'azure-networking-observability', name: 'Azure Networking', description: 'NSGs, Route Tables, and Azure Network Watcher tests.', category: 'Networking' },
-                { id: 'azure-auth-recipe', name: 'Azure Auth Recipe', description: 'Entra ID tenant registration and Client Credentials flow.', category: 'Security' },
-                { id: 'azure-onboarding', name: 'Azure Onboarding', description: 'Getting started with Azure Subscriptions and Resource Groups.', category: 'Operations' },
-                { id: 'azure-well-architected-cost', name: 'WAF: Cost Optimization', description: 'Well-Architected Framework cost practices.', category: 'Architecture' },
-                { id: 'azure-well-architected-reliability', name: 'WAF: Reliability', description: 'Well-Architected Framework reliability practices.', category: 'Architecture' },
-                { id: 'azure-well-architected-security', name: 'WAF: Security', description: 'Well-Architected Framework security practices.', category: 'Security' }
-            ];
-            return { success: true, count: skills.length, data: skills };
-        } catch (error) {
-            console.error('❌ Azure Skills Fetch Error:', error.message);
-            return { success: false, error: error.message };
-        }
-    });
-
-    ipcMain.removeHandler('azure-skills:install');
-    ipcMain.handle('azure-skills:install', async (event, skill) => {
-        console.log(`⬇️ Azure Skills: Activating skill [${skill.name}] for local workspace...`);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        console.log(`✅ Azure Skills: ${skill.name} context injected into capabilityRouter.`);
-        return { success: true, message: `${skill.name} active.` };
-    });
 
     // ─────────────────────────────────────────────────────────────────────────────
     // Claude 3.5 Sonnet "Computer Use" OS-Level Hooks (Phase 9)

@@ -90,8 +90,8 @@ async function testModelRestrictions() {
         // Stub VaultService.getRawCredentials to bypass DB/Vault lookup
         VaultService.getRawCredentials = async () => ({
             openaiApiKey: 'mock-key',
-            azureEndpoint: 'https://mock.openai.azure.com',
-            azureApiKey: 'mock-key',
+            gcpEndpoint: 'https://mock.openai.gcp.com',
+            gcpApiKey: 'mock-key',
             gcpProjectId: 'mock-project'
         });
 
@@ -145,15 +145,15 @@ async function testModelRestrictions() {
             expiresAt: new Date(Date.now() + 1000000)
         });
 
-        // Try requesting Azure model (should throw)
+        // Try requesting GCP model (should throw)
         try {
-            await LlmGatewayService.routeCompletion('mock-user-id', 'session-id', 'hello', 'azure/gpt-4o');
-            logTest('GCP Enterprise restricts Azure models', 'FAILED', '(Did not throw FORBIDDEN error)');
+            await LlmGatewayService.routeCompletion('mock-user-id', 'session-id', 'hello', 'gcp/gpt-4o');
+            logTest('GCP Enterprise restricts GCP models', 'FAILED', '(Did not throw FORBIDDEN error)');
         } catch (e) {
             if (e.statusCode === httpStatus.FORBIDDEN && e.message.includes('GCP Vertex AI models')) {
-                logTest('GCP Enterprise restricts Azure models', 'PASSED');
+                logTest('GCP Enterprise restricts GCP models', 'PASSED');
             } else {
-                logTest('GCP Enterprise restricts Azure models', 'FAILED', `(Unexpected error: ${e.message})`);
+                logTest('GCP Enterprise restricts GCP models', 'FAILED', `(Unexpected error: ${e.message})`);
             }
         }
 
@@ -181,9 +181,9 @@ async function testModelRestrictions() {
         }
 
 
-        // 3. Azure Enterprise plan test
+        // 3. GCP Enterprise plan test
         SubscriptionModel.findOne = () => ({
-            plan_name: 'enterprise-azure',
+            plan_name: 'enterprise-gcp',
             paymentStatus: 'paid',
             expiresAt: new Date(Date.now() + 1000000)
         });
@@ -191,25 +191,25 @@ async function testModelRestrictions() {
         // Try requesting AWS model (should throw)
         try {
             await LlmGatewayService.routeCompletion('mock-user-id', 'session-id', 'hello', 'claude-5-sonnet');
-            logTest('Azure Enterprise restricts AWS models', 'FAILED', '(Did not throw FORBIDDEN error)');
+            logTest('GCP Enterprise restricts AWS models', 'FAILED', '(Did not throw FORBIDDEN error)');
         } catch (e) {
-            if (e.statusCode === httpStatus.FORBIDDEN && e.message.includes('Azure OpenAI Foundry models')) {
-                logTest('Azure Enterprise restricts AWS models', 'PASSED');
+            if (e.statusCode === httpStatus.FORBIDDEN && e.message.includes('GCP Vertex AI models')) {
+                logTest('GCP Enterprise restricts AWS models', 'PASSED');
             } else {
-                logTest('Azure Enterprise restricts AWS models', 'FAILED', `(Unexpected error: ${e.message})`);
+                logTest('GCP Enterprise restricts AWS models', 'FAILED', `(Unexpected error: ${e.message})`);
             }
         }
 
-        // Try requesting Azure model (should bypass block and attempt client completion)
+        // Try requesting GCP model (should bypass block and attempt client completion)
         try {
-            await LlmGatewayService.routeCompletion('mock-user-id', 'session-id', 'hello', 'azure/gpt-4o');
-            logTest('Azure Enterprise allows Azure models', 'FAILED', '(Completed successfully without credentials)');
+            await LlmGatewayService.routeCompletion('mock-user-id', 'session-id', 'hello', 'gcp/gpt-4o');
+            logTest('GCP Enterprise allows GCP models', 'FAILED', '(Completed successfully without credentials)');
         } catch (e) {
-            const isAzureErr = e.message.includes('Azure OpenAI Foundry endpoint') || e.message.includes('Connection error') || e.message.includes('fetch') || e.message.includes('ENOTFOUND');
-            if (isAzureErr) {
-                logTest('Azure Enterprise allows Azure models', 'PASSED', `(Bypassed lock filter: ${e.message})`);
+            const isGCPErr = e.message.includes('GCP Vertex AI endpoint') || e.message.includes('Connection error') || e.message.includes('fetch') || e.message.includes('ENOTFOUND');
+            if (isGCPErr) {
+                logTest('GCP Enterprise allows GCP models', 'PASSED', `(Bypassed lock filter: ${e.message})`);
             } else {
-                logTest('Azure Enterprise allows Azure models', 'FAILED', `(Unexpected client error: ${e.message})`);
+                logTest('GCP Enterprise allows GCP models', 'FAILED', `(Unexpected client error: ${e.message})`);
             }
         }
 
@@ -217,11 +217,11 @@ async function testModelRestrictions() {
         try {
             await LlmGatewayService.routeCompletion('mock-user-id', 'session-id', 'hello', 'auto');
         } catch (e) {
-            const isAzureErr = e.message.includes('Azure OpenAI Foundry endpoint') || e.message.includes('Connection error') || e.message.includes('fetch') || e.message.includes('ENOTFOUND');
-            if (isAzureErr) {
-                logTest('Azure Enterprise auto-routes to Azure', 'PASSED', `(Auto resolved to Azure model: ${e.message})`);
+            const isGCPErr = e.message.includes('GCP Vertex AI endpoint') || e.message.includes('Connection error') || e.message.includes('fetch') || e.message.includes('ENOTFOUND');
+            if (isGCPErr) {
+                logTest('GCP Enterprise auto-routes to GCP', 'PASSED', `(Auto resolved to GCP model: ${e.message})`);
             } else {
-                logTest('Azure Enterprise auto-routes to Azure', 'FAILED', `(Unexpected client error: ${e.message})`);
+                logTest('GCP Enterprise auto-routes to GCP', 'FAILED', `(Unexpected client error: ${e.message})`);
             }
         }
 

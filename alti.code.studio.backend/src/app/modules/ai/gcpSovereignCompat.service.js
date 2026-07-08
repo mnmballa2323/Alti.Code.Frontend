@@ -1,7 +1,7 @@
 import { logger } from '../../../shared/logger.js';
 import { multiCloudInferenceService } from './multicloud_inference.service.js';
 
-class AzureSovereignCompatService {
+class GcpSovereignCompatService {
   constructor() {
     this.isMockMode = false;
     this.modelName = 'gemini-3.5-flash';
@@ -26,16 +26,16 @@ class AzureSovereignCompatService {
         );
       return result.content;
     } catch (error) {
-      logger.error('AzureSovereignCompatService Compatibility Error:', error);
+      logger.error('GcpSovereignCompatService Compatibility Error:', error);
       return this.mockGenerate(prompt);
     }
   }
 
   async mockGenerate(prompt) {
     logger.info(
-      'AzureSovereignCompatService (Azure Compat): Generating mock response...',
+      'GcpSovereignCompatService (GCP Compat): Generating mock response...',
     );
-    return `[Azure Sovereign Compat Fallback] Received prompt: ${prompt.substring(0, 60)}`;
+    return `[GCP Sovereign Compat Fallback] Received prompt: ${prompt.substring(0, 60)}`;
   }
 
   async getEmbeddings(text) {
@@ -43,4 +43,4 @@ class AzureSovereignCompatService {
   }
 }
 
-export const azureSovereignCompatService = new AzureSovereignCompatService();
+export const gcpSovereignCompatService = new GcpSovereignCompatService();

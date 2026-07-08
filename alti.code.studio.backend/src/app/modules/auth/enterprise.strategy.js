@@ -4,7 +4,7 @@
  * Enterprise IAM Strategies
  *
  * Provides pluggable authentication flows for Enterprise SSO integration
- * including SAML 2.0 (Okta, Ping, Azure AD) and OpenID Connect.
+ * including SAML 2.0 (Okta, Ping, GCP Workforce Identity) and OpenID Connect.
  * Enforces strict JIT (Just-In-Time) provisioning into multi-tenant structure.
  */
 

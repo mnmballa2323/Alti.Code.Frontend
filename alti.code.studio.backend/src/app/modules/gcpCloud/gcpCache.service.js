@@ -207,4 +207,3 @@ class GcpCacheService {
 export const gcpCacheService = new GcpCacheService();
 export const memorystoreService = gcpCacheService;
 export const ragCacheService = gcpCacheService;
-export const azureCacheService = gcpCacheService;

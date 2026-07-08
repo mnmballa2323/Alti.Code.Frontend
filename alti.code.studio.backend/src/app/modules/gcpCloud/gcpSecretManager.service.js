@@ -66,4 +66,3 @@ class GcpSecretManagerService {
 
 export const gcpSecretManagerService = new GcpSecretManagerService();
 export const SecretManagerService = gcpSecretManagerService;
-export const azureSecretManagerService = gcpSecretManagerService;

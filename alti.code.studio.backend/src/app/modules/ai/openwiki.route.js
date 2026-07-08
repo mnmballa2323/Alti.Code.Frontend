@@ -42,7 +42,7 @@ const formatMessagesToPrompt = (messages) => {
 /**
  * POST /chat/completions
  * Main proxy handler. Translates standard OpenAI requests to our platform's
- * sovereign GCP/Azure inference gateway.
+ * sovereign GCP/GCP inference gateway.
  */
 export const handleChatCompletions = async (req, res) => {
   const { messages, temperature, stream } = req.body;
@@ -55,13 +55,8 @@ export const handleChatCompletions = async (req, res) => {
   let provider = 'gcp';
   let model = 'gemini-3.5-flash';
 
-  if (process.env.OPENWIKI_PROVIDER === 'azure') {
-    provider = 'azure';
-    model = process.env.OPENWIKI_MODEL || 'azure/gpt-5.4';
-  } else if (process.env.OPENWIKI_PROVIDER === 'gcp') {
-    provider = 'gcp';
-    model = process.env.OPENWIKI_MODEL || 'gemini-3.5-flash';
-  }
+  provider = 'gcp';
+  model = process.env.OPENWIKI_MODEL || 'gemini-3.5-flash';
 
   logger.info(`🔀 [OpenWiki Proxy] Intercepted request | Provider: ${provider} | Model: ${model}`);
   logger.info(`📥 [OpenWiki Proxy] req.body: ${JSON.stringify(req.body)}`);

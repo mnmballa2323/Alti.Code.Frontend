@@ -1,14 +1,14 @@
-import { azureSecretManagerService } from '../gcpCloud/gcpSecretManager.service.js';
+import { gcpSecretManagerService } from '../gcpCloud/gcpSecretManager.service.js';
 import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
 /**
  * Enterprise-Grade Secret Vault for Cloud Deployments.
- * Synchronizes production secrets with Azure Key Vault.
+ * Synchronizes production secrets with GCP Secret Manager.
  */
 class CloudSecretService {
   constructor() {
-    this.secretManager = azureSecretManagerService;
+    this.secretManager = gcpSecretManagerService;
   }
 
   /**
@@ -21,7 +21,7 @@ class CloudSecretService {
 
     try {
       for (const [key, value] of Object.entries(secrets)) {
-        // Ensure the secret exists in Azure Key Vault or the target platform vault
+        // Ensure the secret exists in GCP Secret Manager or the target platform vault
         logger.debug(
           `[Secrets] Vaulting ${key} for mission-critical deployment.`,
         );
@@ -41,7 +41,7 @@ class CloudSecretService {
       return await this.secretManager.getSecret(secretName);
     } catch (error) {
       logger.warn(
-        `[Secrets] Secret ${secretName} not found in Azure Key Vault. Using env fallback.`,
+        `[Secrets] Secret ${secretName} not found in GCP Secret Manager. Using env fallback.`,
       );
       return process.env[secretName];
     }

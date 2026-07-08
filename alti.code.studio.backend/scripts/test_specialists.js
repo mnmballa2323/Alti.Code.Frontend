@@ -4,7 +4,7 @@
 
 import { awsAgent } from '../src/app/modules/agents/aws.agent.js';
 import { gcpAgent } from '../src/app/modules/agents/gcp.agent.js';
-import { azureAgent } from '../src/app/modules/agents/azure.agent.js';
+import { gcpAgent } from '../src/app/modules/agents/gcp.agent.js';
 import { typescriptAgent } from '../src/app/modules/agents/typescript.agent.js';
 import { pythonAgent } from '../src/app/modules/agents/python.agent.js';
 import { rustAgent } from '../src/app/modules/agents/rust.agent.js';
@@ -21,7 +21,7 @@ async function runTests() {
     console.log("=== STARTING SPECIALIST AGENT TESTS ===\n");
 
     const agents = [
-        awsAgent, gcpAgent, azureAgent,
+        awsAgent, gcpAgent, gcpAgent,
         typescriptAgent, pythonAgent, rustAgent, golangAgent
     ];
 

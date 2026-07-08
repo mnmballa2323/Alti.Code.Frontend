@@ -6,7 +6,7 @@ const router = express.Router();
 // SaaS Entitlement Resolutions
 router.post('/gcp/resolve', cloudMarketplaceController.resolveGcp);
 router.post('/aws/resolve', cloudMarketplaceController.resolveAws);
-router.post('/azure/resolve', cloudMarketplaceController.resolveAzure);
+router.post('/gcp/resolve', cloudMarketplaceController.resolveGcp);
 
 // User Subscription Details
 router.get('/user/:userId', cloudMarketplaceController.getEntitlements);

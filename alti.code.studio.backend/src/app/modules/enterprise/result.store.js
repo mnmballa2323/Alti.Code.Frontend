@@ -9,7 +9,7 @@
  *   - Compliance auditing (SOX 7-year retention)
  *   - Analytics and trend detection
  *
- * Production: Azure Cosmos DB (SQL API)
+ * Production: GCP Firestore (SQL API)
  * Development: In-memory store
  */
 
@@ -24,7 +24,7 @@ const cosmosDb = {
     },
   }),
 };
-const PROJECT_ID = process.env.ARM_SUBSCRIPTION_ID || 'azure-active';
+const PROJECT_ID = process.env.GCP_PROJECT_ID || 'gcp-active';
 const CONTAINER_NAME = 'alti-code-studio-results';
 
 class ResultStore {
@@ -35,7 +35,7 @@ class ResultStore {
   }
 
   /**
-   * Persist an agent execution result to Azure Cosmos DB (or local Map fallback)
+   * Persist an agent execution result to GCP Firestore (or local Map fallback)
    */
   async save(params) {
     const tenantId = params.tenantId || 'default';
@@ -62,11 +62,11 @@ class ResultStore {
       try {
         const safePayload = JSON.parse(JSON.stringify(result));
         await cosmosDb.container(CONTAINER_NAME).items.create(safePayload);
-        logger.debug(`☁️ Azure Cosmos DB: Saved agent result ${docId}`);
+        logger.debug(`☁️ GCP Firestore: Saved agent result ${docId}`);
         return result;
       } catch (err) {
         logger.warn(
-          `⚠️ Azure Cosmos DB save failed (${err.message}). Falling back to local store...`,
+          `⚠️ GCP Firestore save failed (${err.message}). Falling back to local store...`,
         );
       }
     }
@@ -90,11 +90,11 @@ class ResultStore {
     if (PROJECT_ID && process.env.NODE_ENV !== 'test') {
       try {
         // In production, execute SQL query on Cosmos DB container
-        logger.debug(`☁️ Azure Cosmos DB: Querying results for ${tenantId}`);
+        logger.debug(`☁️ GCP Firestore: Querying results for ${tenantId}`);
         return [];
       } catch (err) {
         logger.warn(
-          `⚠️ Azure Cosmos DB query failed (${err.message}). Falling back to local store...`,
+          `⚠️ GCP Firestore query failed (${err.message}). Falling back to local store...`,
         );
       }
     }

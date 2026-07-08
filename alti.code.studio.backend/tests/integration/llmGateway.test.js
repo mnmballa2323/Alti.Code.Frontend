@@ -127,8 +127,8 @@ describe('Secure Vault & LLM Gateway Integration Tests', () => {
     it('Vault Service: should store, encrypt, mask, and retrieve credentials', async () => {
         const testKeys = {
             openaiApiKey: 'sk-direct-openai-key-secret-123456',
-            azureEndpoint: 'https://alti-azure-foundry.openai.azure.com/',
-            azureApiKey: 'azure-secret-key-654321',
+            gcpEndpoint: 'https://alti-gcp-foundry.openai.gcp.com/',
+            gcpApiKey: 'gcp-secret-key-654321',
             gcpProjectId: 'alti-secure-enterprise-project'
         };
 
@@ -137,9 +137,9 @@ describe('Secure Vault & LLM Gateway Integration Tests', () => {
 
         expect(maskedOutput.openaiApiKey).toContain('sk-');
         expect(maskedOutput.openaiApiKey).toContain('...3456');
-        expect(maskedOutput.azureApiKey).toContain('azur');
-        expect(maskedOutput.azureApiKey).toContain('...4321');
-        expect(maskedOutput.azureEndpoint).toBe('https://alti-azure-foundry.openai.azure.com/');
+        expect(maskedOutput.gcpApiKey).toContain('azur');
+        expect(maskedOutput.gcpApiKey).toContain('...4321');
+        expect(maskedOutput.gcpEndpoint).toBe('https://alti-gcp-foundry.openai.gcp.com/');
         expect(maskedOutput.gcpProjectId).toBe('alti-secure-enterprise-project');
 
         // Confirm DB ciphertext is NOT plaintext (is encrypted)
@@ -147,13 +147,13 @@ describe('Secure Vault & LLM Gateway Integration Tests', () => {
             where: { userId: testUserId }
         });
         expect(dbRecord.openaiApiKey).not.toBe(testKeys.openaiApiKey);
-        expect(dbRecord.azureApiKey).not.toBe(testKeys.azureApiKey);
+        expect(dbRecord.gcpApiKey).not.toBe(testKeys.gcpApiKey);
 
         // Fetch decrypted raw keys in-memory
         const rawKeys = await VaultService.getRawCredentials(testUserId);
         expect(rawKeys.openaiApiKey).toBe(testKeys.openaiApiKey);
-        expect(rawKeys.azureApiKey).toBe(testKeys.azureApiKey);
-        expect(rawKeys.azureEndpoint).toBe(testKeys.azureEndpoint);
+        expect(rawKeys.gcpApiKey).toBe(testKeys.gcpApiKey);
+        expect(rawKeys.gcpEndpoint).toBe(testKeys.gcpEndpoint);
     });
 
     it('LLM Gateway: should execute dynamic model completions', async () => {
@@ -187,20 +187,20 @@ describe('Secure Vault & LLM Gateway Integration Tests', () => {
     });
 
     it('LLM Gateway Defense: should sanitize sensitive credentials from error messages', () => {
-        const rawMessage = 'Error connecting with API Key AIzaSyA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6 and key sk-abcdefghijklmnopqrstuvwxyz0123456789 or Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 and headers api-key: my-azure-secret-key-1234 on endpoint https://my-resource.openai.azure.com';
+        const rawMessage = 'Error connecting with API Key AIzaSyA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6 and key sk-abcdefghijklmnopqrstuvwxyz0123456789 or Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9 and headers api-key: my-gcp-secret-key-1234 on endpoint https://my-resource.openai.gcp.com';
         const sanitized = LlmGatewayService.sanitizeErrorMessage(rawMessage);
 
         expect(sanitized).not.toContain('AIzaSyA1B2C3D4E5F6G7H8I9J0K1L2M3N4O5P6');
         expect(sanitized).not.toContain('sk-abcdefghijklmnopqrstuvwxyz0123456789');
         expect(sanitized).not.toContain('Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9');
-        expect(sanitized).not.toContain('my-azure-secret-key-1234');
-        expect(sanitized).not.toContain('https://my-resource.openai.azure.com');
+        expect(sanitized).not.toContain('my-gcp-secret-key-1234');
+        expect(sanitized).not.toContain('https://my-resource.openai.gcp.com');
 
         expect(sanitized).toContain('AIzaSy...[MASKED]');
         expect(sanitized).toContain('sk-...[MASKED]');
         expect(sanitized).toContain('Bearer [MASKED]');
         expect(sanitized).toContain('api-key: [MASKED]');
-        expect(sanitized).toContain('https://[AZURE_ENDPOINT_MASKED]');
+        expect(sanitized).toContain('https://[GCP_ENDPOINT_MASKED]');
     });
 
     it('LLM Gateway Agility: should retry transient errors and recover', async () => {

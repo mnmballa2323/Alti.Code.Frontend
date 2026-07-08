@@ -1,22 +1,22 @@
-import { azurePubSubService } from '../gcpCloud/gcpPubSub.service.js';
+import { gcpPubSubService } from '../gcpCloud/gcpPubSub.service.js';
 import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
 /**
- * Azure Sentinel (SecOps) Swarm Telemetry Service.
+ * GCP Chronicle (SecOps) Swarm Telemetry Service.
  * As the Swarm gains full autonomy over enterprise monorepos, we must mathematically
  * guarantee it isn't generating malicious zero-day vulnerabilities or backdoors.
  * All Swarm-generated code patches and execution logs are streamed directly into
- * Azure Sentinel via Event Hubs / Service Bus. Microsoft's proprietary petabyte-scale
+ * GCP Chronicle via Event Hubs / Service Bus. Microsoft's proprietary petabyte-scale
  * security ML continuously analyzes the Swarm's behavioral patterns, instantly freezing
  * the agent if it detects rogue actions.
  */
-class AzureSentinelService {
+class GCPSentinelService {
   constructor() {
-    this.pubsub = azurePubSubService;
+    this.pubsub = gcpPubSubService;
     this.topicName =
-      config.azure?.sentinel_ingest_topic || 'alti-swarm-secops-telemetry';
-    logger.info('🛡️ [Sentinel] Azure SecOps Telemetry Pipeline initialized.');
+      config.gcp?.sentinel_ingest_topic || 'alti-swarm-secops-telemetry';
+    logger.info('🛡️ [Sentinel] GCP SecOps Telemetry Pipeline initialized.');
   }
 
   /**
@@ -27,7 +27,7 @@ class AzureSentinelService {
    */
   async streamBehavioralTelemetry(agentId, actionType, payload) {
     logger.info(
-      `🛡️ [Sentinel] Streaming Swarm behavior [${actionType}] to Azure Sentinel...`,
+      `🛡️ [Sentinel] Streaming Swarm behavior [${actionType}] to GCP Chronicle...`,
     );
 
     try {
@@ -38,7 +38,7 @@ class AzureSentinelService {
         payload: payload,
         risk_metadata: {
           origin_ip: 'internal-mesh',
-          // Could include the Azure Confidential VM Instance ID here
+          // Could include the GCP Confidential VM Instance ID here
         },
       };
 
@@ -48,7 +48,7 @@ class AzureSentinelService {
       );
 
       logger.info(
-        `✅ [Sentinel] Behavioral telemetry logged (Message ID: ${messageId}). Swarm is actively monitored by Azure Security ML.`,
+        `✅ [Sentinel] Behavioral telemetry logged (Message ID: ${messageId}). Swarm is actively monitored by GCP Security ML.`,
       );
       return true;
     } catch (error) {
@@ -63,4 +63,4 @@ class AzureSentinelService {
   }
 }
 
-export const chronicleService = new AzureSentinelService();
+export const chronicleService = new GCPSentinelService();

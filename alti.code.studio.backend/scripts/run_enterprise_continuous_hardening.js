@@ -86,19 +86,19 @@ const runHardeningCycle = async () => {
         complianceIssues++;
     }
 
-    // 4. Audit Azure Sovereign deployment parameters against catalog standards
-    logger('Step 4: Auditing Azure Sovereign infrastructure files...');
+    // 4. Audit GCP Sovereign deployment parameters against catalog standards
+    logger('Step 4: Auditing GCP Sovereign infrastructure files...');
     const deployScriptPath = path.join(__dirname, '../../deploy_enterprise.sh');
     if (fs.existsSync(deployScriptPath)) {
         const deployContent = fs.readFileSync(deployScriptPath, 'utf8');
-        const hasAzure = deployContent.includes('AZURE SOVEREIGN ENTERPRISE DEPLOYER');
+        const hasGCP = deployContent.includes('GCP Sovereign ENTERPRISE DEPLOYER');
         const hasTier = deployContent.includes('commercial|government|classified');
-        const hasTerraform = deployContent.includes('Executing Terraform IaC for Azure Sovereign Enterprise');
+        const hasTerraform = deployContent.includes('Executing Terraform IaC for GCP Sovereign Enterprise');
 
-        if (hasAzure && hasTier && hasTerraform) {
-            logger('✅ Azure Sovereign deploy script contains all required enterprise components.');
+        if (hasGCP && hasTier && hasTerraform) {
+            logger('✅ GCP Sovereign deploy script contains all required enterprise components.');
         } else {
-            logger('❌ Azure Sovereign deploy script is missing key security components.', 'CRITICAL');
+            logger('❌ GCP Sovereign deploy script is missing key security components.', 'CRITICAL');
             complianceIssues++;
         }
     } else {

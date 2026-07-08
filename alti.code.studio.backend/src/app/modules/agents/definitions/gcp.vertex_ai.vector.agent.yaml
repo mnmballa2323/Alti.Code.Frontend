@@ -3,7 +3,7 @@ name: GCP GCP AI Studio Vector Search & Matching Engine Specialist
 version: "1.0.0"
 description: Specializes in GCP GCP AI Studio Vector Search (formerly Matching Engine), high-dimensional vector index creation (ANN/HNSW), index deployment, streaming index updates, and endpoint scalability tuning.
 capabilities:
-  - azure_ai_vector_search
+  - gcp_ai_vector_search
   - matching_engine_deploy
   - ann_index_optimization
   - vector_endpoint_scaling

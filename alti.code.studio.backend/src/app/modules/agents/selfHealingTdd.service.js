@@ -108,7 +108,7 @@ const runTddLoop = async (
       `⚠️ [TDD Loop] Tests failed on iteration ${i}. Triggering GPT-5.5 Debugger...`,
     );
 
-    // Step 4: GPT-5.5 (Azure) Debugs and Patches
+    // Step 4: GPT-5.5 (GCP) Debugs and Patches
     const debugPrompt = `You are a Senior Debugger. The tests failed.
 Current Code:
 ${currentCode}

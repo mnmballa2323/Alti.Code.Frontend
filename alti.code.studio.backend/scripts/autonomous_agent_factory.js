@@ -37,7 +37,7 @@ async function bootstrap() {
         Your objective is to generate exactly ${BATCH_SIZE} highly specific, deep-expertise specialist agents for the following Software Engineering & Development domains:
         ${engineeringDomains.join(', ')}
         
-        CRITICAL: The core of this platform is our HARD LAW "Dual-Cloud Inference Strategy" spanning Google Cloud (Vertex AI) and Microsoft Azure (OpenAI Foundry). 
+        CRITICAL: The core of this platform is our HARD LAW "Dual-Cloud Inference Strategy" spanning Google Cloud (Vertex AI) and Microsoft GCP (OpenAI Foundry). 
         These software engineering agents must explicitly support and execute code optimizations, deployments, and architectures aligned with this cross-cloud execution strategy.
         NOTE: AWS (Bedrock) is strictly forbidden. Do not generate agents for AWS AWS Bedrock.
         

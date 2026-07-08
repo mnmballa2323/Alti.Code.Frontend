@@ -1,13 +1,13 @@
 import { logger } from '../../../shared/logger.js';
-import { AzureOpenAI } from 'openai';
+import { GCPOpenAI } from 'openai';
 import config from '../../../../config/index.js';
 import crypto from 'crypto';
 import { parseOKF, validateOKF } from '../knowledgeCatalog/okf.parser.js';
 
-// Under the hood, Sovereign Azure Inference Strategy is preserved
-const azureOpenAi = new AzureOpenAI({
-  endpoint: config.azureOpenAi?.endpoint || 'https://mock.azure.openai.com/',
-  apiKey: config.azureOpenAi?.apiKey || 'mock-key',
+// Under the hood, Sovereign GCP Inference Strategy is preserved
+const gcpOpenAi = new GCPOpenAI({
+  endpoint: config.gcpOpenAi?.endpoint || 'https://mock.gcp.openai.com/',
+  apiKey: config.gcpOpenAi?.apiKey || 'mock-key',
   apiVersion: '2024-02-15-preview',
 });
 
@@ -239,7 +239,7 @@ Provide your synthesized answer below:
     logger.info(
       `🌊 [GCP RAG] Pillar 20: Streaming Vertex Gemini 2.0 Pro tokens to client in real-time...`,
     );
-    const stream = await azureOpenAi.chat.completions.create({
+    const stream = await gcpOpenAi.chat.completions.create({
       model: 'gpt-5.4',
       messages: [{ role: 'user', content: synthesisPrompt }],
       temperature: 0.1,

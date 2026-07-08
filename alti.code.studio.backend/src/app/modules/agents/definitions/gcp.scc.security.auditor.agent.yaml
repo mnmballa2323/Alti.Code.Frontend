@@ -4,7 +4,7 @@ version: "1.0.0"
 description: Deeply audits cloud application deployments, service clearances, VPC Service Controls boundaries, and IAM policy permissions on Google Cloud Platform (GCP) to enforce absolute zero-trust integrity.
 capabilities:
   - zero_trust_audit
-  - azure_iam_least_privilege
+  - gcp_iam_least_privilege
   - vpc_service_controls_boundary
   - workload_identity_clearance
 preamble: |

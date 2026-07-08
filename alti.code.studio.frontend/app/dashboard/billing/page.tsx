@@ -57,24 +57,6 @@ const pricingCatalog = [
     inputPrice: 15.0,
     outputPrice: 75.0,
   },
-  {
-    id: "gpt-5.4-mini",
-    name: "GPT-5.4 Mini",
-    provider: "OpenAI GPT",
-    icon: "simple-icons:openai",
-    iconColor: "text-black dark:text-white",
-    inputPrice: 0.15,
-    outputPrice: 0.6,
-  },
-  {
-    id: "gpt-5.4",
-    name: "GPT-5.4",
-    provider: "OpenAI GPT",
-    icon: "simple-icons:openai",
-    iconColor: "text-black dark:text-white",
-    inputPrice: 2.5,
-    outputPrice: 10.0,
-  },
 ];
 
 const fallbackUsageReport = {
@@ -84,7 +66,7 @@ const fallbackUsageReport = {
   usagePercent: 64,
   byModel: [
     {
-      name: "gpt-5.4",
+      name: "gemini-3.5-pro",
       tokens: 1450000,
       input: 1100000,
       output: 350000,
@@ -105,7 +87,7 @@ const fallbackUsageReport = {
       cost: 2.58,
     },
     {
-      name: "gpt-5.4-mini",
+      name: "gemini-3.5-pro",
       tokens: 162050,
       input: 100000,
       output: 62050,
@@ -139,7 +121,7 @@ function BillingPage() {
   const [providerFilter, setProviderFilter] = useState<string>("All");
 
   // Cost Calculator states
-  const [calcModel, setCalcModel] = useState<string>("gpt-5.4");
+  const [calcModel, setCalcModel] = useState<string>("gemini-3.5-pro");
   const [calcInput, setCalcInput] = useState<string>("100000");
   const [calcOutput, setCalcOutput] = useState<string>("20000");
   const [calcResult, setCalcResult] = useState<any>({
@@ -523,9 +505,8 @@ function BillingPage() {
               Prices are passed directly through with absolutely zero markup.
             </p>
 
-            {/* Catalog Filters */}
             <div className="flex gap-1.5 mb-6 overflow-x-auto pb-2">
-              {["All", "OpenAI GPT", "Google Gemini", "Anthropic Claude"].map(
+              {["All", "Google Gemini", "Anthropic Claude"].map(
                 (p) => (
                   <button
                     key={p}

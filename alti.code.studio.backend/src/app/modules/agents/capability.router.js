@@ -5,7 +5,7 @@ import { agentRegistry } from './agent.registry.js';
 import { selfExpandingSwarmService } from './self_expanding_swarm.service.js';
 import { vectorStoreService } from '../memory/vector.store.js';
 import { memorystoreService } from '../gcpCloud/gcpCache.service.js';
-import { AzureSearchService } from '../gcpCloud/gcpSearch.service.js';
+import { GcpSearchService } from '../gcpCloud/gcpSearch.service.js';
 import { spannerGraphService } from '../gcpCloud/gcpSpannerGraph.service.js';
 import { GoogleDlpService } from '../ai/gcpDlp.service.js';
 import { workflowService } from '../gcpCloud/gcpWorkflow.service.js';
@@ -14,17 +14,17 @@ import { AgentMemoryHooks } from '../memory/agentmemory.hooks.js';
 import fs from 'fs';
 import path from 'path';
 
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 
 class CapabilityRouter {
   constructor() {
-    this.modelName = (config.azure && config.azure.model_name) || 'gpt-5.4';
+    this.modelName = (config.gcp && config.gcp.model_name) || 'gpt-5.4';
     this.isIndexed = false;
   }
 
   get model() {
     if (!this._model) {
-      this._model = AzureGenAiService.getGenerativeModel(this.modelName);
+      this._model = GcpGenAiService.getGenerativeModel(this.modelName);
     }
     return this._model;
   }
@@ -306,11 +306,11 @@ class CapabilityRouter {
     }
 
     logger.info(
-      `🔍 [CapabilityRouter] Grounding architectural query in real-time Azure search...`,
+      `🔍 [CapabilityRouter] Grounding architectural query in real-time GCP Search...`,
     );
     let searchContext = '';
     try {
-      searchContext = await AzureSearchService.getSearchContext(
+      searchContext = await GcpSearchService.getSearchContext(
         `software architecture best practices for: ${sanitizedQuery}`,
       );
     } catch (e) {
@@ -320,7 +320,7 @@ class CapabilityRouter {
     }
 
     logger.info(
-      `🕸️ [CapabilityRouter] Calculating AST blast radius via Azure Cosmos Graph...`,
+      `🕸️ [CapabilityRouter] Calculating AST blast radius via GCP Spanner Graph...`,
     );
     let astContext = '';
     try {

@@ -6,7 +6,7 @@ import { UserRepository } from './prisma.user.repository.js';
 import { totp } from '../../platform/index.js';
 import config from '../../../../config/index.js';
 import bcrypt from 'bcryptjs';
-import { authenticateAzureAD } from './gcpIap.service.js';
+import { authenticateGCPAD } from './gcpIap.service.js';
 import { prisma } from '../../platform/db/prismaClient.js';
 
 vi.mock('../../platform/db/prismaClient.js', () => ({
@@ -18,7 +18,7 @@ vi.mock('../../platform/db/prismaClient.js', () => ({
 }));
 
 vi.mock('./gcpIap.service.js', () => ({
-  authenticateAzureAD: vi.fn(),
+  authenticateGCPAD: vi.fn(),
 }));
 
 vi.mock('./prisma.user.repository.js', () => ({

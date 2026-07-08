@@ -12,7 +12,7 @@ import { logger } from '../../../shared/logger.js';
 import ApiError from '../../../errors/ApiError.js';
 import httpStatus from 'http-status';
 import { RulesService } from '../rules/rules.service.js';
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 import { ultimateRagService } from '../rag/ultimate_rag.service.js';
 import { researchService } from '../research/research.service.js';
 import { triBrainService } from '../agents/tri_brain.service.js';
@@ -98,8 +98,8 @@ const sanitizeErrorMessage = message => {
     .replace(/Bearer\s+[A-Za-z0-9._-]+/gi, 'Bearer [MASKED]')
     .replace(/api-key['"]?\s*:\s*['"]?[A-Za-z0-9_-]+/gi, 'api-key: [MASKED]')
     .replace(
-      /https:\/\/[A-Za-z0-9.-]+\.openai\.azure\.com/gi,
-      'https://[AZURE_ENDPOINT_MASKED]',
+      /https:\/\/[A-Za-z0-9.-]+\.openai\.gcp\.com/gi,
+      'https://[GCP_ENDPOINT_MASKED]',
     );
 };
 
@@ -166,39 +166,39 @@ const routeCompletion = async (
   if (
     subscription &&
     [
-      'enterprise-azure-commercial',
-      'enterprise-azure-il5',
-      'enterprise-azure-il6',
-      'enterprise-azure',
+      'enterprise-gcp-commercial',
+      'enterprise-gcp-il5',
+      'enterprise-gcp-il6',
+      'enterprise-gcp',
     ].includes(subscription.plan_name)
   ) {
     logger.info(
-      `🏢 [LlmGateway] Enforcing Azure Sovereign exclusive mode for ${subscription.plan_name}`,
+      `🏢 [LlmGateway] Enforcing GCP Sovereign exclusive mode for ${subscription.plan_name}`,
     );
     if (
       !actualModelName ||
       actualModelName === 'auto' ||
       actualModelName === 'default'
     ) {
-      if (subscription.plan_name === 'enterprise-azure-il6') {
-        actualModelName = 'azure/il6-gpt-5.4';
-      } else if (subscription.plan_name === 'enterprise-azure-il5') {
-        actualModelName = 'azure/il5-gpt-5.4';
+      if (subscription.plan_name === 'enterprise-gcp-il6') {
+        actualModelName = 'gcp/il6-gpt-5.4';
+      } else if (subscription.plan_name === 'enterprise-gcp-il5') {
+        actualModelName = 'gcp/il5-gpt-5.4';
       } else {
-        actualModelName = 'azure/gpt-5.4';
+        actualModelName = 'gcp/gpt-5.4';
       }
       logger.info(
-        `🏢 [LlmGateway] Enterprise Azure: Auto-routing overridden to default Azure OpenAI model: ${actualModelName}`,
+        `🏢 [LlmGateway] Enterprise GCP: Auto-routing overridden to default GCP Vertex AI model: ${actualModelName}`,
       );
     } else {
-      const isAzureOrLocal =
-        actualModelName.startsWith('azure/') ||
+      const isGCPOrLocal =
+        actualModelName.startsWith('gcp/') ||
         actualModelName.startsWith('local/') ||
         actualModelName === 'gpt-5.4';
-      if (!isAzureOrLocal) {
+      if (!isGCPOrLocal) {
         throw new ApiError(
           httpStatus.FORBIDDEN,
-          `Security Enforcement: Your Azure Sovereign Enterprise plan restricts you exclusively to Azure OpenAI Foundry models. Model '${actualModelName}' is blocked.`,
+          `Security Enforcement: Your GCP Sovereign Enterprise plan restricts you exclusively to GCP Vertex AI models. Model '${actualModelName}' is blocked.`,
         );
       }
     }
@@ -297,7 +297,7 @@ Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
         );
         const consensus =
           await triBrainService.executeConsensusLoop(scrubbedPrompt);
-        const reply = `### 🧠 Azure Tri-Zone Consensus Reached\n\n**Status**: ${consensus.status}\n\n**Generated Code (Azure Commercial)**:\n\`\`\`\n${consensus.code}\n\`\`\`\n\n**Test Suite (Azure IL5)**:\n\`\`\`\n${consensus.tests}\n\`\`\`\n\n**DevSecOps Audit (Azure IL6)**:\n${consensus.auditLog}`;
+        const reply = `### 🧠 GCP Tri-Zone Consensus Reached\n\n**Status**: ${consensus.status}\n\n**Generated Code (GCP Commercial)**:\n\`\`\`\n${consensus.code}\n\`\`\`\n\n**Test Suite (GCP IL5)**:\n\`\`\`\n${consensus.tests}\n\`\`\`\n\n**DevSecOps Audit (GCP IL6)**:\n${consensus.auditLog}`;
         await saveChatResponse(
           userId,
           sessionId,
@@ -467,13 +467,13 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
 
   // Force Google Vertex AI Sovereign Cloud connection for all model requests (Sovereign Mode)
   const isGptModel = actualModelName.includes('gpt');
-  const preferredProvider = isGptModel ? 'azure' : 'gcp-vertex';
+  const preferredProvider = isGptModel ? 'gcp' : 'gcp-vertex';
   logger.info(
-    `🧠 [LlmGateway] Routing inference to ${preferredProvider === 'azure' ? 'Azure OpenAI Foundry' : 'Google Vertex AI'}...`,
+    `🧠 [LlmGateway] Routing inference to ${preferredProvider === 'gcp' ? 'GCP Vertex AI' : 'Google Vertex AI'}...`,
   );
   try {
-    const cleanModelName = actualModelName.startsWith('azure/')
-      ? actualModelName.replace(/^azure\//, '')
+    const cleanModelName = actualModelName.startsWith('gcp/')
+      ? actualModelName.replace(/^gcp\//, '')
       : actualModelName.startsWith('gcp-vertex/')
         ? actualModelName.replace(/^gcp-vertex\//, '')
         : [

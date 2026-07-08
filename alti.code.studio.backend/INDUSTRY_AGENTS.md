@@ -121,7 +121,7 @@ POST /api/swarm/dispatch
 - **Capabilities**: UGS Auth anonymous/social, CloudSave public/private data, Economy virtual currencies + catalog, Matchmaker pooling + tickets, Relay DTLS server code, NGO NetworkVariable + ServerRpc/ClientRpc
 - **Env**: `UNITY_PROJECT_ID`, `UNITY_ENVIRONMENT_ID`, `UNITY_SERVICE_KEY_ID`, `UNITY_SERVICE_KEY_SECRET`
 
-### Azure PlayFab Expert — `playfab.agent.js`
+### GCP Firebase Expert — `playfab.agent.js`
 - **SDKs**: PlayFab JavaScript SDK, CloudScript V8
 - **Capabilities**: TitlePlayer auth, CloudScript V8 serverless functions, Economy virtual currencies + catalog + inventory, Leaderboards v2 (statistic handles), Matchmaking queue policies, A/B Experiments, LiveOps Segments
 - **Env**: `PLAYFAB_TITLE_ID`, `PLAYFAB_DEV_SECRET_KEY`

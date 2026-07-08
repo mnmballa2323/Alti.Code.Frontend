@@ -17,7 +17,7 @@ import { join, resolve } from 'path';
 import { TenantContainerOrchestrator } from './tenant_container_orchestrator.js';
 import crypto from 'crypto';
 import { logger } from '../../../shared/logger.js';
-import { azureContainerService } from '../../../shared/gcpContainer.service.js';
+import { gcpContainerService } from '../../../shared/gcpContainer.service.js';
 
 export class AgentContainerOrchestrator {
   /**
@@ -64,7 +64,7 @@ export class AgentContainerOrchestrator {
    * Detects if the Docker daemon is responsive.
    */
   async checkDockerAvailability() {
-    if (process.env.ARM_SUBSCRIPTION_ID) {
+    if (process.env.GCP_PROJECT_ID) {
       return true;
     }
     if (this.isDockerAvailable !== null) {
@@ -100,9 +100,9 @@ export class AgentContainerOrchestrator {
 
     const hasDocker = await this.checkDockerAvailability();
 
-    // ------------------ AZURE ACI PATH ------------------
-    if (process.env.ARM_SUBSCRIPTION_ID) {
-      const activeGroups = await azureContainerService.listContainers();
+    // ------------------ GCP ACI PATH ------------------
+    if (process.env.GCP_PROJECT_ID) {
+      const activeGroups = await gcpContainerService.listContainers();
       const existingGroup = activeGroups.find(g =>
         g.Names.includes(containerName),
       );
@@ -113,7 +113,7 @@ export class AgentContainerOrchestrator {
       }
 
       try {
-        await azureContainerService.deleteContainerGroup(containerName);
+        await gcpContainerService.deleteContainerGroup(containerName);
       } catch (e) {}
 
       const memoryLimit = options.memory || '256m';
@@ -126,9 +126,9 @@ export class AgentContainerOrchestrator {
       const cpuLimit = parseFloat(options.cpus || '0.5');
 
       console.log(
-        `[Azure/ACI] Spawning agent container group ${containerName} using image ${this.baseImage}...`,
+        `[GCP/ACI] Spawning agent container group ${containerName} using image ${this.baseImage}...`,
       );
-      await azureContainerService.createContainerGroup(
+      await gcpContainerService.createContainerGroup(
         containerName,
         this.baseImage,
         cpuLimit,
@@ -142,7 +142,7 @@ export class AgentContainerOrchestrator {
       this.containerWorkspaces.set(containerName, hostWorkspacePath);
       return { containerName, hostWorkspacePath, isMock: false };
     }
-    // ------------------ END AZURE ACI PATH ------------------
+    // ------------------ END GCP ACI PATH ------------------
 
     if (!hasDocker) {
       // High-Fidelity Mock Sandbox Fallback
@@ -284,12 +284,12 @@ export class AgentContainerOrchestrator {
       workspacePath || this.containerWorkspaces.get(containerName);
     this.containerWorkspaces.delete(containerName);
 
-    // ------------------ AZURE ACI PATH ------------------
-    if (process.env.ARM_SUBSCRIPTION_ID) {
+    // ------------------ GCP ACI PATH ------------------
+    if (process.env.GCP_PROJECT_ID) {
       try {
-        await azureContainerService.deleteContainerGroup(containerName);
+        await gcpContainerService.deleteContainerGroup(containerName);
         console.log(
-          `🧹 [Azure/ACI] Stopped and pruned Agent Container Group: [${containerName}]`,
+          `🧹 [GCP/ACI] Stopped and pruned Agent Container Group: [${containerName}]`,
         );
       } catch (e) {
         console.warn(`Failed to stop ACI container group: ${e.message}`);
@@ -480,11 +480,11 @@ export class AgentContainerOrchestrator {
     let stderrLogs = [];
     let executionReport = null;
 
-    // ------------------ AZURE ACI PATH ------------------
-    if (process.env.ARM_SUBSCRIPTION_ID) {
+    // ------------------ GCP ACI PATH ------------------
+    if (process.env.GCP_PROJECT_ID) {
       try {
         // Write file directly in ACI container
-        await azureContainerService.writeFileToContainer(
+        await gcpContainerService.writeFileToContainer(
           containerName,
           containerName,
           `/workspace/${tempFileName}`,
@@ -493,7 +493,7 @@ export class AgentContainerOrchestrator {
 
         // Run execution
         const execResult =
-          await azureContainerService.executeCommandAndGetOutput(
+          await gcpContainerService.executeCommandAndGetOutput(
             containerName,
             containerName,
             `node /workspace/${tempFileName}`,
@@ -521,7 +521,7 @@ export class AgentContainerOrchestrator {
         }
 
         // Cleanup temp file inside ACI
-        await azureContainerService.executeCommandAndGetOutput(
+        await gcpContainerService.executeCommandAndGetOutput(
           containerName,
           containerName,
           `rm /workspace/${tempFileName}`,
@@ -669,15 +669,15 @@ export class AgentContainerOrchestrator {
    * Scans and automatically stops/prunes any orphaned agent containers left behind from past failed sessions.
    */
   async pruneOrphanedContainers() {
-    if (process.env.ARM_SUBSCRIPTION_ID) {
-      const containers = await azureContainerService.listContainers();
+    if (process.env.GCP_PROJECT_ID) {
+      const containers = await gcpContainerService.listContainers();
       for (const c of containers) {
         if (c.Names[0] && c.Names[0].startsWith('agent-container-')) {
           console.log(
-            `🧹 Self-Healing [Azure]: Pruning orphaned agent container: [${c.Names[0]}]`,
+            `🧹 Self-Healing [GCP]: Pruning orphaned agent container: [${c.Names[0]}]`,
           );
           try {
-            await azureContainerService.deleteContainerGroup(c.Names[0]);
+            await gcpContainerService.deleteContainerGroup(c.Names[0]);
           } catch (e) {}
         }
       }

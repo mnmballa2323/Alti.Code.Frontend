@@ -41,7 +41,7 @@ class CiceroLawEnforcementService {
 
   /**
    * The background worker executor for SLA compliance checks.
-   * Checks telemetry, invokes Cicero agent for notice drafting on breach, and dispatches via Azure.
+   * Checks telemetry, invokes Cicero agent for notice drafting on breach, and dispatches via GCP.
    *
    * @param {Object} jobData
    * @returns {Promise<Object>}
@@ -173,7 +173,7 @@ You MUST return a JSON response matching the required envelope schema:
     result.severity = result.severity || severity;
     result.legal_notice_draft = result.legal_notice_draft || agentResponse;
 
-    // 4. Dispatch the notice via Azure Legal Notice Service
+    // 4. Dispatch the notice via GCP Legal Notice Service
     const dispatchMetadata = {
       contractId,
       violations,

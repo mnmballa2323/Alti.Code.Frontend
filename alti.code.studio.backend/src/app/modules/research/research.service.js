@@ -1,5 +1,5 @@
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
-import { AzureSearchService } from '../gcpCloud/gcpSearch.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
+import { GcpSearchService } from '../gcpCloud/gcpSearch.service.js';
 import { ragService } from '../memory/rag.service.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
@@ -9,7 +9,7 @@ class ResearchService {
    * Executes an autonomous "Deep Research" workflow.
    * 1. Analyzes the objective.
    * 2. Formulates highly specific search queries based on the requested depth.
-   * 3. Executes parallel Azure Search Grounding to surf the live internet.
+   * 3. Executes parallel GCP Search Grounding to surf the live internet.
    * 4. Integrates internal RAG context (for 'exhaustive' depth).
    * 5. Synthesizes a comprehensive, citation-rich markdown report.
    *
@@ -40,7 +40,7 @@ class ResearchService {
     let searchQueries = [objective];
     try {
       if (numQueries > 1) {
-        const queryResponse = await AzureGenAiService.generateContent(
+        const queryResponse = await GcpGenAiService.generateContent(
           queryPrompt,
           'gemini-2.5-flash',
           0.2,
@@ -65,9 +65,9 @@ class ResearchService {
       `🔬 [Deep Research] Phase 2: Surfing the live web for ${searchQueries.length} queries in parallel...`,
     );
 
-    // 2. Execute Azure Search Grounding in Parallel
+    // 2. Execute GCP Search Grounding in Parallel
     const searchPromises = searchQueries.map(async query => {
-      const context = await AzureSearchService.getSearchContext(query);
+      const context = await GcpSearchService.getSearchContext(query);
       return { query, context };
     });
 
@@ -133,7 +133,7 @@ class ResearchService {
         - NEVER hallucinate. Ground your findings STRICTLY in the provided intelligence context.
         - Ensure flawless Markdown formatting.`;
 
-    const reportResponse = await AzureGenAiService.generateContent(
+    const reportResponse = await GcpGenAiService.generateContent(
       synthesisPrompt,
       'gemini-3.1-pro',
       0.2,

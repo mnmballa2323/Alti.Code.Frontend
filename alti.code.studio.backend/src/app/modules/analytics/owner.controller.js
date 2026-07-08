@@ -90,9 +90,9 @@ export const OwnerController = {
         systemSpendUSD: {
           total: 12480.5,
           byProvider: {
-            azureCommercial: 5410.2,
-            azureIL5: 4890.3,
-            azureIL6: 2180.0,
+            gcpCommercial: 5410.2,
+            gcpIL5: 4890.3,
+            gcpIL6: 2180.0,
           },
           monthlyTrend: [
             { month: 'Jan', spend: 8900 },

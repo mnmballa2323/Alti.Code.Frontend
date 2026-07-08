@@ -210,7 +210,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 ### Added
 - **Phase 48: Core Infrastructure Mastery**: Generated 21 deep-expert agents covering complex operational areas (Governance, Procurement, Quality Assurance, Audit/Forensics, Site Reliability Engineering, etc.). Upgraded `phases48_50.test.js` covering data pipelines, ML indexing, and cross-integration execution.
-- **Phase 49: Strategic VIP Integrations**: Generated another set of 21 deep-expert agents (totaling 42 for the session) integrating specific enterprise tools (Stripe, Splunk, Twilio, Snowflake, AWS, Azure, Google Cloud, Okta, Jira, GitHub Enterprise, PagerDuty, Datadog, ServiceNow, Salesforce, Zendesk, Marketo, Workday, SAP, Oracle). Total swarm size hits 316 distinct agents.
+- **Phase 49: Strategic VIP Integrations**: Generated another set of 21 deep-expert agents (totaling 42 for the session) integrating specific enterprise tools (Stripe, Splunk, Twilio, Snowflake, AWS, GCP, Google Cloud, Okta, Jira, GitHub Enterprise, PagerDuty, Datadog, ServiceNow, Salesforce, Zendesk, Marketo, Workday, SAP, Oracle). Total swarm size hits 316 distinct agents.
 - **Phase 50: Enterprise Search Engine**: Established the global Enterprise Search capability. Includes the `/search` REST API built upon Node TF-IDF TF/IDF multi-entity scoring (Agents, Tenants, Dispatches, Logs, Workflows), fuzzy matching, and live analytics. Coupled with a globally-available `OmniSearch` frontend UI component bounded to `Cmd+K` inputs.
 
 ## [7.2.0] - 2026-02-23 — OpenClaw Deep Integrations & Autonomic Reliability

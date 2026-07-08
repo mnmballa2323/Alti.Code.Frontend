@@ -22,9 +22,9 @@ import {
 } from '../gcpCloud/gcpServices.service.js';
 
 // transactional emails.
-const sendMailWithAzure = async mailData => {
+const sendMailWithGCP = async mailData => {
   logger.info(
-    `[Azure Identity] Simulating transactional email to ${mailData.to} via Azure Communication Services`,
+    `[GCP Identity] Simulating transactional email to ${mailData.to} via GCP Communication Services`,
   );
   return { success: true };
 };
@@ -171,7 +171,7 @@ const forgetPassword = catchAsync(async (req, res) => {
     subject: 'Password Reset',
     body: `OTP: ${OTP}`,
   };
-  await sendMailWithAzure(mailData);
+  await sendMailWithGCP(mailData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -237,7 +237,7 @@ const deleteUserAccountOTP = catchAsync(async (req, res) => {
     subject: 'Delete Account',
     body: `OTP: ${OTP}`,
   };
-  await sendMailWithAzure(mailData);
+  await sendMailWithGCP(mailData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -354,13 +354,13 @@ const updateUser = catchAsync(async (req, res) => {
   });
 });
 
-const sendMailWithAzureController = async (req, res) => {
+const sendMailWithGCPController = async (req, res) => {
   try {
     const mailData = { to: 'test@example.com', subject: 'Verify Email' };
-    const result = await sendMailWithAzure(mailData);
+    const result = await sendMailWithGCP(mailData);
     res.status(201).send(result);
   } catch (error) {
-    logger.error('Azure Email Error:', error);
+    logger.error('GCP Email Error:', error);
   }
 };
 
@@ -381,7 +381,7 @@ const googleAuthCallback = catchAsync(async (req, res) => {
   res.redirect(`${frontendUrl}/auth/success?accessToken=${accessToken}`);
 });
 
-const azureAuthCallback = catchAsync(async (req, res) => {
+const gcpAuthCallback = catchAsync(async (req, res) => {
   const user = req.user;
   const { accessToken, refreshToken } = authService.generateUserTokens(user);
 
@@ -530,9 +530,9 @@ export const authController = {
   deleteUserAccount,
   deleteUserAccountOTP,
   changePassword,
-  sendMailWithAzureController,
+  sendMailWithGCPController,
   googleAuthCallback,
-  azureAuthCallback,
+  gcpAuthCallback,
   githubAuthCallback,
   ssoAuthCallback,
   setupMfa,

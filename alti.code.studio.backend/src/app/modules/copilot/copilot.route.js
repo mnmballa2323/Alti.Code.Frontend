@@ -9,12 +9,12 @@ import express from 'express';
 import { CopilotBackend } from '@copilotkit/backend';
 // Removed VertexAI import
 import config from '../../../../config/index.js';
-import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
+import { gcpSovereignCompatService } from '../ai/gcpSovereignCompat.service.js';
 import { catchAsync } from '../../../shared/catchAsync.js';
 
 class GcpVertexAIAdapter {
   constructor(options = {}) {
-    this.modelName = options.model || config.azure.model_name || 'gpt-5.4';
+    this.modelName = options.model || config.gcp.model_name || 'gpt-5.4';
   }
 
   async getResponse(forwardedProps) {
@@ -24,7 +24,7 @@ class GcpVertexAIAdapter {
 
     try {
       const vertexAI = new VertexAI({
-        project: config.azure.tenant_id || 'alti-code-studio',
+        project: config.gcp.tenant_id || 'alti-code-studio',
         location: 'eastus',
       });
       const model = vertexAI.getGenerativeModel({ model: this.modelName });

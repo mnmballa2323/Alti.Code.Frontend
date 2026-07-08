@@ -7,4 +7,4 @@ export class GcpAgent {
   }
 }
 export const gcpAgent = new GcpAgent();
-export const azureAgent = gcpAgent; // Compatibility mapping
+export const gcpAgent = gcpAgent; // Compatibility mapping

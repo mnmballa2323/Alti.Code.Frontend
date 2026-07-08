@@ -3,7 +3,7 @@ name: GCP GCP AI Studio Search & Conversation Agentic Specialist
 version: "1.0.0"
 description: Specializes in GCP AI Studio Agent Builder, enterprise search data store indexing, Dialogflow CX triggers, grounding pipelines, and conversational AI flows.
 capabilities:
-  - azure_ai_search_indexing
+  - gcp_ai_search_indexing
   - agent_builder_orchestration
   - dialogflow_cx_integration
   - search_grounding_pipelines

@@ -377,8 +377,6 @@ const SettingsModal = () => {
                       <SelectItem key="claude-sonnet-4.6">
                         Claude Sonnet 4.6
                       </SelectItem>
-                      <SelectItem key="gpt-5.4">GPT-5.4</SelectItem>
-                      <SelectItem key="gpt-5.4-mini">GPT-5.4 Mini</SelectItem>
                     </Select>
                   </div>
 

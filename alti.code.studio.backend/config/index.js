@@ -1,8 +1,6 @@
 import { config } from 'dotenv';
 import path from 'path';
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
-import { DefaultAzureCredential } from '@azure/identity';
-import { SecretClient } from '@azure/keyvault-secrets';
 
 config({ path: path.join(process.cwd(), '.env') });
 
@@ -62,7 +60,7 @@ const configObject = {
   },
   tavily_api_key: process.env.TAVILY_API_KEY,
   serper_api_key: process.env.SERPER_API_KEY,
-  // Sovereign inference requires only Azure or local models. Other providers are blocked.
+  // Sovereign inference requires only GCP or local models. Other providers are blocked.
   cyberdesk_api_key: process.env.CYBERDESK_API_KEY,
   stripe: {
     stripe_secret_key: process.env.STRIPE_SECRET_KEY,
@@ -74,13 +72,11 @@ const configObject = {
     process.env.AGENT_S_PYTHON_PATH ||
     path.join(process.cwd(), '.venv-agent-s/bin/python'),
   private_cloud_mode: process.env.PRIVATE_CLOUD_MODE === 'true',
-  azure: {
-    subscription_id: process.env.ARM_SUBSCRIPTION_ID,
-    tenant_id: process.env.ARM_TENANT_ID,
-    client_id: process.env.ARM_CLIENT_ID,
-    model_name: process.env.AZURE_MODEL_NAME || 'gpt-5.4',
-    azure_openai_endpoint: process.env.AZURE_OPENAI_ENDPOINT,
-    azure_openai_api_key: process.env.AZURE_OPENAI_API_KEY,
+  gcp: {
+    subscription_id: process.env.GCP_PROJECT_ID,
+    tenant_id: process.env.GCP_TENANT_ID,
+    client_id: process.env.GCP_CLIENT_ID,
+    model_name: process.env.GCP_MODEL_NAME || 'gpt-5.4',
   },
   smtp: {
     host: process.env.SMTP_HOST,
@@ -126,14 +122,7 @@ export const loadEnterpriseSecrets = async () => {
     GITHUB_CLIENT_SECRET: val => {
       configObject.github.clientSecret = val;
     },
-    AZURE_OPENAI_API_KEY: val => {
-      configObject.azure.azure_openai_api_key = val;
-      process.env.AZURE_OPENAI_API_KEY = val;
-    },
-    AZURE_OPENAI_ENDPOINT: val => {
-      configObject.azure.azure_openai_endpoint = val;
-      process.env.AZURE_OPENAI_ENDPOINT = val;
-    },
+
     STRIPE_SECRET_KEY: val => {
       configObject.stripe.stripe_secret_key = val;
       process.env.STRIPE_SECRET_KEY = val;
@@ -186,33 +175,7 @@ export const loadEnterpriseSecrets = async () => {
     }
   }
 
-  // Azure Key Vault Integration
-  const keyVaultName = process.env.AZURE_KEYVAULT_NAME;
-  if (keyVaultName) {
-    console.log(`[Azure Key Vault] Initializing Sovereign Vault: ${keyVaultName}`);
-    try {
-      const KVUri = `https://${keyVaultName}.vault.azure.net`;
-      const credential = new DefaultAzureCredential();
-      const client = new SecretClient(KVUri, credential);
 
-      for (const [key, updater] of Object.entries(secretsMap)) {
-        const secretName = key.replace(/_/g, '-');
-        try {
-          const secret = await client.getSecret(secretName);
-          if (secret && secret.value) {
-            updater(secret.value.trim());
-            console.log(`[Azure Key Vault] Loaded secret: ${key}`);
-          }
-        } catch (secretErr) {
-          console.warn(`⚠️ [Azure Key Vault] Failed to load ${key} from Vault: ${secretErr.message}. Using environment default.`);
-        }
-      }
-    } catch (err) {
-      console.error('❌ [Azure Key Vault] Failed to initialize SecretClient:', err.message);
-    }
-  } else {
-    console.log('[Azure Key Vault] AZURE_KEYVAULT_NAME not set. Falling back to local env variables.');
-  }
 };
 
 export default configObject;

@@ -103,7 +103,7 @@ You MUST return a valid JSON object matching the following format exactly (no ma
           llmPrompt,
           'presentation_generator',
           {
-            preferredProvider: 'azure',
+            preferredProvider: 'gcp',
             modelId: modelId.includes('gpt') ? modelId : 'gpt-5.4',
           },
         );

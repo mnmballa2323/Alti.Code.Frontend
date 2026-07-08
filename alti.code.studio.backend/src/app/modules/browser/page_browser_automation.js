@@ -116,7 +116,7 @@ export class PageBrowserAutomation {
         '127.0.0.1',
         '0.0.0.0',
         '::1',
-        '169.254.169.254', // AWS/GCP/Azure Metadata Services
+        '169.254.169.254', // AWS/GCP/GCP Metadata Services
         '192.168.', // Local networks
         '10.',
         '172.16.',

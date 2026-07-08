@@ -65,4 +65,3 @@ class GcpSpeechService {
 
 export const gcpSpeechService = new GcpSpeechService();
 export const speechClient = gcpSpeechService;
-export const azureSpeechService = gcpSpeechService;

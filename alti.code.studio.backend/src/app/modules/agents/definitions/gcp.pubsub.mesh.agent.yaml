@@ -3,7 +3,7 @@ name: Google Cloud Pub/Sub Event-Driven Mesh Conductor Specialist
 version: "1.0.0"
 description: Specializes in designing, tuning, and scaling high-performance, asynchronous event-driven architectures using Google Cloud Pub/Sub, with precise dead-letter queue (DLQ) topologies, subscriber concurrency, and delivery safety rules.
 capabilities:
-  - azure_servicebus_architecture
+  - gcp_servicebus_architecture
   - schema_registry_enforcement
   - dead_letter_queue_design
   - retry_backoff_tuning

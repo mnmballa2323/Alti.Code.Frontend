@@ -2,7 +2,7 @@
 name: cloud-arch-general
 title: General of Multi-Cloud Architecture
 tier: Tier-2-General
-description: 4-Star General overseeing the AWS, GCP, Azure, Enterprise Design domain. Delegates to specialized Colonels.
+description: 4-Star General overseeing the AWS, GCP, GCP, Enterprise Design domain. Delegates to specialized Colonels.
 model: gemini-3.1-pro
 tools: ["Delegate", "Read", "Write"]
 ---

@@ -120,10 +120,10 @@ const getJobStatus = catchAsync(async (req, res) => {
 
 /**
  * POST /debug-agent/debug/webhook
- * Receives Azure Monitor alerts and triggers autonomic debugging.
+ * Receives GCP Cloud Monitoring alerts and triggers autonomic debugging.
  */
 const autonomicWebhook = catchAsync(async (req, res) => {
-  logger.info('Received Autonomic Debugging Webhook from Azure Monitor');
+  logger.info('Received Autonomic Debugging Webhook from GCP Cloud Monitoring');
 
   const alertData = observabilityService.ingestCloudAlert(req.body);
 
@@ -131,7 +131,7 @@ const autonomicWebhook = catchAsync(async (req, res) => {
   DebugAgentService.analyzeError(
     alertData.errorLog,
     alertData.stackTrace,
-    'system-azure-alert',
+    'system-gcp-alert',
     alertData.incidentId,
   ).catch(err => {
     logger.error(

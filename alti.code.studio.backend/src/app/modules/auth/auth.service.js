@@ -16,7 +16,7 @@ import { logger } from '../../../shared/logger.js';
 import { UserRepository } from './prisma.user.repository.js'; // 100% Postgres DAL
 import { prisma } from '../../../config/prisma.js';
 import crypto from 'crypto';
-import { authenticateAzureAD } from './gcpIap.service.js';
+import { authenticateGCPAD } from './gcpIap.service.js';
 import { totp } from '../../platform/index.js';
 
 const deleteUserAccountService = async userId => {
@@ -137,21 +137,21 @@ const loginService = async (email, password) => {
   }
 
   if (config.private_cloud_mode) {
-    const azureUser = await authenticateAzureAD(email, password);
+    const gcpUser = await authenticateGCPAD(email, password);
     let localUser = await UserRepository.findByEmail(email);
 
     if (!localUser) {
-      const defaultRole = azureUser.roles.includes('admin') ? 'admin' : 'user';
+      const defaultRole = gcpUser.roles.includes('admin') ? 'admin' : 'user';
       try {
         localUser = await prisma.$transaction(async tx => {
-          const tenantName = `${azureUser.projectName || 'Workspace'} - ${azureUser.username}`;
+          const tenantName = `${gcpUser.projectName || 'Workspace'} - ${gcpUser.username}`;
           const tenant = await tx.tenant.create({
             data: { name: tenantName },
           });
           return tx.user.create({
             data: {
               email,
-              provider: 'azure',
+              provider: 'gcp',
               role: defaultRole,
               tenantId: tenant.id,
               tenantRole: 'owner',
@@ -160,7 +160,7 @@ const loginService = async (email, password) => {
         });
       } catch (dbErr) {
         logger.warn(
-          '⚠️ [Postgres Offline] Falling back to mock database for Azure user provisioning',
+          '⚠️ [Postgres Offline] Falling back to mock database for GCP user provisioning',
         );
         const mockUserId = crypto.randomUUID
           ? crypto.randomUUID()
@@ -172,7 +172,7 @@ const loginService = async (email, password) => {
           id: mockUserId,
           tenantId: mockTenantId,
           tenantRole: 'owner',
-          provider: 'azure',
+          provider: 'gcp',
           email,
           role: defaultRole,
         };

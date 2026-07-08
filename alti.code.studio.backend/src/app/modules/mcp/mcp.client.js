@@ -215,10 +215,10 @@ export const PRESETS = [
     envKey: 'MCP_ENABLE_GCP',
   },
   {
-    name: 'azure',
+    name: 'gcp',
     command: 'docker',
-    args: ['run', '-i', '--rm', 'mcp/azure'],
-    envKey: 'MCP_ENABLE_AZURE',
+    args: ['run', '-i', '--rm', 'mcp/gcp'],
+    envKey: 'MCP_ENABLE_GCP',
   },
   {
     name: 'kubernetes',

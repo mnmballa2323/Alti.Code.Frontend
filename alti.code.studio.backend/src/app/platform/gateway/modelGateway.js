@@ -6,14 +6,14 @@
  * Routes LLM completions exclusively via authorized Tri-Cloud providers:
  * - GCP Vertex AI (for Gemini)
  * - AWS Bedrock (for Claude)
- * - Azure OpenAI Foundry (for GPT)
+ * - GCP Vertex AI (for GPT)
  *
  * Enforces security rules by disallowing direct OpenAI and Anthropic SDK endpoints,
  * and includes transient error retries, DLP scrubbing, and context compression.
  */
 
 import { executeVertexInference } from '../../modules/ai/vertex_ai.helper.js';
-import { AzureOpenAI } from 'openai';
+// Removed GCPOpenAI import
 // Removed Bedrock import
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError.js';
@@ -100,14 +100,11 @@ const getProviderRegion = provider => {
   if (provider === 'gcp') {
     return config.gcp?.location || 'us-central1';
   }
-  if (provider === 'azure') {
-    return 'azure-eastus';
-  }
   return 'unknown';
 };
 
 /**
- * Routes text completion request to authorized GCP Vertex AI endpoint (internally routed to Azure OpenAI)
+ * Routes text completion request to authorized GCP Vertex AI endpoint (internally routed to GCP Vertex AI)
  * @param {object} params
  * @param {string} params.provider - 'gcp'
  * @param {string} params.model - Specific model ID
@@ -125,14 +122,14 @@ export const routePlatformCompletion = async ({
   productId = null,
   tenantId = null,
 }) => {
-  // Security validation: Only allow GCP Vertex AI and Azure Foundry publicly
-  if (provider !== 'gcp' && provider !== 'azure') {
+  // Security validation: Only allow GCP Vertex AI publicly
+  if (provider !== 'gcp') {
     logger.error(
       `🚫 [Model Gateway] Blocked connection attempt to unauthorized provider: ${provider}`,
     );
     throw new ApiError(
       httpStatus.FORBIDDEN,
-      'Security Policy Exception: Direct API connections to non-GCP/Azure providers are blocked. Please use GCP Vertex AI or Azure Foundry.',
+      'Security Policy Exception: Direct API connections to non-GCP providers are blocked. Please use GCP Vertex AI.',
     );
   }
 
@@ -211,45 +208,10 @@ export const routePlatformCompletion = async ({
         break;
       }
 
-      case 'azure': {
-        const azureApiKey = process.env.AZURE_OPENAI_API_KEY;
-        const azureEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
-
-        if (!azureApiKey || !azureEndpoint) {
-          throw new ApiError(
-            httpStatus.BAD_REQUEST,
-            'Azure OpenAI Foundry API credentials/endpoint are missing.',
-          );
-        }
-
-        // Initialize Azure OpenAI client from openai
-        const client = new AzureOpenAI({
-          endpoint: azureEndpoint,
-          apiKey: azureApiKey,
-          apiVersion: '2024-02-15-preview',
-        });
-
-        const deploymentName = activeModel.replace(/^azure\//, '');
-        const response = await callWithRetry(() =>
-          client.chat.completions.create({
-            model: deploymentName,
-            messages: [{ role: 'user', content: activePrompt }],
-            temperature,
-          }),
-        );
-
-        if (response?.usage) {
-          tokensConsumed = response.usage.total_tokens || 0;
-        }
-
-        resultText = response.choices[0].message.content;
-        break;
-      }
-
       default:
         throw new ApiError(
           httpStatus.BAD_REQUEST,
-          `Unsupported Cloud provider: "${provider}". Must be: gcp, azure.`,
+          `Unsupported Cloud provider: "${provider}". Must be: gcp.`,
         );
     }
 

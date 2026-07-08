@@ -5,7 +5,7 @@
  *
  * Supports:
  *   - Google OIDC (Cloud Identity)
- *   - SAML 2.0 federation (Okta, Azure AD, Ping)
+ *   - SAML 2.0 federation (Okta, GCP Workforce Identity, Ping)
  *   - Service Account authentication (machine-to-machine)
  *   - JWT validation with Google public keys
  *

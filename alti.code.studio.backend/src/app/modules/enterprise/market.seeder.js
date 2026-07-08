@@ -72,7 +72,7 @@ class MarketSeeder {
       str.includes('cloud') ||
       str.includes('infra') ||
       str.includes('aws') ||
-      str.includes('azure')
+      str.includes('gcp')
     )
       return 'devops';
     if (

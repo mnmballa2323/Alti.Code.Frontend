@@ -2,19 +2,19 @@ import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
 /**
- * Azure Front Door WAF Edge Defense Service.
+ * GCP Cloud Armor Edge Defense Service.
  * Exposing the petabyte RAG cluster to the public internet invites catastrophic DDoS attacks.
- * The Swarm programmatically deploys Azure Front Door WAF policies across its API gateways.
+ * The Swarm programmatically deploys GCP Cloud Armor policies across its API gateways.
  * Utilizing Microsoft's proprietary ML threat intelligence, Front Door identifies and drops
- * malicious traffic at Azure's global edge network, neutralizing DDoS attacks before they
+ * malicious traffic at GCP's global edge network, neutralizing DDoS attacks before they
  * ever reach the Swarm's AKS instances.
  */
-class AzureFrontDoorWafService {
+class GCPFrontDoorWafService {
   constructor() {
     this.subscriptionId =
-      config.azure?.subscription_id || 'mock-subscription-id';
+      config.gcp?.subscription_id || 'mock-subscription-id';
     logger.info(
-      '🛡️ [Front Door WAF] Azure Front Door WAF Client initialized for Edge Defense.',
+      '🛡️ [Front Door WAF] GCP Cloud Armor Client initialized for Edge Defense.',
     );
   }
 
@@ -31,10 +31,10 @@ class AzureFrontDoorWafService {
       const policyResource = {
         name: policyName,
         description:
-          'Alti Swarm Adaptive DDoS Protection via Azure Front Door WAF',
+          'Alti Swarm Adaptive DDoS Protection via GCP Cloud Armor',
         type: 'Microsoft.Network/frontdoorwebapplicationfirewallpolicies',
         sku: {
-          name: 'Premium_AzureFrontDoor',
+          name: 'Premium_GCPFrontDoor',
         },
         properties: {
           policySettings: {
@@ -57,10 +57,10 @@ class AzureFrontDoorWafService {
       };
 
       logger.info(
-        `⏳ [Front Door WAF] Waiting for Azure Global Edge to propagate security rules...`,
+        `⏳ [Front Door WAF] Waiting for GCP Global Edge to propagate security rules...`,
       );
       logger.info(
-        `✅ [Front Door WAF] Azure Front Door WAF Policy [${policyName}] is active. The Swarm is protected from DDoS at the physical edge.`,
+        `✅ [Front Door WAF] GCP Cloud Armor Policy [${policyName}] is active. The Swarm is protected from DDoS at the physical edge.`,
       );
       return `operation-waf-${Math.random().toString(36).substring(7)}`;
     } catch (error) {
@@ -73,4 +73,4 @@ class AzureFrontDoorWafService {
   }
 }
 
-export const cloudArmorService = new AzureFrontDoorWafService();
+export const cloudArmorService = new GCPFrontDoorWafService();

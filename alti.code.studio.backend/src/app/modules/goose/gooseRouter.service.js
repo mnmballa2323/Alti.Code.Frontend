@@ -376,11 +376,11 @@ ${newErrors.join('\n\n')}
 
       const env = {
         ...process.env,
-        GOOSE_PROVIDER: 'azure_openai',
-        AZURE_OPENAI_API_KEY: process.env.ARM_CLIENT_SECRET || 'dummy-key',
-        AZURE_OPENAI_ENDPOINT:
-          process.env.ARM_ENDPOINT || 'https://dummy-endpoint.openai.azure.com',
-        GOOSE_MODEL: config.azure.model_name || 'gpt-5.4',
+        GOOSE_PROVIDER: 'gcp_openai',
+        GCP_OPENAI_API_KEY: process.env.ARM_CLIENT_SECRET || 'dummy-key',
+        GCP_OPENAI_ENDPOINT:
+          process.env.GCP_ENDPOINT || 'https://dummy-endpoint.openai.gcp.com',
+        GOOSE_MODEL: config.gcp.model_name || 'gpt-5.4',
       };
 
       const gooseProcess = spawn(

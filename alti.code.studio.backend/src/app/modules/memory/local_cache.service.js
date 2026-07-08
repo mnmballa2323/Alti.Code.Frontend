@@ -4,16 +4,16 @@ import { logger } from '../../../shared/logger.js';
 import path from 'path';
 import fs from 'fs';
 import config from '../../../../config/index.js';
-import { azureSecretManagerService } from '../gcpCloud/gcpSecretManager.service.js';
+import { gcpSecretManagerService } from '../gcpCloud/gcpSecretManager.service.js';
 
 /**
- * Azure LevelDB Local Disk Cache Service (with Key Vault Envelope Encryption).
+ * GCP LevelDB Local Disk Cache Service (with Key Vault Envelope Encryption).
  * Caching proprietary enterprise ASTs to local disk is a massive security vulnerability.
- * This service caches AST mappings to LevelDB, but uses Azure Key Vault to implement
+ * This service caches AST mappings to LevelDB, but uses GCP Secret Manager to implement
  * true Envelope Encryption. Every local AST chunk is encrypted with a unique local DEK,
- * which is mathematically wrapped by a centralized Azure Key Vault KEK.
+ * which is mathematically wrapped by a centralized GCP KMS KEK.
  */
-class AzureLevelDbService {
+class GCPLevelDbService {
   constructor() {
     try {
       const dbPath = path.join(process.cwd(), '.alti_swarm_cache');
@@ -22,17 +22,17 @@ class AzureLevelDbService {
       }
 
       this.db = new Level(dbPath, { valueEncoding: 'json' });
-      this.secretManager = azureSecretManagerService;
+      this.secretManager = gcpSecretManagerService;
 
       // Central KEK key name
-      this.keyName = config.azure?.key_vault_kek || 'cache-kek';
+      this.keyName = config.gcp?.key_vault_kek || 'cache-kek';
 
       logger.info(
-        '💽 [LevelDB+KeyVault] Azure LevelDB Local AST Cache with Envelope Encryption initialized.',
+        '💽 [LevelDB+KeyVault] GCP LevelDB Local AST Cache with Envelope Encryption initialized.',
       );
     } catch (error) {
       logger.warn(
-        '⚠️ [LevelDB+KeyVault] Could not initialize LevelDB or Azure Key Vault KEK.',
+        '⚠️ [LevelDB+KeyVault] Could not initialize LevelDB or GCP KMS KEK.',
       );
     }
   }
@@ -47,7 +47,7 @@ class AzureLevelDbService {
     }
     // Fallback key derived from application secret
     const appSecret =
-      process.env.AZURE_CLIENT_SECRET ||
+      process.env.GCP_CLIENT_SECRET ||
       'local-fallback-kek-seed-value-32bytes!';
     return crypto.createHash('sha256').update(appSecret).digest();
   }
@@ -145,4 +145,4 @@ class AzureLevelDbService {
   }
 }
 
-export const localCacheService = new AzureLevelDbService();
+export const localCacheService = new GCPLevelDbService();

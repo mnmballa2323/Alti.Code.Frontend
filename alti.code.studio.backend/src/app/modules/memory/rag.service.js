@@ -5,7 +5,7 @@
  * https://opensource.org/licenses/MIT
  */
 
-import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
+import { gcpSovereignCompatService } from '../ai/gcpSovereignCompat.service.js';
 import { logger } from '../../../shared/logger.js';
 import { vectorStoreService } from './vector.store.js';
 import { magikaService } from '../agents/magika.service.js';
@@ -83,7 +83,7 @@ class RagService {
 
             // 2. Generate embedding and push to Vertex AI Vector Search (Matching Engine)
             const embedding =
-              await azureSovereignCompatService.getEmbeddings(sanitizedText);
+              await gcpSovereignCompatService.getEmbeddings(sanitizedText);
             await vertexVectorSearch.upsertEmbeddings([
               { id: docId, embedding },
             ]);
@@ -210,7 +210,7 @@ class RagService {
     const vectorPromise = (async () => {
       try {
         const queryEmbedding =
-          await azureSovereignCompatService.getEmbeddings(query);
+          await gcpSovereignCompatService.getEmbeddings(query);
         const neighbors = await vertexVectorSearch.queryContext(
           queryEmbedding,
           topK,
@@ -285,7 +285,7 @@ Query: ${query}`;
 
     try {
       const response =
-        await azureSovereignCompatService.generateContent(prompt);
+        await gcpSovereignCompatService.generateContent(prompt);
       return response;
     } catch (aiError) {
       logger.error(`RAG: AI synthesis failed. Error: ${aiError.message}`);

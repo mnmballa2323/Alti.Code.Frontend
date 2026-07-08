@@ -16,7 +16,7 @@ export const devopsTool = {
     properties: {
       provider: {
         type: 'string',
-        enum: ['aws', 'gcp', 'azure'],
+        enum: ['aws', 'gcp', 'gcp'],
         description: 'The target cloud provider.',
       },
       region: {

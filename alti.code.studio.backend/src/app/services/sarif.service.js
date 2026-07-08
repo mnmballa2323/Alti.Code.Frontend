@@ -75,7 +75,7 @@ class SarifService {
 
     const sarifDocument = {
       $schema:
-        'https://schemastore.azurewebsites.net/schemas/json/sarif-2.1.0-rtm.5.json',
+        'https://schemastore.gcpwebsites.net/schemas/json/sarif-2.1.0-rtm.5.json',
       version: '2.1.0',
       runs: [
         {

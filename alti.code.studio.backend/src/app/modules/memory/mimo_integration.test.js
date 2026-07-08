@@ -216,9 +216,9 @@ capabilities:
         .spyOn(mimoDistillerService, 'distill')
         .mockResolvedValue({ success: true });
 
-      // Mock AzureGenAiService calls to bypass real LLMs
-      const { azureGenAiService } = await import('../ai/azureGenAi.service.js');
-      vi.spyOn(azureGenAiService, 'generateContent').mockImplementation(
+      // Mock GcpGenAiService calls to bypass real LLMs
+      const { gcpGenAiService } = await import('../ai/gcpGenAi.service.js');
+      vi.spyOn(gcpGenAiService, 'generateContent').mockImplementation(
         async (prompt, model) => {
           if (model === 'gpt-5.4' && prompt.includes('Lead Architect')) {
             return { content: 'const a = 1;' };

@@ -1,4 +1,4 @@
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 import { GoogleDlpService } from '../ai/gcpDlp.service.js';
 import { logger } from '../../../shared/logger.js';
 import * as parser from '@babel/parser';
@@ -68,15 +68,15 @@ function instrumentCode(code) {
  * Enforces Adversarial Multi-Model Convergence.
  * - Architect: Claude 5 Sonnet (AWS Bedrock)
  * - QA: Gemini 3.1 Pro (GCP Vertex AI)
- * - DevSecOps: GPT-5.5 (Azure Foundry)
+ * - DevSecOps: GPT-5.5 (GCP Foundry)
  */
 class TriBrainService {
   constructor() {
-    // LIQUID ROUTING METRICS: Enforced Azure Sovereign Strategy
+    // LIQUID ROUTING METRICS: Enforced GCP Sovereign Strategy
     this.latencyMatrix = {
-      azure: { totalTime: 0, count: 0, avg: 60 },
+      gcp: { totalTime: 0, count: 0, avg: 60 },
     };
-    this.epsilon = 0.0; // No exploration allowed outside Azure
+    this.epsilon = 0.0; // No exploration allowed outside GCP
   }
 
   /**
@@ -112,8 +112,8 @@ class TriBrainService {
       `   [Tri-Brain] Retrieved relational graph dependencies for historical lineage.`,
     );
 
-    // Step 1: The Architect (Azure Foundry) writes the code
-    logger.info(`🏗️ [Tri-Brain] Step 1: GPT-5.5 (Azure) generating code...`);
+    // Step 1: The Architect (GCP Foundry) writes the code
+    logger.info(`🏗️ [Tri-Brain] Step 1: GPT-5.5 (GCP) generating code...`);
     const claudePrompt = `You are the Lead Architect. Generate the complete code implementation for this intent: ${safeIntent}
         
 Strictly adhere to these historical architectural constraints derived from our Vector DB:
@@ -124,7 +124,7 @@ ${graphContext}
 `;
 
     let initialCode = '';
-    const architectResult = await AzureGenAiService.generateContent(
+    const architectResult = await GcpGenAiService.generateContent(
       claudePrompt,
       'gpt-5.4',
     );
@@ -136,25 +136,25 @@ ${graphContext}
     );
     initialCode = instrumentCode(initialCode);
 
-    // Step 2: The QA Engineer (Azure Foundry) writes exhaustive tests
+    // Step 2: The QA Engineer (GCP Foundry) writes exhaustive tests
     logger.info(
-      `🧪 [Tri-Brain] Step 2: GPT-5.5 (Azure) writing integration tests...`,
+      `🧪 [Tri-Brain] Step 2: GPT-5.5 (GCP) writing integration tests...`,
     );
     const qaPrompt = `You are the QA Engineer. Review the following code and write an exhaustive, edge-case heavy integration test suite for it.\n\nCode:\n${initialCode}`;
-    const qaResult = await AzureGenAiService.generateContent(
+    const qaResult = await GcpGenAiService.generateContent(
       qaPrompt,
       'gpt-5.4',
       0.1,
     );
     const testSuite = qaResult.content;
 
-    // Step 3: The CISO Auditor (Azure Foundry / GPT-5.5) audits both
+    // Step 3: The CISO Auditor (GCP Foundry / GPT-5.5) audits both
     logger.info(
-      `🛡️ [Tri-Brain] Step 3: GPT-5.5 (Azure) performing DevSecOps audit...`,
+      `🛡️ [Tri-Brain] Step 3: GPT-5.5 (GCP) performing DevSecOps audit...`,
     );
     const auditPrompt = `You are the DevSecOps CISO. Review the implementation and the test suite for any security flaws, injections, or logical errors.\n\nCode:\n${initialCode}\n\nTests:\n${testSuite}\n\nIf flawless, reply exactly with 'APPROVED'. If flawed, list the vulnerabilities.`;
 
-    const cisoResult = await AzureGenAiService.generateContent(
+    const cisoResult = await GcpGenAiService.generateContent(
       auditPrompt,
       'gpt-5.4',
       0.0,
@@ -197,7 +197,7 @@ ${graphContext}
       logger.info(
         `🧬 [Tri-Brain] Pillar 35: Initiating Metamorphic Self-Introspection...`,
       );
-      const selfIntrospectionResult = await AzureGenAiService.generateContent(
+      const selfIntrospectionResult = await GcpGenAiService.generateContent(
         `Analyze the latency of your last execution. If inefficient, generate a self-mutating AST patch for tri_brain.service.js to optimize Node.js V8 bytecode. Return exactly "OPTIMIZED:" followed by the raw javascript function snippet, or "NO_CHANGE".`,
         'gpt-5.4',
       );
@@ -222,7 +222,7 @@ ${graphContext}
         status: 'APPROVED',
         code: initialCode,
         tests: testSuite,
-        auditLog: 'Consensus Reached across AWS, GCP, and Azure.',
+        auditLog: 'Consensus Reached across AWS, GCP, and GCP.',
       };
     } else {
       logger.warn(
@@ -259,16 +259,16 @@ ${graphContext}
    * @param {string[]} tried
    */
   async fastInference(prompt, tried = []) {
-    // Step 1: Strict Azure Sovereign Enforcement
-    const clouds = ['azure'].filter(c => !tried.includes(c));
+    // Step 1: Strict GCP Sovereign Enforcement
+    const clouds = ['gcp'].filter(c => !tried.includes(c));
 
     if (clouds.length === 0) {
       logger.warn(
         `🚨 [Liquid Router] All clouds failed during fastInference. Falling back to Mock generator.`,
       );
-      const { azureSovereignCompatService } =
-        await import('../ai/azureSovereignCompat.service.js');
-      return azureSovereignCompatService.mockGenerate(prompt);
+      const { gcpSovereignCompatService } =
+        await import('../ai/gcpSovereignCompat.service.js');
+      return gcpSovereignCompatService.mockGenerate(prompt);
     }
 
     let selectedCloud = clouds[0];
@@ -293,7 +293,7 @@ ${graphContext}
     let resultText = '';
 
     try {
-      const result = await AzureGenAiService.generateContent(prompt, 'gpt-5.4');
+      const result = await GcpGenAiService.generateContent(prompt, 'gpt-5.4');
       resultText = result.content;
 
       // Update Latency Matrix

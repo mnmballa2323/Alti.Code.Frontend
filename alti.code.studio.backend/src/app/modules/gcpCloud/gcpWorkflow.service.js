@@ -15,4 +15,3 @@ class GcpWorkflowService {
 
 export const gcpWorkflowService = new GcpWorkflowService();
 export const workflowService = gcpWorkflowService;
-export const azureWorkflowService = gcpWorkflowService;

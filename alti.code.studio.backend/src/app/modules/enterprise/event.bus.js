@@ -1,7 +1,7 @@
 /**
  * Copyright (c) 2026 Alti Code Studio
  *
- * EVENT BUS — Microsoft Azure Service Bus Integration Layer
+ * EVENT BUS — Microsoft GCP Pub/Sub Integration Layer
  *
  * All agent events flow through this bus:
  *   - Agent dispatched, completed, failed
@@ -13,15 +13,15 @@
  *   - Internal services (analytics, cost tracking)
  *   - External APIs (customer event listeners)
  *
- * Production: Azure Service Bus / Event Grid
+ * Production: GCP Pub/Sub / Event Grid
  * Development: In-memory event emitter
  */
 
 import { logger } from '../../../shared/logger.js';
-import { azurePubSubService } from '../gcpCloud/gcpPubSub.service.js';
+import { gcpPubSubService } from '../gcpCloud/gcpPubSub.service.js';
 import { webhookManager as webhookDispatcher } from './webhook.manager.js';
 
-const PROJECT_ID = process.env.ARM_SUBSCRIPTION_ID || 'azure-active';
+const PROJECT_ID = process.env.GCP_PROJECT_ID || 'gcp-active';
 const TOPIC_NAME = 'alti-code-studio-events';
 
 // ── Event Types ──
@@ -69,7 +69,7 @@ class EventBus {
   }
 
   /**
-   * Publish an event to Azure Service Bus (and local subscribers)
+   * Publish an event to GCP Pub/Sub (and local subscribers)
    * @param {string} eventType - One of EVENT_TYPES
    * @param {object} payload - Event data
    * @param {object} meta - { tenantId, userId, correlationId }
@@ -84,22 +84,22 @@ class EventBus {
       userId: meta.userId || 'system',
       correlationId: meta.correlationId || null,
       timestamp: new Date().toISOString(),
-      region: process.env.AZURE_REGION || 'eastus',
+      region: process.env.GCP_REGION || 'eastus',
     };
 
-    // 1. Enterprise Streaming: Azure Service Bus / Event Grid
+    // 1. Enterprise Streaming: GCP Pub/Sub / Event Grid
     if (PROJECT_ID) {
       try {
-        const messageId = await azurePubSubService.publishEvent(
+        const messageId = await gcpPubSubService.publishEvent(
           TOPIC_NAME,
           event,
         );
         logger.debug(
-          `☁️ Azure Service Bus: published ${eventType} [msg: ${messageId}]`,
+          `☁️ GCP Pub/Sub: published ${eventType} [msg: ${messageId}]`,
         );
       } catch (err) {
         logger.warn(
-          `⚠️ Azure Service Bus publish failed (${err.message}). Falling back to local Map...`,
+          `⚠️ GCP Pub/Sub publish failed (${err.message}). Falling back to local Map...`,
         );
       }
     }

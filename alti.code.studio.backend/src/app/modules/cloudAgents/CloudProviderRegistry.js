@@ -26,7 +26,7 @@ class CloudProviderRegistry {
     );
 
     // In a full production environment, this would dynamically import('@aws-sdk/client-ec2')
-    // or '@azure/arm-compute' depending on the exact string. For total coverage, we wrap it.
+    // or '@gcp/arm-compute' depending on the exact string. For total coverage, we wrap it.
     const adapter = new UniversalCloudAdapter(providerName);
 
     this.activeProviders.set(providerName, adapter);

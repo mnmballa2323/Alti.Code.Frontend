@@ -693,14 +693,14 @@ class GraphOrchestrator {
           ).fileSearchService || {},
       };
 
-      // BYOC Check: If the tenant configuration directs to a private Azure Stack Hub executor
+      // BYOC Check: If the tenant configuration directs to a private Google Distributed Cloud executor
       const { tenantService } = await import('../enterprise/tenant.service.js');
       const tenant = await tenantService.resolve(tenantId);
 
       if (tenant && tenant.byocEnabled && tenant.byocEndpoint) {
         const axios = (await import('axios')).default;
         logger.info(
-          `🌐 BYOC Router: Delegating step ${step.agent}.${step.action} to private Azure Stack Hub node: ${tenant.byocEndpoint}`,
+          `🌐 BYOC Router: Delegating step ${step.agent}.${step.action} to private Google Distributed Cloud node: ${tenant.byocEndpoint}`,
         );
         try {
           const response = await axios.post(`${tenant.byocEndpoint}/execute`, {
@@ -715,7 +715,7 @@ class GraphOrchestrator {
             `❌ BYOC execution error routing to ${tenant.byocEndpoint}: ${err.message}`,
           );
           throw new Error(
-            `BYOC_ROUTING_FAILED: Failed to delegate to private Azure Stack Hub bare-metal node: ${err.message}`,
+            `BYOC_ROUTING_FAILED: Failed to delegate to private Google Distributed Cloud bare-metal node: ${err.message}`,
           );
         }
       } else {

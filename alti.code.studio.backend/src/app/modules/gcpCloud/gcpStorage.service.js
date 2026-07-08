@@ -172,4 +172,3 @@ class GcpStorageService {
 export const gcpStorageService = new GcpStorageService();
 export const gcsService = gcpStorageService;
 export const GcsService = gcpStorageService;
-export const azureStorageService = gcpStorageService;

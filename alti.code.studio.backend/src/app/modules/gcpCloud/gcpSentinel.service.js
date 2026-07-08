@@ -40,4 +40,3 @@ class GcpSentinelService {
 
 export const gcpSentinelService = new GcpSentinelService();
 export const gcpSentinel = gcpSentinelService;
-export const azureSentinelService = gcpSentinelService;

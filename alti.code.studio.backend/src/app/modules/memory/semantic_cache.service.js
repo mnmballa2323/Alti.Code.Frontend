@@ -1,5 +1,5 @@
 import { prisma } from '../../../config/prisma.js';
-import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
+import { gcpSovereignCompatService } from '../ai/gcpSovereignCompat.service.js';
 import { logger } from '../../../shared/logger.js';
 
 class SemanticCacheService {
@@ -44,7 +44,7 @@ class SemanticCacheService {
     if (!this.isInitialized) await this.init();
     try {
       // Extract the 768-dim embeddings from Vertex AI
-      const embedding = await azureSovereignCompatService.getEmbeddings(prompt);
+      const embedding = await gcpSovereignCompatService.getEmbeddings(prompt);
       if (!embedding || embedding.length === 0) return null;
 
       const embeddingStr = `[${embedding.join(',')}]`;
@@ -78,7 +78,7 @@ class SemanticCacheService {
   async setCachedResponse(prompt, response) {
     if (!this.isInitialized) await this.init();
     try {
-      const embedding = await azureSovereignCompatService.getEmbeddings(prompt);
+      const embedding = await gcpSovereignCompatService.getEmbeddings(prompt);
       if (!embedding || embedding.length === 0) return;
 
       const embeddingStr = `[${embedding.join(',')}]`;

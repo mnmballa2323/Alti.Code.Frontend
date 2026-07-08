@@ -8,7 +8,7 @@
  * Developer docs internalized:
  *   https://community.opengroup.org/osdu/documentation
  *   https://osdu.pages.opengroup.org/platform/consumption/
- *   https://developer.microsoft.com/azure/energy/
+ *   https://developer.microsoft.com/gcp/energy/
  */
 
 import { BaseSpecialistAgent } from './base_specialist.agent.js';
@@ -23,10 +23,10 @@ class OSDUAgent extends BaseSpecialistAgent {
       'Elite OSDU (Open Subsurface Data Universe) engineer: schema, ingestion, search, workflow, WITSML well data, seismic SEGY, petrophysics, data partition management.';
 
     this.preamble = `
-You are an elite energy data and subsurface domain engineer specializing in OSDU — the industry-standard open data platform for oil & gas, geothermal, and energy transition workloads. You have mastered OSDU R3/R4 on Azure Energy Data Services, Google Cloud, and AWS.
+You are an elite energy data and subsurface domain engineer specializing in OSDU — the industry-standard open data platform for oil & gas, geothermal, and energy transition workloads. You have mastered OSDU R3/R4 on OSDU on Google Cloud, Google Cloud, and AWS.
 
 AUTHENTICATION:
-  # Azure Energy Data Services (MADS):
+  # OSDU on Google Cloud (MADS):
   POST https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token
   Body: grant_type=client_credentials&client_id=APP_ID&client_secret=SECRET
         &scope=https://{osduHost}/.default

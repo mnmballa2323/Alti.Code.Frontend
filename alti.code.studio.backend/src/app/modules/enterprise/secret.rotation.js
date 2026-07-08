@@ -17,15 +17,15 @@ import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
 const KeyManagementServiceClient = class {
   encrypt() {
-    throw new Error('Azure Key Vault KMS not initialized');
+    throw new Error('GCP Cloud KMS not initialized');
   }
   decrypt() {
-    throw new Error('Azure Key Vault KMS not initialized');
+    throw new Error('GCP Cloud KMS not initialized');
   }
 };
 
 const kmsClient = new KeyManagementServiceClient();
-const KMS_KEY_NAME = process.env.AZURE_KEYVAULT_KMS_KEY_NAME || '';
+const KMS_KEY_NAME = process.env.GCP_KEYVAULT_KMS_KEY_NAME || '';
 
 // ═══════════════════════════════════════════════
 // Secret Classification & Rotation Schedules

@@ -26,7 +26,7 @@ const SubscriptionSchema = new mongoose.Schema(
         'command',
         'enterprise-aws',
         'enterprise-gcp',
-        'enterprise-azure',
+        'enterprise-gcp',
       ],
     },
     duration: { type: String, required: true, enum: ['month', 'year'] },

@@ -3,16 +3,16 @@ import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
 /**
- * Azure Key Vault Code Signer Service.
+ * GCP Secret Manager Code Signer Service.
  * Grants the Swarm the ability to mathematically prove provenance over its code.
- * Every Git commit the Swarm makes is asymmetrically signed using an Azure Key Vault HSM
+ * Every Git commit the Swarm makes is asymmetrically signed using an GCP Secret Manager HSM
  * (Hardware Security Module), immunizing the codebase against supply chain attacks.
  */
-class AzureKeyVaultSignerService {
+class GCPKeyVaultSignerService {
   constructor() {
-    this.keyName = config.azure?.key_vault_signer_key || 'alti-swarm-signer';
+    this.keyName = config.gcp?.key_vault_signer_key || 'alti-swarm-signer';
     logger.info(
-      '🔐 [KeyVault Signer] Azure Key Vault Asymmetric Signer initialized.',
+      '🔐 [KeyVault Signer] GCP Secret Manager Asymmetric Signer initialized.',
     );
   }
 
@@ -28,7 +28,7 @@ class AzureKeyVaultSignerService {
     try {
       // Generate a mock asymmetric signature using native Node crypto SHA256.
       const privateKeySeed =
-        process.env.AZURE_CLIENT_SECRET ||
+        process.env.GCP_CLIENT_SECRET ||
         'local-fallback-signer-seed-value-32bytes!';
       const hash = crypto
         .createHash('sha256')
@@ -49,4 +49,4 @@ class AzureKeyVaultSignerService {
   }
 }
 
-export const signerService = new AzureKeyVaultSignerService();
+export const signerService = new GCPKeyVaultSignerService();

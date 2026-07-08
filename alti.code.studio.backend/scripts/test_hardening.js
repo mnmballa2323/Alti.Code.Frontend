@@ -17,7 +17,7 @@ import { capabilityRouter } from '../src/app/modules/agents/capability.router.js
 // Cloud agents
 import { awsAgent } from '../src/app/modules/agents/aws.agent.js';
 import { gcpAgent } from '../src/app/modules/agents/gcp.agent.js';
-import { azureAgent } from '../src/app/modules/agents/azure.agent.js';
+import { gcpAgent } from '../src/app/modules/agents/gcp.agent.js';
 import { cloudflareAgent } from '../src/app/modules/agents/cloudflare.agent.js';
 import { vercelAgent } from '../src/app/modules/agents/vercel.agent.js';
 import { netlifyAgent } from '../src/app/modules/agents/netlify.agent.js';
@@ -139,7 +139,7 @@ await t('resetMetrics() zeroes all counters', async () => {
 // ── Cloud Agents: Structural Validation ─────────────────────────────────────
 console.log('\n📍 Cloud Agent Structural Validation (all 21)');
 const cloudAgents = [
-    awsAgent, gcpAgent, azureAgent, cloudflareAgent, vercelAgent, netlifyAgent,
+    awsAgent, gcpAgent, gcpAgent, cloudflareAgent, vercelAgent, netlifyAgent,
     digitaloceanAgent, oracleAgent, ibmcloudAgent, alibabaAgent, hetznerAgent,
     flyioAgent, railwayAgent, renderAgent, linodeAgent, vultrAgent, scalewayAgent,
     ovhcloudAgent, neonAgent, fastlyAgent, backblazeAgent

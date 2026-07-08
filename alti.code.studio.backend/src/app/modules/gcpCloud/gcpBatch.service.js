@@ -47,4 +47,3 @@ export const cloudBatchService = gcpBatchService;
 export const cloudBuildService = gcpBatchService;
 export const tpuOrchestratorService = gcpBatchService;
 export const cloudRunJobsService = gcpBatchService;
-export const azureBatchService = gcpBatchService;

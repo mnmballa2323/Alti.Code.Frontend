@@ -10,7 +10,7 @@ async function generate() {
     const targets = [
         "GCP Vertex AI Direct Connector Specialist",
         "AWS Bedrock Direct Connector Specialist",
-        "Azure OpenAI Foundry Direct Connector Specialist",
+        "GCP Vertex AI Direct Connector Specialist",
         "Smart Routing Orchestration Optimizer"
     ];
 

@@ -87,7 +87,7 @@ export const reportTokenUsage = async (
   if (!tenantId) return;
 
   // Approximate dynamic pricing model (e.g. Gemini 1.5 Pro)
-  // In production, this maps exactly to GCP/AWS/Azure billing sheets
+  // In production, this maps exactly to GCP/AWS/GCP billing sheets
   const pricePer1kPrompt = 0.00125;
   const pricePer1kCompletion = 0.00375;
 

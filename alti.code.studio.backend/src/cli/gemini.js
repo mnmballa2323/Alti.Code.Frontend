@@ -15,7 +15,7 @@ const __dirname = path.dirname(__filename);
 // Construct absolute path to service
 const servicePath = path.resolve(
   __dirname,
-  '../app/modules/ai/azureGenAi.service.js',
+  '../app/modules/ai/gcpGenAi.service.js',
 );
 
 // Helper to load services
@@ -23,7 +23,7 @@ const getServices = async () => {
   try {
     const genAiModule = await import(
       pathToFileURL(
-        path.resolve(__dirname, '../app/modules/ai/azureGenAi.service.js'),
+        path.resolve(__dirname, '../app/modules/ai/gcpGenAi.service.js'),
       )
     );
     const deployModule = await import(
@@ -44,8 +44,8 @@ const getServices = async () => {
     );
     const fsModule = await import('fs/promises');
     return {
-      AzureGenAiService:
-        genAiModule.azureGenAiService || genAiModule.AzureGenAiService,
+      GcpGenAiService:
+        genAiModule.gcpGenAiService || genAiModule.GcpGenAiService,
       uDeploymentService: deployModule.uDeploymentService,
       spannerGraphService: spannerModule.spannerGraphService,
       fs: fsModule,
@@ -80,13 +80,13 @@ const main = async () => {
     return;
   }
 
-  const { AzureGenAiService, uDeploymentService, spannerGraphService, fs } =
+  const { GcpGenAiService, uDeploymentService, spannerGraphService, fs } =
     await getServices();
 
   if (command === 'ask') {
     if (!input) return console.error('❌ Error: Please provide a prompt.');
     try {
-      const result = await AzureGenAiService.generateContent(input);
+      const result = await GcpGenAiService.generateContent(input);
       console.log('\n🌌 Gemini Response:\n\n', result.content);
     } catch (error) {
       console.error('❌ Error:', error.message);
@@ -94,7 +94,7 @@ const main = async () => {
   } else if (command === 'chat') {
     if (!input) return console.error('❌ Error: Please provide a message.');
     try {
-      const result = await AzureGenAiService.chatSession([], input);
+      const result = await GcpGenAiService.chatSession([], input);
       console.log('\n💬 Chat Response:\n\n', result.response);
     } catch (error) {
       console.error('❌ Error:', error.message);

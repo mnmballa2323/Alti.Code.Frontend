@@ -2,15 +2,15 @@ import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
 /**
- * Azure Zanzibar Granular Authorization Service (Microsoft Entra ID / RBAC).
+ * GCP Zanzibar Granular Authorization Service (Microsoft Entra ID / RBAC).
  * The world's best RAG system cannot leak code to unauthorized developers within an enterprise.
  * We implement a granular Zanzibar model via Microsoft Entra ID. Every single AST node retrieved
  * by the Swarm undergoes nanosecond authorization checks, guaranteeing that the RAG only returns
  * code context that the requesting developer has cryptographic clearance to read.
  */
-class AzureZanzibarService {
+class GCPZanzibarService {
   constructor() {
-    this.tenantId = config.azure?.tenant_id || 'mock-tenant-id';
+    this.tenantId = config.gcp?.tenant_id || 'mock-tenant-id';
     logger.info(
       '🔐 [Zanzibar] Microsoft Entra ID / Zanzibar Policy Engine initialized.',
     );
@@ -54,4 +54,4 @@ class AzureZanzibarService {
   }
 }
 
-export const zanzibarService = new AzureZanzibarService();
+export const zanzibarService = new GCPZanzibarService();

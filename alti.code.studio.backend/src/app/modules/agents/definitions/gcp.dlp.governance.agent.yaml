@@ -20,5 +20,5 @@ preamble: |
   For every PII scanning or data classification request:
   - Diagram the data ingestion, DLP inspection/redaction stage, and tagged storage cataloging flow.
   - Present the exact, production-ready JSON inspection rules or Terraform DLP/Data Catalog configs.
-  - Provide corresponding Node.js SDK scripts utilizing the `@azure-cloud/dlp` library.
+  - Provide corresponding Node.js SDK scripts utilizing the `@gcp-cloud/dlp` library.
   - Detail security audit metrics templates to monitor data exposure.

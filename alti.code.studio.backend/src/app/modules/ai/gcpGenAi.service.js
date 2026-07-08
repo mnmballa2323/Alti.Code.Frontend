@@ -8,10 +8,10 @@ const generateContent = async (
   modelName = PRIMARY_MODEL,
   temperature = 0.5,
 ) => {
-  logger.info(`🧠 [AzureGenAi] Running generation on Azure OpenAI...`);
+  logger.info(`🧠 [GcpGenAi] Running generation on GCP Vertex AI...`);
   const result = await multiCloudInferenceService.executeMultiCloudInference(
     prompt,
-    'azure_genai',
+    'gcp_genai',
     { modelId: modelName },
   );
   return {
@@ -34,7 +34,7 @@ const getGenerativeModel = (modelName, temperature = 0.5) => {
       const result =
         await multiCloudInferenceService.executeMultiCloudInference(
           prompt,
-          'azure_genai_model',
+          'gcp_genai_model',
           { modelId: modelName },
         );
       return {
@@ -50,7 +50,7 @@ const getGenerativeModel = (modelName, temperature = 0.5) => {
           const result =
             await multiCloudInferenceService.executeMultiCloudInference(
               prompt,
-              'azure_genai_chat',
+              'gcp_genai_chat',
               { modelId: modelName },
             );
           return {
@@ -79,7 +79,7 @@ const chatSession = async (history, msg) => {
   };
 };
 
-export const azureGenAiService = {
+export const gcpGenAiService = {
   generateContent,
   getGenerativeModel,
   generateEmbedding,

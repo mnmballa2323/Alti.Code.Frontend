@@ -1,7 +1,7 @@
 import { discoveryEngineService } from '../gcpCloud/gcpSearch.service.js';
 import { spannerGraphService } from '../gcpCloud/gcpSpannerGraph.service.js';
 import { GeminiCliService } from '../geminiCli/geminiCli.service.js';
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 import { fileSearchService } from '../fileSearch/fileSearch.service.js';
 import { ragCacheService } from '../gcpCloud/gcpCache.service.js';
 import { vectorStoreService } from '../memory/vector.store.js';
@@ -65,7 +65,7 @@ Rules:
 
 Example: ["original query", "specific technical term query", "architectural pattern query"]`;
 
-      const raw = await AzureGenAiService.generateContent(
+      const raw = await GcpGenAiService.generateContent(
         prompt,
         'gemini-3.1-pro',
         0.3,
@@ -449,7 +449,7 @@ Example: ["original query", "specific technical term query", "architectural patt
     const finalPrompt = `USER QUERY: ${query}\n\n=== GOOGLE RAG CONTEXT ===\n${combinedContext}\n\nSynthesize the ultimate answer based strictly on the context and include citations.`;
 
     logger.info(`🧠 [Ultimate RAG] Synthesizing via Google Gemini 3.1 Pro...`);
-    const response = await AzureGenAiService.generateContent(
+    const response = await GcpGenAiService.generateContent(
       `${systemPrompt}\n\n${finalPrompt}`,
       'gemini-3.1-pro',
       0.2,

@@ -5,7 +5,7 @@ import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 import { parseOKF, validateOKF } from './okf.parser.js';
 import { prisma } from '../../../config/prisma.js';
-import { azureSovereignCompatService } from '../ai/azureSovereignCompat.service.js';
+import { gcpSovereignCompatService } from '../ai/gcpSovereignCompat.service.js';
 import { socketService } from '../../services/socket.service.js';
 import { neo4jService } from '../../services/neo4j.service.js';
 
@@ -13,7 +13,7 @@ class KnowledgeCatalogService {
   constructor() {
     this.catalogDir = path.join(process.cwd(), 'catalog');
     this.location = 'eastus';
-    this.projectId = config.azure?.tenant_id || 'mock-project-id';
+    this.projectId = config.gcp?.tenant_id || 'mock-project-id';
 
     try {
       this.client = null;
@@ -245,7 +245,7 @@ ${generatedFiles
 
         // 2. Generate and store pgvector embedding (with safety fallback)
         try {
-          const embedding = await azureSovereignCompatService.getEmbeddings(
+          const embedding = await gcpSovereignCompatService.getEmbeddings(
             concept.body,
           );
           const embeddingStr = `[${embedding.join(',')}]`;
@@ -329,7 +329,7 @@ ${generatedFiles
    */
   async searchCatalogSemantically(query, topK = 5) {
     try {
-      const embedding = await azureSovereignCompatService.getEmbeddings(query);
+      const embedding = await gcpSovereignCompatService.getEmbeddings(query);
       const embeddingStr = `[${embedding.join(',')}]`;
 
       // Query OkfConcept using cosine distance (<=>)
@@ -614,7 +614,7 @@ timestamp: ${new Date().toISOString()}
       });
 
       try {
-        const embedding = await azureSovereignCompatService.getEmbeddings(body);
+        const embedding = await gcpSovereignCompatService.getEmbeddings(body);
         const embeddingStr = `[${embedding.join(',')}]`;
         await prisma.$executeRawUnsafe(`
                     UPDATE "OkfConcept"

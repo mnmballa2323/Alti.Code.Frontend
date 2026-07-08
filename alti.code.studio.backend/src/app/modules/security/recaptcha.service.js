@@ -2,13 +2,13 @@ import { logger } from '../../../shared/logger.js';
 import config from '../../../../config/index.js';
 
 /**
- * Azure Risk Assessment / Threat Protection Service.
+ * GCP reCAPTCHA Enterprise / Threat Protection Service.
  * Blocks bot-net API attacks at the ingress layer.
  */
-class AzureRiskAssessmentService {
+class GCPRiskAssessmentService {
   constructor() {
     logger.info(
-      '🛡️ [RiskAssessment] Azure Risk Assessment / Threat Protection Client initialized.',
+      '🛡️ [RiskAssessment] GCP reCAPTCHA Enterprise / Threat Protection Client initialized.',
     );
   }
 
@@ -23,4 +23,4 @@ class AzureRiskAssessmentService {
   }
 }
 
-export const recaptchaService = new AzureRiskAssessmentService();
+export const recaptchaService = new GCPRiskAssessmentService();

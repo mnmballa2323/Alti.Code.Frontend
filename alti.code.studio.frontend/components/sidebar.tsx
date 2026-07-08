@@ -1842,43 +1842,42 @@ export default function Sidebar() {
             isSidebarOpen ? "w-80" : "w-16",
           )}
         >
-          {/* Active Workspace Name (Left Side) */}
-          {isSidebarOpen && activeProject?.name && (
-            <div className="absolute top-0 left-3 h-10 flex items-center max-w-[180px] select-none pointer-events-none z-50">
-              <span className="text-[12px] font-semibold text-default-450 dark:text-default-400 truncate">
-                {activeProject.name}
+          {/* Sidebar Header (Workspace Name & Collapse Button) */}
+          {isSidebarOpen ? (
+            <div className="w-full flex items-center justify-between pt-4 pb-3 px-4 border-b border-white/5 select-none">
+              <span className="text-[12px] font-normal text-gray-300 dark:text-gray-200 truncate max-w-[200px]">
+                {activeProject?.name || "No Workspace"}
               </span>
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
+                onClick={toggleLeftSidebar}
+              >
+                <PanelLeftClose className="size-4" />
+              </Button>
+            </div>
+          ) : (
+            <div className="w-full flex justify-center pt-3 pb-3 border-b border-white/5 select-none">
+              <Button
+                isIconOnly
+                variant="light"
+                size="sm"
+                className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
+                onClick={toggleLeftSidebar}
+              >
+                <PanelLeftOpen className="size-4" />
+              </Button>
             </div>
           )}
-
-          {/* Sidebar Collapse Toggle Button */}
-          <div
-            className={cn(
-              "absolute top-1 z-50",
-              isSidebarOpen ? "right-3" : "right-4"
-            )}
-          >
-            <Button
-              isIconOnly
-              variant="light"
-              size="sm"
-              className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
-              onClick={toggleLeftSidebar}
-            >
-              {isSidebarOpen ? (
-                <PanelLeftClose className="size-4" />
-              ) : (
-                <PanelLeftOpen className="size-4" />
-              )}
-            </Button>
-          </div>
 
           <div
             className={cn(
               "flex border-b border-transparent",
               isSidebarOpen
-                ? "h-[92px] pt-10 pb-1.5 px-3 items-end justify-start"
-                : "h-auto pt-12 pb-2 items-center justify-center",
+                ? "h-[54px] pt-3 pb-1.5 px-3 items-end justify-start"
+                : "h-auto pt-4 pb-2 items-center justify-center",
             )}
           >
             <div

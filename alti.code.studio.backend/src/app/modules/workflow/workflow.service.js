@@ -1,4 +1,4 @@
-import { azureGenAiService as AzureGenAiService } from '../ai/azureGenAi.service.js';
+import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 import { logger } from '../../../shared/logger.js';
 import crypto from 'crypto';
 
@@ -39,7 +39,7 @@ class WorkflowService {
 
     let compiledSteps = [];
     try {
-      const result = await AzureGenAiService.generateContent(
+      const result = await GcpGenAiService.generateContent(
         compilerPrompt,
         'gemini-3.1-pro',
         0.1,
