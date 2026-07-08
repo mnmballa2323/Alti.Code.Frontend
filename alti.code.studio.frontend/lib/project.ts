@@ -38,7 +38,9 @@ export const onProjectChange = (
 ): (() => void) => {
   if (typeof window === "undefined") return () => {};
   const handler = (e: Event) => cb((e as CustomEvent<ActiveProject>).detail);
+
   window.addEventListener(EVENT_NAME, handler);
+
   return () => window.removeEventListener(EVENT_NAME, handler);
 };
 
@@ -59,6 +61,7 @@ export const readProjectData = <T>(
   if (typeof window === "undefined") return fallback;
   try {
     const raw = localStorage.getItem(projectKey(agentId, suffix));
+
     return raw ? (JSON.parse(raw) as T) : fallback;
   } catch {
     return fallback;

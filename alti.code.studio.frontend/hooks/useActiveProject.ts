@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
 import {
   getActiveProject,
   onProjectChange,
@@ -19,6 +20,7 @@ export function useActiveProject(): ActiveProject {
   useEffect(() => {
     // Sync on mount in case localStorage was updated before hydration
     setProject(getActiveProject());
+
     // Listen for subsequent changes
     return onProjectChange(setProject);
   }, []);

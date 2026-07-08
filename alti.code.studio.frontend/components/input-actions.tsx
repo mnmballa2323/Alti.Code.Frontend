@@ -1,10 +1,7 @@
 "use client";
 
 import {
-  Badge,
-  Button,
   Form,
-  Image,
   cn,
   Dropdown,
   DropdownTrigger,
@@ -18,19 +15,9 @@ import {
   ArrowUp,
   Plus,
   ChevronDown,
-  Github,
-  CloudUpload,
   Figma,
   Codesandbox,
   MonitorSmartphone,
-  Shield,
-  FlaskConical,
-  Network,
-  Cpu,
-  Wand2,
-  BookOpen,
-  HelpCircle,
-  Database,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -43,8 +30,6 @@ import PromptInput from "./prompt-input";
 
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useModalStore } from "@/store/useModalStore";
-import { VideoEyeRecorder } from "@/components/studio/VideoEyeRecorder";
-import { LogCaptureAgent } from "@/components/studio/LogCaptureAgent";
 import { sendMessage } from "@/store/messagesSlice";
 import { AppDispatch, RootState } from "@/store";
 
@@ -212,8 +197,10 @@ function PromptInputAssets({
         const isString = typeof asset === "string";
         const dataUrl = (isString ? asset : asset.data) || "";
         const name = isString
-          ? (asset.startsWith("data:image/") ? "Image Attachment" : "Document Attachment")
-          : (asset.name || "Attachment");
+          ? asset.startsWith("data:image/")
+            ? "Image Attachment"
+            : "Document Attachment"
+          : asset.name || "Attachment";
         const isImage = dataUrl.startsWith("data:image/");
 
         return (
@@ -228,8 +215,8 @@ function PromptInputAssets({
             />
             <span className="max-w-[150px] truncate font-medium">{name}</span>
             <button
-              type="button"
               className="size-5 flex items-center justify-center cursor-pointer rounded-full bg-slate-200 dark:bg-zinc-700/60 hover:bg-slate-300 dark:hover:bg-zinc-600/80 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors"
+              type="button"
               onClick={() => onRemoveAsset(index)}
             >
               <Icon icon="iconamoon:close-thin" width={14} />
@@ -309,7 +296,9 @@ function PromptInputFullLineComponent({
   const connectedClouds = useSelector(
     (state: RootState) => state.system.connectedClouds,
   );
-  const [assets, setAssets] = useState<(string | { name: string; data: string; type: string })[]>([]);
+  const [assets, setAssets] = useState<
+    (string | { name: string; data: string; type: string })[]
+  >([]);
   const [selectedLanguage, setSelectedLanguage] = useState("Mode");
   const [langDropdownOpen, setLangDropdownOpen] = useState(false);
   const langDropdownRef = useRef<HTMLDivElement>(null);
@@ -372,8 +361,11 @@ function PromptInputFullLineComponent({
       if (customEvent.detail) {
         const detail = customEvent.detail;
         const exists = assets.some((asset) => {
-          const assetData = typeof asset === "string" ? asset : (asset?.data || "");
-          const detailData = typeof detail === "string" ? detail : (detail?.data || "");
+          const assetData =
+            typeof asset === "string" ? asset : asset?.data || "";
+          const detailData =
+            typeof detail === "string" ? detail : detail?.data || "";
+
           return assetData === detailData;
         });
 
@@ -468,7 +460,10 @@ function PromptInputFullLineComponent({
           // Generate unique name via timestamp to prevent duplicate key/pasting collisions
           const name = `pasted_image_${Date.now()}_${count++}.png`;
 
-          setAssets((prev) => [...prev, { name, data: base64data, type: item.type }]);
+          setAssets((prev) => [
+            ...prev,
+            { name, data: base64data, type: item.type },
+          ]);
         };
         reader.readAsDataURL(blob);
       }
@@ -485,7 +480,10 @@ function PromptInputFullLineComponent({
         reader.onload = () => {
           const base64data = reader.result as string;
 
-          setAssets((prev) => [...prev, { name: file.name, data: base64data, type: file.type }]);
+          setAssets((prev) => [
+            ...prev,
+            { name: file.name, data: base64data, type: file.type },
+          ]);
         };
         reader.readAsDataURL(file);
       });

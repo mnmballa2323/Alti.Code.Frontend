@@ -63,7 +63,6 @@ const providers = [
       },
     ],
   },
-
 ];
 
 export default function ModelProvidersSection() {
@@ -88,7 +87,8 @@ export default function ModelProvidersSection() {
             To guarantee absolute data sovereignty and regulatory compliance,
             the platform is restricted
             <br className="hidden md:inline" />
-            exclusively to the premier model providers hosted securely on Google Cloud.
+            exclusively to the premier model providers hosted securely on Google
+            Cloud.
           </p>
         </div>
 
@@ -120,10 +120,9 @@ export default function ModelProvidersSection() {
 
         {/* Legal Disclaimer */}
         <p className="text-[10px] text-zinc-400 dark:text-zinc-500 leading-relaxed font-normal max-w-4xl text-center">
-          * Google, Google Cloud, Vertex AI, and Gemini are trademarks of
-          Google LLC. All model providers are accessed exclusively through
-          Google Cloud Platform. This does not imply official partnership
-          or endorsement.
+          * Google, Google Cloud, Vertex AI, and Gemini are trademarks of Google
+          LLC. All model providers are accessed exclusively through Google Cloud
+          Platform. This does not imply official partnership or endorsement.
         </p>
       </div>
     </section>

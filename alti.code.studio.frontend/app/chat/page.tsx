@@ -2,14 +2,7 @@
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Microscope } from "lucide-react";
-import { cn } from "@heroui/react";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import ChatBotLayout from "@/components/ChatbotLayout";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
@@ -102,7 +95,6 @@ export default function ChatHome() {
                 />
               </div>
             </div>
-
           </div>
         )}
       </div>

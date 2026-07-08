@@ -2,13 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@heroui/react";
-import {
-  FileText,
-  Trash2,
-  Loader2,
-  Upload,
-  ArrowUp,
-} from "lucide-react";
+import { FileText, Trash2, ArrowUp } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import axios from "axios";
@@ -50,6 +44,7 @@ export default function KnowledgePage() {
         headers: { Authorization: `Bearer ${token}` },
         params: agentId ? { agentId } : undefined,
       });
+
       if (res.data?.success) {
         setFiles(res.data.data || []);
         // Sync sidebar
@@ -80,22 +75,19 @@ export default function KnowledgePage() {
     for (let i = 0; i < fileList.length; i++) {
       const file = fileList[i];
       const formData = new FormData();
+
       formData.append("file", file);
 
       const toastId = toast.loading(`Uploading "${file.name}"...`);
 
       try {
-        await axios.post(
-          `${API_BASE_URL}/knowledge/files/upload`,
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "multipart/form-data",
-            },
-            params: agentId ? { agentId } : undefined,
+        await axios.post(`${API_BASE_URL}/knowledge/files/upload`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
-        );
+          params: agentId ? { agentId } : undefined,
+        });
         toast.success(`"${file.name}" uploaded and indexed.`, { id: toastId });
       } catch {
         toast.error(`Failed to upload "${file.name}".`, { id: toastId });
@@ -110,13 +102,10 @@ export default function KnowledgePage() {
   const handleDeleteFile = async () => {
     if (!fileToDelete || !token) return;
     try {
-      await axios.delete(
-        `${API_BASE_URL}/knowledge/files/${fileToDelete.id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-          params: agentId ? { agentId } : undefined,
-        },
-      );
+      await axios.delete(`${API_BASE_URL}/knowledge/files/${fileToDelete.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: agentId ? { agentId } : undefined,
+      });
       toast.success("File deleted.");
       fetchFiles();
     } catch {
@@ -238,7 +227,8 @@ export default function KnowledgePage() {
                   Delete File
                 </h3>
                 <p className="text-sm text-center text-gray-500 dark:text-gray-400 px-4">
-                  Are you sure you want to remove &quot;{fileToDelete.name}&quot;?
+                  Are you sure you want to remove &quot;{fileToDelete.name}
+                  &quot;?
                 </p>
               </div>
               <div className="flex border-t border-default-200/50 dark:border-gray-800 w-full">

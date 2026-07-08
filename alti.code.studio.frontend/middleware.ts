@@ -64,11 +64,13 @@ export async function middleware(request: NextRequest) {
         req: request,
         secret: process.env.NEXTAUTH_SECRET,
       });
+
       if (token) {
         // All logged-in users go to the admin page as requested
         return NextResponse.redirect(new URL("/admin", request.url));
       }
     }
+
     return NextResponse.next();
   }
 

@@ -51,7 +51,7 @@ export default function GcpSovereignSection() {
       id="architecture"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-900/10 rounded-full blur-[120px] pointer-events-none z-0" />
-      
+
       <div className="max-w-7xl mx-auto flex flex-col items-center gap-20 relative z-10">
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-6 max-w-5xl">
@@ -59,7 +59,9 @@ export default function GcpSovereignSection() {
             Google Cloud. Sovereign Security.
           </h3>
           <p className="text-base sm:text-lg md:text-xl text-zinc-400 leading-relaxed font-medium max-w-4xl">
-            Deploy sovereign AI agent swarms on Google Cloud, Dedicated, and Assured Workloads. Enforce absolute compliance and physical data isolation tailored to your enterprise.
+            Deploy sovereign AI agent swarms on Google Cloud, Dedicated, and
+            Assured Workloads. Enforce absolute compliance and physical data
+            isolation tailored to your enterprise.
           </p>
         </div>
 

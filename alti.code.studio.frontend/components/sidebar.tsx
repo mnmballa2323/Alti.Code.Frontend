@@ -4,14 +4,10 @@ import type { ComponentProps } from "react";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { Icon } from "@iconify/react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { setActiveProject } from "@/lib/project";
-import { useActiveProject } from "@/hooks/useActiveProject";
-import { readProjectData } from "@/lib/project";
 import { useQuery } from "@tanstack/react-query";
 import {
   Button,
@@ -33,7 +29,6 @@ import {
 import { useCallback, useEffect, useState, useRef } from "react";
 import {
   Search,
-  ChevronDown,
   Plus,
   Code,
   MessageSquare,
@@ -49,13 +44,15 @@ import {
   Terminal,
   Cpu,
   SlidersHorizontal,
-  Cable,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import MyAccountDropdown from "./MyAccountDropdown";
 import NotificationBell from "./NotificationBell";
 
+import { readProjectData } from "@/lib/project";
+import { useActiveProject } from "@/hooks/useActiveProject";
+import { setActiveProject } from "@/lib/project";
 import { removeDocument, setActiveWorkspace } from "@/store/systemSlice";
 import { addTab } from "@/store/tabsSlice";
 import { RootState } from "@/store";
@@ -466,7 +463,6 @@ const AppIcon = ({
     brave_search: "brave",
     argocd: "argo",
     ansible: "ansible",
-
   };
 
   const getUrlsToTry = () => {
@@ -949,7 +945,9 @@ export default function Sidebar() {
     const handleOpenSelector = () => {
       handleOpenLocalWorkspace();
     };
+
     window.addEventListener("open-workspace-selector", handleOpenSelector);
+
     return () => {
       window.removeEventListener("open-workspace-selector", handleOpenSelector);
     };
@@ -981,7 +979,10 @@ export default function Sidebar() {
     setIsWorkspaceModalOpen(true);
   };
 
-  const connectWorkspaceDirectory = async (directoryPath: string, customName?: string) => {
+  const connectWorkspaceDirectory = async (
+    directoryPath: string,
+    customName?: string,
+  ) => {
     setIsConnectingWorkspace(true);
     try {
       const response = await fetch(
@@ -1009,7 +1010,7 @@ export default function Sidebar() {
             projectPath: folderName,
             activeView: "/chat",
             chatSessionId: null,
-          })
+          }),
         );
         dispatch(setActiveWorkspace(folderName));
         setActiveProject({ id: folderName, name: folderName });
@@ -1036,13 +1037,16 @@ export default function Sidebar() {
   const activeAgentId = activeProject?.id ?? null;
 
   // ── Vault secrets – per project ─────────────────────────────────
-  const [vaultSecrets, setVaultSecrets] = useState<{ id: string; name: string; service: string }[]>([]);
+  const [vaultSecrets, setVaultSecrets] = useState<
+    { id: string; name: string; service: string }[]
+  >([]);
 
   // Reload vault secrets whenever active project changes
   useEffect(() => {
-    const stored = readProjectData<{ id: string; name: string; service: string }[]>(
-      activeAgentId, "vault_secrets", []
-    );
+    const stored = readProjectData<
+      { id: string; name: string; service: string }[]
+    >(activeAgentId, "vault_secrets", []);
+
     setVaultSecrets(stored);
   }, [activeAgentId]);
 
@@ -1072,7 +1076,6 @@ export default function Sidebar() {
       window.removeEventListener("delete-vault-secret", handleDeleteSecret);
     };
   }, []);
-
 
   // Prefetch all key sidebar routes on mount to ensure instant 0ms transitions!
   useEffect(() => {
@@ -1124,24 +1127,29 @@ export default function Sidebar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("inso_sidebar_open");
+
       return stored === null ? true : stored === "true";
     }
+
     return true;
   });
 
   useEffect(() => {
     window.dispatchEvent(
-      new CustomEvent("sidebar-state-change", { detail: isSidebarOpen })
+      new CustomEvent("sidebar-state-change", { detail: isSidebarOpen }),
     );
 
     const handleToggleSidebar = (e: Event) => {
       const customEvent = e as CustomEvent;
-      const targetState = customEvent.detail !== undefined ? customEvent.detail : !isSidebarOpen;
+      const targetState =
+        customEvent.detail !== undefined ? customEvent.detail : !isSidebarOpen;
+
       setIsSidebarOpen(targetState);
       localStorage.setItem("inso_sidebar_open", String(targetState));
     };
 
     window.addEventListener("toggle-sidebar", handleToggleSidebar);
+
     return () => {
       window.removeEventListener("toggle-sidebar", handleToggleSidebar);
     };
@@ -1237,10 +1245,18 @@ export default function Sidebar() {
   const [guardrails, setGuardrails] = useState<{ id: string; name: string }[]>(
     [],
   );
-  const [tuningRepos, setTuningRepos] = useState<{ id: string; name: string }[]>([]);
-  const [tuningApis, setTuningApis] = useState<{ id: string; name: string }[]>([]);
-  const [tuningSkds, setTuningSdks] = useState<{ id: string; name: string }[]>([]);
-  const [tuningMcps, setTuningMcps] = useState<{ id: string; name: string }[]>([]);
+  const [tuningRepos, setTuningRepos] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [tuningApis, setTuningApis] = useState<{ id: string; name: string }[]>(
+    [],
+  );
+  const [tuningSkds, setTuningSdks] = useState<{ id: string; name: string }[]>(
+    [],
+  );
+  const [tuningMcps, setTuningMcps] = useState<{ id: string; name: string }[]>(
+    [],
+  );
   const [knowledgeFolders, setKnowledgeFolders] = useState<
     { id: string; name: string }[]
   >([]);
@@ -1267,8 +1283,10 @@ export default function Sidebar() {
         const res = await axios.get(`${API_URL}/agents/custom`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
+
         if (res.data && res.data.success) {
           let list = res.data.data || [];
+
           if (agentIdParam && agentNameParam) {
             if (!list.find((a: any) => a.id === agentIdParam)) {
               list = [
@@ -1542,8 +1560,14 @@ export default function Sidebar() {
       sdks: { id: string; name: string }[];
       mcps: { id: string; name: string }[];
     }>(activeAgentId, "rules", {
-      instructions: [], guardrails: [], repositories: [], apis: [], sdks: [], mcps: [],
+      instructions: [],
+      guardrails: [],
+      repositories: [],
+      apis: [],
+      sdks: [],
+      mcps: [],
     });
+
     setInstructions(rulesLocal.instructions || []);
     setGuardrails(rulesLocal.guardrails || []);
     setTuningRepos(rulesLocal.repositories || []);
@@ -1559,10 +1583,14 @@ export default function Sidebar() {
   useEffect(() => {
     const handleRefresh = (e: Event) => {
       const customEvent = e as CustomEvent;
+
       if (customEvent.detail) {
-        if (customEvent.detail.instructions) setInstructions(customEvent.detail.instructions);
-        if (customEvent.detail.guardrails) setGuardrails(customEvent.detail.guardrails);
-        if (customEvent.detail.repositories) setTuningRepos(customEvent.detail.repositories);
+        if (customEvent.detail.instructions)
+          setInstructions(customEvent.detail.instructions);
+        if (customEvent.detail.guardrails)
+          setGuardrails(customEvent.detail.guardrails);
+        if (customEvent.detail.repositories)
+          setTuningRepos(customEvent.detail.repositories);
         if (customEvent.detail.apis) setTuningApis(customEvent.detail.apis);
         if (customEvent.detail.sdks) setTuningSdks(customEvent.detail.sdks);
         if (customEvent.detail.mcps) setTuningMcps(customEvent.detail.mcps);
@@ -1814,9 +1842,9 @@ export default function Sidebar() {
               </span>
               <Button
                 isIconOnly
-                variant="light"
-                size="sm"
                 className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
+                size="sm"
+                variant="light"
                 onClick={toggleLeftSidebar}
               >
                 <PanelLeftClose className="size-4" />
@@ -1826,9 +1854,9 @@ export default function Sidebar() {
             <div className="w-full flex justify-center pt-3 pb-3 border-b border-white/5 select-none">
               <Button
                 isIconOnly
-                variant="light"
-                size="sm"
                 className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
+                size="sm"
+                variant="light"
                 onClick={toggleLeftSidebar}
               >
                 <PanelLeftOpen className="size-4" />
@@ -1885,7 +1913,9 @@ export default function Sidebar() {
                         }
                       }}
                     >
-                      <IconComponent className={isSidebarOpen ? "size-3.5" : "size-4"} />
+                      <IconComponent
+                        className={isSidebarOpen ? "size-3.5" : "size-4"}
+                      />
                       <span className="sr-only">{item.label}</span>
                     </Link>
                   </Tooltip>
@@ -3222,12 +3252,16 @@ export default function Sidebar() {
                       "h-11 rounded-xl bg-default-100 hover:bg-default-100 focus-within:!bg-default-100 group-data-[hover=true]:bg-default-100 group-data-[focus=true]:bg-default-100 border-none border-transparent shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all",
                     input: "text-xs text-default-800",
                   }}
-                  placeholder={isNameInputFocused ? "" : "e.g. My Awesome Project (Optional)"}
+                  placeholder={
+                    isNameInputFocused
+                      ? ""
+                      : "e.g. My Awesome Project (Optional)"
+                  }
                   value={localWorkspaceName}
                   variant="flat"
-                  onFocus={() => setIsNameInputFocused(true)}
                   onBlur={() => setIsNameInputFocused(false)}
                   onChange={(e) => setLocalWorkspaceName(e.target.value)}
+                  onFocus={() => setIsNameInputFocused(true)}
                 />
               </div>
 
@@ -3247,19 +3281,20 @@ export default function Sidebar() {
                     placeholder={isInputFocused ? "" : "/path/to/your/project"}
                     value={localWorkspacePath}
                     variant="flat"
-                    onFocus={() => setIsInputFocused(true)}
                     onBlur={() => setIsInputFocused(false)}
                     onChange={(e) => setLocalWorkspacePath(e.target.value)}
+                    onFocus={() => setIsInputFocused(true)}
                   />
                   {isTauri && (
                     <Tooltip
-                      content="Browse Folder"
-                      placement="top"
-                      closeDelay={0}
-                      delay={300}
                       classNames={{
-                        content: "bg-white text-zinc-900 border border-zinc-200 px-3 py-1.5 text-xs rounded-lg shadow-xl font-medium tracking-wide",
+                        content:
+                          "bg-white text-zinc-900 border border-zinc-200 px-3 py-1.5 text-xs rounded-lg shadow-xl font-medium tracking-wide",
                       }}
+                      closeDelay={0}
+                      content="Browse Folder"
+                      delay={300}
+                      placement="top"
                     >
                       <Button
                         isIconOnly
@@ -3307,7 +3342,12 @@ export default function Sidebar() {
               color="primary"
               isDisabled={!localWorkspacePath.trim()}
               isLoading={isConnectingWorkspace}
-              onPress={() => connectWorkspaceDirectory(localWorkspacePath, localWorkspaceName)}
+              onPress={() =>
+                connectWorkspaceDirectory(
+                  localWorkspacePath,
+                  localWorkspaceName,
+                )
+              }
             >
               Open Folder
             </Button>

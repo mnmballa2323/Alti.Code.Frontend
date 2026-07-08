@@ -7,7 +7,6 @@ import {
   Shield,
   Database,
   Cloud,
-  Activity,
   Cpu,
   Globe,
   Eye,
@@ -69,7 +68,13 @@ const SERVICE_CATEGORIES: Record<
   Compute: {
     icon: Server,
     color: "text-emerald-500",
-    services: ["Cloud Run", "Cloud Functions", "GKE", "Batch", "Compute Engine"],
+    services: [
+      "Cloud Run",
+      "Cloud Functions",
+      "GKE",
+      "Batch",
+      "Compute Engine",
+    ],
   },
   Security: {
     icon: Shield,
@@ -87,7 +92,13 @@ const SERVICE_CATEGORIES: Record<
   Messaging: {
     icon: MessageSquare,
     color: "text-amber-500",
-    services: ["Pub/Sub", "Cloud Tasks", "Cloud Scheduler", "Eventarc", "Workflows"],
+    services: [
+      "Pub/Sub",
+      "Cloud Tasks",
+      "Cloud Scheduler",
+      "Eventarc",
+      "Workflows",
+    ],
   },
   Storage: {
     icon: HardDrive,
@@ -97,7 +108,13 @@ const SERVICE_CATEGORIES: Record<
   Networking: {
     icon: Globe,
     color: "text-indigo-500",
-    services: ["VPC", "Cloud CDN", "Cloud Load Balancing", "Cloud DNS", "Cloud NAT"],
+    services: [
+      "VPC",
+      "Cloud CDN",
+      "Cloud Load Balancing",
+      "Cloud DNS",
+      "Cloud NAT",
+    ],
   },
   Observability: {
     icon: Eye,
@@ -125,6 +142,7 @@ export default function OwnerGcpPage() {
       const token =
         localStorage.getItem("accessToken") || localStorage.getItem("token");
       const headers: HeadersInit = { "Content-Type": "application/json" };
+
       if (token) headers["Authorization"] = `Bearer ${token}`;
 
       const res = await fetch(`${API_URL}/health/gcp`, { headers });
@@ -149,14 +167,17 @@ export default function OwnerGcpPage() {
                   : rawStatus === "down"
                     ? "down"
                     : "healthy";
+
             if (status === "healthy") healthy++;
             else if (status === "degraded") degraded++;
             else down++;
+
             return { name: svc, status };
           });
         });
 
         const total = healthy + degraded + down;
+
         setData({
           project: json.gcp.project || "alti-code-studio",
           region: json.gcp.region || "us-central1",
@@ -172,9 +193,11 @@ export default function OwnerGcpPage() {
       // Fallback: show all services as healthy
       const categories: Record<string, ServiceStatus[]> = {};
       let total = 0;
+
       Object.entries(SERVICE_CATEGORIES).forEach(([cat, def]) => {
         categories[cat] = def.services.map((svc) => {
           total++;
+
           return { name: svc, status: "healthy" as const };
         });
       });
@@ -205,6 +228,7 @@ export default function OwnerGcpPage() {
       down: "bg-red-500",
       unknown: "bg-neutral-400",
     };
+
     return (
       <span
         className={`inline-block w-2 h-2 rounded-full ${colors[status] || colors.unknown}`}
@@ -218,6 +242,7 @@ export default function OwnerGcpPage() {
       byoc: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
       airgap: "bg-red-500/10 text-red-600 dark:text-red-400",
     };
+
     return (
       <span
         className={`px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide ${styles[mode] || styles.cloud}`}

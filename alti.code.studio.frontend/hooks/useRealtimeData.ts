@@ -1,6 +1,7 @@
-import { useEffect, useState, useCallback, useRef } from 'react';
-import { io, Socket } from 'socket.io-client';
-import { API_URL } from '@/lib/config';
+import { useEffect, useState, useCallback, useRef } from "react";
+import { io, Socket } from "socket.io-client";
+
+import { API_URL } from "@/lib/config";
 
 interface UseRealtimeDataOptions {
   channel: string;
@@ -16,22 +17,23 @@ export function useRealtimeData<T>(options: UseRealtimeDataOptions) {
   useEffect(() => {
     if (!enabled) return;
 
-    const wsUrl = API_URL?.replace('/api/v1', '') || 'http://localhost:5000';
+    const wsUrl = API_URL?.replace("/api/v1", "") || "http://localhost:5000";
     const socket = io(wsUrl, {
-      transports: ['websocket', 'polling'],
+      transports: ["websocket", "polling"],
       auth: {
-        token: typeof window !== 'undefined' ? localStorage.getItem('token') : null,
+        token:
+          typeof window !== "undefined" ? localStorage.getItem("token") : null,
       },
     });
 
     socketRef.current = socket;
 
-    socket.on('connect', () => setIsConnected(true));
-    socket.on('disconnect', () => setIsConnected(false));
+    socket.on("connect", () => setIsConnected(true));
+    socket.on("disconnect", () => setIsConnected(false));
     socket.on(channel, (payload: T) => setData(payload));
 
     // Subscribe to the channel
-    socket.emit('subscribe', { channel });
+    socket.emit("subscribe", { channel });
 
     return () => {
       socket.off(channel);

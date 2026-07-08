@@ -67,7 +67,7 @@ export default function ZeroTrustLedgerSection() {
   return (
     <section className="w-full py-32 bg-[#030014] text-white px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute top-1/2 left-1/4 w-[450px] h-[450px] bg-blue-900/10 rounded-full blur-[130px] pointer-events-none z-0" />
-      
+
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 items-center gap-16 lg:gap-24 relative z-10">
         {/* Left Column: Copy */}
         <div className="lg:col-span-7 flex flex-col gap-8">
@@ -77,7 +77,13 @@ export default function ZeroTrustLedgerSection() {
               Cryptographic Ledger.
             </h3>
             <p className="text-xl text-zinc-400 leading-relaxed font-medium max-w-3xl">
-              Every single agent execution is fully sandboxed and recorded to a local, tamper-proof cryptographic ledger. Before any file context leaves your secure enterprise workspace, native Data Loss Prevention (DLP) rules automatically scan, mask, and redact API keys, database credentials, and proprietary secrets—guaranteeing absolute data privacy and sovereign compliance without slowing down your engineering cycles.
+              Every single agent execution is fully sandboxed and recorded to a
+              local, tamper-proof cryptographic ledger. Before any file context
+              leaves your secure enterprise workspace, native Data Loss
+              Prevention (DLP) rules automatically scan, mask, and redact API
+              keys, database credentials, and proprietary secrets—guaranteeing
+              absolute data privacy and sovereign compliance without slowing
+              down your engineering cycles.
             </p>
           </div>
         </div>

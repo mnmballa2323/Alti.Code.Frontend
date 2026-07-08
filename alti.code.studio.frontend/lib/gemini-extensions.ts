@@ -628,8 +628,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "skill-porter",
-    description:
-      "Converts Claude Code skills to GCP Sovereign CLI extensions.",
+    description: "Converts Claude Code skills to GCP Sovereign CLI extensions.",
     githubUrl: "https://github.com/jduncan-rva/skill-porter",
     category: "Dev Tools",
   },
@@ -893,7 +892,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "gdc-hydra",
-    description: "Google Distributed Cloud integration with speculative decoding and caching.",
+    description:
+      "Google Distributed Cloud integration with speculative decoding and caching.",
     githubUrl: "https://github.com/EPS-AI-SOLUTIONS/GeminiHydra",
     category: "AI/ML",
   },
@@ -1099,8 +1099,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "chime",
-    description:
-      "Audible notifications for GCP Sovereign CLI task completion.",
+    description: "Audible notifications for GCP Sovereign CLI task completion.",
     githubUrl: "https://github.com/rebekahx23/chime",
     category: "Other",
   },
@@ -1159,8 +1158,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "FileSearch",
-    description:
-      "Cloud RAG capabilities via GCP GCP Sovereign File Search.",
+    description: "Cloud RAG capabilities via GCP GCP Sovereign File Search.",
     githubUrl:
       "https://github.com/automateyournetwork/GeminiCLI_File_Search_Extension",
     category: "Cloud",
@@ -1798,7 +1796,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   {
     name: "data-agent-kit-starter-pack",
     description: "Skills for data-agent-kit-starter-pack",
-    githubUrl: "https://github.com/gemini-cli-extensions/data-agent-kit-starter-pack",
+    githubUrl:
+      "https://github.com/gemini-cli-extensions/data-agent-kit-starter-pack",
     category: "Dev Tools",
   },
   {
@@ -1815,7 +1814,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "sre",
-    description: "SRE Extension to provide Site Reliability Engineering tools for CLI harness investigations (agy, Gemini CLI, claude, ..) on Google Cloud et al.",
+    description:
+      "SRE Extension to provide Site Reliability Engineering tools for CLI harness investigations (agy, Gemini CLI, claude, ..) on Google Cloud et al.",
     githubUrl: "https://github.com/gemini-cli-extensions/sre",
     category: "Dev Tools",
   },
@@ -1828,7 +1828,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   {
     name: "customer-experience-agent-studio",
     description: "Skills for customer-experience-agent-studio",
-    githubUrl: "https://github.com/gemini-cli-extensions/customer-experience-agent-studio",
+    githubUrl:
+      "https://github.com/gemini-cli-extensions/customer-experience-agent-studio",
     category: "Dev Tools",
   },
   {
@@ -1858,7 +1859,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   {
     name: "bigquery-data-transfer-service",
     description: "Skills for bigquery-data-transfer-service",
-    githubUrl: "https://github.com/gemini-cli-extensions/bigquery-data-transfer-service",
+    githubUrl:
+      "https://github.com/gemini-cli-extensions/bigquery-data-transfer-service",
     category: "Dev Tools",
   },
   {
@@ -1876,19 +1878,22 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   {
     name: "database-migration-service",
     description: "Skills for database-migration-service",
-    githubUrl: "https://github.com/gemini-cli-extensions/database-migration-service",
+    githubUrl:
+      "https://github.com/gemini-cli-extensions/database-migration-service",
     category: "Databases",
   },
   {
     name: "cloud-resource-manager",
     description: "Skills for cloud-resource-manager",
-    githubUrl: "https://github.com/gemini-cli-extensions/cloud-resource-manager",
+    githubUrl:
+      "https://github.com/gemini-cli-extensions/cloud-resource-manager",
     category: "Cloud",
   },
   {
     name: "memorystore-for-valkey",
     description: "Skills for memorystore-for-valkey",
-    githubUrl: "https://github.com/gemini-cli-extensions/memorystore-for-valkey",
+    githubUrl:
+      "https://github.com/gemini-cli-extensions/memorystore-for-valkey",
     category: "Databases",
   },
   {
@@ -1900,13 +1905,15 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   {
     name: "android-management-api",
     description: "Skills for android-management-api",
-    githubUrl: "https://github.com/gemini-cli-extensions/android-management-api",
+    githubUrl:
+      "https://github.com/gemini-cli-extensions/android-management-api",
     category: "Dev Tools",
   },
   {
     name: "pay-and-wallet-developer",
     description: "Skills for pay-and-wallet-developer",
-    githubUrl: "https://github.com/gemini-cli-extensions/pay-and-wallet-developer",
+    githubUrl:
+      "https://github.com/gemini-cli-extensions/pay-and-wallet-developer",
     category: "Dev Tools",
   },
   {
@@ -1918,7 +1925,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   {
     name: "bigquery-migration-service",
     description: "Skills for bigquery-migration-service",
-    githubUrl: "https://github.com/gemini-cli-extensions/bigquery-migration-service",
+    githubUrl:
+      "https://github.com/gemini-cli-extensions/bigquery-migration-service",
     category: "Dev Tools",
   },
   {

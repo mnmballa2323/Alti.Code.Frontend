@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 import {
@@ -11,11 +11,9 @@ import {
   FileText,
   ArrowLeft,
   Activity,
-  Bot,
-  Settings,
-  Sliders,
   LifeBuoy,
-  ClipboardList
+  ClipboardList,
+  Search,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -59,6 +57,11 @@ export default function AdminLayout({
       pathname !== "/admin/team-members") ||
     isTeamsDetail ||
     isEnterpriseDetail;
+
+  const showSearch =
+    pathname === "/admin/team-members" ||
+    pathname === "/admin/logs" ||
+    pathname === "/admin/invoices";
 
   useEffect(() => {
     if (profile) {
@@ -148,6 +151,7 @@ export default function AdminLayout({
     if (pathname.startsWith("/admin/team-members")) return "Members";
     if (pathname.startsWith("/admin/billing")) return "Billing";
     if (pathname.startsWith("/admin/invoices")) return "Invoices";
+    if (pathname.startsWith("/admin/usage")) return "Usage";
     if (pathname.startsWith("/admin/logs")) return "Logs";
     if (pathname.startsWith("/admin/support")) return "Support";
 
@@ -199,7 +203,7 @@ export default function AdminLayout({
         </div>
 
         {/* Right header: page title and user info */}
-        <div className="flex-1 h-full flex items-center justify-between pl-10 pr-14">
+        <div className="flex-1 h-full flex items-center justify-between pl-10 pr-10">
           <div className="flex items-center gap-3">
             {isMemberDetail ? (
               <Link
@@ -228,7 +232,18 @@ export default function AdminLayout({
             )}
           </div>
 
-          <div className="flex items-center">
+          <div className="flex items-center gap-4">
+            {showSearch && (
+              <div className="relative w-80">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="w-full pl-9 pr-4 py-2 bg-neutral-100 dark:bg-[#0d1117] border border-transparent dark:border-neutral-800 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:focus:ring-neutral-700 transition-shadow text-neutral-900 dark:text-white placeholder-neutral-500"
+                />
+              </div>
+            )}
+            
             {isMemberDetail && (
               <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
                 {activeMemberName || "Ada Lovelace"}
@@ -245,9 +260,9 @@ export default function AdminLayout({
             {renderNavGroup("", adminItems)}
           </div>
           <div className="pt-4 mt-auto">
-            <button 
-              onClick={() => setShowLogoutModal(true)}
+            <button
               className="w-full bg-[#e53935] hover:bg-[#d32f2f] text-white py-2.5 rounded-lg font-medium text-sm transition-colors"
+              onClick={() => setShowLogoutModal(true)}
             >
               Logout
             </button>
@@ -271,21 +286,23 @@ export default function AdminLayout({
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="bg-white dark:bg-[#161b22] w-[300px] rounded-2xl shadow-xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
             <div className="p-6 text-center">
-              <h3 className="text-[17px] font-bold text-neutral-900 dark:text-white mb-1.5">Logout</h3>
+              <h3 className="text-[17px] font-bold text-neutral-900 dark:text-white mb-1.5">
+                Logout
+              </h3>
               <p className="text-[13px] text-neutral-500 dark:text-neutral-400">
                 Are you sure you want to logout?
               </p>
             </div>
             <div className="flex border-t border-neutral-200 dark:border-neutral-700">
               <button
-                onClick={() => setShowLogoutModal(false)}
                 className="flex-1 py-3 text-[15px] font-normal text-neutral-900 dark:text-white border-r border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                onClick={() => setShowLogoutModal(false)}
               >
                 Cancel
               </button>
               <button
-                onClick={() => signOut({ callbackUrl: "/login" })}
                 className="flex-1 py-3 text-[15px] font-normal text-neutral-900 dark:text-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                onClick={() => signOut({ callbackUrl: "/login" })}
               >
                 Logout
               </button>

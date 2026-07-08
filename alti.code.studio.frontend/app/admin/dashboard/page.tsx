@@ -259,9 +259,7 @@ export default function AdminDashboardPage() {
                   </div>
                   <span
                     className={`flex items-center gap-0.5 text-xs font-semibold ${
-                      kpi.change >= 0
-                        ? "text-emerald-500"
-                        : "text-red-500"
+                      kpi.change >= 0 ? "text-emerald-500" : "text-red-500"
                     }`}
                   >
                     {kpi.change >= 0 ? (

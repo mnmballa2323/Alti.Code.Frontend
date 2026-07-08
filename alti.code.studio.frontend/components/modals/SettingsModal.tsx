@@ -44,7 +44,6 @@ const SettingsModal = () => {
     maxConcurrentAgents,
     agentTimeoutSecs,
 
-
     setGeminiApiKey,
     setGithubToken,
     setDefaultModel,
@@ -80,10 +79,7 @@ const SettingsModal = () => {
     if (isOpen) {
       loadVaultKeys();
     }
-  }, [
-    isOpen,
-    setGeminiApiKey,
-  ]);
+  }, [isOpen, setGeminiApiKey]);
 
   const handleSave = async () => {
     // POST raw keys securely to backend Tink-encrypted Vault
@@ -265,8 +261,6 @@ const SettingsModal = () => {
                       variant="bordered"
                       onValueChange={setGithubToken}
                     />
-
-
                   </div>
 
                   <Divider />

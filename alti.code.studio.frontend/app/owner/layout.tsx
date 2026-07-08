@@ -12,8 +12,6 @@ import {
   Cloud,
   Cpu,
   Shield,
-  Settings,
-  Sliders,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";

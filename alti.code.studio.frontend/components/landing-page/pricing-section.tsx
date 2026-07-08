@@ -26,8 +26,7 @@ const plans = [
       "Fastest deployment",
     ],
     cta: "Deploy Cloud",
-    buttonClass:
-      "bg-white text-black hover:bg-zinc-100",
+    buttonClass: "bg-white text-black hover:bg-zinc-100",
     isContact: false,
   },
   {
@@ -49,8 +48,7 @@ const plans = [
       "Enhanced security & data isolation",
     ],
     cta: "Deploy Dedicated",
-    buttonClass:
-      "bg-white text-black hover:bg-zinc-100",
+    buttonClass: "bg-white text-black hover:bg-zinc-100",
     isContact: false,
   },
   {
@@ -72,8 +70,7 @@ const plans = [
       "Sovereign security controls",
     ],
     cta: "Contact Us",
-    buttonClass:
-      "bg-blue-600 hover:bg-blue-700 text-white",
+    buttonClass: "bg-blue-600 hover:bg-blue-700 text-white",
     isContact: true,
   },
 ];
@@ -147,7 +144,7 @@ export default function PricingSection() {
       id="pricing"
     >
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-blue-900/10 rounded-full blur-[140px] pointer-events-none z-0" />
-      
+
       <div className="max-w-7xl mx-auto w-full flex flex-col items-center relative z-10">
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-4 max-w-3xl mb-20">

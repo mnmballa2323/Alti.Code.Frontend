@@ -48,12 +48,37 @@ interface Incident {
 
 const FALLBACK_SERVICES: ServiceStatus[] = [
   { name: "API Gateway", icon: Server, status: "operational", uptime: 99.98 },
-  { name: "AI Engine (Vertex AI)", icon: Brain, status: "operational", uptime: 99.95 },
-  { name: "Database (Cloud SQL)", icon: Database, status: "operational", uptime: 99.99 },
+  {
+    name: "AI Engine (Vertex AI)",
+    icon: Brain,
+    status: "operational",
+    uptime: 99.95,
+  },
+  {
+    name: "Database (Cloud SQL)",
+    icon: Database,
+    status: "operational",
+    uptime: 99.99,
+  },
   { name: "Authentication", icon: Lock, status: "operational", uptime: 100.0 },
-  { name: "File Storage (GCS)", icon: HardDrive, status: "operational", uptime: 99.97 },
-  { name: "Real-time (WebSocket)", icon: Radio, status: "operational", uptime: 99.92 },
-  { name: "Search (Firestore)", icon: Search, status: "operational", uptime: 99.96 },
+  {
+    name: "File Storage (GCS)",
+    icon: HardDrive,
+    status: "operational",
+    uptime: 99.97,
+  },
+  {
+    name: "Real-time (WebSocket)",
+    icon: Radio,
+    status: "operational",
+    uptime: 99.92,
+  },
+  {
+    name: "Search (Firestore)",
+    icon: Search,
+    status: "operational",
+    uptime: 99.96,
+  },
   { name: "CDN", icon: Globe, status: "operational", uptime: 99.99 },
 ];
 
@@ -90,10 +115,12 @@ const FALLBACK_INCIDENTS: Incident[] = [
 /** Generate 90 days of uptime bar data, mostly green with a few amber */
 const generateUptimeBars = (): ("green" | "amber" | "red")[] => {
   const bars: ("green" | "amber" | "red")[] = Array(90).fill("green");
+
   // Sprinkle 2–3 amber days matching our incidents
   bars[5] = "amber"; // ~5 days ago
   bars[12] = "amber"; // ~12 days ago
   bars[25] = "amber"; // ~25 days ago
+
   return bars;
 };
 
@@ -104,7 +131,9 @@ const generateUptimeBars = (): ("green" | "amber" | "red")[] => {
 export default function StatusPage() {
   const [services, setServices] = useState<ServiceStatus[]>(FALLBACK_SERVICES);
   const [incidents, setIncidents] = useState<Incident[]>(FALLBACK_INCIDENTS);
-  const [lastUpdated, setLastUpdated] = useState<string>(new Date().toISOString());
+  const [lastUpdated, setLastUpdated] = useState<string>(
+    new Date().toISOString(),
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   const uptimeBars = generateUptimeBars();
@@ -113,8 +142,10 @@ export default function StatusPage() {
     const fetchStatus = async () => {
       try {
         const res = await fetch(`${API_URL}/status/public`);
+
         if (res.ok) {
           const data = await res.json();
+
           if (data.services) setServices(data.services);
           if (data.incidents) setIncidents(data.incidents);
           if (data.lastUpdated) setLastUpdated(data.lastUpdated);
@@ -125,6 +156,7 @@ export default function StatusPage() {
         setIsLoading(false);
       }
     };
+
     fetchStatus();
   }, []);
 
@@ -203,8 +235,10 @@ export default function StatusPage() {
           <div
             className={`inline-flex items-center gap-2.5 px-5 py-3 rounded-2xl ${overall.bgColor}`}
           >
-            <div className={`w-2.5 h-2.5 rounded-full ${overall.color} animate-pulse`} />
-            <OverallIcon size={18} className={overall.textColor} />
+            <div
+              className={`w-2.5 h-2.5 rounded-full ${overall.color} animate-pulse`}
+            />
+            <OverallIcon className={overall.textColor} size={18} />
             <span className={`text-sm font-semibold ${overall.textColor}`}>
               {overall.label}
             </span>
@@ -224,13 +258,17 @@ export default function StatusPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {services.map((service) => {
                 const ServiceIcon = service.icon;
+
                 return (
                   <div
                     key={service.name}
                     className="flex items-center justify-between p-4 rounded-xl border border-default-100 dark:border-white/5 bg-default-50 dark:bg-black/40 hover:border-default-200 dark:hover:border-white/10 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <ServiceIcon size={18} className="text-gray-500 dark:text-gray-400" />
+                      <ServiceIcon
+                        className="text-gray-500 dark:text-gray-400"
+                        size={18}
+                      />
                       <span className="text-sm font-medium text-gray-800 dark:text-gray-200">
                         {service.name}
                       </span>
@@ -274,7 +312,12 @@ export default function StatusPage() {
                   key={idx}
                   className={`flex-1 rounded-sm transition-all duration-200 cursor-pointer ${barColor(bar)}`}
                   style={{
-                    height: bar === "green" ? "100%" : bar === "amber" ? "60%" : "30%",
+                    height:
+                      bar === "green"
+                        ? "100%"
+                        : bar === "amber"
+                          ? "60%"
+                          : "30%",
                     minWidth: "2px",
                   }}
                   title={`${90 - idx} days ago — ${bar === "green" ? "No issues" : bar === "amber" ? "Minor incident" : "Outage"}`}
@@ -318,7 +361,10 @@ export default function StatusPage() {
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <CheckCircle2 size={16} className="text-emerald-500 shrink-0" />
+                      <CheckCircle2
+                        className="text-emerald-500 shrink-0"
+                        size={16}
+                      />
                       <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                         {incident.title}
                       </h3>

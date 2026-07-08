@@ -275,7 +275,6 @@ const AppIcon = ({
     brave_search: "brave",
     argocd: "argo",
     ansible: "ansible",
-
   };
 
   const getUrlsToTry = () => {
@@ -724,7 +723,12 @@ function ConnectAppsContent() {
       };
       const res = await axios.post(
         `${API_URL}/mcp/connect`,
-        { name: slug, command: preset.command, args: preset.args, agentId: agentId ?? undefined },
+        {
+          name: slug,
+          command: preset.command,
+          args: preset.args,
+          agentId: agentId ?? undefined,
+        },
         {
           headers: accessToken
             ? { Authorization: `Bearer ${accessToken}` }

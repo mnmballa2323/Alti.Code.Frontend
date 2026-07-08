@@ -155,8 +155,8 @@ export default function MembersPage() {
   };
 
   return (
-    <div className="w-full pt-6">
-      <div className="w-full">
+    <div className="w-full flex-1 flex flex-col pt-6">
+      <div className="w-full flex-1 flex flex-col">
         {/* Table Header */}
         <div className="grid grid-cols-[20%_20%_35%_25%] px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
           <div>FIRST NAME</div>
@@ -252,6 +252,33 @@ export default function MembersPage() {
             </Link>
           ))}
         </div>
+
+        {/* Pagination Bar */}
+        <div className="sticky bottom-6 z-20 flex items-center justify-between px-6 py-4 mt-auto mb-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300">
+          <div className="text-neutral-500 dark:text-neutral-400">
+            Showing{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              1
+            </span>{" "}
+            to{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {mockMembers.length}
+            </span>{" "}
+            of{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {mockMembers.length}
+            </span>{" "}
+            results
+          </div>
+          <div className="flex gap-2">
+            <button className="px-4 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+              Previous
+            </button>
+            <button className="px-4 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
+              Next
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Confirmation Modal */}
@@ -259,7 +286,9 @@ export default function MembersPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="bg-white dark:bg-[#161b22] w-auto min-w-[300px] max-w-2xl px-2 rounded-2xl shadow-xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
             <div className="p-6 text-center">
-              <h3 className="text-[17px] font-bold text-neutral-900 dark:text-white mb-1.5">Remove Member</h3>
+              <h3 className="text-[17px] font-bold text-neutral-900 dark:text-white mb-1.5">
+                Remove Member
+              </h3>
               <p className="text-[13px] text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
                 Are you sure you want to remove{" "}
                 <span>

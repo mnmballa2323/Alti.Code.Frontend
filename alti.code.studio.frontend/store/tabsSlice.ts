@@ -1,10 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface WorkspaceTab {
-  id: string;          // Unique tab ID
-  title: string;       // Tab title (e.g. project name)
+  id: string; // Unique tab ID
+  title: string; // Tab title (e.g. project name)
   projectPath: string; // Path or slug of project
-  activeView: string;  // e.g. "/chat", "/code", "/database"
+  activeView: string; // e.g. "/chat", "/code", "/database"
   chatSessionId: string | null; // Selected chat inside this tab
 }
 
@@ -40,11 +40,12 @@ export const tabsSlice = createSlice({
     addTab: (state, action: PayloadAction<Omit<WorkspaceTab, "id">>) => {
       // Check if a tab with the same projectPath is already open
       const existingTab = state.tabs.find(
-        (t) => t.projectPath === action.payload.projectPath
+        (t) => t.projectPath === action.payload.projectPath,
       );
 
       if (existingTab) {
         state.activeTabId = existingTab.id;
+
         return;
       }
 
@@ -71,6 +72,7 @@ export const tabsSlice = createSlice({
         if (state.tabs.length > 0) {
           // Activate the tab at the same index, or the last tab
           const newActiveIndex = Math.min(tabIndex, state.tabs.length - 1);
+
           state.activeTabId = state.tabs[newActiveIndex].id;
         } else {
           state.activeTabId = null;
@@ -87,9 +89,10 @@ export const tabsSlice = createSlice({
         chatSessionId?: string | null;
         activeView?: string;
         title?: string;
-      }>
+      }>,
     ) => {
       const tab = state.tabs.find((t) => t.id === action.payload.id);
+
       if (tab) {
         if (action.payload.chatSessionId !== undefined) {
           tab.chatSessionId = action.payload.chatSessionId;

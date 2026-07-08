@@ -74,6 +74,7 @@ const loadSecrets = (agentId: string | null): SecretEntry[] => {
   if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(vaultStorageKey(agentId));
+
     return raw ? JSON.parse(raw) : [];
   } catch {
     return [];
@@ -369,6 +370,7 @@ export default function VaultPage() {
   // ── Load secrets for the active project on mount / project switch ──────────
   useEffect(() => {
     const stored = readProjectData<SecretEntry[]>(agentId, "vault_secrets", []);
+
     setSecrets(stored);
     setSelectedSecretId(null);
   }, [agentId]);
@@ -393,7 +395,6 @@ export default function VaultPage() {
       window.removeEventListener("select-secret", handleSelectSecret);
     };
   }, [resetForm]);
-
 
   const toggleReveal = (id: string) => {
     const s = new Set(revealedIds);
@@ -510,9 +511,14 @@ export default function VaultPage() {
         const scopedSecretId = agentId
           ? `${agentId}__${normalizedId}`
           : normalizedId;
+
         await axios.post(
           `${API_URL}/secret-manager/update`,
-          { secretId: scopedSecretId, payload: effectiveKey, agentId: agentId ?? undefined },
+          {
+            secretId: scopedSecretId,
+            payload: effectiveKey,
+            agentId: agentId ?? undefined,
+          },
           {
             headers: accessToken
               ? { Authorization: `Bearer ${accessToken}` }

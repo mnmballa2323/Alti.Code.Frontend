@@ -97,22 +97,28 @@ export default function ClientPage() {
         const response = await teamAPI.members();
         const decodedId = decodeURIComponent(id);
         const found = response.data?.find(
-          (m: any) => m.id === decodedId || m._id === decodedId || m.email === decodedId,
+          (m: any) =>
+            m.id === decodedId || m._id === decodedId || m.email === decodedId,
         );
 
         if (found) {
           setMember(found);
         } else {
-           throw new Error("Not found in API");
+          throw new Error("Not found in API");
         }
       } catch (error) {
         console.warn("Failed to fetch member details:", error);
         // Fallback for when API is down or member not found
         const decodedId = decodeURIComponent(id);
-        const emailParts = decodedId.split('@')[0].split('.');
-        const firstName = emailParts[0] ? emailParts[0].charAt(0).toUpperCase() + emailParts[0].slice(1) : '';
-        const lastName = emailParts[1] ? emailParts[1].charAt(0).toUpperCase() + emailParts[1].slice(1) : '';
-        setMember({ email: decodedId, firstName, lastName, role: 'Member' });
+        const emailParts = decodedId.split("@")[0].split(".");
+        const firstName = emailParts[0]
+          ? emailParts[0].charAt(0).toUpperCase() + emailParts[0].slice(1)
+          : "";
+        const lastName = emailParts[1]
+          ? emailParts[1].charAt(0).toUpperCase() + emailParts[1].slice(1)
+          : "";
+
+        setMember({ email: decodedId, firstName, lastName, role: "Member" });
       } finally {
         setMemberLoading(false);
       }
@@ -127,6 +133,7 @@ export default function ClientPage() {
         member.firstName && member.lastName
           ? `${member.firstName} ${member.lastName}`
           : member.name || member.email;
+
       dispatch(setActiveMemberName(displayName));
     }
 

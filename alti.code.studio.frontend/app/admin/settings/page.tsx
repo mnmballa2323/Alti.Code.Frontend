@@ -10,12 +10,6 @@ import {
   Save,
   Trash2,
   Download,
-  Globe,
-  Clock,
-  Key,
-  Lock,
-  Cpu,
-  Gauge,
   ToggleLeft,
   ToggleRight,
 } from "lucide-react";
@@ -105,9 +99,9 @@ function Toggle({
 }) {
   return (
     <button
+      className="flex items-center justify-between w-full group"
       type="button"
       onClick={onToggle}
-      className="flex items-center justify-between w-full group"
     >
       <span className="text-sm text-default-700">{label}</span>
       {enabled ? (
@@ -189,8 +183,7 @@ export default function AdminSettingsPage() {
     try {
       const token =
         typeof window !== "undefined"
-          ? localStorage.getItem("accessToken") ||
-            localStorage.getItem("token")
+          ? localStorage.getItem("accessToken") || localStorage.getItem("token")
           : null;
 
       await fetch(`${API_URL}/admin/settings/${section}`, {
@@ -244,9 +237,9 @@ export default function AdminSettingsPage() {
               </label>
               <input
                 className={inputCls}
+                placeholder="My Organization"
                 value={org.name}
                 onChange={(e) => setOrg({ ...org, name: e.target.value })}
-                placeholder="My Organization"
               />
             </div>
             <div>
@@ -255,9 +248,9 @@ export default function AdminSettingsPage() {
               </label>
               <input
                 className={inputCls}
+                placeholder="example.com"
                 value={org.domain}
                 onChange={(e) => setOrg({ ...org, domain: e.target.value })}
-                placeholder="example.com"
               />
             </div>
             <div>
@@ -270,7 +263,9 @@ export default function AdminSettingsPage() {
                 onChange={(e) => setOrg({ ...org, industry: e.target.value })}
               >
                 {INDUSTRIES.map((i) => (
-                  <option key={i} value={i}>{i}</option>
+                  <option key={i} value={i}>
+                    {i}
+                  </option>
                 ))}
               </select>
             </div>
@@ -284,7 +279,9 @@ export default function AdminSettingsPage() {
                 onChange={(e) => setOrg({ ...org, timezone: e.target.value })}
               >
                 {TIMEZONES.map((tz) => (
-                  <option key={tz} value={tz}>{tz}</option>
+                  <option key={tz} value={tz}>
+                    {tz}
+                  </option>
                 ))}
               </select>
             </div>
@@ -312,10 +309,13 @@ export default function AdminSettingsPage() {
         </CardHeader>
         <CardBody className="px-4 pb-5 space-y-4">
           <Toggle
-            label="Two-Factor Authentication"
             enabled={security.twoFactorEnabled}
+            label="Two-Factor Authentication"
             onToggle={() =>
-              setSecurity({ ...security, twoFactorEnabled: !security.twoFactorEnabled })
+              setSecurity({
+                ...security,
+                twoFactorEnabled: !security.twoFactorEnabled,
+              })
             }
           />
 
@@ -331,7 +331,9 @@ export default function AdminSettingsPage() {
               }
             >
               {SESSION_TIMEOUTS.map((t) => (
-                <option key={t.value} value={t.value}>{t.label}</option>
+                <option key={t.value} value={t.value}>
+                  {t.label}
+                </option>
               ))}
             </select>
           </div>
@@ -342,18 +344,18 @@ export default function AdminSettingsPage() {
             </label>
             <textarea
               className={`${inputCls} min-h-[80px] resize-y`}
+              placeholder="Enter one IP or CIDR per line…"
+              rows={3}
               value={security.ipAllowlist}
               onChange={(e) =>
                 setSecurity({ ...security, ipAllowlist: e.target.value })
               }
-              placeholder="Enter one IP or CIDR per line…"
-              rows={3}
             />
           </div>
 
           <Toggle
-            label="Enforce SSO"
             enabled={security.enforceSSO}
+            label="Enforce SSO"
             onToggle={() =>
               setSecurity({ ...security, enforceSSO: !security.enforceSSO })
             }
@@ -391,22 +393,24 @@ export default function AdminSettingsPage() {
               onChange={(e) => setAI({ ...ai, defaultModel: e.target.value })}
             >
               {AI_MODELS.map((m) => (
-                <option key={m.value} value={m.value}>{m.label}</option>
+                <option key={m.value} value={m.value}>
+                  {m.label}
+                </option>
               ))}
             </select>
           </div>
 
           <Toggle
-            label="AI Guardrails"
             enabled={ai.guardrailsEnabled}
+            label="AI Guardrails"
             onToggle={() =>
               setAI({ ...ai, guardrailsEnabled: !ai.guardrailsEnabled })
             }
           />
 
           <Toggle
-            label="Code Execution"
             enabled={ai.codeExecutionEnabled}
+            label="Code Execution"
             onToggle={() =>
               setAI({ ...ai, codeExecutionEnabled: !ai.codeExecutionEnabled })
             }
@@ -417,15 +421,18 @@ export default function AdminSettingsPage() {
               Max Token Budget Per Request
             </label>
             <input
-              type="number"
               className={inputCls}
+              max={1000000}
+              min={1000}
+              step={1000}
+              type="number"
               value={ai.maxTokenBudget}
               onChange={(e) =>
-                setAI({ ...ai, maxTokenBudget: parseInt(e.target.value, 10) || 0 })
+                setAI({
+                  ...ai,
+                  maxTokenBudget: parseInt(e.target.value, 10) || 0,
+                })
               }
-              min={1000}
-              max={1000000}
-              step={1000}
             />
           </div>
 
@@ -448,13 +455,17 @@ export default function AdminSettingsPage() {
       <Card className="border-2 border-red-500/40 bg-red-500/5">
         <CardHeader className="flex items-center gap-2 px-4 py-3">
           <AlertTriangle className="h-5 w-5 text-red-500" />
-          <span className="text-sm font-semibold text-red-500">Danger Zone</span>
+          <span className="text-sm font-semibold text-red-500">
+            Danger Zone
+          </span>
         </CardHeader>
         <CardBody className="px-4 pb-5 space-y-5">
           {/* Export Data */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-default-700">Export All Data</p>
+              <p className="text-sm font-medium text-default-700">
+                Export All Data
+              </p>
               <p className="text-xs text-default-500">
                 Download a full export of your organization data as JSON.
               </p>
@@ -469,10 +480,12 @@ export default function AdminSettingsPage() {
 
           {/* Delete Organization */}
           <div>
-            <p className="text-sm font-medium text-red-600">Delete Organization</p>
+            <p className="text-sm font-medium text-red-600">
+              Delete Organization
+            </p>
             <p className="text-xs text-default-500 mb-3">
-              This action is irreversible. All data, members, agents, and billing
-              history will be permanently deleted.
+              This action is irreversible. All data, members, agents, and
+              billing history will be permanently deleted.
             </p>
             <div className="flex items-center gap-3">
               <input
@@ -482,8 +495,8 @@ export default function AdminSettingsPage() {
                 onChange={(e) => setDeleteConfirm(e.target.value)}
               />
               <button
-                disabled={deleteConfirm !== "DELETE"}
                 className="flex items-center gap-1.5 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                disabled={deleteConfirm !== "DELETE"}
               >
                 <Trash2 className="h-4 w-4" />
                 Delete

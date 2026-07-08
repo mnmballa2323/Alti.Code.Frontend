@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { FileCode, ArrowRight, BookOpen, GitBranch, RefreshCw, Check, Sparkles } from "lucide-react";
+import { FileCode, BookOpen, GitBranch, RefreshCw, Check } from "lucide-react";
 
 interface Commit {
   id: string;
@@ -20,9 +19,30 @@ interface DocSection {
 }
 
 const mockCommits: Commit[] = [
-  { id: "c4f9a12", file: "src/services/auth.service.ts", linesAdded: 32, linesRemoved: 4, author: "sarah.dev", timestamp: "Just now" },
-  { id: "f2b8e34", file: "src/app/routes/billing.route.ts", linesAdded: 18, linesRemoved: 0, author: "michael.dev", timestamp: "2m ago" },
-  { id: "a8d3c56", file: "src/models/user.model.ts", linesAdded: 8, linesRemoved: 2, author: "david.dev", timestamp: "5m ago" },
+  {
+    id: "c4f9a12",
+    file: "src/services/auth.service.ts",
+    linesAdded: 32,
+    linesRemoved: 4,
+    author: "sarah.dev",
+    timestamp: "Just now",
+  },
+  {
+    id: "f2b8e34",
+    file: "src/app/routes/billing.route.ts",
+    linesAdded: 18,
+    linesRemoved: 0,
+    author: "michael.dev",
+    timestamp: "2m ago",
+  },
+  {
+    id: "a8d3c56",
+    file: "src/models/user.model.ts",
+    linesAdded: 8,
+    linesRemoved: 2,
+    author: "david.dev",
+    timestamp: "5m ago",
+  },
 ];
 
 export default function LiveWikiSection() {
@@ -33,12 +53,14 @@ export default function LiveWikiSection() {
   const [wikiDocs, setWikiDocs] = useState<Record<string, DocSection>>({
     "API_WIKI.md": {
       title: "Authentication API Documentation",
-      content: "# Authentication API\n\nSecure zero-trust endpoint schema and validation flows for user validation.\n\n## Endpoints\n\n### POST /api/v1/auth/login\nAuthenticates user credentials and signs JWT tokens.",
+      content:
+        "# Authentication API\n\nSecure zero-trust endpoint schema and validation flows for user validation.\n\n## Endpoints\n\n### POST /api/v1/auth/login\nAuthenticates user credentials and signs JWT tokens.",
       status: "synced",
     },
     "BILLING.md": {
       title: "Billing Route Integration Details",
-      content: "# Billing Services\n\nSovereign billing orchestrator using Stripe connections.\n\n## Routes\n\n*(Stale documentation - waiting for synchronization)*",
+      content:
+        "# Billing Services\n\nSovereign billing orchestrator using Stripe connections.\n\n## Routes\n\n*(Stale documentation - waiting for synchronization)*",
       status: "stale",
     },
   });
@@ -64,19 +86,23 @@ export default function LiveWikiSection() {
           // Update documentation contents based on commit index
           setWikiDocs((prev) => {
             const nextDocs = { ...prev };
+
             if (activeCommitIdx === 0) {
               nextDocs["API_WIKI.md"] = {
                 title: "Authentication API Documentation",
-                content: "# Authentication API\n\nSecure zero-trust endpoint schema and validation flows for user validation.\n\n## Endpoints\n\n### POST /api/v1/auth/login\nAuthenticates user credentials and signs JWT tokens.\n\n### POST /api/v1/auth/mfa-verify\n[NEW] Verifies multi-factor token credentials using sovereign secure vault keyring.",
+                content:
+                  "# Authentication API\n\nSecure zero-trust endpoint schema and validation flows for user validation.\n\n## Endpoints\n\n### POST /api/v1/auth/login\nAuthenticates user credentials and signs JWT tokens.\n\n### POST /api/v1/auth/mfa-verify\n[NEW] Verifies multi-factor token credentials using sovereign secure vault keyring.",
                 status: "synced",
               };
             } else if (activeCommitIdx === 1) {
               nextDocs["BILLING.md"] = {
                 title: "Billing Route Integration Details",
-                content: "# Billing Services\n\nSovereign billing orchestrator using Stripe connections.\n\n## Routes\n\n### POST /api/v1/payment/webhook\nProcesses incoming payment events from Stripe.\n\n### GET /api/v1/billing/subscriptions\nRetrieves subscription tier details for organization.",
+                content:
+                  "# Billing Services\n\nSovereign billing orchestrator using Stripe connections.\n\n## Routes\n\n### POST /api/v1/payment/webhook\nProcesses incoming payment events from Stripe.\n\n### GET /api/v1/billing/subscriptions\nRetrieves subscription tier details for organization.",
                 status: "synced",
               };
             }
+
             return nextDocs;
           });
 
@@ -121,26 +147,32 @@ export default function LiveWikiSection() {
             Zero-Maintenance Wiki
           </h2>
           <p className="text-lg md:text-xl text-zinc-400 leading-relaxed font-medium max-w-3xl">
-            Documentation that evolves as fast as your code. OpenWiki analyzes git commits in real time, automatically compiling and committing markdown docs.
+            Documentation that evolves as fast as your code. OpenWiki analyzes
+            git commits in real time, automatically compiling and committing
+            markdown docs.
           </p>
         </div>
 
         {/* Interactive Sync Workspace */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch w-full max-w-5xl mx-auto">
-          
           {/* Left Panel: Git Commits */}
           <div className="col-span-12 lg:col-span-5 flex flex-col gap-5 p-5 xl:p-6 rounded-[24px] bg-white/[0.02] border border-white/10 backdrop-blur-xl shadow-2xl relative overflow-hidden group shadow-[0_0_0_1px_rgba(255,255,255,0.03)_inset]">
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div className="flex items-center gap-2">
                 <GitBranch className="w-5 h-5 text-blue-400" />
-                <span className="font-semibold text-sm tracking-tight text-white">Active Commits</span>
+                <span className="font-semibold text-sm tracking-tight text-white">
+                  Active Commits
+                </span>
               </div>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-zinc-400 tracking-wider">main</span>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-zinc-400 tracking-wider">
+                main
+              </span>
             </div>
 
             <div className="flex flex-col gap-3 flex-1">
               {commits.map((commit, idx) => {
                 const isActive = idx === activeCommitIdx;
+
                 return (
                   <div
                     key={commit.id}
@@ -153,19 +185,29 @@ export default function LiveWikiSection() {
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <FileCode className="w-4 h-4 text-blue-400" />
-                        <span className="font-mono text-xs text-zinc-300 font-semibold">{commit.file}</span>
+                        <span className="font-mono text-xs text-zinc-300 font-semibold">
+                          {commit.file}
+                        </span>
                       </div>
-                      <span className="font-mono text-[10px] text-zinc-500">{commit.id}</span>
+                      <span className="font-mono text-[10px] text-zinc-500">
+                        {commit.id}
+                      </span>
                     </div>
                     <p className="text-xs text-zinc-400 mb-3">
                       Modified structure matching custom schema changes.
                     </p>
                     <div className="flex items-center justify-between text-[10px]">
                       <div className="flex items-center gap-2 font-mono">
-                        <span className="text-emerald-400">+{commit.linesAdded}</span>
-                        <span className="text-rose-500">-{commit.linesRemoved}</span>
+                        <span className="text-emerald-400">
+                          +{commit.linesAdded}
+                        </span>
+                        <span className="text-rose-500">
+                          -{commit.linesRemoved}
+                        </span>
                       </div>
-                      <span className="text-zinc-500 font-medium">{commit.timestamp}</span>
+                      <span className="text-zinc-500 font-medium">
+                        {commit.timestamp}
+                      </span>
                     </div>
                   </div>
                 );
@@ -178,9 +220,11 @@ export default function LiveWikiSection() {
             <div className="w-full lg:w-0.5 h-0.5 lg:h-24 bg-gradient-to-r lg:bg-gradient-to-b from-blue-500/0 via-blue-500/50 to-blue-500/0" />
             <div className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-white/[0.03] border border-white/10 shadow-2xl backdrop-blur-xl group hover:border-blue-500/50 transition-all duration-300">
               <div className="absolute inset-0 bg-blue-500/10 rounded-2xl blur-md group-hover:bg-blue-500/20 transition-all duration-300" />
-              <RefreshCw className={`w-8 h-8 text-blue-400 relative z-10 ${isProcessing ? "animate-spin" : ""}`} />
+              <RefreshCw
+                className={`w-8 h-8 text-blue-400 relative z-10 ${isProcessing ? "animate-spin" : ""}`}
+              />
             </div>
-            
+
             {/* Sync Progress Bar */}
             <div className="flex-1 lg:flex-none w-full max-w-[140px] flex flex-col gap-1.5 text-center mt-2">
               <div className="h-1 bg-white/5 rounded-full overflow-hidden w-full">
@@ -201,18 +245,20 @@ export default function LiveWikiSection() {
             <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <div className="flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-blue-400" />
-                <span className="font-semibold text-sm tracking-tight text-white">Project Wiki</span>
+                <span className="font-semibold text-sm tracking-tight text-white">
+                  Project Wiki
+                </span>
               </div>
               <div className="flex items-center gap-2">
                 {Object.keys(wikiDocs).map((docKey) => (
                   <button
                     key={docKey}
-                    onClick={() => setActiveDocKey(docKey)}
                     className={`px-3 py-1 rounded-lg text-xs font-mono transition-all duration-300 ${
                       activeDocKey === docKey
                         ? "bg-blue-500/10 border border-blue-500/30 text-blue-400"
                         : "bg-white/5 border border-transparent text-zinc-500 hover:text-zinc-300"
                     }`}
+                    onClick={() => setActiveDocKey(docKey)}
                   >
                     {docKey}
                   </button>
@@ -226,12 +272,16 @@ export default function LiveWikiSection() {
                 {wikiDocs[activeDocKey].status === "synced" ? (
                   <>
                     <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">Synced</span>
+                    <span className="text-[10px] text-emerald-400 font-semibold uppercase tracking-wider">
+                      Synced
+                    </span>
                   </>
                 ) : (
                   <>
                     <RefreshCw className="w-3 h-3 text-blue-400 animate-spin" />
-                    <span className="text-[10px] text-blue-400 font-semibold uppercase tracking-wider">Syncing...</span>
+                    <span className="text-[10px] text-blue-400 font-semibold uppercase tracking-wider">
+                      Syncing...
+                    </span>
                   </>
                 )}
               </div>

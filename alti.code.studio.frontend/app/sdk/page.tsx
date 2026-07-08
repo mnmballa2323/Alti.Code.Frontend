@@ -4,12 +4,14 @@ import { useSession } from "next-auth/react";
 import { ArrowUp } from "lucide-react";
 import axios from "axios";
 import { Button, Input } from "@heroui/react";
+
 import { TuningTabs } from "@/components/tuning-tabs";
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { useActiveProject } from "@/hooks/useActiveProject";
 import { readProjectData, writeProjectData } from "@/lib/project";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
 interface Sdk {
   id: string;
@@ -34,7 +36,11 @@ export default function SdkPage() {
     if (!agentId) return;
 
     // Load from local storage first
-    const local = readProjectData(agentId, "rules", { sdks: [] }) as Record<string, unknown>;
+    const local = readProjectData(agentId, "rules", { sdks: [] }) as Record<
+      string,
+      unknown
+    >;
+
     if (Array.isArray(local?.sdks)) {
       setSdks(local.sdks as Sdk[]);
     }
@@ -44,6 +50,7 @@ export default function SdkPage() {
       .get(`${API_URL}/rules?agentId=${agentId}`)
       .then((res) => {
         const data = res.data as Record<string, unknown>;
+
         if (Array.isArray(data?.sdks)) {
           setSdks(data.sdks as Sdk[]);
         }
@@ -56,6 +63,7 @@ export default function SdkPage() {
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = inputValue.trim();
+
     if (!trimmed || !agentId) return;
 
     setSubmitting(true);
@@ -66,10 +74,14 @@ export default function SdkPage() {
     };
 
     const updated = [...sdks, newSdk];
+
     setSdks(updated);
     setInputValue("");
 
-    const existing = readProjectData(agentId, "rules", {}) as Record<string, unknown>;
+    const existing = readProjectData(agentId, "rules", {}) as Record<
+      string,
+      unknown
+    >;
     const updatedRules = {
       ...existing,
       sdks: updated,

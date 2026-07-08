@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import {
-  Bell,
   Shield,
   CreditCard,
   BarChart3,
@@ -63,12 +62,42 @@ const CATEGORY_META: Record<
   NotificationCategory,
   { icon: React.ComponentType<any>; color: string; bg: string; label: string }
 > = {
-  security: { icon: Shield, color: "text-red-500", bg: "bg-red-500/10", label: "Security" },
-  billing: { icon: CreditCard, color: "text-amber-500", bg: "bg-amber-500/10", label: "Billing" },
-  usage: { icon: BarChart3, color: "text-blue-500", bg: "bg-blue-500/10", label: "Usage" },
-  agent: { icon: Bot, color: "text-purple-500", bg: "bg-purple-500/10", label: "Agent" },
-  system: { icon: Server, color: "text-emerald-500", bg: "bg-emerald-500/10", label: "System" },
-  deployment: { icon: Rocket, color: "text-cyan-500", bg: "bg-cyan-500/10", label: "Deployment" },
+  security: {
+    icon: Shield,
+    color: "text-red-500",
+    bg: "bg-red-500/10",
+    label: "Security",
+  },
+  billing: {
+    icon: CreditCard,
+    color: "text-amber-500",
+    bg: "bg-amber-500/10",
+    label: "Billing",
+  },
+  usage: {
+    icon: BarChart3,
+    color: "text-blue-500",
+    bg: "bg-blue-500/10",
+    label: "Usage",
+  },
+  agent: {
+    icon: Bot,
+    color: "text-purple-500",
+    bg: "bg-purple-500/10",
+    label: "Agent",
+  },
+  system: {
+    icon: Server,
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10",
+    label: "System",
+  },
+  deployment: {
+    icon: Rocket,
+    color: "text-cyan-500",
+    bg: "bg-cyan-500/10",
+    label: "Deployment",
+  },
 };
 
 const FILTER_TABS: { key: FilterTab; label: string }[] = [
@@ -89,7 +118,8 @@ const MOCK_NOTIFICATIONS: Notification[] = [
     id: "n1",
     category: "security",
     title: "New login from unknown device",
-    message: "A sign-in was detected from Chrome on Windows in San Jose, CA. If this wasn't you, secure your account immediately.",
+    message:
+      "A sign-in was detected from Chrome on Windows in San Jose, CA. If this wasn't you, secure your account immediately.",
     timeAgo: "5 min ago",
     read: false,
   },
@@ -97,7 +127,8 @@ const MOCK_NOTIFICATIONS: Notification[] = [
     id: "n2",
     category: "billing",
     title: "Invoice #1234 generated",
-    message: "Your monthly invoice for $2,847.63 has been generated and is ready for review.",
+    message:
+      "Your monthly invoice for $2,847.63 has been generated and is ready for review.",
     timeAgo: "1 hour ago",
     read: false,
   },
@@ -105,7 +136,8 @@ const MOCK_NOTIFICATIONS: Notification[] = [
     id: "n3",
     category: "agent",
     title: "Code Architect completed 15 tasks",
-    message: "The Code Architect agent finished a batch run — 15 tasks completed, 0 failed, avg latency 2.3s.",
+    message:
+      "The Code Architect agent finished a batch run — 15 tasks completed, 0 failed, avg latency 2.3s.",
     timeAgo: "2 hours ago",
     read: false,
   },
@@ -113,7 +145,8 @@ const MOCK_NOTIFICATIONS: Notification[] = [
     id: "n4",
     category: "usage",
     title: "Token usage at 85% of monthly limit",
-    message: "Your organization has consumed 85% of the monthly token allowance. Consider upgrading or reviewing high-usage agents.",
+    message:
+      "Your organization has consumed 85% of the monthly token allowance. Consider upgrading or reviewing high-usage agents.",
     timeAgo: "3 hours ago",
     read: true,
   },
@@ -121,7 +154,8 @@ const MOCK_NOTIFICATIONS: Notification[] = [
     id: "n5",
     category: "system",
     title: "Platform update deployed v2.4.1",
-    message: "Includes performance improvements, new guardrail options, and bug fixes for the agent dashboard.",
+    message:
+      "Includes performance improvements, new guardrail options, and bug fixes for the agent dashboard.",
     timeAgo: "1 day ago",
     read: true,
   },
@@ -129,7 +163,8 @@ const MOCK_NOTIFICATIONS: Notification[] = [
     id: "n6",
     category: "security",
     title: "API key rotated successfully",
-    message: "The production API key ending in …f8a2 was rotated. Old key is now revoked.",
+    message:
+      "The production API key ending in …f8a2 was rotated. Old key is now revoked.",
     timeAgo: "2 days ago",
     read: true,
   },
@@ -137,7 +172,8 @@ const MOCK_NOTIFICATIONS: Notification[] = [
     id: "n7",
     category: "agent",
     title: "Security Auditor flagged 3 issues",
-    message: "The Security Auditor agent found 3 medium-severity issues during the nightly scan. Review recommended.",
+    message:
+      "The Security Auditor agent found 3 medium-severity issues during the nightly scan. Review recommended.",
     timeAgo: "2 days ago",
     read: true,
   },
@@ -145,7 +181,8 @@ const MOCK_NOTIFICATIONS: Notification[] = [
     id: "n8",
     category: "deployment",
     title: "Staging deployment completed",
-    message: "Build #487 deployed to staging environment successfully. All health checks passed.",
+    message:
+      "Build #487 deployed to staging environment successfully. All health checks passed.",
     timeAgo: "3 days ago",
     read: true,
   },
@@ -156,7 +193,8 @@ const MOCK_NOTIFICATIONS: Notification[] = [
 /* ------------------------------------------------------------------ */
 
 export default function AdminNotificationsPage() {
-  const [notifications, setNotifications] = useState<Notification[]>(MOCK_NOTIFICATIONS);
+  const [notifications, setNotifications] =
+    useState<Notification[]>(MOCK_NOTIFICATIONS);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
   const [prefsOpen, setPrefsOpen] = useState(false);
@@ -217,7 +255,7 @@ export default function AdminNotificationsPage() {
 
   const markRead = (id: string) =>
     setNotifications((prev) =>
-      prev.map((n) => (n.id === id ? { ...n, read: true } : n))
+      prev.map((n) => (n.id === id ? { ...n, read: true } : n)),
     );
 
   const toggleCategoryPref = (key: keyof NotificationPrefs) =>
@@ -248,9 +286,9 @@ export default function AdminNotificationsPage() {
           )}
         </div>
         <button
-          onClick={markAllRead}
-          disabled={unreadCount === 0}
           className="flex items-center gap-1.5 text-sm font-medium text-primary hover:text-primary/80 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+          disabled={unreadCount === 0}
+          onClick={markAllRead}
         >
           <CheckCheck className="h-4 w-4" />
           Mark All Read
@@ -262,12 +300,12 @@ export default function AdminNotificationsPage() {
         {FILTER_TABS.map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
             className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors whitespace-nowrap ${
               activeTab === tab.key
                 ? "bg-primary text-white"
                 : "bg-default-100 text-default-600 hover:bg-default-200"
             }`}
+            onClick={() => setActiveTab(tab.key)}
           >
             {tab.label}
           </button>
@@ -285,11 +323,12 @@ export default function AdminNotificationsPage() {
             filtered.map((n) => {
               const meta = CATEGORY_META[n.category];
               const IconComp = meta.icon;
+
               return (
                 <button
                   key={n.id}
-                  onClick={() => markRead(n.id)}
                   className="flex items-start gap-4 w-full text-left p-4 hover:bg-default-100/60 transition-colors"
+                  onClick={() => markRead(n.id)}
                 >
                   {/* Category icon */}
                   <div className={`flex-shrink-0 rounded-lg p-2 ${meta.bg}`}>
@@ -298,13 +337,17 @@ export default function AdminNotificationsPage() {
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
-                    <p className={`text-sm ${n.read ? "font-normal text-default-700" : "font-semibold text-foreground"}`}>
+                    <p
+                      className={`text-sm ${n.read ? "font-normal text-default-700" : "font-semibold text-foreground"}`}
+                    >
                       {n.title}
                     </p>
                     <p className="text-xs text-default-500 mt-0.5 line-clamp-2">
                       {n.message}
                     </p>
-                    <p className="text-[11px] text-default-400 mt-1">{n.timeAgo}</p>
+                    <p className="text-[11px] text-default-400 mt-1">
+                      {n.timeAgo}
+                    </p>
                   </div>
 
                   {/* Unread dot */}
@@ -324,7 +367,9 @@ export default function AdminNotificationsPage() {
           className="cursor-pointer select-none flex items-center justify-between px-4 py-3"
           onClick={() => setPrefsOpen((v) => !v)}
         >
-          <span className="text-sm font-semibold">Notification Preferences</span>
+          <span className="text-sm font-semibold">
+            Notification Preferences
+          </span>
           {prefsOpen ? (
             <ChevronUp className="h-4 w-4 text-default-500" />
           ) : (
@@ -340,16 +385,18 @@ export default function AdminNotificationsPage() {
                 Categories
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {(Object.keys(categoryPrefs) as (keyof NotificationPrefs)[]).map((key) => (
+                {(
+                  Object.keys(categoryPrefs) as (keyof NotificationPrefs)[]
+                ).map((key) => (
                   <label
                     key={key}
                     className="flex items-center gap-2 text-sm cursor-pointer"
                   >
                     <input
-                      type="checkbox"
                       checked={categoryPrefs[key]}
-                      onChange={() => toggleCategoryPref(key)}
                       className="rounded border-default-300 text-primary focus:ring-primary"
+                      type="checkbox"
+                      onChange={() => toggleCategoryPref(key)}
                     />
                     <span className="capitalize">{key}</span>
                   </label>
@@ -375,10 +422,10 @@ export default function AdminNotificationsPage() {
                     className="flex items-center gap-2 text-sm cursor-pointer"
                   >
                     <input
-                      type="checkbox"
                       checked={channelPrefs[key]}
-                      onChange={() => toggleChannelPref(key)}
                       className="rounded border-default-300 text-primary focus:ring-primary"
+                      type="checkbox"
+                      onChange={() => toggleChannelPref(key)}
                     />
                     {label}
                   </label>

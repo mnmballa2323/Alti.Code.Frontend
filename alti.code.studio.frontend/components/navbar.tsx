@@ -366,7 +366,7 @@ function Navbar() {
           <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <div
               className={cn(
-                "flex items-center gap-1.5 p-1.5 rounded-full transition-all duration-300 bg-white/5 border border-white/10 backdrop-blur-md shadow-lg"
+                "flex items-center gap-1.5 p-1.5 rounded-full transition-all duration-300 bg-white/5 border border-white/10 backdrop-blur-md shadow-lg",
               )}
             >
               {sections.map((sec, index) => {
@@ -402,7 +402,7 @@ function Navbar() {
               <>
                 <Button
                   className={cn(
-                    "rounded-full bg-transparent px-6 transition-colors border border-white/25 text-white hover:bg-white/10 micro-beam-btn"
+                    "rounded-full bg-transparent px-6 transition-colors border border-white/25 text-white hover:bg-white/10 micro-beam-btn",
                   )}
                   size="sm"
                   onClick={() => {
@@ -419,7 +419,7 @@ function Navbar() {
                 </Button>
                 <Button
                   className={cn(
-                    "rounded-full px-6 transition-all duration-200 shadow-sm bg-white text-black hover:bg-zinc-100 micro-beam-btn"
+                    "rounded-full px-6 transition-all duration-200 shadow-sm bg-white text-black hover:bg-zinc-100 micro-beam-btn",
                   )}
                   size="sm"
                   onClick={() => {
@@ -450,7 +450,7 @@ function Navbar() {
                 {!isDesktopApp && (
                   <Button
                     className={cn(
-                      "rounded-full px-6 transition-all duration-200 shadow-sm bg-transparent border border-white/20 text-white hover:bg-white/10 micro-beam-btn"
+                      "rounded-full px-6 transition-all duration-200 shadow-sm bg-transparent border border-white/20 text-white hover:bg-white/10 micro-beam-btn",
                     )}
                     size="sm"
                     onClick={() => router.push("/register")}

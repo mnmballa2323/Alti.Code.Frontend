@@ -4,12 +4,14 @@ import { useSession } from "next-auth/react";
 import { ArrowUp } from "lucide-react";
 import axios from "axios";
 import { Button, Input } from "@heroui/react";
+
 import { TuningTabs } from "@/components/tuning-tabs";
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { useActiveProject } from "@/hooks/useActiveProject";
 import { readProjectData, writeProjectData } from "@/lib/project";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
 
 interface Repository {
   id: string;
@@ -34,7 +36,11 @@ export default function RepositoryPage() {
     if (!agentId) return;
 
     // Load from local storage first
-    const local = readProjectData(agentId, "rules", {}) as Record<string, unknown>;
+    const local = readProjectData(agentId, "rules", {}) as Record<
+      string,
+      unknown
+    >;
+
     if (Array.isArray(local?.repositories)) {
       setRepositories(local.repositories as Repository[]);
     }
@@ -44,6 +50,7 @@ export default function RepositoryPage() {
       .get(`${API_URL}/rules?agentId=${agentId}`)
       .then((res) => {
         const data = res.data as Record<string, unknown>;
+
         if (Array.isArray(data?.repositories)) {
           setRepositories(data.repositories as Repository[]);
         }
@@ -56,6 +63,7 @@ export default function RepositoryPage() {
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = inputValue.trim();
+
     if (!trimmed || !agentId) return;
 
     setSubmitting(true);
@@ -66,11 +74,15 @@ export default function RepositoryPage() {
     };
 
     const updated = [...repositories, newRepo];
+
     setRepositories(updated);
     setInputValue("");
 
     // Read all existing rules fields so we don't overwrite them
-    const existing = readProjectData(agentId, "rules", {}) as Record<string, unknown>;
+    const existing = readProjectData(agentId, "rules", {}) as Record<
+      string,
+      unknown
+    >;
     const updatedRules = {
       ...existing,
       repositories: updated,

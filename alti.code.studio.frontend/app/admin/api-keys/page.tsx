@@ -13,8 +13,6 @@ import {
   Gauge,
 } from "lucide-react";
 
-import { API_URL } from "@/lib/config";
-
 interface ApiKey {
   id: string;
   name: string;
@@ -86,7 +84,7 @@ export default function ApiKeysPage() {
 
   const handleRevoke = (id: string) => {
     setKeys((prev) =>
-      prev.map((k) => (k.id === id ? { ...k, status: "revoked" as const } : k))
+      prev.map((k) => (k.id === id ? { ...k, status: "revoked" as const } : k)),
     );
   };
 
@@ -96,6 +94,7 @@ export default function ApiKeysPage() {
 
   const formatDate = (iso: string) => {
     const d = new Date(iso);
+
     return d.toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
@@ -107,10 +106,13 @@ export default function ApiKeysPage() {
     if (!iso) return "Never";
     const diff = Date.now() - new Date(iso).getTime();
     const mins = Math.floor(diff / 60000);
+
     if (mins < 60) return `${mins}m ago`;
     const hrs = Math.floor(mins / 60);
+
     if (hrs < 24) return `${hrs}h ago`;
     const days = Math.floor(hrs / 24);
+
     return `${days}d ago`;
   };
 
@@ -207,9 +209,9 @@ export default function ApiKeysPage() {
                   </code>
                   <button
                     className="shrink-0 p-1 rounded-md hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer"
+                    title={isRevealed ? "Hide key" : "Reveal key"}
                     type="button"
                     onClick={() => toggleReveal(key.id)}
-                    title={isRevealed ? "Hide key" : "Reveal key"}
                   >
                     {isRevealed ? (
                       <EyeOff className="w-3.5 h-3.5 text-neutral-400" />
@@ -267,9 +269,9 @@ export default function ApiKeysPage() {
                 <div className="flex items-center justify-end gap-1.5">
                   <button
                     className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-600 dark:text-neutral-400 transition-all shadow-sm cursor-pointer"
+                    title="Copy key"
                     type="button"
                     onClick={() => handleCopy(key)}
-                    title="Copy key"
                   >
                     {isCopied ? (
                       <>
@@ -288,9 +290,9 @@ export default function ApiKeysPage() {
                   {!isRevoked && (
                     <button
                       className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border border-rose-200 dark:border-rose-800/50 bg-white dark:bg-[#161b22] hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-600 dark:text-rose-400 transition-all shadow-sm cursor-pointer"
+                      title="Revoke key"
                       type="button"
                       onClick={() => handleRevoke(key.id)}
-                      title="Revoke key"
                     >
                       <Ban className="w-3 h-3" />
                       Revoke

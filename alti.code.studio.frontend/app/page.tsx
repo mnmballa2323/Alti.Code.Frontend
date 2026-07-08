@@ -10,7 +10,6 @@ import PairedProgrammerSection from "@/components/landing-page/paired-programmer
 import LiveWikiSection from "@/components/landing-page/live-wiki-section";
 import GcpSovereignSection from "@/components/landing-page/tri-cloud-section";
 import AgentSwarmSection from "@/components/landing-page/agent-swarm-section";
-
 import DeterministicControlSection from "@/components/landing-page/deterministic-control-section";
 import AgentForgeSection from "@/components/landing-page/agent-forge-section";
 import ZeroTrustLedgerSection from "@/components/landing-page/zero-trust-ledger-section";
@@ -32,6 +31,7 @@ export default function LandingPage() {
     };
 
     window.addEventListener("mousemove", handleMouseMove);
+
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
@@ -61,10 +61,11 @@ export default function LandingPage() {
         {/* Ambient Top & Bottom Fades */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#030014] via-transparent to-[#030014]" />
         {/* Ambient Radial Spotlight following Cursor */}
-        <div 
+        <div
           className="fixed inset-0 z-10 transition-opacity duration-300 pointer-events-none"
           style={{
-            background: "radial-gradient(600px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), rgba(59, 130, 246, 0.05), transparent 45%)"
+            background:
+              "radial-gradient(600px circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh), rgba(59, 130, 246, 0.05), transparent 45%)",
           }}
         />
       </div>

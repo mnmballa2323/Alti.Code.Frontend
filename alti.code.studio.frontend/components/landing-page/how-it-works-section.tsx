@@ -55,7 +55,8 @@ function HowItWorksSection() {
               key={idx}
               className="flex flex-col items-center justify-center p-8 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-blue-500/30 hover:border-blue-400/60 hover:bg-white/[0.06] hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden text-center"
               style={{
-                boxShadow: "0 0 20px rgba(59, 130, 246, 0.15), 0 0 60px rgba(59, 130, 246, 0.05), inset 0 0 0 1px rgba(255,255,255,0.05)"
+                boxShadow:
+                  "0 0 20px rgba(59, 130, 246, 0.15), 0 0 60px rgba(59, 130, 246, 0.05), inset 0 0 0 1px rgba(255,255,255,0.05)",
               }}
             >
               {/* Top-right glow blob */}

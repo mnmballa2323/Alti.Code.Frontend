@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, CardBody, CardHeader } from "@heroui/card";
+import { Card, CardBody } from "@heroui/card";
 import {
   Building2,
   Globe,
@@ -40,7 +40,13 @@ const STEPS = [
   { label: "AI Config", icon: Bot },
 ];
 
-const INDUSTRIES = ["Technology", "Finance", "Healthcare", "Government", "Other"];
+const INDUSTRIES = [
+  "Technology",
+  "Finance",
+  "Healthcare",
+  "Government",
+  "Other",
+];
 
 const PLANS = [
   {
@@ -100,17 +106,20 @@ const MODELS = [
   {
     id: "gemini-2.5-pro",
     name: "Gemini 2.5 Pro",
-    description: "Most capable — complex reasoning, code generation, long-context analysis",
+    description:
+      "Most capable — complex reasoning, code generation, long-context analysis",
   },
   {
     id: "gemini-2.5-flash",
     name: "Gemini 2.5 Flash",
-    description: "Balanced — fast responses with strong reasoning at lower cost",
+    description:
+      "Balanced — fast responses with strong reasoning at lower cost",
   },
   {
     id: "gemini-2.0-flash",
     name: "Gemini 2.0 Flash",
-    description: "Ultra-fast — high throughput for simple tasks and rapid iteration",
+    description:
+      "Ultra-fast — high throughput for simple tasks and rapid iteration",
   },
 ];
 
@@ -148,8 +157,13 @@ export default function OnboardingPage() {
     setTeamMembers(teamMembers.filter((_, i) => i !== index));
   };
 
-  const updateTeamMember = (index: number, field: keyof TeamMember, value: string) => {
+  const updateTeamMember = (
+    index: number,
+    field: keyof TeamMember,
+    value: string,
+  ) => {
     const updated = [...teamMembers];
+
     updated[index] = { ...updated[index], [field]: value };
     setTeamMembers(updated);
   };
@@ -158,6 +172,7 @@ export default function OnboardingPage() {
     setIsSubmitting(true);
     try {
       const token = localStorage.getItem("token");
+
       await fetch(`${API_URL}/onboarding/setup`, {
         method: "POST",
         headers: {
@@ -181,6 +196,7 @@ export default function OnboardingPage() {
 
   const canProceed = () => {
     if (currentStep === 0) return orgName.trim().length > 0;
+
     return true;
   };
 
@@ -191,6 +207,7 @@ export default function OnboardingPage() {
         const StepIcon = step.icon;
         const isActive = idx === currentStep;
         const isComplete = idx < currentStep;
+
         return (
           <React.Fragment key={step.label}>
             <div className="flex items-center gap-2">
@@ -242,7 +259,9 @@ export default function OnboardingPage() {
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
           Set Up Your Organization
         </h2>
-        <p className="text-sm text-gray-500 mt-2">Tell us about your company to get started</p>
+        <p className="text-sm text-gray-500 mt-2">
+          Tell us about your company to get started
+        </p>
       </div>
 
       <div className="space-y-4">
@@ -251,11 +270,11 @@ export default function OnboardingPage() {
             Organization Name <span className="text-red-500">*</span>
           </label>
           <input
+            className="w-full px-4 py-3 rounded-xl border border-default-200 dark:border-white/10 bg-white dark:bg-black/40 text-gray-900 dark:text-gray-100 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
+            placeholder="Acme Corporation"
             type="text"
             value={orgName}
             onChange={(e) => setOrgName(e.target.value)}
-            placeholder="Acme Corporation"
-            className="w-full px-4 py-3 rounded-xl border border-default-200 dark:border-white/10 bg-white dark:bg-black/40 text-gray-900 dark:text-gray-100 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
           />
         </div>
 
@@ -264,13 +283,13 @@ export default function OnboardingPage() {
             Domain <span className="text-gray-400 text-xs">(optional)</span>
           </label>
           <div className="flex items-center gap-2">
-            <Globe size={16} className="text-gray-400 shrink-0" />
+            <Globe className="text-gray-400 shrink-0" size={16} />
             <input
+              className="w-full px-4 py-3 rounded-xl border border-default-200 dark:border-white/10 bg-white dark:bg-black/40 text-gray-900 dark:text-gray-100 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
+              placeholder="acme.com"
               type="text"
               value={domain}
               onChange={(e) => setDomain(e.target.value)}
-              placeholder="acme.com"
-              className="w-full px-4 py-3 rounded-xl border border-default-200 dark:border-white/10 bg-white dark:bg-black/40 text-gray-900 dark:text-gray-100 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all"
             />
           </div>
         </div>
@@ -280,9 +299,9 @@ export default function OnboardingPage() {
             Industry
           </label>
           <select
+            className="w-full px-4 py-3 rounded-xl border border-default-200 dark:border-white/10 bg-white dark:bg-black/40 text-gray-900 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all appearance-none cursor-pointer"
             value={industry}
             onChange={(e) => setIndustry(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl border border-default-200 dark:border-white/10 bg-white dark:bg-black/40 text-gray-900 dark:text-gray-100 text-sm focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-all appearance-none cursor-pointer"
           >
             {INDUSTRIES.map((ind) => (
               <option key={ind} value={ind}>
@@ -314,7 +333,12 @@ export default function OnboardingPage() {
         {PLANS.map((plan) => {
           const isSelected = selectedPlan === plan.id;
           const PlanIcon =
-            plan.id === "cloud" ? Sparkles : plan.id === "dedicated" ? Crown : Shield;
+            plan.id === "cloud"
+              ? Sparkles
+              : plan.id === "dedicated"
+                ? Crown
+                : Shield;
+
           return (
             <Card
               key={plan.id}
@@ -336,7 +360,7 @@ export default function OnboardingPage() {
                   </span>
                   {isSelected && (
                     <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                      <Check size={12} className="text-white" />
+                      <Check className="text-white" size={12} />
                     </div>
                   )}
                 </div>
@@ -344,7 +368,10 @@ export default function OnboardingPage() {
                 {/* Icon & Name */}
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-default-100 dark:bg-white/5 flex items-center justify-center">
-                    <PlanIcon size={20} className="text-gray-600 dark:text-gray-300" />
+                    <PlanIcon
+                      className="text-gray-600 dark:text-gray-300"
+                      size={20}
+                    />
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
                     {plan.name}
@@ -372,8 +399,14 @@ export default function OnboardingPage() {
                 {/* Features */}
                 <ul className="space-y-2">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400">
-                      <Check size={14} className="text-emerald-500 shrink-0 mt-0.5" />
+                    <li
+                      key={feature}
+                      className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-400"
+                    >
+                      <Check
+                        className="text-emerald-500 shrink-0 mt-0.5"
+                        size={14}
+                      />
                       <span>{feature}</span>
                     </li>
                   ))}
@@ -396,7 +429,9 @@ export default function OnboardingPage() {
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
           Invite Your Team
         </h2>
-        <p className="text-sm text-gray-500 mt-2">Add your first team members or skip for now</p>
+        <p className="text-sm text-gray-500 mt-2">
+          Add your first team members or skip for now
+        </p>
       </div>
 
       <div className="space-y-3">
@@ -406,16 +441,16 @@ export default function OnboardingPage() {
             className="flex items-center gap-3 p-3 rounded-xl border border-default-200 dark:border-white/10 bg-white dark:bg-black/40"
           >
             <input
+              className="flex-1 px-3 py-2 rounded-lg bg-transparent text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none"
+              placeholder="colleague@company.com"
               type="email"
               value={member.email}
               onChange={(e) => updateTeamMember(idx, "email", e.target.value)}
-              placeholder="colleague@company.com"
-              className="flex-1 px-3 py-2 rounded-lg bg-transparent text-sm text-gray-900 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none"
             />
             <select
+              className="px-3 py-2 rounded-lg border border-default-200 dark:border-white/10 bg-default-50 dark:bg-white/5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none appearance-none cursor-pointer"
               value={member.role}
               onChange={(e) => updateTeamMember(idx, "role", e.target.value)}
-              className="px-3 py-2 rounded-lg border border-default-200 dark:border-white/10 bg-default-50 dark:bg-white/5 text-sm text-gray-700 dark:text-gray-300 focus:outline-none appearance-none cursor-pointer"
             >
               <option value="admin">Admin</option>
               <option value="developer">Developer</option>
@@ -423,8 +458,8 @@ export default function OnboardingPage() {
             </select>
             {teamMembers.length > 1 && (
               <button
-                onClick={() => removeTeamMember(idx)}
                 className="p-2 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-500/10 transition-all"
+                onClick={() => removeTeamMember(idx)}
               >
                 <Trash2 size={16} />
               </button>
@@ -434,8 +469,8 @@ export default function OnboardingPage() {
       </div>
 
       <button
-        onClick={addTeamMember}
         className="flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+        onClick={addTeamMember}
       >
         <Plus size={16} />
         Add Another
@@ -465,19 +500,22 @@ export default function OnboardingPage() {
         </label>
         {MODELS.map((model) => {
           const isSelected = defaultModel === model.id;
+
           return (
             <button
               key={model.id}
-              onClick={() => setDefaultModel(model.id)}
               className={`w-full flex items-center gap-4 p-4 rounded-xl border transition-all duration-200 text-left ${
                 isSelected
                   ? "border-primary bg-primary/5 dark:bg-primary/10 shadow-sm"
                   : "border-default-200 dark:border-white/10 bg-white dark:bg-black/40 hover:border-default-300"
               }`}
+              onClick={() => setDefaultModel(model.id)}
             >
               <div
                 className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-all ${
-                  isSelected ? "border-primary" : "border-default-300 dark:border-white/20"
+                  isSelected
+                    ? "border-primary"
+                    : "border-default-300 dark:border-white/20"
                 }`}
               >
                 {isSelected && (
@@ -488,7 +526,9 @@ export default function OnboardingPage() {
                 <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                   {model.name}
                 </p>
-                <p className="text-xs text-gray-500 mt-0.5">{model.description}</p>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {model.description}
+                </p>
               </div>
             </button>
           );
@@ -499,7 +539,7 @@ export default function OnboardingPage() {
       <div className="space-y-4 pt-4 border-t border-default-200 dark:border-white/10">
         <div className="flex items-center justify-between p-4 rounded-xl border border-default-200 dark:border-white/10 bg-white dark:bg-black/40">
           <div className="flex items-center gap-3">
-            <Shield size={18} className="text-emerald-500" />
+            <Shield className="text-emerald-500" size={18} />
             <div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 AI Guardrails
@@ -510,20 +550,23 @@ export default function OnboardingPage() {
             </div>
           </div>
           <button
-            onClick={() => setGuardrails(!guardrails)}
             className="transition-colors"
+            onClick={() => setGuardrails(!guardrails)}
           >
             {guardrails ? (
-              <ToggleRight size={32} className="text-emerald-500" />
+              <ToggleRight className="text-emerald-500" size={32} />
             ) : (
-              <ToggleLeft size={32} className="text-gray-300 dark:text-gray-600" />
+              <ToggleLeft
+                className="text-gray-300 dark:text-gray-600"
+                size={32}
+              />
             )}
           </button>
         </div>
 
         <div className="flex items-center justify-between p-4 rounded-xl border border-default-200 dark:border-white/10 bg-white dark:bg-black/40">
           <div className="flex items-center gap-3">
-            <Zap size={18} className="text-amber-500" />
+            <Zap className="text-amber-500" size={18} />
             <div>
               <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 Code Execution
@@ -534,13 +577,16 @@ export default function OnboardingPage() {
             </div>
           </div>
           <button
-            onClick={() => setCodeExecution(!codeExecution)}
             className="transition-colors"
+            onClick={() => setCodeExecution(!codeExecution)}
           >
             {codeExecution ? (
-              <ToggleRight size={32} className="text-emerald-500" />
+              <ToggleRight className="text-emerald-500" size={32} />
             ) : (
-              <ToggleLeft size={32} className="text-gray-300 dark:text-gray-600" />
+              <ToggleLeft
+                className="text-gray-300 dark:text-gray-600"
+                size={32}
+              />
             )}
           </button>
         </div>
@@ -549,7 +595,12 @@ export default function OnboardingPage() {
   );
 
   /* ── Render ──────────────────────────────────────────────────────── */
-  const stepRenderers = [renderOrgStep, renderPlanStep, renderTeamStep, renderAIConfigStep];
+  const stepRenderers = [
+    renderOrgStep,
+    renderPlanStep,
+    renderTeamStep,
+    renderAIConfigStep,
+  ];
 
   return (
     <div className="min-h-screen bg-default-50 dark:bg-[#0A0A0A] flex items-center justify-center p-6">
@@ -565,13 +616,13 @@ export default function OnboardingPage() {
         {/* Navigation */}
         <div className="flex items-center justify-between mt-6">
           <button
-            onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-            disabled={currentStep === 0}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all ${
               currentStep === 0
                 ? "text-gray-300 dark:text-gray-700 cursor-not-allowed"
                 : "text-gray-600 dark:text-gray-300 hover:bg-default-100 dark:hover:bg-white/5"
             }`}
+            disabled={currentStep === 0}
+            onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
           >
             <ChevronLeft size={16} />
             Previous
@@ -580,8 +631,8 @@ export default function OnboardingPage() {
           <div className="flex items-center gap-3">
             {currentStep === 2 && (
               <button
-                onClick={() => setCurrentStep(3)}
                 className="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-default-100 dark:hover:bg-white/5 transition-all"
+                onClick={() => setCurrentStep(3)}
               >
                 Skip
               </button>
@@ -589,22 +640,22 @@ export default function OnboardingPage() {
 
             {currentStep < STEPS.length - 1 ? (
               <button
-                onClick={() => setCurrentStep(currentStep + 1)}
-                disabled={!canProceed()}
                 className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${
                   canProceed()
                     ? "bg-black dark:bg-white text-white dark:text-black hover:opacity-90 shadow-lg"
                     : "bg-default-200 dark:bg-white/10 text-gray-400 cursor-not-allowed"
                 }`}
+                disabled={!canProceed()}
+                onClick={() => setCurrentStep(currentStep + 1)}
               >
                 Next
                 <ChevronRight size={16} />
               </button>
             ) : (
               <button
-                onClick={handleComplete}
-                disabled={isSubmitting}
                 className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/25 transition-all disabled:opacity-50"
+                disabled={isSubmitting}
+                onClick={handleComplete}
               >
                 {isSubmitting ? (
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />

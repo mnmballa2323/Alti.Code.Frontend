@@ -16,8 +16,6 @@ import { WorkspaceDock } from "@/components/WorkspaceDock";
 import { addTab } from "@/store/tabsSlice";
 import { setActiveWorkspace } from "@/store/systemSlice";
 import { setActiveProject } from "@/lib/project";
-import { Button } from "@heroui/react";
-import { PanelLeftOpen, PanelLeftClose } from "lucide-react";
 
 /**
  * Persistent layout wrapper for authenticated application routes.
@@ -28,7 +26,10 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
   const pathname = usePathname();
   const isNoSidebarRoute =
-    pathname?.startsWith("/admin") || pathname?.startsWith("/owner") || pathname === "/login" || pathname === "/";
+    pathname?.startsWith("/admin") ||
+    pathname?.startsWith("/owner") ||
+    pathname === "/login" ||
+    pathname === "/";
   const [isTauri, setIsTauri] = useState(false);
   const [headers, setHeaders] = useState<Record<string, string>>({});
 
@@ -42,7 +43,9 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
     if (pathname === "/new-chat" || pathname === "/chat") return "Let's Chat";
     if (pathname?.startsWith("/chat/")) return "Chat Session";
     const segment = pathname?.split("/").pop() || "";
+
     if (!segment) return "Home";
+
     return segment.charAt(0).toUpperCase() + segment.slice(1);
   };
   const pageTitle = getPageTitle();
@@ -51,6 +54,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
     if (typeof window !== "undefined") {
       const searchParams = new URLSearchParams(window.location.search);
       const projectParam = searchParams.get("project");
+
       if (projectParam) {
         dispatch(
           addTab({
@@ -58,7 +62,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
             projectPath: projectParam,
             activeView: pathname || "/chat",
             chatSessionId: null,
-          })
+          }),
         );
         dispatch(setActiveWorkspace(projectParam));
         setActiveProject({ id: projectParam, name: projectParam });
@@ -93,15 +97,18 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("inso_sidebar_open");
+
       setIsSidebarOpen(stored === null ? true : stored === "true");
     }
 
     const handleSidebarState = (e: Event) => {
       const customEvent = e as CustomEvent;
+
       setIsSidebarOpen(customEvent.detail);
     };
 
     window.addEventListener("sidebar-state-change", handleSidebarState);
+
     return () => {
       window.removeEventListener("sidebar-state-change", handleSidebarState);
     };
@@ -109,7 +116,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
 
   const handleToggleSidebar = () => {
     window.dispatchEvent(
-      new CustomEvent("toggle-sidebar", { detail: !isSidebarOpen })
+      new CustomEvent("toggle-sidebar", { detail: !isSidebarOpen }),
     );
   };
 
@@ -137,8 +144,6 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
             >
               {/* Left spacer for macOS window traffic light buttons */}
               <div className="w-[76px] shrink-0" />
-
-
             </div>
           )}
 

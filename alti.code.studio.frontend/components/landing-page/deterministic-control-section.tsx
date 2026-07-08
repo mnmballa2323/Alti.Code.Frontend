@@ -155,7 +155,9 @@ export default function DeterministicControlSection() {
             Absolute Security.
           </h3>
           <p className="text-xl text-zinc-400 leading-relaxed font-medium text-balance max-w-3xl">
-            Most AI tools are unpredictable. Inso Code is built for enterprise engineering teams, combining native guardrails and mandatory TDD workflows to build robust production systems.
+            Most AI tools are unpredictable. Inso Code is built for enterprise
+            engineering teams, combining native guardrails and mandatory TDD
+            workflows to build robust production systems.
           </p>
         </div>
 
@@ -247,7 +249,7 @@ export default function DeterministicControlSection() {
                     <g
                       className={`transition-colors duration-500 ${
                         isActive ? "text-white" : "text-zinc-400"
-                    }`}
+                      }`}
                     >
                       {agent.iconPath}
                     </g>

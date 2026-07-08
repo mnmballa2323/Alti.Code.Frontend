@@ -1,7 +1,7 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState, Suspense, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState, Suspense } from "react";
 import { CheckCircle2, ArrowUp, Paperclip } from "lucide-react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
@@ -76,6 +76,7 @@ function AgentPageContent() {
     if (!agentId) {
       setCurrentAgent(null);
       setSuggestions([]);
+
       return;
     }
 
@@ -84,9 +85,11 @@ function AgentPageContent() {
         const res = await axios.get(`${API_BASE_URL}/agents/custom`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
+
         if (res.data?.success) {
           const list = res.data.data || [];
           const found = list.find((a: any) => a.id === agentId);
+
           if (found) {
             setCurrentAgent(found);
             // Setup suggestions based on ID

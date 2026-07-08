@@ -8,7 +8,6 @@ interface SettingsState {
   telemetryLevel: "standard" | "verbose";
   openClawEnabled: boolean;
 
-
   // IDE & Editor Preferences
   editorFontSize: number;
   editorWordWrap: boolean;
@@ -24,7 +23,6 @@ interface SettingsState {
   setDefaultModel: (model: string) => void;
   setTelemetryLevel: (level: "standard" | "verbose") => void;
   setOpenClawEnabled: (enabled: boolean) => void;
-
 
   setEditorFontSize: (size: number) => void;
   setEditorWordWrap: (enabled: boolean) => void;
@@ -43,7 +41,6 @@ export const useSettingsStore = create<SettingsState>()(
       telemetryLevel: "standard",
       openClawEnabled: false,
 
-
       editorFontSize: 14,
       editorWordWrap: true,
       editorMinimap: true,
@@ -56,7 +53,6 @@ export const useSettingsStore = create<SettingsState>()(
       setDefaultModel: (model) => set({ defaultModel: model }),
       setTelemetryLevel: (level) => set({ telemetryLevel: level }),
       setOpenClawEnabled: (enabled) => set({ openClawEnabled: enabled }),
-
 
       setEditorFontSize: (size) => set({ editorFontSize: size }),
       setEditorWordWrap: (enabled) => set({ editorWordWrap: enabled }),

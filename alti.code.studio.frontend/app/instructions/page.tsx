@@ -34,6 +34,7 @@ export default function InstructionsPage() {
       instructions: { id: string; name: string }[];
       guardrails: { id: string; name: string }[];
     }>(agentId, "rules", { instructions: [], guardrails: [] });
+
     setInstructions(local.instructions);
     setGuardrails(local.guardrails);
 
@@ -44,6 +45,7 @@ export default function InstructionsPage() {
           headers: { Authorization: `Bearer ${token}` },
           params: agentId ? { agentId } : undefined,
         });
+
         if (res.data?.success) {
           setInstructions(res.data.data.instructions || []);
           setGuardrails(res.data.data.guardrails || []);
@@ -52,6 +54,7 @@ export default function InstructionsPage() {
         // offline — already loaded from localStorage
       }
     };
+
     fetchRules();
   }, [token, agentId]);
 
@@ -89,6 +92,7 @@ export default function InstructionsPage() {
       ...instructions,
       { id: "inst-" + Date.now(), name: inputValue.trim() },
     ];
+
     setInstructions(updated);
     setInputValue("");
     await saveRules(updated);
@@ -105,13 +109,20 @@ export default function InstructionsPage() {
 
         <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide flex flex-col items-center justify-center">
           <div className="w-full max-w-2xl mb-14">
-            <form className="relative flex items-center w-full shadow-sm rounded-2xl" onSubmit={handleSend}>
+            <form
+              className="relative flex items-center w-full shadow-sm rounded-2xl"
+              onSubmit={handleSend}
+            >
               <Input
                 classNames={{
                   inputWrapper:
                     "!bg-white dark:!bg-[#111111] data-[hover=true]:!bg-white data-[hover=true]:dark:!bg-[#111111] group-data-[focus=true]:!bg-white group-data-[focus=true]:dark:!bg-[#111111] border border-default-200 dark:border-default-100 shadow-sm rounded-2xl h-14 text-base pr-14",
                 }}
-                placeholder={project ? `Instruction for ${project.name}…` : "Enter a new system instruction..."}
+                placeholder={
+                  project
+                    ? `Instruction for ${project.name}…`
+                    : "Enter a new system instruction..."
+                }
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />

@@ -1,6 +1,5 @@
 import React from "react";
 
-
 export const LibertyIcon = ({ className }: { className?: string }) => (
   <svg
     className={className}

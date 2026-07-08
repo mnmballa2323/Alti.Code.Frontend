@@ -521,8 +521,8 @@ export default function CloudPage() {
                             </div>
                             <div>
                               <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
-                                GCP Sovereign AI Gateway Routing (Sovereign
-                                GCP Inference)
+                                GCP Sovereign AI Gateway Routing (Sovereign GCP
+                                Inference)
                               </h4>
                               <p className="text-[10px] text-gray-400">
                                 Sovereign proxy path enforced for foundational

@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { useSession } from "next-auth/react";
-import { Microscope } from "lucide-react";
-import { cn } from "@heroui/react";
 
 import ChatBotLayout from "@/components/ChatbotLayout";
 import MessageContainer from "@/components/message-container";
@@ -15,11 +13,6 @@ import {
   setMessages,
   sendMessage,
 } from "@/store/messagesSlice";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { RootState } from "@/store";
 import useFetchSingleData from "@/hooks/useFetchSingleData";
 import { AppDispatch } from "@/store";

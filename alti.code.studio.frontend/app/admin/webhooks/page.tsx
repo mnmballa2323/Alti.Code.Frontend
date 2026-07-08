@@ -16,8 +16,6 @@ import {
   Zap,
 } from "lucide-react";
 
-import { API_URL } from "@/lib/config";
-
 interface WebhookEndpoint {
   id: string;
   url: string;
@@ -134,9 +132,15 @@ export default function WebhooksPage() {
     setWebhooks((prev) =>
       prev.map((w) =>
         w.id === id
-          ? { ...w, status: w.status === "active" ? ("paused" as const) : ("active" as const) }
-          : w
-      )
+          ? {
+              ...w,
+              status:
+                w.status === "active"
+                  ? ("paused" as const)
+                  : ("active" as const),
+            }
+          : w,
+      ),
     );
   };
 
@@ -147,10 +151,13 @@ export default function WebhooksPage() {
   const formatRelative = (iso: string) => {
     const diff = Date.now() - new Date(iso).getTime();
     const mins = Math.floor(diff / 60000);
+
     if (mins < 60) return `${mins}m ago`;
     const hrs = Math.floor(mins / 60);
+
     if (hrs < 24) return `${hrs}h ago`;
     const days = Math.floor(hrs / 24);
+
     return `${days}d ago`;
   };
 
@@ -292,17 +299,17 @@ export default function WebhooksPage() {
                   <div className="flex items-center gap-1.5">
                     <button
                       className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-600 dark:text-neutral-400 transition-all shadow-sm cursor-pointer"
-                      type="button"
                       title="Send test event"
+                      type="button"
                     >
                       <Play className="w-3 h-3" />
                       Test
                     </button>
                     <button
                       className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-600 dark:text-neutral-400 transition-all shadow-sm cursor-pointer"
+                      title={isPaused ? "Resume" : "Pause"}
                       type="button"
                       onClick={() => handleToggleStatus(wh.id)}
-                      title={isPaused ? "Resume" : "Pause"}
                     >
                       {isPaused ? (
                         <>
@@ -318,17 +325,17 @@ export default function WebhooksPage() {
                     </button>
                     <button
                       className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#161b22] hover:bg-neutral-50 dark:hover:bg-neutral-800/50 text-neutral-600 dark:text-neutral-400 transition-all shadow-sm cursor-pointer"
-                      type="button"
                       title="Edit endpoint"
+                      type="button"
                     >
                       <Pencil className="w-3 h-3" />
                       Edit
                     </button>
                     <button
                       className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border border-rose-200 dark:border-rose-800/50 bg-white dark:bg-[#161b22] hover:bg-rose-50 dark:hover:bg-rose-950/20 text-rose-600 dark:text-rose-400 transition-all shadow-sm cursor-pointer"
+                      title="Delete endpoint"
                       type="button"
                       onClick={() => handleDelete(wh.id)}
-                      title="Delete endpoint"
                     >
                       <Trash2 className="w-3 h-3" />
                       Delete

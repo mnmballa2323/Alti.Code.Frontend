@@ -104,7 +104,7 @@ export default function AgentForgeSection() {
   return (
     <section className="w-full py-32 bg-[#030014] text-white px-4 sm:px-6 lg:px-8 relative overflow-hidden">
       <div className="absolute top-1/2 left-3/4 w-[450px] h-[450px] bg-blue-900/10 rounded-full blur-[130px] pointer-events-none z-0" />
-      
+
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center relative z-10">
         {/* Left Side: Copy */}
         <div className="flex flex-col gap-8 lg:order-2 lg:-translate-x-12">
@@ -114,7 +114,9 @@ export default function AgentForgeSection() {
               Self Expanding Swarm.
             </h3>
             <p className="text-xl text-zinc-400 leading-relaxed font-medium max-w-3xl">
-              Specify your database, API, or integration requirements and allow the forge to autonomously construct, test, and deploy a new specialized expert to your swarm in seconds.
+              Specify your database, API, or integration requirements and allow
+              the forge to autonomously construct, test, and deploy a new
+              specialized expert to your swarm in seconds.
             </p>
           </div>
         </div>

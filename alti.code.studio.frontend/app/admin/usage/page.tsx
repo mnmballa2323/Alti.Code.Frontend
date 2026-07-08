@@ -70,7 +70,7 @@ export default function TokenUsagePage() {
   const [metrics, setMetrics] = useState<CostMetrics | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProvider, setSelectedProvider] = useState<Provider>("Claude");
+  const [selectedProvider, setSelectedProvider] = useState<Provider>("Gemini");
 
   const getProviderIcon = (p: Provider) => {
     switch (p) {
@@ -208,7 +208,7 @@ export default function TokenUsagePage() {
       <div className="p-8 max-w-6xl mx-auto space-y-6">
         <div className="flex justify-center mb-8">
           <div className="flex p-1 space-x-1 bg-default-200/50 dark:bg-default-50/10 rounded-xl shadow-inner">
-            {(["Claude", "Gemini"] as Provider[]).map((p) => (
+            {(["Gemini", "Claude"] as Provider[]).map((p) => (
               <button
                 key={p}
                 className={`px-8 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
