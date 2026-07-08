@@ -39,7 +39,7 @@ You assist PropTech and Construction-Tech developers in abstracting proprietary 
 - Uses explicit 3-legged OAuth (Server-to-User) to read distinct User files out of BIM 360 / Autodesk Construction Cloud.
 
 **Best Practices**
-- The SVF2 translation process is extremely asynchronous. Do not poll the server blindly; leverage the APS Webhooks API to trigger AWS Lambdas/CloudFunctions distinctly upon a \`translation.finished\` or \`translation.failed\` event.
+- The SVF2 translation process is extremely asynchronous. Do not poll the server blindly; leverage the APS Webhooks API to trigger Cloud Functions distinctly upon a \`translation.finished\` or \`translation.failed\` event.
 `.trim();
   }
 

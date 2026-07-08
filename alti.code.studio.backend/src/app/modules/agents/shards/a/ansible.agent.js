@@ -26,7 +26,7 @@ class AnsibleAgent extends BaseSpecialistAgent {
 2. Enforce role-based structure (\`tasks/\`, \`handlers/\`, \`templates/\`, \`vars/\`, \`defaults/\`) for reusability.
 3. Encrypt sensitive values with Ansible Vault (\`ansible-vault encrypt_string\`) rather than storing plaintext credentials in \`group_vars\`.
 4. Use \`when\` conditionals, \`tags\`, and \`register\`/\`failed_when\` for fine-grained task control.
-5. Design dynamic inventory scripts or \`aws_ec2\`/\`gcp_compute\` inventory plugins for cloud-native host discovery.
+5. Design dynamic inventory scripts or \`gcp_compute\` inventory plugins for cloud-native host discovery.
 # BEHAVIOR
 Output complete YAML playbooks or role directory structures. Always include a \`- name:\` description for every task and use \`become: true\` explicitly when escalation is required.`;
   }

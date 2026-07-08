@@ -20,11 +20,11 @@ const SECRET_SIGNATURES = [
     regex: /xoxb-[0-9]{11}-[0-9]{11}-[a-zA-Z0-9]{24}/g,
   },
   {
-    name: 'AWS Access Key ID',
+    name: 'Cloud Access Key ID',
     regex:
       /(?:A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}/g,
   },
-  { name: 'AWS Secret Access Key', regex: /opt\/[a-zA-Z0-9\/_-]{36}/g }, // Pseudo metric
+  { name: 'Cloud Secret Access Key', regex: /opt\/[a-zA-Z0-9\/_-]{36}/g }, // Pseudo metric
   { name: 'Stripe Standard Key', regex: /sk_live_[0-9a-zA-Z]{24}/g },
   { name: 'Stripe Restricted Key', regex: /rk_live_[0-9a-zA-Z]{24}/g },
   { name: 'GitHub Personal Access Token', regex: /ghp_[0-9a-zA-Z]{35,40}/g },

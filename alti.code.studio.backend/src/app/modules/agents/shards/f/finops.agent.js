@@ -28,26 +28,26 @@ class FinopsAgent extends BaseSpecialistAgent {
       tier: 25,
       version: '6.8.0',
       capabilities: [
-        'Analyze AWS Cost Explorer and GCP Billing data',
+        'Analyze GCP Billing data',
         'Arbitrate spot instances and compute costs across providers',
         'Simulate infrastructure cost optimization via Terraform changes',
         'Route workloads based on real-time grid carbon intensity (Green Software)',
       ],
     });
 
-    // Simulated Live Pricing Data (In production, replace with live AWS/GCP/GCP API polling)
+    // Simulated Live Pricing Data (In production, replace with live GCP API polling)
     this.basePrices = {
-      aws: { computePerHour: 0.0416, storagePerGb: 0.023 },
-      gcp: { computePerHour: 0.0385, storagePerGb: 0.02 },
-      gcp: { computePerHour: 0.042, storagePerGb: 0.021 },
+      gcpOnDemand: { computePerHour: 0.0416, storagePerGb: 0.023 },
+      gcpCommitted1yr: { computePerHour: 0.0385, storagePerGb: 0.02 },
+      gcpCommitted3yr: { computePerHour: 0.042, storagePerGb: 0.021 },
     };
 
     // Simulated Carbon Intensity data (gCO2eq/kWh) - Normally fetched from WattTime / Electricity Maps
     this.carbonData = {
-      'us-east-1': 450, // Dirtier grid
-      'us-west-2': 210, // Hydro
-      'eu-north-1': 45, // Wind/Solar
-      'ap-southeast-1': 520, // Coal heavy
+      'us-central1': 450, // Standard grid
+      'us-west1': 210, // Hydro
+      'europe-north1': 45, // Wind/Solar
+      'asia-southeast1': 520, // Coal heavy
     };
   }
 
@@ -89,9 +89,9 @@ class FinopsAgent extends BaseSpecialistAgent {
         target: `Migrate to ${cheapestProvider.toUpperCase()}`,
         savings:
           (
-            ((result.aws.totalCost - lowestCost) / result.aws.totalCost) *
+            ((result.gcpOnDemand.totalCost - lowestCost) / result.gcpOnDemand.totalCost) *
             100
-          ).toFixed(1) + '% vs AWS standard',
+          ).toFixed(1) + '% vs GCP on-demand',
         details: result,
       };
     } catch (error) {

@@ -36,7 +36,7 @@ Your core expertise revolves around designing extremely secure, highly available
 
 # IDENTITY & SECURITY
 - **OCI IAM Policies**: The syntax is unique and human-readable. Structure must be: \`Allow group <group_name> to <verb> <resource-type> in compartment <compartment_name>\`.
-- **Dynamic Groups**: The OCI equivalent of AWS Instance Profiles. Create rules matching instance OCIDs so compute nodes can assume permissions without hardcoded keys.
+- **Dynamic Groups**: The OCI equivalent of GCP Service Accounts. Create rules matching instance OCIDs so compute nodes can assume permissions without hardcoded keys.
 - **Principals**: Always use Resource Principal (serverless) or Instance Principal (compute) authentication for code executing inside OCI.
 
 # OUTPUT STANDARDS

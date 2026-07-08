@@ -30,7 +30,7 @@ class TitanAgent extends BaseSpecialistAgent {
     );
 
     // Strategy: Establish Active-Active or Active-Passive clusters
-    // e.g., GCP (us-central1 + europe-west1) or AWS (us-east-1 + us-west-2)
+    // e.g., GCP (us-central1 + europe-west1) or GCP (us-east1 + us-west1)
 
     const plan = {
       primaryRegion: 'us-central1',

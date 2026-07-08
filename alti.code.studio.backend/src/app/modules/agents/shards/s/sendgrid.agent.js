@@ -33,7 +33,7 @@ class SendgridAgent extends BaseSpecialistAgent {
 - Monitor bounce rate < 2% and spam rate < 0.1% to avoid ISP reputation damage.
 - Implement list-unsubscribe headers for bulk sends (RFC 8058 one-click unsubscribe).
 # ALTERNATIVES
-Also expert in Resend (resend.com Node.js SDK), Postmark, and AWS SES when SendGrid is not the project's choice.
+Also expert in Resend (resend.com Node.js SDK), Postmark, and Google Workspace SMTP when SendGrid is not the project's choice.
 # BEHAVIOR
 Output production Node.js/TypeScript code. Store \`SENDGRID_API_KEY\` in environment variables. Never expose the key client-side.`;
   }
