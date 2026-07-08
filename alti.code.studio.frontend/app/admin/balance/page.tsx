@@ -5,7 +5,13 @@ import { Wallet, ArrowUpRight, ArrowDownRight, Plus, RefreshCw } from "lucide-re
 
 export default function BalancePage() {
   const currentBalance = 4250.00;
-  const isAutoRechargeEnabled = true;
+  const [isAutoRechargeEnabled, setIsAutoRechargeEnabled] = React.useState(true);
+  const [isAutoRechargeOpen, setIsAutoRechargeOpen] = React.useState(false);
+  const [modalAutoRechargeEnabled, setModalAutoRechargeEnabled] = React.useState(true);
+  const [autoRechargeThreshold, setAutoRechargeThreshold] = React.useState<string>("");
+  const [autoRechargeAmount, setAutoRechargeAmount] = React.useState<string>("");
+  const [isThresholdFocused, setIsThresholdFocused] = React.useState(false);
+  const [isRechargeFocused, setIsRechargeFocused] = React.useState(false);
   
   const [isAddFundsOpen, setIsAddFundsOpen] = React.useState(false);
   const [selectedPreset, setSelectedPreset] = React.useState<number | null>(100);
@@ -19,6 +25,14 @@ export default function BalancePage() {
       setCustomAmount("");
     }
   }, [isAddFundsOpen]);
+
+  React.useEffect(() => {
+    if (isAutoRechargeOpen) {
+      setModalAutoRechargeEnabled(isAutoRechargeEnabled);
+      setIsThresholdFocused(false);
+      setIsRechargeFocused(false);
+    }
+  }, [isAutoRechargeOpen, isAutoRechargeEnabled]);
 
   const finalAmount = customAmount ? Number(customAmount) : (selectedPreset || 0);
 
@@ -62,7 +76,10 @@ export default function BalancePage() {
                 <Plus className="w-4 h-4" />
                 Add Funds
               </button>
-              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-2xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2">
+              <button 
+                onClick={() => setIsAutoRechargeOpen(true)}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 px-6 rounded-2xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2"
+              >
                 <RefreshCw className="w-4 h-4" />
                 Auto-Recharge
               </button>
@@ -123,15 +140,7 @@ export default function BalancePage() {
               </div>
             </div>
 
-            <div className="bg-neutral-100 dark:bg-neutral-800 p-4 rounded-xl border border-transparent mb-8 flex items-center gap-3">
-              <div className="w-10 h-6 bg-white dark:bg-neutral-800 rounded shadow-sm border border-neutral-200 dark:border-neutral-700 flex items-center justify-center text-[10px] font-black text-blue-600">
-                VISA
-              </div>
-              <div className="flex-1">
-                <p className="text-sm font-bold text-neutral-900 dark:text-white">Visa ending in 4242</p>
-                <p className="text-xs text-neutral-500">Saved Payment Method</p>
-              </div>
-            </div>
+
 
             <div className="flex gap-3">
               <button 
@@ -146,6 +155,91 @@ export default function BalancePage() {
                 className="flex-1 py-3.5 rounded-xl font-bold text-sm bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isProcessing ? "Processing..." : `Pay $${finalAmount.toLocaleString()}`}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Auto-Recharge Modal */}
+      {isAutoRechargeOpen && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsAutoRechargeOpen(false);
+          }}
+        >
+          <div className="bg-white dark:bg-neutral-900 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-neutral-200 dark:border-neutral-800 animate-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between mb-8 p-4 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-transparent">
+              <div>
+                <p className="font-bold text-neutral-900 dark:text-white">Enable Auto-Recharge</p>
+                <p className="text-xs text-neutral-500">Automatically add funds when balance is low</p>
+              </div>
+              <button 
+                onClick={() => setModalAutoRechargeEnabled(!modalAutoRechargeEnabled)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${modalAutoRechargeEnabled ? 'bg-black dark:bg-white' : 'bg-neutral-300 dark:bg-neutral-600'}`}
+              >
+                <span className={`inline-block h-4 w-4 transform rounded-full bg-white dark:bg-black transition-transform ${modalAutoRechargeEnabled ? 'translate-x-6' : 'translate-x-1'}`} />
+              </button>
+            </div>
+
+            <div className={`transition-opacity duration-300 ${modalAutoRechargeEnabled ? 'opacity-100' : 'opacity-40 pointer-events-none'}`}>
+              <div className="mb-6">
+                <div className="relative">
+                  {(isThresholdFocused || autoRechargeThreshold) && (
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black dark:text-white font-bold text-lg">$</span>
+                  )}
+                  <input 
+                    type="text" 
+                    placeholder={isThresholdFocused ? "" : "Minimum Balance"}
+                    value={autoRechargeThreshold ? Number(autoRechargeThreshold).toLocaleString() : ""}
+                    onFocus={() => setIsThresholdFocused(true)}
+                    onBlur={() => setIsThresholdFocused(false)}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/\D/g, "");
+                      setAutoRechargeThreshold(raw);
+                    }}
+                    className={`w-full h-12 pr-4 rounded-xl border border-transparent bg-neutral-100 dark:bg-neutral-800 font-bold text-lg placeholder:font-normal placeholder:text-sm focus:outline-none transition-all ${isThresholdFocused || autoRechargeThreshold ? 'pl-8' : 'pl-4'}`}
+                  />
+                </div>
+              </div>
+
+              <div className="mb-8">
+                <div className="relative">
+                  {(isRechargeFocused || autoRechargeAmount) && (
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-black dark:text-white font-bold text-lg">$</span>
+                  )}
+                  <input 
+                    type="text" 
+                    placeholder={isRechargeFocused ? "" : "Recharge Amount"}
+                    value={autoRechargeAmount ? Number(autoRechargeAmount).toLocaleString() : ""}
+                    onFocus={() => setIsRechargeFocused(true)}
+                    onBlur={() => setIsRechargeFocused(false)}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/\D/g, "");
+                      setAutoRechargeAmount(raw);
+                    }}
+                    className={`w-full h-12 pr-4 rounded-xl border border-transparent bg-neutral-100 dark:bg-neutral-800 font-bold text-lg placeholder:font-normal placeholder:text-sm focus:outline-none transition-all ${isRechargeFocused || autoRechargeAmount ? 'pl-8' : 'pl-4'}`}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3 mt-8">
+              <button 
+                onClick={() => setIsAutoRechargeOpen(false)}
+                className="flex-1 py-3.5 rounded-xl font-bold text-sm bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-700 dark:hover:bg-neutral-600 text-neutral-900 dark:text-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  setIsAutoRechargeEnabled(modalAutoRechargeEnabled);
+                  setIsAutoRechargeOpen(false);
+                }}
+                className="flex-1 py-3.5 rounded-xl font-bold text-sm bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 text-white dark:text-black transition-colors flex items-center justify-center gap-2"
+              >
+                Save
               </button>
             </div>
           </div>
