@@ -44,23 +44,12 @@ const SettingsModal = () => {
     maxConcurrentAgents,
     agentTimeoutSecs,
 
-    // Vault-bound credentials
-    azureEndpoint,
-    azureApiKey,
-    azureSovereignTenantId,
-    azureSovereignClientId,
-    azureSovereignClientSecret,
 
     setGeminiApiKey,
     setGithubToken,
     setDefaultModel,
     setTelemetryLevel,
     setOpenClawEnabled,
-    setAzureEndpoint,
-    setAzureApiKey,
-    setAzureSovereignTenantId,
-    setAzureSovereignClientId,
-    setAzureSovereignClientSecret,
     setEditorFontSize,
     setEditorWordWrap,
     setEditorMinimap,
@@ -82,14 +71,6 @@ const SettingsModal = () => {
           const keys = responseData.data;
 
           if (keys.geminiApiKey) setGeminiApiKey(keys.geminiApiKey);
-          if (keys.azureEndpoint) setAzureEndpoint(keys.azureEndpoint);
-          if (keys.azureApiKey) setAzureApiKey(keys.azureApiKey);
-          if (keys.azureSovereignTenantId)
-            setAzureSovereignTenantId(keys.azureSovereignTenantId);
-          if (keys.azureSovereignClientId)
-            setAzureSovereignClientId(keys.azureSovereignClientId);
-          if (keys.azureSovereignClientSecret)
-            setAzureSovereignClientSecret(keys.azureSovereignClientSecret);
         }
       } catch (e) {
         console.error("Failed to load keys from Vault:", e);
@@ -102,11 +83,6 @@ const SettingsModal = () => {
   }, [
     isOpen,
     setGeminiApiKey,
-    setAzureEndpoint,
-    setAzureApiKey,
-    setAzureSovereignTenantId,
-    setAzureSovereignClientId,
-    setAzureSovereignClientSecret,
   ]);
 
   const handleSave = async () => {
@@ -122,11 +98,6 @@ const SettingsModal = () => {
         },
         body: JSON.stringify({
           geminiApiKey,
-          azureEndpoint,
-          azureApiKey,
-          azureSovereignTenantId,
-          azureSovereignClientId,
-          azureSovereignClientSecret,
         }),
       });
     } catch (e) {
@@ -295,57 +266,7 @@ const SettingsModal = () => {
                       onValueChange={setGithubToken}
                     />
 
-                    <Divider className="my-2" />
 
-                    <div className="text-xs font-semibold text-gray-400">
-                      Azure OpenAI Foundry
-                    </div>
-                    <Input
-                      label="Azure Endpoint URL"
-                      placeholder="https://myendpoint.openai.azure.com"
-                      type="text"
-                      value={azureEndpoint}
-                      variant="bordered"
-                      onValueChange={setAzureEndpoint}
-                    />
-                    <Input
-                      label="Azure API Key"
-                      placeholder="Azure API Key..."
-                      type="password"
-                      value={azureApiKey}
-                      variant="bordered"
-                      onValueChange={setAzureApiKey}
-                    />
-
-                    <Divider className="my-2" />
-
-                    <div className="text-xs font-semibold text-gray-400">
-                      Azure Sovereign (IL6)
-                    </div>
-                    <Input
-                      label="Tenant ID"
-                      placeholder="3b2e5a1c-7d9e-4a6f-b2c4-d8f9a0e1b2c3"
-                      type="text"
-                      value={azureSovereignTenantId}
-                      variant="bordered"
-                      onValueChange={setAzureSovereignTenantId}
-                    />
-                    <Input
-                      label="Client ID (SPN)"
-                      placeholder="9a8b7c6d-5e4f-3a2b-1c0d-9e8f7a6b5c4d"
-                      type="email"
-                      value={azureSovereignClientId}
-                      variant="bordered"
-                      onValueChange={setAzureSovereignClientId}
-                    />
-                    <Input
-                      label="Client Secret"
-                      placeholder="-----BEGIN PRIVATE KEY-----..."
-                      type="password"
-                      value={azureSovereignClientSecret}
-                      variant="bordered"
-                      onValueChange={setAzureSovereignClientSecret}
-                    />
                   </div>
 
                   <Divider />

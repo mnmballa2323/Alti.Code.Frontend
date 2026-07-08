@@ -1,1 +1,0 @@
-Sprint Goal: Deploy highly available Redis cache cluster on Azure using Azure Cache for Redis.

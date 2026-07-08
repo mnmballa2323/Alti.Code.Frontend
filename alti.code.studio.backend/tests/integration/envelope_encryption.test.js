@@ -15,9 +15,6 @@ vi.mock('../../src/config/prisma.js', () => {
     gcpProjectId: '',
     gcpClientEmail: '',
     gcpPrivateKey: '',
-    awsAccessKeyId: '',
-    awsSecretAccessKey: '',
-    awsRegion: '',
   };
 
   const mockPrisma = {

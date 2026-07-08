@@ -828,7 +828,7 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       // Mock axios
       const axios = await import('axios');
       const mockPost = vi.spyOn(axios.default, 'post').mockResolvedValue({
-        data: { result: 'BYOC OpenStack Bare-Metal Node Result' },
+        data: { result: 'BYOC Google Distributed Cloud Bare-Metal Node Result' },
       });
 
       // Register tenant with BYOC config
@@ -861,7 +861,7 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         mockConfig,
       );
       expect(resultObj.results[0]).toBe(
-        'BYOC OpenStack Bare-Metal Node Result',
+        'BYOC Google Distributed Cloud Bare-Metal Node Result',
       );
       expect(mockPost).toHaveBeenCalledWith(
         'http://10.240.0.10:5000/api/v1/agent-runner/execute',
@@ -976,7 +976,7 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
     });
   });
 
-  describe('Phase 2 Hardening: BYOK, SIEM, FIPS, and OpenStack Packaging', () => {
+  describe('Phase 2 Hardening: BYOK, SIEM, FIPS, and Google Distributed Cloud Packaging', () => {
     afterEach(() => {
       vi.restoreAllMocks();
     });

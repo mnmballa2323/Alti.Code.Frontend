@@ -8,12 +8,6 @@ interface SettingsState {
   telemetryLevel: "standard" | "verbose";
   openClawEnabled: boolean;
 
-  // New secure Vault database credentials
-  azureEndpoint: string;
-  azureApiKey: string;
-  azureSovereignTenantId: string;
-  azureSovereignClientId: string;
-  azureSovereignClientSecret: string;
 
   // IDE & Editor Preferences
   editorFontSize: number;
@@ -31,11 +25,6 @@ interface SettingsState {
   setTelemetryLevel: (level: "standard" | "verbose") => void;
   setOpenClawEnabled: (enabled: boolean) => void;
 
-  setAzureEndpoint: (endpoint: string) => void;
-  setAzureApiKey: (key: string) => void;
-  setAzureSovereignTenantId: (projectId: string) => void;
-  setAzureSovereignClientId: (email: string) => void;
-  setAzureSovereignClientSecret: (key: string) => void;
 
   setEditorFontSize: (size: number) => void;
   setEditorWordWrap: (enabled: boolean) => void;
@@ -54,12 +43,6 @@ export const useSettingsStore = create<SettingsState>()(
       telemetryLevel: "standard",
       openClawEnabled: false,
 
-      // Defaults for Vault credentials
-      azureEndpoint: "",
-      azureApiKey: "",
-      azureSovereignTenantId: "",
-      azureSovereignClientId: "",
-      azureSovereignClientSecret: "",
 
       editorFontSize: 14,
       editorWordWrap: true,
@@ -74,14 +57,6 @@ export const useSettingsStore = create<SettingsState>()(
       setTelemetryLevel: (level) => set({ telemetryLevel: level }),
       setOpenClawEnabled: (enabled) => set({ openClawEnabled: enabled }),
 
-      setAzureEndpoint: (endpoint) => set({ azureEndpoint: endpoint }),
-      setAzureApiKey: (key) => set({ azureApiKey: key }),
-      setAzureSovereignTenantId: (projectId) =>
-        set({ azureSovereignTenantId: projectId }),
-      setAzureSovereignClientId: (email) =>
-        set({ azureSovereignClientId: email }),
-      setAzureSovereignClientSecret: (key) =>
-        set({ azureSovereignClientSecret: key }),
 
       setEditorFontSize: (size) => set({ editorFontSize: size }),
       setEditorWordWrap: (enabled) => set({ editorWordWrap: enabled }),
