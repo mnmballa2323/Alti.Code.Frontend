@@ -62,7 +62,7 @@ function ThirdSection() {
       title: "Enterprise Integration ",
       img: "/insocode4.png",
       subTitle: "Secure, scalable, and works with your existing tools.",
-      des: "Built on claude technology with intelligent routing for optimal speed and performance across many native tool integrations including GitHub, Jira, Azure, and Kubernetes. Enterprise-grade security features SOC 2 compliance, encrypted storage, and flexible on-premises deployment options. Simple configuration lets you define standards, approval workflows, and deployment rules that align perfectly with your organization's governance and special requirements.",
+      des: "Built on claude technology with intelligent routing for optimal speed and performance across many native tool integrations including GitHub, Jira, GCP, and Kubernetes. Enterprise-grade security features SOC 2 compliance, encrypted storage, and flexible on-premises deployment options. Simple configuration lets you define standards, approval workflows, and deployment rules that align perfectly with your organization's governance and special requirements.",
       bulletsTitle: [
         "Select Model",
         "Tool Integrations",
@@ -71,7 +71,7 @@ function ThirdSection() {
       ],
       bulletDesc: [
         "Choose between powerful models for optimal speed and maximum development efficiency.",
-        "Native connections to GitHub, Jira, Azure, Kubernetes, and your entire toolchain.",
+        "Native connections to GitHub, Jira, GCP, Kubernetes, and your entire toolchain.",
         "SOC 2 compliance, encrypted storage, and on-premises deployment options for enterprise.",
         "Define standards, approval workflows, and deployment rules with simple configuration.",
       ],

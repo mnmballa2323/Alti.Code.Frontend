@@ -44,7 +44,7 @@ const SYMBOLS = [
   "~/",
   "IL5",
   "IL6",
-  "Azure",
+  "GCP",
   "SQL",
   "CSS",
   "HTML",

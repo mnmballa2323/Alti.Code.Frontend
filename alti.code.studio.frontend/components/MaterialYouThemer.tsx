@@ -4,9 +4,9 @@ import { useEffect } from "react";
 import { themeFromImage, applyTheme } from "@material/material-color-utilities";
 
 /**
- * Azure Fluent Design Themer.
+ * GCP Material You Design Themer.
  * Automatically extracts the dominant color from a given brand image and
- * dynamically applies a beautiful, accessible Azure Fluent Design
+ * dynamically applies a beautiful, accessible GCP Material You Design
  * color palette to the entire application's CSS variables at runtime.
  */
 export function MaterialYouThemer({ imageUrl }: { imageUrl: string }) {

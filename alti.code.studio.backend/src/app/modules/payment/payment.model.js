@@ -24,8 +24,6 @@ const SubscriptionSchema = new mongoose.Schema(
         'build',
         'scale',
         'command',
-        'enterprise-aws',
-        'enterprise-gcp',
         'enterprise-gcp',
       ],
     },

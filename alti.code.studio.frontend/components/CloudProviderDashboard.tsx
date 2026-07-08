@@ -86,7 +86,7 @@ export default function CloudProviderDashboard({
       icon: Lock,
       items: [
         {
-          name: "Azure Tenant SPN",
+          name: "GCP Tenant SPN",
           key: "3b2e5a1c...f8a",
           full: "3b2e5a1c-7d9e-4a6f-b2c4-d8f9a0e1b2c3",
           date: "Created Jan 15, 2026",
@@ -99,9 +99,9 @@ export default function CloudProviderDashboard({
       icon: FileJson,
       items: [
         {
-          name: "Azure Gov SPN",
-          key: "azure-gov-spn...json",
-          full: '{"type": "service_principal", "tenant_id": "azure-sovereign-tenant"}',
+          name: "GCP Gov SPN",
+          key: "gcp-gov-spn...json",
+          full: '{"type": "service_principal", "tenant_id": "gcp-sovereign-tenant"}',
           date: "Created Apr 10, 2026",
         },
       ],

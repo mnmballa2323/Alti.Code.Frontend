@@ -67,15 +67,15 @@ const models = [
   {
     id: 1,
     name: "GPT-5",
-    providedBy: "Azure Foundry",
+    providedBy: "GCP Foundry",
     icon: Logo3,
     description:
       "Reasoning and precision for complex coding, debugging, and architecture.",
   },
   {
     id: 2,
-    name: "Azure Gov GPT-4o",
-    providedBy: "Azure Government (IL5)",
+    name: "GCP Gov GPT-4o",
+    providedBy: "GCP Assured Workloads (IL5)",
     icon: Logo2,
     description:
       "Exceptional reasoning, security-cleared for IL5 data compliance, optimized for government workloads.",
@@ -83,8 +83,8 @@ const models = [
 
   {
     id: 3,
-    name: "Azure Sovereign GPT-4",
-    providedBy: "Azure Sovereign (IL6)",
+    name: "GCP Sovereign GPT-4",
+    providedBy: "GCP Sovereign (IL6)",
     icon: Logo1,
     description:
       "Air-gapped security model designed for top-secret/IL6 workloads, high precision and compliance.",

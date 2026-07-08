@@ -91,7 +91,7 @@ export default function AudioRecorder({
     };
 
     recognition.onerror = (event: any) => {
-      console.warn("Azure Speech Recognition warning:", event.error);
+      console.warn("GCP Speech Recognition warning:", event.error);
 
       let friendlyMessage = `Microphone error: ${event.error}`;
 

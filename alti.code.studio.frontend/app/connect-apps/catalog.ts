@@ -50,14 +50,14 @@ export const SAAS_MOCKS = [
     icon: "logos:subversion",
   },
   {
-    name: "Azure Virtual Machines",
-    slug: "mcp_azure_vm",
-    icon: "logos:azure",
+    name: "GCP Virtual Machines",
+    slug: "mcp_gcp_vm",
+    icon: "logos:gcp",
   },
   {
-    name: "Azure Blob Storage",
-    slug: "mcp_azure_blob",
-    icon: "logos:azure-icon",
+    name: "GCP Cloud Storage",
+    slug: "mcp_gcp_blob",
+    icon: "logos:gcp-icon",
   },
   {
     name: "Vercel",
@@ -382,9 +382,9 @@ export const SAAS_MOCKS = [
     icon: "logos:gitlab",
   },
   {
-    name: "Azure Kubernetes Service (AKS)",
-    slug: "mcp_azure_aks",
-    icon: "logos:azure-icon",
+    name: "GCP Kubernetes Service (AKS)",
+    slug: "mcp_gcp_aks",
+    icon: "logos:gcp-icon",
   },
   {
     name: "Jupyter Notebook Core",

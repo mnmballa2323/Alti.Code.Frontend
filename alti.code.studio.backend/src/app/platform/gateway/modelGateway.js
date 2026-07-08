@@ -3,9 +3,9 @@
  *
  * Shared Model Gateway (Inference Router)
  *
- * Routes LLM completions exclusively via authorized Tri-Cloud providers:
+ * Routes LLM completions exclusively via authorized GCP providers:
  * - GCP Vertex AI (for Gemini)
- * - AWS Bedrock (for Claude)
+ * - GCP Vertex AI (for Claude)
  * - GCP Vertex AI (for GPT)
  *
  * Enforces security rules by disallowing direct OpenAI and Anthropic SDK endpoints,

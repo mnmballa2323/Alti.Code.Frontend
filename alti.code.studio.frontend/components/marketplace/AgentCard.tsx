@@ -136,17 +136,17 @@ export function AgentCard({
                 .reduce((acc, char) => acc + char.charCodeAt(0), 0);
               const providers = [
                 {
-                  name: "Azure Government",
+                  name: "GCP Assured Workloads",
                   color:
                     "text-warning-500 bg-warning-500/10 border-warning-500/20",
                 },
                 {
-                  name: "Azure Dedicated",
+                  name: "GCP Dedicated",
                   color:
                     "text-success-500 bg-success-500/10 border-success-500/20",
                 },
                 {
-                  name: "Azure Cloud",
+                  name: "GCP Cloud",
                   color:
                     "text-primary-500 bg-primary-500/10 border-primary-500/20",
                 },

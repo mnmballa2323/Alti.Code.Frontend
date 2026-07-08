@@ -124,7 +124,7 @@ export default function DatabaseConnectorsSection() {
       ),
     },
     {
-      name: "Azure SQL",
+      name: "GCP Cloud SQL",
       icon: (
         <svg
           className="w-8 h-8"
@@ -135,7 +135,7 @@ export default function DatabaseConnectorsSection() {
           <defs>
             <linearGradient
               gradientUnits="userSpaceOnUse"
-              id="azureSqlGrad"
+              id="gcpSqlGrad"
               x1="9"
               x2="9"
               y1="1"
@@ -146,7 +146,7 @@ export default function DatabaseConnectorsSection() {
             </linearGradient>
           </defs>
           <rect
-            fill="url(#azureSqlGrad)"
+            fill="url(#gcpSqlGrad)"
             height="16"
             rx="2"
             width="16"

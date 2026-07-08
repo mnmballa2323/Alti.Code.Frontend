@@ -37,7 +37,7 @@ export default function LiveCollaborationEditor({
     // 1. Initialize Yjs CRDT Document
     const ydoc = new Y.Doc();
 
-    // 2. Connect to the Azure backend CRDT Websocket
+    // 2. Connect to the GCP backend CRDT Websocket
     // We use our own backend socket /api/v1/lsp/telepathy or a dedicated CRDT route
     const provider = new WebsocketProvider(
       "ws://localhost:8080/crdt",

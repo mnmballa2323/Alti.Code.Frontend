@@ -2,7 +2,7 @@
 
 /**
  * Server Action: Triggers the backend's Ultimate GCP RAG Sequence.
- * This connects the Next.js frontend to the multi-modal Azure OpenAI + Cloud SQL + gcloud command orchestration loop.
+ * This connects the Next.js frontend to the multi-modal GCP Vertex AI + Cloud SQL + gcloud command orchestration loop.
  */
 export async function queryUltimateRAG(
   query: string,

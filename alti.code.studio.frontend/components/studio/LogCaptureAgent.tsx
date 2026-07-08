@@ -26,11 +26,11 @@ export function LogCaptureAgent({
     setIsCapturing(true);
 
     try {
-      // In a fully industrialized "Azure Sovereign" architecture, this pings the backend
-      // to execute an Azure Monitor / Log Analytics query for the latest production errors.
+      // In a fully industrialized "GCP Sovereign" architecture, this pings the backend
+      // to execute an GCP Cloud Logging / Log Analytics query for the latest production errors.
       const res = await fetch(`${API_URL}/api/v1/logging/capture-recent`);
 
-      // Fallback to local telemetry if Azure logging route isn't strictly defined yet
+      // Fallback to local telemetry if GCP logging route isn't strictly defined yet
       const fallbackRes = !res.ok
         ? await fetch(`${API_URL}/api/v1/telemetry/metrics`)
         : res;
@@ -39,18 +39,18 @@ export function LogCaptureAgent({
 
       const data = await fallbackRes.json();
 
-      // Simulate raw stack trace formatting from the Azure Monitor payload
+      // Simulate raw stack trace formatting from the GCP Cloud Logging payload
       const rawLogs = `
-### ☁️ Azure Monitor Operations (Log Analytics + App Insights)
+### ☁️ GCP Cloud Logging Operations (Log Analytics + App Insights)
 **Timestamp:** ${new Date().toISOString()}
-**Azure Subscription:** \`inso-sovereign-prod\`
+**GCP Subscription:** \`inso-sovereign-prod\`
 **Trace ID:** \`subscriptions/inso-sovereign-prod/traces/${Math.random().toString(36).substring(2, 18)}\`
 **Status:** ${data.success ? "✅ Trace Acquired" : "❌ DEGRADED"}
 
 \`\`\`json
 {
   "insertId": "1a2b3c4d5e",
-  "resource": { "type": "azure_container_app", "labels": { "service_name": "inso-backend" } },
+  "resource": { "type": "gcp_container_app", "labels": { "service_name": "inso-backend" } },
   "severity": "ERROR",
   "trace": "subscriptions/inso-sovereign-prod/traces/${Math.random().toString(36).substring(2, 18)}",
   "textPayload": "Unhandled runtime exception in Swarm Orchestrator thread:
@@ -61,7 +61,7 @@ export function LogCaptureAgent({
 \`\`\`
       `.trim();
 
-      toast.success("☁️ Azure Monitor: Logs captured!");
+      toast.success("☁️ GCP Cloud Logging: Logs captured!");
       onCapture(rawLogs);
     } catch (error: any) {
       toast.error(`Failed to capture logs: ${error.message}`);

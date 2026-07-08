@@ -527,7 +527,7 @@ function SovereignSecurityPanel() {
   return (
     <div className="rounded-2xl border border-blue-500/30 bg-blue-950/20 p-5 flex flex-col gap-3">
       <h3 className="font-semibold text-blue-400 flex items-center gap-2">
-        <span>🛡️</span> Sovereign Azure Security Matrix
+        <span>🛡️</span> Sovereign GCP Security Matrix
       </h3>
       <div className="space-y-2 max-h-48 overflow-y-auto pr-1 mt-2">
         {events.map((e, i) => (
@@ -816,7 +816,7 @@ export default function MissionControlPage() {
           {/* Red Team Telemetry */}
           <RedTeamPanel reports={redTeamReports} />
 
-          {/* Sovereign Azure Security Matrix */}
+          {/* Sovereign GCP Security Matrix */}
           <SovereignSecurityPanel />
 
           {/* Knowledge Base */}

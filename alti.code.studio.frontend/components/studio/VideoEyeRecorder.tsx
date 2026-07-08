@@ -17,7 +17,7 @@ import { addMessage } from "@/store/messagesSlice";
  * Global VIDEO_EYE Recorder.
  * Placed in the Layout. Press a global hotkey or the UI button to start recording
  * the screen. Once stopped, it encodes to webm/mp4 and streams directly to
- * the backend Azure Video Indexer Agent for autonomous UI debugging.
+ * the backend GCP Video Indexer Agent for autonomous UI debugging.
  */
 export function VideoEyeRecorder() {
   const dispatch = useDispatch();
@@ -108,21 +108,21 @@ export function VideoEyeRecorder() {
     if (chunksRef.current.length === 0) return;
 
     setIsUploading(true);
-    toast.loading("Azure Storage: Provisioning SAS URL...");
+    toast.loading("GCP Storage: Provisioning SAS URL...");
 
     const blob = new Blob(chunksRef.current, { type: "video/webm" });
 
     try {
-      // 1. Get Azure SAS URL from the backend
-      // We assume /api/v1/azure-storage/sas-url returns { url, gsUri }
+      // 1. Get GCP SAS URL from the backend
+      // We assume /api/v1/gcp-storage/sas-url returns { url, gsUri }
       const signedUrlRes = await fetch(
-        `${API_URL}/api/v1/azure-storage/sas-url?type=video/webm`,
+        `${API_URL}/api/v1/gcp-storage/sas-url?type=video/webm`,
       );
 
       // Fallback to direct upload if the GCS route isn't fully provisioned yet on the backend
       if (!signedUrlRes.ok) {
         toast.loading(
-          "Azure SAS Route unavailable. Using direct memory streaming...",
+          "GCP SAS Route unavailable. Using direct memory streaming...",
         );
         const formData = new FormData();
 
@@ -158,7 +158,7 @@ export function VideoEyeRecorder() {
       const signedUrlData = await signedUrlRes.json();
       const { url, gsUri } = signedUrlData.data;
 
-      toast.loading("Azure Storage: Streaming video to Azure Blob...");
+      toast.loading("GCP Storage: Streaming video to GCP Blob...");
 
       // 2. Direct-to-Blob secure upload (bypassing backend memory constraints)
       await fetch(url, {
@@ -167,9 +167,9 @@ export function VideoEyeRecorder() {
         body: blob,
       });
 
-      toast.loading("Azure: Publishing Event to Event Grid Topic...");
+      toast.loading("GCP: Publishing Event to Event Grid Topic...");
 
-      // 3. Trigger Video Indexer asynchronously via Azure Event Grid
+      // 3. Trigger Video Indexer asynchronously via GCP Pub/Sub
       // This publishes the Blob URI to an Event Grid topic, enabling infinite scale and decoupled Swarm analysis.
       const res = await fetch(`${API_URL}/api/v1/telemetry/video-eventgrid`, {
         method: "POST",
@@ -184,14 +184,14 @@ export function VideoEyeRecorder() {
 
       if (data.success) {
         toast.dismiss();
-        toast.success("✅ Azure Event Grid: Analysis job queued successfully.");
+        toast.success("✅ GCP Pub/Sub: Analysis job queued successfully.");
 
         // Listen for the async Pub/Sub result on the WebSocket or Poll (Simulated via immediate return for UI demo)
         if (data.data?.analysis?.reply) {
           // @ts-ignore
           dispatch(
             addMessage({
-              reply: `👁️ **Azure VIDEO_EYE Visual Diagnosis**\n\n${data.data.analysis.reply}`,
+              reply: `👁️ **GCP VIDEO_EYE Visual Diagnosis**\n\n${data.data.analysis.reply}`,
             }),
           );
         }

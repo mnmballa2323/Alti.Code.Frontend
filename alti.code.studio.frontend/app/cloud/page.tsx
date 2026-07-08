@@ -509,8 +509,8 @@ export default function CloudPage() {
                         </div>
                       </div>
 
-                      {/* Azure Sovereign AI Gateway Endpoint Section */}
-                      {["GCP", "Azure"].some((x) =>
+                      {/* GCP Sovereign AI Gateway Endpoint Section */}
+                      {["GCP", "GCP"].some((x) =>
                         selectedProvider?.includes(x),
                       ) && (
                         <div className="mb-8 bg-default-50 dark:bg-black/40 border border-default-100 rounded-2xl p-5 relative overflow-hidden">
@@ -522,7 +522,7 @@ export default function CloudPage() {
                             <div>
                               <h4 className="text-sm font-bold text-gray-900 dark:text-gray-100">
                                 GCP Sovereign AI Gateway Routing (Sovereign
-                                Azure Inference)
+                                GCP Inference)
                               </h4>
                               <p className="text-[10px] text-gray-400">
                                 Sovereign proxy path enforced for foundational
@@ -538,10 +538,10 @@ export default function CloudPage() {
                               </span>
                               <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
                                 {selectedProvider === "GCP Government"
-                                  ? "Azure OpenAI Government (IL5 Proxy)"
+                                  ? "GCP Vertex AI Government (IL5 Proxy)"
                                   : selectedProvider === "GCP Dedicated"
-                                    ? "Azure OpenAI Dedicated (IL2 Proxy)"
-                                    : "Azure OpenAI Foundry Proxy"}
+                                    ? "GCP Vertex AI Dedicated (IL2 Proxy)"
+                                    : "GCP Vertex AI Proxy"}
                               </div>
                             </div>
 

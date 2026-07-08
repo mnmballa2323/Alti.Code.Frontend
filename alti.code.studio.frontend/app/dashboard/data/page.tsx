@@ -17,7 +17,7 @@ import { useState, useEffect } from "react";
 export default function DataPage() {
   const [logs, setLogs] = useState<string[]>([
     "[System] Initializing Sovereign Data Hub...",
-    "[VectorDB] Connected to Azure Cosmos DB cluster (Latency: 14ms)",
+    "[VectorDB] Connected to GCP AlloyDB cluster (Latency: 14ms)",
     "[ETL] Syncing Jira agile boards...",
   ]);
 
@@ -86,7 +86,7 @@ export default function DataPage() {
       syncTime: "5 mins ago",
     },
     {
-      name: "Azure Blob Storage",
+      name: "GCP Cloud Storage",
       status: "Syncing",
       icon: CloudLightning,
       syncTime: "In progress",
@@ -115,7 +115,7 @@ export default function DataPage() {
             Sovereign Data Hub
           </h1>
           <p className="text-gray-400 text-lg mt-2">
-            God-Tier Azure Sovereign Vector Ingestion & Real-Time Analytics
+            God-Tier GCP Sovereign Vector Ingestion & Real-Time Analytics
           </p>
         </header>
 

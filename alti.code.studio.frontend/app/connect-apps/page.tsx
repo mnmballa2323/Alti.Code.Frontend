@@ -35,7 +35,7 @@ type Tool = {
   inputSchema?: any;
 };
 
-// Command Preset Registry for MCP & Azure MCP Toolbox
+// Command Preset Registry for MCP & GCP MCP Toolbox
 const COMMAND_PRESETS: Record<string, { command: string; args: string[] }> = {
   mcp_sqlite: {
     command: "npx",
@@ -272,7 +272,7 @@ const AppIcon = ({
     sentry: "sentry.svg",
     docker: "docker-icon.png",
     kubernetes: "kubernetes.png",
-    azure: "azure.svg",
+    gcp: "gcp.svg",
   };
 
   const simpleIconsMapping: Record<string, string> = {

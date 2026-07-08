@@ -140,7 +140,7 @@ export default function GovernancePage() {
               : "LOW",
           status: data.status || (violations.length > 0 ? "QUEUED" : "SKIPPED"),
           receiptId:
-            data.azure_routing_metadata?.receiptId ||
+            data.gcp_routing_metadata?.receiptId ||
             (violations.length > 0 ? "az-rcpt-pending" : "N/A"),
           hash: cryptHash,
         },
@@ -163,7 +163,7 @@ export default function GovernancePage() {
       slaViolations: item.violations,
       severityLevel: item.severity,
       queueStatus: item.status,
-      azureNoticeReceiptId: item.receiptId,
+      gcpNoticeReceiptId: item.receiptId,
       cryptographicProvenanceHash: item.hash,
       signature: "INSO-CODE-GOVERNANCE-OFFICE-AUTOSIGN-SHA256",
     };
@@ -446,7 +446,7 @@ export default function GovernancePage() {
                         Timestamp: {new Date(item.timestamp).toLocaleString()}
                       </div>
                       <div>
-                        Azure Dispatch Receipt:{" "}
+                        GCP Dispatch Receipt:{" "}
                         <span className="font-mono text-slate-400">
                           {item.receiptId}
                         </span>

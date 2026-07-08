@@ -11,7 +11,7 @@ import { AgentCommandCenter } from "./AgentCommandCenter";
 import { queryUltimateRAG } from "@/app/actions/ultimateRag";
 
 /**
- * Visualizes the Ultimate Azure RAG System output.
+ * Visualizes the Ultimate GCP RAG System output.
  */
 export function UltimateRagTerminal() {
   const [query, setQuery] = useState("");

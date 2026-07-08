@@ -86,7 +86,7 @@ export default function MatrixMissionControl() {
           </Chip>
         </div>
         <p className="text-blue-400/80 font-mono text-sm mt-2 max-w-lg">
-          Real-time topological visualization of the Azure Event Grid Agentic
+          Real-time topological visualization of the GCP Pub/Sub Agentic
           Mesh. Monitoring 300+ highly specialized Sovereign Agents in
           multi-dimensional space.
         </p>
