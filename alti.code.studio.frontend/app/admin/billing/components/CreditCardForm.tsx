@@ -111,17 +111,25 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
     placeholder: "CVC",
   };
 
+  const FallbackInput = ({ placeholder }: { placeholder: string }) => {
+    const [val, setVal] = useState("");
+    return (
+      <input
+        className="w-full h-full bg-transparent text-[14px] text-[#404040] placeholder:text-[#a3a3a3] focus:outline-none"
+        placeholder={placeholder}
+        type="text"
+        title="Disable your adblocker to securely enter payment details"
+        value={val}
+        onChange={(e) => {
+          // Allow numbers, spaces, and slashes
+          setVal(e.target.value.replace(/[^0-9\s/]/g, ""));
+        }}
+      />
+    );
+  };
+
   const wrapperClass =
     "w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm flex flex-col justify-center";
-
-  const renderFallback = (placeholder: string) => (
-    <input
-      className="w-full h-full bg-transparent text-[14px] text-[#404040] placeholder:text-[#a3a3a3] focus:outline-none"
-      placeholder={placeholder}
-      type="text"
-      title="Disable your adblocker to securely enter payment details"
-    />
-  );
 
   return (
     <form onSubmit={handleSaveCard} className="flex flex-col gap-6 mt-2">
@@ -131,20 +139,24 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
           placeholder="Enter Cardholder Name"
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            // Only allow letters and spaces
+            const textOnly = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+            setName(textOnly);
+          }}
           required
         />
         <div className={wrapperClass}>
-          {stripe ? <CardNumberElement options={cardNumberOptions} /> : renderFallback("Enter Card Number")}
+          {stripe ? <CardNumberElement options={cardNumberOptions} /> : <FallbackInput placeholder="Enter Card Number" />}
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div className={wrapperClass}>
-          {stripe ? <CardExpiryElement options={cardExpiryOptions} /> : renderFallback("MM / YY")}
+          {stripe ? <CardExpiryElement options={cardExpiryOptions} /> : <FallbackInput placeholder="MM / YY" />}
         </div>
         <div className={wrapperClass}>
-          {stripe ? <CardCvcElement options={cardCvcOptions} /> : renderFallback("CVC")}
+          {stripe ? <CardCvcElement options={cardCvcOptions} /> : <FallbackInput placeholder="CVC" />}
         </div>
       </div>
 

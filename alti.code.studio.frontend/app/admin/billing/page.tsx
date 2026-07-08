@@ -11,9 +11,9 @@ import { ACHBankForm } from "./components/ACHBankForm";
 // Initialize Stripe outside of component render to avoid recreating Stripe object
 // Forcing a test key so Stripe doesn't block localhost HTTP connections (live keys crash on localhost)
 const stripePromise = loadStripe(
-  "pk_test_TYooMQauvdEDq54NiTphI7jx"
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
 ).catch((err) => {
-  console.error("Failed to load Stripe.js (might be blocked by AdBlock):", err);
+  console.error("Failed to load Stripe.js:", err);
   return null;
 });
 
