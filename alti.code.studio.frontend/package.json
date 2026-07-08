@@ -4,7 +4,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "ulimit -n 4096 && next dev -p 3001",
+    "dev": "ulimit -n 4096 && next dev -p 3001 --experimental-https",
     "build": "node scripts/copy-monaco.js && node scripts/check-build-safety.js && next build && cp -r public .next/standalone/ && cp -r .next/static .next/standalone/.next/",
     "start": "node .next/standalone/server.js || next start",
     "lint": "eslint --fix",
