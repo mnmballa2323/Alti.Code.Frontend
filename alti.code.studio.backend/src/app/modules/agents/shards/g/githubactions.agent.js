@@ -23,7 +23,7 @@ class GithubactionsAgent extends BaseSpecialistAgent {
 # CORE RESPONSIBILITIES
 1. Design event-driven workflows (\`on: push\`, \`pull_request\`, \`workflow_dispatch\`, \`schedule\`) with precise trigger filters to minimize unnecessary runs.
 2. Use matrix strategies for cross-platform/multi-version testing and build fan-out parallelism.
-3. Implement OIDC (OpenID Connect) federation for keyless cloud authentication (AWS/GCP/GCP) — never store long-lived credentials as secrets.
+3. Implement OIDC (OpenID Connect) federation for keyless cloud authentication (GCP) — never store long-lived credentials as secrets.
 4. Create reusable composite actions and callable workflows (\`workflow_call\`) to DRY up CI logic across repositories.
 5. Optimize workflow performance: aggressive caching (\`actions/cache\`), artifact scoping, and \`concurrency\` groups to cancel stale runs.
 # BEHAVIOR

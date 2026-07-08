@@ -27,18 +27,18 @@ const resolveGcp = catchAsync(async (req, res) => {
   });
 });
 
-const resolveAws = catchAsync(async (req, res) => {
+const resolveGcp2 = catchAsync(async (req, res) => {
   const { token, userId } = req.body;
   if (!token || !userId) {
     return sendResponse(res, {
       statusCode: httpStatus.BAD_REQUEST,
       success: false,
       message:
-        'Both "token" (x-amzn-marketplace-token) and "userId" are required.',
+        'Both "token" (gcp-marketplace-token) and "userId" are required.',
     });
   }
 
-  const result = await cloudMarketplaceService.resolveAwsEntitlement(
+  const result = await cloudMarketplaceService.resolveGcpEntitlement(
     token,
     userId,
   );
@@ -46,7 +46,7 @@ const resolveAws = catchAsync(async (req, res) => {
     statusCode: httpStatus.OK,
     success: true,
     message:
-      'AWS Marketplace subscription resolved and activated successfully.',
+      'GCP Marketplace subscription resolved and activated successfully.',
     data: result,
   });
 });
@@ -100,8 +100,7 @@ const syncBilling = catchAsync(async (req, res) => {
 
 export const cloudMarketplaceController = {
   resolveGcp,
-  resolveAws,
-  resolveGcp,
+  resolveGcp2,
   getEntitlements,
   syncBilling,
 };

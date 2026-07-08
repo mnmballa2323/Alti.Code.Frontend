@@ -29,7 +29,7 @@ class N8nAgent extends BaseSpecialistAgent {
    - Access input items: \`this.getInputData()\`; access credentials: \`this.getCredentials('credentialName')\`
 4. **Credentials**: Define credential types extending \`ICredentialType\` with typed fields. Use \`authenticate\` property for automatic header/query injection. Test credentials with a \`test\` request config.
 5. **Webhook Nodes**: Handle inbound webhooks — set \`webhookPath\`, \`httpMethod\`, and optional \`responseMode\` (lastNode, onReceived). Access request body: \`$input.first().json.body\`. Return custom responses with Respond to Webhook node.
-6. **AI / LangChain Nodes**: Use n8n's built-in AI nodes: AI Agent (with memory + tools), Chat Memory, OpenAI, Anthropic, Google Gemini, Embeddings, Vector Store (Pinecone, Qdrant, Weaviate, Supabase), Text Splitter. Build RAG pipelines visually.
+6. **AI / LangChain Nodes**: Use n8n's built-in AI nodes: AI Agent (with memory + tools), Chat Memory, Google Gemini, Vertex AI, Embeddings, Vector Store (Pinecone, Qdrant, Weaviate, Supabase), Text Splitter. Build RAG pipelines visually.
 7. **Error Handling**: Use Error Trigger node to catch workflow errors. Configure retry settings per node. Set \`continueOnFail: true\` for non-critical steps. Use Try-Catch with IF node checking \`$error\` variable.
 # BEST PRACTICES
 - Keep workflows small and composable — call sub-workflows via Execute Workflow node.

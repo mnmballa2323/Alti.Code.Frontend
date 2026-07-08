@@ -126,8 +126,8 @@ describe('Secure Vault & LLM Gateway Integration Tests', () => {
 
     it('Vault Service: should store, encrypt, mask, and retrieve credentials', async () => {
         const testKeys = {
-            openaiApiKey: 'sk-direct-openai-key-secret-123456',
-            gcpEndpoint: 'https://alti-gcp-foundry.openai.gcp.com/',
+            partnerApiKey: 'sk-partner-key-secret-123456',
+            gcpEndpoint: 'https://alti-gcp-foundry.partner.gcp.com/',
             gcpApiKey: 'gcp-secret-key-654321',
             gcpProjectId: 'alti-secure-enterprise-project'
         };
@@ -135,35 +135,34 @@ describe('Secure Vault & LLM Gateway Integration Tests', () => {
         // Save keys - must encrypt at-rest
         const maskedOutput = await VaultService.updateCredentials(testUserId, testKeys);
 
-        expect(maskedOutput.openaiApiKey).toContain('sk-');
-        expect(maskedOutput.openaiApiKey).toContain('...3456');
-        expect(maskedOutput.gcpApiKey).toContain('azur');
+        expect(maskedOutput.partnerApiKey).toContain('sk-');
+        expect(maskedOutput.partnerApiKey).toContain('...3456');
+        expect(maskedOutput.gcpApiKey).toContain('gcp');
         expect(maskedOutput.gcpApiKey).toContain('...4321');
-        expect(maskedOutput.gcpEndpoint).toBe('https://alti-gcp-foundry.openai.gcp.com/');
+        expect(maskedOutput.gcpEndpoint).toBe('https://alti-gcp-foundry.partner.gcp.com/');
         expect(maskedOutput.gcpProjectId).toBe('alti-secure-enterprise-project');
 
         // Confirm DB ciphertext is NOT plaintext (is encrypted)
         const dbRecord = await prisma.vault.findUnique({
             where: { userId: testUserId }
         });
-        expect(dbRecord.openaiApiKey).not.toBe(testKeys.openaiApiKey);
+        expect(dbRecord.partnerApiKey).not.toBe(testKeys.partnerApiKey);
         expect(dbRecord.gcpApiKey).not.toBe(testKeys.gcpApiKey);
 
         // Fetch decrypted raw keys in-memory
         const rawKeys = await VaultService.getRawCredentials(testUserId);
-        expect(rawKeys.openaiApiKey).toBe(testKeys.openaiApiKey);
+        expect(rawKeys.partnerApiKey).toBe(testKeys.partnerApiKey);
         expect(rawKeys.gcpApiKey).toBe(testKeys.gcpApiKey);
         expect(rawKeys.gcpEndpoint).toBe(testKeys.gcpEndpoint);
     });
 
-    it('LLM Gateway: should execute dynamic model completions', async () => {
-        // Mock direct openai gateway execution
+        // Mock gateway execution
         const prompt = 'Test unified credentials loading';
-        const model = 'gpt-4o';
+        const model = 'gemini-2.5-pro';
 
         // Should load secure vault credentials dynamically in-memory and decrypt them.
         const rawCreds = await VaultService.getRawCredentials(testUserId);
-        expect(rawCreds.openaiApiKey).toBe('sk-direct-openai-key-secret-123456');
+        expect(rawCreds.partnerApiKey).toBe('sk-partner-key-secret-123456');
 
         // Validate Chat History Postgres saves (JSONB)
         await LlmGatewayService.saveChatResponse(

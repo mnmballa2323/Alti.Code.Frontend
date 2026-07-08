@@ -212,7 +212,7 @@ export default function CloudPage() {
               cpu: "45%",
             },
             {
-              id: `openai-${Math.floor(Math.random() * 1000)}`,
+              id: `vertex-${Math.floor(Math.random() * 1000)}`,
               name: "Sovereign AI Gateway (GCP Vertex AI Gov FedRAMP)",
               status: "Running",
               region: "usgovvirginia",
@@ -236,7 +236,7 @@ export default function CloudPage() {
               cpu: "38%",
             },
             {
-              id: `openai-${Math.floor(Math.random() * 1000)}`,
+              id: `vertex-${Math.floor(Math.random() * 1000)}`,
               name: "Sovereign AI Gateway (GCP Vertex AI Dedicated Sovereign)",
               status: "Running",
               region: "eastus2",
@@ -299,7 +299,7 @@ export default function CloudPage() {
             cpu: "45%",
           },
           {
-            id: `openai-${Math.floor(Math.random() * 1000)}`,
+            id: `vertex-${Math.floor(Math.random() * 1000)}`,
             name: "GCP Vertex AI Gov (FedRAMP)",
             status: "Running",
             region: "usgovvirginia",
@@ -323,7 +323,7 @@ export default function CloudPage() {
             cpu: "38%",
           },
           {
-            id: `openai-${Math.floor(Math.random() * 1000)}`,
+            id: `vertex-${Math.floor(Math.random() * 1000)}`,
             name: "GCP Vertex AI Dedicated (Sovereign)",
             status: "Running",
             region: "eastus2",

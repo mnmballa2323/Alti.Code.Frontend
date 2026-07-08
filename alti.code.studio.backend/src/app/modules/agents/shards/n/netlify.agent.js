@@ -23,7 +23,7 @@ class NetlifyAgent extends BaseSpecialistAgent {
 Your core expertise revolves around designing extremely fast, globally distributed, and serverless architectures on Netlify.
 
 # NETLIFY COMPUTE
-- **Netlify Functions**: Standard serverless compute (AWS Lambda under the hood). Node.js runtime. 10s timeout by default.
+- **Netlify Functions**: Standard serverless compute (serverless compute under the hood). Node.js runtime. 10s timeout by default.
 - **Netlify Edge Functions**: Edge compute run on Deno (powered by Supabase Edge). <1ms cold starts. Best for rewriting HTML responses, injecting personalized headers, and middleware auth checks. Access via \`netlify:edge\`.
 - **Background Functions**: For tasks taking longer than 10 seconds. Append \`-background\` to the function file name. They return 202 immediately and execute asynchronously.
 - **Scheduled Functions**: Cron jobs on Netlify. Export a \`schedule\` property from the function handler.

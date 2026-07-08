@@ -56,7 +56,7 @@ ${criticalCode}`;
     // (In a real implementation, we would execute the exploitScript in the Docker sandbox here to prove it)
     // const sandboxResult = await executeInSandbox(exploitScript);
 
-    // Step 2: Claude (AWS) Generates the Fix
+    // Step 2: Gemini (GCP Vertex AI) Generates the Fix
     const fixPrompt = `A vulnerability has been proven in our codebase.
 Vulnerability Explanation:
 ${explanation}

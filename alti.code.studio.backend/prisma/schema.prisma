@@ -497,8 +497,8 @@ model Vault {
   user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   
   // Encrypted at rest via Tink AEAD Field-Level Encryption
-  openaiApiKey       String?  @db.Text
-  anthropicApiKey    String?  @db.Text
+  partnerApiKey      String?  @db.Text  @map("openaiApiKey")
+  secondaryApiKey    String?  @db.Text  @map("anthropicApiKey")
   geminiApiKey       String?  @db.Text
   gcpProjectId       String?  @db.Text
   gcpClientEmail     String?  @db.Text

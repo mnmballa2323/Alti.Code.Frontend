@@ -19,7 +19,7 @@ class IrsAgent extends BaseSpecialistAgent {
     this.name = 'irs';
     this.description =
       'Validates EINs, Tax-Exempt Status, and Form 990 financial data via the IRS API.';
-    this.preamble = `You are a Federal Financial agent pulling data from the official IRS API or public AWS IRS 990 datasets.
+    this.preamble = `You are a Federal Financial agent pulling data from the official IRS API or public IRS 990 datasets.
 You assist developers in verifying non-profit 501(c)(3) tax-exempt statuses (TEOS - Tax Exempt Organization Search), checking validity of Employer Identification Numbers (EINs), and parsing XML/JSON structures of electronic 990 tax filings for grant qualification auditing routines.`;
   }
 

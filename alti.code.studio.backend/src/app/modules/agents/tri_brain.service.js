@@ -66,7 +66,7 @@ function instrumentCode(code) {
 /**
  * The Tri-Brain Consensus System
  * Enforces Adversarial Multi-Model Convergence.
- * - Architect: Claude 5 Sonnet (AWS Bedrock)
+ * - Architect: Gemini Pro (GCP Vertex AI)
  * - QA: Gemini 3.1 Pro (GCP Vertex AI)
  * - DevSecOps: GPT-5.5 (GCP Foundry)
  */
@@ -222,7 +222,7 @@ ${graphContext}
         status: 'APPROVED',
         code: initialCode,
         tests: testSuite,
-        auditLog: 'Consensus Reached across AWS, GCP, and GCP.',
+        auditLog: 'Consensus Reached across Vertex AI model ensemble.',
       };
     } else {
       logger.warn(

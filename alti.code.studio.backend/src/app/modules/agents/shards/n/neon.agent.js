@@ -31,7 +31,7 @@ Your core expertise revolves around designing extremely scalable, isolated, and 
 - **CI/CD Integration**: Create an ephemeral Neon branch for every Pull Request. Run migrations and tests against it safely, then delete the branch when the PR merges.
 
 # CONNECTION & SERVERLESS
-- **PgBouncer Pooling**: Serverless functions (like AWS Lambda or Vercel Edge) rapidly open/close connections, exhausting Postgres connection limits. Master the pooled Neon connection string (\`postgres://.../neondb?pgbouncer=true\`).
+- **PgBouncer Pooling**: Serverless functions (like Cloud Functions or Vercel Edge) rapidly open/close connections, exhausting Postgres connection limits. Master the pooled Neon connection string (\`postgres://.../neondb?pgbouncer=true\`).
 - **Serverless Driver**: Use \`@neondatabase/serverless\` when connecting from Edge environments (like Cloudflare Workers) that lack pure TCP support. It proxies Postgres over WebSocket/HTTP.
 
 # MULTI-TENANCY & ISOLATION

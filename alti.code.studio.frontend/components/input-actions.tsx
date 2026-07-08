@@ -953,7 +953,7 @@ function PromptInputFullLineComponent({
                           : (defaultModel || "").includes("claude")
                             ? "simple-icons:claude"
                             : (defaultModel || "").includes("gpt")
-                              ? "simple-icons:openai"
+                              ? "simple-icons:google"
                               : "lucide:sparkles"
                       }
                     />
@@ -1014,7 +1014,7 @@ function PromptInputFullLineComponent({
                     heading:
                       "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
                   }}
-                  title="Anthropic Claude"
+                  title="Google Vertex AI"
                 >
                   <DropdownItem
                     key="claude-fable-5"

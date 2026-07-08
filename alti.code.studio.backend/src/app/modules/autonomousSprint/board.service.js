@@ -55,7 +55,7 @@ export class BoardOfDirectorsService {
         `🏛️ BoardOfDirectors (CFO): Reviewing Multi-Cloud Burn Rates...`,
       );
       const finReport = await finopsAgent.execute('arbitrage', {
-        query: 'Simulate AWS vs GCP current platform cost',
+        query: 'Simulate GCP current platform cost',
       });
       finData = finReport.recommendation || 'Cloud spend is nominal.';
     } catch (e) {

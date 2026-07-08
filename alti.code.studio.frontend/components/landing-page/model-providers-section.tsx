@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 const providers = [
   {
-    name: "Anthropic",
+    name: "Google DeepMind",
     brand: "Claude Models",
     glowClass: "from-orange-500/10 via-orange-500/2 to-transparent",
     borderHoverClass:
@@ -120,10 +120,10 @@ export default function ModelProvidersSection() {
 
         {/* Legal Disclaimer */}
         <p className="text-[10px] text-zinc-400 dark:text-zinc-500 leading-relaxed font-normal max-w-4xl text-center">
-          * Anthropic, Google, and OpenAI are trademarks of their respective
-          owners. Mention of these providers signifies compatibility with their
-          sovereign API endpoints and does not imply official partnership,
-          sponsorship, or endorsement.
+          * Google, Google Cloud, Vertex AI, and Gemini are trademarks of
+          Google LLC. All model providers are accessed exclusively through
+          Google Cloud Platform. This does not imply official partnership
+          or endorsement.
         </p>
       </div>
     </section>

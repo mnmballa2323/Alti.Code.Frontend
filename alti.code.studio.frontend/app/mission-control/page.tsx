@@ -500,7 +500,7 @@ function SovereignSecurityPanel() {
   const [events, setEvents] = useState([
     {
       type: "DLP_REDACTION",
-      detail: "Scrubbed AZURE_CREDENTIALS from user prompt",
+      detail: "Scrubbed LEAKED_CREDENTIALS from user prompt",
       status: "PROTECTED",
       time: "Just now",
     },

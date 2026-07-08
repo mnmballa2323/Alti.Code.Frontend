@@ -33,7 +33,7 @@ const pricingCatalog = [
   {
     id: "claude-sonnet-4.6",
     name: "Claude Sonnet 4.6",
-    provider: "Anthropic Claude",
+    provider: "Google Vertex AI",
     icon: "simple-icons:claude",
     iconColor: "text-[#CC9980]",
     inputPrice: 3.0,
@@ -42,7 +42,7 @@ const pricingCatalog = [
   {
     id: "claude-opus-4.8",
     name: "Claude Opus 4.8",
-    provider: "Anthropic Claude",
+    provider: "Google Vertex AI",
     icon: "simple-icons:claude",
     iconColor: "text-[#CC9980]",
     inputPrice: 15.0,
@@ -51,7 +51,7 @@ const pricingCatalog = [
   {
     id: "claude-fable-5",
     name: "Claude Fable 5",
-    provider: "Anthropic Claude",
+    provider: "Google Vertex AI",
     icon: "simple-icons:claude",
     iconColor: "text-[#CC9980]",
     inputPrice: 15.0,
@@ -506,7 +506,7 @@ function BillingPage() {
             </p>
 
             <div className="flex gap-1.5 mb-6 overflow-x-auto pb-2">
-              {["All", "Google Gemini", "Anthropic Claude"].map(
+              {["All", "Google Gemini", "Google Vertex AI"].map(
                 (p) => (
                   <button
                     key={p}
@@ -518,9 +518,7 @@ function BillingPage() {
                     onClick={() => setProviderFilter(p)}
                   >
                     {p
-                      .replace("Google ", "")
-                      .replace("Anthropic ", "")
-                      .replace("OpenAI ", "")}
+                      .replace("Google ", "")}
                   </button>
                 ),
               )}

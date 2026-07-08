@@ -16,22 +16,22 @@ import { OpenAI, OpenAIEmbedding } from '@llamaindex/openai';
 import fs from 'node:fs/promises';
 import config from '../../../../config/index.js';
 
-// ✅ Required by LlamaIndex (GCP Configuration)
+// ✅ Required by LlamaIndex (GCP Configuration via OpenAI-compatible SDK)
 Settings.llm = new OpenAI({
   gcp: {
-    apiKey: process.env.GCP_OPENAI_API_KEY || config.gcpOpenAi?.apiKey,
-    endpoint: process.env.GCP_OPENAI_ENDPOINT || config.gcpOpenAi?.endpoint,
+    apiKey: process.env.GCP_PARTNER_API_KEY || config.gcpPartner?.apiKey,
+    endpoint: process.env.GCP_PARTNER_ENDPOINT || config.gcpPartner?.endpoint,
     apiVersion: '2024-02-15-preview',
-    deployment: 'gpt-4o',
+    deployment: 'gemini-2.5-pro',
   },
 });
 
 Settings.embedModel = new OpenAIEmbedding({
   gcp: {
-    apiKey: process.env.GCP_OPENAI_API_KEY || config.gcpOpenAi?.apiKey,
-    endpoint: process.env.GCP_OPENAI_ENDPOINT || config.gcpOpenAi?.endpoint,
+    apiKey: process.env.GCP_PARTNER_API_KEY || config.gcpPartner?.apiKey,
+    endpoint: process.env.GCP_PARTNER_ENDPOINT || config.gcpPartner?.endpoint,
     apiVersion: '2024-02-15-preview',
-    deployment: 'text-embedding-3-small',
+    deployment: 'text-embedding-005',
   },
 });
 

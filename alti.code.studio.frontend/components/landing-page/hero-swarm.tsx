@@ -218,7 +218,7 @@ export default function HeroSwarm() {
         id="hero-canvas"
       />
 
-      {/* Premium Apple/OpenAI-style background gradient mesh */}
+      {/* Premium modern-style background gradient mesh */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         {/* Ambient Magical Glows */}
         <div className="absolute top-[-10%] left-[-10%] w-[50vw] h-[50vh] rounded-[100%] bg-gradient-to-br from-blue-900/40 to-transparent blur-[120px] animate-[spin_45s_linear_infinite]" />

@@ -14,8 +14,8 @@ vi.mock('../../src/app/platform/index.js', () => {
             },
             vault: {
                 findUnique: vi.fn().mockResolvedValue({
-                    openaiApiKey: 'encrypted',
-                    anthropicApiKey: 'encrypted',
+                    partnerApiKey: 'encrypted',
+                    secondaryApiKey: 'encrypted',
                     geminiApiKey: 'encrypted',
                     gcpProjectId: 'encrypted',
                     gcpClientEmail: 'encrypted',
@@ -114,8 +114,8 @@ vi.mock('../../src/config/prisma.js', () => ({
         },
         vault: {
             findUnique: vi.fn().mockResolvedValue({
-                openaiApiKey: 'mocked-key',
-                anthropicApiKey: 'mocked-key',
+                partnerApiKey: 'mocked-key',
+                secondaryApiKey: 'mocked-key',
                 geminiApiKey: 'mocked-key',
                 gcpEndpoint: 'mocked-endpoint',
                 gcpApiKey: 'mocked-key',

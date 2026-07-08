@@ -71,7 +71,7 @@ const COMMUNITY_CATALOG = [
     id: 'agent.terraform.iac',
     name: 'Terraform IaC Master',
     description:
-      'Writes production-grade Terraform for AWS, GCP, and GCP with modules.',
+      'Writes production-grade Terraform for GCP with modules.',
     author: 'InfraWizard',
     category: 'infrastructure',
     price: '$2.99/mo',

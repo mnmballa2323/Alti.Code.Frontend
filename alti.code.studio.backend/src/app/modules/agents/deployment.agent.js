@@ -80,7 +80,7 @@ class DeploymentAgent {
   /**
    * Synthesize Infrastructure as Code (Terraform)
    */
-  async generateTerraform(repoName, cloudProvider = 'aws') {
+  async generateTerraform(repoName, cloudProvider = 'gcp') {
     logger.info(
       `🏗️ DevOps Agent: Synthesizing IaC (Terraform) for ${repoName} on ${cloudProvider}...`,
     );

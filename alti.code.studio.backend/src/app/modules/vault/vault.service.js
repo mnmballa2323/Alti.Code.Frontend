@@ -166,9 +166,9 @@ const getRawCredentials = async userId => {
 
   const decryptAll = async (key, throwOnError = false) => {
     return {
-      openaiApiKey: await decryptField(vault.openaiApiKey, key, throwOnError),
-      anthropicApiKey: await decryptField(
-        vault.anthropicApiKey,
+      partnerApiKey: await decryptField(vault.partnerApiKey, key, throwOnError),
+      secondaryApiKey: await decryptField(
+        vault.secondaryApiKey,
         key,
         throwOnError,
       ),
@@ -213,8 +213,8 @@ const getMaskedCredentials = async userId => {
   const targetUserId = await resolveUserId(userId);
   const raw = await getRawCredentials(targetUserId);
   return {
-    openaiApiKey: maskKey(raw.openaiApiKey),
-    anthropicApiKey: maskKey(raw.anthropicApiKey),
+    partnerApiKey: maskKey(raw.partnerApiKey),
+    secondaryApiKey: maskKey(raw.secondaryApiKey),
     geminiApiKey: maskKey(raw.geminiApiKey),
     gcpEndpoint: raw.gcpEndpoint || '',
     gcpApiKey: maskKey(raw.gcpApiKey),
@@ -269,8 +269,8 @@ const updateCredentials = async (userId, keys) => {
     }
   };
 
-  await processField('openaiApiKey', keys.openaiApiKey);
-  await processField('anthropicApiKey', keys.anthropicApiKey);
+  await processField('partnerApiKey', keys.partnerApiKey);
+  await processField('secondaryApiKey', keys.secondaryApiKey);
   await processField('geminiApiKey', keys.geminiApiKey);
   await processField('gcpEndpoint', keys.gcpEndpoint);
   await processField('gcpApiKey', keys.gcpApiKey);

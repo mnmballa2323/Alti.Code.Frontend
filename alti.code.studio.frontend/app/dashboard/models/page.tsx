@@ -60,7 +60,7 @@ import Logo1 from "@/public/assets/model-icons/gemini-color.png";
 import Logo4 from "@/public/assets/model-icons/grok.png";
 import Logo5 from "@/public/assets/model-icons/meta-color.png";
 import Logo6 from "@/public/assets/model-icons/mistral-color.png";
-import Logo3 from "@/public/assets/model-icons/openai.png";
+import Logo3 from "@/public/assets/model-icons/vertex-ai.png";
 import Logo7 from "@/public/assets/model-icons/qwen-color.png";
 
 const models = [

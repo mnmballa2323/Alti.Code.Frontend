@@ -89,51 +89,39 @@ async function testModelRestrictions() {
 
         // Stub VaultService.getRawCredentials to bypass DB/Vault lookup
         VaultService.getRawCredentials = async () => ({
-            openaiApiKey: 'mock-key',
-            gcpEndpoint: 'https://mock.openai.gcp.com',
+            partnerApiKey: 'mock-key',
+            gcpEndpoint: 'https://mock.partner.gcp.com',
             gcpApiKey: 'mock-key',
             gcpProjectId: 'mock-project'
         });
 
-        // 1. AWS Enterprise plan test
+        // 1. GCP Standard plan test
         SubscriptionModel.findOne = () => ({
-            plan_name: 'enterprise-aws',
+            plan_name: 'enterprise-gcp-standard',
             paymentStatus: 'paid',
             expiresAt: new Date(Date.now() + 1000000)
         });
 
-        // Try requesting GCP model (should throw)
+        // Try requesting Vertex model (should work)
         try {
-            await LlmGatewayService.routeCompletion('mock-user-id', 'session-id', 'hello', 'gemini-3.1-pro');
-            logTest('AWS Enterprise restricts GCP models', 'FAILED', '(Did not throw FORBIDDEN error)');
+            await LlmGatewayService.routeCompletion('mock-user-id', 'session-id', 'hello', 'gemini-3.5-pro');
+            logTest('GCP Standard allows Vertex models', 'FAILED', '(Completed successfully without keys)');
         } catch (e) {
-            if (e.statusCode === httpStatus.FORBIDDEN && e.message.includes('AWS Bedrock models')) {
-                logTest('AWS Enterprise restricts GCP models', 'PASSED');
+            if (e.message.includes('Google Vertex AI credentials') && e.message.includes('missing')) {
+                logTest('GCP Standard allows Vertex models', 'PASSED', '(Bypassed lock filter and reached Vertex client init)');
             } else {
-                logTest('AWS Enterprise restricts GCP models', 'FAILED', `(Unexpected error: ${e.message})`);
+                logTest('GCP Standard allows Vertex models', 'FAILED', `(Unexpected error: ${e.message})`);
             }
         }
 
-        // Try requesting AWS model (should try to execute and fail on Bedrock init, not on FORBIDDEN routing)
-        try {
-            await LlmGatewayService.routeCompletion('mock-user-id', 'session-id', 'hello', 'claude-5-sonnet');
-            logTest('AWS Enterprise allows AWS models', 'FAILED', '(Completed successfully without keys)');
-        } catch (e) {
-            if (e.message.includes('AWS Bedrock credentials') && e.message.includes('missing')) {
-                logTest('AWS Enterprise allows AWS models', 'PASSED', '(Bypassed lock filter and reached AWS client init)');
-            } else {
-                logTest('AWS Enterprise allows AWS models', 'FAILED', `(Unexpected client error: ${e.message})`);
-            }
-        }
-
-        // Try auto/default override
+        // Try requesting Vertex model via auto route
         try {
             await LlmGatewayService.routeCompletion('mock-user-id', 'session-id', 'hello', 'auto');
         } catch (e) {
-            if (e.message.includes('AWS Bedrock credentials') && e.message.includes('missing')) {
-                logTest('AWS Enterprise auto-routes to Bedrock', 'PASSED', '(Auto resolved to AWS model)');
+            if (e.message.includes('Google Vertex AI credentials') && e.message.includes('missing')) {
+                logTest('GCP Standard auto-routes to Vertex', 'PASSED', '(Auto resolved to GCP model)');
             } else {
-                logTest('AWS Enterprise auto-routes to Bedrock', 'FAILED', `(Unexpected client error: ${e.message})`);
+                logTest('GCP Standard auto-routes to Vertex', 'FAILED', `(Unexpected client error: ${e.message})`);
             }
         }
 

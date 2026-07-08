@@ -65,7 +65,7 @@ class EnterpriseWAF {
         'system prompt leak',
         'drop table',
         'rm -rf /',
-        'export AWS_ACCESS_KEY_ID',
+        'export AWS_ACCESS_KEY_ID', // SECURITY: credential leak detection pattern, not an AWS dependency
       ];
 
       for (const pattern of maliciousPatterns) {

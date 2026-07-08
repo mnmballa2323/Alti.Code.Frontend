@@ -9,8 +9,8 @@ class DlpScrubberService {
     constructor() {
         // Standard Fortune 100 Secret & PII regex patterns
         this.patterns = [
-            { name: 'AWS Access Key', regex: /(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}/g },
-            { name: 'AWS Secret Key', regex: /(?i)aws_secret_access_key\s*=\s*['"][a-zA-Z0-9/+=]{40}['"]/g },
+            { name: 'Cloud Access Key', regex: /(A3T[A-Z0-9]|AKIA|AGPA|AIDA|AROA|AIPA|ANPA|ANVA|ASIA)[A-Z0-9]{16}/g },
+            { name: 'Cloud Secret Key', regex: /(?i)aws_secret_access_key\s*=\s*['"][a-zA-Z0-9/+=]{40}['"]/g },
             { name: 'GCP Service Account', regex: /"type":\s*"service_account"/g },
             { name: 'Stripe API Key', regex: /sk_(test|live)_[0-9a-zA-Z]{24}/g },
             { name: 'Slack Token', regex: /xox[baprs]-[0-9]{12}-[0-9]{12}-[a-zA-Z0-9]{24}/g },

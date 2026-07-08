@@ -7,7 +7,7 @@ const LITELLM_URL = config.litellm_url || 'http://localhost:4000';
 
 const routeCompletion = async (model, messages, parameters = {}) => {
   try {
-    // LiteLLM exposes a standard OpenAI-compatible completions endpoint
+    // LiteLLM exposes a standard completions endpoint
     const response = await axios.post(`${LITELLM_URL}/v1/chat/completions`, {
       model: model, // e.g., 'gpt-4o', 'claude-3-opus', 'gemini-3.1-pro'
       messages: messages,

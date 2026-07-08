@@ -7,8 +7,8 @@ import { prisma } from '../../src/config/prisma.js';
 vi.mock('../../src/config/prisma.js', () => {
   const mockVault = {
     userId: 'user-123',
-    openaiApiKey: '',
-    anthropicApiKey: '',
+    partnerApiKey: '',
+    secondaryApiKey: '',
     geminiApiKey: '',
     gcpEndpoint: '',
     gcpApiKey: '',
@@ -85,8 +85,8 @@ describe('Envelope Encryption & Vault Service Integration Tests', () => {
   describe('VaultService Operations with Envelope Encryption', () => {
     it('should update credentials using envelope encryption and read them back decrypted', async () => {
       const inputCredentials = {
-        openaiApiKey: 'sk-openai-12345',
-        anthropicApiKey: 'sk-ant-abcde',
+        partnerApiKey: 'sk-partner-12345',
+        secondaryApiKey: 'sk-sec-abcde',
         geminiApiKey: 'ai-gemini-9999',
       };
 
@@ -94,14 +94,14 @@ describe('Envelope Encryption & Vault Service Integration Tests', () => {
       const masked = await VaultService.updateCredentials('user-123', inputCredentials);
 
       // Verify UI masked output format
-      expect(masked.openaiApiKey).toBe('sk-o...2345');
-      expect(masked.anthropicApiKey).toBe('sk-a...bcde');
+      expect(masked.partnerApiKey).toBe('sk-p...2345');
+      expect(masked.secondaryApiKey).toBe('sk-s...bcde');
       expect(masked.geminiApiKey).toBe('ai-g...9999');
 
       // Verify raw retrieval decrypts envelopes correctly
       const raw = await VaultService.getRawCredentials('user-123');
-      expect(raw.openaiApiKey).toBe('sk-openai-12345');
-      expect(raw.anthropicApiKey).toBe('sk-ant-abcde');
+      expect(raw.partnerApiKey).toBe('sk-partner-12345');
+      expect(raw.secondaryApiKey).toBe('sk-sec-abcde');
       expect(raw.geminiApiKey).toBe('ai-gemini-9999');
     });
   });

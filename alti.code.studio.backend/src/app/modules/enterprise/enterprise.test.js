@@ -1015,8 +1015,8 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       process.env.GCP_ACCESS_TOKEN = 'mock-auth-token';
 
       const rawKeys = {
-        openaiApiKey: 'sk-1234567890abcdef',
-        anthropicApiKey: 'sk-ant-9876543210',
+        partnerApiKey: 'sk-1234567890abcdef',
+        secondaryApiKey: 'sk-sec-9876543210',
       };
 
       // 1. Update and encrypt credentials
@@ -1032,13 +1032,13 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       );
 
       // Verify they are encrypted in the mock DB record
-      expect(mockVaultRecord.openaiApiKey).toBeDefined();
-      expect(mockVaultRecord.openaiApiKey).not.toBe('sk-1234567890abcdef');
+      expect(mockVaultRecord.partnerApiKey).toBeDefined();
+      expect(mockVaultRecord.partnerApiKey).not.toBe('sk-1234567890abcdef');
 
       // 2. Read and decrypt credentials
       const decrypted = await VaultService.getRawCredentials('byok-user-uuid');
-      expect(decrypted.openaiApiKey).toBe('sk-1234567890abcdef');
-      expect(decrypted.anthropicApiKey).toBe('sk-ant-9876543210');
+      expect(decrypted.partnerApiKey).toBe('sk-1234567890abcdef');
+      expect(decrypted.secondaryApiKey).toBe('sk-sec-9876543210');
 
       delete process.env.GCP_PROJECT_ID;
       delete process.env.GCP_KMS_KEY_RING;
@@ -1175,7 +1175,7 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       // Mock vault record returning this GCM ciphertext
       vi.spyOn(prisma.vault, 'findUnique').mockResolvedValue({
         userId: 'rotation-user-uuid',
-        openaiApiKey: encryptedSecret,
+        partnerApiKey: encryptedSecret,
       });
 
       // Configure GCP KMS env vars
@@ -1200,7 +1200,7 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         await VaultService.getRawCredentials('rotation-user-uuid');
 
       // Decryption should succeed after cache bypass retry
-      expect(decrypted.openaiApiKey).toBe(secretValue);
+      expect(decrypted.partnerApiKey).toBe(secretValue);
       // Verify it was fetched twice (first for cached value, second for bypass retry)
       expect(callCount).toBe(2);
     });

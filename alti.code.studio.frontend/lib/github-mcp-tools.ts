@@ -45,10 +45,10 @@ export const githubMcpTools = [
     image: "/assets/new-logos/Unity.png",
   },
   {
-    title: "Azure",
+    title: "Cloud Build",
     description:
-      "The Azure MCP Server, bringing the power of Azure to your agents.",
-    image: "/assets/new-logos/Azure.png",
+      "The Cloud Build MCP Server, bringing the power of GCP CI/CD to your agents.",
+    image: "/assets/new-logos/GCP.png",
   },
   {
     title: "Stripe",
@@ -68,10 +68,10 @@ export const githubMcpTools = [
     image: "/assets/new-logos/Microsoft_Learn.png",
   },
   {
-    title: "Azure DevOps",
+    title: "GKE",
     description:
-      "Interact with Azure DevOps services like repositories, work items, builds, releases, test plans, and code search.",
-    image: "/assets/new-logos/Azure_DevOps.png",
+      "Interact with Google Kubernetes Engine for container orchestration, workload management, and cluster operations.",
+    image: "/assets/new-logos/GKE.png",
   },
   {
     title: "Nuxt",
@@ -115,10 +115,10 @@ export const githubMcpTools = [
     image: "/assets/new-logos/Monday.com.png",
   },
   {
-    title: "Azure AI Foundry",
+    title: "Vertex AI Foundry",
     description:
-      "An experimental MCP server implementation for Azure AI Foundry that exposes unified tools for models, knowledge, evaluation and deployment.",
-    image: "/assets/new-logos/Azure_AI_Foundry.png",
+      "An MCP server implementation for Vertex AI Foundry that exposes unified tools for models, knowledge, evaluation and deployment.",
+    image: "/assets/new-logos/Vertex_AI_Foundry.png",
   },
   {
     title: "Imagesorcery",
@@ -139,10 +139,10 @@ export const githubMcpTools = [
     image: "/assets/new-logos/Logfire.png",
   },
   {
-    title: "Azure Kubernetes Service",
+    title: "Vertex AI Pipelines",
     description:
-      "Interact with Azure Kubernetes Service (AKS) from MCP clients.",
-    image: "/assets/new-logos/Azure_Kubernetes_Service.png",
+      "Orchestrate ML workflows on Vertex AI Pipelines from MCP clients.",
+    image: "/assets/new-logos/Vertex_AI_Pipelines.png",
   },
   {
     title: "Hugging Face",
