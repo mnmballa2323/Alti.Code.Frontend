@@ -1,6 +1,5 @@
 import { director } from './Director.js';
 import { maestro } from './Maestro.js';
-// import { logger } from './logger.mock.js';
 import { logger } from '../../../shared/logger.js';
 
 /**

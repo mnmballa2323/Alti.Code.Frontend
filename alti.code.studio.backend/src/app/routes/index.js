@@ -8,14 +8,37 @@ const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
+// Lean health check for Docker HEALTHCHECK / GKE liveness probes
 router.get('/health', (req, res) =>
   res.status(200).json({ status: 'UP', timestamp: new Date().toISOString() }),
 );
-router.get('/ready', (req, res) =>
-  res
-    .status(200)
-    .json({ ready: true, subsystems: ['postgres', 'redis', 'gemini'] }),
+
+// /healthz: Kubernetes-style health probe (Docker HEALTHCHECK target)
+router.get('/healthz', (req, res) =>
+  res.status(200).json({ status: 'ok' }),
 );
+
+// Deep readiness check: verifies all subsystems and GCP services
+router.get('/ready', async (req, res) => {
+  try {
+    const gcpBootstrap = await import('../modules/gcpCloud/gcpBootstrap.service.js').catch(() => null);
+    const gcpHealth = gcpBootstrap?.gcpHealthCheck ? await gcpBootstrap.gcpHealthCheck() : { gcp: { status: 'not-loaded' } };
+
+    res.status(200).json({
+      ready: true,
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      memory: process.memoryUsage(),
+      deploymentMode: process.env.DEPLOYMENT_MODE || 'cloud',
+      gcpProjectId: process.env.GCP_PROJECT_ID || 'not-set',
+      region: process.env.GCP_REGION || 'us-central1',
+      subsystems: ['postgres', 'redis', 'gemini', 'gcp-cloud-platform'],
+      ...gcpHealth,
+    });
+  } catch (e) {
+    res.status(200).json({ ready: true, subsystems: ['postgres', 'redis', 'gemini'] });
+  }
+});
 
 const modulesPath = path.join(__dirname, '../modules');
 

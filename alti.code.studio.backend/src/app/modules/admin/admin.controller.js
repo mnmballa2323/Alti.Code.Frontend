@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-// const pick = require('../../middlewares/other/pick');
 import httpStatus from 'http-status';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';

@@ -18,7 +18,6 @@ import {
   createOIDCStrategy,
 } from './enterprise.strategy.js';
 import { prisma } from '../../../config/prisma.js';
-// import { validateRequest } from '../../middlewares/validateRequest/validateRequest.js';
 
 const router = express.Router();
 

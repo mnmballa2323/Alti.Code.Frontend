@@ -8,7 +8,6 @@
 import httpStatus from 'http-status';
 import { catchAsync } from '../../../shared/catchAsync.js';
 import sendResponse from '../../../shared/sendResponse.js';
-// import { ConversationChain } from 'langchain/chains';
 import validatePromptRequest from '../../../shared/validatePromptRequest.js';
 import { GeminiAiService } from './geminiOpenMemo.service.js';
 

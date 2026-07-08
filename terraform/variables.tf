@@ -172,3 +172,221 @@ variable "gcp_kms_crypto_key" {
   type        = string
   default     = null
 }
+
+# ------------------------------------------------------------------------------
+# Cloud Run Configuration
+# ------------------------------------------------------------------------------
+variable "cloud_run_min_instances" {
+  description = "Minimum number of Cloud Run instances (keep warm)"
+  type        = number
+  default     = 1
+}
+
+variable "cloud_run_max_instances" {
+  description = "Maximum number of Cloud Run instances for auto-scaling"
+  type        = number
+  default     = 10
+}
+
+variable "cloud_run_cpu" {
+  description = "CPU allocation per Cloud Run container (e.g., '2' for 2 vCPUs)"
+  type        = string
+  default     = "2"
+}
+
+variable "cloud_run_memory" {
+  description = "Memory allocation per Cloud Run container"
+  type        = string
+  default     = "2Gi"
+}
+
+variable "cloud_run_allow_unauthenticated" {
+  description = "Allow unauthenticated access to Cloud Run (traffic comes via load balancer)"
+  type        = bool
+  default     = false
+}
+
+# ------------------------------------------------------------------------------
+# CDN & Load Balancer Configuration
+# ------------------------------------------------------------------------------
+variable "cdn_domain" {
+  description = "The primary domain name for the HTTPS load balancer and SSL certificate"
+  type        = string
+  default     = "app.alticode.studio"
+}
+
+variable "cdn_cors_origins" {
+  description = "Allowed CORS origins for the frontend assets bucket"
+  type        = list(string)
+  default     = ["https://app.alticode.studio"]
+}
+
+# ------------------------------------------------------------------------------
+# WAF Geo-Blocking Configuration
+# ------------------------------------------------------------------------------
+variable "waf_blocked_countries" {
+  description = "List of ISO 3166-1 alpha-2 country codes to block via Cloud Armor geo-blocking (e.g., ['CN', 'RU'])"
+  type        = list(string)
+  default     = []
+}
+
+# ------------------------------------------------------------------------------
+# Workstream 4: Security Deepening
+# ------------------------------------------------------------------------------
+variable "enable_vpc_service_controls" {
+  description = "Enable VPC Service Controls sovereign perimeter around sensitive GCP APIs (requires access_policy_id and gcp_project_number)"
+  type        = bool
+  default     = false
+}
+
+variable "access_policy_id" {
+  description = "The numeric ID of the Access Context Manager access policy (org-level). Required when enable_vpc_service_controls is true."
+  type        = string
+  default     = ""
+}
+
+variable "gcp_project_number" {
+  description = "The numeric GCP project number (not the project ID). Required for VPC Service Controls resource scoping."
+  type        = string
+  default     = ""
+}
+
+variable "enable_binary_authorization" {
+  description = "Enable Binary Authorization to enforce attestation-gated container deployments via Cloud Build"
+  type        = bool
+  default     = false
+}
+
+# ------------------------------------------------------------------------------
+# AI-Layer Configuration
+# ------------------------------------------------------------------------------
+variable "vertex_ai_search_datastore_id" {
+  description = "Discovery Engine data store ID for code search RAG"
+  type        = string
+  default     = "alti-code-search"
+}
+
+variable "vertex_ai_tensorboard_enabled" {
+  description = "Enable Vertex AI Tensorboard for experiment tracking"
+  type        = bool
+  default     = true
+}
+
+variable "vertex_ai_feature_store_min_nodes" {
+  description = "Minimum Bigtable nodes for Feature Online Store"
+  type        = number
+  default     = 1
+}
+
+variable "vertex_ai_feature_store_max_nodes" {
+  description = "Maximum Bigtable nodes for Feature Online Store auto-scaling"
+  type        = number
+  default     = 3
+}
+
+# ------------------------------------------------------------------------------
+# Deployment Mode Configuration
+# ------------------------------------------------------------------------------
+variable "deployment_mode" {
+  description = "Primary deployment mode: 'cloud' (SaaS), 'byoc' (enterprise), 'airgap' (classified)"
+  type        = string
+  default     = "cloud"
+
+  validation {
+    condition     = contains(["cloud", "byoc", "airgap"], var.deployment_mode)
+    error_message = "deployment_mode must be one of: cloud, byoc, airgap"
+  }
+}
+
+variable "enable_governance_module" {
+  description = "Enable the governance module (org policies, audit logging, budget alerts)"
+  type        = bool
+  default     = true
+}
+
+variable "enable_control_plane" {
+  description = "Enable the SaaS control plane for multi-tenant management"
+  type        = bool
+  default     = false
+}
+
+# ------------------------------------------------------------------------------
+# Security: Cloud Armor & VPC Service Controls
+# ------------------------------------------------------------------------------
+variable "enable_vpc_service_controls" {
+  description = "Enable VPC Service Controls for data exfiltration prevention"
+  type        = bool
+  default     = false
+}
+
+variable "enable_vpc_sc" {
+  description = "Alias for enable_vpc_service_controls (used by security.tf)"
+  type        = bool
+  default     = false
+}
+
+variable "access_policy_id" {
+  description = "Access Context Manager policy ID (required if VPC-SC is enabled)"
+  type        = string
+  default     = ""
+}
+
+variable "trusted_ip_ranges" {
+  description = "Trusted IP CIDR ranges for VPC-SC access levels"
+  type        = list(string)
+  default     = []
+}
+
+variable "vpc_sc_allowed_ip_ranges" {
+  description = "Allowed IP ranges for VPC Service Controls"
+  type        = list(string)
+  default     = []
+}
+
+variable "vpc_sc_allowed_members" {
+  description = "Allowed IAM members for VPC Service Controls"
+  type        = list(string)
+  default     = []
+}
+
+# ------------------------------------------------------------------------------
+# Observability: Monitoring, Logging, Uptime
+# ------------------------------------------------------------------------------
+variable "observability_notification_email" {
+  description = "Email address for monitoring alert notifications"
+  type        = string
+  default     = ""
+}
+
+variable "uptime_check_host" {
+  description = "Hostname for uptime checks (e.g., api.alticode.studio)"
+  type        = string
+  default     = "api.alticode.studio"
+}
+
+# ------------------------------------------------------------------------------
+# CDN & Load Balancing
+# ------------------------------------------------------------------------------
+variable "cdn_domain" {
+  description = "Domain for the managed SSL certificate and CDN"
+  type        = string
+  default     = "alticode.studio"
+}
+
+variable "cdn_api_domain" {
+  description = "API subdomain for backend routing"
+  type        = string
+  default     = "api.alticode.studio"
+}
+
+variable "frontend_bucket_name" {
+  description = "GCS bucket name for frontend static assets"
+  type        = string
+  default     = "alti-frontend-assets"
+}
+
+variable "cloud_run_neg_name" {
+  description = "Name of the Cloud Run network endpoint group for the backend"
+  type        = string
+  default     = "alti-backend-neg"
+}

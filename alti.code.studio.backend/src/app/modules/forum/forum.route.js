@@ -13,7 +13,6 @@ const {
   validateRequest,
 } = require('../../middlewares/validateRequest/validateRequest');
 const forumUserActivitiesValidationSchema = require('./forum.validation');
-// const { authController } = require("../auth/auth.controller");
 
 router
   .route('/:id')

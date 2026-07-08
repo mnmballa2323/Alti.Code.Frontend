@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-// import { logger } from '../../../shared/logger.js';
 import paginationHelpers from '../../helpers/paginationHelpers.js';
 import UserModel from '../auth/auth.model.js';
 import SubscriptionModel from '../payment/payment.model.js';
@@ -68,19 +67,7 @@ const getAllUsersService = async (filters, paginationOptions) => {
       unverifyUsers,
     },
     data: users,
-  };
 };
-
-// const updateUserRoleService = async (id, userRole) => {
-//   const filter = { _id: id };
-//   const updateDoc = {
-//     $set: { role: userRole },
-//   };
-//   const result = await UserModel.updateOne(filter, updateDoc, {
-//     runValidators: true,
-//   });
-//   return result;
-// };
 
 //===================  Buyer =========================
 const getAllBuyerServices = async () => {

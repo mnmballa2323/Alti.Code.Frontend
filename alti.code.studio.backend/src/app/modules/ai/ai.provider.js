@@ -283,7 +283,7 @@ class AIProvider {
 
   /**
    * Generate embedding for the given text.
-   * Uses OfflineEmbeddingCache under air-gapped mode, or fallback.
+   * Uses OfflineEmbeddingCache under air-gapped mode, or Vertex AI text-embedding-005.
    */
   async embed(text, options = {}) {
     if (process.env.AIR_GAPPED_MODE === 'true') {
@@ -291,10 +291,37 @@ class AIProvider {
         await import('./offline_embedding_cache.js');
       return OfflineEmbeddingCache.getEmbedding(text, options);
     }
-    logger.info(
-      `🧠 AIProvider: Generating mock 1536-dim embedding in non-air-gapped mode`,
-    );
-    return new Array(1536).fill(0.1);
+
+    const { executeVertexEmbedding } = await import('./vertex_ai.helper.js');
+    const result = await executeVertexEmbedding(text, options);
+    return result.embedding;
+  }
+
+  /**
+   * Generate a response grounded with Google Search results.
+   * Returns text with inline citations from live web data.
+   */
+  async groundedGenerate(prompt, options = {}) {
+    if (process.env.AIR_GAPPED_MODE === 'true') {
+      return this._executeLocalGdcModel(prompt, { ...options, isReason: false });
+    }
+
+    const { executeVertexGroundedGeneration } = await import('./vertex_ai.helper.js');
+    return executeVertexGroundedGeneration(prompt, options);
+  }
+
+  /**
+   * Streaming generation — calls onChunk callback for each text fragment.
+   */
+  async stream(prompt, options = {}) {
+    if (process.env.AIR_GAPPED_MODE === 'true') {
+      const text = await this._executeLocalGdcModel(prompt, { ...options, isReason: false });
+      if (options.onChunk) options.onChunk(text);
+      return { text, provider: 'gdc-local' };
+    }
+
+    const { executeVertexStreamingInference } = await import('./vertex_ai.helper.js');
+    return executeVertexStreamingInference(prompt, options.model || 'gemini-3.5-flash', options);
   }
 
   /**

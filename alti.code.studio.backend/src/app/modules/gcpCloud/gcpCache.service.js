@@ -22,13 +22,48 @@ class GcpCacheService {
         process.env.GCP_REDIS_HOST || process.env.REDIS_HOST || '127.0.0.1';
       const redisPort =
         process.env.GCP_REDIS_PORT || process.env.REDIS_PORT || 6379;
-      const redisPassword =
+      let redisPassword =
         process.env.GCP_REDIS_PASSWORD || process.env.REDIS_PASSWORD || null;
+
+      // GCP Memorystore IAM Auth: Use short-lived access token as password
+      if (process.env.GCP_REDIS_AUTH_MODE === 'iam') {
+        try {
+          const { GoogleAuth } = await import('google-auth-library');
+          const auth = new GoogleAuth({
+            scopes: 'https://www.googleapis.com/auth/cloud-platform',
+          });
+          const authClient = await auth.getClient();
+          const tokenResponse = await authClient.getAccessToken();
+          redisPassword = tokenResponse.token;
+          logger.info('🔐 GCP Memorystore: Using IAM-based authentication');
+
+          // Refresh token every 45 minutes (tokens expire in 60 min)
+          setInterval(async () => {
+            try {
+              const refreshedToken = await authClient.getAccessToken();
+              if (this.publisher) {
+                await this.publisher.auth(refreshedToken.token);
+              }
+              if (this.subscriber) {
+                await this.subscriber.auth(refreshedToken.token);
+              }
+              logger.info('🔐 GCP Memorystore: IAM token refreshed');
+            } catch (refreshErr) {
+              logger.error(`❌ GCP Memorystore IAM token refresh failed: ${refreshErr.message}`);
+            }
+          }, 45 * 60 * 1000);
+        } catch (iamErr) {
+          logger.warn(`⚠️ GCP Memorystore IAM auth failed: ${iamErr.message}. Using password auth.`);
+        }
+      }
+
+      const enableTls = process.env.GCP_REDIS_TLS === 'true' || process.env.GCP_REDIS_AUTH_MODE === 'iam';
 
       const redisOptions = {
         host: redisHost,
         port: redisPort,
         password: redisPassword,
+        ...(enableTls ? { tls: { rejectUnauthorized: false } } : {}),
         retryStrategy: times => {
           if (times > 3) {
             logger.warn(

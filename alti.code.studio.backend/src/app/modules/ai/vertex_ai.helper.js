@@ -19,7 +19,7 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
 
   // 1. Map model ids to publisher and model name in Vertex AI
   let publisher = 'google';
-  let vertexModelId = 'gemini-2.5-flash';
+  let vertexModelId = 'gemini-3.5-flash';
   let isClaude = false;
 
   if (modelId.includes('claude')) {
@@ -36,9 +36,9 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
   } else {
     publisher = 'google';
     if (modelId.includes('pro')) {
-      vertexModelId = 'gemini-3.5-pro'; // Latest Gemini Pro model on Vertex
+      vertexModelId = 'gemini-3.5-pro';
     } else {
-      vertexModelId = 'gemini-3.5-flash'; // Latest Gemini Flash model on Vertex
+      vertexModelId = 'gemini-3.5-flash';
     }
   }
 
@@ -81,9 +81,12 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
         url = `https://${region}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${region}/publishers/google/models/${vertexModelId}:generateContent`;
         body = {
           contents: [{ parts: [{ text: prompt }] }],
+          ...(options.systemInstruction ? {
+            systemInstruction: { parts: [{ text: options.systemInstruction }] },
+          } : {}),
           generationConfig: {
             temperature: options.temperature || 0.2,
-            maxOutputTokens: 4096,
+            maxOutputTokens: options.maxOutputTokens || 8192,
             ...(isStructured ? { responseMimeType: 'application/json' } : {}),
           },
         };
@@ -208,6 +211,434 @@ function getSimulatedResponse(prompt, modelDesc) {
   return `[GOOGLE VERTEX AI DIRECT SOVEREIGN COMPLIANT SIMULATION]
 This response was processed securely via direct Google Cloud Vertex AI regional endpoints (us-central1) and logged in the GCP Audit Dashboard.
 Your prompt snippet: "${prompt.substring(0, 80)}..."`;
+}
+
+/**
+ * Generates real text embeddings using Vertex AI text-embedding-005.
+ * Returns a 768-dimensional vector (or custom dimension via options.outputDimensionality).
+ */
+export async function executeVertexEmbedding(text, options = {}) {
+  let projectId = process.env.GCP_PROJECT_ID || 'sovereign-cloud-project';
+  let accessToken = null;
+
+  try {
+    const auth = new GoogleAuth({
+      scopes: 'https://www.googleapis.com/auth/cloud-platform',
+    });
+    const authClient = await auth.getClient();
+    projectId = await auth.getProjectId();
+    const tokenResponse = await authClient.getAccessToken();
+    accessToken = tokenResponse.token;
+  } catch (err) {
+    logger.warn(`⚠️ Vertex AI Embedding auth bypassed: ${err.message}`);
+  }
+
+  const region = DEFAULT_REGION;
+  const model = options.model || 'text-embedding-005';
+  const dimension = options.outputDimensionality || 768;
+
+  if (accessToken && projectId) {
+    try {
+      const url = `https://${region}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${region}/publishers/google/models/${model}:predict`;
+      const body = {
+        instances: [{ content: text, task_type: options.taskType || 'RETRIEVAL_DOCUMENT' }],
+        parameters: { outputDimensionality: dimension },
+      };
+
+      logger.info(`🧠 Vertex AI Embedding: ${model} (${dimension}-dim)`);
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const embedding = data.predictions?.[0]?.embeddings?.values;
+        if (embedding) {
+          return {
+            embedding,
+            dimension: embedding.length,
+            model,
+            provider: 'gcp-vertex',
+          };
+        }
+      }
+      const errText = await response.text();
+      throw new Error(`Vertex Embedding API status ${response.status}: ${errText}`);
+    } catch (apiErr) {
+      logger.error(`❌ Vertex AI Embedding failed: ${apiErr.message}`);
+    }
+  }
+
+  // Fallback: Google AI Studio Embedding API
+  const apiKey = process.env.GEMINI_API_KEY;
+  if (apiKey) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:embedContent?key=${apiKey}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: `models/${model}`,
+          content: { parts: [{ text }] },
+          outputDimensionality: dimension,
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const embedding = data.embedding?.values;
+        if (embedding) {
+          return { embedding, dimension: embedding.length, model, provider: 'gcp-developer' };
+        }
+      }
+    } catch (devErr) {
+      logger.error(`❌ Google AI Studio embedding fallback failed: ${devErr.message}`);
+    }
+  }
+
+  // Last resort: deterministic mock embedding
+  logger.warn('⚠️ Vertex AI Embedding: All methods failed. Returning mock embedding.');
+  return {
+    embedding: new Array(dimension).fill(0).map((_, i) => Math.sin(i * 0.1) * 0.5),
+    dimension,
+    model: 'mock',
+    provider: 'mock',
+  };
+}
+
+/**
+ * Generates a response grounded with Google Search results.
+ * Returns the response with inline citations from live web data.
+ */
+export async function executeVertexGroundedGeneration(prompt, options = {}) {
+  let projectId = process.env.GCP_PROJECT_ID || 'sovereign-cloud-project';
+  let accessToken = null;
+
+  try {
+    const auth = new GoogleAuth({
+      scopes: 'https://www.googleapis.com/auth/cloud-platform',
+    });
+    const authClient = await auth.getClient();
+    projectId = await auth.getProjectId();
+    const tokenResponse = await authClient.getAccessToken();
+    accessToken = tokenResponse.token;
+  } catch (err) {
+    logger.warn(`⚠️ Vertex AI Grounded Generation auth bypassed: ${err.message}`);
+    return executeVertexInference(prompt, options.model || 'gemini-3.5-flash', options);
+  }
+
+  if (!accessToken) {
+    return executeVertexInference(prompt, options.model || 'gemini-3.5-flash', options);
+  }
+
+  const region = DEFAULT_REGION;
+  const modelId = options.model || 'gemini-3.5-flash';
+
+  try {
+    const url = `https://${region}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${region}/publishers/google/models/${modelId}:generateContent`;
+    const body = {
+      contents: [{ parts: [{ text: prompt }] }],
+      ...(options.systemInstruction ? {
+        systemInstruction: { parts: [{ text: options.systemInstruction }] },
+      } : {}),
+      tools: [{
+        googleSearchRetrieval: {
+          dynamicRetrievalConfig: {
+            mode: 'MODE_DYNAMIC',
+            dynamicThreshold: options.groundingThreshold || 0.3,
+          },
+        },
+      }],
+      generationConfig: {
+        temperature: options.temperature || 0.2,
+        maxOutputTokens: options.maxOutputTokens || 8192,
+      },
+    };
+
+    logger.info(`🌐 Vertex AI Grounded Generation: ${modelId} with Google Search`);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const candidate = data.candidates?.[0];
+      const text = candidate?.content?.parts?.[0]?.text || '';
+      const groundingMetadata = candidate?.groundingMetadata || {};
+
+      return {
+        text,
+        groundingMetadata: {
+          searchEntryPoint: groundingMetadata.searchEntryPoint,
+          groundingChunks: groundingMetadata.groundingChunks || [],
+          groundingSupports: groundingMetadata.groundingSupports || [],
+          webSearchQueries: groundingMetadata.webSearchQueries || [],
+        },
+        usage: {
+          promptTokens: Math.max(1, Math.ceil(prompt.length / 4)),
+          completionTokens: Math.max(1, Math.ceil(text.length / 4)),
+        },
+        provider: 'gcp-vertex-grounded',
+      };
+    }
+    const errText = await response.text();
+    throw new Error(`Vertex Grounded API status ${response.status}: ${errText}`);
+  } catch (apiErr) {
+    logger.error(`❌ Vertex AI Grounded Generation failed: ${apiErr.message}. Falling back to standard inference.`);
+    return executeVertexInference(prompt, modelId, options);
+  }
+}
+
+/**
+ * Streaming inference via Vertex AI using Server-Sent Events (SSE).
+ * Calls the onChunk callback for each streamed text fragment.
+ */
+export async function executeVertexStreamingInference(prompt, modelId, options = {}) {
+  let projectId = process.env.GCP_PROJECT_ID || 'sovereign-cloud-project';
+  let accessToken = null;
+
+  try {
+    const auth = new GoogleAuth({
+      scopes: 'https://www.googleapis.com/auth/cloud-platform',
+    });
+    const authClient = await auth.getClient();
+    projectId = await auth.getProjectId();
+    const tokenResponse = await authClient.getAccessToken();
+    accessToken = tokenResponse.token;
+  } catch (err) {
+    logger.warn(`⚠️ Vertex AI Streaming auth bypassed: ${err.message}`);
+    const fallback = await executeVertexInference(prompt, modelId, options);
+    if (options.onChunk) options.onChunk(fallback.text);
+    return fallback;
+  }
+
+  if (!accessToken) {
+    const fallback = await executeVertexInference(prompt, modelId, options);
+    if (options.onChunk) options.onChunk(fallback.text);
+    return fallback;
+  }
+
+  const region = DEFAULT_REGION;
+  const resolvedModel = modelId.includes('pro') ? 'gemini-3.5-pro' : 'gemini-3.5-flash';
+
+  try {
+    const url = `https://${region}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${region}/publishers/google/models/${resolvedModel}:streamGenerateContent?alt=sse`;
+    const body = {
+      contents: [{ parts: [{ text: prompt }] }],
+      ...(options.systemInstruction ? {
+        systemInstruction: { parts: [{ text: options.systemInstruction }] },
+      } : {}),
+      generationConfig: {
+        temperature: options.temperature || 0.2,
+        maxOutputTokens: options.maxOutputTokens || 8192,
+      },
+    };
+
+    logger.info(`🌊 Vertex AI Streaming: ${resolvedModel}`);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(body),
+      signal: options.signal,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Vertex Streaming API status ${response.status}`);
+    }
+
+    let fullText = '';
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (line.startsWith('data: ')) {
+          try {
+            const data = JSON.parse(line.slice(6));
+            const chunk = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            if (chunk) {
+              fullText += chunk;
+              if (options.onChunk) options.onChunk(chunk);
+            }
+          } catch {
+            // Skip malformed SSE lines
+          }
+        }
+      }
+    }
+
+    return {
+      text: fullText,
+      usage: {
+        promptTokens: Math.max(1, Math.ceil(prompt.length / 4)),
+        completionTokens: Math.max(1, Math.ceil(fullText.length / 4)),
+      },
+      provider: 'gcp-vertex-streaming',
+    };
+  } catch (apiErr) {
+    logger.error(`❌ Vertex AI Streaming failed: ${apiErr.message}. Falling back to non-streaming.`);
+    const fallback = await executeVertexInference(prompt, modelId, options);
+    if (options.onChunk) options.onChunk(fallback.text);
+    return fallback;
+  }
+}
+
+/**
+ * Context caching for Vertex AI — caches large context prefixes to reduce cost by ~75%.
+ * Creates a cached content resource and references it in subsequent requests.
+ */
+export async function executeVertexCachedInference(prompt, cachedContentName, options = {}) {
+  let projectId = process.env.GCP_PROJECT_ID || 'sovereign-cloud-project';
+  let accessToken = null;
+
+  try {
+    const auth = new GoogleAuth({
+      scopes: 'https://www.googleapis.com/auth/cloud-platform',
+    });
+    const authClient = await auth.getClient();
+    projectId = await auth.getProjectId();
+    const tokenResponse = await authClient.getAccessToken();
+    accessToken = tokenResponse.token;
+  } catch (err) {
+    logger.warn(`⚠️ Vertex AI Cached Inference auth bypassed: ${err.message}`);
+    return executeVertexInference(prompt, options.model || 'gemini-3.5-flash', options);
+  }
+
+  if (!accessToken || !cachedContentName) {
+    return executeVertexInference(prompt, options.model || 'gemini-3.5-flash', options);
+  }
+
+  const region = DEFAULT_REGION;
+  const modelId = options.model || 'gemini-3.5-flash';
+
+  try {
+    const url = `https://${region}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${region}/publishers/google/models/${modelId}:generateContent`;
+    const body = {
+      cachedContent: cachedContentName,
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      generationConfig: {
+        temperature: options.temperature || 0.2,
+        maxOutputTokens: options.maxOutputTokens || 8192,
+      },
+    };
+
+    logger.info(`💾 Vertex AI Cached Inference: ${modelId} (cache: ${cachedContentName})`);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(body),
+      signal: options.signal,
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      const usageMetadata = data.usageMetadata || {};
+
+      return {
+        text,
+        usage: {
+          promptTokens: usageMetadata.promptTokenCount || Math.ceil(prompt.length / 4),
+          completionTokens: usageMetadata.candidatesTokenCount || Math.ceil(text.length / 4),
+          cachedContentTokenCount: usageMetadata.cachedContentTokenCount || 0,
+        },
+        provider: 'gcp-vertex-cached',
+      };
+    }
+    const errText = await response.text();
+    throw new Error(`Vertex Cached API status ${response.status}: ${errText}`);
+  } catch (apiErr) {
+    logger.error(`❌ Vertex AI Cached Inference failed: ${apiErr.message}. Falling back to standard.`);
+    return executeVertexInference(prompt, modelId, options);
+  }
+}
+
+/**
+ * Creates a cached content resource on Vertex AI for context caching.
+ * Returns the cache name to reference in subsequent generateContent calls.
+ */
+export async function createVertexContextCache(contents, options = {}) {
+  let projectId = process.env.GCP_PROJECT_ID || 'sovereign-cloud-project';
+  let accessToken = null;
+
+  try {
+    const auth = new GoogleAuth({
+      scopes: 'https://www.googleapis.com/auth/cloud-platform',
+    });
+    const authClient = await auth.getClient();
+    projectId = await auth.getProjectId();
+    const tokenResponse = await authClient.getAccessToken();
+    accessToken = tokenResponse.token;
+  } catch (err) {
+    logger.warn(`⚠️ Vertex AI Context Cache auth bypassed: ${err.message}`);
+    return null;
+  }
+
+  if (!accessToken) return null;
+
+  const region = DEFAULT_REGION;
+  const modelId = options.model || 'gemini-3.5-flash';
+  const ttlSeconds = options.ttlSeconds || 3600;
+
+  try {
+    const url = `https://${region}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${region}/cachedContents`;
+    const body = {
+      model: `projects/${projectId}/locations/${region}/publishers/google/models/${modelId}`,
+      contents: Array.isArray(contents)
+        ? contents
+        : [{ role: 'user', parts: [{ text: contents }] }],
+      ...(options.systemInstruction ? {
+        systemInstruction: { parts: [{ text: options.systemInstruction }] },
+      } : {}),
+      ttl: `${ttlSeconds}s`,
+      displayName: options.displayName || 'alti-context-cache',
+    };
+
+    logger.info(`💾 Vertex AI: Creating context cache (TTL: ${ttlSeconds}s)`);
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      logger.info(`💾 Vertex AI: Context cache created: ${data.name}`);
+      return data.name;
+    }
+    const errText = await response.text();
+    logger.error(`❌ Vertex AI Context Cache creation failed: ${errText}`);
+    return null;
+  } catch (apiErr) {
+    logger.error(`❌ Vertex AI Context Cache error: ${apiErr.message}`);
+    return null;
+  }
 }
 
 /**

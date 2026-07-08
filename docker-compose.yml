@@ -46,7 +46,7 @@ services:
     networks:
       - alti_net
 
-  # AWS Bedrock and Azure Foundry Microservices have been removed for pure GCP sovereign compliance.
+  # All inference services route exclusively through Google Cloud Vertex AI for sovereign compliance.
 
   # 🖥️ The Face: Frontend
   frontend:

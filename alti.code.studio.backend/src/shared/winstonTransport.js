@@ -6,7 +6,6 @@
  */
 
 import Transport from 'winston-transport';
-// import { EventBus } from '../app/shared/eventBus.js'; // REMOVED: Circular dependency breaker
 
 export class EventBusTransport extends Transport {
   constructor(opts) {

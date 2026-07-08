@@ -6,8 +6,6 @@
  */
 
 import express from 'express';
-// import auth from '../../middlewares/auth.js';
-// import { USER_ROLE } from '../user/user.constant.js';
 import { AgentController } from './agent.controller.js';
 
 const router = express.Router();
@@ -41,8 +39,6 @@ const router = express.Router();
  *       200:
  *         description: Mission started successfully
  */
-// Route for testing without auth middleware
-// router.post('/mission', auth(USER_ROLE.USER), AgentController.startMission);
 router.post('/mission', AgentController.startMission);
 
 /**

@@ -8,9 +8,7 @@
 const httpStatus = require('http-status');
 const { sendResponse } = require('../../../shared/sendResponse');
 const { catchAsync } = require('../../../shared/catchAsync');
-// const { AccessToken } = require('livekit-server-sdk');
 const { livekit_secret_key, livekit_api_key } = require('../../../../config');
-// const { logger } = require('../../../shared/logger');
 
 const generateRandomParticipantName = length => {
   const alphabets = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';

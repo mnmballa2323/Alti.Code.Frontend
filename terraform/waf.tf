@@ -3,6 +3,29 @@ resource "google_compute_security_policy" "waf_policy" {
   name        = "inso-production-waf-policy"
   description = "Enterprise Edge WAF shield policy blocking SQLi, XSS, and OWASP Top 10"
 
+  # Cloud Armor Adaptive Protection — ML-based L7 DDoS Defense
+  adaptive_protection_config {
+    layer_7_ddos_defense_config {
+      enable          = true
+      rule_visibility = "STANDARD"
+    }
+  }
+
+  # 0. Geo-Blocking Rule — deny traffic from blocked countries (configurable)
+  dynamic "rule" {
+    for_each = length(var.waf_blocked_countries) > 0 ? [1] : []
+    content {
+      action   = "deny(403)"
+      priority = "800"
+      match {
+        expr {
+          expression = "origin.region_code.matches('${join("|", var.waf_blocked_countries)}')"
+        }
+      }
+      description = "Geo-blocking rule — deny traffic from restricted countries"
+    }
+  }
+
   # 1. Default Rule: Allow all traffic and filter incrementally
   rule {
     action   = "allow"

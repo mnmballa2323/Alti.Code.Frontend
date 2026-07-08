@@ -5,7 +5,6 @@
  * https://opensource.org/licenses/MIT
  */
 
-// import mongoose from 'mongoose';
 import mongoose from 'mongoose';
 
 const llamaResponseSchema = new mongoose.Schema({

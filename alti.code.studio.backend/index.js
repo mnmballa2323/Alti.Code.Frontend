@@ -26,7 +26,6 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import xss from 'xss-clean';
 import hpp from 'hpp';
-// import config from './config';
 
 import globalErrorHandler from './src/app/middlewares/globalErrorHandler/globalErrorHandler.js';
 import router from './src/app/routes/index.js';
@@ -35,12 +34,10 @@ import { appRouter } from './src/app/trpc/router.js';
 import { logger } from './src/shared/logger.js';
 import { marketSeeder } from './src/app/modules/enterprise/market.seeder.js';
 import config from './config/index.js';
-// import './src/app/middlewares/resetUsage/resetUsage.js';
 
 // // Load environment variables
 dotenv.config();
 
-// import { SentinelService } from './src/app/modules/sentinel/sentinel.service.js';
 import passport from 'passport';
 import googleStrategy from './src/app/modules/auth/google.strategy.js';
 import githubStrategy from './src/app/modules/auth/github.strategy.js';

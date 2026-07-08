@@ -18,6 +18,7 @@ import { agentRegistry } from './src/app/modules/agents/agent.registry.js';
 import { startDataRetentionCron } from './src/app/scripts/dataRetention.cron.js';
 import crypto from 'crypto';
 import { auditFipsCompliance } from './src/shared/security/fipsCheck.js';
+import { gcpStartupValidator } from './src/app/modules/gcpCloud/gcpStartupValidator.service.js';
 
 // Enforce FIPS 140-3 Cryptography for Defense/Gov (DoD IL5/IL6)
 if (process.env.NODE_ENV === 'production') {
@@ -45,7 +46,15 @@ mongoose.set('bufferCommands', false);
 
 async function main() {
   try {
-    // 0. Load GCP Secret Manager / sovereign enterprise secrets
+    // 0. Initialize GCP Observability (MUST be first for trace context propagation)
+    try {
+      const { initializeObservability } = await import('./src/app/modules/gcpCloud/gcpObservability.service.js');
+      await initializeObservability();
+    } catch (obsErr) {
+      logger.warn(`⚠️ GCP Observability init bypassed: ${obsErr.message}`);
+    }
+
+    // 1. Load GCP Secret Manager / sovereign enterprise secrets
     try {
       const { loadEnterpriseSecrets } = await import('./config/index.js');
       await loadEnterpriseSecrets();
@@ -54,12 +63,20 @@ async function main() {
       logger.warn(`⚠️ Enterprise Key Vault auto-inject bypassed: ${secretErr.message}`);
     }
 
-    // 1. Initialize PostgreSQL (Prisma)
+    // 2. Initialize PostgreSQL (Prisma)
     await connectPrisma();
     
-    // 2. Disable Legacy MongoDB & Mock Mode
+    // 3. Disable Legacy MongoDB & Mock Mode
     logger.info('✅ Strict Database Policy Enforced: Legacy MongoDB and MongoMemoryServer disabled.');
     logger.info('   All systems now exclusively utilize the robust PostgreSQL (Prisma) data store.');
+
+    // 3.5 Run GCP Startup Validation Dashboard
+    await gcpStartupValidator.validate();
+
+    // 4. Initialize GCP Cloud Platform (all 24 services)
+    import('./src/app/modules/gcpCloud/gcpBootstrap.service.js').then(async ({ initializeGcpServices }) => {
+      await initializeGcpServices();
+    }).catch(err => logger.error('❌ Failed to initialize GCP Cloud Platform', err));
 
     // Seed initial agent skills for SkillOpt catalog
     try {
@@ -281,6 +298,12 @@ const gracefulShutdown = async (signal) => {
           agentMemoryService.shutdown();
           logger.info('✅ AgentMemory shutdown initiated.');
         }).catch(() => logger.warn('AgentMemory shutdown bypassed.'));
+
+        // Shutdown GCP Cloud Platform services
+        import('./src/app/modules/gcpCloud/gcpBootstrap.service.js').then(async ({ shutdownGcpServices }) => {
+          await shutdownGcpServices();
+          logger.info('✅ GCP Cloud Platform shutdown complete.');
+        }).catch(() => logger.warn('GCP shutdown bypassed.'));
 
         // Shutdown MiMo Dream Service
         import('./src/app/modules/memory/mimo_dream.service.js').then(({ mimoDreamService }) => {
