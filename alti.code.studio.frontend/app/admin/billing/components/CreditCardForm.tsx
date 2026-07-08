@@ -98,7 +98,7 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
 
   const cardNumberOptions = {
     ...ELEMENT_OPTIONS,
-    placeholder: "Enter Card Number",
+    placeholder: "Card Number",
   };
 
   const cardExpiryOptions = {
@@ -136,7 +136,7 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <input
           className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
-          placeholder="Enter Cardholder Name"
+          placeholder="Cardholder Name"
           type="text"
           value={name}
           onChange={(e) => {
@@ -147,7 +147,7 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
           required
         />
         <div className={wrapperClass}>
-          {stripe ? <CardNumberElement options={cardNumberOptions} /> : <FallbackInput placeholder="Enter Card Number" />}
+          {stripe ? <CardNumberElement options={cardNumberOptions} /> : <FallbackInput placeholder="Card Number" />}
         </div>
       </div>
 
@@ -184,7 +184,7 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
           Vault.
         </p>
         <button
-          className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg shadow-sm focus:outline-none disabled:opacity-50"
+          className="px-10 h-11 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-sm font-semibold rounded-xl shadow-sm focus:outline-none disabled:opacity-50 shrink-0 min-w-[200px]"
           type="submit"
           disabled={isProcessing}
         >
