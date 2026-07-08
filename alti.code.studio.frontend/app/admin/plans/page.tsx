@@ -3,7 +3,6 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
 import { useAppSelector } from "@/store";
 
 const plans = [
@@ -25,9 +24,10 @@ const plans = [
       "Shared infrastructure",
       "Fastest deployment",
     ],
-    cta: "Deploy Cloud",
-    buttonClass: "bg-white text-black hover:bg-zinc-100",
+    cta: "Current Plan",
+    buttonClass: "bg-blue-600 hover:bg-blue-700 text-white disabled:text-white",
     isContact: false,
+    isCurrent: true,
   },
   {
     name: "Dedicated",
@@ -47,9 +47,10 @@ const plans = [
       "Dedicated infrastructure",
       "Enhanced security & data isolation",
     ],
-    cta: "Deploy Dedicated",
+    cta: "Select Plan",
     buttonClass: "bg-white text-black hover:bg-zinc-100",
     isContact: false,
+    isCurrent: false,
   },
   {
     name: "Sovereign",
@@ -70,29 +71,26 @@ const plans = [
       "Sovereign security controls",
     ],
     cta: "Contact Us",
-    buttonClass: "bg-blue-600 hover:bg-blue-700 text-white",
+    buttonClass: "bg-white text-black hover:bg-zinc-100",
     isContact: true,
+    isCurrent: false,
   },
 ];
 
-export default function PricingSection() {
+export default function PlansPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const profile = useAppSelector((state) => state.user.data);
   const [loading, setLoading] = React.useState<string | null>(null);
 
   const handleCheckout = async (plan: (typeof plans)[number]) => {
-    // Sovereign tier → contact form
     if (plan.isContact) {
       router.push("/contact");
-
       return;
     }
-
-    // Not logged in → register first
+    
     if (status !== "authenticated" || !session?.user) {
       router.push("/register");
-
       return;
     }
 
@@ -139,33 +137,14 @@ export default function PricingSection() {
   };
 
   return (
-    <section
-      className="w-full py-24 bg-[#030014] text-white px-4 sm:px-6 lg:px-8 relative overflow-hidden"
-      id="pricing"
-    >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-blue-900/10 rounded-full blur-[140px] pointer-events-none z-0" />
-
-      <div className="max-w-7xl mx-auto w-full flex flex-col items-center relative z-10">
-        {/* Header */}
-        <div className="flex flex-col items-center text-center gap-4 max-w-3xl mb-20">
-          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-white leading-tight">
-            Predictable Pricing.
-          </h2>
-          <p className="text-base sm:text-lg text-zinc-400 leading-relaxed font-medium">
-            Enterprise licensing for sovereign agent orchestration and secure
-            sandboxing.
-            <br />
-            Inference token usage is billed directly at cost or routed via
-            client-managed keys.
-          </p>
-        </div>
-
+    <div className="flex-1 bg-[#F4F4F6] dark:bg-background min-h-screen p-8 lg:p-12 overflow-y-auto">
+      <div className="max-w-[85rem] mx-auto pt-4 md:pt-12">
         {/* Pricing Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-6xl items-stretch mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 w-full items-stretch">
           {plans.map((plan, idx) => (
             <div
               key={idx}
-              className="relative flex flex-col justify-between p-6 xl:p-8 rounded-[32px] border border-blue-500/50 shadow-sm transition-all duration-300 lightning-glow-card-active"
+              className="relative flex flex-col justify-between p-5 xl:p-6 rounded-[32px] bg-[#030014] border border-blue-500/50 shadow-sm transition-all duration-300"
             >
               <div className="flex-1 flex flex-col justify-between mb-8">
                 <div>
@@ -190,17 +169,16 @@ export default function PricingSection() {
                 </div>
 
                 <div className="flex flex-col gap-6 mt-auto">
-                  <p className="text-zinc-400 text-sm leading-relaxed font-medium text-left">
+                  <p className="text-zinc-400 text-[13px] leading-relaxed font-medium text-left">
                     {plan.description}
                   </p>
                 </div>
               </div>
 
-              {/* Action Button */}
               <button
-                className={`w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 border border-transparent active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed micro-beam-btn ${plan.buttonClass}`}
-                disabled={loading === plan.backendPlan}
-                onClick={() => handleCheckout(plan)}
+                className={`w-full py-4 px-6 rounded-2xl font-semibold text-sm transition-all duration-300 disabled:cursor-not-allowed ${plan.buttonClass} ${plan.isCurrent ? "" : "disabled:opacity-60"}`}
+                disabled={loading === plan.backendPlan || plan.isCurrent}
+                onClick={() => !plan.isCurrent && handleCheckout(plan)}
               >
                 {loading === plan.backendPlan ? (
                   <span className="flex items-center justify-center gap-2">
@@ -233,6 +211,6 @@ export default function PricingSection() {
           ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 }

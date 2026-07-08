@@ -44,86 +44,22 @@ export default function BillingPage() {
   return (
     <div className="w-full pt-6">
       <div className="flex flex-col gap-6 w-full">
-        {/* Floating Box Cards in a Row for the Plan & Card Part */}
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
-          {/* Card 1: Plan Type */}
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm relative flex flex-col justify-between h-28">
-            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
-              Plan
-            </div>
-            <div className="flex items-baseline justify-between mt-2">
-              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
-                Pro SaaS
-              </span>
-              <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-green-50 dark:bg-green-950/30 text-green-600 dark:text-green-400 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
-                Active
-              </span>
-            </div>
-          </div>
-
-          {/* Card 2: Active Seats */}
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
-            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
-              Seats
-            </div>
-            <div className="flex items-baseline justify-between mt-2">
-              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
-                {activeSeats} Active
-              </span>
-              <span className="text-[10px] text-neutral-400 font-semibold">
-                ${seatPrice}/seat
-              </span>
-            </div>
-          </div>
-
-          {/* Card 3: Monthly Cost */}
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
-            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
-              Total Monthly
-            </div>
-            <div className="flex items-baseline justify-between mt-2">
-              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
-                ${totalAmount}.00
-              </span>
-              <span className="text-[10px] text-neutral-400 font-semibold">
-                USD
-              </span>
-            </div>
-          </div>
-
-          {/* Card 4: Payment Method */}
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl p-5 shadow-sm flex flex-col justify-between h-28">
-            <div className="text-[10px] text-neutral-400 font-bold uppercase tracking-wider">
-              Payment
-            </div>
-            <div className="flex items-baseline justify-between mt-2">
-              <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
-                {activePaymentMethod.details}
-              </span>
-              <span className="text-[10px] text-neutral-400 font-semibold">
-                {activePaymentMethod.extra}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Payment Method Selector Tabs */}
-        <div className="flex border-b border-neutral-100 dark:border-neutral-800 gap-6 mt-4">
+        {/* Payment Method Selector Toggle */}
+        <div className="flex bg-neutral-200/70 dark:bg-neutral-800 p-1 rounded-xl w-max">
           <button
-            className={`pb-3 text-xs font-bold uppercase tracking-wider transition-colors focus:outline-none flex items-center gap-1.5 ${paymentType === "card" ? "border-b-2 border-black dark:border-white text-neutral-900 dark:text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"}`}
+            className={`px-5 py-2.5 text-xs font-bold transition-all rounded-lg focus:outline-none flex items-center gap-2 ${paymentType === "card" ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm" : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"}`}
             type="button"
             onClick={() => setPaymentType("card")}
           >
-            <CreditCard className="w-3.5 h-3.5" />
+            <CreditCard className="w-4 h-4" />
             Credit Card
           </button>
           <button
-            className={`pb-3 text-xs font-bold uppercase tracking-wider transition-colors focus:outline-none flex items-center gap-1.5 ${paymentType === "ach" ? "border-b-2 border-black dark:border-white text-neutral-900 dark:text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"}`}
+            className={`px-5 py-2.5 text-xs font-bold transition-all rounded-lg focus:outline-none flex items-center gap-2 ${paymentType === "ach" ? "bg-white dark:bg-neutral-700 text-neutral-900 dark:text-white shadow-sm" : "text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200"}`}
             type="button"
             onClick={() => setPaymentType("ach")}
           >
-            <Landmark className="w-3.5 h-3.5" />
+            <Landmark className="w-4 h-4" />
             ACH Bank Debit
           </button>
         </div>

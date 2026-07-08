@@ -3,9 +3,10 @@
 import React from "react";
 import Link from "next/link";
 import { ChevronDown, Trash2 } from "lucide-react";
+import { useAppSelector } from "@/store";
 
 export default function MembersPage() {
-  const mockMembers = [
+  const baseMockMembers = [
     {
       firstName: "Michael",
       lastName: "Meram",
@@ -64,6 +65,19 @@ export default function MembersPage() {
     },
   ];
 
+  const mockMembers = Array.from({ length: 55 }, (_, i) => {
+    if (i < baseMockMembers.length) return baseMockMembers[i];
+    return {
+      firstName: "Test",
+      lastName: `User ${i + 1}`,
+      email: `test.user${i + 1}@example.com`,
+      role: "Member",
+      isYou: false,
+      tokens: "0K",
+    };
+  });
+
+  const searchQuery = useAppSelector((state) => state.ui.searchQuery);
   const [members, setMembers] = React.useState(mockMembers);
   const [activeDropdownIndex, setActiveDropdownIndex] = React.useState<
     number | null
@@ -154,6 +168,29 @@ export default function MembersPage() {
     setMembers(updatedMembers);
   };
 
+  const filteredMembers = members.filter((member) => {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      member.firstName.toLowerCase().includes(q) ||
+      member.lastName.toLowerCase().includes(q) ||
+      member.email.toLowerCase().includes(q) ||
+      member.role.toLowerCase().includes(q)
+    );
+  });
+
+  const ITEMS_PER_PAGE = 8;
+  const [currentPage, setCurrentPage] = React.useState(1);
+
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery]);
+
+  const totalPages = Math.ceil(filteredMembers.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredMembers.length);
+  const paginatedMembers = filteredMembers.slice(startIndex, endIndex);
+
   return (
     <div className="w-full flex-1 flex flex-col pt-6">
       <div className="w-full flex-1 flex flex-col">
@@ -167,10 +204,10 @@ export default function MembersPage() {
 
         {/* Table Body */}
         <div className="flex flex-col gap-2 mt-4">
-          {members.map((member, i) => (
+          {paginatedMembers.map((member, i) => (
             <Link
-              key={i}
-              className="group grid grid-cols-[20%_20%_35%_25%] items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
+              key={startIndex + i}
+              className="group grid grid-cols-[20%_20%_35%_25%] items-center px-6 py-3 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
               href={`/admin/team-members/${encodeURIComponent(member.email)}`}
             >
               <div>{member.firstName}</div>
@@ -182,7 +219,7 @@ export default function MembersPage() {
                   className="relative"
                 >
                   {member.isYou ? (
-                    <span className="font-medium text-neutral-700 dark:text-neutral-300">
+                    <span className="inline-block py-1 font-medium text-neutral-700 dark:text-neutral-300">
                       {member.role}
                     </span>
                   ) : (
@@ -254,29 +291,39 @@ export default function MembersPage() {
         </div>
 
         {/* Pagination Bar */}
-        <div className="sticky bottom-6 z-20 flex items-center justify-between px-6 py-4 mt-auto mb-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300">
+        <div className="sticky bottom-6 z-20 flex items-center justify-between h-[68px] px-6 py-4 mt-auto mb-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300">
           <div className="text-neutral-500 dark:text-neutral-400">
             Showing{" "}
             <span className="font-medium text-neutral-900 dark:text-white">
-              1
+              {filteredMembers.length > 0 ? startIndex + 1 : 0}
             </span>{" "}
             to{" "}
             <span className="font-medium text-neutral-900 dark:text-white">
-              {mockMembers.length}
+              {endIndex}
             </span>{" "}
             of{" "}
             <span className="font-medium text-neutral-900 dark:text-white">
-              {mockMembers.length}
+              {filteredMembers.length}
             </span>{" "}
             results
           </div>
           <div className="flex gap-2">
-            <button className="px-4 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
-              Previous
-            </button>
-            <button className="px-4 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors">
-              Next
-            </button>
+            {currentPage > 1 && (
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                className="px-4 py-1.5 rounded-lg bg-neutral-200 text-neutral-700 hover:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 font-medium transition-colors"
+              >
+                Back
+              </button>
+            )}
+            {currentPage < totalPages && totalPages > 0 && (
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                className="px-4 py-1.5 rounded-lg bg-neutral-900 hover:bg-black text-white dark:bg-white dark:hover:bg-neutral-200 dark:text-black font-medium transition-colors"
+              >
+                Next
+              </button>
+            )}
           </div>
         </div>
       </div>

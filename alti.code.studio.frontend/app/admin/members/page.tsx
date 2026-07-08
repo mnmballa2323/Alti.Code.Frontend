@@ -2,11 +2,24 @@
 
 import React from "react";
 import { ChevronDown } from "lucide-react";
+import { useAppSelector } from "@/store";
 
 export default function InvitePage() {
+  const profile = useAppSelector((state) => state.user.data);
   const [isOpen, setIsOpen] = React.useState(false);
   const [selectedRole, setSelectedRole] = React.useState("");
   const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  const planPrices: Record<string, string> = {
+    launch: "1,000",
+    build: "2,500",
+    scale: "5,000",
+    cloud: "1,000",
+    dedicated: "2,500",
+    sovereign: "5,000",
+  };
+  const currentPlan = profile?.plan?.toLowerCase() || "cloud";
+  const currentPrice = planPrices[currentPlan] || "1,000";
 
   React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -107,7 +120,7 @@ export default function InvitePage() {
               Billing notice:
             </span>{" "}
             Adding a new team member adds an active seat to your plan at
-            $25.00/month.
+            ${currentPrice}/month.
           </p>
           <button className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg">
             Invite Member

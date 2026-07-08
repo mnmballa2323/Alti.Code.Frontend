@@ -56,7 +56,7 @@ const ALL_MODELS = [
   {
     id: "gemini-3.1-pro",
     name: "Gemini 3.1 Pro",
-    price: "$12.00 in / $18.00 out",
+    price: "$4.00 in / $18.00 out",
   },
   {
     id: "gemini-3.5-flash",
@@ -214,7 +214,7 @@ export default function TokenUsagePage() {
           </div>
           <div className="flex gap-4 items-center">
             <div className="font-mono text-lg font-bold text-neutral-900 dark:text-white">
-              ${totalCost.toFixed(4)}
+              ${totalCost.toFixed(2)}
             </div>
           </div>
         </div>
@@ -239,7 +239,7 @@ export default function TokenUsagePage() {
                   <div className="font-semibold text-neutral-900 dark:text-white">{h.month}</div>
                   <div className="text-neutral-500">{h.invocations.toLocaleString()}</div>
                   <div className="font-mono text-neutral-500">{h.totalTokens.toLocaleString()} tkns</div>
-                  <div className="text-right font-mono text-neutral-900 dark:text-white font-bold">${h.cost.toFixed(4)}</div>
+                  <div className="text-right font-mono text-neutral-900 dark:text-white font-bold">${h.cost.toFixed(2)}</div>
                 </div>
               ))}
             </div>
@@ -272,7 +272,7 @@ function UsageRow({ model }: { model: ModelUsage }) {
         <span className="text-[10px] text-neutral-500 font-mono">{model.priceOut} / 1M</span>
       </div>
       <div className="text-right font-mono text-sm text-neutral-900 dark:text-white font-bold">
-        ${model.cost.toFixed(4)}
+        ${model.cost.toFixed(2)}
       </div>
     </div>
   );

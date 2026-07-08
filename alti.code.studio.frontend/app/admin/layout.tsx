@@ -11,12 +11,15 @@ import {
   FileText,
   ArrowLeft,
   Activity,
-  LifeBuoy,
+  Headset,
   ClipboardList,
   Search,
+  Package,
+  Wallet,
 } from "lucide-react";
 
-import { useAppSelector } from "@/store";
+import { useAppSelector, useAppDispatch } from "@/store";
+import { setSearchQuery } from "@/store/uiSlice";
 
 interface SidebarItem {
   label: string;
@@ -24,14 +27,22 @@ interface SidebarItem {
   icon: React.ComponentType<any>;
 }
 
-const adminItems: SidebarItem[] = [
+const workspaceItems: SidebarItem[] = [
+  { label: "Plans", href: "/admin/plans", icon: Package },
   { label: "Invite", href: "/admin/members", icon: UserPlus },
   { label: "Members", href: "/admin/team-members", icon: Users },
+];
+
+const billingItems: SidebarItem[] = [
   { label: "Billing", href: "/admin/billing", icon: CreditCard },
+  { label: "Balance", href: "/admin/balance", icon: Wallet },
   { label: "Invoices", href: "/admin/invoices", icon: FileText },
+];
+
+const systemItems: SidebarItem[] = [
   { label: "Usage", href: "/admin/usage", icon: Activity },
   { label: "Logs", href: "/admin/logs", icon: ClipboardList },
-  { label: "Support", href: "/admin/support", icon: LifeBuoy },
+  { label: "Support", href: "/admin/support", icon: Headset },
 ];
 
 export default function AdminLayout({
@@ -40,8 +51,10 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname() || "";
+  const dispatch = useAppDispatch();
   const profileFromStore = useAppSelector((state) => state.user.data);
   const activeMemberName = useAppSelector((state) => state.ui.activeMemberName);
+  const searchQuery = useAppSelector((state) => state.ui.searchQuery);
   const profile = profileFromStore?.email ? profileFromStore : null;
   const [isAdmin, setIsAdmin] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -147,8 +160,11 @@ export default function AdminLayout({
   };
 
   const getPageTitle = () => {
+    if (pathname.startsWith("/admin/dashboard")) return "Dashboard";
     if (pathname.startsWith("/admin/members")) return "Invite";
     if (pathname.startsWith("/admin/team-members")) return "Members";
+    if (pathname.startsWith("/admin/plans")) return "Plans";
+    if (pathname.startsWith("/admin/balance")) return "Balance";
     if (pathname.startsWith("/admin/billing")) return "Billing";
     if (pathname.startsWith("/admin/invoices")) return "Invoices";
     if (pathname.startsWith("/admin/usage")) return "Usage";
@@ -239,6 +255,8 @@ export default function AdminLayout({
                 <input
                   type="text"
                   placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => dispatch(setSearchQuery(e.target.value))}
                   className="w-full pl-9 pr-4 py-2 bg-neutral-100 dark:bg-[#0d1117] border border-transparent dark:border-neutral-800 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:focus:ring-neutral-700 transition-shadow text-neutral-900 dark:text-white placeholder-neutral-500"
                 />
               </div>
@@ -257,7 +275,9 @@ export default function AdminLayout({
         {/* Internal Navigation Sidebar */}
         <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 relative z-10">
           <div className="flex-1 overflow-y-auto">
-            {renderNavGroup("", adminItems)}
+            {renderNavGroup("Workspace", workspaceItems)}
+            {renderNavGroup("Billing", billingItems)}
+            {renderNavGroup("System", systemItems)}
           </div>
           <div className="pt-4 mt-auto">
             <button

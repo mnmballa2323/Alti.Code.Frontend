@@ -6,6 +6,7 @@ interface UIState {
   editorLanguage: string;
   editorTitle: string;
   activeMemberName: string | null;
+  searchQuery: string;
 }
 
 const initialState: UIState = {
@@ -15,6 +16,7 @@ const initialState: UIState = {
   editorLanguage: "javascript",
   editorTitle: "Inso Sentinel - Code View",
   activeMemberName: null,
+  searchQuery: "",
 };
 
 export const uiSlice = createSlice({
@@ -42,6 +44,9 @@ export const uiSlice = createSlice({
     setActiveMemberName: (state, action: PayloadAction<string | null>) => {
       state.activeMemberName = action.payload;
     },
+    setSearchQuery: (state, action: PayloadAction<string>) => {
+      state.searchQuery = action.payload;
+    },
   },
 });
 
@@ -53,6 +58,7 @@ export const {
   openGhostEditor,
   closeGhostEditor,
   setActiveMemberName,
+  setSearchQuery,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;
