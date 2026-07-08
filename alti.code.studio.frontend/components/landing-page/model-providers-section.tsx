@@ -82,14 +82,13 @@ export default function ModelProvidersSection() {
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-6 max-w-5xl">
           <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-black dark:text-white leading-tight">
-            Triple Sovereign AI Restriction
+            Sovereign AI Restriction
           </h3>
           <p className="text-base sm:text-lg md:text-xl text-gray-500 dark:text-gray-400 leading-relaxed font-normal max-w-5xl">
             To guarantee absolute data sovereignty and regulatory compliance,
             the platform is restricted
             <br className="hidden md:inline" />
-            exclusively to the premier model providers hosted securely on Google
-            Cloud and Microsoft Azure.
+            exclusively to the premier model providers hosted securely on Google Cloud.
           </p>
         </div>
 

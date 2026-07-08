@@ -151,7 +151,7 @@ async def create_index(request: RAGIndexRequest):
         from llama_index.core import Document, VectorStoreIndex, Settings
         # Embed model removed per Tri-Cloud strategy
         
-        logger.warning("Generation will be simulated. RAG requires connection to Azure Foundry or AWS Bedrock.")
+        logger.warning("Generation will be simulated. RAG requires connection to GCP Vertex AI.")
 
         docs = [Document(text=d['text'], metadata=d.get('metadata', {})) for d in request.documents]
         index = VectorStoreIndex.from_documents(docs)
@@ -182,7 +182,7 @@ async def query_index(request: RAGQueryRequest):
         logger.error(f"Query failed: {e}")
         # Fallback for disconnected environment
         return {
-            "response": f"Simulated RAG Response to: '{request.query}' (Connect Azure Foundry or AWS Bedrock for real generation). Context found.",
+            "response": f"Simulated RAG Response to: '{request.query}' (Connect GCP Vertex AI for real generation). Context found.",
             "sources": []
         }
         raise HTTPException(status_code=500, detail=str(e))

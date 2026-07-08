@@ -15,6 +15,32 @@ vi.mock('../../../shared/logger.js', () => ({
   logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug: vi.fn() },
 }));
 
+// ── Mock Google Cloud KMS ──
+vi.mock('@google-cloud/kms', () => {
+  return {
+    default: {
+      KeyManagementServiceClient: class {
+        async asymmetricSign() {
+          return [
+            {
+              signature: Buffer.from('mock-asymmetric-signature-from-gcp-kms'),
+            },
+          ];
+        }
+      },
+    },
+    KeyManagementServiceClient: class {
+      async asymmetricSign() {
+        return [
+          {
+            signature: Buffer.from('mock-asymmetric-signature-from-gcp-kms'),
+          },
+        ];
+      }
+    },
+  };
+});
+
 // ── Mock agent registry ──
 vi.mock('../agents/agent.registry.js', () => {
   const agents = [];
@@ -1114,6 +1140,11 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
   describe('Phase 3 Hardening: Hardware Isolation, KMS Rotation, Sandboxing and Replication', () => {
     afterEach(() => {
       vi.restoreAllMocks();
+      delete process.env.GCP_PROJECT_ID;
+      delete process.env.GCP_KMS_KEY_RING;
+      delete process.env.GCP_KMS_KEY_NAME;
+      delete process.env.GCP_ACCESS_TOKEN;
+      delete process.env.SOVEREIGN_MICROVM_RUNTIME;
     });
 
     it('should bypass KEK cache and retry decryption on auth tag error (rotated key)', async () => {
@@ -1133,10 +1164,10 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         },
       });
 
-      // Encrypt secret with NEW key
+      // Encrypt secret with NEW key using envelope encryption
       const newKey = 'my-new-gcp-key-payload-32b';
       const secretValue = 'super-secret-key-data';
-      const encryptedSecret = await encryptionService.encrypt(
+      const encryptedSecret = await encryptionService.envelopeEncrypt(
         secretValue,
         newKey,
       );
@@ -1172,16 +1203,13 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       expect(decrypted.openaiApiKey).toBe(secretValue);
       // Verify it was fetched twice (first for cached value, second for bypass retry)
       expect(callCount).toBe(2);
-
-      delete process.env.GCP_PROJECT_ID;
-      delete process.env.GCP_KMS_KEY_RING;
-      delete process.env.GCP_ACCESS_TOKEN;
     });
 
     it('should sign SIEM webhook payloads and attach X-Alti-Signature header', async () => {
       const { siemService } = await import('../security/siem.service.js');
       const { prisma } = await import('../../../config/prisma.js');
       const axios = await import('axios');
+      const kms = await import('@google-cloud/kms');
 
       // Mock siemWebhook query
       vi.spyOn(prisma.siemWebhook, 'findMany').mockResolvedValue([
@@ -1199,22 +1227,16 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
       process.env.GCP_KMS_KEY_RING = 'test-keyring';
       process.env.GCP_KMS_KEY_NAME = 'test-siem-key-uuid';
       process.env.GCP_ACCESS_TOKEN = 'mock-gcp-token';
-
-      // Mock GCP KMS signature response and webhook post
+      // Mock webhook post
       const mockPost = vi
         .spyOn(axios.default, 'post')
-        .mockImplementation(async url => {
-          if (url.includes(':asymmetricSign')) {
-            return {
-              data: { signature: 'mock-asymmetric-signature-from-gcp-kms' },
-            };
-          }
-          return { status: 200 };
-        });
+        .mockResolvedValue({ status: 200 });
 
       await siemService.dispatchEvent('tenant-123', 'WAF_PAYLOAD_INJECTION', {
         detail: 'XSS',
       });
+
+      const expectedSignature = Buffer.from('mock-asymmetric-signature-from-gcp-kms').toString('base64');
 
       // Verify webhook was called with X-Alti-Signature header
       expect(mockPost).toHaveBeenCalledWith(
@@ -1222,16 +1244,11 @@ describe('Cross-Module Integration: S&P 500 Readiness', () => {
         expect.any(Object),
         expect.objectContaining({
           headers: expect.objectContaining({
-            'X-Alti-Signature': 'mock-asymmetric-signature-from-gcp-kms',
+            'X-Alti-Signature': expectedSignature,
             Authorization: 'Bearer splunk-token',
           }),
         }),
       );
-
-      delete process.env.GCP_PROJECT_ID;
-      delete process.env.GCP_KMS_KEY_RING;
-      delete process.env.GCP_KMS_KEY_NAME;
-      delete process.env.GCP_ACCESS_TOKEN;
     });
 
     it('should detect PKCS#11 bridge configuration and log active status', async () => {

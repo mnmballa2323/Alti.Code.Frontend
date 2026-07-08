@@ -204,4 +204,3 @@ class GcpContainerService {
 }
 
 export const gcpContainerService = new GcpContainerService();
-export const gcpContainerService = gcpContainerService; // Compatibility mapping

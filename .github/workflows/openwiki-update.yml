@@ -47,15 +47,14 @@ jobs:
         env:
           PORT: 5001
           DISABLE_REDIS: true
-          AZURE_OPENAI_API_KEY: ${{ secrets.AZURE_OPENAI_API_KEY }}
-          AZURE_OPENAI_ENDPOINT: ${{ secrets.AZURE_OPENAI_ENDPOINT }}
+          VERTEX_API_KEY: ${{ secrets.VERTEX_API_KEY }}
 
       - name: Run OpenWiki Documentation Update
         working-directory: alti.code.studio.backend
         run: npx openwiki --update -p
         env:
-          OPENWIKI_PROVIDER: openai
-          OPENWIKI_MODEL_ID: azure/gpt-5.4
+          OPENWIKI_PROVIDER: google
+          OPENWIKI_MODEL_ID: gcp/gemini-3.5-pro
           OPENAI_API_KEY: mock-openwiki-key
           OPENAI_BASE_URL: http://localhost:5001/api/v1/openwiki-proxy
           OPENAI_API_BASE: http://localhost:5001/api/v1/openwiki-proxy

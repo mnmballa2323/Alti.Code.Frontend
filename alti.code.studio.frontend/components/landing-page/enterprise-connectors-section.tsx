@@ -106,18 +106,6 @@ export default function EnterpriseConnectorsSection() {
                 className="w-6 h-6 object-contain"
                 src="/assets/cloud-logos/gcp.svg"
               />,
-              <img
-                key="aws"
-                alt="Amazon Web Services"
-                className="w-7 h-7 object-contain"
-                src="/assets/cloud-logos/aws.svg"
-              />,
-              <img
-                key="azure"
-                alt="Microsoft Azure"
-                className="w-6 h-6 object-contain"
-                src="/assets/cloud-logos/azure.svg"
-              />,
             ]}
             size={260}
           />

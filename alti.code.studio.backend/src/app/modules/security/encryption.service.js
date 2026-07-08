@@ -237,12 +237,7 @@ class EncryptionService {
       return decrypted;
     } catch (error) {
       logger.error('Envelope Decryption Error:', error);
-      // Fallback to legacy decryption for existing database values
-      try {
-        return await this.decrypt(envelopeBase64, tenantKmsKey);
-      } catch (err) {
-        throw new Error('Envelope decryption failed');
-      }
+      throw error;
     }
   }
 }
