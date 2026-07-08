@@ -44,6 +44,9 @@ import { secretsVault } from './secretsVault.js';
 import { chaosMonkey } from './chaosMonkey.js';
 import { webrtcSignaling } from './webrtcSignaling.js';
 import { predictiveScaler } from './predictiveScaler.js';
+import { raftConsensus } from './raftConsensus.js';
+import { wasmRuntime } from './wasmRuntime.js';
+import { astDeltaCompressor } from './astDeltaCompressor.js';
 
 class ServiceRegistry {
   constructor() {
@@ -61,7 +64,8 @@ class ServiceRegistry {
       // Phase 0: Bootstrapping
       await this._initService('secretsVault', () => secretsVault.init());
 
-      // Phase 1: Data layer
+      // Phase 1: Data layer/Consensus
+      await this._initService('raftConsensus', () => raftConsensus.init());
       await this._initService('shardRouter', () => shardRouter.init());
       await this._initService('conflictResolver', () => conflictResolver.init());
 
@@ -122,6 +126,7 @@ class ServiceRegistry {
       });
 
       await this._initService('sandboxManager', () => sandboxManager.init());
+      await this._initService('wasmRuntime', () => wasmRuntime.init());
 
       await this._initService('evalFramework', () => {
         return { status: 'initialized' };
@@ -131,6 +136,7 @@ class ServiceRegistry {
       await this._initService('stripeWebhookHandler', () => stripeWebhookHandler.init());
 
       await this._initService('webrtcSignaling', () => webrtcSignaling.init());
+      await this._initService('astDeltaCompressor', () => astDeltaCompressor.init());
 
       await this._initService('webhookEngine', () => {
         return { status: 'initialized', events: 16 };
