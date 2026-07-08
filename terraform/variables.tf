@@ -161,6 +161,12 @@ variable "waf_rate_limit_interval" {
   default     = 60
 }
 
+variable "bigtable_num_nodes" {
+  description = "Number of nodes for the Cloud Bigtable cluster"
+  type        = number
+  default     = 1
+}
+
 variable "enable_confidential_compute" {
   description = "Toggle Google Cloud Confidential VM technology (AMD SEV memory encryption)"
   type        = bool
@@ -297,6 +303,7 @@ variable "enable_control_plane" {
   type        = bool
   default     = false
 }
+
 
 # ------------------------------------------------------------------------------
 # Security: Cloud Armor & VPC Service Controls

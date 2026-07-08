@@ -66,7 +66,7 @@ EXPOSE 3000
 
 # 🛡️ Infrastructure Health Probes
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:3000/api/healthz || exit 1
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1
 
 # Execute the standalone Node.js server directly, bypassing the heavy npm wrapper
 CMD ["node", "server.js"]

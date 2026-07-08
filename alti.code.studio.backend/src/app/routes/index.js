@@ -8,15 +8,26 @@ const __dirname = path.dirname(__filename);
 
 const router = express.Router();
 
-// Lean health check for Docker HEALTHCHECK / GKE liveness probes
-router.get('/health', (req, res) =>
-  res.status(200).json({ status: 'UP', timestamp: new Date().toISOString() }),
-);
+// GCP-native health probes (Kubernetes/Cloud Run compatible)
+router.get('/health', async (req, res) => {
+  try {
+    const { gcpHealthCheckService } = await import('../modules/gcpCloud/gcpHealthCheck.service.js');
+    const result = await gcpHealthCheckService.liveness();
+    res.status(200).json(result);
+  } catch {
+    res.status(200).json({ status: 'UP', timestamp: new Date().toISOString() });
+  }
+});
 
-// /healthz: Kubernetes-style health probe (Docker HEALTHCHECK target)
-router.get('/healthz', (req, res) =>
-  res.status(200).json({ status: 'ok' }),
-);
+router.get('/healthz', async (req, res) => {
+  try {
+    const { gcpHealthCheckService } = await import('../modules/gcpCloud/gcpHealthCheck.service.js');
+    const result = await gcpHealthCheckService.liveness();
+    res.status(200).json(result);
+  } catch {
+    res.status(200).json({ status: 'ok' });
+  }
+});
 
 // Deep readiness check: verifies all subsystems and GCP services
 router.get('/ready', async (req, res) => {

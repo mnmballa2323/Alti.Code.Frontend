@@ -152,6 +152,25 @@ export async function initializeGcpServices() {
     loadService('deploymentManager', './gcpDeploymentManager.service.js', 'gcpDeploymentManagerService'),
   ]);
 
+  // ── AI Vision & Media ──
+  await Promise.allSettled([
+    loadService('vision', './gcpVision.service.js', 'gcpVisionService'),
+    loadService('documentAI', './gcpDocumentAI.service.js', 'gcpDocumentAIService'),
+    loadService('videoIntelligence', './gcpVideoIntelligence.service.js', 'gcpVideoIntelligenceService'),
+    loadService('mediaCDN', './gcpMediaCDN.service.js', 'gcpMediaCDNService'),
+    loadService('talent', './gcpTalent.service.js', 'gcpTalentService'),
+  ]);
+
+  // ── Event-Driven & Secret Management ──
+  await Promise.allSettled([
+    loadService('eventarc', './gcpEventarc.service.js', 'gcpEventarcService'),
+    loadService('secretRotation', './gcpSecretRotation.service.js', 'gcpSecretRotationService'),
+    loadService('bigtable', './gcpBigtable.service.js', 'gcpBigtableService'),
+  ]);
+
+  // ── Health Check Service ──
+  await loadService('healthCheck', './gcpHealthCheck.service.js', 'gcpHealthCheckService');
+
   // ── Orchestrator (BigQuery, KMS, SCC, Vision, etc.) ──
   await loadService('orchestrator', './gcpServices.service.js', 'gcpServicesService');
 
