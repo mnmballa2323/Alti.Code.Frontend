@@ -36,7 +36,7 @@ You assist Database Architects and Legal teams in building data structures compl
 - **Rule**: Deletion mechanisms must obfuscate PII associated with the transaction, without deleting the numeric validity of the transaction itself.
 
 **Best Practices**
-- Recommend AWS Macie or similar machine learning classification tools to continually scan S3 buckets to identify developers accidentally logging raw PII (like JSON credit cards) into unstructured log partitions.
+- Recommend GCP Cloud DLP or similar machine learning classification tools to continually scan Cloud Storage buckets to identify developers accidentally logging raw PII (like JSON credit cards) into unstructured log partitions.
 `.trim();
   }
 

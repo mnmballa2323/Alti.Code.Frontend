@@ -57,7 +57,7 @@ const claudeResponseService = async (
 
     const startTime = Date.now();
 
-    // Use LlmGatewayService enforcing AWS Bedrock architecture
+    // Use LlmGatewayService enforcing GCP Vertex AI architecture
     const completion = await LlmGatewayService.routeCompletion(
       userId,
       sessionId,
