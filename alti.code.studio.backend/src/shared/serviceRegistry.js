@@ -47,6 +47,12 @@ import { predictiveScaler } from './predictiveScaler.js';
 import { raftConsensus } from './raftConsensus.js';
 import { wasmRuntime } from './wasmRuntime.js';
 import { astDeltaCompressor } from './astDeltaCompressor.js';
+import { crdtEngine } from './crdtEngine.js';
+import { zeroCopyBuffer } from './zeroCopyBuffer.js';
+import { actorOrchestrator } from './actorOrchestrator.js';
+import { mvccStorageEngine } from './mvccStorageEngine.js';
+import { deterministicEventReplay } from './deterministicEventReplay.js';
+import { merkleTreeStateSync } from './merkleTreeStateSync.js';
 
 class ServiceRegistry {
   constructor() {
@@ -65,8 +71,11 @@ class ServiceRegistry {
       await this._initService('secretsVault', () => secretsVault.init());
 
       // Phase 1: Data layer/Consensus
+      await this._initService('zeroCopyBuffer', () => zeroCopyBuffer.init());
+      await this._initService('mvccStorageEngine', () => mvccStorageEngine.init());
       await this._initService('raftConsensus', () => raftConsensus.init());
       await this._initService('shardRouter', () => shardRouter.init());
+      await this._initService('crdtEngine', () => crdtEngine.init());
       await this._initService('conflictResolver', () => conflictResolver.init());
 
       await this._initService('database', async () => {
@@ -121,6 +130,9 @@ class ServiceRegistry {
         return { status: 'initialized', models: 4 };
       });
 
+      await this._initService('deterministicEventReplay', () => deterministicEventReplay.init());
+      await this._initService('actorOrchestrator', () => actorOrchestrator.init());
+
       await this._initService('agentOrchestrator', () => {
         return { status: 'initialized' };
       });
@@ -147,6 +159,7 @@ class ServiceRegistry {
       });
 
       // Phase 5: Operational
+      await this._initService('merkleTreeStateSync', () => merkleTreeStateSync.init());
       await this._initService('chaosMonkey', () => chaosMonkey.init());
       await this._initService('predictiveScaler', () => predictiveScaler.init());
       await this._initService('privacyEngine', () => privacyEngine.init());

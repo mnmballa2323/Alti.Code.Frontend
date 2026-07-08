@@ -243,7 +243,9 @@ app.use((req, res, next) => {
 });
 
 // API routes
+import { apiRoutes } from './src/routes/v1/api.routes.js';
 app.use('/api/v1', router);
+app.use('/api/v1/engine', apiRoutes);
 
 
 // tRPC routes

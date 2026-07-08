@@ -14,6 +14,8 @@ import {
   Bot,
   Settings,
   Sliders,
+  LifeBuoy,
+  ClipboardList
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -30,9 +32,8 @@ const adminItems: SidebarItem[] = [
   { label: "Billing", href: "/admin/billing", icon: CreditCard },
   { label: "Invoices", href: "/admin/invoices", icon: FileText },
   { label: "Usage", href: "/admin/usage", icon: Activity },
-
-  { label: "Platform Admin", href: "/admin/platform-admin", icon: Settings },
-  { label: "Platform Manager", href: "/admin/platform-manager", icon: Sliders },
+  { label: "Logs", href: "/admin/logs", icon: ClipboardList },
+  { label: "Support", href: "/admin/support", icon: LifeBuoy },
 ];
 
 export default function AdminLayout({
@@ -147,6 +148,8 @@ export default function AdminLayout({
     if (pathname.startsWith("/admin/team-members")) return "Members";
     if (pathname.startsWith("/admin/billing")) return "Billing";
     if (pathname.startsWith("/admin/invoices")) return "Invoices";
+    if (pathname.startsWith("/admin/logs")) return "Logs";
+    if (pathname.startsWith("/admin/support")) return "Support";
 
     return "Platform Admin";
   };

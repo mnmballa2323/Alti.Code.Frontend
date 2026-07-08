@@ -30,8 +30,6 @@ const ownerItems: SidebarItem[] = [
   { label: "GCP Infrastructure", href: "/owner/gcp", icon: Cloud },
   { label: "AI Intelligence", href: "/owner/ai-intelligence", icon: Cpu },
   { label: "Compliance", href: "/owner/compliance", icon: Shield },
-  { label: "Platform Admin", href: "/owner/platform-admin", icon: Settings },
-  { label: "Platform Manager", href: "/owner/platform-manager", icon: Sliders },
 ];
 
 const memberItems: SidebarItem[] = [

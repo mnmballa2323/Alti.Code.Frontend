@@ -12,6 +12,7 @@
 import { logger } from './logger.js';
 import { metrics } from './metrics.js';
 import { dlpScanner } from './dlpScanner.js';
+import { VertexAI } from '@google-cloud/vertexai';
 
 const MODELS = {
   'gemini-2.5-pro': {
@@ -132,6 +133,54 @@ class ModelRouter {
 
     metrics.incrementCounter('model_route_decisions', 1, { model: complexityModel, reason: 'complexity' });
     return { model: MODELS[complexityModel], reason: 'complexity_route' };
+  }
+
+  async executePrompt(request) {
+    const { model } = await this.route(request);
+    
+    // Google Cloud Inference Strategy HARD LAW compliance
+    logger.info(`[ModelRouter] Executing via Vertex AI using model ${model.id}`);
+    
+    try {
+      const vertex_ai = new VertexAI({
+        project: process.env.GOOGLE_CLOUD_PROJECT || 'dummy-project',
+        location: process.env.GOOGLE_CLOUD_LOCATION || 'us-central1'
+      });
+      
+      const generativeModel = vertex_ai.preview.getGenerativeModel({
+        model: model.id,
+        generationConfig: {
+          maxOutputTokens: 8192,
+          temperature: request.temperature || 0.7,
+        },
+      });
+
+      // If no credentials, we degrade gracefully in dev
+      if (!process.env.GOOGLE_APPLICATION_CREDENTIALS && !process.env.GOOGLE_CLOUD_PROJECT) {
+        logger.warn(`[ModelRouter] No GCP credentials found, returning degraded simulation response.`);
+        return {
+          content: `[Simulated response from ${model.id}] This is a mocked fallback because no Vertex AI credentials were provided.`,
+          model: model.id,
+          tokens: { input: 10, output: 20 }
+        };
+      }
+
+      const chat = generativeModel.startChat({});
+      const result = await chat.sendMessage(request.prompt);
+      const response = await result.response;
+      
+      return {
+        content: response.candidates[0].content.parts[0].text,
+        model: model.id,
+        tokens: {
+          input: response.usageMetadata?.promptTokenCount || 0,
+          output: response.usageMetadata?.candidatesTokenCount || 0
+        }
+      };
+    } catch (err) {
+      logger.error(`[ModelRouter] Vertex AI execution failed:`, err.message);
+      throw err;
+    }
   }
 
   estimateCost(modelId, inputTokens, outputTokens) {
