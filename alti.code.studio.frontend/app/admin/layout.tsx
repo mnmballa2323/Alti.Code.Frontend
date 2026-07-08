@@ -10,6 +10,9 @@ import {
   FileText,
   ArrowLeft,
   Activity,
+  Bot,
+  Settings,
+  Sliders,
 } from "lucide-react";
 
 import { useAppSelector } from "@/store";
@@ -26,6 +29,9 @@ const adminItems: SidebarItem[] = [
   { label: "Billing", href: "/admin/billing", icon: CreditCard },
   { label: "Invoices", href: "/admin/invoices", icon: FileText },
   { label: "Usage", href: "/admin/usage", icon: Activity },
+  { label: "AI Agents", href: "/admin/ai-agents", icon: Bot },
+  { label: "Platform Admin", href: "/admin/platform-admin", icon: Settings },
+  { label: "Platform Manager", href: "/admin/platform-manager", icon: Sliders },
 ];
 
 export default function AdminLayout({

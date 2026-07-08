@@ -4,7 +4,17 @@ import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { Users, ArrowLeft, LayoutDashboard, DollarSign } from "lucide-react";
+import {
+  Users,
+  ArrowLeft,
+  LayoutDashboard,
+  DollarSign,
+  Cloud,
+  Cpu,
+  Shield,
+  Settings,
+  Sliders,
+} from "lucide-react";
 
 import { useAppSelector } from "@/store";
 
@@ -17,6 +27,11 @@ interface SidebarItem {
 const ownerItems: SidebarItem[] = [
   { label: "Dashboard", href: "/owner/dashboard", icon: LayoutDashboard },
   { label: "Revenue", href: "/owner/revenue", icon: DollarSign },
+  { label: "GCP Infrastructure", href: "/owner/gcp", icon: Cloud },
+  { label: "AI Intelligence", href: "/owner/ai-intelligence", icon: Cpu },
+  { label: "Compliance", href: "/owner/compliance", icon: Shield },
+  { label: "Platform Admin", href: "/owner/platform-admin", icon: Settings },
+  { label: "Platform Manager", href: "/owner/platform-manager", icon: Sliders },
 ];
 
 const memberItems: SidebarItem[] = [
