@@ -32,6 +32,9 @@ import { stripeWebhookHandler } from './stripeWebhookHandler.js';
 import { dlpScanner } from './dlpScanner.js';
 import { privacyEngine } from './privacyEngine.js';
 import { conflictResolver } from './conflictResolver.js';
+import { sandboxManager } from './sandboxManager.js';
+import { migrationOrchestrator } from './migrationOrchestrator.js';
+import { cacheManager } from './cacheManager.js';
 
 class ServiceRegistry {
   constructor() {
@@ -54,11 +57,15 @@ class ServiceRegistry {
         return { status: client ? 'connected' : 'skipped' };
       });
 
+      await this._initService('migrationOrchestrator', () => migrationOrchestrator.init());
+
       await this._initService('cache', async () => {
         // Redis initialization would happen here
         await cacheStrategy.init(null); // null = in-memory fallback
         return { status: 'initialized', mode: 'in-memory' };
       });
+
+      await this._initService('cacheManager', () => cacheManager.init());
 
       // Phase 2: Core services
       await this._initService('rateLimiter', () => rateLimiter.init());
@@ -96,6 +103,8 @@ class ServiceRegistry {
       await this._initService('agentOrchestrator', () => {
         return { status: 'initialized' };
       });
+
+      await this._initService('sandboxManager', () => sandboxManager.init());
 
       await this._initService('evalFramework', () => {
         return { status: 'initialized' };

@@ -139,6 +139,7 @@ model User {
   billing       UserBilling?
   notifications Notification[]
   serverlessFunctions ServerlessFunction[]
+  llmMetrics          LLMMetrics[]
 }
 
 // -----------------------------------------------------------------
@@ -186,6 +187,7 @@ model UserBilling {
 model TokenUsageRecord {
   id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   tenantId       String   @db.Uuid
+  userId         String?  @db.Uuid
   agentName      String?
   model          String   @default("default")
   inputTokens    Int      @default(0)
@@ -380,6 +382,8 @@ model LLMMetrics {
   id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   tenantId         String   @db.Uuid
   tenant           Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  userId           String?  @db.Uuid
+  user             User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
   agentName        String
   model            String   @default("gemini-3.1-pro")
   promptTokens     Int      @default(0)

@@ -11,6 +11,7 @@
 import { logger } from './logger.js';
 import { metrics } from './metrics.js';
 import { modelRouter } from './modelRouter.js';
+import { sandboxManager } from './sandboxManager.js';
 import { EventEmitter } from 'events';
 
 class AgentOrchestrator extends EventEmitter {
@@ -115,6 +116,9 @@ class AgentOrchestrator extends EventEmitter {
   async _executeAgent(agent, input, context) {
     const startTime = Date.now();
     try {
+      const workspacePath = context.workspacePath || '/tmp/workspace/default';
+      sandboxManager.execute(agent.name || 'unknown-agent', 'agent_execution', workspacePath);
+
       if (typeof agent.execute === 'function') {
         return await agent.execute(input, context);
       }

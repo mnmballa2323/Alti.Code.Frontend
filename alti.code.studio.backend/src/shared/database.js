@@ -12,6 +12,7 @@
 import { PrismaClient } from '@prisma/client';
 import { logger } from './logger.js';
 import { metrics } from './metrics.js';
+import { cacheManager } from './cacheManager.js';
 
 class DatabaseManager {
   constructor() {
@@ -42,6 +43,20 @@ class DatabaseManager {
         { level: 'error', emit: 'event' },
         { level: 'warn', emit: 'event' },
       ],
+    });
+
+    // Invalidate cache on mutations
+    this.client.$use(async (params, next) => {
+      const result = await next(params);
+      const mutations = ['create', 'update', 'delete', 'upsert', 'updateMany', 'deleteMany', 'createMany'];
+      if (mutations.includes(params.action) && params.model) {
+        const modelName = params.model.toLowerCase();
+        cacheManager.invalidate(modelName);
+        if (params.args?.where?.id) {
+          cacheManager.invalidate(`${modelName}:${params.args.where.id}`);
+        }
+      }
+      return result;
     });
 
     // Track query performance
