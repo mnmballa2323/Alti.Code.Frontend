@@ -1,39 +1,94 @@
 /**
- * Copyright (c) 2024 Inso Code
- *
- * This software is released under the MIT License.
- * https://opensource.org/licenses/MIT
+ * Circuit Breaker
+ * 
+ * Prevents cascading failures:
+ * - CLOSED: normal operation
+ * - OPEN: all calls fail fast (no upstream call)
+ * - HALF_OPEN: allow one test call to check recovery
  */
 
-import CircuitBreaker from 'opossum';
 import { logger } from './logger.js';
+import { metrics } from './metrics.js';
 
-const options = {
-  timeout: 60000, // Trigger failure if function takes > 60 seconds (AI models are slow)
-  errorThresholdPercentage: 50, // Trip when >= 50% of requests fail
-  resetTimeout: 10000, // After 10 seconds, transition to half-open
-  volumeThreshold: 5, // Min request count before trip logic applies (prevents single-failure trips in dev)
+class CircuitBreaker {
+  constructor(name, options = {}) {
+    this.name = name;
+    this.state = 'CLOSED';
+    this.failureCount = 0;
+    this.successCount = 0;
+    this.lastFailureTime = null;
+    this.failureThreshold = options.failureThreshold || 5;
+    this.recoveryTimeout = options.recoveryTimeout || 30000; // 30s
+    this.halfOpenMax = options.halfOpenMax || 1;
+    this.halfOpenCount = 0;
+  }
+
+  async execute(fn) {
+    if (this.state === 'OPEN') {
+      if (Date.now() - this.lastFailureTime > this.recoveryTimeout) {
+        this.state = 'HALF_OPEN';
+        this.halfOpenCount = 0;
+        logger.info(`[CircuitBreaker:${this.name}] Transitioning to HALF_OPEN`);
+      } else {
+        metrics.incrementCounter('circuit_breaker_rejected', 1, { name: this.name });
+        throw new Error(`Circuit breaker ${this.name} is OPEN`);
+      }
+    }
+
+    if (this.state === 'HALF_OPEN' && this.halfOpenCount >= this.halfOpenMax) {
+      throw new Error(`Circuit breaker ${this.name} is HALF_OPEN (max test calls reached)`);
+    }
+
+    try {
+      if (this.state === 'HALF_OPEN') this.halfOpenCount++;
+      const result = await fn();
+      this._onSuccess();
+      return result;
+    } catch (err) {
+      this._onFailure();
+      throw err;
+    }
+  }
+
+  _onSuccess() {
+    if (this.state === 'HALF_OPEN') {
+      logger.info(`[CircuitBreaker:${this.name}] Recovery successful, closing circuit`);
+      this.state = 'CLOSED';
+      metrics.incrementCounter('circuit_breaker_recovered', 1, { name: this.name });
+    }
+    this.failureCount = 0;
+    this.successCount++;
+  }
+
+  _onFailure() {
+    this.failureCount++;
+    this.lastFailureTime = Date.now();
+
+    if (this.failureCount >= this.failureThreshold) {
+      this.state = 'OPEN';
+      logger.warn(`[CircuitBreaker:${this.name}] Circuit OPENED after ${this.failureCount} failures`);
+      metrics.incrementCounter('circuit_breaker_opened', 1, { name: this.name });
+    }
+  }
+
+  getState() {
+    return { name: this.name, state: this.state, failures: this.failureCount, successes: this.successCount };
+  }
+
+  reset() {
+    this.state = 'CLOSED';
+    this.failureCount = 0;
+    this.successCount = 0;
+    this.halfOpenCount = 0;
+  }
+}
+
+// Pre-configured breakers for critical services
+export const breakers = {
+  vertexAi: new CircuitBreaker('vertex-ai', { failureThreshold: 3, recoveryTimeout: 60000 }),
+  database: new CircuitBreaker('database', { failureThreshold: 5, recoveryTimeout: 30000 }),
+  redis: new CircuitBreaker('redis', { failureThreshold: 10, recoveryTimeout: 15000 }),
+  pubsub: new CircuitBreaker('pubsub', { failureThreshold: 5, recoveryTimeout: 30000 }),
 };
 
-export const createCircuitBreaker = (asyncFunction, name = 'Service') => {
-  const breaker = new CircuitBreaker(asyncFunction, options);
-
-  // Fallback THROWS — callers expect the wrapped function's return type (e.g. a string).
-  // Returning { error, fallback: true } causes silent type mismatches when callers do .replace() etc.
-  breaker.fallback(() => {
-    const msg = `Service ${name} is currently unavailable. Please try again later.`;
-    logger.warn(`⚠️ Circuit Breaker fallback triggered for ${name}.`);
-    throw new Error(msg);
-  });
-
-  breaker.on('open', () => logger.warn(`🔥 Circuit Breaker OPEN: ${name}`));
-  breaker.on('halfOpen', () =>
-    logger.info(`⏳ Circuit Breaker HALF-OPEN: ${name}`),
-  );
-  breaker.on('close', () => logger.info(`✅ Circuit Breaker CLOSED: ${name}`));
-  breaker.on('fallback', () =>
-    logger.warn(`↩️  Circuit Breaker FALLBACK: ${name}`),
-  );
-
-  return breaker;
-};
+export { CircuitBreaker };
