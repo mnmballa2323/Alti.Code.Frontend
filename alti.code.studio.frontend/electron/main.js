@@ -1,11 +1,130 @@
 
-const { app, BrowserWindow, ipcMain, desktopCapturer, screen, nativeImage } = require('electron');
+const { app, BrowserWindow, ipcMain, desktopCapturer, screen, nativeImage, Tray, Menu } = require('electron');
+const fs = require('fs');
+const https = require('https');
 const path = require('path');
 const serve = require('electron-serve');
 const { spawn } = require('child_process');
 const { OpenClaudeSessionSyncer } = require('../desktop/session.sync.js');
 const appServe = app.isPackaged ? serve({ directory: path.join(__dirname, '../out') }) : null;
 let openworkProcess = null;
+let tray = null;
+let mainWindow = null;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Window State Persistence
+// ─────────────────────────────────────────────────────────────────────────────
+const windowStatePath = path.join(app.getPath('userData'), 'window-state.json');
+
+function loadWindowState() {
+    try {
+        if (fs.existsSync(windowStatePath)) {
+            return JSON.parse(fs.readFileSync(windowStatePath, 'utf-8'));
+        }
+    } catch (err) {
+        console.warn('⚠️ Could not load window state:', err.message);
+    }
+    return { width: 1200, height: 800 };
+}
+
+function saveWindowState(win) {
+    if (!win || win.isDestroyed()) return;
+    try {
+        const bounds = win.getBounds();
+        const state = {
+            width: bounds.width,
+            height: bounds.height,
+            x: bounds.x,
+            y: bounds.y,
+            isMaximized: win.isMaximized(),
+        };
+        fs.writeFileSync(windowStatePath, JSON.stringify(state, null, 2));
+    } catch (err) {
+        console.warn('⚠️ Could not save window state:', err.message);
+    }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Auto-Update Check (GCS-based)
+// ─────────────────────────────────────────────────────────────────────────────
+function checkForUpdates() {
+    const updateUrl = 'https://storage.googleapis.com/alti-code-studio-releases/latest-version.json';
+    console.log('🔄 Checking for updates at:', updateUrl);
+
+    https.get(updateUrl, (res) => {
+        let data = '';
+        res.on('data', (chunk) => { data += chunk; });
+        res.on('end', () => {
+            try {
+                const release = JSON.parse(data);
+                const currentVersion = app.getVersion();
+                console.log(`📦 Current version: ${currentVersion}, Latest: ${release.version || 'unknown'}`);
+                if (release.version && release.version !== currentVersion) {
+                    console.log(`🆕 Update available: ${release.version}. Download: ${release.downloadUrl || 'N/A'}`);
+                } else {
+                    console.log('✅ App is up to date.');
+                }
+            } catch (err) {
+                console.warn('⚠️ Could not parse update response:', err.message);
+            }
+        });
+    }).on('error', (err) => {
+        console.warn('⚠️ Update check failed (network):', err.message);
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// System Tray
+// ─────────────────────────────────────────────────────────────────────────────
+function createTray() {
+    const trayIconPath = path.join(__dirname, '../public/mac-dock-icon.png');
+    const trayIcon = nativeImage.createFromPath(trayIconPath).resize({ width: 18, height: 18 });
+
+    tray = new Tray(trayIcon);
+    tray.setToolTip('Alti Code Studio');
+
+    const contextMenu = Menu.buildFromTemplate([
+        {
+            label: 'Open Alti Code Studio',
+            click: () => {
+                if (mainWindow) {
+                    mainWindow.show();
+                    mainWindow.focus();
+                } else {
+                    createWindow();
+                }
+            },
+        },
+        {
+            label: 'New Chat',
+            click: () => {
+                if (mainWindow && !mainWindow.isDestroyed()) {
+                    mainWindow.webContents.send('navigate', '/new-chat');
+                    mainWindow.show();
+                    mainWindow.focus();
+                } else {
+                    createWindow();
+                }
+            },
+        },
+        { type: 'separator' },
+        {
+            label: 'Quit',
+            click: () => {
+                app.quit();
+            },
+        },
+    ]);
+
+    tray.setContextMenu(contextMenu);
+
+    tray.on('click', () => {
+        if (mainWindow) {
+            mainWindow.show();
+            mainWindow.focus();
+        }
+    });
+}
 
 
 
@@ -46,9 +165,14 @@ const createWindow = () => {
         app.dock.setIcon(icon);
     }
 
+    // Restore saved window state (size + position)
+    const savedState = loadWindowState();
+
     const win = new BrowserWindow({
-        width: 1200,
-        height: 800,
+        width: savedState.width || 1200,
+        height: savedState.height || 800,
+        x: savedState.x,
+        y: savedState.y,
         title: "Inso Code",
         icon: iconPath,
         webPreferences: {
@@ -57,6 +181,18 @@ const createWindow = () => {
             contextIsolation: true,
         },
     });
+
+    mainWindow = win;
+
+    // Restore maximized state
+    if (savedState.isMaximized) {
+        win.maximize();
+    }
+
+    // Persist window state on resize, move, and close
+    win.on('resize', () => saveWindowState(win));
+    win.on('move', () => saveWindowState(win));
+    win.on('close', () => saveWindowState(win));
 
     // ─────────────────────────────────────────────────────────────────────────────
     // WebRTC / Media Permissions (Required for VideoEyeRecorder in Electron)
@@ -239,11 +375,10 @@ const createWindow = () => {
 let syncer = null;
 
 app.on('ready', () => {
-
-
     bootOpenWork();
-
     createWindow();
+    createTray();
+    checkForUpdates();
     syncer = new OpenClaudeSessionSyncer();
     syncer.start();
 });
