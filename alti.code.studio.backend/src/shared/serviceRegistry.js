@@ -35,9 +35,12 @@ import { conflictResolver } from './conflictResolver.js';
 import { sandboxManager } from './sandboxManager.js';
 import { migrationOrchestrator } from './migrationOrchestrator.js';
 import { cacheManager } from './cacheManager.js';
+import { lockManager } from './lockManager.js';
 import { dlqManager } from './dlqManager.js';
 import { configManager } from './configManager.js';
 import { soc2Snapshotter } from './soc2Snapshotter.js';
+import { secretsVault } from './secretsVault.js';
+import { chaosMonkey } from './chaosMonkey.js';
 
 class ServiceRegistry {
   constructor() {
@@ -52,6 +55,9 @@ class ServiceRegistry {
     logger.info('[ServiceRegistry] Starting platform initialization...');
 
     try {
+      // Phase 0: Bootstrapping
+      await this._initService('secretsVault', () => secretsVault.init());
+
       // Phase 1: Data layer
       await this._initService('conflictResolver', () => conflictResolver.init());
 
@@ -69,6 +75,8 @@ class ServiceRegistry {
       });
 
       await this._initService('cacheManager', () => cacheManager.init());
+
+      await this._initService('lockManager', () => lockManager.init());
 
       await this._initService('configManager', () => configManager.init());
 
@@ -127,6 +135,7 @@ class ServiceRegistry {
       });
 
       // Phase 5: Operational
+      await this._initService('chaosMonkey', () => chaosMonkey.init());
       await this._initService('privacyEngine', () => privacyEngine.init());
       
       await this._initService('dlqManager', () => dlqManager.init());

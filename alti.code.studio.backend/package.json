@@ -71,7 +71,7 @@
     "@google-cloud/discoveryengine": "^1.13.0",
     "@google-cloud/dlp": "^5.2.0",
     "@google-cloud/dns": "^4.0.0",
-    "@google-cloud/document-ai": "^8.10.0",
+    "@google-cloud/documentai": "^8.10.0",
     "@google-cloud/error-reporting": "^3.0.0",
     "@google-cloud/firestore": "^8.6.0",
     "@google-cloud/kms": "^5.5.1",

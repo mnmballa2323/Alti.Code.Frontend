@@ -2,6 +2,7 @@ import { logger } from './logger.js';
 import { metrics } from './metrics.js';
 import { auditLogger } from './auditLogger.js';
 import { notificationService } from './notificationService.js';
+import { lockManager } from './lockManager.js';
 
 class DlqManager {
   constructor() {
@@ -13,8 +14,8 @@ class DlqManager {
     logger.info('[DlqManager] Initializing dead letter queue manager');
     
     // Simulate processing DLQ periodically
-    this.intervalId = setInterval(() => {
-      this._processQueue();
+    this.intervalId = setInterval(async () => {
+      await this._processQueue();
     }, 60000); // Check every minute
     
     return { status: 'initialized' };
@@ -52,13 +53,22 @@ class DlqManager {
     }, backoffMs);
   }
   
-  _processQueue() {
-    const messages = this.simulatedQueue.splice(0, this.simulatedQueue.length);
-    if (messages.length > 0) {
-      logger.info(`[DlqManager] Processing ${messages.length} messages from simulated queue`);
-      messages.forEach(msg => {
-        this.processDeadLetter(msg);
-      });
+  async _processQueue() {
+    const acquired = await lockManager.acquireLock('dlq-processor', 60000);
+    if (!acquired) {
+      return; // another node is doing it
+    }
+
+    try {
+      const messages = this.simulatedQueue.splice(0, this.simulatedQueue.length);
+      if (messages.length > 0) {
+        logger.info(`[DlqManager] Processing ${messages.length} messages from simulated queue`);
+        messages.forEach(msg => {
+          this.processDeadLetter(msg);
+        });
+      }
+    } finally {
+      await lockManager.releaseLock('dlq-processor');
     }
   }
 }

@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import { logger } from './logger.js';
 import { metrics } from './metrics.js';
 import { auditLogger } from './auditLogger.js';
+import { lockManager } from './lockManager.js';
 
 class Soc2Snapshotter {
   constructor() {
@@ -12,8 +13,8 @@ class Soc2Snapshotter {
     logger.info('[Soc2Snapshotter] Initializing SOC-2 Snapshotter...');
     
     // Simulate cron job running every 24 hours (86400000 ms)
-    this.intervalId = setInterval(() => {
-      this.generateDailySnapshot();
+    this.intervalId = setInterval(async () => {
+      await this.generateDailySnapshot();
     }, 24 * 60 * 60 * 1000);
 
     // Don't keep the process alive just for this interval
@@ -25,6 +26,11 @@ class Soc2Snapshotter {
   }
 
   async generateDailySnapshot() {
+    const acquired = await lockManager.acquireLock('soc2-snapshot', 300000);
+    if (!acquired) {
+      return;
+    }
+
     logger.info('[Soc2Snapshotter] Generating daily SOC-2 compliance snapshot...');
     const startTime = Date.now();
 
@@ -76,6 +82,8 @@ class Soc2Snapshotter {
       await auditLogger.logEvent('COMPLIANCE', 'SOC2_SNAPSHOT_FAILED', 'SYSTEM', {
         error: error.message
       });
+    } finally {
+      await lockManager.releaseLock('soc2-snapshot');
     }
   }
 
