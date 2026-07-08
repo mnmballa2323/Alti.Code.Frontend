@@ -394,3 +394,12 @@ variable "cloud_run_neg_name" {
   type        = string
   default     = "alti-backend-neg"
 }
+
+# ------------------------------------------------------------------------------
+# Alerting Configuration
+# ------------------------------------------------------------------------------
+variable "ops_alert_email" {
+  description = "Email address for ops team alerts"
+  type        = string
+  default     = "ops@alticode.studio"
+}
