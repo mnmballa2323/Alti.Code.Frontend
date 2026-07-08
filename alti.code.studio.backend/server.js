@@ -7,7 +7,7 @@
 
 import './polyfill.js';
 import http from 'http';
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'; // LEGACY: Retained for graceful shutdown of any remaining MongoDB connections. No active models use this.
 import fs from 'fs';
 import path from 'path';
 
@@ -41,6 +41,7 @@ process.on('uncaughtException', error => {
 import { connectPrisma } from './src/config/prisma.js';
 
 let server;
+// LEGACY: MongoDB configuration — will be removed once all data is migrated to Firestore/AlloyDB
 mongoose.set('strictQuery', true);
 mongoose.set('bufferCommands', false);
 

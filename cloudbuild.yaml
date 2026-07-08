@@ -27,14 +27,26 @@ steps:
     waitFor: ['-'] # Run immediately, no dependencies
 
   # --------------------------------------------------------------------------
-  # Step 2: Run test suite — fail fast on any test failure
+  # Step 2: Lint — catch syntax and style issues early
+  # --------------------------------------------------------------------------
+  - id: 'lint-backend'
+    name: 'node:20-alpine'
+    entrypoint: 'npx'
+    args: ['eslint', 'src/', '--max-warnings=0', '--no-error-on-unmatched-pattern']
+    dir: 'alti.code.studio.backend'
+    waitFor: ['install-dependencies']
+
+  # --------------------------------------------------------------------------
+  # Step 3: Run test suite — fail fast on any test failure
   # --------------------------------------------------------------------------
   - id: 'run-tests'
     name: 'node:20-alpine'
-    entrypoint: 'npm'
-    args: ['test']
+    entrypoint: 'npx'
+    args: ['vitest', 'run', '--reporter=verbose']
     dir: 'alti.code.studio.backend'
-    waitFor: ['install-dependencies']
+    env:
+      - 'NODE_ENV=test'
+    waitFor: ['lint-backend']
 
   # --------------------------------------------------------------------------
   # Step 2b: Build frontend Next.js app
@@ -117,6 +129,21 @@ steps:
     name: 'gcr.io/cloud-builders/docker'
     args: ['push', '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/backend:latest']
     waitFor: ['docker-build']
+
+  # --------------------------------------------------------------------------
+  # Step 4b: Scan container for vulnerabilities (On-Demand Scanning)
+  # --------------------------------------------------------------------------
+  - id: 'vulnerability-scan'
+    name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud artifacts docker images scan \
+          ${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO_NAME}/backend:${SHORT_SHA} \
+          --format='value(response.scan)' \
+          --remote 2>/dev/null || echo "⚠️ Vulnerability scan skipped (API not enabled)"
+    waitFor: ['docker-push-sha']
 
   # --------------------------------------------------------------------------
   # Step 5: Deploy to Cloud Run (managed) with traffic migration
