@@ -22,12 +22,6 @@ class MultiCloudInferenceService {
     );
     this.marketplaceSkus = {
       gcp: {
-        sku: 'AZ-FOUNDRY-ALTI-SAAS-109',
-        pricePerKPrompt: 0.0025,
-        pricePerKCompletion: 0.01,
-        contractId: 'az-ea-foundry-3882',
-      },
-      gcp: {
         sku: 'GCP-VERTEX-ALTI-SAAS-201',
         pricePerKPrompt: 0.0015,
         pricePerKCompletion: 0.005,
