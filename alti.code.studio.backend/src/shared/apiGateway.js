@@ -13,6 +13,7 @@
 import { logger } from './logger.js';
 import { metrics } from './metrics.js';
 import { auditLogger } from './auditLogger.js';
+import { rateLimiter } from './rateLimiter.js';
 import crypto from 'crypto';
 
 class ApiGateway {
@@ -50,6 +51,19 @@ class ApiGateway {
       req.apiKeyData = keyData;
       req.tenantId = keyData.tenantId;
       metrics.incrementCounter('api_auth_success', 1, { tenant: keyData.tenantId });
+      next();
+    };
+  }
+
+  /**
+   * Rate limiting middleware (runs after auth)
+   */
+  rateLimitAuth() {
+    return async (req, res, next) => {
+      const isAllowed = await rateLimiter.checkLimit(req.tenantId, 'api');
+      if (!isAllowed) {
+        return res.status(429).json(this.errorEnvelope('Rate limit exceeded', 'RATE_LIMITED', req.requestId));
+      }
       next();
     };
   }

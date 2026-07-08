@@ -11,6 +11,7 @@
 
 import { logger } from './logger.js';
 import { metrics } from './metrics.js';
+import { webhookEngine } from './webhookEngine.js';
 import crypto from 'crypto';
 
 class AuditLogger {
@@ -72,6 +73,10 @@ class AuditLogger {
       audit: true,
       ...entry,
     });
+
+    if (action.includes('security') || action.includes('api_key') || action.includes('tenant')) {
+      webhookEngine.emit(entry.tenantId, 'security.audit_finding', entry);
+    }
 
     metrics.incrementCounter('audit_events_total', 1, { action, result: entry.result });
 

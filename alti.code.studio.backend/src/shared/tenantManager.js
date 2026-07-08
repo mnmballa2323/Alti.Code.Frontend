@@ -13,6 +13,7 @@ import { logger } from './logger.js';
 import { metrics } from './metrics.js';
 import { auditLogger } from './auditLogger.js';
 import { usageMetering } from './usageMetering.js';
+import crypto from 'crypto';
 
 const TENANT_STATES = ['trial', 'active', 'suspended', 'archived'];
 
@@ -135,6 +136,26 @@ class TenantManager {
       total: tenants.length,
       byPlan: { cloud: tenants.filter(t => t.plan === 'cloud').length, dedicated: tenants.filter(t => t.plan === 'dedicated').length, sovereign: tenants.filter(t => t.plan === 'sovereign').length },
       byState: { trial: tenants.filter(t => t.state === 'trial').length, active: tenants.filter(t => t.state === 'active').length, suspended: tenants.filter(t => t.state === 'suspended').length },
+    };
+  }
+
+  async impersonateTenant(superAdminId, targetTenantId, reason) {
+    const tenant = this.tenants.get(targetTenantId);
+    if (!tenant) throw new Error(`Tenant ${targetTenantId} not found`);
+
+    await auditLogger.log({
+      action: 'tenant.impersonation_started',
+      actor: { id: superAdminId },
+      resource: { type: 'tenant', id: targetTenantId },
+      metadata: { reason },
+      tenantId: targetTenantId,
+    });
+
+    return {
+      token: crypto.randomBytes(32).toString('hex'),
+      expiresAt: Date.now() + 3600000,
+      tenantId: targetTenantId,
+      impersonator: superAdminId,
     };
   }
 }

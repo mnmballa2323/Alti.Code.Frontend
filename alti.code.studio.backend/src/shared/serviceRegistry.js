@@ -27,6 +27,8 @@ import { tenantManager } from './tenantManager.js';
 import { usageMetering } from './usageMetering.js';
 import { webhookEngine } from './webhookEngine.js';
 import { breakers } from './circuitBreaker.js';
+import { rateLimiter } from './rateLimiter.js';
+import { stripeWebhookHandler } from './stripeWebhookHandler.js';
 
 class ServiceRegistry {
   constructor() {
@@ -54,6 +56,8 @@ class ServiceRegistry {
       });
 
       // Phase 2: Core services
+      await this._initService('rateLimiter', () => rateLimiter.init());
+
       await this._initService('auditLogger', async () => {
         const prisma = database.getClient();
         if (prisma) await auditLogger.init(prisma);
@@ -91,6 +95,8 @@ class ServiceRegistry {
       });
 
       // Phase 4: Integration services
+      await this._initService('stripeWebhookHandler', () => stripeWebhookHandler.init());
+
       await this._initService('webhookEngine', () => {
         return { status: 'initialized', events: 16 };
       });
