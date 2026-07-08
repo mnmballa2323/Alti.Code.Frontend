@@ -13,6 +13,13 @@ export default function BalancePage() {
   const [isCustomAmountFocused, setIsCustomAmountFocused] = React.useState(false);
   const [isProcessing, setIsProcessing] = React.useState(false);
 
+  React.useEffect(() => {
+    if (isAddFundsOpen) {
+      setSelectedPreset(100);
+      setCustomAmount("");
+    }
+  }, [isAddFundsOpen]);
+
   const finalAmount = customAmount ? Number(customAmount) : (selectedPreset || 0);
 
   const handleAddFunds = () => {
@@ -67,7 +74,12 @@ export default function BalancePage() {
 
       {/* Add Funds Modal */}
       {isAddFundsOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setIsAddFundsOpen(false);
+          }}
+        >
           <div className="bg-white dark:bg-neutral-900 rounded-3xl p-8 max-w-md w-full shadow-2xl border border-neutral-200 dark:border-neutral-800 animate-in zoom-in-95 duration-200">
             <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-8">Add Funds</h3>
             
