@@ -233,18 +233,6 @@ variable "waf_blocked_countries" {
 # ------------------------------------------------------------------------------
 # Workstream 4: Security Deepening
 # ------------------------------------------------------------------------------
-variable "enable_vpc_service_controls" {
-  description = "Enable VPC Service Controls sovereign perimeter around sensitive GCP APIs (requires access_policy_id and gcp_project_number)"
-  type        = bool
-  default     = false
-}
-
-variable "access_policy_id" {
-  description = "The numeric ID of the Access Context Manager access policy (org-level). Required when enable_vpc_service_controls is true."
-  type        = string
-  default     = ""
-}
-
 variable "gcp_project_number" {
   description = "The numeric GCP project number (not the project ID). Required for VPC Service Controls resource scoping."
   type        = string
@@ -313,22 +301,10 @@ variable "enable_control_plane" {
 # ------------------------------------------------------------------------------
 # Security: Cloud Armor & VPC Service Controls
 # ------------------------------------------------------------------------------
-variable "enable_vpc_service_controls" {
+variable "enable_vpc_sc" {
   description = "Enable VPC Service Controls for data exfiltration prevention"
   type        = bool
   default     = false
-}
-
-variable "enable_vpc_sc" {
-  description = "Alias for enable_vpc_service_controls (used by security.tf)"
-  type        = bool
-  default     = false
-}
-
-variable "access_policy_id" {
-  description = "Access Context Manager policy ID (required if VPC-SC is enabled)"
-  type        = string
-  default     = ""
 }
 
 variable "trusted_ip_ranges" {
@@ -352,27 +328,48 @@ variable "vpc_sc_allowed_members" {
 # ------------------------------------------------------------------------------
 # Observability: Monitoring, Logging, Uptime
 # ------------------------------------------------------------------------------
-variable "observability_notification_email" {
-  description = "Email address for monitoring alert notifications"
+variable "ops_email" {
+  description = "Email address for operational alert notifications"
+  type        = string
+  default     = "ops@alticode.studio"
+}
+
+variable "backend_domain" {
+  description = "Backend domain for uptime checks"
+  type        = string
+  default     = "api.alticode.studio"
+}
+
+variable "frontend_domain" {
+  description = "Frontend domain for uptime checks"
+  type        = string
+  default     = "app.alticode.studio"
+}
+
+# ------------------------------------------------------------------------------
+# DNS Configuration
+# ------------------------------------------------------------------------------
+variable "domain_name" {
+  description = "Root domain name for DNS zone"
+  type        = string
+  default     = "alticode.studio"
+}
+
+variable "frontend_lb_ip" {
+  description = "Frontend load balancer IP address for DNS A record"
   type        = string
   default     = ""
 }
 
-variable "uptime_check_host" {
-  description = "Hostname for uptime checks (e.g., api.alticode.studio)"
+variable "backend_lb_ip" {
+  description = "Backend load balancer IP address for DNS A record"
   type        = string
-  default     = "api.alticode.studio"
+  default     = ""
 }
 
 # ------------------------------------------------------------------------------
 # CDN & Load Balancing
 # ------------------------------------------------------------------------------
-variable "cdn_domain" {
-  description = "Domain for the managed SSL certificate and CDN"
-  type        = string
-  default     = "alticode.studio"
-}
-
 variable "cdn_api_domain" {
   description = "API subdomain for backend routing"
   type        = string

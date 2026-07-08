@@ -124,6 +124,34 @@ export async function initializeGcpServices() {
   // ── Media Processing ──
   await loadService('mediaTranscoder', './gcpMediaTranscoder.service.js', 'gcpMediaTranscoderService');
 
+  // ── Networking & Load Balancing ──
+  await Promise.allSettled([
+    loadService('loadBalancing', './gcpLoadBalancing.service.js', 'gcpLoadBalancingService'),
+    loadService('cloudNAT', './gcpCloudNAT.service.js', 'gcpCloudNATService'),
+    loadService('cloudDNS', './gcpCloudDNS.service.js', 'gcpCloudDNSService'),
+    loadService('serviceMesh', './gcpServiceMesh.service.js', 'gcpServiceMeshService'),
+    loadService('privateServiceConnect', './gcpPrivateServiceConnect.service.js', 'gcpPrivateServiceConnectService'),
+  ]);
+
+  // ── Data & Analytics ──
+  await Promise.allSettled([
+    loadService('dataCatalog', './gcpDataCatalog.service.js', 'gcpDataCatalogService'),
+    loadService('dataplex', './gcpDataplex.service.js', 'gcpDataplexService'),
+    loadService('dataproc', './gcpDataproc.service.js', 'gcpDataprocService'),
+    loadService('composer', './gcpComposer.service.js', 'gcpComposerService'),
+  ]);
+
+  // ── Governance & Billing ──
+  await Promise.allSettled([
+    loadService('cloudBilling', './gcpCloudBilling.service.js', 'gcpCloudBillingService'),
+    loadService('orgPolicy', './gcpOrgPolicy.service.js', 'gcpOrgPolicyService'),
+    loadService('auditLogs', './gcpAuditLogs.service.js', 'gcpAuditLogsService'),
+    loadService('recommender', './gcpRecommender.service.js', 'gcpRecommenderService'),
+    loadService('containerSecurity', './gcpContainerSecurity.service.js', 'gcpContainerSecurityService'),
+    loadService('anthos', './gcpAnthos.service.js', 'gcpAnthosService'),
+    loadService('deploymentManager', './gcpDeploymentManager.service.js', 'gcpDeploymentManagerService'),
+  ]);
+
   // ── Orchestrator (BigQuery, KMS, SCC, Vision, etc.) ──
   await loadService('orchestrator', './gcpServices.service.js', 'gcpServicesService');
 
