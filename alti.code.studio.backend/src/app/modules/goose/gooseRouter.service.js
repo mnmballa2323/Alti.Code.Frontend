@@ -376,10 +376,10 @@ ${newErrors.join('\n\n')}
 
       const env = {
         ...process.env,
-        GOOSE_PROVIDER: 'gcp_openai',
-        GCP_OPENAI_API_KEY: process.env.ARM_CLIENT_SECRET || 'dummy-key',
-        GCP_OPENAI_ENDPOINT:
-          process.env.GCP_ENDPOINT || 'https://dummy-endpoint.openai.gcp.com',
+        GOOSE_PROVIDER: 'gcp_partner',
+        GCP_PARTNER_API_KEY: process.env.ARM_CLIENT_SECRET || 'dummy-key',
+        GCP_PARTNER_ENDPOINT:
+          process.env.GCP_ENDPOINT || 'https://dummy-endpoint.partner.gcp.com',
         GOOSE_MODEL: config.gcp.model_name || 'gpt-5.4',
       };
 

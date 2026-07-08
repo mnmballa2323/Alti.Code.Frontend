@@ -187,12 +187,12 @@ class ComplianceEngine {
     ) {
       try {
         const axios = (await import('axios')).default;
-        const ollamaUrl = process.env.OLLAMA_URL || 'http://localhost:11434';
+        const gdcUrl = process.env.GCP_GDC_LOCAL_URL || 'http://localhost:11434';
         logger.info(
           `🛡️ DLP: Performing local Llama Guard safety check on private Google Distributed Cloud node`,
         );
 
-        const response = await axios.post(`${ollamaUrl}/api/generate`, {
+        const response = await axios.post(`${gdcUrl}/api/generate`, {
           model: 'llama-guard',
           prompt: text,
           stream: false,

@@ -3,11 +3,11 @@ import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError.js';
 import config from '../../../../config/index.js';
 
-const OLLAMA_API_URL = config.ollama_url || 'http://localhost:11434';
+const GCP_GDC_LOCAL_URL = config.gcp_gdc_local_url || 'http://localhost:11434';
 
 const generateCompletion = async (modelName, promptText, stream = false) => {
   try {
-    const response = await axios.post(`${OLLAMA_API_URL}/api/generate`, {
+    const response = await axios.post(`${GCP_GDC_LOCAL_URL}/api/generate`, {
       model: modelName,
       prompt: promptText,
       stream: stream,
@@ -16,24 +16,24 @@ const generateCompletion = async (modelName, promptText, stream = false) => {
   } catch (error) {
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
-      `Failed to generate completion from local Ollama model [${modelName}]: ${error.message}`,
+      `Failed to generate completion from local GDC model [${modelName}]: ${error.message}`,
     );
   }
 };
 
 const getLocalModels = async () => {
   try {
-    const response = await axios.get(`${OLLAMA_API_URL}/api/tags`);
+    const response = await axios.get(`${GCP_GDC_LOCAL_URL}/api/tags`);
     return response.data;
   } catch (error) {
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
-      `Failed to fetch local Ollama models: ${error.message}`,
+      `Failed to fetch local GDC models: ${error.message}`,
     );
   }
 };
 
-export const OllamaAgentService = {
+export const GdcAgentService = {
   generateCompletion,
   getLocalModels,
 };

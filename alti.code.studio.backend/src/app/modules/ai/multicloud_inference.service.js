@@ -83,7 +83,7 @@ class MultiCloudInferenceService {
 
     if (process.env.AIR_GAPPED_MODE === 'true') {
       logger.warn(
-        `🛡️ [Google Sovereign Inference] AIR_GAPPED_MODE is ON. Bypassing public clouds. Routing to local Ollama API.`,
+        `🛡️ [Google Sovereign Inference] AIR_GAPPED_MODE is ON. Bypassing public clouds. Routing to local Google Distributed Cloud model node.`,
       );
       return await this._executeAirGapped(finalPrompt, activeAgent, modelId);
     }
@@ -188,25 +188,25 @@ class MultiCloudInferenceService {
    */
   async _executeAirGapped(prompt, activeAgent, modelId) {
     logger.info(
-      `🔒 [Google Sovereign Inference] Executing Air-Gapped Local Inference on Ollama...`,
+      `🔒 [Google Sovereign Inference] Executing Air-Gapped Local Inference on Google Distributed Cloud...`,
     );
     const startTime = Date.now();
     let text = '';
     let latency = 0;
 
-    const ollamaUrl =
-      process.env.OLLAMA_API_URL || 'http://localhost:11434/api/generate';
+    const gdcUrl =
+      process.env.GCP_GDC_LOCAL_URL || 'http://localhost:11434/api/generate';
     const localModel = process.env.AIR_GAPPED_MODEL || 'llama3';
 
     try {
-      const res = await fetch(ollamaUrl, {
+      const res = await fetch(gdcUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, model: localModel, stream: false }),
         signal: AbortSignal.timeout(30000),
       });
       if (!res.ok)
-        throw new Error(`Ollama responded with status ${res.status}`);
+        throw new Error(`Local model responded with status ${res.status}`);
       const data = await res.json();
       text = data.response;
       latency = Date.now() - startTime;

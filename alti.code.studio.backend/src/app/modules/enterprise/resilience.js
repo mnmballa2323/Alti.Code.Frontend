@@ -5,7 +5,7 @@
  *
  * S&P 500 companies need 99.99% uptime. This module ensures:
  *   1. Circuit breaker per AI provider (CLOSED → OPEN → HALF_OPEN)
- *   2. Automatic failover chain: Gemini → GPT-4o → Claude → Ollama
+ *   2. Automatic failover chain: Gemini Ultra → Gemini Pro → Gemini Flash → GDC Local
  *   3. Retry with exponential backoff + jitter
  *   4. Timeout enforcement per agent
  *   5. Health check aggregation
@@ -176,10 +176,10 @@ class ResilientAIProvider {
   constructor() {
     // Failover chain: primary → secondary → tertiary → local
     this.providers = [
-      { name: 'gemini', priority: 1 },
-      { name: 'gpt4o', priority: 2 },
-      { name: 'claude', priority: 3 },
-      { name: 'ollama', priority: 4 },
+      { name: 'gemini-ultra', priority: 1 },
+      { name: 'gemini-pro', priority: 2 },
+      { name: 'gemini-flash', priority: 3 },
+      { name: 'gdc-local', priority: 4 },
     ];
 
     // One circuit breaker per provider

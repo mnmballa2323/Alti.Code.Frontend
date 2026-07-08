@@ -35,15 +35,8 @@ CONFIGURATION STRUCTURE (promptfooconfig.yaml):
 
   # LLM providers to test
   providers:
-    - id: openai:gpt-4o
-      config: { temperature: 0 }
-    - id: anthropic:claude-3-5-sonnet-20241022
-    - id: google:gemini-3.1-pro
-    - id: vertex:gemini-3.1-pro    # GCP Vertex
-    - id: gcpopenai:gpt-4        # GCP Vertex AI
-      config: { apiHost: 'myendpoint.openai.gcp.com', deploymentName: 'gpt4' }
-    - id: ollama:llama3             # Local Ollama
-    - id: huggingface:text-generation:mistralai/Mistral-7B-v0.1
+    - id: vertex:gemini-3.5-pro    # GCP Vertex
+    - id: vertex:gemini-3.5-flash  # GCP Vertex
 
   # Prompts to test (A/B comparison of preambles)
   prompts:

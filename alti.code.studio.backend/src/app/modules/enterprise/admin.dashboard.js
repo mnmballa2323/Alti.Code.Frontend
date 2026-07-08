@@ -132,7 +132,7 @@ class AdminDashboardController {
       ai: {
         label: 'AI/ML',
         count: 12,
-        examples: ['geminiAgent', 'claudeAgent', 'ollamaAgent'],
+        examples: ['geminiAgent', 'claudeAgent', 'gdcAgent'],
       },
       general: {
         label: 'General',

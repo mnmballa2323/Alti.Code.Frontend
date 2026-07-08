@@ -61,17 +61,17 @@ class MetricCollector {
     this.defineCounter('cost.usd.total', 'Total estimated cost in USD');
 
     // Provider metrics
-    this.defineCounter('provider.gemini.calls', 'Gemini API calls');
-    this.defineCounter('provider.gpt4o.calls', 'GPT-4o API calls');
-    this.defineCounter('provider.claude.calls', 'Claude API calls');
-    this.defineCounter('provider.ollama.calls', 'Ollama API calls');
+    this.defineCounter('provider.gemini-ultra.calls', 'Gemini Ultra API calls');
+    this.defineCounter('provider.gemini-pro.calls', 'Gemini Pro API calls');
+    this.defineCounter('provider.gemini-flash.calls', 'Gemini Flash API calls');
+    this.defineCounter('provider.gdc-local.calls', 'GDC Local API calls');
     this.defineCounter('provider.failover.count', 'Provider failover count');
 
     // Circuit breaker
-    this.defineGauge('circuit.gemini.state', 'Gemini circuit breaker state');
-    this.defineGauge('circuit.gpt4o.state', 'GPT-4o circuit breaker state');
-    this.defineGauge('circuit.claude.state', 'Claude circuit breaker state');
-    this.defineGauge('circuit.ollama.state', 'Ollama circuit breaker state');
+    this.defineGauge('circuit.gemini-ultra.state', 'Gemini Ultra circuit breaker state');
+    this.defineGauge('circuit.gemini-pro.state', 'Gemini Pro circuit breaker state');
+    this.defineGauge('circuit.gemini-flash.state', 'Gemini Flash circuit breaker state');
+    this.defineGauge('circuit.gdc-local.state', 'GDC Local circuit breaker state');
 
     // Latency histograms
     this.defineHistogram(

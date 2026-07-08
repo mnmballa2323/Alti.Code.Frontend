@@ -42,8 +42,8 @@ export class OfflineEmbeddingCache {
     const textHash = this._hashText(text);
     const model = process.env.AIR_GAPPED_EMBEDDING_MODEL || 'nomic-embed-text';
     const url =
-      process.env.OLLAMA_EMBED_URL ||
-      process.env.OLLAMA_API_URL?.replace('/generate', '/embeddings') ||
+      process.env.GCP_GDC_LOCAL_EMBED_URL ||
+      process.env.GCP_GDC_LOCAL_URL?.replace('/generate', '/embeddings') ||
       'http://localhost:11434/api/embeddings';
 
     // 1. Try DB Cache first (if MongoDB is connected)
@@ -86,9 +86,9 @@ export class OfflineEmbeddingCache {
       );
     }
 
-    // 3. Cache Miss: Query local Ollama API
+    // 3. Cache Miss: Query local GDC node
     logger.info(
-      `🔌 [OfflineEmbeddingCache] Cache MISS. Fetching embedding from Ollama for model: ${model}`,
+      `🔌 [OfflineEmbeddingCache] Cache MISS. Fetching embedding from local GDC node for model: ${model}`,
     );
     let embedding;
     try {
@@ -109,7 +109,7 @@ export class OfflineEmbeddingCache {
       }
 
       if (!embedding || !Array.isArray(embedding)) {
-        throw new Error('Malformed embedding response from Ollama');
+        throw new Error('Malformed embedding response from local GDC node');
       }
     } catch (err) {
       logger.error(

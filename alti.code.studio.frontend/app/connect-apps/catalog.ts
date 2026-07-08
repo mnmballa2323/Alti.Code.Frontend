@@ -236,8 +236,8 @@ export const SAAS_MOCKS = [
   },
 
   {
-    name: "Ollama Local AI",
-    slug: "mcp_ollama",
+    name: "GCP GDC Local AI",
+    slug: "mcp_gdc",
     icon: "solar:cpu-bold-duotone",
   },
 

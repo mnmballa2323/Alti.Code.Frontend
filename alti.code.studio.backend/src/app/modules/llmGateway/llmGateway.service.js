@@ -98,7 +98,7 @@ const sanitizeErrorMessage = message => {
     .replace(/Bearer\s+[A-Za-z0-9._-]+/gi, 'Bearer [MASKED]')
     .replace(/api-key['"]?\s*:\s*['"]?[A-Za-z0-9_-]+/gi, 'api-key: [MASKED]')
     .replace(
-      /https:\/\/[A-Za-z0-9.-]+\.openai\.gcp\.com/gi,
+      /https:\/\/[A-Za-z0-9.-]+\.partner\.gcp\.com/gi,
       'https://[GCP_ENDPOINT_MASKED]',
     );
 };

@@ -51,7 +51,7 @@ class AIProvider {
   async init() {
     if (process.env.AIR_GAPPED_MODE === 'true') {
       logger.info(
-        `🧠 AIProvider: Initialized in Air-Gapped Mode (routing to local Ollama/vLLM)`,
+        `🧠 AIProvider: Initialized in Air-Gapped Mode (routing to local Google Distributed Cloud/vLLM)`,
       );
       return;
     }
@@ -148,13 +148,13 @@ class AIProvider {
     return localReasonModel;
   }
 
-  async _executeOllama(prompt, options = {}) {
+  async _executeLocalGdcModel(prompt, options = {}) {
     const url =
-      process.env.OLLAMA_API_URL || 'http://localhost:11434/api/generate';
+      process.env.GCP_GDC_LOCAL_URL || 'http://localhost:11434/api/generate';
     const model = this._selectLocalModel(prompt, options);
 
     logger.info(
-      `🛡️ [AIProvider] AIR_GAPPED_MODE is ON. Routing task to local Ollama [${model}]`,
+      `🛡️ [AIProvider] AIR_GAPPED_MODE is ON. Routing task to local Google Distributed Cloud [${model}]`,
     );
 
     try {
@@ -176,7 +176,7 @@ class AIProvider {
       if (response.data && response.data.response !== undefined) {
         return response.data.response;
       }
-      throw new Error('Ollama API returned an empty or malformed response');
+      throw new Error('Local GDC API returned an empty or malformed response');
     } catch (err) {
       logger.error(
         `❌ [AIProvider] Local model execution failed: ${err.message}`,
@@ -220,7 +220,7 @@ class AIProvider {
     const scrubbedPrompt = this._scrubCredentials(groundedPrompt);
 
     if (process.env.AIR_GAPPED_MODE === 'true') {
-      return this._executeOllama(scrubbedPrompt, {
+      return this._executeLocalGdcModel(scrubbedPrompt, {
         ...options,
         isReason: true,
       });
@@ -268,7 +268,7 @@ class AIProvider {
     const scrubbedPrompt = this._scrubCredentials(groundedPrompt);
 
     if (process.env.AIR_GAPPED_MODE === 'true') {
-      return this._executeOllama(scrubbedPrompt, {
+      return this._executeLocalGdcModel(scrubbedPrompt, {
         ...options,
         isReason: false,
       });

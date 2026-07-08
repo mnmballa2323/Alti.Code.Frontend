@@ -209,7 +209,7 @@ const PromptfooAgentService = {};
 const GeminiExtensionService = {};
 const LitellmGatewayService = {};
 const QdrantService = {};
-const OllamaAgentService = {};
+const GdcAgentService = {};
 const SearxngAgentService = {};
 const OpenInterpreterAgentService = {};
 const ObservabilityService = {};
@@ -667,7 +667,7 @@ class GraphOrchestrator {
         dspy: DspyAgentService,
         geminiExt: GeminiExtensionService,
         qdrant: QdrantService,
-        ollama: OllamaAgentService,
+        gdcLocal: GdcAgentService,
         observability: ObservabilityService,
         voice: VoiceAgentService,
         litellm: LitellmGatewayService,

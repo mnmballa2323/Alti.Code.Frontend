@@ -892,8 +892,8 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
     category: "AI/ML",
   },
   {
-    name: "ollama-hydra",
-    description: "Ollama integration with speculative decoding and caching.",
+    name: "gdc-hydra",
+    description: "Google Distributed Cloud integration with speculative decoding and caching.",
     githubUrl: "https://github.com/EPS-AI-SOLUTIONS/GeminiHydra",
     category: "AI/ML",
   },

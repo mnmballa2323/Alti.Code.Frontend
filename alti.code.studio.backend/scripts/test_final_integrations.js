@@ -12,7 +12,7 @@ import { PromptfooAgentService } from '../src/app/modules/promptfooAgent/promptf
 import { GeminiExtensionService } from '../src/app/modules/geminiExtensions/geminiExtension.service.js';
 import { LitellmGatewayService } from '../src/app/modules/litellmGateway/litellmGateway.service.js';
 import { QdrantService } from '../src/app/modules/qdrantAgent/qdrant.service.js';
-import { OllamaAgentService } from '../src/app/modules/ollamaAgent/ollamaAgent.service.js';
+import { GdcAgentService } from '../src/app/modules/gdcAgent/gdcAgent.service.js';
 import { SearxngAgentService } from '../src/app/modules/searxngAgent/searxngAgent.service.js';
 import { OpenInterpreterAgentService } from '../src/app/modules/openInterpreterAgent/openInterpreterAgent.service.js';
 import { ObservabilityService } from '../src/app/modules/observability/observability.service.js';
@@ -70,7 +70,7 @@ async function testAllNewIntegrations() {
         assert(typeof QdrantService.createCollection === 'function', 'Qdrant: createCollection exists');
 
         // Phase 17
-        assert(typeof OllamaAgentService.generateCompletion === 'function', 'Ollama: generateCompletion exists');
+        assert(typeof GdcAgentService.generateCompletion === 'function', 'GDC: generateCompletion exists');
 
         // Phase 18
         assert(typeof SearxngAgentService.searchWeb === 'function', 'SearXNG: searchWeb exists');

@@ -342,10 +342,10 @@ describe('Phase 28: Resilience & SLA Infrastructure', () => {
     const health = resilientAI.getHealth();
 
     expect(health.totalProviders).toBe(4);
-    expect(health.providers.gemini).toBeDefined();
-    expect(health.providers.gpt4o).toBeDefined();
-    expect(health.providers.claude).toBeDefined();
-    expect(health.providers.ollama).toBeDefined();
+    expect(health.providers['gemini-ultra']).toBeDefined();
+    expect(health.providers['gemini-pro']).toBeDefined();
+    expect(health.providers['gemini-flash']).toBeDefined();
+    expect(health.providers['gdc-local']).toBeDefined();
   });
 });
 

@@ -103,9 +103,9 @@ const initialNodes: Node[] = [
     style: nodeStyles.gateway,
   },
   {
-    id: "ollama",
+    id: "gdc-local",
     position: { x: 750, y: 250 },
-    data: { label: "Ollama (Local SLMs)" },
+    data: { label: "GCP Distributed Cloud" },
     style: nodeStyles.gateway,
   },
 
@@ -262,7 +262,7 @@ const initialEdges: Edge[] = [
     animated: true,
   },
   { id: "e-kong-litellm", source: "kong", target: "litellm", animated: true },
-  { id: "e-litellm-ollama", source: "litellm", target: "ollama" },
+  { id: "e-litellm-gdc", source: "litellm", target: "gdc-local" },
 
   { id: "e-litellm-dspy", source: "litellm", target: "dspy" },
 
