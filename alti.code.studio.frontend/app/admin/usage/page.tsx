@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Icon } from "@iconify/react";
 
 import { API_URL } from "@/lib/config";
@@ -12,8 +11,10 @@ interface ModelUsage {
   completionTokens: number;
   totalTokens: number;
   cost: number;
+  cost: number;
   invocations: number;
-  priceRate?: string;
+  priceIn?: string;
+  priceOut?: string;
 }
 
 interface CostMetrics {
@@ -25,8 +26,6 @@ interface CostMetrics {
   };
   modelsUsage: ModelUsage[];
 }
-
-type Provider = "Claude" | "Gemini";
 
 interface HistoryEntry {
   month: string;
@@ -70,29 +69,6 @@ export default function TokenUsagePage() {
   const [metrics, setMetrics] = useState<CostMetrics | null>(null);
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedProvider, setSelectedProvider] = useState<Provider>("Gemini");
-
-  const getProviderIcon = (p: Provider) => {
-    switch (p) {
-      case "Claude":
-        return "simple-icons:claude";
-      case "Gemini":
-        return "simple-icons:googlegemini";
-      default:
-        return "solar:box-minimalistic-bold-duotone";
-    }
-  };
-
-  const getProviderColor = (p: Provider) => {
-    switch (p) {
-      case "Claude":
-        return "text-[#CC9980]";
-      case "Gemini":
-        return "text-blue-500 dark:text-blue-400";
-      default:
-        return "";
-    }
-  };
 
   const fetchMetrics = async () => {
     try {
@@ -193,9 +169,15 @@ export default function TokenUsagePage() {
         (d) => d.id === m.model || d.name === m.model,
       );
 
+      const priceStr = def?.price || "Pricing N/A";
+      const parts = priceStr.split(" / ");
+      const priceIn = parts[0] ? parts[0].replace(" in", "") : "";
+      const priceOut = parts[1] ? parts[1].replace(" out", "") : "";
+
       return {
         ...m,
-        priceRate: def?.price || "Pricing N/A",
+        priceIn: priceIn || "N/A",
+        priceOut: priceOut || "N/A",
       };
     });
   };
@@ -203,91 +185,64 @@ export default function TokenUsagePage() {
   const claudeModels = mergeProviderModels("claude");
   const geminiModels = mergeProviderModels("gemini");
 
+  const currentModels = [...geminiModels, ...claudeModels];
+  const totalTokens = currentModels.reduce((acc, m) => acc + m.totalTokens, 0);
+  const totalCost = currentModels.reduce((acc, m) => acc + m.cost, 0);
+
   return (
-    <div className="flex-1 bg-[#F4F4F6] dark:bg-background min-h-screen overflow-y-auto">
-      <div className="p-8 max-w-6xl mx-auto space-y-6">
-        <div className="flex justify-center mb-8">
-          <div className="flex p-1 space-x-1 bg-default-200/50 dark:bg-default-50/10 rounded-xl shadow-inner">
-            {(["Gemini", "Claude"] as Provider[]).map((p) => (
-              <button
-                key={p}
-                className={`px-8 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
-                  selectedProvider === p
-                    ? "bg-white dark:bg-default-200 shadow-sm text-foreground"
-                    : "text-default-500 hover:text-foreground hover:bg-default-200/50 dark:hover:bg-default-100/50"
-                }`}
-                onClick={() => setSelectedProvider(p)}
-              >
-                <Icon
-                  className={`text-lg transition-colors ${selectedProvider === p ? getProviderColor(p) : ""}`}
-                  icon={getProviderIcon(p)}
-                />
-                {p}
-              </button>
-            ))}
+    <div className="w-full flex-1 flex flex-col pt-6 pb-24">
+      <div className="w-full flex-1 flex flex-col">
+        {/* Table Header */}
+        <div className="grid grid-cols-[25%_30%_30%_15%] px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
+          <div>MODEL</div>
+          <div>INPUT</div>
+          <div>OUTPUT</div>
+          <div className="text-right">COST</div>
+        </div>
+
+        {/* Table Body */}
+        <div className="flex flex-col gap-2 mt-4">
+          {currentModels.map((m, idx) => (
+            <UsageRow key={idx} model={m} />
+          ))}
+        </div>
+
+        {/* Totals Bar */}
+        <div className="flex items-center justify-between px-6 py-4 mt-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300">
+          <div className="font-semibold text-neutral-900 dark:text-white">
+            Total usage this month
+          </div>
+          <div className="flex gap-4 items-center">
+            <div className="font-mono text-lg font-bold text-neutral-900 dark:text-white">
+              ${totalCost.toFixed(4)}
+            </div>
           </div>
         </div>
-        <div className="flex justify-center mb-6">
-          <h2 className="text-xl font-bold text-foreground">
-            Current Month Usage
-          </h2>
-        </div>
 
-        <div className="max-w-2xl mx-auto">
-          {selectedProvider === "Claude" && (
-            <CategoryCard
-              bg="bg-[#CC9980]/10"
-              color="text-[#CC9980]"
-              icon="simple-icons:claude"
-              models={claudeModels}
-              title="Claude Models"
-            />
-          )}
-          {selectedProvider === "Gemini" && (
-            <CategoryCard
-              bg="bg-blue-500/10"
-              color="text-blue-500 dark:text-blue-400"
-              icon="simple-icons:googlegemini"
-              models={geminiModels}
-              title="Gemini Models"
-            />
-          )}
-        </div>
-
+        {/* History Ledger */}
         {history.length > 0 && (
-          <div className="max-w-2xl mx-auto mt-12">
-            <h2 className="text-xl font-bold text-foreground mb-4">
-              Monthly History Ledger
-            </h2>
-            <Card className="bg-white dark:bg-black/40 border border-default-200 dark:border-white/10 shadow-sm">
-              <CardBody className="p-0">
-                <ul className="divide-y divide-default-200 dark:divide-white/5">
-                  {history.map((h, idx) => (
-                    <li
-                      key={idx}
-                      className="p-4 hover:bg-default-100 dark:hover:bg-white/5 transition-colors flex justify-between items-center"
-                    >
-                      <div>
-                        <span className="font-semibold text-sm block">
-                          {h.month}
-                        </span>
-                        <span className="text-xs text-default-500">
-                          {h.invocations.toLocaleString()} requests
-                        </span>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-sm font-mono font-bold text-warning block">
-                          ${h.cost.toFixed(4)}
-                        </span>
-                        <span className="text-xs text-default-400 font-mono">
-                          {h.totalTokens.toLocaleString()} tkns
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </CardBody>
-            </Card>
+          <div className="mt-12 w-full flex-1 flex flex-col mb-12">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
+                History Ledger
+              </h2>
+            </div>
+            <div className="grid grid-cols-[25%_25%_25%_25%] px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
+              <div>MONTH</div>
+              <div>REQUESTS</div>
+              <div>TOKENS</div>
+              <div className="text-right">COST</div>
+            </div>
+            <div className="flex flex-col gap-2 mt-4">
+              {history.map((h, idx) => (
+                <div key={idx} className="grid grid-cols-[25%_25%_25%_25%] items-center px-6 h-[56px] bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors">
+                  <div className="font-semibold text-neutral-900 dark:text-white">{h.month}</div>
+                  <div className="text-neutral-500">{h.invocations.toLocaleString()}</div>
+                  <div className="font-mono text-neutral-500">{h.totalTokens.toLocaleString()} tkns</div>
+                  <div className="text-right font-mono text-neutral-900 dark:text-white font-bold">${h.cost.toFixed(4)}</div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -295,68 +250,30 @@ export default function TokenUsagePage() {
   );
 }
 
-function CategoryCard({
-  title,
-  icon,
-  color,
-  bg,
-  models,
-}: {
-  title: string;
-  icon: string;
-  color: string;
-  bg: string;
-  models: ModelUsage[];
-}) {
-  const totalCategoryTokens = models.reduce((acc, m) => acc + m.totalTokens, 0);
-  const totalCategoryCost = models.reduce((acc, m) => acc + m.cost, 0);
+function UsageRow({ model }: { model: ModelUsage }) {
+  const isClaude = model.model.toLowerCase().includes("claude");
+  const isGemini = model.model.toLowerCase().includes("gemini");
+  
+  const iconName = isClaude ? "simple-icons:claude" : isGemini ? "simple-icons:googlegemini" : "solar:box-minimalistic-bold-duotone";
+  const iconColor = isClaude ? "text-[#CC9980]" : isGemini ? "text-blue-500 dark:text-blue-400" : "text-neutral-500";
 
   return (
-    <Card className="bg-white dark:bg-black/40 border border-default-200 dark:border-white/10 text-foreground flex flex-col shadow-sm">
-      <CardHeader
-        className={`flex gap-3 items-center p-4 border-b border-default-200 dark:border-white/10 ${bg}`}
-      >
-        <Icon className={`text-2xl ${color}`} icon={icon} />
-        <div className="flex-1">
-          <h2 className="text-lg font-bold">{title}</h2>
-        </div>
-        <div className="text-right">
-          <p className="text-sm font-mono font-bold">
-            ${totalCategoryCost.toFixed(4)}
-          </p>
-          <p className="text-xs text-default-400">
-            {totalCategoryTokens.toLocaleString()} tkns
-          </p>
-        </div>
-      </CardHeader>
-      <CardBody className="p-0 flex-1">
-        {models.length === 0 ? (
-          <div className="p-8 flex flex-col justify-center items-center text-center text-default-400 opacity-50">
-            <Icon className="text-3xl mb-2" icon="solar:ghost-bold-duotone" />
-            <p className="text-sm">No usage recorded yet</p>
-          </div>
-        ) : (
-          <ul className="divide-y divide-default-200 dark:divide-white/5">
-            {models.map((m, idx) => (
-              <li
-                key={idx}
-                className="p-4 hover:bg-default-100 dark:hover:bg-white/5 transition-colors"
-              >
-                <div className="flex justify-between items-center mb-2">
-                  <span className="font-semibold text-sm">{m.model}</span>
-                  <span className="text-xs font-mono text-warning">
-                    ${m.cost.toFixed(4)}
-                  </span>
-                </div>
-                <div className="flex justify-between items-center text-xs text-default-500 font-mono">
-                  <span>{m.totalTokens.toLocaleString()} total tokens</span>
-                  <span>{m.priceRate}</span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        )}
-      </CardBody>
-    </Card>
+    <div className="grid grid-cols-[25%_30%_30%_15%] items-center px-6 py-3 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm transition-colors hover:border-neutral-300 dark:hover:border-neutral-700">
+      <div className="font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+        <Icon className={`text-lg ${iconColor}`} icon={iconName} />
+        {model.model}
+      </div>
+      <div className="flex items-baseline gap-2">
+        <span className="font-mono text-sm text-neutral-900 dark:text-white">{model.promptTokens.toLocaleString()} <span className="text-neutral-400">tkns</span></span>
+        <span className="text-[10px] text-neutral-500 font-mono">{model.priceIn} / 1M</span>
+      </div>
+      <div className="flex items-baseline gap-2">
+        <span className="font-mono text-sm text-neutral-900 dark:text-white">{model.completionTokens.toLocaleString()} <span className="text-neutral-400">tkns</span></span>
+        <span className="text-[10px] text-neutral-500 font-mono">{model.priceOut} / 1M</span>
+      </div>
+      <div className="text-right font-mono text-sm text-neutral-900 dark:text-white font-bold">
+        ${model.cost.toFixed(4)}
+      </div>
+    </div>
   );
 }
