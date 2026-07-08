@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import {
   UserPlus,
   Users,
@@ -29,7 +30,7 @@ const adminItems: SidebarItem[] = [
   { label: "Billing", href: "/admin/billing", icon: CreditCard },
   { label: "Invoices", href: "/admin/invoices", icon: FileText },
   { label: "Usage", href: "/admin/usage", icon: Activity },
-  { label: "AI Agents", href: "/admin/ai-agents", icon: Bot },
+
   { label: "Platform Admin", href: "/admin/platform-admin", icon: Settings },
   { label: "Platform Manager", href: "/admin/platform-manager", icon: Sliders },
 ];
@@ -44,6 +45,7 @@ export default function AdminLayout({
   const activeMemberName = useAppSelector((state) => state.ui.activeMemberName);
   const profile = profileFromStore?.email ? profileFromStore : null;
   const [isAdmin, setIsAdmin] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const isTeamsDetail =
     pathname.startsWith("/admin/teams/") && pathname !== "/admin/teams";
 
@@ -196,15 +198,7 @@ export default function AdminLayout({
         {/* Right header: page title and user info */}
         <div className="flex-1 h-full flex items-center justify-between pl-10 pr-14">
           <div className="flex items-center gap-3">
-            <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
-              {isMemberDetail
-                ? activeMemberName || "Ada Lovelace"
-                : getPageTitle()}
-            </span>
-          </div>
-
-          <div className="flex items-center">
-            {isMemberDetail && (
+            {isMemberDetail ? (
               <Link
                 className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
                 href={
@@ -224,6 +218,18 @@ export default function AdminLayout({
                       : "Back to Members"}
                 </span>
               </Link>
+            ) : (
+              <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
+                {getPageTitle()}
+              </span>
+            )}
+          </div>
+
+          <div className="flex items-center">
+            {isMemberDetail && (
+              <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
+                {activeMemberName || "Ada Lovelace"}
+              </span>
             )}
           </div>
         </div>
@@ -231,8 +237,18 @@ export default function AdminLayout({
 
       <div className="flex-1 flex w-full overflow-hidden">
         {/* Internal Navigation Sidebar */}
-        <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
-          {renderNavGroup("", adminItems)}
+        <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 relative z-10">
+          <div className="flex-1 overflow-y-auto">
+            {renderNavGroup("", adminItems)}
+          </div>
+          <div className="pt-4 mt-auto">
+            <button 
+              onClick={() => setShowLogoutModal(true)}
+              className="w-full bg-[#e53935] hover:bg-[#d32f2f] text-white py-2.5 rounded-lg font-medium text-sm transition-colors"
+            >
+              Logout
+            </button>
+          </div>
         </div>
 
         {/* Main Content Pane */}
@@ -246,6 +262,34 @@ export default function AdminLayout({
           <div className="shrink-0 h-12 w-full bg-[#F3F4F6] dark:bg-[#0d1117] z-10 pointer-events-none absolute bottom-0 left-0" />
         </div>
       </div>
+
+      {/* Logout Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white dark:bg-[#161b22] w-[300px] rounded-2xl shadow-xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="p-6 text-center">
+              <h3 className="text-[17px] font-bold text-neutral-900 dark:text-white mb-1.5">Logout</h3>
+              <p className="text-[13px] text-neutral-500 dark:text-neutral-400">
+                Are you sure you want to logout?
+              </p>
+            </div>
+            <div className="flex border-t border-neutral-200 dark:border-neutral-700">
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="flex-1 py-3 text-[15px] font-normal text-neutral-900 dark:text-white border-r border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => signOut({ callbackUrl: "/login" })}
+                className="flex-1 py-3 text-[15px] font-normal text-neutral-900 dark:text-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -5,7 +5,7 @@ const nextConfig = {
   devIndicators: {
     appIsrStatus: false,
     buildActivity: false,
-    overlay: false,
+    overlay: true,
   },
   images: {
     unoptimized: false,

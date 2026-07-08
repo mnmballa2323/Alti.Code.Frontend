@@ -121,7 +121,7 @@ export default function MembersPage() {
           }
         }
       } catch (err) {
-        console.error("Failed to load members from database:", err);
+        console.warn("Failed to load members from database:", err);
       }
     }
     loadMembers();
@@ -158,11 +158,10 @@ export default function MembersPage() {
     <div className="w-full pt-6">
       <div className="w-full">
         {/* Table Header */}
-        <div className="grid grid-cols-[18%_18%_32%_15%_17%] px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
+        <div className="grid grid-cols-[20%_20%_35%_25%] px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl">
           <div>FIRST NAME</div>
           <div>LAST NAME</div>
           <div>EMAIL ADDRESS</div>
-          <div>30-DAY USAGE</div>
           <div>ROLE TYPE</div>
         </div>
 
@@ -171,15 +170,12 @@ export default function MembersPage() {
           {members.map((member, i) => (
             <Link
               key={i}
-              className="group grid grid-cols-[18%_18%_32%_15%_17%] items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
+              className="group grid grid-cols-[20%_20%_35%_25%] items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
               href={`/admin/team-members/${encodeURIComponent(member.email)}`}
             >
               <div>{member.firstName}</div>
               <div>{member.lastName}</div>
               <div>{member.email}</div>
-              <div className="font-mono text-xs text-neutral-500">
-                {member.tokens}
-              </div>
               <div className="flex items-center justify-between w-full pr-0 relative">
                 <div
                   ref={activeDropdownIndex === i ? activeDropdownRef : null}
@@ -260,21 +256,20 @@ export default function MembersPage() {
 
       {/* Confirmation Modal */}
       {memberToRemove !== null && indexToRemove !== null && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-50 flex items-center justify-center p-4">
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800 rounded-2xl shadow-xl max-w-sm w-full p-6 animate-in fade-in zoom-in-95 duration-200">
-            <h3 className="text-sm font-bold text-neutral-900 dark:text-white">
-              Remove Member
-            </h3>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-2 leading-relaxed">
-              Are you sure you want to remove{" "}
-              <span className="font-bold text-neutral-800 dark:text-neutral-200">
-                {memberToRemove.firstName} {memberToRemove.lastName}
-              </span>{" "}
-              from your team? This action cannot be undone.
-            </p>
-            <div className="flex justify-end gap-2.5 mt-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white dark:bg-[#161b22] w-auto min-w-[300px] max-w-2xl px-2 rounded-2xl shadow-xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="p-6 text-center">
+              <h3 className="text-[17px] font-bold text-neutral-900 dark:text-white mb-1.5">Remove Member</h3>
+              <p className="text-[13px] text-neutral-500 dark:text-neutral-400 whitespace-nowrap">
+                Are you sure you want to remove{" "}
+                <span>
+                  {memberToRemove.firstName} {memberToRemove.lastName}
+                </span>
+              </p>
+            </div>
+            <div className="flex border-t border-neutral-200 dark:border-neutral-700">
               <button
-                className="px-3.5 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-100 text-xs font-semibold rounded-lg transition-colors focus:outline-none"
+                className="flex-1 py-3 text-[15px] font-normal text-neutral-900 dark:text-white border-r border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                 type="button"
                 onClick={() => {
                   setMemberToRemove(null);
@@ -284,7 +279,7 @@ export default function MembersPage() {
                 Cancel
               </button>
               <button
-                className="px-3.5 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-semibold rounded-lg transition-colors focus:outline-none"
+                className="flex-1 py-3 text-[15px] font-normal text-neutral-900 dark:text-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
                 type="button"
                 onClick={() => {
                   handleRemoveMember(indexToRemove);

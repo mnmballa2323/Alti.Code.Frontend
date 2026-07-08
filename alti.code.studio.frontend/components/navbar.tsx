@@ -409,13 +409,13 @@ function Navbar() {
                     const userRole = (profile?.role || "").toLowerCase();
 
                     if (userRole === "owner" || userRole === "admin") {
-                      router.push("/dashboard");
+                      router.push("/admin");
                     } else {
                       router.push("/new-chat");
                     }
                   }}
                 >
-                  Launch App
+                  Dashboard
                 </Button>
                 <Button
                   className={cn(

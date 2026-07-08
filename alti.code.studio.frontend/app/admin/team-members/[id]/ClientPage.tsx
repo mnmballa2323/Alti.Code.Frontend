@@ -11,8 +11,10 @@ import { setActiveMemberName } from "@/store/uiSlice";
 import { API_URL } from "@/lib/config";
 
 interface Member {
-  id: string;
+  id?: string;
   name?: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
   role: string;
 }
@@ -93,13 +95,24 @@ export default function ClientPage() {
     const fetchMember = async () => {
       try {
         const response = await teamAPI.members();
+        const decodedId = decodeURIComponent(id);
         const found = response.data?.find(
-          (m: any) => m.id === id || m._id === id,
+          (m: any) => m.id === decodedId || m._id === decodedId || m.email === decodedId,
         );
 
-        setMember(found || null);
+        if (found) {
+          setMember(found);
+        } else {
+           throw new Error("Not found in API");
+        }
       } catch (error) {
-        console.error("Failed to fetch member details:", error);
+        console.warn("Failed to fetch member details:", error);
+        // Fallback for when API is down or member not found
+        const decodedId = decodeURIComponent(id);
+        const emailParts = decodedId.split('@')[0].split('.');
+        const firstName = emailParts[0] ? emailParts[0].charAt(0).toUpperCase() + emailParts[0].slice(1) : '';
+        const lastName = emailParts[1] ? emailParts[1].charAt(0).toUpperCase() + emailParts[1].slice(1) : '';
+        setMember({ email: decodedId, firstName, lastName, role: 'Member' });
       } finally {
         setMemberLoading(false);
       }
@@ -110,7 +123,11 @@ export default function ClientPage() {
 
   useEffect(() => {
     if (member) {
-      dispatch(setActiveMemberName(member.name || member.email));
+      const displayName =
+        member.firstName && member.lastName
+          ? `${member.firstName} ${member.lastName}`
+          : member.name || member.email;
+      dispatch(setActiveMemberName(displayName));
     }
 
     return () => {
@@ -151,7 +168,7 @@ export default function ClientPage() {
         setHistory(historyData.data);
       }
     } catch (error) {
-      console.error("Failed to fetch user token metrics", error);
+      console.warn("Failed to fetch user token metrics", error);
     } finally {
       setLoading(false);
     }
@@ -259,23 +276,36 @@ export default function ClientPage() {
       <div className="p-8 max-w-6xl mx-auto space-y-6">
         <div className="flex justify-center mb-8">
           <div className="flex p-1 space-x-1 bg-default-200/50 dark:bg-default-50/10 rounded-xl shadow-inner">
-            {(["Claude", "Gemini"] as Provider[]).map((p) => (
-              <button
-                key={p}
-                className={`px-8 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-2 ${
-                  selectedProvider === p
-                    ? "bg-white dark:bg-default-200 shadow-sm text-foreground"
-                    : "text-default-500 hover:text-foreground hover:bg-default-200/50 dark:hover:bg-default-100/50"
-                }`}
-                onClick={() => setSelectedProvider(p)}
-              >
-                <Icon
-                  className={`text-lg transition-colors ${selectedProvider === p ? getProviderColor(p) : ""}`}
-                  icon={getProviderIcon(p)}
-                />
-                {p}
-              </button>
-            ))}
+            <button
+              className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${
+                selectedProvider === "Gemini"
+                  ? "bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
+              }`}
+              type="button"
+              onClick={() => setSelectedProvider("Gemini")}
+            >
+              <Icon
+                className="w-4 h-4 text-blue-500"
+                icon="simple-icons:googlegemini"
+              />
+              Gemini
+            </button>
+            <button
+              className={`flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-lg text-sm font-semibold transition-all ${
+                selectedProvider === "Claude"
+                  ? "bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700 dark:hover:text-neutral-300"
+              }`}
+              type="button"
+              onClick={() => setSelectedProvider("Claude")}
+            >
+              <Icon
+                className="w-4 h-4 text-[#d97757]"
+                icon="simple-icons:claude"
+              />
+              Claude
+            </button>
           </div>
         </div>
         <div className="flex justify-center mb-6">

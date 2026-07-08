@@ -59,6 +59,16 @@ export async function middleware(request: NextRequest) {
 
   // Allow public routes through
   if (isPublicRoute(pathname)) {
+    if (pathname === "/") {
+      const token = await getToken({
+        req: request,
+        secret: process.env.NEXTAUTH_SECRET,
+      });
+      if (token) {
+        // All logged-in users go to the admin page as requested
+        return NextResponse.redirect(new URL("/admin", request.url));
+      }
+    }
     return NextResponse.next();
   }
 
@@ -115,6 +125,11 @@ export async function middleware(request: NextRequest) {
     mfaUrl.searchParams.set("callbackUrl", pathname);
 
     return NextResponse.redirect(mfaUrl);
+  }
+
+  // Never allow access to the old dashboard
+  if (pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL("/admin", request.url));
   }
 
   // Admin/Owner routes require elevated roles
