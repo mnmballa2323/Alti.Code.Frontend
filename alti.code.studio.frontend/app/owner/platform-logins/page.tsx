@@ -1,68 +1,66 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Loader2, ChevronRight, User, Plus, X, ChevronDown, Filter } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useAppSelector } from "@/store";
 
-import { CustomerInfo, DUMMY_CUSTOMERS } from "./data";
+import { PlatformLogin, DUMMY_LOGINS } from "./data";
 
-export default function CustomersPage() {
+export default function PlatformLoginsPage() {
   const router = useRouter();
   const { status } = useSession();
-  const [customers, setCustomers] = useState<CustomerInfo[]>([]);
+  const [logins, setLogins] = useState<PlatformLogin[]>([]);
   const ITEMS_PER_PAGE = 8;
   const [loading, setLoading] = useState(true);
   const searchQuery = useAppSelector((state) => state.ui.searchQuery);
   const [currentPage, setCurrentPage] = useState(1);
+  const [visiblePasswords, setVisiblePasswords] = useState<Set<string>>(new Set());
+
+  const togglePasswordVisibility = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation();
+    setVisiblePasswords((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   useEffect(() => {
     if (status === "authenticated") {
-      setCustomers(DUMMY_CUSTOMERS);
+      setLogins(DUMMY_LOGINS);
       setLoading(false);
     } else if (status === "unauthenticated") {
       setLoading(false);
     }
   }, [status]);
 
-  // Filter based on search query
-  const filteredCustomers = customers.filter((c) => {
+  const filteredLogins = logins.filter((c) => {
     const query = searchQuery.toLowerCase();
-    
-    return c.name.toLowerCase().includes(query) ||
-      (c.domain && c.domain.toLowerCase().includes(query)) ||
-      (c.owner && c.owner.toLowerCase().includes(query));
+    return c.platform.toLowerCase().includes(query) ||
+      c.website.toLowerCase().includes(query) ||
+      c.username.toLowerCase().includes(query);
   });
 
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery]);
 
-  const totalPages = Math.ceil(filteredCustomers.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredLogins.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredCustomers.length);
-  const paginatedCustomers = filteredCustomers.slice(startIndex, endIndex);
-
-  const getPrice = (type: string) => {
-    if (type === "Cloud") return "$250/mo";
-    if (type === "Dedicated") return "$2,500/mo";
-    if (type === "Sovereign") return "$5,000/mo";
-    return "$0/mo";
-  };
-
-
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredLogins.length);
+  const paginatedLogins = filteredLogins.slice(startIndex, endIndex);
 
   return (
     <div className="w-full flex-1 flex flex-col pt-6">
       <div className="w-full flex-1 flex flex-col">
-        {/* Table Header */}
-        <div className="grid grid-cols-12 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl items-center">
-          <div className="col-span-3">Account Name</div>
-          <div className="col-span-3">Owner Email</div>
-          <div className="col-span-2">Type</div>
-          <div className="col-span-2">Members</div>
-          <div className="col-span-2 flex items-center justify-between pr-2">Price</div>
+        <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl items-center">
+          <div className="col-span-3">Platform</div>
+          <div className="col-span-3">Website</div>
+          <div className="col-span-4">Username</div>
+          <div className="col-span-2 flex items-center justify-between pr-2">Password</div>
         </div>
 
         {/* Floating Rows */}
@@ -70,49 +68,51 @@ export default function CustomersPage() {
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20">
               <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
-              <p className="text-sm text-neutral-500">Loading customers...</p>
+              <p className="text-sm text-neutral-500">Loading...</p>
             </div>
-          ) : paginatedCustomers.length > 0 ? (
-            paginatedCustomers.map((customer) => (
+          ) : paginatedLogins.length > 0 ? (
+            paginatedLogins.map((item) => (
               <div
-                key={customer.id}
+                key={item.id}
                 className="group grid grid-cols-12 gap-4 items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors cursor-pointer relative"
-                onClick={() => router.push(`/owner/customers/${customer.id}`)}
+                onClick={() => {}}
               >
-                {/* Account Name */}
                 <div className="col-span-3 flex items-center min-w-0">
                   <span className="text-neutral-900 dark:text-white font-semibold truncate">
-                    {customer.name}
+                    {item.platform}
                   </span>
                 </div>
 
-                {/* Owner Email */}
-                <div className="col-span-3 flex items-center text-neutral-500 dark:text-neutral-400 font-normal">
-                  {customer.owner}
+                <div className="col-span-3 flex items-center text-neutral-500 dark:text-neutral-400 font-normal truncate pr-4">
+                  {item.website}
                 </div>
 
-                {/* Account Type */}
-                <div className="col-span-2 flex items-center text-neutral-500 dark:text-neutral-400 font-normal">
-                  {customer.type}
+                <div className="col-span-4 flex items-center text-neutral-500 dark:text-neutral-400 font-normal truncate pr-4">
+                  {item.username}
                 </div>
 
-                {/* Members (No "members" text) */}
-                <div className="col-span-2 text-neutral-600 dark:text-neutral-400 font-normal">
-                  {customer.userCount.toLocaleString()}
-                </div>
-
-                {/* Price */}
                 <div className="col-span-2 flex items-center justify-between pr-2">
-                  <span className="text-neutral-800 dark:text-neutral-200 font-normal text-sm">
-                    {getPrice(customer.type)}
+                  <span className={`font-mono text-neutral-500 dark:text-neutral-400 text-xs ${!visiblePasswords.has(item.id) ? 'tracking-widest' : ''}`}>
+                    {visiblePasswords.has(item.id) ? item.password : item.passwordPlaceholder}
                   </span>
-                  <ChevronRight className="w-4 h-4 text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors" />
+                  <div className="flex items-center gap-1">
+                    <button 
+                      onClick={(e) => togglePasswordVisibility(e, item.id)}
+                      className="p-1 text-neutral-400 hover:text-neutral-900 dark:hover:text-white transition-colors"
+                    >
+                      {visiblePasswords.has(item.id) ? (
+                        <EyeOff className="w-3.5 h-3.5" />
+                      ) : (
+                        <Eye className="w-3.5 h-3.5" />
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
             ))
           ) : (
             <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
-              No customers match your filter or search query.
+              No results found.
             </div>
           )}
         </div>
@@ -120,7 +120,7 @@ export default function CustomersPage() {
         {/* Pagination Bar */}
         <div className="sticky bottom-6 z-20 flex items-center justify-between h-[68px] px-6 py-4 mt-auto mb-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300">
           <div className="text-neutral-500 dark:text-neutral-400">
-            Showing <span className="font-medium text-neutral-900 dark:text-white">{filteredCustomers.length > 0 ? startIndex + 1 : 0}</span> to <span className="font-medium text-neutral-900 dark:text-white">{endIndex}</span> of <span className="font-medium text-neutral-900 dark:text-white">{filteredCustomers.length}</span> results
+            Showing <span className="font-medium text-neutral-900 dark:text-white">{filteredLogins.length > 0 ? startIndex + 1 : 0}</span> to <span className="font-medium text-neutral-900 dark:text-white">{endIndex}</span> of <span className="font-medium text-neutral-900 dark:text-white">{filteredLogins.length}</span> results
           </div>
           <div className="flex gap-2">
             {currentPage > 1 && (

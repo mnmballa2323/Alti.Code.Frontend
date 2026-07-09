@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import "@copilotkit/react-ui/styles.css";
 
-import { RootState } from "@/store";
+import type { RootState } from "@/store";
 import Sidebar from "@/components/sidebar";
 import GhostEditor from "@/components/ghost-editor";
 import { WorkspaceDock } from "@/components/WorkspaceDock";
@@ -28,6 +28,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
   const isNoSidebarRoute =
     pathname?.startsWith("/admin") ||
     pathname?.startsWith("/owner") ||
+    pathname?.startsWith("/support") ||
     pathname === "/login" ||
     pathname === "/";
   const [isTauri, setIsTauri] = useState(false);

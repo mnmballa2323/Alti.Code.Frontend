@@ -7,7 +7,7 @@ import { X, Code2, Copy, Check } from "lucide-react";
 import { Button } from "@heroui/react";
 import { loader } from "@monaco-editor/react";
 
-import { RootState } from "@/store";
+import type { RootState } from "@/store";
 import { closeGhostEditor } from "@/store/uiSlice";
 
 // Configure Monaco to work inside Tauri's restricted webview.

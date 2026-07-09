@@ -2,88 +2,14 @@
 
 import React, { useState, useEffect } from "react";
 import { Search, MailOpen, CheckCircle } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useAppDispatch, useAppSelector } from "@/store";
 import { setActiveThreadSubject } from "@/store/uiSlice";
-
-type Message = {
-  id: string;
-  senderName: string;
-  text: string;
-  isMe: boolean;
-  date: string;
-};
-
-type Ticket = {
-  id: string;
-  customerName: string;
-  subject: string;
-  messages: Message[];
-  status: "Open" | "Resolved";
-  date: string;
-};
-
-const DUMMY_TICKETS: Ticket[] = [
-  {
-    id: "tkt-1",
-    customerName: "Ada Lovelace",
-    subject: "Help with billing details",
-    messages: [
-      {
-        id: "m1",
-        senderName: "Ada Lovelace",
-        text: "I need to update my credit card on file but I can't find where to do it. Can you help me navigate to the right section? I looked under settings but didn't see an option for payment methods.",
-        isMe: false,
-        date: "2 hours ago"
-      },
-      {
-        id: "m2",
-        senderName: "Me",
-        text: "Hi Ada,\n\nThanks for reaching out! You can update your payment method by going to the Billing tab on the sidebar and clicking on 'Update Payment Method'. Let me know if you still have trouble finding it.\n\nBest,\nSupport Team",
-        isMe: true,
-        date: "1 hour ago"
-      }
-    ],
-    status: "Open",
-    date: "Just now"
-  },
-  {
-    id: "tkt-2",
-    customerName: "Grace Hopper",
-    subject: "Error when inviting team member",
-    messages: [
-      {
-        id: "m3",
-        senderName: "Grace Hopper",
-        text: "I tried to invite a new team member but I got an error saying 'Domain mismatch'. What does this mean? Do they need to have the same email domain as me?",
-        isMe: false,
-        date: "2 hours ago"
-      }
-    ],
-    status: "Open",
-    date: "2 hours ago"
-  },
-  {
-    id: "tkt-3",
-    customerName: "Alan Turing",
-    subject: "Cloud Environment Setup",
-    messages: [
-      {
-        id: "m4",
-        senderName: "Alan Turing",
-        text: "Everything worked perfectly. Just wanted to say thanks for the quick turnaround on my environment setup yesterday. The platform is running very smoothly.",
-        isMe: false,
-        date: "2 days ago"
-      }
-    ],
-    status: "Resolved",
-    date: "2 days ago"
-  }
-];
+import { addReply } from "@/store/ticketSlice";
 
 export default function SupportInboxPage() {
-  const dispatch = useDispatch();
-  const [tickets, setTickets] = useState<Ticket[]>(DUMMY_TICKETS);
-  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(DUMMY_TICKETS[0].id);
+  const dispatch = useAppDispatch();
+  const tickets = useAppSelector((state) => state.tickets.tickets);
+  const [selectedTicketId, setSelectedTicketId] = useState<string | null>(tickets[0]?.id || null);
   const [searchQuery, setSearchQuery] = useState("");
   const [replyText, setReplyText] = useState("");
   const [isSending, setIsSending] = useState(false);
@@ -110,35 +36,27 @@ export default function SupportInboxPage() {
 
   const handleResolve = () => {
     if (!selectedTicket) return;
-    setTickets(prev => prev.map(t => t.id === selectedTicket.id ? { ...t, status: "Resolved" } : t));
+    // Dispatch resolve action if implemented later
   };
 
   const handleSendReply = () => {
-    if (!replyText.trim()) return;
+    if (!replyText.trim() || !selectedTicketId) return;
     
     setIsSending(true);
     // Simulate API call
     setTimeout(() => {
-      const newMessage: Message = {
-        id: Date.now().toString(),
-        senderName: "Me",
-        text: replyText,
-        isMe: true,
-        date: "Just now"
-      };
-      
-      setTickets(prev => prev.map(t => {
-        if (t.id === selectedTicketId) {
-          return {
-            ...t,
-            messages: [...t.messages, newMessage],
-            date: "Just now"
-          };
+      dispatch(addReply({
+        ticketId: selectedTicketId,
+        message: {
+          id: Date.now().toString(),
+          senderType: "support",
+          senderName: "Support Team",
+          text: replyText,
+          date: "Just now"
         }
-        return t;
       }));
-      setReplyText("");
       setIsSending(false);
+      setReplyText("");
     }, 500);
   };
 
@@ -196,14 +114,14 @@ export default function SupportInboxPage() {
             {/* Conversation Area */}
             <div className="flex-1 overflow-y-auto p-6 flex flex-col gap-6">
               {selectedTicket.messages.map((msg) => (
-                <div key={msg.id} className={`flex gap-4 ${msg.isMe ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`flex flex-col gap-1 max-w-[85%] ${msg.isMe ? 'items-end' : 'items-start'}`}>
+                <div key={msg.id} className={`flex gap-4 ${msg.senderType === "support" ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`flex flex-col gap-1 max-w-[85%] ${msg.senderType === "support" ? 'items-end' : 'items-start'}`}>
                     <div className="flex items-center gap-2 px-1">
                       <span className="text-[12px] font-medium text-neutral-900 dark:text-neutral-100">{msg.senderName}</span>
                       <span className="text-[11px] text-neutral-500">{msg.date}</span>
                     </div>
-                    <div className={`p-4 shadow-sm ${msg.isMe ? 'bg-black text-white rounded-2xl rounded-tr-none' : 'bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl rounded-tl-none'}`}>
-                      <p className={`text-[14px] leading-relaxed ${msg.isMe ? 'text-white' : 'text-neutral-700 dark:text-neutral-300'} whitespace-pre-wrap`}>
+                    <div className={`p-4 shadow-sm ${msg.senderType === "support" ? 'bg-black text-white rounded-2xl rounded-tr-none' : 'bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl rounded-tl-none'}`}>
+                      <p className={`text-[14px] leading-relaxed ${msg.senderType === "support" ? 'text-white' : 'text-neutral-700 dark:text-neutral-300'} whitespace-pre-wrap`}>
                         {msg.text}
                       </p>
                     </div>

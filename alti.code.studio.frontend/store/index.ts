@@ -7,6 +7,8 @@ import shadowReducer from "./shadowSlice";
 import systemReducer from "./systemSlice";
 import uiReducer from "./uiSlice";
 import tabsReducer from "./tabsSlice";
+import teamReducer from "./teamSlice";
+import ticketReducer from "./ticketSlice";
 
 export const store = configureStore({
   reducer: {
@@ -17,6 +19,8 @@ export const store = configureStore({
     system: systemReducer,
     ui: uiReducer,
     tabs: tabsReducer,
+    team: teamReducer,
+    tickets: ticketReducer,
   },
 });
 

@@ -9,7 +9,7 @@ import { Accordion, AccordionItem, Chip } from "@heroui/react";
 import MessageCard from "./message-card";
 import { MarkdownChats } from "./markdown-chats";
 
-import { RootState } from "@/store";
+import type { RootState } from "@/store";
 import { ToolExecution } from "@/store/messagesSlice";
 
 const FormattedReply = ({ reply }: { reply: string }) => {

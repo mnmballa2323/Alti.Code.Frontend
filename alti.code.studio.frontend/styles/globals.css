@@ -595,3 +595,12 @@ div[class*="tabs"] > button:not([role="tab"]) {
 .landing-footer a:hover {
   color: #ffffff !important;
 }
+
+/* Fix Chrome autofill background overriding */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s !important;
+  -webkit-text-fill-color: inherit !important;
+}

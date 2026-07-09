@@ -19,7 +19,7 @@ import { Icon } from "@iconify/react";
 import { useTheme } from "next-themes";
 import { useDispatch, useSelector } from "react-redux";
 
-import { RootState } from "@/store";
+import type { RootState } from "@/store";
 import { removeRepository } from "@/store/systemSlice";
 import { useModalStore } from "@/store/useModalStore";
 import { useSettingsStore } from "@/store/useSettingsStore";

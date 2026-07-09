@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import { API_URL } from "@/lib/config";
-import { RootState } from "@/store";
+import type { RootState } from "@/store";
 import { toggleShadowMode } from "@/store/shadowSlice";
 
 export const ShadowToggle = (): React.ReactNode => {

@@ -14,10 +14,14 @@ import {
   Shield,
   FileText,
   Search,
-  Headset
+  Headset,
+  UserPlus,
+  Key,
+  Mail
 } from "lucide-react";
 
-import { useAppSelector, useAppDispatch, RootState } from "@/store";
+import { useAppSelector, useAppDispatch } from "@/store";
+import type { RootState } from "@/store";
 import { setSearchQuery } from "@/store/uiSlice";
 
 interface SidebarItem {
@@ -30,7 +34,17 @@ const ownerItems: SidebarItem[] = [
   { label: "Dashboard", href: "/owner/dashboard", icon: LayoutDashboard },
   { label: "Customers", href: "/owner/customers", icon: Users },
   { label: "Transactions", href: "/owner/transactions", icon: FileText },
-  { label: "Support Inbox", href: "/owner/support", icon: Headset },
+];
+
+const teamItems: SidebarItem[] = [
+  { label: "Invite Members", href: "/owner/invite", icon: UserPlus },
+  { label: "Team Members", href: "/owner/members", icon: Users },
+];
+
+const accountItems: SidebarItem[] = [
+  { label: "Platform Logins", href: "/owner/platform-logins", icon: Shield },
+  { label: "API Keys", href: "/owner/api-keys", icon: Key },
+  { label: "Email Accounts", href: "/owner/email-accounts", icon: Mail },
 ];
 
 export default function OwnerLayout({
@@ -114,12 +128,15 @@ export default function OwnerLayout({
 
   const getPageTitle = () => {
     if (pathname.startsWith("/owner/dashboard")) return "Dashboard";
-    if (pathname.startsWith("/owner/members")) return "Invite";
+    if (pathname.startsWith("/owner/invite")) return "Invite Members";
+    if (pathname.startsWith("/owner/members")) return "Team Members";
     if (pathname.startsWith("/owner/customers")) return "Customers";
     if (pathname.startsWith("/owner/transactions")) return "Transactions";
-    if (pathname.startsWith("/owner/support")) return "Support Inbox";
+    if (pathname.startsWith("/owner/platform-logins")) return "Platform Logins";
+    if (pathname.startsWith("/owner/api-keys")) return "API Keys";
+    if (pathname.startsWith("/owner/email-accounts")) return "Email Accounts";
 
-    return "Platform Owner";
+    return "Platform Management";
   };
 
   return (
@@ -216,8 +233,49 @@ export default function OwnerLayout({
 
       <div className="flex-1 flex w-full overflow-hidden">
         {/* Internal Navigation Sidebar */}
-        <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
-          {renderNavGroup("", ownerItems)}
+        <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 relative z-10">
+          <div className="flex-1 overflow-y-auto py-6 px-3 flex flex-col gap-6">
+            {renderNavGroup("Platform Management", ownerItems)}
+            {renderNavGroup("Account Management", accountItems)}
+
+            {/* External Portals & Settings */}
+            <div className="mb-6">
+              <h3 className="px-4 text-[10px] font-bold text-neutral-455 dark:text-neutral-500 uppercase tracking-wider mb-2">
+                Customer Support
+              </h3>
+              <nav className="flex flex-col gap-1">
+                {teamItems.map((item) => {
+                  const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+                  return (
+                    <Link
+                      key={item.label}
+                      className={`flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-xl transition-all cursor-pointer ${
+                        isActive
+                          ? "bg-neutral-100 dark:bg-neutral-800 text-neutral-900 dark:text-white font-semibold"
+                          : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/40 hover:text-neutral-900 dark:hover:text-white"
+                      }`}
+                      href={item.href}
+                    >
+                      <item.icon
+                        className={`w-4 h-4 ${isActive ? "text-neutral-900 dark:text-white" : "text-neutral-400"}`}
+                      />
+                      {item.label}
+                    </Link>
+                  );
+                })}
+                
+                <a
+                  href="/support/inbox"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-xl transition-all cursor-pointer text-neutral-500 dark:text-neutral-400 hover:bg-neutral-50 dark:hover:bg-neutral-800/40 hover:text-neutral-900 dark:hover:text-white"
+                >
+                  <Headset className="w-4 h-4 text-neutral-400" />
+                  Support Platform
+                </a>
+              </nav>
+            </div>
+          </div>
         </div>
 
         {/* Main Content Pane */}

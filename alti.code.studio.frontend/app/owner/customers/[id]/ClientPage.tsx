@@ -15,7 +15,7 @@ import { useSession } from "next-auth/react";
 import { adminAPI, teamAPI } from "@/lib/enterprise-api";
 import { useAppDispatch } from "@/store";
 import { setActiveMemberName } from "@/store/uiSlice";
-import { DUMMY_CUSTOMERS } from "../page";
+import { DUMMY_CUSTOMERS } from "../data";
 
 interface Member {
   id: string;

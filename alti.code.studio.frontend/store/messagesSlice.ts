@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { RootState } from "./index";
+import type { RootState } from "./index";
 
 import { useSettingsStore } from "@/store/useSettingsStore";
 

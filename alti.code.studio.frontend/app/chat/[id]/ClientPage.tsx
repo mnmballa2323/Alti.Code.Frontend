@@ -13,7 +13,7 @@ import {
   setMessages,
   sendMessage,
 } from "@/store/messagesSlice";
-import { RootState } from "@/store";
+import type { RootState } from "@/store";
 import useFetchSingleData from "@/hooks/useFetchSingleData";
 import { AppDispatch } from "@/store";
 

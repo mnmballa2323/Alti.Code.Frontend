@@ -55,7 +55,7 @@ import { useActiveProject } from "@/hooks/useActiveProject";
 import { setActiveProject } from "@/lib/project";
 import { removeDocument, setActiveWorkspace } from "@/store/systemSlice";
 import { addTab } from "@/store/tabsSlice";
-import { RootState } from "@/store";
+import type { RootState } from "@/store";
 import { useModalStore } from "@/store/useModalStore";
 import useFetchChatHistory from "@/hooks/useFetchChatHistory";
 import { startNewChat } from "@/store/messagesSlice";

@@ -1,17 +1,17 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Loader2, ChevronRight, User, Plus, X, ChevronDown, Filter } from "lucide-react";
+import { Loader2, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useAppSelector } from "@/store";
 
-import { CustomerInfo, DUMMY_CUSTOMERS } from "./data";
+import { ApiKey, DUMMY_API_KEYS } from "./data";
 
-export default function CustomersPage() {
+export default function ApiKeysPage() {
   const router = useRouter();
   const { status } = useSession();
-  const [customers, setCustomers] = useState<CustomerInfo[]>([]);
+  const [keys, setKeys] = useState<ApiKey[]>([]);
   const ITEMS_PER_PAGE = 8;
   const [loading, setLoading] = useState(true);
   const searchQuery = useAppSelector((state) => state.ui.searchQuery);
@@ -19,50 +19,38 @@ export default function CustomersPage() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      setCustomers(DUMMY_CUSTOMERS);
+      setKeys(DUMMY_API_KEYS);
       setLoading(false);
     } else if (status === "unauthenticated") {
       setLoading(false);
     }
   }, [status]);
 
-  // Filter based on search query
-  const filteredCustomers = customers.filter((c) => {
+  const filteredKeys = keys.filter((c) => {
     const query = searchQuery.toLowerCase();
-    
     return c.name.toLowerCase().includes(query) ||
-      (c.domain && c.domain.toLowerCase().includes(query)) ||
-      (c.owner && c.owner.toLowerCase().includes(query));
+      c.prefix.toLowerCase().includes(query);
   });
 
   useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery]);
 
-  const totalPages = Math.ceil(filteredCustomers.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredKeys.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredCustomers.length);
-  const paginatedCustomers = filteredCustomers.slice(startIndex, endIndex);
-
-  const getPrice = (type: string) => {
-    if (type === "Cloud") return "$250/mo";
-    if (type === "Dedicated") return "$2,500/mo";
-    if (type === "Sovereign") return "$5,000/mo";
-    return "$0/mo";
-  };
-
-
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredKeys.length);
+  const paginatedKeys = filteredKeys.slice(startIndex, endIndex);
 
   return (
     <div className="w-full flex-1 flex flex-col pt-6">
       <div className="w-full flex-1 flex flex-col">
         {/* Table Header */}
         <div className="grid grid-cols-12 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl items-center">
-          <div className="col-span-3">Account Name</div>
-          <div className="col-span-3">Owner Email</div>
-          <div className="col-span-2">Type</div>
-          <div className="col-span-2">Members</div>
-          <div className="col-span-2 flex items-center justify-between pr-2">Price</div>
+          <div className="col-span-3">Key Name</div>
+          <div className="col-span-3">Prefix</div>
+          <div className="col-span-2">Created</div>
+          <div className="col-span-2">Last Used</div>
+          <div className="col-span-2 flex items-center justify-between pr-2">Status</div>
         </div>
 
         {/* Floating Rows */}
@@ -70,41 +58,36 @@ export default function CustomersPage() {
           {loading ? (
             <div className="flex flex-col items-center justify-center py-20">
               <Loader2 className="w-8 h-8 text-neutral-400 animate-spin mb-2" />
-              <p className="text-sm text-neutral-500">Loading customers...</p>
+              <p className="text-sm text-neutral-500">Loading...</p>
             </div>
-          ) : paginatedCustomers.length > 0 ? (
-            paginatedCustomers.map((customer) => (
+          ) : paginatedKeys.length > 0 ? (
+            paginatedKeys.map((item) => (
               <div
-                key={customer.id}
+                key={item.id}
                 className="group grid grid-cols-12 gap-4 items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors cursor-pointer relative"
-                onClick={() => router.push(`/owner/customers/${customer.id}`)}
+                onClick={() => {}}
               >
-                {/* Account Name */}
                 <div className="col-span-3 flex items-center min-w-0">
                   <span className="text-neutral-900 dark:text-white font-semibold truncate">
-                    {customer.name}
+                    {item.name}
                   </span>
                 </div>
 
-                {/* Owner Email */}
-                <div className="col-span-3 flex items-center text-neutral-500 dark:text-neutral-400 font-normal">
-                  {customer.owner}
+                <div className="col-span-3 flex items-center text-neutral-500 dark:text-neutral-400 font-mono text-xs">
+                  {item.prefix}
                 </div>
 
-                {/* Account Type */}
                 <div className="col-span-2 flex items-center text-neutral-500 dark:text-neutral-400 font-normal">
-                  {customer.type}
+                  {item.created}
                 </div>
 
-                {/* Members (No "members" text) */}
                 <div className="col-span-2 text-neutral-600 dark:text-neutral-400 font-normal">
-                  {customer.userCount.toLocaleString()}
+                  {item.lastUsed}
                 </div>
 
-                {/* Price */}
                 <div className="col-span-2 flex items-center justify-between pr-2">
-                  <span className="text-neutral-800 dark:text-neutral-200 font-normal text-sm">
-                    {getPrice(customer.type)}
+                  <span className={`font-normal text-sm px-2 py-1 rounded-full ${item.status === "Active" ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400"}`}>
+                    {item.status}
                   </span>
                   <ChevronRight className="w-4 h-4 text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors" />
                 </div>
@@ -112,7 +95,7 @@ export default function CustomersPage() {
             ))
           ) : (
             <div className="text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
-              No customers match your filter or search query.
+              No results found.
             </div>
           )}
         </div>
@@ -120,7 +103,7 @@ export default function CustomersPage() {
         {/* Pagination Bar */}
         <div className="sticky bottom-6 z-20 flex items-center justify-between h-[68px] px-6 py-4 mt-auto mb-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300">
           <div className="text-neutral-500 dark:text-neutral-400">
-            Showing <span className="font-medium text-neutral-900 dark:text-white">{filteredCustomers.length > 0 ? startIndex + 1 : 0}</span> to <span className="font-medium text-neutral-900 dark:text-white">{endIndex}</span> of <span className="font-medium text-neutral-900 dark:text-white">{filteredCustomers.length}</span> results
+            Showing <span className="font-medium text-neutral-900 dark:text-white">{filteredKeys.length > 0 ? startIndex + 1 : 0}</span> to <span className="font-medium text-neutral-900 dark:text-white">{endIndex}</span> of <span className="font-medium text-neutral-900 dark:text-white">{filteredKeys.length}</span> results
           </div>
           <div className="flex gap-2">
             {currentPage > 1 && (

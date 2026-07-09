@@ -31,7 +31,7 @@ import PromptInput from "./prompt-input";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useModalStore } from "@/store/useModalStore";
 import { sendMessage } from "@/store/messagesSlice";
-import { AppDispatch, RootState } from "@/store";
+import type { AppDispatch, RootState } from "@/store";
 
 const programmingLanguages = [
   // General-purpose & scripting

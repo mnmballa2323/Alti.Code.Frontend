@@ -8,7 +8,7 @@ import ChatBotLayout from "@/components/ChatbotLayout";
 import MessageContainer from "@/components/message-container";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
 import { AppDispatch } from "@/store";
-import { RootState } from "@/store";
+import type { RootState } from "@/store";
 import {
   startNewChat,
   setChatContext,

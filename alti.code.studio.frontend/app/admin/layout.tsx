@@ -19,7 +19,8 @@ import {
   Inbox,
 } from "lucide-react";
 
-import { useAppSelector, useAppDispatch, RootState } from "@/store";
+import { useAppSelector, useAppDispatch } from "@/store";
+import type { RootState } from "@/store";
 import { setSearchQuery } from "@/store/uiSlice";
 
 interface SidebarItem {

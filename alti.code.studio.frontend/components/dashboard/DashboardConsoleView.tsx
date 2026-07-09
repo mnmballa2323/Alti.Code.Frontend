@@ -7,6 +7,7 @@ import {
   Users,
   CreditCard,
   TrendingUp,
+  Wallet,
   Loader2,
 } from "lucide-react";
 
@@ -18,6 +19,7 @@ interface OwnerMetrics {
   sovereignAccounts: number;
   monthlyRecurringRevenue: number;
   annualRecurringRevenue: number;
+  totalAvailableBalance: number;
 }
 
 export default function DashboardConsoleView() {
@@ -27,6 +29,7 @@ export default function DashboardConsoleView() {
     sovereignAccounts: 0,
     monthlyRecurringRevenue: 0,
     annualRecurringRevenue: 0,
+    totalAvailableBalance: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -54,6 +57,7 @@ export default function DashboardConsoleView() {
             sovereignAccounts: json.data.sovereignAccounts || 0,
             monthlyRecurringRevenue: json.data.monthlyRecurringRevenue || 0,
             annualRecurringRevenue: json.data.annualRecurringRevenue || 0,
+            totalAvailableBalance: json.data.totalAvailableBalance || 0,
           });
         }
       } catch (err) {
@@ -76,7 +80,7 @@ export default function DashboardConsoleView() {
   }
 
   return (
-    <div className="flex flex-col gap-6 w-full h-full pt-4">
+    <div className="flex flex-col gap-10 w-full h-full pt-4">
       {/* Top Row Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Total Cloud Accounts Card */}
@@ -162,6 +166,28 @@ export default function DashboardConsoleView() {
               </span>
             </div>
             <TrendingUp className="w-5 h-5 text-neutral-400 dark:text-neutral-500" />
+          </div>
+        </div>
+      </div>
+
+      {/* Third Row Cards */}
+      <div className="grid grid-cols-1 gap-6">
+        {/* Total Available Balance Card */}
+        <div className="bg-white dark:bg-[#161b22] border border-neutral-100 dark:border-neutral-800 rounded-[20px] p-8 flex flex-col justify-between min-h-[130px]">
+          <div className="flex justify-between items-start w-full">
+            <div className="flex flex-col">
+              <span className="text-neutral-400 dark:text-neutral-500 text-[13px] font-medium">
+                Total Available Balance
+              </span>
+              <span className="text-[36px] font-bold text-neutral-950 dark:text-white leading-none mt-2 animate-fade-in">
+                $
+                {metrics.totalAvailableBalance.toLocaleString("en-US", {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
+              </span>
+            </div>
+            <Wallet className="w-5 h-5 text-neutral-400 dark:text-neutral-500" />
           </div>
         </div>
       </div>
