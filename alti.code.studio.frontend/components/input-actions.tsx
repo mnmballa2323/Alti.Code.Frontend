@@ -1,5 +1,7 @@
 "use client";
 
+import type { AppDispatch, RootState } from "@/store";
+
 import {
   Form,
   cn,
@@ -31,7 +33,6 @@ import PromptInput from "./prompt-input";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useModalStore } from "@/store/useModalStore";
 import { sendMessage } from "@/store/messagesSlice";
-import type { AppDispatch, RootState } from "@/store";
 
 const programmingLanguages = [
   // General-purpose & scripting

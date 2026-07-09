@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+
 import { useAppSelector } from "@/store";
 
 interface Transaction {
@@ -49,23 +50,26 @@ const baseTransactions: Transaction[] = [
   },
 ];
 
-const mockTransactions: Transaction[] = Array.from({ length: 89 }).map((_, i) => {
-  const base = baseTransactions[i % baseTransactions.length];
-  // Calculate descending dates
-  const dateObj = new Date("2026-06-12");
-  dateObj.setDate(dateObj.getDate() - i);
-  const dateStr = dateObj.toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
+const mockTransactions: Transaction[] = Array.from({ length: 89 }).map(
+  (_, i) => {
+    const base = baseTransactions[i % baseTransactions.length];
+    // Calculate descending dates
+    const dateObj = new Date("2026-06-12");
 
-  return {
-    ...base,
-    id: `TXN-${(i + 1).toString().padStart(3, "0")}`,
-    date: dateStr,
-  };
-});
+    dateObj.setDate(dateObj.getDate() - i);
+    const dateStr = dateObj.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+
+    return {
+      ...base,
+      id: `TXN-${(i + 1).toString().padStart(3, "0")}`,
+      date: dateStr,
+    };
+  },
+);
 
 export default function TransactionsPage() {
   const ITEMS_PER_PAGE = 9;
@@ -75,6 +79,7 @@ export default function TransactionsPage() {
   const filteredTransactions = mockTransactions.filter((txn) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
+
     return (
       txn.id.toLowerCase().includes(q) ||
       txn.company.toLowerCase().includes(q) ||
@@ -90,8 +95,14 @@ export default function TransactionsPage() {
 
   const totalPages = Math.ceil(filteredTransactions.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredTransactions.length);
-  const paginatedTransactions = filteredTransactions.slice(startIndex, endIndex);
+  const endIndex = Math.min(
+    startIndex + ITEMS_PER_PAGE,
+    filteredTransactions.length,
+  );
+  const paginatedTransactions = filteredTransactions.slice(
+    startIndex,
+    endIndex,
+  );
 
   return (
     <div className="w-full flex-1 flex flex-col pt-6">
@@ -124,21 +135,35 @@ export default function TransactionsPage() {
         {/* Pagination Bar */}
         <div className="sticky bottom-6 z-20 flex items-center justify-between h-[68px] px-6 py-4 mt-auto mb-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300">
           <div className="text-neutral-500 dark:text-neutral-400">
-            Showing <span className="font-medium text-neutral-900 dark:text-white">{filteredTransactions.length > 0 ? startIndex + 1 : 0}</span> to <span className="font-medium text-neutral-900 dark:text-white">{endIndex}</span> of <span className="font-medium text-neutral-900 dark:text-white">{filteredTransactions.length}</span> results
+            Showing{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {filteredTransactions.length > 0 ? startIndex + 1 : 0}
+            </span>{" "}
+            to{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {endIndex}
+            </span>{" "}
+            of{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {filteredTransactions.length}
+            </span>{" "}
+            results
           </div>
           <div className="flex gap-2">
             {currentPage > 1 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 className="px-4 py-1.5 rounded-lg bg-neutral-200 text-neutral-700 hover:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 font-medium transition-colors"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               >
                 Back
               </button>
             )}
             {currentPage < totalPages && totalPages > 0 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 className="px-4 py-1.5 rounded-lg bg-neutral-900 hover:bg-black text-white dark:bg-white dark:hover:bg-neutral-200 dark:text-black font-medium transition-colors"
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
               >
                 Next
               </button>

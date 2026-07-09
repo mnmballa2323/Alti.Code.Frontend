@@ -1,21 +1,14 @@
 "use client";
 
+import type { RootState } from "@/store";
+
 import React, { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import {
-  ArrowLeft,
-  Headset,
-  Search,
-  LogOut,
-  Users
-} from "lucide-react";
-import { signOut } from "next-auth/react";
+import { Headset, Users } from "lucide-react";
 
-import { useAppSelector, useAppDispatch } from "@/store";
-import type { RootState } from "@/store";
-import type { TeamMember } from "@/store/teamSlice";
+import { useAppSelector } from "@/store";
 
 interface SidebarItem {
   label: string;
@@ -37,7 +30,9 @@ export default function SupportLayout({
   const router = useRouter();
   const { status } = useSession();
   const profileFromStore = useAppSelector((state) => state.user.data);
-  const { activeThreadSubject } = useAppSelector((state: RootState) => state.ui);
+  const { activeThreadSubject } = useAppSelector(
+    (state: RootState) => state.ui,
+  );
   const teamMembers = useAppSelector((state: RootState) => state.team.members);
   const profile = profileFromStore?.email ? profileFromStore : null;
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -48,7 +43,13 @@ export default function SupportLayout({
     } else if (status === "authenticated" && profile) {
       const userRole = (profile.role || "").toLowerCase();
 
-      if (userRole === "owner" || userRole === "support" || userRole === "admin" || userRole === "super_admin" || !userRole) {
+      if (
+        userRole === "owner" ||
+        userRole === "support" ||
+        userRole === "admin" ||
+        userRole === "super_admin" ||
+        !userRole
+      ) {
         setIsAuthorized(true);
       } else {
         // router.push("/dashboard");
@@ -65,8 +66,10 @@ export default function SupportLayout({
     if (pathname.startsWith("/support/chat/")) {
       const memberId = pathname.split("/support/chat/")[1];
       const member = teamMembers?.find((m) => m.id === memberId);
+
       if (member) return member.name;
     }
+
     return "Support Portal";
   };
 
@@ -124,7 +127,8 @@ export default function SupportLayout({
                 <nav className="flex flex-col gap-1">
                   {supportItems.map((item) => {
                     const isActive =
-                      pathname === item.href || pathname.startsWith(item.href + "/");
+                      pathname === item.href ||
+                      pathname.startsWith(item.href + "/");
 
                     return (
                       <Link
@@ -169,7 +173,10 @@ export default function SupportLayout({
                         >
                           <span className="truncate">{member.name}</span>
                           {member.status === "Pending" && (
-                            <span className="ml-auto w-2 h-2 rounded-full bg-orange-400" title="Pending invite" />
+                            <span
+                              className="ml-auto w-2 h-2 rounded-full bg-orange-400"
+                              title="Pending invite"
+                            />
                           )}
                         </Link>
                       );
@@ -210,7 +217,9 @@ export default function SupportLayout({
               {activeThreadSubject && (
                 <div className="hidden md:flex items-center gap-2 text-sm font-medium text-neutral-500 bg-neutral-50 dark:bg-[#0d1117] px-3 py-1 rounded-full border border-neutral-200 dark:border-neutral-800">
                   <span className="w-2 h-2 rounded-full bg-blue-500" />
-                  <span className="max-w-[300px] truncate">{activeThreadSubject}</span>
+                  <span className="max-w-[300px] truncate">
+                    {activeThreadSubject}
+                  </span>
                 </div>
               )}
             </header>

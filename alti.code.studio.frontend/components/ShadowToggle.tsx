@@ -1,5 +1,7 @@
 "use client";
 
+import type { RootState } from "@/store";
+
 import React from "react";
 import { Switch } from "@heroui/switch";
 import { Chip } from "@heroui/chip";
@@ -9,7 +11,6 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 
 import { API_URL } from "@/lib/config";
-import type { RootState } from "@/store";
 import { toggleShadowMode } from "@/store/shadowSlice";
 
 export const ShadowToggle = (): React.ReactNode => {

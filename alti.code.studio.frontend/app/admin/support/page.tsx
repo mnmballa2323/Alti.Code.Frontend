@@ -14,7 +14,7 @@ export default function SupportPage() {
     if (!subject.trim() || !message.trim()) return;
 
     setIsSubmitting(true);
-    
+
     // Simulate sending to the internal ticket system
     setTimeout(() => {
       setIsSubmitting(false);
@@ -53,8 +53,8 @@ export default function SupportPage() {
         <div className="flex flex-col gap-3 mt-2 w-full">
           <button
             className="w-full px-5 py-3.5 bg-black hover:bg-neutral-900 text-white transition-colors text-[13px] font-bold rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-            type="submit"
             disabled={isSubmitting}
+            type="submit"
           >
             {isSubmitting ? "Sending..." : "Send Message"}
           </button>
@@ -63,11 +63,11 @@ export default function SupportPage() {
 
       {/* Success Modal */}
       {submitted && (
-        <div 
+        <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm"
           onClick={() => setSubmitted(false)}
         >
-          <div 
+          <div
             className="bg-white dark:bg-[#161b22] w-[380px] rounded-2xl shadow-xl flex flex-col overflow-hidden animate-in fade-in zoom-in duration-200"
             onClick={(e) => e.stopPropagation()}
           >

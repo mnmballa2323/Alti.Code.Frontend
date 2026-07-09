@@ -5,15 +5,17 @@ import { CreditCard, Landmark } from "lucide-react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { useSession } from "next-auth/react";
+
 import { CreditCardForm } from "./components/CreditCardForm";
 import { ACHBankForm } from "./components/ACHBankForm";
 
 // Initialize Stripe outside of component render to avoid recreating Stripe object
 // Forcing a test key so Stripe doesn't block localhost HTTP connections (live keys crash on localhost)
 const stripePromise = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
 ).catch((err) => {
   console.error("Failed to load Stripe.js:", err);
+
   return null;
 });
 
@@ -32,7 +34,8 @@ export default function BillingPage() {
 
       const token =
         (session?.user as any)?.accessToken ||
-        (typeof window !== "undefined" && localStorage.getItem("accessToken")) ||
+        (typeof window !== "undefined" &&
+          localStorage.getItem("accessToken")) ||
         (typeof window !== "undefined" && localStorage.getItem("token"));
 
       const res = await fetch(`${API_URL}/payment/create-setup-intent`, {
@@ -51,7 +54,10 @@ export default function BillingPage() {
       }
     } catch (err) {
       // Silently fail — forms will still render and work in Stripe Elements mode
-      console.warn("Could not fetch SetupIntent (backend may be offline):", err);
+      console.warn(
+        "Could not fetch SetupIntent (backend may be offline):",
+        err,
+      );
     }
   };
 
@@ -90,9 +96,7 @@ export default function BillingPage() {
           {paymentType === "card" && (
             <CreditCardForm clientSecret={clientSecret} />
           )}
-          {paymentType === "ach" && (
-            <ACHBankForm clientSecret={clientSecret} />
-          )}
+          {paymentType === "ach" && <ACHBankForm clientSecret={clientSecret} />}
         </Elements>
       </div>
     </div>

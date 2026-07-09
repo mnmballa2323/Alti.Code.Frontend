@@ -1,12 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Loader2, ChevronRight } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useAppSelector } from "@/store";
 
 import { EmailAccount, DUMMY_EMAILS } from "./data";
+
+import { useAppSelector } from "@/store";
 
 export default function EmailAccountsPage() {
   const router = useRouter();
@@ -16,6 +17,12 @@ export default function EmailAccountsPage() {
   const [loading, setLoading] = useState(true);
   const searchQuery = useAppSelector((state) => state.ui.searchQuery);
   const [currentPage, setCurrentPage] = useState(1);
+  const [revealed, setRevealed] = useState<Record<string, boolean>>({});
+
+  const toggleReveal = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setRevealed((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -28,9 +35,8 @@ export default function EmailAccountsPage() {
 
   const filteredEmails = emails.filter((c) => {
     const query = searchQuery.toLowerCase();
-    return c.address.toLowerCase().includes(query) ||
-      c.provider.toLowerCase().includes(query) ||
-      c.type.toLowerCase().includes(query);
+
+    return c.address.toLowerCase().includes(query);
   });
 
   useEffect(() => {
@@ -46,11 +52,9 @@ export default function EmailAccountsPage() {
     <div className="w-full flex-1 flex flex-col pt-6">
       <div className="w-full flex-1 flex flex-col">
         {/* Table Header */}
-        <div className="grid grid-cols-12 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl items-center">
-          <div className="col-span-4">Address</div>
-          <div className="col-span-3">Provider</div>
-          <div className="col-span-3">Type</div>
-          <div className="col-span-2 flex items-center justify-between pr-2">Status</div>
+        <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl items-center">
+          <div className="col-span-6">Email Address</div>
+          <div className="col-span-6">Password</div>
         </div>
 
         {/* Floating Rows */}
@@ -67,28 +71,26 @@ export default function EmailAccountsPage() {
                 className="group grid grid-cols-12 gap-4 items-center px-6 py-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors cursor-pointer relative"
                 onClick={() => {}}
               >
-                <div className="col-span-4 flex items-center min-w-0">
+                <div className="col-span-6 flex items-center min-w-0">
                   <span className="text-neutral-900 dark:text-white font-semibold truncate">
                     {item.address}
                   </span>
                 </div>
 
-                <div className="col-span-3 flex items-center text-neutral-500 dark:text-neutral-400 font-normal">
-                  {item.provider}
-                </div>
-
-                <div className="col-span-3 flex items-center text-neutral-500 dark:text-neutral-400 font-normal">
-                  {item.type}
-                </div>
-
-                <div className="col-span-2 flex items-center justify-between pr-2">
-                  <div className="flex items-center gap-2">
-                    <span className={`w-2 h-2 rounded-full ${item.status === "Connected" ? "bg-green-500" : "bg-red-500"}`}></span>
-                    <span className="font-normal text-sm text-neutral-600 dark:text-neutral-400">
-                      {item.status}
-                    </span>
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-neutral-400 dark:text-neutral-500 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors" />
+                <div className="col-span-6 flex items-center justify-between text-neutral-500 dark:text-neutral-400 font-mono text-xs pr-2">
+                  <span>
+                    {revealed[item.id] ? item.password : "••••••••••••"}
+                  </span>
+                  <button
+                    className="p-1 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors"
+                    onClick={(e) => toggleReveal(item.id, e)}
+                  >
+                    {revealed[item.id] ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
                 </div>
               </div>
             ))
@@ -102,21 +104,35 @@ export default function EmailAccountsPage() {
         {/* Pagination Bar */}
         <div className="sticky bottom-6 z-20 flex items-center justify-between h-[68px] px-6 py-4 mt-auto mb-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300">
           <div className="text-neutral-500 dark:text-neutral-400">
-            Showing <span className="font-medium text-neutral-900 dark:text-white">{filteredEmails.length > 0 ? startIndex + 1 : 0}</span> to <span className="font-medium text-neutral-900 dark:text-white">{endIndex}</span> of <span className="font-medium text-neutral-900 dark:text-white">{filteredEmails.length}</span> results
+            Showing{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {filteredEmails.length > 0 ? startIndex + 1 : 0}
+            </span>{" "}
+            to{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {endIndex}
+            </span>{" "}
+            of{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {filteredEmails.length}
+            </span>{" "}
+            results
           </div>
           <div className="flex gap-2">
             {currentPage > 1 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 className="px-4 py-1.5 rounded-lg bg-neutral-200 text-neutral-700 hover:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 font-medium transition-colors"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               >
                 Back
               </button>
             )}
             {currentPage < totalPages && totalPages > 0 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 className="px-4 py-1.5 rounded-lg bg-neutral-900 hover:bg-black text-white dark:bg-white dark:hover:bg-neutral-200 dark:text-black font-medium transition-colors"
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
               >
                 Next
               </button>

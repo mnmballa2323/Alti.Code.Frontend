@@ -16,19 +16,24 @@ export function ACHBankForm({ clientSecret }: ACHBankFormProps) {
 
   const handleLinkBank = async () => {
     if (!stripe) {
-      setError("Stripe failed to connect. Please pause your adblocker to securely link your bank.");
+      setError(
+        "Stripe failed to connect. Please pause your adblocker to securely link your bank.",
+      );
+
       return;
     }
 
     if (!accountName.trim()) {
       setError("Please enter the account holder name.");
+
       return;
     }
 
     if (!clientSecret) {
       setError(
-        "Payment service is initializing. Please wait a moment and try again."
+        "Payment service is initializing. Please wait a moment and try again.",
       );
+
       return;
     }
 
@@ -54,7 +59,7 @@ export function ACHBankForm({ clientSecret }: ACHBankFormProps) {
       if (stripeError) {
         setError(
           stripeError.message ??
-            "An error occurred while connecting your bank account."
+            "An error occurred while connecting your bank account.",
         );
       } else if (setupIntent?.status === "requires_confirmation") {
         // User selected a bank account — now confirm the SetupIntent
@@ -93,9 +98,9 @@ export function ACHBankForm({ clientSecret }: ACHBankFormProps) {
         />
         <button
           className="px-10 h-11 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-sm font-semibold rounded-xl shadow-sm focus:outline-none disabled:opacity-50 shrink-0 min-w-[200px]"
+          disabled={isProcessing}
           type="button"
           onClick={handleLinkBank}
-          disabled={isProcessing}
         >
           {isProcessing ? "Linking..." : "Link Bank Account"}
         </button>
@@ -112,8 +117,8 @@ export function ACHBankForm({ clientSecret }: ACHBankFormProps) {
       {success && (
         <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl p-3">
           <p className="text-sm text-emerald-700 dark:text-emerald-400 font-semibold">
-            ✓ Bank account linked successfully! It will be used for your
-            monthly recurring billing.
+            ✓ Bank account linked successfully! It will be used for your monthly
+            recurring billing.
           </p>
         </div>
       )}

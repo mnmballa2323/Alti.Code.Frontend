@@ -1,6 +1,7 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import type { RootState } from "@/store";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
@@ -55,7 +56,6 @@ import { useActiveProject } from "@/hooks/useActiveProject";
 import { setActiveProject } from "@/lib/project";
 import { removeDocument, setActiveWorkspace } from "@/store/systemSlice";
 import { addTab } from "@/store/tabsSlice";
-import type { RootState } from "@/store";
 import { useModalStore } from "@/store/useModalStore";
 import useFetchChatHistory from "@/hooks/useFetchChatHistory";
 import { startNewChat } from "@/store/messagesSlice";

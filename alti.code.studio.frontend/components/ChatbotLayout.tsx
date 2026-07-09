@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import "@copilotkit/react-ui/styles.css";
 
 import type { RootState } from "@/store";
+
 import Sidebar from "@/components/sidebar";
 import GhostEditor from "@/components/ghost-editor";
 import { WorkspaceDock } from "@/components/WorkspaceDock";

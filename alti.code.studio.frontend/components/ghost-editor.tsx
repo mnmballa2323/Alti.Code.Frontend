@@ -1,5 +1,7 @@
 "use client";
 
+import type { RootState } from "@/store";
+
 import React, { useState } from "react";
 import dynamic from "next/dynamic";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +9,6 @@ import { X, Code2, Copy, Check } from "lucide-react";
 import { Button } from "@heroui/react";
 import { loader } from "@monaco-editor/react";
 
-import type { RootState } from "@/store";
 import { closeGhostEditor } from "@/store/uiSlice";
 
 // Configure Monaco to work inside Tauri's restricted webview.

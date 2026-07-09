@@ -1,5 +1,7 @@
 "use client";
 
+import type { RootState } from "@/store";
+
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
@@ -13,7 +15,6 @@ import {
 import { Tooltip, Button, Modal, ModalContent } from "@heroui/react";
 
 import { cn } from "@/lib/utils";
-import type { RootState } from "@/store";
 import { removeTab, setActiveTab, WorkspaceTab } from "@/store/tabsSlice";
 import { setActiveWorkspace } from "@/store/systemSlice";
 import { setActiveProject } from "@/lib/project";

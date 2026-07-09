@@ -56,9 +56,10 @@ const teamSlice = createSlice({
     },
     updateMemberStatus: (
       state,
-      action: PayloadAction<{ id: string; status: "Active" | "Pending" }>
+      action: PayloadAction<{ id: string; status: "Active" | "Pending" }>,
     ) => {
       const member = state.members.find((m) => m.id === action.payload.id);
+
       if (member) {
         member.status = action.payload.status;
       }
@@ -66,5 +67,6 @@ const teamSlice = createSlice({
   },
 });
 
-export const { addMember, removeMember, updateMemberStatus } = teamSlice.actions;
+export const { addMember, removeMember, updateMemberStatus } =
+  teamSlice.actions;
 export default teamSlice.reducer;

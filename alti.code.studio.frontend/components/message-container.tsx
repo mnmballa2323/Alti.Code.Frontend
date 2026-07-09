@@ -1,4 +1,6 @@
 "use client";
+import type { RootState } from "@/store";
+
 import React, { useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import MDEditor from "@uiw/react-md-editor";
@@ -9,7 +11,6 @@ import { Accordion, AccordionItem, Chip } from "@heroui/react";
 import MessageCard from "./message-card";
 import { MarkdownChats } from "./markdown-chats";
 
-import type { RootState } from "@/store";
 import { ToolExecution } from "@/store/messagesSlice";
 
 const FormattedReply = ({ reply }: { reply: string }) => {

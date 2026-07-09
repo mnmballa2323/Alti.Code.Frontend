@@ -1,5 +1,7 @@
 "use client";
 
+import type { RootState } from "@/store";
+
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -20,7 +22,6 @@ import {
 } from "lucide-react";
 
 import { useAppSelector, useAppDispatch } from "@/store";
-import type { RootState } from "@/store";
 import { setSearchQuery } from "@/store/uiSlice";
 
 interface SidebarItem {
@@ -57,7 +58,9 @@ export default function AdminLayout({
   const dispatch = useAppDispatch();
   const profileFromStore = useAppSelector((state) => state.user.data);
   const activeMemberName = useAppSelector((state) => state.ui.activeMemberName);
-  const { searchQuery, activeThreadSubject } = useAppSelector((state: RootState) => state.ui);
+  const { searchQuery, activeThreadSubject } = useAppSelector(
+    (state: RootState) => state.ui,
+  );
   const profile = profileFromStore?.email ? profileFromStore : null;
   const [isAdmin, setIsAdmin] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -225,7 +228,9 @@ export default function AdminLayout({
         {/* Right header: page title and user info */}
         <div className="flex-1 h-full flex items-center justify-between">
           <div className="flex items-center h-full">
-            <div className={`h-full flex items-center gap-3 ${pathname.startsWith("/admin/inbox") ? "w-72 border-r border-neutral-200 dark:border-neutral-800 shrink-0 px-6" : "pl-10"}`}>
+            <div
+              className={`h-full flex items-center gap-3 ${pathname.startsWith("/admin/inbox") ? "w-72 border-r border-neutral-200 dark:border-neutral-800 shrink-0 px-6" : "pl-10"}`}
+            >
               {isMemberDetail ? (
                 <Link
                   className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
@@ -264,15 +269,15 @@ export default function AdminLayout({
               <div className="relative w-80">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
                 <input
-                  type="text"
+                  className="w-full pl-9 pr-4 py-2 bg-neutral-100 dark:bg-[#0d1117] border border-transparent dark:border-neutral-800 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:focus:ring-neutral-700 transition-shadow text-neutral-900 dark:text-white placeholder-neutral-500"
                   placeholder="Search..."
+                  type="text"
                   value={searchQuery}
                   onChange={(e) => dispatch(setSearchQuery(e.target.value))}
-                  className="w-full pl-9 pr-4 py-2 bg-neutral-100 dark:bg-[#0d1117] border border-transparent dark:border-neutral-800 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:focus:ring-neutral-700 transition-shadow text-neutral-900 dark:text-white placeholder-neutral-500"
                 />
               </div>
             )}
-            
+
             {isMemberDetail && (
               <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
                 {activeMemberName || "Ada Lovelace"}
@@ -303,9 +308,13 @@ export default function AdminLayout({
         {/* Main Content Pane */}
         <div className="flex-1 flex flex-col h-full bg-[#F3F4F6] dark:bg-[#0d1117] relative overflow-hidden">
           {/* Content Children */}
-          <div className={`flex-1 overflow-y-auto relative flex flex-col h-full ${pathname.startsWith("/admin/inbox") ? "" : "pt-4 px-10"}`}>
+          <div
+            className={`flex-1 overflow-y-auto relative flex flex-col h-full ${pathname.startsWith("/admin/inbox") ? "" : "pt-4 px-10"}`}
+          >
             {children}
-            {!pathname.startsWith("/admin/inbox") && <div className="shrink-0 h-4 w-full" />}
+            {!pathname.startsWith("/admin/inbox") && (
+              <div className="shrink-0 h-4 w-full" />
+            )}
           </div>
           {/* Thick gray bar at the bottom */}
           {!pathname.startsWith("/admin/inbox") && (

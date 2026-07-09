@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+
 import { useAppSelector } from "@/store";
 
 // Mock data for initial UI
@@ -44,6 +45,7 @@ export default function LogsPage() {
   const filteredLogs = MOCK_LOGS.filter((log) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
+
     return (
       log.action.toLowerCase().includes(q) ||
       log.actor.toLowerCase().includes(q) ||
@@ -115,16 +117,18 @@ export default function LogsPage() {
           <div className="flex gap-2">
             {currentPage > 1 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 className="px-4 py-1.5 rounded-lg bg-neutral-200 text-neutral-700 hover:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 font-medium transition-colors"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               >
                 Back
               </button>
             )}
             {currentPage < totalPages && totalPages > 0 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 className="px-4 py-1.5 rounded-lg bg-neutral-900 hover:bg-black text-white dark:bg-white dark:hover:bg-neutral-200 dark:text-black font-medium transition-colors"
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
               >
                 Next
               </button>

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+
 import { useAppSelector } from "@/store";
 
 export default function InvitePage() {
@@ -58,8 +59,8 @@ export default function InvitePage() {
           </div>
           <div className="flex-1">
             <button
-              onClick={handleSendInvite}
               className="w-full h-11 px-5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-sm font-normal rounded-xl"
+              onClick={handleSendInvite}
             >
               Send Invite
             </button>
@@ -76,13 +77,17 @@ export default function InvitePage() {
                 Invitation Sent
               </h3>
               <p className="text-[13px] text-neutral-500 dark:text-neutral-400">
-                You invited <span className="font-medium text-neutral-700 dark:text-neutral-300">{firstName} {lastName}</span> to the support platform
+                You invited{" "}
+                <span className="font-medium text-neutral-700 dark:text-neutral-300">
+                  {firstName} {lastName}
+                </span>{" "}
+                to the support platform
               </p>
             </div>
             <div className="flex border-t border-neutral-200 dark:border-neutral-700">
               <button
-                onClick={handleClosePopup}
                 className="flex-1 py-3 text-[15px] font-normal text-neutral-900 dark:text-white hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                onClick={handleClosePopup}
               >
                 Close
               </button>

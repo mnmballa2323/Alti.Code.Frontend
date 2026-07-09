@@ -3,6 +3,7 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
 import { useAppSelector } from "@/store";
 
 const plans = [
@@ -86,11 +87,13 @@ export default function PlansPage() {
   const handleCheckout = async (plan: (typeof plans)[number]) => {
     if (plan.isContact) {
       router.push("/contact");
+
       return;
     }
-    
+
     if (status !== "authenticated" || !session?.user) {
       router.push("/register");
+
       return;
     }
 

@@ -37,7 +37,7 @@ export const DUMMY_CUSTOMERS: CustomerInfo[] = [
     owner: "marie.curie@alticodestudio.com",
     userCount: 89,
   },
-  
+
   // Dedicated Customers
   {
     id: "acme-corp",

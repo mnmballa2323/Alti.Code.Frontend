@@ -2,6 +2,7 @@
 
 import React from "react";
 import { ChevronDown } from "lucide-react";
+
 import { useAppSelector } from "@/store";
 
 export default function InvitePage() {
@@ -119,8 +120,8 @@ export default function InvitePage() {
             <span className="font-bold text-neutral-900 dark:text-neutral-200">
               Billing notice:
             </span>{" "}
-            Adding a new team member adds an active seat to your plan at
-            ${currentPrice}/month.
+            Adding a new team member adds an active seat to your plan at $
+            {currentPrice}/month.
           </p>
           <button className="px-5 py-2.5 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-xs font-semibold rounded-lg">
             Invite Member

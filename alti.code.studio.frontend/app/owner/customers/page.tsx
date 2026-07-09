@@ -1,19 +1,20 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Loader2, ChevronRight, User, Plus, X, ChevronDown, Filter } from "lucide-react";
+import { Loader2, ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useAppSelector } from "@/store";
 
 import { CustomerInfo, DUMMY_CUSTOMERS } from "./data";
+
+import { useAppSelector } from "@/store";
 
 export default function CustomersPage() {
   const router = useRouter();
   const { status } = useSession();
-  const [customers, setCustomers] = useState<CustomerInfo[]>([]);
+  const [customers, setCustomers] = useState<CustomerInfo[]>(DUMMY_CUSTOMERS);
   const ITEMS_PER_PAGE = 8;
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const searchQuery = useAppSelector((state) => state.ui.searchQuery);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -29,10 +30,12 @@ export default function CustomersPage() {
   // Filter based on search query
   const filteredCustomers = customers.filter((c) => {
     const query = searchQuery.toLowerCase();
-    
-    return c.name.toLowerCase().includes(query) ||
+
+    return (
+      c.name.toLowerCase().includes(query) ||
       (c.domain && c.domain.toLowerCase().includes(query)) ||
-      (c.owner && c.owner.toLowerCase().includes(query));
+      (c.owner && c.owner.toLowerCase().includes(query))
+    );
   });
 
   useEffect(() => {
@@ -41,17 +44,19 @@ export default function CustomersPage() {
 
   const totalPages = Math.ceil(filteredCustomers.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredCustomers.length);
+  const endIndex = Math.min(
+    startIndex + ITEMS_PER_PAGE,
+    filteredCustomers.length,
+  );
   const paginatedCustomers = filteredCustomers.slice(startIndex, endIndex);
 
   const getPrice = (type: string) => {
     if (type === "Cloud") return "$250/mo";
     if (type === "Dedicated") return "$2,500/mo";
     if (type === "Sovereign") return "$5,000/mo";
+
     return "$0/mo";
   };
-
-
 
   return (
     <div className="w-full flex-1 flex flex-col pt-6">
@@ -60,9 +65,11 @@ export default function CustomersPage() {
         <div className="grid grid-cols-12 px-6 py-4 border-b border-neutral-100 dark:border-neutral-800 text-[10px] font-bold text-neutral-400 uppercase tracking-wider bg-white dark:bg-neutral-900 rounded-t-xl items-center">
           <div className="col-span-3">Account Name</div>
           <div className="col-span-3">Owner Email</div>
-          <div className="col-span-2">Type</div>
-          <div className="col-span-2">Members</div>
-          <div className="col-span-2 flex items-center justify-between pr-2">Price</div>
+          <div className="col-span-2 pl-10">Type</div>
+          <div className="col-span-2 flex justify-center pr-8">Members</div>
+          <div className="col-span-2 flex items-center justify-between pr-2">
+            Price
+          </div>
         </div>
 
         {/* Floating Rows */}
@@ -92,12 +99,12 @@ export default function CustomersPage() {
                 </div>
 
                 {/* Account Type */}
-                <div className="col-span-2 flex items-center text-neutral-500 dark:text-neutral-400 font-normal">
+                <div className="col-span-2 pl-10 flex items-center text-neutral-500 dark:text-neutral-400 font-normal">
                   {customer.type}
                 </div>
 
                 {/* Members (No "members" text) */}
-                <div className="col-span-2 text-neutral-600 dark:text-neutral-400 font-normal">
+                <div className="col-span-2 flex justify-center pr-8 text-neutral-600 dark:text-neutral-400 font-normal">
                   {customer.userCount.toLocaleString()}
                 </div>
 
@@ -120,21 +127,35 @@ export default function CustomersPage() {
         {/* Pagination Bar */}
         <div className="sticky bottom-6 z-20 flex items-center justify-between h-[68px] px-6 py-4 mt-auto mb-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300">
           <div className="text-neutral-500 dark:text-neutral-400">
-            Showing <span className="font-medium text-neutral-900 dark:text-white">{filteredCustomers.length > 0 ? startIndex + 1 : 0}</span> to <span className="font-medium text-neutral-900 dark:text-white">{endIndex}</span> of <span className="font-medium text-neutral-900 dark:text-white">{filteredCustomers.length}</span> results
+            Showing{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {filteredCustomers.length > 0 ? startIndex + 1 : 0}
+            </span>{" "}
+            to{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {endIndex}
+            </span>{" "}
+            of{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {filteredCustomers.length}
+            </span>{" "}
+            results
           </div>
           <div className="flex gap-2">
             {currentPage > 1 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 className="px-4 py-1.5 rounded-lg bg-neutral-200 text-neutral-700 hover:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 font-medium transition-colors"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               >
                 Back
               </button>
             )}
             {currentPage < totalPages && totalPages > 0 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 className="px-4 py-1.5 rounded-lg bg-neutral-900 hover:bg-black text-white dark:bg-white dark:hover:bg-neutral-200 dark:text-black font-medium transition-colors"
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
               >
                 Next
               </button>

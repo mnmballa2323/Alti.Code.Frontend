@@ -1,4 +1,6 @@
 "use client";
+import type { RootState } from "@/store";
+
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -13,7 +15,6 @@ import {
   setMessages,
   sendMessage,
 } from "@/store/messagesSlice";
-import type { RootState } from "@/store";
 import useFetchSingleData from "@/hooks/useFetchSingleData";
 import { AppDispatch } from "@/store";
 

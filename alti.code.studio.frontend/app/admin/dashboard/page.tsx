@@ -1,24 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Card, CardBody, CardHeader } from "@heroui/card";
 import { Icon } from "@iconify/react";
-import {
-  Users,
-  Activity,
-  CreditCard,
-  Cpu,
-  Shield,
-  Clock,
-  Zap,
-  ArrowUpRight,
-  ArrowDownRight,
-  LogIn,
-  Bot,
-  KeyRound,
-  Settings,
-  UserPlus,
-} from "lucide-react";
+import { LogIn, Bot, KeyRound, Settings, UserPlus } from "lucide-react";
 
 import { API_URL } from "@/lib/config";
 
@@ -179,8 +163,6 @@ export default function AdminDashboardPage() {
     fetchDashboard();
   }, []);
 
-
-
   const activeSeats = 7;
   const seatPrice = 15;
   const totalAmount = activeSeats * seatPrice;
@@ -207,8 +189,6 @@ export default function AdminDashboardPage() {
   return (
     <div className="flex-1 bg-[#F4F4F6] dark:bg-background min-h-screen overflow-y-auto">
       <div className="p-8 max-w-6xl mx-auto space-y-6">
-
-
         {/* ── Subscription Summary Cards ─────────────────────────────────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {/* Card 1: Plan Type */}
@@ -247,8 +227,6 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         </div>
-
-
       </div>
     </div>
   );

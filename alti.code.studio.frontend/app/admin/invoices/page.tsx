@@ -2,6 +2,7 @@
 
 import React from "react";
 import { Download } from "lucide-react";
+
 import { useAppSelector } from "@/store";
 
 export default function InvoicesPage() {
@@ -62,6 +63,7 @@ export default function InvoicesPage() {
   const filteredInvoices = mockInvoices.filter((inv) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
+
     return (
       inv.id.toLowerCase().includes(q) ||
       inv.plan.toLowerCase().includes(q) ||
@@ -79,7 +81,10 @@ export default function InvoicesPage() {
 
   const totalPages = Math.ceil(filteredInvoices.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredInvoices.length);
+  const endIndex = Math.min(
+    startIndex + ITEMS_PER_PAGE,
+    filteredInvoices.length,
+  );
   const paginatedInvoices = filteredInvoices.slice(startIndex, endIndex);
 
   return (
@@ -120,21 +125,35 @@ export default function InvoicesPage() {
         {/* Pagination Bar */}
         <div className="sticky bottom-6 z-20 flex items-center justify-between h-[68px] px-6 py-4 mt-auto mb-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300">
           <div className="text-neutral-500 dark:text-neutral-400">
-            Showing <span className="font-medium text-neutral-900 dark:text-white">{filteredInvoices.length > 0 ? startIndex + 1 : 0}</span> to <span className="font-medium text-neutral-900 dark:text-white">{endIndex}</span> of <span className="font-medium text-neutral-900 dark:text-white">{filteredInvoices.length}</span> results
+            Showing{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {filteredInvoices.length > 0 ? startIndex + 1 : 0}
+            </span>{" "}
+            to{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {endIndex}
+            </span>{" "}
+            of{" "}
+            <span className="font-medium text-neutral-900 dark:text-white">
+              {filteredInvoices.length}
+            </span>{" "}
+            results
           </div>
           <div className="flex gap-2">
             {currentPage > 1 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 className="px-4 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               >
                 Previous
               </button>
             )}
             {currentPage < totalPages && totalPages > 0 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 className="px-4 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors"
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
               >
                 Next
               </button>

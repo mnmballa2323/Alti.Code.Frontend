@@ -3,6 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { ChevronDown, Trash2 } from "lucide-react";
+
 import { useAppSelector } from "@/store";
 
 export default function MembersPage() {
@@ -67,6 +68,7 @@ export default function MembersPage() {
 
   const mockMembers = Array.from({ length: 55 }, (_, i) => {
     if (i < baseMockMembers.length) return baseMockMembers[i];
+
     return {
       firstName: "Test",
       lastName: `User ${i + 1}`,
@@ -171,6 +173,7 @@ export default function MembersPage() {
   const filteredMembers = members.filter((member) => {
     if (!searchQuery) return true;
     const q = searchQuery.toLowerCase();
+
     return (
       member.firstName.toLowerCase().includes(q) ||
       member.lastName.toLowerCase().includes(q) ||
@@ -188,7 +191,10 @@ export default function MembersPage() {
 
   const totalPages = Math.ceil(filteredMembers.length / ITEMS_PER_PAGE);
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredMembers.length);
+  const endIndex = Math.min(
+    startIndex + ITEMS_PER_PAGE,
+    filteredMembers.length,
+  );
   const paginatedMembers = filteredMembers.slice(startIndex, endIndex);
 
   return (
@@ -310,16 +316,18 @@ export default function MembersPage() {
           <div className="flex gap-2">
             {currentPage > 1 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 className="px-4 py-1.5 rounded-lg bg-neutral-200 text-neutral-700 hover:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 font-medium transition-colors"
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               >
                 Back
               </button>
             )}
             {currentPage < totalPages && totalPages > 0 && (
               <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                 className="px-4 py-1.5 rounded-lg bg-neutral-900 hover:bg-black text-white dark:bg-white dark:hover:bg-neutral-200 dark:text-black font-medium transition-colors"
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(totalPages, p + 1))
+                }
               >
                 Next
               </button>

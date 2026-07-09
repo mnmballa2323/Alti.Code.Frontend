@@ -2,9 +2,8 @@
 
 import React, { useState } from "react";
 import { useParams } from "next/navigation";
+
 import { useAppSelector, useAppDispatch } from "@/store";
-import { updateMemberStatus } from "@/store/teamSlice";
-import { Send, UserCircle, MoreVertical, Phone, Video, Paperclip, Image as ImageIcon } from "lucide-react";
 
 export default function TeamChatPage() {
   const { memberId } = useParams() as { memberId: string };
@@ -16,9 +15,12 @@ export default function TeamChatPage() {
   if (!member) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-8 bg-[#F3F4F6] dark:bg-[#0d1117] h-full">
-        <h2 className="text-xl font-bold text-neutral-900 dark:text-white">Team Member Not Found</h2>
+        <h2 className="text-xl font-bold text-neutral-900 dark:text-white">
+          Team Member Not Found
+        </h2>
         <p className="text-neutral-500 mt-2 text-center max-w-sm">
-          The team member you are trying to reach might have been removed or doesn't exist.
+          The team member you are trying to reach might have been removed or
+          doesn't exist.
         </p>
       </div>
     );
@@ -45,7 +47,9 @@ export default function TeamChatPage() {
                 <span className="text-xs text-neutral-400">10:42 AM</span>
               </div>
               <div className="text-[14px] text-neutral-700 dark:text-neutral-300 bg-white dark:bg-[#161b22] px-4 py-3 rounded-2xl rounded-tl-none border border-neutral-200 dark:border-neutral-800 shadow-sm">
-                Hey! Just wanted to let you know I've caught up on all the pending support tickets from this morning. Let me know if you need help with anything else.
+                Hey! Just wanted to let you know I've caught up on all the
+                pending support tickets from this morning. Let me know if you
+                need help with anything else.
               </div>
             </div>
           </div>
@@ -53,11 +57,14 @@ export default function TeamChatPage() {
           <div className="flex justify-end gap-4">
             <div className="flex flex-col gap-1 items-end max-w-[80%]">
               <div className="flex items-baseline gap-2 px-1">
-                <span className="text-xs font-medium text-neutral-900 dark:text-white">Me</span>
+                <span className="text-xs font-medium text-neutral-900 dark:text-white">
+                  Me
+                </span>
                 <span className="text-[11px] text-neutral-500">10:45 AM</span>
               </div>
               <div className="text-[14px] text-white bg-black dark:bg-[#161b22] px-4 py-3 rounded-2xl rounded-tr-none shadow-sm">
-                Awesome, thanks {member.name.split(" ")[0]}! I'll take a look at the new feature requests that came in overnight.
+                Awesome, thanks {member.name.split(" ")[0]}! I'll take a look at
+                the new feature requests that came in overnight.
               </div>
             </div>
           </div>
@@ -68,15 +75,15 @@ export default function TeamChatPage() {
       <div className="shrink-0 h-24 px-6 flex items-center bg-white dark:bg-[#161b22] border-t border-neutral-200 dark:border-neutral-800">
         <div className="flex items-center gap-3 w-full">
           <input
+            className="flex-1 h-12 px-4 rounded-xl border-none bg-neutral-100 dark:bg-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:focus:ring-neutral-700 placeholder:text-neutral-500"
+            placeholder="Write your reply here..."
             type="text"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Write your reply here..."
-            className="flex-1 h-12 px-4 rounded-xl border-none bg-neutral-100 dark:bg-neutral-800 text-sm focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:focus:ring-neutral-700 placeholder:text-neutral-500"
           />
           <button
-            disabled={!message.trim()}
             className="shrink-0 px-6 h-12 bg-black hover:bg-neutral-900 disabled:cursor-not-allowed text-white transition-colors text-sm font-bold rounded-xl flex items-center gap-2"
+            disabled={!message.trim()}
           >
             Send
           </button>

@@ -234,11 +234,22 @@ export default function TokenUsagePage() {
             </div>
             <div className="flex flex-col gap-2 mt-4">
               {history.map((h, idx) => (
-                <div key={idx} className="grid grid-cols-[25%_25%_25%_25%] items-center px-6 h-[56px] bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors">
-                  <div className="font-semibold text-neutral-900 dark:text-white">{h.month}</div>
-                  <div className="text-neutral-500">{h.invocations.toLocaleString()}</div>
-                  <div className="font-mono text-neutral-500">{h.totalTokens.toLocaleString()} tkns</div>
-                  <div className="text-right font-mono text-neutral-900 dark:text-white font-bold">${h.cost.toFixed(2)}</div>
+                <div
+                  key={idx}
+                  className="grid grid-cols-[25%_25%_25%_25%] items-center px-6 h-[56px] bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300 hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors"
+                >
+                  <div className="font-semibold text-neutral-900 dark:text-white">
+                    {h.month}
+                  </div>
+                  <div className="text-neutral-500">
+                    {h.invocations.toLocaleString()}
+                  </div>
+                  <div className="font-mono text-neutral-500">
+                    {h.totalTokens.toLocaleString()} tkns
+                  </div>
+                  <div className="text-right font-mono text-neutral-900 dark:text-white font-bold">
+                    ${h.cost.toFixed(2)}
+                  </div>
                 </div>
               ))}
             </div>
@@ -252,9 +263,17 @@ export default function TokenUsagePage() {
 function UsageRow({ model }: { model: ModelUsage }) {
   const isClaude = model.model.toLowerCase().includes("claude");
   const isGemini = model.model.toLowerCase().includes("gemini");
-  
-  const iconName = isClaude ? "simple-icons:claude" : isGemini ? "simple-icons:googlegemini" : "solar:box-minimalistic-bold-duotone";
-  const iconColor = isClaude ? "text-[#CC9980]" : isGemini ? "text-blue-500 dark:text-blue-400" : "text-neutral-500";
+
+  const iconName = isClaude
+    ? "simple-icons:claude"
+    : isGemini
+      ? "simple-icons:googlegemini"
+      : "solar:box-minimalistic-bold-duotone";
+  const iconColor = isClaude
+    ? "text-[#CC9980]"
+    : isGemini
+      ? "text-blue-500 dark:text-blue-400"
+      : "text-neutral-500";
 
   return (
     <div className="grid grid-cols-[25%_30%_30%_15%] items-center px-6 py-3 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm transition-colors hover:border-neutral-300 dark:hover:border-neutral-700">
@@ -263,12 +282,22 @@ function UsageRow({ model }: { model: ModelUsage }) {
         {model.model}
       </div>
       <div className="flex items-baseline gap-2">
-        <span className="font-mono text-sm text-neutral-900 dark:text-white">{model.promptTokens.toLocaleString()} <span className="text-neutral-400">tkns</span></span>
-        <span className="text-[10px] text-neutral-500 font-mono">{model.priceIn} / 1M</span>
+        <span className="font-mono text-sm text-neutral-900 dark:text-white">
+          {model.promptTokens.toLocaleString()}{" "}
+          <span className="text-neutral-400">tkns</span>
+        </span>
+        <span className="text-[10px] text-neutral-500 font-mono">
+          {model.priceIn} / 1M
+        </span>
       </div>
       <div className="flex items-baseline gap-2">
-        <span className="font-mono text-sm text-neutral-900 dark:text-white">{model.completionTokens.toLocaleString()} <span className="text-neutral-400">tkns</span></span>
-        <span className="text-[10px] text-neutral-500 font-mono">{model.priceOut} / 1M</span>
+        <span className="font-mono text-sm text-neutral-900 dark:text-white">
+          {model.completionTokens.toLocaleString()}{" "}
+          <span className="text-neutral-400">tkns</span>
+        </span>
+        <span className="text-[10px] text-neutral-500 font-mono">
+          {model.priceOut} / 1M
+        </span>
       </div>
       <div className="text-right font-mono text-sm text-neutral-900 dark:text-white font-bold">
         ${model.cost.toFixed(2)}

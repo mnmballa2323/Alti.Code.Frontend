@@ -30,8 +30,10 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
     setSuccess(false);
 
     const cardNumberElement = elements.getElement(CardNumberElement);
+
     if (!cardNumberElement) {
       setIsProcessing(false);
+
       return;
     }
 
@@ -49,7 +51,9 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
           });
 
         if (stripeError) {
-          setError(stripeError.message ?? "An error occurred while saving your card.");
+          setError(
+            stripeError.message ?? "An error occurred while saving your card.",
+          );
         } else if (setupIntent?.status === "succeeded") {
           setSuccess(true);
           setName("");
@@ -113,12 +117,13 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
 
   const FallbackInput = ({ placeholder }: { placeholder: string }) => {
     const [val, setVal] = useState("");
+
     return (
       <input
         className="w-full h-full bg-transparent text-[14px] text-[#404040] placeholder:text-[#a3a3a3] focus:outline-none"
         placeholder={placeholder}
-        type="text"
         title="Disable your adblocker to securely enter payment details"
+        type="text"
         value={val}
         onChange={(e) => {
           // Allow numbers, spaces, and slashes
@@ -132,9 +137,10 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
     "w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm flex flex-col justify-center";
 
   return (
-    <form onSubmit={handleSaveCard} className="flex flex-col gap-6 mt-2">
+    <form className="flex flex-col gap-6 mt-2" onSubmit={handleSaveCard}>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <input
+          required
           className="w-full h-11 px-4 rounded-xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-sm focus:outline-none placeholder:text-neutral-400 shadow-sm"
           placeholder="Cardholder Name"
           type="text"
@@ -142,21 +148,33 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
           onChange={(e) => {
             // Only allow letters and spaces
             const textOnly = e.target.value.replace(/[^a-zA-Z\s]/g, "");
+
             setName(textOnly);
           }}
-          required
         />
         <div className={wrapperClass}>
-          {stripe ? <CardNumberElement options={cardNumberOptions} /> : <FallbackInput placeholder="Card Number" />}
+          {stripe ? (
+            <CardNumberElement options={cardNumberOptions} />
+          ) : (
+            <FallbackInput placeholder="Card Number" />
+          )}
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div className={wrapperClass}>
-          {stripe ? <CardExpiryElement options={cardExpiryOptions} /> : <FallbackInput placeholder="MM / YY" />}
+          {stripe ? (
+            <CardExpiryElement options={cardExpiryOptions} />
+          ) : (
+            <FallbackInput placeholder="MM / YY" />
+          )}
         </div>
         <div className={wrapperClass}>
-          {stripe ? <CardCvcElement options={cardCvcOptions} /> : <FallbackInput placeholder="CVC" />}
+          {stripe ? (
+            <CardCvcElement options={cardCvcOptions} />
+          ) : (
+            <FallbackInput placeholder="CVC" />
+          )}
         </div>
       </div>
 
@@ -185,8 +203,8 @@ export function CreditCardForm({ clientSecret }: CreditCardFormProps) {
         </p>
         <button
           className="px-10 h-11 bg-black hover:bg-neutral-900 dark:bg-white dark:hover:bg-neutral-200 dark:text-black transition-colors text-white text-sm font-semibold rounded-xl shadow-sm focus:outline-none disabled:opacity-50 shrink-0 min-w-[200px]"
-          type="submit"
           disabled={isProcessing}
+          type="submit"
         >
           {isProcessing ? "Saving..." : "Save Card"}
         </button>

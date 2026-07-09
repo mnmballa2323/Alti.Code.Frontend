@@ -1,4 +1,6 @@
 "use client";
+import type { RootState } from "@/store";
+
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
@@ -8,7 +10,6 @@ import ChatBotLayout from "@/components/ChatbotLayout";
 import MessageContainer from "@/components/message-container";
 import PromptInputFullLineWithBottomActions from "@/components/input-actions";
 import { AppDispatch } from "@/store";
-import type { RootState } from "@/store";
 import {
   startNewChat,
   setChatContext,
