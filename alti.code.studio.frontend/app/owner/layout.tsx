@@ -12,9 +12,12 @@ import {
   Cloud,
   Cpu,
   Shield,
+  FileText,
+  Search
 } from "lucide-react";
 
-import { useAppSelector } from "@/store";
+import { useAppSelector, useAppDispatch } from "@/store";
+import { setSearchQuery } from "@/store/uiSlice";
 
 interface SidebarItem {
   label: string;
@@ -24,10 +27,7 @@ interface SidebarItem {
 
 const ownerItems: SidebarItem[] = [
   { label: "Dashboard", href: "/owner/dashboard", icon: LayoutDashboard },
-  { label: "Revenue", href: "/owner/revenue", icon: DollarSign },
-  { label: "GCP Infrastructure", href: "/owner/gcp", icon: Cloud },
-  { label: "AI Intelligence", href: "/owner/ai-intelligence", icon: Cpu },
-  { label: "Compliance", href: "/owner/compliance", icon: Shield },
+  { label: "Transactions", href: "/owner/transactions", icon: FileText },
 ];
 
 const memberItems: SidebarItem[] = [
@@ -42,12 +42,16 @@ export default function OwnerLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname() || "";
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const { status } = useSession();
   const profileFromStore = useAppSelector((state) => state.user.data);
   const activeMemberName = useAppSelector((state) => state.ui.activeMemberName);
+  const searchQuery = useAppSelector((state) => state.ui.searchQuery);
   const profile = profileFromStore?.email ? profileFromStore : null;
   const [isAuthorized, setIsAuthorized] = useState(false);
+
+  const showSearch = pathname === "/owner/transactions";
 
   const isTeamsDetail =
     pathname.startsWith("/owner/teams/") && pathname !== "/owner/teams";
@@ -98,7 +102,7 @@ export default function OwnerLayout({
               pathname === item.href || pathname.startsWith(item.href + "/");
 
             return (
-              <a
+              <Link
                 key={item.label}
                 className={`flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-xl transition-all cursor-pointer ${
                   isActive
@@ -111,7 +115,7 @@ export default function OwnerLayout({
                   className={`w-4 h-4 ${isActive ? "text-neutral-900 dark:text-white" : "text-neutral-400"}`}
                 />
                 {item.label}
-              </a>
+              </Link>
             );
           })}
         </nav>
@@ -125,7 +129,7 @@ export default function OwnerLayout({
     if (pathname.startsWith("/owner/team-members")) return "Cloud";
     if (pathname.startsWith("/owner/teams")) return "Dedicated";
     if (pathname.startsWith("/owner/enterprise")) return "Sovereign";
-    if (pathname.startsWith("/owner/revenue")) return "Revenue";
+    if (pathname.startsWith("/owner/transactions")) return "Transactions";
 
     return "Platform Owner";
   };
@@ -175,7 +179,7 @@ export default function OwnerLayout({
         </div>
 
         {/* Right header: page title and user info */}
-        <div className="flex-1 h-full flex items-center justify-between pl-10 pr-14">
+        <div className="flex-1 h-full flex items-center justify-between pl-10 pr-10">
           <div className="flex items-center gap-3">
             <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
               {isMemberDetail
@@ -184,7 +188,20 @@ export default function OwnerLayout({
             </span>
           </div>
 
-          <div className="flex items-center">
+          <div className="flex items-center gap-4">
+            {showSearch && (
+              <div className="relative w-80">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+                  className="w-full pl-9 pr-4 py-2 bg-neutral-100 dark:bg-[#0d1117] border border-transparent dark:border-neutral-800 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:focus:ring-neutral-700 transition-shadow text-neutral-900 dark:text-white placeholder-neutral-500"
+                />
+              </div>
+            )}
+            
             {isMemberDetail && (
               <Link
                 className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
