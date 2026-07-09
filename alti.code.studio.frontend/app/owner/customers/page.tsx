@@ -16,7 +16,7 @@ interface CustomerInfo {
   userCount: number;
 }
 
-export const DUMMY_CUSTOMERS: CustomerInfo[] = [
+const DUMMY_CUSTOMERS: CustomerInfo[] = [
   // Cloud Customers
   {
     id: "cloud-1",
