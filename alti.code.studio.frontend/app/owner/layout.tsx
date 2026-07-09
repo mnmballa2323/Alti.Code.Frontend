@@ -169,7 +169,7 @@ export default function OwnerLayout({
         {/* Right header: page title and user info */}
         <div className="flex-1 h-full flex items-center justify-between">
           <div className="flex items-center h-full">
-            <div className={`h-full flex items-center gap-3 ${pathname.startsWith("/owner/support") ? "w-72 border-r border-neutral-200 dark:border-neutral-800 shrink-0 px-10" : "pl-10"}`}>
+            <div className={`h-full flex items-center gap-3 ${pathname.startsWith("/owner/support") ? "w-72 border-r border-neutral-200 dark:border-neutral-800 shrink-0 px-6" : "pl-10"}`}>
               {isMemberDetail ? (
                 <Link
                   className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
