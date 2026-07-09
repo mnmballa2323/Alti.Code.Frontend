@@ -68,7 +68,7 @@ const mockTransactions: Transaction[] = Array.from({ length: 89 }).map((_, i) =>
 });
 
 export default function TransactionsPage() {
-  const ITEMS_PER_PAGE = 8;
+  const ITEMS_PER_PAGE = 9;
   const searchQuery = useAppSelector((state) => state.ui.searchQuery);
   const [currentPage, setCurrentPage] = useState(1);
 

@@ -13,10 +13,11 @@ import {
   Cpu,
   Shield,
   FileText,
-  Search
+  Search,
+  Headset
 } from "lucide-react";
 
-import { useAppSelector, useAppDispatch } from "@/store";
+import { useAppSelector, useAppDispatch, RootState } from "@/store";
 import { setSearchQuery } from "@/store/uiSlice";
 
 interface SidebarItem {
@@ -27,13 +28,9 @@ interface SidebarItem {
 
 const ownerItems: SidebarItem[] = [
   { label: "Dashboard", href: "/owner/dashboard", icon: LayoutDashboard },
+  { label: "Customers", href: "/owner/customers", icon: Users },
   { label: "Transactions", href: "/owner/transactions", icon: FileText },
-];
-
-const memberItems: SidebarItem[] = [
-  { label: "Cloud", href: "/owner/team-members", icon: Users },
-  { label: "Dedicated", href: "/owner/teams", icon: Users },
-  { label: "Sovereign", href: "/owner/enterprise", icon: Users },
+  { label: "Support Inbox", href: "/owner/support", icon: Headset },
 ];
 
 export default function OwnerLayout({
@@ -47,24 +44,16 @@ export default function OwnerLayout({
   const { status } = useSession();
   const profileFromStore = useAppSelector((state) => state.user.data);
   const activeMemberName = useAppSelector((state) => state.ui.activeMemberName);
-  const searchQuery = useAppSelector((state) => state.ui.searchQuery);
+  const { searchQuery, activeThreadSubject } = useAppSelector((state: RootState) => state.ui);
   const profile = profileFromStore?.email ? profileFromStore : null;
   const [isAuthorized, setIsAuthorized] = useState(false);
 
-  const showSearch = pathname === "/owner/transactions";
-
-  const isTeamsDetail =
-    pathname.startsWith("/owner/teams/") && pathname !== "/owner/teams";
-
-  const isEnterpriseDetail =
-    pathname.startsWith("/owner/enterprise/") &&
-    pathname !== "/owner/enterprise";
+  const showSearch =
+    pathname === "/owner/transactions" ||
+    pathname === "/owner/customers";
 
   const isMemberDetail =
-    (pathname.startsWith("/owner/team-members/") &&
-      pathname !== "/owner/team-members") ||
-    isTeamsDetail ||
-    isEnterpriseDetail;
+    pathname.startsWith("/owner/customers/") && pathname !== "/owner/customers";
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -126,10 +115,9 @@ export default function OwnerLayout({
   const getPageTitle = () => {
     if (pathname.startsWith("/owner/dashboard")) return "Dashboard";
     if (pathname.startsWith("/owner/members")) return "Invite";
-    if (pathname.startsWith("/owner/team-members")) return "Cloud";
-    if (pathname.startsWith("/owner/teams")) return "Dedicated";
-    if (pathname.startsWith("/owner/enterprise")) return "Sovereign";
+    if (pathname.startsWith("/owner/customers")) return "Customers";
     if (pathname.startsWith("/owner/transactions")) return "Transactions";
+    if (pathname.startsWith("/owner/support")) return "Support Inbox";
 
     return "Platform Owner";
   };
@@ -179,16 +167,31 @@ export default function OwnerLayout({
         </div>
 
         {/* Right header: page title and user info */}
-        <div className="flex-1 h-full flex items-center justify-between pl-10 pr-10">
-          <div className="flex items-center gap-3">
-            <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
-              {isMemberDetail
-                ? activeMemberName || "Ada Lovelace"
-                : getPageTitle()}
-            </span>
+        <div className="flex-1 h-full flex items-center justify-between">
+          <div className="flex items-center h-full">
+            <div className={`h-full flex items-center gap-3 ${pathname.startsWith("/owner/support") ? "w-72 border-r border-neutral-200 dark:border-neutral-800 shrink-0 px-10" : "pl-10"}`}>
+              {isMemberDetail ? (
+                <Link
+                  className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
+                  href="/owner/customers"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  <span>Back to Customers</span>
+                </Link>
+              ) : (
+                <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
+                  {getPageTitle()}
+                </span>
+              )}
+            </div>
+            {pathname.startsWith("/owner/support") && activeThreadSubject && (
+              <span className="font-semibold text-neutral-900 dark:text-white ml-6">
+                {activeThreadSubject.replace(/^Re:\s*/i, "")}
+              </span>
+            )}
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 pr-10">
             {showSearch && (
               <div className="relative w-80">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
@@ -203,25 +206,9 @@ export default function OwnerLayout({
             )}
             
             {isMemberDetail && (
-              <Link
-                className="flex items-center gap-1.5 text-neutral-500 hover:text-neutral-900 dark:text-neutral-450 dark:hover:text-white text-xs font-bold transition-colors cursor-pointer bg-transparent"
-                href={
-                  isEnterpriseDetail
-                    ? "/owner/enterprise"
-                    : isTeamsDetail
-                      ? "/owner/teams"
-                      : "/owner/team-members"
-                }
-              >
-                <ArrowLeft className="w-3.5 h-3.5" />
-                <span>
-                  {isEnterpriseDetail
-                    ? "Back to Sovereign"
-                    : isTeamsDetail
-                      ? "Back to Dedicated"
-                      : "Back to Cloud"}
-                </span>
-              </Link>
+              <span className="font-semibold text-neutral-950 dark:text-white text-[15px]">
+                {activeMemberName || "Ada Lovelace"}
+              </span>
             )}
           </div>
         </div>
@@ -231,18 +218,19 @@ export default function OwnerLayout({
         {/* Internal Navigation Sidebar */}
         <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 bg-white dark:bg-[#161b22] flex flex-col h-full shrink-0 py-6 px-5 overflow-y-auto relative z-10">
           {renderNavGroup("", ownerItems)}
-          {renderNavGroup("Deployments", memberItems, "mt-8")}
         </div>
 
         {/* Main Content Pane */}
         <div className="flex-1 flex flex-col h-full bg-[#F3F4F6] dark:bg-[#0d1117] relative overflow-hidden">
           {/* Content Children */}
-          <div className="flex-1 overflow-y-auto pt-4 px-10 relative flex flex-col h-full">
+          <div className={`flex-1 overflow-y-auto relative flex flex-col h-full ${pathname.startsWith("/owner/support") ? "" : "pt-4 px-10"}`}>
             {children}
-            <div className="shrink-0 h-4 w-full" />
+            {!pathname.startsWith("/owner/support") && <div className="shrink-0 h-4 w-full" />}
           </div>
           {/* Thick gray bar at the bottom */}
-          <div className="shrink-0 h-12 w-full bg-[#F3F4F6] dark:bg-[#0d1117] z-10 pointer-events-none absolute bottom-0 left-0" />
+          {!pathname.startsWith("/owner/support") && (
+            <div className="shrink-0 h-12 w-full bg-[#F3F4F6] dark:bg-[#0d1117] z-10 pointer-events-none absolute bottom-0 left-0" />
+          )}
         </div>
       </div>
     </div>

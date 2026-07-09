@@ -7,15 +7,21 @@ export default function SupportPage() {
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!subject.trim() || !message.trim()) return;
 
-    // In a real app, you would send this to your backend/support system
-    console.log({ subject, message });
-    setSubmitted(true);
-    setSubject("");
-    setMessage("");
+    setIsSubmitting(true);
+    
+    // Simulate sending to the internal ticket system
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setSubmitted(true);
+      setSubject("");
+      setMessage("");
+    }, 600);
   };
 
   return (
@@ -46,10 +52,11 @@ export default function SupportPage() {
 
         <div className="flex flex-col gap-3 mt-2 w-full">
           <button
-            className="w-full px-5 py-3.5 bg-black hover:bg-neutral-900 text-white transition-colors text-[13px] font-bold rounded-xl flex items-center justify-center"
+            className="w-full px-5 py-3.5 bg-black hover:bg-neutral-900 text-white transition-colors text-[13px] font-bold rounded-xl flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
             type="submit"
+            disabled={isSubmitting}
           >
-            Send Message
+            {isSubmitting ? "Sending..." : "Send Message"}
           </button>
         </div>
       </form>

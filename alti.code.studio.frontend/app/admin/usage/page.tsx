@@ -11,7 +11,6 @@ interface ModelUsage {
   completionTokens: number;
   totalTokens: number;
   cost: number;
-  cost: number;
   invocations: number;
   priceIn?: string;
   priceOut?: string;

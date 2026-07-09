@@ -7,6 +7,7 @@ interface UIState {
   editorTitle: string;
   activeMemberName: string | null;
   searchQuery: string;
+  activeThreadSubject: string | null;
 }
 
 const initialState: UIState = {
@@ -17,6 +18,7 @@ const initialState: UIState = {
   editorTitle: "Inso Sentinel - Code View",
   activeMemberName: null,
   searchQuery: "",
+  activeThreadSubject: null,
 };
 
 export const uiSlice = createSlice({
@@ -47,6 +49,9 @@ export const uiSlice = createSlice({
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
     },
+    setActiveThreadSubject: (state, action: PayloadAction<string | null>) => {
+      state.activeThreadSubject = action.payload;
+    },
   },
 });
 
@@ -59,6 +64,7 @@ export const {
   closeGhostEditor,
   setActiveMemberName,
   setSearchQuery,
+  setActiveThreadSubject,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

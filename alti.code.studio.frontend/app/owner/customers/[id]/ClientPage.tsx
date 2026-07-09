@@ -15,6 +15,7 @@ import { useSession } from "next-auth/react";
 import { adminAPI, teamAPI } from "@/lib/enterprise-api";
 import { useAppDispatch } from "@/store";
 import { setActiveMemberName } from "@/store/uiSlice";
+import { DUMMY_CUSTOMERS } from "../page";
 
 interface Member {
   id: string;
@@ -24,87 +25,7 @@ interface Member {
   subscriptionPrice?: number;
 }
 
-const DUMMY_TEAMS_DATA: Record<string, any> = {
-  "acme-corp": {
-    id: "acme-corp",
-    name: "Acme Corp (Dedicated)",
-    domain: "acme.alticodestudio.com",
-    plan: "starter",
-    status: "active",
-    owner: "admin@acme.com",
-    users: [
-      {
-        id: "acme-1",
-        name: "Ada Lovelace",
-        email: "ada.lovelace@acme.com",
-        tenantRole: "admin",
-        subscriptionPrice: 1000,
-      },
-      {
-        id: "acme-2",
-        name: "Alan Turing",
-        email: "alan.turing@acme.com",
-        tenantRole: "manager",
-        subscriptionPrice: 1000,
-      },
-      {
-        id: "acme-3",
-        name: "Grace Hopper",
-        email: "grace.hopper@acme.com",
-        tenantRole: "developer",
-        subscriptionPrice: 1000,
-      },
-    ],
-  },
-  "stark-industries": {
-    id: "stark-industries",
-    name: "Stark Industries",
-    domain: "stark.alticodestudio.com",
-    plan: "starter",
-    status: "active",
-    owner: "pepper.potts@stark.com",
-    users: [
-      {
-        id: "stark-1",
-        name: "Tony Stark",
-        email: "tony@stark.com",
-        tenantRole: "owner",
-        subscriptionPrice: 1000,
-      },
-      {
-        id: "stark-2",
-        name: "Happy Hogan",
-        email: "happy@stark.com",
-        tenantRole: "manager",
-        subscriptionPrice: 1000,
-      },
-    ],
-  },
-  "wayne-enterprises": {
-    id: "wayne-enterprises",
-    name: "Wayne Enterprises",
-    domain: "wayne.alticodestudio.com",
-    plan: "starter",
-    status: "suspended",
-    owner: "lucius.fox@wayne.com",
-    users: [
-      {
-        id: "wayne-1",
-        name: "Bruce Wayne",
-        email: "bruce@wayne.com",
-        tenantRole: "owner",
-        subscriptionPrice: 1000,
-      },
-      {
-        id: "wayne-2",
-        name: "Lucius Fox",
-        email: "lucius.fox@wayne.com",
-        tenantRole: "admin",
-        subscriptionPrice: 1000,
-      },
-    ],
-  },
-};
+// Dynamic dummy generation will happen in fetchTenantDetails
 
 export default function TeamDetailPage() {
   const params = useParams();
@@ -121,6 +42,8 @@ export default function TeamDetailPage() {
   const [customPrice, setCustomPrice] = useState("$1,000");
   const [isSaving, setIsSaving] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 8;
 
   const fetchTenantDetails = async () => {
     try {
@@ -142,19 +65,24 @@ export default function TeamDetailPage() {
       }
     } catch (err) {
       console.warn("Fallback to dummy tenant details for:", teamId);
-      const dummy = DUMMY_TEAMS_DATA[teamId];
+      const customer = DUMMY_CUSTOMERS.find((c) => c.id === teamId);
 
-      if (dummy) {
-        setTenant(dummy);
-        setMembers(
-          dummy.users.map((u: any) => ({
-            id: u.id,
-            name: u.name,
-            email: u.email,
-            role: u.tenantRole,
-            subscriptionPrice: u.subscriptionPrice,
-          })),
-        );
+      if (customer) {
+        setTenant({
+          name: customer.name,
+          domain: customer.domain || `${customer.id}.com`,
+          owner: customer.owner
+        });
+        
+        const generatedMembers = Array.from({ length: customer.userCount }).map((_, i) => ({
+          id: `${customer.id}-user-${i + 1}`,
+          name: i === 0 ? customer.name : `${customer.name} User ${i + 1}`,
+          email: i === 0 ? customer.owner : `user${i+1}@${customer.domain || "example.com"}`,
+          role: i === 0 ? "owner" : "developer",
+          subscriptionPrice: customer.type === "Sovereign" ? 5000 : customer.type === "Dedicated" ? 2500 : 250
+        }));
+        
+        setMembers(generatedMembers as Member[]);
       }
     } finally {
       setLoading(false);
@@ -223,6 +151,18 @@ export default function TeamDetailPage() {
     }
   };
 
+  const filteredMembers = members.filter(
+    (m) =>
+      (m.email || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (m.name && m.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (m.role && m.role.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const totalPages = Math.ceil(filteredMembers.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = Math.min(startIndex + ITEMS_PER_PAGE, filteredMembers.length);
+  const currentMembers = filteredMembers.slice(startIndex, endIndex);
+
   return (
     <div className="w-full flex flex-col h-full justify-start pt-0 animate-fade-in">
       {loading ? (
@@ -231,26 +171,19 @@ export default function TeamDetailPage() {
           <p className="text-sm text-neutral-500">Loading team details...</p>
         </div>
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-2">
           {/* Team Header card */}
-          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-3xl shadow-sm transition-all hover:border-neutral-350 dark:hover:border-neutral-700 hover:shadow-md overflow-hidden">
-            <div className="group px-6 py-5 flex items-center justify-between">
-              <div className="flex flex-col gap-1">
+          <div className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-sm transition-all hover:border-neutral-350 dark:hover:border-neutral-700 hover:shadow-md">
+            <div className="group px-5 py-3.5 flex items-center justify-between">
+              <div className="flex items-center gap-4">
                 <h1 className="text-xl font-bold text-neutral-900 dark:text-white leading-none">
                   {teamName}
                 </h1>
-                <span className="text-sm text-neutral-500">
-                  {teamDesc} (Owner: {teamAdminEmail})
-                </span>
               </div>
 
               <div className="relative w-64 h-8 shrink-0">
                 {/* Monthly price per member */}
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-row items-center gap-8 transition-all duration-200 opacity-100 group-hover:opacity-0 group-hover:pointer-events-none">
-                  <span className="px-2.5 py-1 text-xs font-semibold bg-neutral-100 dark:bg-neutral-850 text-neutral-600 dark:text-neutral-400 rounded-full border border-neutral-200/50 dark:border-neutral-750 whitespace-nowrap leading-none">
-                    {members.length}{" "}
-                    {members.length === 1 ? "Member" : "Members"}
-                  </span>
                   <span className="text-sm font-bold text-neutral-900 dark:text-white leading-none">
                     {new Intl.NumberFormat("en-US", {
                       style: "currency",
@@ -272,7 +205,7 @@ export default function TeamDetailPage() {
             </div>
 
             {editModalOpen && (
-              <div className="px-6 pb-6 pt-4 border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#161b22]">
+              <div className="px-6 pb-6 pt-4 border-t border-neutral-200 dark:border-neutral-800 bg-white dark:bg-[#161b22] rounded-b-xl">
                 <div className="flex items-end gap-4">
                   <div className="flex-1">
                     <label className="block text-[10px] font-bold text-neutral-450 dark:text-neutral-500 uppercase tracking-wider mb-2">
@@ -344,7 +277,7 @@ export default function TeamDetailPage() {
                       {isSaving ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
-                        "Save Changes"
+                        "Save"
                       )}
                     </button>
                   </div>
@@ -366,62 +299,51 @@ export default function TeamDetailPage() {
           </div>
 
           {/* Members list */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {members.filter(
-              (m) =>
-                (m.email || "")
-                  .toLowerCase()
-                  .includes(searchQuery.toLowerCase()) ||
-                (m.name &&
-                  m.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-                (m.role &&
-                  m.role.toLowerCase().includes(searchQuery.toLowerCase())),
-            ).length > 0 ? (
-              members
-                .filter(
-                  (m) =>
-                    (m.email || "")
-                      .toLowerCase()
-                      .includes(searchQuery.toLowerCase()) ||
-                    (m.name &&
-                      m.name
-                        .toLowerCase()
-                        .includes(searchQuery.toLowerCase())) ||
-                    (m.role &&
-                      m.role.toLowerCase().includes(searchQuery.toLowerCase())),
-                )
-                .map((member) => (
-                  <div
-                    key={member.id}
-                    className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 flex items-start gap-4 transition-all hover:border-neutral-350 dark:hover:border-neutral-700 shadow-sm cursor-pointer"
-                    onClick={() =>
-                      router.push(`/owner/team-members/${member.id}`)
-                    }
-                  >
-                    <div className="flex-1 min-w-0 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-neutral-850 dark:text-neutral-100 truncate text-[15px] group-hover:text-black dark:group-hover:text-white transition-colors">
-                          {member.name || member.email.split("@")[0]}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-sm text-neutral-500">
-                        <Mail className="w-3.5 h-3.5 shrink-0" />
-                        <span className="truncate">{member.email}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-sm text-neutral-500">
-                        <Shield className="w-3.5 h-3.5 shrink-0" />
-                        <span className="capitalize truncate">
-                          {member.role}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))
+          <div className="grid grid-cols-1 gap-2">
+            {currentMembers.length > 0 ? (
+              currentMembers.map((member) => (
+                <div
+                  key={member.id}
+                  className="bg-white dark:bg-[#161b22] border border-neutral-200 dark:border-neutral-800 rounded-xl px-5 py-3.5 flex items-center justify-between transition-all hover:border-neutral-350 dark:hover:border-neutral-700 shadow-sm"
+                >
+                  <span className="font-semibold text-neutral-850 dark:text-neutral-100 truncate text-[14px]">
+                    {member.name || member.email.split("@")[0]}
+                  </span>
+                  <span className="text-sm text-neutral-500 truncate ml-4">
+                    {member.email}
+                  </span>
+                </div>
+              ))
             ) : (
               <div className="col-span-2 text-center py-12 border border-dashed border-neutral-200 dark:border-neutral-800 rounded-2xl text-neutral-400">
-                No members currently in this team.
+                No members match your search.
               </div>
             )}
+          </div>
+
+          {/* Pagination Bar */}
+          <div className="sticky bottom-6 z-20 flex items-center justify-between h-[68px] px-6 py-4 mt-auto mb-4 bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 shadow-sm text-sm font-medium text-neutral-700 dark:text-neutral-300">
+            <div className="text-neutral-500 dark:text-neutral-400">
+              Showing <span className="font-medium text-neutral-900 dark:text-white">{filteredMembers.length > 0 ? startIndex + 1 : 0}</span> to <span className="font-medium text-neutral-900 dark:text-white">{endIndex}</span> of <span className="font-medium text-neutral-900 dark:text-white">{filteredMembers.length}</span> results
+            </div>
+            <div className="flex gap-2">
+              {currentPage > 1 && (
+                <button
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  className="px-4 py-1.5 rounded-lg bg-neutral-200 text-neutral-700 hover:bg-neutral-300 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 font-medium transition-colors"
+                >
+                  Back
+                </button>
+              )}
+              {currentPage < totalPages && totalPages > 0 && (
+                <button
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  className="px-4 py-1.5 rounded-lg bg-neutral-900 hover:bg-black text-white dark:bg-white dark:hover:bg-neutral-200 dark:text-black font-medium transition-colors"
+                >
+                  Next
+                </button>
+              )}
+            </div>
           </div>
         </div>
       )}
