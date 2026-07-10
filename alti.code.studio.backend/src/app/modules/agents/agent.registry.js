@@ -36,6 +36,7 @@ import { voiceCalendarSchedulerAgent } from './voice_calendar_scheduler.agent.js
 // High-Value Enterprise B2B Agent Imports
 import { smolagentsAgent } from './smolagents.agent.js';
 import { lettaAgent } from './letta.agent.js';
+import { copilotkitAgent } from './copilotkit.agent.js';
 import { mulesoftAnypointAgent } from './mulesoft_anypoint.agent.js';
 import { servicenowItsmAgent } from './servicenow_itsm.agent.js';
 import { soxItgcComplianceAgent } from './sox_itgc_compliance.agent.js';
@@ -2442,6 +2443,20 @@ agentRegistry.register({
   ],
   version: '1.0.0',
   instance: lettaAgent,
+});
+
+agentRegistry.register({
+  name: 'copilotkit',
+  description: copilotkitAgent.description,
+  queue: 'copilotkit-queue',
+  capabilities: [
+    'frontend-co-steering-agent',
+    'context-aware-web-widgets',
+    'inline-ai-autocomplete',
+    'copilotkit-integration',
+  ],
+  version: '1.0.0',
+  instance: copilotkitAgent,
 });
 
 // ── Dynamic JSON-based Swarm Registry Loader ──

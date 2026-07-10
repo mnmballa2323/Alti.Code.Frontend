@@ -250,3 +250,6 @@
 [submodule "submodules/letta"]
 	path = submodules/letta
 	url = https://github.com/letta-ai/letta.git
+[submodule "submodules/copilotkit"]
+	path = submodules/copilotkit
+	url = https://github.com/CopilotKit/CopilotKit.git
