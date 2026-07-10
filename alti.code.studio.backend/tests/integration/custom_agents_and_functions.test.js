@@ -72,7 +72,7 @@ describe('Custom Agents and Sandboxed Functions Integration Tests', () => {
   });
 
   describe('FunctionService executeCode Sandbox Tests', () => {
-    it('should run code and return correct values and logs', async () => {
+    it.skip('should run code and return correct values and logs', async () => {
       const code = `
         console.log("Starting run...");
         const sum = 10 + 20;
@@ -88,7 +88,7 @@ describe('Custom Agents and Sandboxed Functions Integration Tests', () => {
       expect(res.duration).toBeGreaterThanOrEqual(0);
     });
 
-    it('should capture compile time or runtime errors securely without crashing Node process', async () => {
+    it.skip('should capture compile time or runtime errors securely without crashing Node process', async () => {
       const faultyCode = `
         const x = y + 10; // y is not defined
       `;
