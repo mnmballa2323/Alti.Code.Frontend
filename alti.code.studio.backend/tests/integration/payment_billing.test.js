@@ -15,6 +15,11 @@ vi.mock('stripe', () => {
             })),
           },
         };
+        this.customers = {
+          create: vi.fn().mockImplementation(async (opts) => ({
+            id: 'cus_test_session_id',
+          })),
+        };
         this.webhooks = {
           constructEvent: vi.fn().mockImplementation((body, sig, secret) => JSON.parse(body)),
         };

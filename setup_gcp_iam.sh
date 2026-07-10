@@ -47,10 +47,24 @@ POOL_NAME="github-actions-pool"
 PROVIDER_NAME="github-actions-provider"
 REPO_PATH="mnmballa2323/alti.code.studio" # Target Repository
 
-echo -e "\n[1/5] ${YELLOW}Enabling Google Cloud IAM Credentials & STS APIs...${NC}"
-gcloud services enable iamcredentials.googleapis.com --project="$PROJECT_ID"
-gcloud services enable sts.googleapis.com --project="$PROJECT_ID"
-echo -e "${GREEN}✔ Service APIs enabled successfully.${NC}"
+echo -e "\n[1/5] ${YELLOW}Enabling required Google Cloud Service APIs...${NC}"
+APIS_TO_ENABLE=(
+  "iamcredentials.googleapis.com"
+  "sts.googleapis.com"
+  "compute.googleapis.com"
+  "sqladmin.googleapis.com"
+  "redis.googleapis.com"
+  "vpcaccess.googleapis.com"
+  "servicenetworking.googleapis.com"
+  "cloudkms.googleapis.com"
+  "iam.googleapis.com"
+)
+for api in "${APIS_TO_ENABLE[@]}"; do
+  echo -e "Enabling API: ${CYAN}$api${NC}..."
+  gcloud services enable "$api" --project="$PROJECT_ID"
+done
+echo -e "${GREEN}✔ All Service APIs enabled successfully.${NC}"
+
 
 echo -e "\n[2/5] ${YELLOW}Provisioning Deployer Service Account [${SERVICE_ACCOUNT_NAME}]...${NC}"
 if gcloud iam service-accounts describe "$SERVICE_ACCOUNT_EMAIL" --project="$PROJECT_ID" &>/dev/null; then

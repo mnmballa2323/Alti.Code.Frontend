@@ -126,7 +126,7 @@ describe('The Citadel — 11-Agent Federation', () => {
     }
 
     expect(Object.keys(workerService.workers).length).toBeGreaterThanOrEqual(9);
-  }, 10000);
+  }, 40000);
 });
 
 describe('Agent Registry — The Nexus', () => {

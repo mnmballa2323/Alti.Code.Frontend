@@ -67,6 +67,7 @@ const getAllUsersService = async (filters, paginationOptions) => {
       unverifyUsers,
     },
     data: users,
+  };
 };
 
 //===================  Buyer =========================

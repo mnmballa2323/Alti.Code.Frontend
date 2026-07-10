@@ -34,6 +34,8 @@ import { webPriceTrackerAgent } from './web_price_tracker.agent.js';
 import { voiceCalendarSchedulerAgent } from './voice_calendar_scheduler.agent.js';
 
 // High-Value Enterprise B2B Agent Imports
+import { smolagentsAgent } from './smolagents.agent.js';
+import { lettaAgent } from './letta.agent.js';
 import { mulesoftAnypointAgent } from './mulesoft_anypoint.agent.js';
 import { servicenowItsmAgent } from './servicenow_itsm.agent.js';
 import { soxItgcComplianceAgent } from './sox_itgc_compliance.agent.js';
@@ -2412,6 +2414,34 @@ agentRegistry.register({
   capabilities: ['legal', 'compliance', 'smart-contracts', 'sla-enforcement'],
   version: '1.0.0',
   instance: ciceroLawEnforcementAgent,
+});
+
+agentRegistry.register({
+  name: 'smolagents',
+  description: smolagentsAgent.description,
+  queue: 'smolagents-queue',
+  capabilities: [
+    'code-as-action-agent',
+    'lightweight-agent-prototyping',
+    'sandboxed-code-tool-execution',
+    'smolagents-runtime',
+  ],
+  version: '1.0.0',
+  instance: smolagentsAgent,
+});
+
+agentRegistry.register({
+  name: 'letta',
+  description: lettaAgent.description,
+  queue: 'letta-queue',
+  capabilities: [
+    'persistent-agent-memory',
+    'self-managed-state-agent',
+    'memgpt-long-term-context',
+    'letta-memory-service',
+  ],
+  version: '1.0.0',
+  instance: lettaAgent,
 });
 
 // ── Dynamic JSON-based Swarm Registry Loader ──

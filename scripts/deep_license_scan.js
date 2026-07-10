@@ -154,17 +154,20 @@ function runDeepScan() {
                             const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
                             lic = pkg.license || 'UNKNOWN';
                         } catch (e) {}
-                    } else {
+                    }
+                    if (lic === 'UNKNOWN') {
                         // Scan root for standard license files
-                        const licenseFiles = ['LICENSE', 'LICENSE.txt', 'LICENSE.md', 'COPYING'];
+                        const licenseFiles = ['LICENSE', 'LICENSE.txt', 'LICENSE.md', 'COPYING', 'license', 'license.txt'];
                         for (const lf of licenseFiles) {
                             const fullLf = path.join(absoluteSubPath, lf);
                             if (fs.existsSync(fullLf)) {
                                 const lContent = fs.readFileSync(fullLf, 'utf8').toLowerCase();
                                 if (lContent.includes('mit license') || lContent.includes('permission is hereby granted')) {
                                     lic = 'MIT';
+                                    break;
                                 } else if (lContent.includes('apache license') && lContent.includes('version 2.0')) {
                                     lic = 'Apache-2.0';
+                                    break;
                                 }
                             }
                         }

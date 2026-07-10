@@ -244,3 +244,9 @@
 [submodule "submodules/vertex-ai-search"]
 	path = submodules/vertex-ai-search
 	url = https://github.com/gemini-cli-extensions/vertex-ai-search.git
+[submodule "submodules/smolagents"]
+	path = submodules/smolagents
+	url = https://github.com/huggingface/smolagents.git
+[submodule "submodules/letta"]
+	path = submodules/letta
+	url = https://github.com/letta-ai/letta.git

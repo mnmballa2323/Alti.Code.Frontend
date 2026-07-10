@@ -7,4 +7,4 @@ export class GcpAgent {
   }
 }
 export const gcpAgent = new GcpAgent();
-export const gcpAgent = gcpAgent; // Compatibility mapping
+

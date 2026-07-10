@@ -7,6 +7,43 @@ import fs from 'fs';
 
 vi.mock('child_process');
 
+vi.mock('../../src/app/modules/gcpCloud/gcpCache.service.js', () => ({
+  memorystoreService: {
+    init: vi.fn(),
+    subscribeToCrdt: vi.fn(),
+    publishCrdtUpdate: vi.fn(),
+    isInitialized: false,
+    publisher: null,
+    subscriber: null,
+  },
+}));
+
+vi.mock('../../src/app/modules/gcpCloud/gcpServices.service.js', () => ({
+  BigQueryService: {},
+  dataCatalogService: { governFileIngestion: vi.fn().mockResolvedValue({ isSafe: true }) },
+  featureStoreService: { getPrecomputedEmbedding: vi.fn().mockResolvedValue(null) },
+  vertexEval: {},
+  sccService: { reportFinding: vi.fn().mockResolvedValue({}) },
+  workspaceAdminService: {},
+  cloudWorkstationsService: {},
+  dynamicSessionsService: {},
+  recommenderService: {},
+  videoEyeService: { analyzeBugRecording: vi.fn().mockResolvedValue([]) },
+  workspaceService: { readTechnicalSpec: vi.fn().mockResolvedValue('') },
+}));
+
+vi.mock('../../src/app/modules/gcpCloud/gcpSecretManager.service.js', () => ({
+  SecretManagerService: { getSecret: vi.fn().mockResolvedValue('mock-secret') },
+}));
+
+vi.mock('../../src/app/modules/memory/agentmemory.hooks.js', () => ({
+  AgentMemoryHooks: {
+    recallContext: vi.fn().mockResolvedValue([]),
+    getProjectContext: vi.fn().mockResolvedValue(''),
+    captureUserPrompt: vi.fn().mockResolvedValue({}),
+  },
+}));
+
 test('ClawCodeRouter: shouldRouteToClawCode classification', () => {
     expect(clawCodeRouterService.shouldRouteToClawCode('explain recursive functions')).toBe(false);
     expect(clawCodeRouterService.shouldRouteToClawCode('write a test file')).toBe(true);
@@ -37,9 +74,11 @@ test('ClawCodeRouter: executes task by spawning Claw CLI and returning stdout wi
 });
 
 test('SwarmBrain to Claw-Code Router Integration', async () => {
-    // Force routing to Claw-Code by setting PREFERRED_AGENT
+    // Force routing to Claw-Code by setting PREFERRED_AGENT and GCP_PROJECT_ID
     const originalPreferred = process.env.PREFERRED_AGENT;
+    const originalGcpProject = process.env.GCP_PROJECT_ID;
     process.env.PREFERRED_AGENT = 'claw';
+    process.env.GCP_PROJECT_ID = 'alti-code-studio-prod';
 
     // Mock fs.existsSync to make sure the router thinks the claw binary is installed
     const existsSpy = vi.spyOn(fs, 'existsSync').mockReturnValue(true);
@@ -59,5 +98,10 @@ test('SwarmBrain to Claw-Code Router Integration', async () => {
         delete process.env.PREFERRED_AGENT;
     } else {
         process.env.PREFERRED_AGENT = originalPreferred;
+    }
+    if (originalGcpProject === undefined) {
+        delete process.env.GCP_PROJECT_ID;
+    } else {
+        process.env.GCP_PROJECT_ID = originalGcpProject;
     }
 });

@@ -30,7 +30,7 @@ class GcpCloudSchedulerService {
   /**
    * Create a scheduled HTTP job.
    * @param {string} jobId - Unique job identifier
-   * @param {string} schedule - Cron expression (e.g., '0 */6 * * *')
+   * @param {string} schedule - Cron expression (e.g., '0 * / 6 * * *' without spaces)
    * @param {string} url - Target HTTP endpoint
    * @param {object} [body] - Optional JSON body
    */

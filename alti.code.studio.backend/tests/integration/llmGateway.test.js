@@ -156,6 +156,7 @@ describe('Secure Vault & LLM Gateway Integration Tests', () => {
         expect(rawKeys.gcpEndpoint).toBe(testKeys.gcpEndpoint);
     });
 
+    it('LLM Gateway Service: should load credentials and save responses', async () => {
         // Mock gateway execution
         const prompt = 'Test unified credentials loading';
         const model = 'gemini-2.5-pro';

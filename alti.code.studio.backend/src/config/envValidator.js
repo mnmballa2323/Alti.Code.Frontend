@@ -231,7 +231,7 @@ export function validateEnvironment() {
     logger.error(
       'Fix the above errors in your .env file or environment config.',
     );
-    if (process.env.NODE_ENV !== 'test') {
+    if (process.env.NODE_ENV !== 'test' && !process.env.VITEST) {
       process.exit(1);
     }
   }

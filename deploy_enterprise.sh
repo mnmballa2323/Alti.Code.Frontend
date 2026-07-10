@@ -335,25 +335,45 @@ if [ "$AUTO_APPROVE" != true ]; then
 fi
 
 # Auto-import existing resources if they exist to prevent 409 conflict errors
-if gcloud compute networks describe "inso-production-vpc" --project="$GCP_PROJECT" &>/dev/null; then
-  echo -e "${YELLOW}⚠️ VPC Network inso-production-vpc already exists. Importing into Terraform state...${NC}"
-  terraform import "${TF_VARS[@]}" google_compute_network.private_network "projects/${GCP_PROJECT}/global/networks/inso-production-vpc" || echo "VPC already imported."
+echo -e "\n🔍 ${YELLOW}Checking for existing resources to import into Terraform state...${NC}"
+
+# 1. VPC Network
+if ! terraform state show google_compute_network.private_network &>/dev/null; then
+  echo -e "Checking if VPC Network inso-production-vpc exists in GCP..."
+  if gcloud compute networks describe "inso-production-vpc" --project="$GCP_PROJECT" &>/dev/null; then
+    echo -e "${YELLOW}⚠️ VPC Network inso-production-vpc already exists. Importing...${NC}"
+    terraform import "${TF_VARS[@]}" google_compute_network.private_network "projects/${GCP_PROJECT}/global/networks/inso-production-vpc" || echo "VPC import skipped/failed."
+  fi
 fi
 
-if gcloud compute security-policies describe "inso-production-waf-policy" --project="$GCP_PROJECT" &>/dev/null; then
-  echo -e "${YELLOW}⚠️ Security Policy inso-production-waf-policy already exists. Importing into Terraform state...${NC}"
-  terraform import "${TF_VARS[@]}" google_compute_security_policy.waf_policy "inso-production-waf-policy" || echo "WAF Policy already imported."
+# 2. WAF Policy
+if ! terraform state show google_compute_security_policy.waf_policy &>/dev/null; then
+  echo -e "Checking if Security Policy inso-production-waf-policy exists in GCP..."
+  if gcloud compute security-policies describe "inso-production-waf-policy" --project="$GCP_PROJECT" &>/dev/null; then
+    echo -e "${YELLOW}⚠️ Security Policy inso-production-waf-policy already exists. Importing...${NC}"
+    terraform import "${TF_VARS[@]}" google_compute_security_policy.waf_policy "inso-production-waf-policy" || echo "WAF Policy import skipped/failed."
+  fi
 fi
 
-if gcloud compute addresses describe "private-ip-address" --global --project="$GCP_PROJECT" &>/dev/null; then
-  echo -e "${YELLOW}⚠️ Global Address private-ip-address already exists. Importing into Terraform state...${NC}"
-  terraform import "${TF_VARS[@]}" google_compute_global_address.private_ip_address "projects/${GCP_PROJECT}/global/addresses/private-ip-address" || echo "IP address already imported."
+# 3. Global IP Address (Internal range for SQL/Redis peering)
+if ! terraform state show google_compute_global_address.private_ip_address &>/dev/null; then
+  echo -e "Attempting to import existing global address private-ip-address (if exists)..."
+  terraform import "${TF_VARS[@]}" google_compute_global_address.private_ip_address "projects/${GCP_PROJECT}/global/addresses/private-ip-address" &>/dev/null && echo -e "${GREEN}✔ Successfully imported private-ip-address.${NC}" || echo -e "Address not found in GCP (will be created)."
 fi
 
-if gcloud compute networks subnets describe "inso-commercial-subnet" --region="us-central1" --project="$GCP_PROJECT" &>/dev/null; then
-  echo -e "${YELLOW}⚠️ Subnetwork inso-commercial-subnet already exists. Importing into Terraform state...${NC}"
-  terraform import "${TF_VARS[@]}" "google_compute_subnetwork.commercial_subnet[0]" "projects/${GCP_PROJECT}/regions/us-central1/subnetworks/inso-commercial-subnet" || echo "Subnet already imported."
+# 4. Subnetwork
+if [ "$DEPLOY_OPTION" = "government" ]; then
+  if ! terraform state show "google_compute_subnetwork.government_subnet[0]" &>/dev/null; then
+    echo -e "Attempting to import existing government subnetwork..."
+    terraform import "${TF_VARS[@]}" "google_compute_subnetwork.government_subnet[0]" "projects/${GCP_PROJECT}/regions/${REGION}/subnetworks/inso-government-subnet" &>/dev/null && echo -e "${GREEN}✔ Successfully imported government subnet.${NC}" || echo -e "Subnet not found in GCP (will be created)."
+  fi
+else
+  if ! terraform state show "google_compute_subnetwork.commercial_subnet[0]" &>/dev/null; then
+    echo -e "Attempting to import existing commercial subnetwork..."
+    terraform import "${TF_VARS[@]}" "google_compute_subnetwork.commercial_subnet[0]" "projects/${GCP_PROJECT}/regions/${REGION}/subnetworks/inso-commercial-subnet" &>/dev/null && echo -e "${GREEN}✔ Successfully imported commercial subnet.${NC}" || echo -e "Subnet not found in GCP (will be created)."
+  fi
 fi
+
 
 echo -e "\n${GREEN}Applying Terraform changes...${NC}"
 terraform apply "${TF_VARS[@]}" -auto-approve
