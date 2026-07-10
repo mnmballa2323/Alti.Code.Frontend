@@ -8,7 +8,7 @@ const nextConfig = {
     overlay: true,
   },
   images: {
-    unoptimized: false,
+    unoptimized: true, // License compliance: avoid sharp -> @img/sharp-libvips (LGPL-3.0)
     domains: ['images.unsplash.com'],
     remotePatterns: [
       {

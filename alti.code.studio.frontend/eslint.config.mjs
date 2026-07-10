@@ -4,7 +4,7 @@ import react from "eslint-plugin-react";
 import unusedImports from "eslint-plugin-unused-imports";
 import _import from "eslint-plugin-import";
 import typescriptEslint from "@typescript-eslint/eslint-plugin";
-import jsxA11Y from "eslint-plugin-jsx-a11y";
+// jsx-a11y removed: pulls axe-core (MPL-2.0) which violates MIT/Apache-only policy
 import prettier from "eslint-plugin-prettier";
 import globals from "globals";
 import tsParser from "@typescript-eslint/parser";
@@ -47,7 +47,7 @@ export default defineConfig([globalIgnores([
         "plugin:react/recommended",
         "plugin:prettier/recommended",
         "plugin:react-hooks/recommended",
-        "plugin:jsx-a11y/recommended",
+
         "plugin:@next/next/recommended",
     )),
 
@@ -56,7 +56,7 @@ export default defineConfig([globalIgnores([
         "unused-imports": unusedImports,
         import: fixupPluginRules(_import),
         "@typescript-eslint": typescriptEslint,
-        "jsx-a11y": fixupPluginRules(jsxA11Y),
+
         prettier: fixupPluginRules(prettier),
     },
 
@@ -91,19 +91,19 @@ export default defineConfig([globalIgnores([
         "react/jsx-uses-react": "off",
         "react/react-in-jsx-scope": "off",
         "react-hooks/exhaustive-deps": "off",
-        "jsx-a11y/click-events-have-key-events": "warn",
-        "jsx-a11y/interactive-supports-focus": "warn",
+
+
         "prettier/prettier": "warn",
         "no-unused-vars": "off",
         "unused-imports/no-unused-vars": "off",
         "unused-imports/no-unused-imports": "warn",
         "react/no-unescaped-entities": "off",
-        "jsx-a11y/anchor-is-valid": "warn",
-        "jsx-a11y/no-static-element-interactions": "warn",
-        "jsx-a11y/label-has-associated-control": "warn",
-        "jsx-a11y/no-autofocus": "warn",
+
+
+
+
         "react/no-unknown-property": "warn",
-        "jsx-a11y/heading-has-content": "warn",
+
 
         "@typescript-eslint/no-unused-vars": ["warn", {
             args: "after-used",
