@@ -253,3 +253,6 @@
 [submodule "submodules/copilotkit"]
 	path = submodules/copilotkit
 	url = https://github.com/CopilotKit/CopilotKit.git
+[submodule "submodules/agno"]
+	path = submodules/agno
+	url = https://github.com/agno-agi/agno.git

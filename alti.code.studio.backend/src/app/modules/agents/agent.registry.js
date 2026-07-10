@@ -37,6 +37,7 @@ import { voiceCalendarSchedulerAgent } from './voice_calendar_scheduler.agent.js
 import { smolagentsAgent } from './smolagents.agent.js';
 import { lettaAgent } from './letta.agent.js';
 import { copilotkitAgent } from './copilotkit.agent.js';
+import { agnoAgent } from './agno.agent.js';
 import { mulesoftAnypointAgent } from './mulesoft_anypoint.agent.js';
 import { servicenowItsmAgent } from './servicenow_itsm.agent.js';
 import { soxItgcComplianceAgent } from './sox_itgc_compliance.agent.js';
@@ -2457,6 +2458,20 @@ agentRegistry.register({
   ],
   version: '1.0.0',
   instance: copilotkitAgent,
+});
+
+agentRegistry.register({
+  name: 'agno',
+  description: agnoAgent.description,
+  queue: 'agno-queue',
+  capabilities: [
+    'multi-agent-system-grid',
+    'swarm-control-plane',
+    'dynamic-workflow-orchestration',
+    'agno-integration',
+  ],
+  version: '1.0.0',
+  instance: agnoAgent,
 });
 
 // ── Dynamic JSON-based Swarm Registry Loader ──
