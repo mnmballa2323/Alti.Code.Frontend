@@ -25,13 +25,13 @@ Inso Code is an **Enterprise AI Development Platform** powered by a self-orchest
 
 ## 🏗️ Architecture — The Industry Armada
 
-### The AGI Genesis (Tri-Cloud Architecture)
-The platform operates on a completely sovereign, self-healing Tri-Cloud architecture:
-1. **The Architect (AWS Bedrock / Claude 5 Sonnet):** Writes God-Tier algorithmic code with mathematically proven structures.
-2. **The QA Engineer (GCP Vertex AI / Gemini 3.1 Pro):** Ingests code, visual Grafana dashboards, and raw CI/CD crash logs to autonomously heal PRs.
-3. **The DevSecOps CISO (Azure Foundry / GPT-5.5):** Audits code cryptographically and streams real-time RBAC tokens.
+### The AGI Genesis (Sovereign Google Cloud Architecture)
+The platform operates on a completely sovereign, self-contained Google Cloud deployment:
+1. **The Architect & Developer Swarm (GCP Vertex AI / Claude Sonnet 4.6 / Gemini 3.5 Pro):** Runs advanced cognitive agent grids, code generation, and multi-agent plan parsing.
+2. **The QA Engineer (GCP Vertex AI / Gemini 3.5 Flash):** Autonomously executes test-driven healing, scans logs, and resolves build errors with sub-second latencies.
+3. **The DevSecOps CISO (GCP Secret Manager & Cloud KMS / ACM):** Enforces customer-managed encryption keys (CMEK), VPC Service Controls perimeters, and Cloud Armor WAF edge protection policies.
 
-This Triple-Threat consensus loop runs autonomously via the **Sovereign Agent**, which writes its own Jira tickets, hot-reloads its own V8 bytecode (Metamorphic Self-Compilation), and queues its knowledge vectors for a 14-minute Interplanetary Sync to Mars.
+This unified consensus loop runs autonomously via the **Sovereign Agent**, which writes its own Jira tickets, hot-reloads its own V8 bytecode (Metamorphic Self-Compilation), and queues its knowledge vectors for secure private database replication.
 
 ### Core Orchestration Layer
 | Component | Role |
