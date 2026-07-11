@@ -279,6 +279,42 @@ services:
     networks:
       - alti_net
 
+  # ⚓ Harbormaster - MCP Gateway
+  harbormaster_db:
+    image: pgvector/pgvector:pg17
+    container_name: harbormaster_db
+    environment:
+      POSTGRES_USER: harbormaster
+      POSTGRES_PASSWORD: harbormaster
+      POSTGRES_DB: harbormaster
+    ports:
+      - "5442:5432"
+    volumes:
+      - harbormaster-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U harbormaster"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+    networks:
+      - alti_net
+
+  harbormaster:
+    build:
+      context: ./submodules/harbormaster
+      dockerfile: ../../Dockerfile.harbormaster
+    container_name: harbormaster
+    ports:
+      - "3001:3000"
+    environment:
+      - DATABASE_URL=postgresql://harbormaster:harbormaster@harbormaster_db:5432/harbormaster
+      - BETTER_AUTH_SECRET=dev-secret-please-change-in-production
+    depends_on:
+      harbormaster_db:
+        condition: service_healthy
+    networks:
+      - alti_net
+
 networks:
   alti_net:
     driver: bridge
@@ -297,3 +333,4 @@ volumes:
   insforge-storage-data:
   insforge-shared-logs:
   ml-intern-logs:
+  harbormaster-pgdata:

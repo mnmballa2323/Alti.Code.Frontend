@@ -256,3 +256,9 @@
 [submodule "submodules/agno"]
 	path = submodules/agno
 	url = https://github.com/agno-agi/agno.git
+[submodule "submodules/loop-engineering"]
+	path = submodules/loop-engineering
+	url = https://github.com/cobusgreyling/loop-engineering.git
+[submodule "submodules/harbormaster"]
+	path = submodules/harbormaster
+	url = https://github.com/theonetheycallneo/harbormaster.git
