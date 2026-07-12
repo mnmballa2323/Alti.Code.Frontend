@@ -244,7 +244,7 @@ function PromptInputFullLineComponent({
   customActions,
   rightActions,
   showModelDropdown = false,
-  showRagToggle = true,
+  showRagToggle = false,
 }: {
   prompt: string;
   setPrompt: React.Dispatch<React.SetStateAction<string>>;
@@ -1922,7 +1922,7 @@ export default function PromptInputFullLineWithBottomActions({
   customActions,
   rightActions,
   showModelDropdown = false,
-  showRagToggle = true,
+  showRagToggle = false,
 }: {
   onSend?: (
     prompt: string,

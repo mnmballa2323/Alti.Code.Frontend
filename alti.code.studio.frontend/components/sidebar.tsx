@@ -1792,7 +1792,7 @@ export default function Sidebar() {
         >
           {/* Sidebar Header (Workspace Name & Collapse Button) */}
           {isSidebarOpen ? (
-            <div className="w-full h-[68px] flex-none flex items-center justify-between px-4 border-b border-white/5 select-none">
+            <div className="w-full h-[52px] flex-none flex items-center justify-between px-4 border-b border-white/5 select-none">
               <span className="text-[12px] font-normal text-gray-300 dark:text-gray-200 truncate max-w-[200px]">
                 {activeProject?.name || "No Workspace"}
               </span>
@@ -1807,7 +1807,7 @@ export default function Sidebar() {
               </Button>
             </div>
           ) : (
-            <div className="w-full h-[68px] flex-none flex items-center justify-center border-b border-white/5 select-none">
+            <div className="w-full h-[52px] flex-none flex items-center justify-center border-b border-white/5 select-none">
               <Button
                 isIconOnly
                 className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
@@ -1822,9 +1822,9 @@ export default function Sidebar() {
 
           <div
             className={cn(
-              "flex border-b border-transparent",
+              "flex border-b border-white/5",
               isSidebarOpen
-                ? "h-[54px] pt-3 pb-1.5 px-3 items-end justify-start"
+                ? "h-[54px] py-0 px-3 items-center justify-start"
                 : "h-auto pt-4 pb-2 items-center justify-center",
             )}
           >
@@ -1934,7 +1934,7 @@ export default function Sidebar() {
           {/* Search bar and + icon on the same line below the main menu */}
           <div
             className={cn(
-              "h-[84px] flex items-center border-b border-default-200 px-3",
+              "h-[56px] flex items-center border-b border-white/5 px-3",
               !isSidebarOpen && "hidden",
             )}
           >
