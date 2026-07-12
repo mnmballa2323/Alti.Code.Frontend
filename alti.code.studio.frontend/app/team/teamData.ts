@@ -1217,18 +1217,7 @@ export const teamMembers: TeamMember[] = [
     statusText: "Idle",
     accentColor: "#2496ED",
   },
-  {
-    id: "terraform-expert",
-    name: "Mitchell Hashimoto AI",
-    role: "Infrastructure IaC Designer",
-    type: "functional",
-    category: "DevOps",
-    specialties: ["Terraform HCL", "State lock locks", "Modular plans"],
-    bio: "Defines cloud components as clean, repeatable code scripts, ensuring zero drift.",
-    status: "idle",
-    statusText: "Idle",
-    accentColor: "#7B42BC",
-  },
+
   {
     id: "sre-lead",
     name: "ChaosMonkey AI",
