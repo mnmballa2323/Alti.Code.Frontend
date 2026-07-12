@@ -106,50 +106,52 @@ export function WorkspaceDock() {
         isDockExpanded ? "w-64 min-w-[256px]" : "w-[88px] min-w-[88px]",
       )}
     >
-      {/* Top Spacer / Header Area with Logo and Toggle (52px) */}
-      <div
-        className={cn(
-          "h-[52px] w-full border-b border-white/5 flex-none flex items-center relative group transition-colors cursor-pointer hover:bg-white/[0.02]",
-          isDockExpanded ? "px-4 justify-between" : "justify-center",
-        )}
-        onClick={handleToggleDockClick}
-      >
-        {isDockExpanded ? (
-          <div className="flex items-center justify-between w-full h-8">
-            <div className="flex items-center">
-              <img
-                alt="Inso Logo Icon"
-                className="w-5 h-5 object-contain"
-                src="/assets/logo-icon-white.png?v=2"
-              />
-            </div>
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-all">
-              <PanelLeftClose className="size-4" />
-            </div>
-          </div>
-        ) : (
-          <div className="relative w-9 h-9 flex items-center justify-center">
-            {/* Logo Icon - Visible by default, fades out on hover */}
-            <img
-              alt="Inso Logo Icon"
-              className="w-5 h-5 object-contain opacity-100 group-hover:opacity-0 transition-opacity duration-200"
-              src="/assets/logo-icon-white.png?v=2"
-            />
-            {/* Toggle button - Hidden by default, fades in on hover */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white border border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-              <PanelLeftOpen className="size-3.5" />
-            </div>
-          </div>
-        )}
-      </div>
-
       {/* Scrollable Workspaces List */}
       <div
         className={cn(
-          "flex-1 w-full flex flex-col gap-2.5 overflow-y-auto scrollbar-none pt-4",
+          "flex-1 w-full flex flex-col gap-2.5 overflow-y-auto scrollbar-none pt-3",
           isDockExpanded ? "px-3" : "items-center px-2",
         )}
       >
+        {/* Logo / Panel Toggle (styled as first workspace item) */}
+        <div
+          className={cn(
+            "w-full flex-none flex items-center relative group transition-all duration-200 cursor-pointer rounded-xl hover:bg-white/5",
+            isDockExpanded ? "h-11 px-3 justify-between" : "h-11 w-11 justify-center",
+          )}
+          onClick={handleToggleDockClick}
+        >
+          {isDockExpanded ? (
+            <div className="flex items-center justify-between w-full">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 shrink-0">
+                  <img
+                    alt="Inso Logo Icon"
+                    className="w-4 h-4 object-contain"
+                    src="/assets/logo-icon-white.png?v=2"
+                  />
+                </div>
+                <span className="text-xs font-semibold text-gray-200">Alti Studio</span>
+              </div>
+              <div className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 group-hover:text-white transition-all">
+                <PanelLeftClose className="size-4" />
+              </div>
+            </div>
+          ) : (
+            <div className="relative w-8 h-8 flex items-center justify-center rounded-lg bg-white/5">
+              {/* Logo Icon - Visible by default, fades out on hover */}
+              <img
+                alt="Inso Logo Icon"
+                className="w-4 h-4 object-contain opacity-100 group-hover:opacity-0 transition-opacity duration-200"
+                src="/assets/logo-icon-white.png?v=2"
+              />
+              {/* Toggle button - Hidden by default, fades in on hover */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center rounded-lg bg-white/5 text-gray-400 hover:text-white">
+                <PanelLeftOpen className="size-3.5" />
+              </div>
+            </div>
+          )}
+        </div>
         {tabs.map((tab) => {
           const isActive = tab.id === activeTabId;
           const initials = getInitials(tab.title);
