@@ -23,28 +23,10 @@ export function WorkspaceDock() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const [isDockExpanded, setIsDockExpanded] = React.useState(() => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("inso_dock_expanded");
-
-      return stored === "true";
-    }
-
-    return false;
-  });
-
+  const isDockExpanded = false;
+  const handleToggleDockClick = () => {};
   const [isConfirmOpen, setIsConfirmOpen] = React.useState(false);
   const [tabToRemove, setTabToRemove] = React.useState<string | null>(null);
-
-  const handleToggleDockClick = () => {
-    setIsDockExpanded((prev) => {
-      const next = !prev;
-
-      localStorage.setItem("inso_dock_expanded", String(next));
-
-      return next;
-    });
-  };
 
   const { tabs, activeTabId } = useSelector((state: RootState) => state.tabs);
 
@@ -113,45 +95,7 @@ export function WorkspaceDock() {
           isDockExpanded ? "px-3" : "items-center px-2",
         )}
       >
-        {/* Logo / Panel Toggle (styled as first workspace item) */}
-        {isDockExpanded ? (
-          <div
-            className="group relative flex items-center justify-between w-full h-11 px-3 rounded-xl cursor-pointer hover:bg-white/5 border border-transparent transition-all duration-200"
-            onClick={handleToggleDockClick}
-          >
-            <div className="flex items-center gap-3 min-w-0">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-white/5 text-white shrink-0">
-                <img
-                  alt="Inso Logo Icon"
-                  className="w-4 h-4 object-contain"
-                  src="/assets/logo-icon-white.png?v=2"
-                />
-              </div>
-              <span className="text-xs font-semibold text-gray-200 truncate">
-                Alti Studio
-              </span>
-            </div>
-            <div className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-400 group-hover:text-white transition-all">
-              <PanelLeftClose className="size-4" />
-            </div>
-          </div>
-        ) : (
-          <div
-            className="group relative flex items-center justify-center w-11 h-11 rounded-xl cursor-pointer hover:bg-white/5 transition-all duration-200"
-            onClick={handleToggleDockClick}
-          >
-            {/* Logo Icon - Visible by default, fades out on hover */}
-            <img
-              alt="Inso Logo Icon"
-              className="w-5 h-5 object-contain opacity-100 group-hover:opacity-0 transition-opacity duration-200"
-              src="/assets/logo-icon-white.png?v=2"
-            />
-            {/* Toggle button - Hidden by default, fades in on hover */}
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center rounded-xl text-gray-400 hover:text-white">
-              <PanelLeftOpen className="size-4" />
-            </div>
-          </div>
-        )}
+
         {tabs.map((tab) => {
           const isActive = tab.id === activeTabId;
           const initials = getInitials(tab.title);
