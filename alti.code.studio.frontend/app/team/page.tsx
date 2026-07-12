@@ -250,7 +250,8 @@ export default function TeamPage() {
   ];
 
   // Filter team members based on search, tab, and category
-  const filteredMembers = teamMembers
+  const uniqueTeamMembers = Array.from(new Map(teamMembers.map(item => [item.id, item])).values());
+  const filteredMembers = uniqueTeamMembers
     .filter((member) => {
       const matchesTab = member.type === activeTab;
       const matchesCategory =
