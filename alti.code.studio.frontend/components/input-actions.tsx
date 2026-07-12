@@ -934,10 +934,10 @@ function PromptInputFullLineComponent({
           autoFocus
           className="flex-1 max-h-[120px] min-h-[36px] resize-none border-none shadow-none outline-none placeholder:text-default-400 focus-visible:ring-0"
           classNames={{
-            innerWrapper: "relative",
+            innerWrapper: "relative border-none outline-none focus:outline-none focus:ring-0",
             input:
-              "text-[15px] leading-normal font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-1.5",
-            inputWrapper: "!bg-transparent shadow-none !border-0 px-2 py-0",
+              "text-[15px] leading-normal font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-1.5 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none",
+            inputWrapper: "!bg-transparent shadow-none !border-0 px-2 py-0 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none focus-within:ring-0 focus-within:outline-none",
           }}
           maxRows={4}
           minRows={1}
@@ -946,7 +946,7 @@ function PromptInputFullLineComponent({
           radius="lg"
           spellCheck={"false"}
           value={prompt}
-          variant="bordered"
+          variant="flat"
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
           onValueChange={setPrompt}
