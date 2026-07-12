@@ -42,7 +42,6 @@ import {
   Cloud,
   Server,
   Bot,
-  Terminal,
   Cpu,
   SlidersHorizontal,
 } from "lucide-react";
@@ -1108,8 +1107,6 @@ export default function Sidebar() {
         return "Guardrails";
       case "/knowledge":
         return "Data";
-      case "/functions":
-        return "Functions";
       case "/connect-apps":
       case "/integrations":
         return "Apps";
@@ -1167,11 +1164,12 @@ export default function Sidebar() {
         dispatch(startNewChat());
       },
     },
+
     {
-      label: "Functions",
-      icon: Terminal,
-      path: "/functions",
-      isActive: pathname === "/functions",
+      label: "Chat",
+      icon: MessageSquare,
+      path: "/chat",
+      isActive: pathname?.startsWith("/chat"),
       onClick: () => {},
     },
     {
@@ -1179,13 +1177,6 @@ export default function Sidebar() {
       icon: Bot,
       path: "/agents",
       isActive: pathname === "/agents" || pathname?.startsWith("/agents/"),
-      onClick: () => {},
-    },
-    {
-      label: "Chat",
-      icon: MessageSquare,
-      path: "/chat",
-      isActive: pathname?.startsWith("/chat"),
       onClick: () => {},
     },
     {
@@ -1271,7 +1262,6 @@ export default function Sidebar() {
     { id: string; name: string; prompt: string }[]
   >([]);
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
-  const [serverlessFunctions, setServerlessFunctions] = useState<any[]>([]);
 
   const searchParams = useSearchParams();
   const agentIdParam = searchParams?.get("agentId");
@@ -1496,41 +1486,7 @@ export default function Sidebar() {
     };
   }, [pathname, token]);
 
-  useEffect(() => {
-    const fetchFunctionsList = async () => {
-      if (!token) return;
-      try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/function`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
-        );
 
-        if (res.data?.success) {
-          setServerlessFunctions(res.data.data || []);
-        }
-      } catch (e) {}
-    };
-
-    if (pathname === "/functions") {
-      fetchFunctionsList();
-    }
-
-    const handleSyncFuncs = (e: any) => {
-      if (e.detail && Array.isArray(e.detail)) {
-        setServerlessFunctions(e.detail);
-      } else {
-        fetchFunctionsList();
-      }
-    };
-
-    window.addEventListener("sync-functions", handleSyncFuncs);
-
-    return () => {
-      window.removeEventListener("sync-functions", handleSyncFuncs);
-    };
-  }, [pathname, token]);
 
   // Listen for knowledge file updates
   useEffect(() => {
