@@ -130,16 +130,12 @@ export default function TeamPage() {
       <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-secondary/5 dark:bg-secondary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[6000ms]" />
 
       {/* Header Section */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10 relative z-10">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2 text-primary font-medium text-xs tracking-wider uppercase">
-            <Sparkles className="animate-pulse" size={14} />
-            <span>Virtual Developer Swarm</span>
-          </div>
-          <h1 className="text-3xl lg:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-black via-zinc-800 to-zinc-900 dark:from-white dark:via-zinc-200 dark:to-zinc-400 bg-clip-text text-transparent">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 relative z-10">
+        <div className="flex flex-col gap-3">
+          <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-black via-zinc-700 to-zinc-900 dark:from-white dark:via-zinc-300 dark:to-zinc-500 bg-clip-text text-transparent leading-none">
             The Century Team
           </h1>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400 max-w-xl leading-relaxed">
+          <p className="text-sm lg:text-base text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed font-normal">
             Choose from our specialized AI engineers covering 120 distinct
             programming language paradigms, systems optimization domains, and
             team execution roles.
