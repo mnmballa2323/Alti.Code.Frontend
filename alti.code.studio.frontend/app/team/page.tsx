@@ -17,7 +17,119 @@ import {
   Code2,
 } from "lucide-react";
 
+import { Icon } from "@iconify/react";
 import { teamMembers, TeamMember } from "./teamData";
+
+// Map ID prefix to specific programming language logos using Iconify devicons
+const getLanguageIcon = (id: string) => {
+  const lang = id.split("-")[0];
+  switch (lang) {
+    case "c":
+      return "devicon:c";
+    case "cpp":
+      return "devicon:cplusplus";
+    case "rust":
+      return "devicon:rust";
+    case "zig":
+      return "devicon:zig";
+    case "go":
+      return "devicon:go";
+    case "assembly":
+      return "mdi:binary";
+    case "python":
+      return "devicon:python";
+    case "typescript":
+    case "ts":
+      return "devicon:typescript";
+    case "javascript":
+    case "js":
+      return "devicon:javascript";
+    case "ruby":
+      return "devicon:ruby";
+    case "php":
+      return "devicon:php";
+    case "csharp":
+      return "devicon:csharp";
+    case "java":
+      return "devicon:java";
+    case "kotlin":
+      return "devicon:kotlin";
+    case "swift":
+      return "devicon:swift";
+    case "html":
+      return "devicon:html5";
+    case "css":
+      return "devicon:css3";
+    case "bash":
+    case "shell":
+      return "devicon:bash";
+    case "sql":
+    case "postgresql":
+    case "postgres":
+      return "devicon:postgresql";
+    case "haskell":
+      return "devicon:haskell";
+    case "clojure":
+      return "devicon:clojure";
+    case "scala":
+      return "devicon:scala";
+    case "elixir":
+      return "devicon:elixir";
+    case "lua":
+      return "devicon:lua";
+    case "perl":
+      return "devicon:perl";
+    case "cobol":
+      return "devicon:cobol";
+    case "fortran":
+      return "devicon:fortran";
+    case "lisp":
+      return "devicon:lisp";
+    case "prolog":
+      return "devicon:prolog";
+    case "dart":
+      return "devicon:dart";
+    case "objectivec":
+      return "devicon:objectivec";
+    case "r":
+      return "devicon:r";
+    case "julia":
+      return "devicon:julia";
+    case "ocaml":
+      return "devicon:ocaml";
+    case "fsharp":
+      return "devicon:fsharp";
+    case "erlang":
+      return "devicon:erlang";
+    case "groovy":
+      return "devicon:groovy";
+    case "ada":
+      return "devicon:ada";
+    case "scratch":
+      return "devicon:scratch";
+    case "solidity":
+      return "devicon:solidity";
+    case "vyper":
+      return "devicon:vyper";
+    case "delphi":
+      return "devicon:delphi";
+    case "matlab":
+      return "devicon:matlab";
+    case "oracle":
+    case "plsql":
+      return "devicon:oracle";
+    default:
+      if (id.includes("typescript")) return "devicon:typescript";
+      if (id.includes("javascript")) return "devicon:javascript";
+      if (id.includes("python")) return "devicon:python";
+      if (id.includes("rust")) return "devicon:rust";
+      if (id.includes("golang") || id.includes("go")) return "devicon:go";
+      if (id.includes("cpp") || id.includes("cplusplus")) return "devicon:cplusplus";
+      if (id.includes("c-")) return "devicon:c";
+      if (id.includes("assembly")) return "mdi:binary";
+      return null;
+  }
+};
 
 // Helper to convert hex to RGB values for custom styling shadow functions
 function hexToRgb(hex: string) {
@@ -209,6 +321,7 @@ export default function TeamPage() {
               const statusInfo = getStatusClasses(member.status);
               const CategoryIcon = getCategoryIcon(member.category);
               const accentRgb = hexToRgb(member.accentColor);
+              const langIcon = member.type === "language" ? getLanguageIcon(member.id) : null;
 
               return (
                 <motion.div
@@ -238,14 +351,18 @@ export default function TeamPage() {
                     <div className="flex justify-between items-start">
                       {/* Icon with Glowing Border */}
                       <div
-                        className="p-2.5 rounded-xl border flex items-center justify-center bg-zinc-50 dark:bg-zinc-900/50 transition-all"
+                        className="p-2.5 rounded-xl border flex items-center justify-center bg-zinc-50 dark:bg-zinc-900/50 transition-all w-9 h-9 shrink-0"
                         style={{
                           borderColor: `${member.accentColor}25`,
                           color: member.accentColor,
                           boxShadow: `0 0 10px ${member.accentColor}08`,
                         }}
                       >
-                        <CategoryIcon size={18} />
+                        {langIcon ? (
+                          <Icon icon={langIcon} className="w-5 h-5 shrink-0" />
+                        ) : (
+                          <CategoryIcon size={18} className="shrink-0" />
+                        )}
                       </div>
                     </div>
 
