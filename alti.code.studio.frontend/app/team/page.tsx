@@ -376,11 +376,7 @@ export default function TeamPage() {
                     "--accent-rgb": accentRgb,
                   } as React.CSSProperties}
                 >
-                  {/* Subtle Glowing Background Accent */}
-                  <div
-                    className="absolute -top-20 -right-20 w-44 h-44 rounded-full blur-[50px] pointer-events-none opacity-0 group-hover:opacity-30 dark:group-hover:opacity-20 scale-75 group-hover:scale-110 transition-all duration-500"
-                    style={{ backgroundColor: member.accentColor }}
-                  />
+
 
                   {/* Top Section: Icon & Name */}
                   <div className="flex flex-col gap-3">
