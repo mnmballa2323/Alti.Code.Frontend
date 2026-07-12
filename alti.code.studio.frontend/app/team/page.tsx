@@ -292,7 +292,7 @@ export default function TeamPage() {
               setActiveCategory("All");
             }}
           >
-            Language Codex ({teamMembers.filter(m => m.type === "language").length})
+            Language Codex
             {activeTab === "language" && (
               <motion.div
                 layoutId="activeTabSlider"
@@ -313,7 +313,7 @@ export default function TeamPage() {
               setActiveCategory("All");
             }}
           >
-            Functional Grid ({teamMembers.filter(m => m.type === "functional").length})
+            Functional Grid
             {activeTab === "functional" && (
               <motion.div
                 layoutId="activeTabSlider"
@@ -357,7 +357,8 @@ export default function TeamPage() {
               const statusInfo = getStatusClasses(member.status);
               const CategoryIcon = getCategoryIcon(member.category);
               const accentRgb = hexToRgb(member.accentColor);
-              const langIcon = member.type === "language" ? getLanguageIcon(member.id) : null;
+              const resolvedIcon = getLanguageIcon(member.id);
+              const langIcon = resolvedIcon !== "mdi:code-braces" ? resolvedIcon : null;
 
               return (
                 <motion.div

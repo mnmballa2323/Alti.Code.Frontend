@@ -1796,7 +1796,7 @@ export default function Sidebar() {
         <div
           className={cn(
             "flex h-full max-h-full overflow-hidden flex-col transition-all duration-300 bg-[#0B1121] border-r border-white/5 relative",
-            isSidebarOpen ? "w-80" : "w-16",
+            isSidebarOpen ? "w-72" : "w-16",
           )}
         >
           {/* Sidebar Header (Workspace Name & Collapse Button) */}
