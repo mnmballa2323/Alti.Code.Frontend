@@ -233,7 +233,7 @@ export default function TeamPage() {
                     style={{ backgroundColor: member.accentColor }}
                   />
 
-                  {/* Top Section: Icon, Name & Status */}
+                  {/* Top Section: Icon & Name */}
                   <div className="flex flex-col gap-3">
                     <div className="flex justify-between items-start">
                       {/* Icon with Glowing Border */}
@@ -246,18 +246,6 @@ export default function TeamPage() {
                         }}
                       >
                         <CategoryIcon size={18} />
-                      </div>
-
-                      {/* Status Indicator */}
-                      <div
-                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border text-[10px] font-semibold transition-all ${statusInfo.bg}`}
-                      >
-                        <span
-                          className={`w-1.5 h-1.5 rounded-full ${statusInfo.dot} ${member.status !== "idle" ? "animate-pulse" : ""}`}
-                        />
-                        <span className={statusInfo.text}>
-                          {member.statusText}
-                        </span>
                       </div>
                     </div>
 
