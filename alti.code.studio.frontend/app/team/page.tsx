@@ -250,20 +250,26 @@ export default function TeamPage() {
   ];
 
   // Filter team members based on search, tab, and category
-  const filteredMembers = teamMembers.filter((member) => {
-    const matchesTab = member.type === activeTab;
-    const matchesCategory =
-      activeCategory === "All" || member.category === activeCategory;
-    const matchesSearch =
-      member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.bio.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      member.specialties.some((spec) =>
-        spec.toLowerCase().includes(searchQuery.toLowerCase()),
-      );
+  const filteredMembers = teamMembers
+    .filter((member) => {
+      const matchesTab = member.type === activeTab;
+      const matchesCategory =
+        activeCategory === "All" || member.category === activeCategory;
+      const matchesSearch =
+        member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        member.bio.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        member.specialties.some((spec) =>
+          spec.toLowerCase().includes(searchQuery.toLowerCase()),
+        );
 
-    return matchesTab && matchesCategory && matchesSearch;
-  });
+      return matchesTab && matchesCategory && matchesSearch;
+    })
+    .sort((a, b) => {
+      const nameA = getLanguageDisplayName(a.id);
+      const nameB = getLanguageDisplayName(b.id);
+      return nameA.localeCompare(nameB);
+    });
 
   const handleDeploy = (member: TeamMember) => {
     router.push(
