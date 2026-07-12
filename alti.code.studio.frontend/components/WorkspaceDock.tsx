@@ -88,10 +88,13 @@ export function WorkspaceDock() {
         isDockExpanded ? "w-64 min-w-[256px]" : "w-[88px] min-w-[88px]",
       )}
     >
+      {/* Top Header Spacer (52px) with border-b to align with Sidebar header */}
+      <div className="h-[52px] w-full border-b border-white/5 flex-none select-none" />
+
       {/* Scrollable Workspaces List */}
       <div
         className={cn(
-          "flex-1 w-full flex flex-col gap-2.5 overflow-y-auto scrollbar-none pt-12",
+          "flex-1 w-full flex flex-col gap-2.5 overflow-y-auto scrollbar-none pt-3",
           isDockExpanded ? "px-3" : "items-center px-2",
         )}
       >
