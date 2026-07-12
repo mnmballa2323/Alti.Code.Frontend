@@ -29,7 +29,7 @@ export default function PairedProgrammerSection() {
             },
           }}
         >
-          Your AI pair programmer.
+          Your AI Engineering Team
         </motion.h2>
 
         <motion.p
