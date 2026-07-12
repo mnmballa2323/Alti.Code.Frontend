@@ -20,114 +20,80 @@ import {
 import { Icon } from "@iconify/react";
 import { teamMembers, TeamMember } from "./teamData";
 
-// Map ID prefix to specific programming language logos using Iconify devicons
 const getLanguageIcon = (id: string) => {
-  const lang = id.split("-")[0];
-  switch (lang) {
-    case "c":
-      return "devicon:c";
-    case "cpp":
-      return "devicon:cplusplus";
-    case "rust":
-      return "devicon:rust";
-    case "zig":
-      return "devicon:zig";
-    case "go":
-      return "devicon:go";
-    case "assembly":
-      return "mdi:binary";
-    case "python":
-      return "devicon:python";
-    case "typescript":
-    case "ts":
-      return "devicon:typescript";
-    case "javascript":
-    case "js":
-      return "devicon:javascript";
-    case "ruby":
-      return "devicon:ruby";
-    case "php":
-      return "devicon:php";
-    case "csharp":
-      return "devicon:csharp";
-    case "java":
-      return "devicon:java";
-    case "kotlin":
-      return "devicon:kotlin";
-    case "swift":
-      return "devicon:swift";
-    case "html":
-      return "devicon:html5";
-    case "css":
-      return "devicon:css3";
-    case "bash":
-    case "shell":
-      return "devicon:bash";
-    case "sql":
-    case "postgresql":
-    case "postgres":
-      return "devicon:postgresql";
-    case "haskell":
-      return "devicon:haskell";
-    case "clojure":
-      return "devicon:clojure";
-    case "scala":
-      return "devicon:scala";
-    case "elixir":
-      return "devicon:elixir";
-    case "lua":
-      return "devicon:lua";
-    case "perl":
-      return "devicon:perl";
-    case "cobol":
-      return "devicon:cobol";
-    case "fortran":
-      return "devicon:fortran";
-    case "lisp":
-      return "devicon:lisp";
-    case "prolog":
-      return "devicon:prolog";
-    case "dart":
-      return "devicon:dart";
-    case "objectivec":
-      return "devicon:objectivec";
-    case "r":
-      return "devicon:r";
-    case "julia":
-      return "devicon:julia";
-    case "ocaml":
-      return "devicon:ocaml";
-    case "fsharp":
-      return "devicon:fsharp";
-    case "erlang":
-      return "devicon:erlang";
-    case "groovy":
-      return "devicon:groovy";
-    case "ada":
-      return "devicon:ada";
-    case "scratch":
-      return "devicon:scratch";
-    case "solidity":
-      return "devicon:solidity";
-    case "vyper":
-      return "devicon:vyper";
-    case "delphi":
-      return "devicon:delphi";
-    case "matlab":
-      return "devicon:matlab";
-    case "oracle":
-    case "plsql":
-      return "devicon:oracle";
+  switch (id) {
+    case "c-expert": return "devicon:c";
+    case "cpp-expert": return "devicon:cplusplus";
+    case "rust-expert": return "devicon:rust";
+    case "zig-expert": return "devicon:zig";
+    case "go-expert": return "devicon:go";
+    case "assembly-x86-expert": return "devicon:nasm";
+    case "assembly-arm-expert": return "devicon:nasm";
+    case "d-expert": return "vscode-icons:file-type-dlang";
+    case "nim-expert": return "devicon:nim";
+    case "carbon-expert": return "devicon:carbon";
+    case "mojo-expert": return "vscode-icons:file-type-mojo";
+    case "ts-expert": return "devicon:typescript";
+    case "js-expert": return "devicon:javascript";
+    case "python-expert": return "devicon:python";
+    case "php-expert": return "devicon:php";
+    case "ruby-expert": return "devicon:ruby";
+    case "perl-expert": return "devicon:perl";
+    case "lua-expert": return "devicon:lua";
+    case "tcl-expert": return "vscode-icons:file-type-tcl";
+    case "bash-expert": return "devicon:bash";
+    case "powershell-expert": return "vscode-icons:file-type-powershell";
+    case "java-expert": return "devicon:java";
+    case "csharp-expert": return "devicon:csharp";
+    case "kotlin-lang-expert": return "devicon:kotlin";
+    case "swift-lang-expert": return "devicon:swift";
+    case "objc-expert": return "vscode-icons:file-type-objectivec";
+    case "scala-expert": return "devicon:scala";
+    case "groovy-expert": return "devicon:groovy";
+    case "haskell-expert": return "devicon:haskell";
+    case "elixir-lang-expert": return "devicon:elixir";
+    case "erlang-expert": return "devicon:erlang";
+    case "fsharp-lang-expert": return "devicon:fsharp";
+    case "clojure-expert": return "devicon:clojure";
+    case "ocaml-expert": return "devicon:ocaml";
+    case "lisp-expert": return "vscode-icons:file-type-lisp";
+    case "prolog-expert": return "vscode-icons:file-type-prolog";
+    case "sql-expert": return "vscode-icons:file-type-sql";
+    case "r-expert": return "devicon:r";
+    case "julia-expert": return "devicon:julia";
+    case "matlab-expert": return "devicon:matlab";
+    case "fortran-expert": return "devicon:fortran";
+    case "sas-expert": return "vscode-icons:file-type-sas";
+    case "cobol-expert": return "devicon:cobol";
+    case "solidity-expert": return "devicon:solidity";
+    case "vyper-expert": return "devicon:vyper";
+    case "html-expert": return "logos:html-5";
+    case "css-expert": return "devicon:css3";
+    case "graphql-expert": return "logos:graphql";
+    case "config-expert": return "logos:aws-config";
+    case "latex-expert": return "devicon:latex";
+    case "terraform-expert": return "logos:terraform";
+    case "unity-expert": return "logos:unity";
+    case "unreal-expert": return "logos:unrealengine";
+    case "ada-expert": return "vscode-icons:file-type-ada";
+    case "delphi-expert": return "devicon:delphi";
+    case "vb-expert": return "vscode-icons:file-type-vb";
+    case "plsql-expert": return "vscode-icons:file-type-plsql";
+    case "abap-expert": return "vscode-icons:file-type-abap";
+    case "vhdl-expert": return "vscode-icons:file-type-vhdl";
+    case "plc-expert": return "mdi:robot-industrial";
+    case "gcode-expert": return "mdi:printer-3d";
+    case "labview-expert": return "vscode-icons:file-type-labview";
     default:
-      if (id.includes("typescript")) return "devicon:typescript";
-      if (id.includes("javascript")) return "devicon:javascript";
+      if (id.includes("typescript") || id.includes("ts-")) return "devicon:typescript";
+      if (id.includes("javascript") || id.includes("js-")) return "devicon:javascript";
       if (id.includes("python")) return "devicon:python";
       if (id.includes("rust")) return "devicon:rust";
-      if (id.includes("golang") || id.includes("go")) return "devicon:go";
+      if (id.includes("golang") || id.includes("go-")) return "devicon:go";
       if (id.includes("cpp") || id.includes("cplusplus")) return "devicon:cplusplus";
       if (id.includes("c-")) return "devicon:c";
-      if (id.includes("assembly")) return "mdi:binary";
-      return null;
+      if (id.includes("assembly")) return "devicon:nasm";
+      return "mdi:code-braces";
   }
 };
 
