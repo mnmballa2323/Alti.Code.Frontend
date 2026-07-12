@@ -283,8 +283,9 @@ export function WorkspaceDock() {
 
       {/* Footer Actions (Plus Button) */}
       <div
+        style={{ height: "76px", minHeight: "76px", maxHeight: "76px" }}
         className={cn(
-          "mt-auto border-t border-default-200 w-full flex flex-col justify-center h-[76px]",
+          "mt-auto border-t border-default-200 w-full flex flex-col justify-center flex-none",
           isDockExpanded ? "px-3" : "items-center",
         )}
       >

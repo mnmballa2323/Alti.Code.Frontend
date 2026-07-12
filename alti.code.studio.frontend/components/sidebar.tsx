@@ -3001,8 +3001,9 @@ export default function Sidebar() {
           )}
 
           <div
+            style={{ height: "76px", minHeight: "76px", maxHeight: "76px" }}
             className={cn(
-              "mt-auto border-t border-default-200 flex flex-col justify-center h-[76px]",
+              "mt-auto border-t border-default-200 flex flex-col justify-center flex-none",
               isSidebarOpen ? "px-5" : "px-1 items-center",
             )}
           >
