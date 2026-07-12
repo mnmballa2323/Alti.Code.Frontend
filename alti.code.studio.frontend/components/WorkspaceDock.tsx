@@ -115,21 +115,18 @@ export function WorkspaceDock() {
         onClick={handleToggleDockClick}
       >
         {isDockExpanded ? (
-          <>
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between w-full h-8">
+            <div className="flex items-center">
               <img
                 alt="Inso Logo Icon"
                 className="w-5 h-5 object-contain"
                 src="/assets/logo-icon-white.png?v=2"
               />
-              <span className="text-[10px] font-bold text-default-400 uppercase tracking-widest pl-1">
-                Workspaces
-              </span>
             </div>
             <div className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-all">
               <PanelLeftClose className="size-4" />
             </div>
-          </>
+          </div>
         ) : (
           <div className="relative w-9 h-9 flex items-center justify-center">
             {/* Logo Icon - Visible by default, fades out on hover */}
