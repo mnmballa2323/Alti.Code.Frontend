@@ -129,21 +129,56 @@ export default function TeamPage() {
       <div className="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-primary/5 dark:bg-primary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[8000ms]" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-secondary/5 dark:bg-secondary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[6000ms]" />
 
-      {/* Header Section */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 relative z-10">
-        <div className="flex flex-col gap-3">
-          <h1 className="text-4xl lg:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-black via-zinc-700 to-zinc-900 dark:from-white dark:via-zinc-300 dark:to-zinc-500 bg-clip-text text-transparent leading-none">
-            The Century Team
-          </h1>
-          <p className="text-sm lg:text-base text-zinc-500 dark:text-zinc-400 max-w-2xl leading-relaxed font-normal">
-            Choose from our specialized AI engineers covering 120 distinct
-            programming language paradigms, systems optimization domains, and
-            team execution roles.
-          </p>
+      {/* Top Navigation Row (Toggle & Search Bar) */}
+      <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6 relative z-10">
+        {/* Navigation Tab Toggle Slider */}
+        <div className="relative flex p-1 bg-zinc-100/80 dark:bg-white/[0.03] backdrop-blur-md rounded-2xl border border-zinc-200/50 dark:border-white/5 self-start shadow-sm">
+          <button
+            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 ${
+              activeTab === "language"
+                ? "text-black dark:text-white"
+                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
+            }`}
+            onClick={() => {
+              setActiveTab("language");
+              setActiveCategory("All");
+            }}
+          >
+            Language Codex (60)
+            {activeTab === "language" && (
+              <motion.div
+                layoutId="activeTabSlider"
+                className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                style={{ zIndex: -1 }}
+              />
+            )}
+          </button>
+          <button
+            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 ${
+              activeTab === "functional"
+                ? "text-black dark:text-white"
+                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
+            }`}
+            onClick={() => {
+              setActiveTab("functional");
+              setActiveCategory("All");
+            }}
+          >
+            Functional Grid (60)
+            {activeTab === "functional" && (
+              <motion.div
+                layoutId="activeTabSlider"
+                className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                style={{ zIndex: -1 }}
+              />
+            )}
+          </button>
         </div>
 
         {/* Search Bar */}
-        <div className="relative w-full md:max-w-xs group">
+        <div className="relative w-full sm:max-w-xs group">
           <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500">
             <Search size={16} />
           </div>
@@ -161,53 +196,9 @@ export default function TeamPage() {
       </div>
 
       {/* Main Grid Container */}
-      <div className="max-w-7xl mx-auto flex flex-col gap-8 relative z-10">
-        {/* Navigation Tabs */}
-        <div className="flex flex-col gap-5 border-b border-zinc-200/60 dark:border-white/5 pb-5">
-          <div className="relative flex p-1 bg-zinc-100/80 dark:bg-white/[0.03] backdrop-blur-md rounded-2xl border border-zinc-200/50 dark:border-white/5 self-start shadow-sm">
-            <button
-              className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 ${
-                activeTab === "language"
-                  ? "text-black dark:text-white"
-                  : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-              }`}
-              onClick={() => {
-                setActiveTab("language");
-                setActiveCategory("All");
-              }}
-            >
-              Language Codex (60)
-              {activeTab === "language" && (
-                <motion.div
-                  layoutId="activeTabSlider"
-                  className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  style={{ zIndex: -1 }}
-                />
-              )}
-            </button>
-            <button
-              className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 ${
-                activeTab === "functional"
-                  ? "text-black dark:text-white"
-                  : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-              }`}
-              onClick={() => {
-                setActiveTab("functional");
-                setActiveCategory("All");
-              }}
-            >
-              Functional Grid (60)
-              {activeTab === "functional" && (
-                <motion.div
-                  layoutId="activeTabSlider"
-                  className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
-                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  style={{ zIndex: -1 }}
-                />
-              )}
-            </button>
-          </div>
+      <div className="max-w-7xl mx-auto flex flex-col gap-6 relative z-10">
+        {/* Sub-categories Pills */}
+        <div className="flex flex-col gap-4 border-b border-zinc-200/60 dark:border-white/5 pb-5">
 
           {/* Sub-categories Pills */}
           <div className="flex flex-wrap gap-2">
