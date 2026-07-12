@@ -3002,8 +3002,8 @@ export default function Sidebar() {
 
           <div
             className={cn(
-              "mt-auto border-t border-default-200 flex flex-col gap-2",
-              isSidebarOpen ? "px-5 pb-5 pt-4" : "px-1 pb-4 pt-4",
+              "mt-auto border-t border-default-200 flex flex-col justify-center h-[76px]",
+              isSidebarOpen ? "px-5" : "px-1 items-center",
             )}
           >
             {status === "unauthenticated" ? (

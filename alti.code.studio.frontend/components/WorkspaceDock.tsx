@@ -284,7 +284,7 @@ export function WorkspaceDock() {
       {/* Footer Actions (Plus Button) */}
       <div
         className={cn(
-          "mt-auto border-t border-default-200 w-full flex flex-col justify-center h-[73px]",
+          "mt-auto border-t border-default-200 w-full flex flex-col justify-center h-[76px]",
           isDockExpanded ? "px-3" : "items-center",
         )}
       >
