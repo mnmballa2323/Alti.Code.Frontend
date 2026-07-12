@@ -1807,7 +1807,7 @@ export default function Sidebar() {
               </Button>
             </div>
           ) : (
-            <div className="w-full flex justify-center pt-3 pb-3 border-b border-white/5 select-none">
+            <div className="w-full h-[68px] flex-none flex items-center justify-center border-b border-white/5 select-none">
               <Button
                 isIconOnly
                 className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
