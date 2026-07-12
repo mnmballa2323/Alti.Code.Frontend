@@ -45,6 +45,7 @@ import {
   Cpu,
   SlidersHorizontal,
   Users,
+  Network,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -1175,7 +1176,7 @@ export default function Sidebar() {
     },
     {
       label: "Team",
-      icon: Users,
+      icon: Network,
       path: "/team",
       isActive: pathname === "/team" || pathname?.startsWith("/team/"),
       onClick: () => {},
