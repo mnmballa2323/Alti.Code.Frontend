@@ -1792,7 +1792,7 @@ export default function Sidebar() {
         >
           {/* Sidebar Header (Workspace Name & Collapse Button) */}
           {isSidebarOpen ? (
-            <div className="w-full h-[88px] flex-none flex flex-col justify-end pb-[12px] px-4 border-b border-white/5 select-none pt-[44px]">
+            <div className="w-full h-[94px] flex-none flex flex-col justify-end pb-[12px] px-4 border-b border-white/5 select-none pt-[50px]">
               <div className="flex items-center justify-between w-full h-8">
                 <span className="text-[12px] font-normal text-gray-300 dark:text-gray-200 truncate max-w-[200px]">
                   {activeProject?.name || "No Workspace"}
