@@ -409,20 +409,6 @@ export default function TeamPage() {
                       </div>
                     </div>
 
-                    {/* Developer Info */}
-                    <div className="flex flex-col gap-0.5 mt-2">
-                      <h3 className="font-bold text-sm text-black dark:text-white leading-tight flex items-center gap-1.5">
-                        {member.name}
-                      </h3>
-                      <p className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400">
-                        {member.role}
-                      </p>
-                    </div>
-
-                    {/* Bio Description */}
-                    <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed font-normal min-h-[54px] line-clamp-3">
-                      {member.bio}
-                    </p>
 
                     {/* Active Work Simulation Progress Bar */}
                     {member.status !== "idle" && (
