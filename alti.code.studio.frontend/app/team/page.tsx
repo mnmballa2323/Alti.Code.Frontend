@@ -197,26 +197,7 @@ export default function TeamPage() {
 
       {/* Main Grid Container */}
       <div className="max-w-7xl mx-auto flex flex-col gap-6 relative z-10">
-        {/* Sub-categories Pills */}
-        <div className="flex flex-col gap-4 border-b border-zinc-200/60 dark:border-white/5 pb-5">
 
-          {/* Sub-categories Pills */}
-          <div className="flex flex-wrap gap-2">
-            {categories.map((category) => (
-              <button
-                key={category}
-                className={`relative px-3.5 py-1.5 text-[11px] font-medium rounded-xl transition-all duration-300 border ${
-                  activeCategory === category
-                    ? "bg-zinc-900 border-transparent text-white dark:bg-white dark:text-black shadow-[0_2px_8px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_12px_rgba(255,255,255,0.08)]"
-                    : "bg-white/60 dark:bg-white/[0.02] backdrop-blur-sm text-zinc-600 dark:text-zinc-400 border-zinc-200 dark:border-white/5 hover:border-zinc-300 dark:hover:border-white/20 hover:bg-white dark:hover:bg-white/[0.05]"
-                }`}
-                onClick={() => setActiveCategory(category)}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
 
         {/* Roster Grid */}
         <motion.div
