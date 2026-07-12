@@ -13,8 +13,11 @@ import validatePromptRequest from '../../../shared/validatePromptRequest.js';
 import { GeminiAiService } from './gemini.service.js';
 
 const GeminiAiGetResponse = catchAsync(async (req, res) => {
-  const { prompt, userId, sessionId, language, mode, domain, errorResponse } =
+  const { prompt, userId, sessionId, language, mode, domain } =
     await validatePromptRequest(req);
+
+  const ragMode = req.body?.ragMode;
+  const ragSources = req.body?.ragSources;
 
   const result = await GeminiAiService.geminiService(
     sessionId,
@@ -23,6 +26,8 @@ const GeminiAiGetResponse = catchAsync(async (req, res) => {
     language,
     mode,
     domain,
+    ragMode,
+    ragSources,
   );
 
   sendResponse(res, {

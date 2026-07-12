@@ -180,6 +180,9 @@ class MultiCloudInferenceService {
       }
     }
 
+    // Phase 5: Swarm DAG Routing & Telemetry log
+    await this.logRoutingTelemetry(activeAgent, modelId, resultObj, options);
+
     return resultObj;
   }
 
@@ -414,6 +417,49 @@ class MultiCloudInferenceService {
     return `[SIMULATED COMPLIANT RESPONSE FROM ${modelDesc.toUpperCase()}]
 This response was processed securely via multi-cloud model endpoints and recorded in the respective Cloud Marketplace dashboard for billing and procurement transparency.
 Your prompt snippet: "${prompt.substring(0, 80)}..."`;
+  }
+
+  /**
+   * Logs structured routing telemetry metrics to marketplace_billing.log.
+   * Tracks latency, prompt and completion tokens, and agent task parameters.
+   */
+  async logRoutingTelemetry(activeAgent, modelId, resultObj, options) {
+    try {
+      const logDir = path.dirname(this.billingLogPath);
+      await fs.mkdir(logDir, { recursive: true });
+
+      const contentText = resultObj?.content || '';
+      const promptTokens = resultObj?.tokens?.prompt || Math.max(1, Math.ceil(contentText.length / 4));
+      const completionTokens = resultObj?.tokens?.completion || Math.max(1, Math.ceil(contentText.length / 4));
+      const latencyMs = resultObj?.latencyMs || 0;
+
+      const logEntry = {
+        timestamp: new Date().toISOString(),
+        transactionId: crypto.randomUUID(),
+        agent: activeAgent,
+        model: modelId,
+        provider: resultObj?.provider || 'gcp-vertex',
+        latencyMs,
+        usage: {
+          promptTokens,
+          completionTokens,
+          totalTokens: promptTokens + completionTokens,
+        },
+        telemetryMetadata: {
+          hasInstruction: !!options?.systemInstruction,
+          isStructured: !!options?.isStructured,
+        },
+      };
+
+      await fs.appendFile(
+        this.billingLogPath,
+        JSON.stringify(logEntry) + '\n',
+        'utf8',
+      );
+      logger.info(`📊 [MultiCloud Telemetry] Logged transaction metadata entry to billing log.`);
+    } catch (err) {
+      logger.warn(`Failed to write marketplace telemetry: ${err.message}`);
+    }
   }
 }
 

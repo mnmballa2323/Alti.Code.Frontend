@@ -146,6 +146,7 @@ try {
               }
               if (file === 'dyad.route.js') basePath = '/dyad/claude';
               if (file === 'gemini.route.js') basePath = '/gemini';
+              if (file === 'loopEngineering.route.js') basePath = '/loop-engineering';
               if (file === 'codeEditor.route.js') basePath = '/code-editor';
               if (file === 'shadowWorkspace.route.js') basePath = '/shadow';
               if (file === 'securityAgent.route.js')

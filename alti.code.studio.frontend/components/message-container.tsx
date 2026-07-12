@@ -6,7 +6,8 @@ import { useSelector } from "react-redux";
 import MDEditor from "@uiw/react-md-editor";
 import remarkGfm from "remark-gfm";
 import DOMPurify from "dompurify";
-import { Accordion, AccordionItem, Chip } from "@heroui/react";
+import { Accordion, AccordionItem, Chip, cn } from "@heroui/react";
+import { Icon } from "@iconify/react";
 
 import MessageCard from "./message-card";
 import { MarkdownChats } from "./markdown-chats";
@@ -83,6 +84,54 @@ const ToolExecutionLog = ({ executions }: { executions: ToolExecution[] }) => {
   );
 };
 
+const RagPipelineTelemetry = ({ pipeline }: { pipeline?: any[] }) => {
+  if (!pipeline || pipeline.length === 0) return null;
+
+  return (
+    <div className="flex flex-wrap gap-2 items-center mt-2.5 mb-2.5 font-mono text-[10px]">
+      <div className="text-default-400 font-semibold mr-1 flex items-center gap-1 select-none">
+        <Icon icon="solar:database-bold-duotone" className="size-3.5" />
+        <span>RAG Context:</span>
+      </div>
+      {pipeline.map((source, index) => {
+        let chipColor: "default" | "success" | "warning" | "danger" = "default";
+        let statusLabel = "";
+
+        if (source.status === "done") {
+          chipColor = "success";
+          statusLabel = `${source.durationMs}ms`;
+        } else if (source.status === "skipped") {
+          chipColor = "default";
+          statusLabel = "skipped";
+        } else {
+          chipColor = "danger";
+          statusLabel = "failed";
+        }
+
+        return (
+          <Chip
+            key={index}
+            className="h-5 px-1 bg-default-100/50 dark:bg-black/20 border border-default-200/30"
+            color={chipColor}
+            size="sm"
+            variant="flat"
+          >
+            <span className="font-semibold text-default-500">{source.label}:</span>{" "}
+            <span className={cn(
+              "font-bold",
+              source.status === "done" && "text-success",
+              source.status === "skipped" && "text-default-400",
+              source.status === "error" && "text-danger"
+            )}>
+              {statusLabel}
+            </span>
+          </Chip>
+        );
+      })}
+    </div>
+  );
+};
+
 export default function MessageContainer() {
   const { messages, loading } = useSelector(
     (state: RootState) => state.messages,
@@ -129,6 +178,9 @@ export default function MessageContainer() {
                     <div className="flex flex-col w-full">
                       <ToolExecutionLog
                         executions={chatMessage.toolExecutions || []}
+                      />
+                      <RagPipelineTelemetry
+                        pipeline={chatMessage.ragPipeline}
                       />
                       <FormattedReply reply={chatMessage.reply as string} />
                     </div>

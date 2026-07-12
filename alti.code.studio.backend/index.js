@@ -65,10 +65,12 @@ if (config.env !== 'production') {
         'http://localhost:3000',
         'http://localhost:3001',
         'http://localhost:3005',
+        'http://localhost:3009',
         'http://localhost:3100',
         'http://127.0.0.1:3000',
         'http://127.0.0.1:3001',
         'http://127.0.0.1:3005',
+        'http://127.0.0.1:3009',
         'http://127.0.0.1:3100',
         'tauri://localhost',
         'http://tauri.localhost'

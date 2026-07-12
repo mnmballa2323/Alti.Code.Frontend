@@ -79,6 +79,14 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
         }
       } else {
         url = `https://${region}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${region}/publishers/google/models/${vertexModelId}:generateContent`;
+        const cachedContentName = await checkAndCreateVertexCache(
+          projectId,
+          region,
+          vertexModelId,
+          options.systemInstruction,
+          prompt,
+          accessToken,
+        );
         body = {
           contents: [{ parts: [{ text: prompt }] }],
           ...(options.systemInstruction ? {
@@ -89,6 +97,7 @@ export async function executeVertexInference(prompt, modelId, options = {}) {
             maxOutputTokens: options.maxOutputTokens || 8192,
             ...(isStructured ? { responseMimeType: 'application/json' } : {}),
           },
+          ...(cachedContentName ? { cachedContent: cachedContentName } : {}),
         };
       }
 
@@ -800,4 +809,46 @@ function getDynamicSvgIllustration(prompt) {
 
   const base64 = Buffer.from(svg).toString('base64');
   return `data:image/svg+xml;base64,${base64}`;
+}
+
+/**
+ * Creates a cachedContent resource on Google Cloud Vertex AI for queries with large prompts.
+ * Dynamic caching helps avoid repetitive model processing latency and cost on GCP.
+ */
+async function checkAndCreateVertexCache(projectId, region, modelId, systemInstruction, promptText, accessToken) {
+  // Vertex AI prompt caching requires a minimum token size (typically 32,768 tokens, approx. 130,000 chars)
+  if (!promptText || promptText.length < 130000) return null;
+
+  try {
+    const url = `https://${region}-aiplatform.googleapis.com/v1/projects/${projectId}/locations/${region}/cachedContents`;
+    const body = {
+      model: `projects/${projectId}/locations/${region}/publishers/google/models/${modelId}`,
+      contents: [{ role: 'user', parts: [{ text: promptText }] }],
+      ...(systemInstruction ? {
+        systemInstruction: { parts: [{ text: systemInstruction }] },
+      } : {}),
+      ttl: '300s', // Keep cached for 5 minutes
+    };
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      logger.info(`✨ Vertex AI prompt cache created successfully: ${data.name}`);
+      return data.name; // returns the full resource name of the cache
+    } else {
+      const errText = await response.text();
+      logger.warn(`Vertex AI cache creation ignored: ${errText}`);
+    }
+  } catch (err) {
+    logger.warn(`Failed to create Vertex AI cachedContent: ${err.message}`);
+  }
+  return null;
 }

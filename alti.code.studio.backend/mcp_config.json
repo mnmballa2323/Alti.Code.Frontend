@@ -36,6 +36,11 @@
       "command": "npx",
       "args": ["-y", "codebase-memory-mcp", "--ui=true", "--port=9749"],
       "env": {}
+    },
+    "loop-engineering": {
+      "command": "node",
+      "args": ["/Users/michaelmeram/workspace/alti.code.studio/submodules/loop-engineering/tools/mcp-server/dist/index.js"],
+      "env": {}
     }
   }
 }

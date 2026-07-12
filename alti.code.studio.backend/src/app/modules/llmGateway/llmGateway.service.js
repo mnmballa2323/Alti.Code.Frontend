@@ -16,6 +16,7 @@ import { gcpGenAiService as GcpGenAiService } from '../ai/gcpGenAi.service.js';
 import { ultimateRagService } from '../rag/ultimate_rag.service.js';
 import { researchService } from '../research/research.service.js';
 import { triBrainService } from '../agents/tri_brain.service.js';
+import { AstSearchEngine } from '../ast/ast_search_engine.js';
 
 /**
  * Persist chat response securely in PostgreSQL ChatHistory table (JSONB).
@@ -140,6 +141,8 @@ const routeCompletion = async (
   modelName,
   temperature = 0.5,
   domain = 'Full Stack',
+  ragMode = 'auto',
+  ragSources = undefined,
 ) => {
   logger.info(
     `🔀 [LlmGateway] Triage routing prompt to model: ${modelName} | Domain: ${domain}`,
@@ -253,13 +256,20 @@ User Query: "${scrubbedPrompt}"
 
 Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
 
-      const classificationResult =
-        await multiCloudInferenceService.executeMultiCloudInference(
-          classificationPrompt,
-          'gateway_router',
-          { modelId: 'gemini-3.5-flash' },
-        );
-      const decision = classificationResult.content.trim().toUpperCase();
+      let decision = 'FAST';
+      if (ragMode === 'forced') {
+        decision = 'RAG';
+      } else if (ragMode === 'disabled') {
+        decision = 'FAST';
+      } else {
+        const classificationResult =
+          await multiCloudInferenceService.executeMultiCloudInference(
+            classificationPrompt,
+            'gateway_router',
+            { modelId: 'gemini-3.5-flash' },
+          );
+        decision = classificationResult.content.trim().toUpperCase();
+      }
 
       if (decision.includes('RAG')) {
         logger.info(
@@ -277,6 +287,7 @@ Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
           undefined,
           userId,
           tenantId,
+          ragSources,
         );
         await saveChatResponse(
           userId,
@@ -290,6 +301,7 @@ Return ONLY 'RAG', 'CONSENSUS', or 'FAST'. Do not return any other text.`;
           sessionId,
           model: 'Auto-RAG',
           success: true,
+          ragPipeline: ragResult.pipeline,
         };
       } else if (decision.includes('CONSENSUS')) {
         logger.info(
@@ -349,13 +361,20 @@ User Query: "${scrubbedPrompt}"
 
 Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a general chat, web search, or non-development question. Do not return any other text.`;
 
-      const classificationResult =
-        await multiCloudInferenceService.executeMultiCloudInference(
-          classificationPrompt,
-          'gateway_router',
-          { modelId: 'gemini-3.5-flash' },
-        );
-      const decision = classificationResult.content.trim().toUpperCase();
+      let decision = 'GENERAL';
+      if (ragMode === 'forced') {
+        decision = 'RAG';
+      } else if (ragMode === 'disabled') {
+        decision = 'GENERAL';
+      } else {
+        const classificationResult =
+          await multiCloudInferenceService.executeMultiCloudInference(
+            classificationPrompt,
+            'gateway_router',
+            { modelId: 'gemini-3.5-flash' },
+          );
+        decision = classificationResult.content.trim().toUpperCase();
+      }
 
       if (decision.includes('RAG')) {
         logger.info(
@@ -373,6 +392,7 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
           undefined,
           userId,
           tenantId,
+          ragSources,
         );
 
         // Persist chat response to Postgres ChatHistory (JSONB)
@@ -389,6 +409,7 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
           sessionId,
           model: actualModelName,
           success: true,
+          ragPipeline: ragResult.pipeline,
         };
       } else {
         logger.info(
@@ -497,6 +518,124 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
       },
     );
     reply = result.content;
+
+    // Phase 2: Compiler & Sandbox Feedback Loops (Syntax Correction Loop)
+    if (reply && (reply.includes('```javascript') || reply.includes('```typescript') || reply.includes('```js') || reply.includes('```ts'))) {
+      try {
+        const codeBlockRegex = /```(javascript|typescript|js|ts)\n([\s\S]*?)```/g;
+        let match;
+        let correctedReply = reply;
+        let hasChanges = false;
+        
+        while ((match = codeBlockRegex.exec(reply)) !== null) {
+          const lang = match[1];
+          const codeBlock = match[2];
+          
+          let attempts = 0;
+          let currentCode = codeBlock;
+          let isValid = false;
+
+          while (attempts < 2 && !isValid) {
+            try {
+              AstSearchEngine.parse(currentCode);
+              isValid = true;
+            } catch (astErr) {
+              attempts++;
+              logger.warn(`⚠️ [LlmGateway Compiler Loop] Syntax error detected in generated ${lang} code block (attempt ${attempts}/2): ${astErr.message}`);
+              
+              const correctionPrompt = `You generated a code block that contains a syntax error:
+${astErr.message}
+
+Here is the code block you generated:
+\`\`\`${lang}
+${currentCode}
+\`\`\`
+
+Please rewrite the code block to resolve this syntax error. Output ONLY the updated code block wrapped in standard markdown triple backticks. Do not add conversational intro/outro text.`;
+
+              const correctionResult = await multiCloudInferenceService.executeMultiCloudInference(
+                correctionPrompt,
+                'gateway-correction',
+                {
+                  preferredProvider,
+                  modelId: cleanModelName,
+                  vaultCredentials: creds,
+                },
+              );
+              
+              const newContent = correctionResult.content;
+              const cleanMatch = /```(?:javascript|typescript|js|ts)?\n([\s\S]*?)```/g.exec(newContent);
+              if (cleanMatch) {
+                currentCode = cleanMatch[1];
+              } else {
+                currentCode = newContent;
+              }
+            }
+          }
+
+          if (isValid && currentCode !== codeBlock) {
+            correctedReply = correctedReply.replace(match[0], `\`\`\`${lang}\n${currentCode}\`\`\``);
+            hasChanges = true;
+          }
+        }
+
+        if (hasChanges) {
+          logger.info(`✨ [LlmGateway Compiler Loop] Successfully self-corrected syntactically invalid code blocks in response.`);
+          reply = correctedReply;
+        }
+      } catch (err) {
+        logger.error(`❌ [LlmGateway Compiler Loop] Error in self-correction runner:`, err);
+      }
+    }
+
+    // Phase 4: Compliance and License Gating (License Audit & Redirection)
+    if (reply && (reply.includes('```javascript') || reply.includes('```typescript') || reply.includes('```js') || reply.includes('```ts'))) {
+      try {
+        const codeBlockRegex = /```(javascript|typescript|js|ts)\n([\s\S]*?)```/g;
+        let match;
+        let correctedReply = reply;
+        let hasComplianceRemediation = false;
+        
+        while ((match = codeBlockRegex.exec(reply)) !== null) {
+          const lang = match[1];
+          const codeBlock = match[2];
+          const auditViolations = auditGeneratedDependencies(codeBlock);
+          
+          if (auditViolations.length > 0) {
+            hasComplianceRemediation = true;
+            logger.warn(`🚨 [LlmGateway Compliance Gate] Disallowed packages detected: ${auditViolations.map(v => v.pkg).join(', ')}`);
+            
+            // Re-prompt the model to rewrite imports with permitted MIT/Apache 2.0 GCP services
+            const violationsDesc = auditViolations.map(v => `- ${v.pkg}: ${v.reason}`).join('\n');
+            const compliancePrompt = `The code block below violates the project's license/sovereignty constraints:\n${violationsDesc}\n\nCode Block:\n\`\`\`${lang}\n${codeBlock}\n\`\`\`\n\nPlease rewrite this code to use ONLY approved, permissive (MIT/Apache 2.0) Google Cloud services or standard libraries. Output ONLY the updated code block wrapped in markdown.`;
+
+            const complianceResult = await multiCloudInferenceService.executeMultiCloudInference(
+              compliancePrompt,
+              'gateway-compliance',
+              {
+                preferredProvider,
+                modelId: cleanModelName,
+                vaultCredentials: creds,
+              },
+            );
+
+            const newContent = complianceResult.content;
+            const cleanMatch = /```(?:javascript|typescript|js|ts)?\n([\s\S]*?)```/g.exec(newContent);
+            const correctedCode = cleanMatch ? cleanMatch[1] : newContent;
+            
+            correctedReply = correctedReply.replace(match[0], `\`\`\`${lang}\n${correctedCode}\`\`\``);
+          }
+        }
+
+        if (hasComplianceRemediation) {
+          logger.info(`✨ [LlmGateway Compliance Gate] Successfully auto-remediated non-compliant packages to sovereign GCP alternatives.`);
+          reply = correctedReply;
+        }
+      } catch (err) {
+        logger.error(`❌ [LlmGateway Compliance Gate] Error in compliance gate:`, err);
+      }
+    }
+
     usedModelName = `${result.provider}/${result.model}`;
 
     if (result && result.tokens) {
@@ -567,6 +706,40 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
     success: true,
   };
 };
+
+/**
+ * Audits generated code blocks for imports of prohibited/non-compliant packages
+ * (e.g. raw MongoDB/Elasticsearch violating SSPL or GPL copyleft licenses).
+ */
+function auditGeneratedDependencies(codeText) {
+  const importRegex = /(?:import\s+(?:[\w\s{},*]+)\s+from\s+['"]([^'"]+)['"])|(?:require\s*\(\s*['"]([^'"]+)['"]\s*\))/g;
+  let match;
+  const packages = new Set();
+  
+  while ((match = importRegex.exec(codeText)) !== null) {
+    const pkg = match[1] || match[2];
+    if (pkg && !pkg.startsWith('.') && !pkg.startsWith('/')) {
+      const mainPkg = pkg.startsWith('@') ? pkg.split('/').slice(0, 2).join('/') : pkg.split('/')[0];
+      packages.add(mainPkg);
+    }
+  }
+
+  const prohibitedPackages = {
+    'mongodb': 'MongoDB raw driver (SSPL) is prohibited. Use Google Cloud Bigtable, Spanner, or Firestore.',
+    'elasticsearch': 'Elasticsearch raw driver (SSPL) is prohibited. Use Google Cloud Discovery Engine or BigQuery.',
+    '@elastic/elasticsearch': 'Elasticsearch raw driver (SSPL) is prohibited. Use Google Cloud Discovery Engine or BigQuery.',
+    'couchdb': 'CouchDB driver is prohibited. Use Firestore or Spanner.',
+  };
+
+  const detectedProhibited = [];
+  for (const pkg of packages) {
+    if (prohibitedPackages[pkg]) {
+      detectedProhibited.push({ pkg, reason: prohibitedPackages[pkg] });
+    }
+  }
+
+  return detectedProhibited;
+}
 
 export const LlmGatewayService = {
   routeCompletion,

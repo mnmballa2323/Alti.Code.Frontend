@@ -15,6 +15,7 @@ export interface MessageType {
   prompt?: string;
   reply?: string;
   toolExecutions?: ToolExecution[];
+  ragPipeline?: any[];
 }
 
 interface MessagesState {
@@ -41,8 +42,9 @@ interface SendMessagePayload {
   domain?: string;
   language?: string;
   sessionId: string | null;
-  // user?: User;
   token: string | null;
+  ragMode?: "auto" | "forced" | "disabled";
+  ragSources?: string[];
   onFulfilled?: (newSessionId: string) => void;
 }
 
@@ -50,6 +52,7 @@ interface ApiResponseData {
   sessionId: string;
   reply: string;
   toolExecutions?: ToolExecution[];
+  ragPipeline?: any[];
 }
 
 export const sendMessage = createAsyncThunk<
@@ -66,6 +69,8 @@ export const sendMessage = createAsyncThunk<
       language,
       sessionId,
       token,
+      ragMode,
+      ragSources,
       onFulfilled,
     }: SendMessagePayload,
     { rejectWithValue, getState },
@@ -97,6 +102,8 @@ export const sendMessage = createAsyncThunk<
         language: language,
         model: defaultModel || "auto",
         ...(sessionId ? { sessionId: sessionId } : {}),
+        ragMode,
+        ragSources,
       };
 
       const res = await fetch(apiUrl, {
@@ -123,6 +130,7 @@ export const sendMessage = createAsyncThunk<
         sessionId: data?.data?.sessionId || sessionId || "temp-session-id",
         reply: data?.data?.reply || "Sorry, I couldn’t understand that.",
         toolExecutions: data?.data?.toolExecutions || [],
+        ragPipeline: data?.data?.ragPipeline || undefined,
       };
 
       // 💡 Check if a new session was created (was null before, is a string now)
@@ -184,7 +192,7 @@ const messagesSlice = createSlice({
       // Handle AI response
       .addCase(sendMessage.fulfilled, (state, action) => {
         state.loading = false;
-        const { reply, sessionId, toolExecutions } = action.payload;
+        const { reply, sessionId, toolExecutions, ragPipeline } = action.payload;
 
         // Update the last message with the reply
         state.messages = state.messages.map((msg, index) =>
@@ -193,6 +201,7 @@ const messagesSlice = createSlice({
                 ...msg,
                 reply: reply || "Sorry, I couldn’t understand that.",
                 toolExecutions,
+                ragPipeline,
               }
             : msg,
         );

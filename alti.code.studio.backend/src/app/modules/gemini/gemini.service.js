@@ -11,6 +11,8 @@ const geminiService = async (
   language,
   mode,
   domain,
+  ragMode,
+  ragSources,
 ) => {
   const model = mode && mode !== 'Agent' ? mode : 'gpt-4o';
 
@@ -21,6 +23,8 @@ const geminiService = async (
     model,
     0.5,
     domain,
+    ragMode,
+    ragSources,
   );
 };
 

@@ -244,6 +244,7 @@ function PromptInputFullLineComponent({
   customActions,
   rightActions,
   showModelDropdown = false,
+  showRagToggle = true,
 }: {
   prompt: string;
   setPrompt: React.Dispatch<React.SetStateAction<string>>;
@@ -252,6 +253,8 @@ function PromptInputFullLineComponent({
     mode?: string,
     domain?: string,
     language?: string,
+    ragMode?: "auto" | "forced" | "disabled",
+    ragSources?: string[],
   ) => void;
   hideDropdown?: boolean;
   hideAgents?: boolean;
@@ -264,10 +267,21 @@ function PromptInputFullLineComponent({
   customActions?: React.ReactNode;
   rightActions?: React.ReactNode;
   showModelDropdown?: boolean;
+  showRagToggle?: boolean;
 }) {
   const router = useRouter();
   const { onOpen } = useModalStore();
   const { defaultModel, setDefaultModel } = useSettingsStore();
+
+  const [ragMode, setRagMode] = useState<"auto" | "forced" | "disabled">("auto");
+  const [selectedRagSources, setSelectedRagSources] = useState<string[]>([
+    "vertex",
+    "spanner",
+    "cli",
+    "filesearch",
+    "knowledge_hub",
+    "lsp_telepathy",
+  ]);
 
   const getModelDisplayName = (modelKey: string): string => {
     if (modelKey && modelKey.startsWith("custom-agent-")) {
@@ -410,7 +424,7 @@ function PromptInputFullLineComponent({
     const language = undefined;
 
     if (onSend) {
-      onSend(prompt, mode, domain, language);
+      onSend(prompt, mode, domain, language, ragMode, selectedRagSources);
     } else {
       dispatch(
         sendMessage({
@@ -420,12 +434,24 @@ function PromptInputFullLineComponent({
           language,
           sessionId,
           token,
+          ragMode,
+          ragSources: selectedRagSources,
         }),
       );
     }
     setPrompt("");
     inputRef.current?.focus();
-  }, [prompt, setPrompt, defaultModel, dispatch, sessionId, token, onSend]);
+  }, [
+    prompt,
+    setPrompt,
+    defaultModel,
+    dispatch,
+    sessionId,
+    token,
+    onSend,
+    ragMode,
+    selectedRagSources,
+  ]);
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -1247,6 +1273,197 @@ function PromptInputFullLineComponent({
             </Dropdown>
           )}
 
+          {showRagToggle && (
+            <Dropdown
+              className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[260px] p-3 text-foreground"
+              placement="top-start"
+            >
+              <DropdownTrigger>
+                <button
+                  className={cn(
+                    "group flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-full transition-colors text-[13px] font-semibold cursor-pointer border border-default-200 dark:border-gray-800 outline-none shrink-0",
+                    ragMode === "disabled"
+                      ? "text-default-400 hover:bg-default-100"
+                      : ragMode === "forced"
+                        ? "text-success bg-success/10 border-success/30 hover:bg-success/20"
+                        : "text-primary bg-primary/10 border-primary/30 hover:bg-primary/20"
+                  )}
+                  type="button"
+                >
+                  <Icon icon="solar:database-bold-duotone" className="size-4 shrink-0" />
+                  <span>
+                    RAG: {ragMode === "auto" ? "Auto" : ragMode === "forced" ? "Forced" : "Off"}
+                  </span>
+                  <ChevronDown className="size-3.5 shrink-0 opacity-60 transition-transform group-aria-expanded:rotate-180" />
+                </button>
+              </DropdownTrigger>
+              <DropdownMenu
+                aria-label="RAG Options"
+                closeOnSelect={false}
+                variant="flat"
+              >
+                <DropdownSection title="RAG Mode">
+                  <DropdownItem
+                    key="auto"
+                    className={cn("rounded-xl px-2 py-1.5", ragMode === "auto" && "bg-primary/10")}
+                    onPress={() => setRagMode("auto")}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex flex-col text-left">
+                        <span className="text-xs font-bold text-[12px]">Auto (Smart Classifier)</span>
+                        <span className="text-[10px] text-default-400">Scan codebase only when needed</span>
+                      </div>
+                      {ragMode === "auto" && <Icon icon="lucide:check" className="size-4 text-primary" />}
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="forced"
+                    className={cn("rounded-xl px-2 py-1.5", ragMode === "forced" && "bg-success/10")}
+                    onPress={() => setRagMode("forced")}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex flex-col text-left">
+                        <span className="text-xs font-bold text-[12px]">Forced (Always search)</span>
+                        <span className="text-[10px] text-default-400">Force load codebase context</span>
+                      </div>
+                      {ragMode === "forced" && <Icon icon="lucide:check" className="size-4 text-success" />}
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="disabled"
+                    className={cn("rounded-xl px-2 py-1.5", ragMode === "disabled" && "bg-default-100")}
+                    onPress={() => setRagMode("disabled")}
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex flex-col text-left">
+                        <span className="text-xs font-bold text-[12px]">Disabled (No search)</span>
+                        <span className="text-[10px] text-default-400">Bypass RAG context entirely</span>
+                      </div>
+                      {ragMode === "disabled" && <Icon icon="lucide:check" className="size-4 text-default-400" />}
+                    </div>
+                  </DropdownItem>
+                </DropdownSection>
+
+                <DropdownSection title="RAG Sources" className={ragMode === "disabled" ? "opacity-40 pointer-events-none" : ""}>
+                  <DropdownItem
+                    key="src-vertex"
+                    closeOnSelect={false}
+                    onPress={() => {
+                      setSelectedRagSources(prev =>
+                        prev.includes("vertex") ? prev.filter(x => x !== "vertex") : [...prev, "vertex"]
+                      );
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedRagSources.includes("vertex")}
+                        readOnly
+                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                      />
+                      <span className="text-xs text-[12px]">Vertex Discovery Engine</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="src-spanner"
+                    closeOnSelect={false}
+                    onPress={() => {
+                      setSelectedRagSources(prev =>
+                        prev.includes("spanner") ? prev.filter(x => x !== "spanner") : [...prev, "spanner"]
+                      );
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedRagSources.includes("spanner")}
+                        readOnly
+                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                      />
+                      <span className="text-xs text-[12px]">Spanner Graph Topology</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="src-cli"
+                    closeOnSelect={false}
+                    onPress={() => {
+                      setSelectedRagSources(prev =>
+                        prev.includes("cli") ? prev.filter(x => x !== "cli") : [...prev, "cli"]
+                      );
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedRagSources.includes("cli")}
+                        readOnly
+                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                      />
+                      <span className="text-xs text-[12px]">Gemini CLI Expert</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="src-filesearch"
+                    closeOnSelect={false}
+                    onPress={() => {
+                      setSelectedRagSources(prev =>
+                        prev.includes("filesearch") ? prev.filter(x => x !== "filesearch") : [...prev, "filesearch"]
+                      );
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedRagSources.includes("filesearch")}
+                        readOnly
+                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                      />
+                      <span className="text-xs text-[12px]">Gemini File Search RAG</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="src-knowledge_hub"
+                    closeOnSelect={false}
+                    onPress={() => {
+                      setSelectedRagSources(prev =>
+                        prev.includes("knowledge_hub") ? prev.filter(x => x !== "knowledge_hub") : [...prev, "knowledge_hub"]
+                      );
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedRagSources.includes("knowledge_hub")}
+                        readOnly
+                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                      />
+                      <span className="text-xs text-[12px]">Knowledge Catalog Ingestion</span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="src-lsp_telepathy"
+                    closeOnSelect={false}
+                    onPress={() => {
+                      setSelectedRagSources(prev =>
+                        prev.includes("lsp_telepathy") ? prev.filter(x => x !== "lsp_telepathy") : [...prev, "lsp_telepathy"]
+                      );
+                    }}
+                  >
+                    <div className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={selectedRagSources.includes("lsp_telepathy")}
+                        readOnly
+                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                      />
+                      <span className="text-xs text-[12px]">LSP Telepathy Buffer</span>
+                    </div>
+                  </DropdownItem>
+                </DropdownSection>
+              </DropdownMenu>
+            </Dropdown>
+          )}
+
           {customActions}
 
           {!hideAgents && (
@@ -1705,12 +1922,15 @@ export default function PromptInputFullLineWithBottomActions({
   customActions,
   rightActions,
   showModelDropdown = false,
+  showRagToggle = true,
 }: {
   onSend?: (
     prompt: string,
     mode?: string,
     domain?: string,
     language?: string,
+    ragMode?: "auto" | "forced" | "disabled",
+    ragSources?: string[],
   ) => void;
   hideDropdown?: boolean;
   hideAgents?: boolean;
@@ -1729,6 +1949,7 @@ export default function PromptInputFullLineWithBottomActions({
   customActions?: React.ReactNode;
   rightActions?: React.ReactNode;
   showModelDropdown?: boolean;
+  showRagToggle?: boolean;
 }) {
   const [internalPrompt, setInternalPrompt] = useState("");
   const prompt =
@@ -1760,6 +1981,7 @@ export default function PromptInputFullLineWithBottomActions({
         showModelDropdown={showModelDropdown}
         showResponsiveButton={showResponsiveButton}
         showSandboxButton={showSandboxButton}
+        showRagToggle={showRagToggle}
         onSend={onSend}
       />
     </div>

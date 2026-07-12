@@ -87,6 +87,8 @@ const SingleChatPage = () => {
     mode?: string,
     domain?: string,
     language?: string,
+    ragMode?: "auto" | "forced" | "disabled",
+    ragSources?: string[],
   ) => {
     dispatch(
       sendMessage({
@@ -96,6 +98,8 @@ const SingleChatPage = () => {
         language,
         sessionId,
         token,
+        ragMode,
+        ragSources,
       }),
     );
   };

@@ -35,6 +35,8 @@ export default function ChatHome() {
     mode?: string,
     domain?: string,
     language?: string,
+    ragMode?: "auto" | "forced" | "disabled",
+    ragSources?: string[],
   ) => {
     const onNavigationFulfilled = (newSessionId: string) => {
       router.push(`/chat/${newSessionId}`);
@@ -49,6 +51,8 @@ export default function ChatHome() {
         domain: isResearchMode ? "Research" : "Chat", // Enforce Chat Workspace Guardrails or Research intercept
         language,
         sessionId: sessionId,
+        ragMode,
+        ragSources,
         ...(sessionId === null ? { onFulfilled: onNavigationFulfilled } : {}),
         token,
       }),

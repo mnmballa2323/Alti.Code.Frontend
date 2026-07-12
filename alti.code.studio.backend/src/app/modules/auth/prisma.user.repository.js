@@ -62,7 +62,38 @@ export const UserRepository = {
         '⚠️ [Postgres Offline] Falling back to mock users database for findById',
       );
       const users = await getMockUsers();
-      return users.find(u => u.id === id) || null;
+      let user = users.find(u => u.id === id);
+      if (!user) {
+        if (id === '00000000-0000-0000-0000-000000000000') {
+          user = {
+            id: '00000000-0000-0000-0000-000000000000',
+            email: 'test@alti.com',
+            role: 'user',
+            tenantId: 'e469748e-9b5d-4525-b4fb-40f6bf7fe9db',
+            tenantRole: 'owner',
+            provider: 'local',
+          };
+        } else if (id === '84644de4-219b-4e40-84ea-55cefe3c71cd') {
+          user = {
+            id: '84644de4-219b-4e40-84ea-55cefe3c71cd',
+            email: 'admin@insocode.com',
+            role: 'admin',
+            tenantId: 'e469748e-9b5d-4525-b4fb-40f6bf7fe9db',
+            tenantRole: 'owner',
+            provider: 'local',
+          };
+        } else if (id === '94644de4-219b-4e40-84ea-55cefe3c71cd') {
+          user = {
+            id: '94644de4-219b-4e40-84ea-55cefe3c71cd',
+            email: 'owner@insocode.com',
+            role: 'owner',
+            tenantId: 'e469748e-9b5d-4525-b4fb-40f6bf7fe9db',
+            tenantRole: 'owner',
+            provider: 'local',
+          };
+        }
+      }
+      return user || null;
     }
   },
 

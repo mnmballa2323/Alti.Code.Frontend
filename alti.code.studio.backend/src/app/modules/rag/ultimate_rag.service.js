@@ -7,6 +7,8 @@ import { ragCacheService } from '../gcpCloud/gcpCache.service.js';
 import { vectorStoreService } from '../memory/vector.store.js';
 import { prismaClient } from '../../platform/db/prismaClient.js';
 import { logger } from '../../../shared/logger.js';
+import { AstSearchEngine } from '../ast/ast_search_engine.js';
+import { lspGateway } from '../lsp/lsp.gateway.js';
 import crypto from 'crypto';
 
 const prisma = prismaClient.prisma;
@@ -107,7 +109,7 @@ Example: ["original query", "specific technical term query", "architectural patt
    * @param {string} tenantId - Tenant ID for vector queries
    * @returns {Promise<{combinedContext: string, pipeline: Object[]}>}
    */
-  async executeRetrieval(query, expandedQueries, userId, tenantId) {
+  async executeRetrieval(query, expandedQueries, userId, tenantId, enabledSources) {
     const pipelineStart = Date.now();
     const allQueries = expandedQueries || [query];
     const primaryQuery = allQueries[0];
@@ -118,6 +120,16 @@ Example: ["original query", "specific technical term query", "architectural patt
 
     // ─── Timed source wrappers ──────────────────
     const timedSource = async (id, label, fn) => {
+      // Check if source is explicitly disabled in UI
+      if (enabledSources && Array.isArray(enabledSources) && !enabledSources.includes(id)) {
+        return {
+          id,
+          label,
+          status: 'skipped',
+          durationMs: 0,
+          result: null,
+        };
+      }
       const start = Date.now();
       try {
         const result = await fn();
@@ -150,18 +162,33 @@ Example: ["original query", "specific technical term query", "architectural patt
             discoveryEngineService.searchCodebase(q).catch(() => []),
           ),
         );
-        // Deduplicate by document ID across all query variants
-        const seen = new Set();
-        const merged = [];
+        // Reciprocal Rank Fusion (RRF) to merge and rank results across all query variants
+        const rrfMap = new Map();
+        const k = 60;
+
         for (const results of allResults) {
-          for (const res of results || []) {
-            const id = res.document?.id || res.document?.name;
-            if (id && !seen.has(id)) {
-              seen.add(id);
-              merged.push(res);
+          (results || []).forEach((res, rankZeroIndexed) => {
+            const id = res.id || res.title || res.uri;
+            if (!id) return;
+            const rank = rankZeroIndexed + 1;
+            const contribution = 1 / (k + rank);
+
+            if (rrfMap.has(id)) {
+              rrfMap.get(id).score += contribution;
+            } else {
+              rrfMap.set(id, {
+                doc: res,
+                score: contribution,
+              });
             }
-          }
+          });
         }
+
+        // Sort by RRF score descending and return documents
+        const merged = Array.from(rrfMap.values())
+          .sort((a, b) => b.score - a.score)
+          .map(entry => entry.doc);
+
         return merged;
       }),
 
@@ -238,6 +265,21 @@ Example: ["original query", "specific technical term query", "architectural patt
 
         return docs;
       }),
+
+      // 6. LSP shadow buffers (Live unsaved editor state)
+      timedSource('lsp_telepathy', 'LSP Shadow Buffers', async () => {
+        const docs = [];
+        if (lspGateway && lspGateway.shadowBuffers) {
+          for (const [uri, content] of lspGateway.shadowBuffers.entries()) {
+            const filename = uri.split('/').pop() || uri;
+            docs.push({
+              name: filename,
+              content: content,
+            });
+          }
+        }
+        return docs;
+      }),
     ]);
 
     // ─── Assemble context ───────────────────────
@@ -250,11 +292,9 @@ Example: ["original query", "specific technical term query", "architectural patt
       vertexResult.length > 0
     ) {
       combinedContext += `\n\n[VERTEX AI DISCOVERY ENGINE]\n`;
-      vertexResult.slice(0, 8).forEach((res, index) => {
-        const snippet =
-          res.document?.derivedStructData?.snippets?.[0]?.snippet || '';
-        const fileSource =
-          res.document?.id || res.document?.name || `Source_${index + 1}`;
+      vertexResult.slice(0, 6).forEach((res, index) => {
+        const snippet = res.snippet || '';
+        const fileSource = res.title || res.id || `Source_${index + 1}`;
         if (snippet) {
           combinedContext += `\n--- SOURCE: ${fileSource} ---\n${snippet}\n`;
         }
@@ -299,7 +339,43 @@ Example: ["original query", "specific technical term query", "architectural patt
     ) {
       combinedContext += `\n\n[KNOWLEDGE CATALOG UPLOADS]\n`;
       knowledgeResult.forEach(doc => {
-        combinedContext += `\n--- DOCUMENT: ${doc.name} ---\n${doc.content}\n`;
+        let astMetadata = '';
+        if (
+          doc.name &&
+          (doc.name.endsWith('.js') ||
+            doc.name.endsWith('.ts') ||
+            doc.name.endsWith('.jsx') ||
+            doc.name.endsWith('.tsx'))
+        ) {
+          try {
+            const funcs = AstSearchEngine.findFunctions(doc.content);
+            if (funcs && funcs.length > 0) {
+              astMetadata = `\n[AST Structure Summary]\nFound ${funcs.length} functions:\n`;
+              funcs.slice(0, 10).forEach(f => {
+                astMetadata += `- ${f.type} ${f.name}(${f.parameters.join(', ')}) [lines ${f.startLine}-${f.endLine}]\n`;
+              });
+              if (funcs.length > 10) {
+                astMetadata += `... and ${funcs.length - 10} more functions.\n`;
+              }
+              astMetadata += `\n`;
+            }
+          } catch (astErr) {
+            // Non-blocking fallback for incomplete/non-JS snippets
+          }
+        }
+        combinedContext += `\n--- DOCUMENT: ${doc.name} ---\n${astMetadata}${doc.content}\n`;
+      });
+    }
+
+    const lspResult = sources.find(s => s.id === 'lsp_telepathy')?.result;
+    if (
+      lspResult &&
+      Array.isArray(lspResult) &&
+      lspResult.length > 0
+    ) {
+      combinedContext += `\n\n[LSP TELEPATHY LIVE BUFFER STATE]\n`;
+      lspResult.forEach(doc => {
+        combinedContext += `\n--- LIVE UNSAVED FILE: ${doc.name} ---\n${doc.content}\n`;
       });
     }
 
@@ -378,7 +454,7 @@ Example: ["original query", "specific technical term query", "architectural patt
    * Synthesizes the RAG context using Google Gemini 3.1 Pro.
    * Includes cache check (#1), query expansion (#2), and feedback loop (#3).
    */
-  async synthesize(query, mode, domain, language, userId, tenantId) {
+  async synthesize(query, mode, domain, language, userId, tenantId, enabledSources) {
     const synthesisStart = Date.now();
 
     // ── #1: RAG Cache Check ──────────────────────────────────────
@@ -409,7 +485,7 @@ Example: ["original query", "specific technical term query", "architectural patt
       combinedContext,
       pipeline,
       totalDurationMs: retrievalMs,
-    } = await this.executeRetrieval(query, expandedQueries, userId, tenantId);
+    } = await this.executeRetrieval(query, expandedQueries, userId, tenantId, enabledSources);
 
     // ── Synthesis Prompt ─────────────────────────────────────────
     let systemPrompt = `You are the world's most advanced RAG Synthesizer. 
