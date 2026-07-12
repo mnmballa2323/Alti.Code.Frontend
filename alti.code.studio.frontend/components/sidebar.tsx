@@ -1822,67 +1822,61 @@ export default function Sidebar() {
 
           <div
             className={cn(
-              "flex border-b border-white/5",
+              "flex flex-col border-b border-white/5 w-full flex-none h-[212px]",
               isSidebarOpen
-                ? "h-[54px] py-0 px-3 items-center justify-start"
-                : "h-auto pt-4 pb-2 items-center justify-center",
+                ? "py-2 px-3 gap-1"
+                : "py-2 items-center justify-center gap-2",
             )}
           >
-            <div
-              className={cn(
-                "bg-white/5 border border-white/5 rounded-xl p-1",
-                isSidebarOpen
-                  ? "flex flex-row items-center justify-between gap-0.5 w-full"
-                  : "flex flex-col items-center gap-2 w-10",
-              )}
-            >
-              {filteredNavigationItems.map((item) => {
-                const IconComponent = item.icon;
+            {filteredNavigationItems.map((item) => {
+              const IconComponent = item.icon;
 
-                return (
-                  <Tooltip
-                    key={item.label}
-                    showArrow
-                    classNames={{
-                      content:
-                        "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+              return (
+                <Tooltip
+                  key={item.label}
+                  showArrow
+                  classNames={{
+                    content:
+                      "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                  }}
+                  closeDelay={0}
+                  content={item.label}
+                  delay={0}
+                  isDisabled={isSidebarOpen}
+                  placement="right"
+                >
+                  <Link
+                    className={cn(
+                      "flex items-center transition-all duration-200 relative group min-w-0 min-h-0",
+                      isSidebarOpen
+                        ? "h-[36px] w-full px-3 gap-3 rounded-xl text-xs font-semibold"
+                        : "h-[36px] w-[36px] rounded-xl justify-center",
+                      item.isActive
+                        ? "bg-white/10 text-white shadow-sm"
+                        : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
+                    )}
+                    href={item.path}
+                    onClick={(e) => {
+                      if (item.onClick) {
+                        item.onClick();
+                      }
                     }}
-                    closeDelay={0}
-                    content={item.label}
-                    delay={0}
-                    placement={isSidebarOpen ? "top" : "right"}
                   >
-                    <Link
-                      className={cn(
-                        "flex items-center justify-center transition-all duration-200 relative group min-w-0 min-h-0",
-                        isSidebarOpen
-                          ? "h-[30px] flex-1 rounded-md"
-                          : "h-[36px] w-[36px] rounded-xl",
-                        item.isActive
-                          ? "bg-white/10 text-white shadow-sm"
-                          : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
-                      )}
-                      href={item.path}
-                      onClick={(e) => {
-                        if (item.onClick) {
-                          item.onClick();
-                        }
-                      }}
-                    >
-                      <IconComponent
-                        className={isSidebarOpen ? "size-3.5" : "size-4"}
-                      />
-                      <span className="sr-only">{item.label}</span>
-                    </Link>
-                  </Tooltip>
-                );
-              })}
-              {isSidebarOpen && filteredNavigationItems.length === 0 && (
-                <div className="w-full text-center py-2 text-xs text-default-400 italic">
-                  No results found
-                </div>
-              )}
-            </div>
+                    <IconComponent
+                      className={isSidebarOpen ? "size-4 shrink-0" : "size-4"}
+                    />
+                    {isSidebarOpen && (
+                      <span className="truncate">{item.label}</span>
+                    )}
+                  </Link>
+                </Tooltip>
+              );
+            })}
+            {isSidebarOpen && filteredNavigationItems.length === 0 && (
+              <div className="w-full text-center py-2 text-xs text-default-400 italic">
+                No results found
+              </div>
+            )}
           </div>
 
           {/* Dedicated Workspace Engines Option Row - Hidden for Phase 2

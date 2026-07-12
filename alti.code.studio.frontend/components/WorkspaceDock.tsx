@@ -106,15 +106,15 @@ export function WorkspaceDock() {
         isDockExpanded ? "w-64 min-w-[256px]" : "w-[88px] min-w-[88px]",
       )}
     >
-      {/* Top Spacer / Header Area matching Sidebar header heights (52px header + 54px menu + 56px search = 162px) */}
-      <div className="h-[162px] w-full flex-none flex flex-col select-none">
+      {/* Top Spacer / Header Area matching Sidebar header heights (52px header + 212px menu + 56px search = 320px) */}
+      <div className="h-[320px] w-full flex-none flex flex-col select-none">
         {/* Top spacer matching Sidebar Header height (52px) with border-b */}
         <div className="h-[52px] w-full border-b border-white/5 flex-none" />
 
-        {/* Logo and toggle container matching navigation + search height (110px) with border-b */}
+        {/* Logo and toggle container matching navigation + search height (268px) with border-b */}
         <div
           className={cn(
-            "h-[110px] w-full border-b border-white/5 flex-none flex items-center relative group transition-colors cursor-pointer hover:bg-white/[0.02]",
+            "h-[268px] w-full border-b border-white/5 flex-none flex items-center relative group transition-colors cursor-pointer hover:bg-white/[0.02]",
             isDockExpanded ? "px-4 justify-between" : "justify-center",
           )}
           onClick={handleToggleDockClick}
