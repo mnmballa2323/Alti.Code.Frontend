@@ -106,47 +106,41 @@ export function WorkspaceDock() {
         isDockExpanded ? "w-64 min-w-[256px]" : "w-[88px] min-w-[88px]",
       )}
     >
-      {/* Top Spacer / Header Area matching Sidebar header heights (52px header + 212px menu + 56px search = 320px) */}
-      <div className="h-[320px] w-full flex-none flex flex-col select-none">
-        {/* Top spacer matching Sidebar Header height (52px) with border-b */}
-        <div className="h-[52px] w-full border-b border-white/5 flex-none" />
-
-        {/* Logo and toggle container matching navigation + search height (268px) with border-b */}
-        <div
-          className={cn(
-            "h-[268px] w-full border-b border-white/5 flex-none flex items-center relative group transition-colors cursor-pointer hover:bg-white/[0.02]",
-            isDockExpanded ? "px-4 justify-between" : "justify-center",
-          )}
-          onClick={handleToggleDockClick}
-        >
-          {isDockExpanded ? (
-            <div className="flex items-center justify-between w-full h-8">
-              <div className="flex items-center">
-                <img
-                  alt="Inso Logo Icon"
-                  className="w-5 h-5 object-contain"
-                  src="/assets/logo-icon-white.png?v=2"
-                />
-              </div>
-              <div className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-all">
-                <PanelLeftClose className="size-4" />
-              </div>
-            </div>
-          ) : (
-            <div className="relative w-9 h-9 flex items-center justify-center">
-              {/* Logo Icon - Visible by default, fades out on hover */}
+      {/* Top Spacer / Header Area with Logo and Toggle (52px) */}
+      <div
+        className={cn(
+          "h-[52px] w-full border-b border-white/5 flex-none flex items-center relative group transition-colors cursor-pointer hover:bg-white/[0.02]",
+          isDockExpanded ? "px-4 justify-between" : "justify-center",
+        )}
+        onClick={handleToggleDockClick}
+      >
+        {isDockExpanded ? (
+          <div className="flex items-center justify-between w-full h-8">
+            <div className="flex items-center">
               <img
                 alt="Inso Logo Icon"
-                className="w-5 h-5 object-contain opacity-100 group-hover:opacity-0 transition-opacity duration-200"
+                className="w-5 h-5 object-contain"
                 src="/assets/logo-icon-white.png?v=2"
               />
-              {/* Toggle button - Hidden by default, fades in on hover */}
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white border border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
-                <PanelLeftOpen className="size-3.5" />
-              </div>
             </div>
-          )}
-        </div>
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg hover:bg-white/5 text-gray-400 hover:text-white transition-all">
+              <PanelLeftClose className="size-4" />
+            </div>
+          </div>
+        ) : (
+          <div className="relative w-9 h-9 flex items-center justify-center">
+            {/* Logo Icon - Visible by default, fades out on hover */}
+            <img
+              alt="Inso Logo Icon"
+              className="w-5 h-5 object-contain opacity-100 group-hover:opacity-0 transition-opacity duration-200"
+              src="/assets/logo-icon-white.png?v=2"
+            />
+            {/* Toggle button - Hidden by default, fades in on hover */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white border border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
+              <PanelLeftOpen className="size-3.5" />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Scrollable Workspaces List */}
