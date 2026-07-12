@@ -109,7 +109,7 @@ export function WorkspaceDock() {
       {/* Scrollable Workspaces List */}
       <div
         className={cn(
-          "flex-1 w-full flex flex-col gap-2.5 overflow-y-auto scrollbar-none pt-3",
+          "flex-1 w-full flex flex-col gap-2.5 overflow-y-auto scrollbar-none pt-12",
           isDockExpanded ? "px-3" : "items-center px-2",
         )}
       >
