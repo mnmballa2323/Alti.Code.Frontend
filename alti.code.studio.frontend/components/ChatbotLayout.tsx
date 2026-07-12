@@ -141,11 +141,20 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
           {/* Title Bar */}
           {isTauri && (
             <div
-              data-tauri-drag-region
-              className="absolute top-0 left-0 w-full h-10 bg-transparent flex items-center justify-between z-[100] cursor-default px-4 select-none"
+              className="absolute top-0 left-0 w-full h-10 bg-transparent flex items-center justify-between z-[100] select-none pointer-events-none"
             >
-              {/* Left spacer for macOS window traffic light buttons */}
-              <div className="w-[76px] shrink-0" />
+              {/* Left spacer for macOS window traffic light buttons: draggable */}
+              <div
+                data-tauri-drag-region
+                className="w-[76px] h-full shrink-0 pointer-events-auto cursor-default"
+              />
+              {/* Center spacer where tabs/content are: clickable/pass-through */}
+              <div className="flex-grow h-full pointer-events-none" />
+              {/* Right spacer for dragging: draggable */}
+              <div
+                data-tauri-drag-region
+                className="w-[200px] h-full shrink-0 pointer-events-auto cursor-default"
+              />
             </div>
           )}
 
@@ -156,7 +165,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
 
             {/* Sidebar */}
             {!isNoSidebarRoute && (
-              <div className="z-[110] relative h-full shrink-0">
+              <div className="z-[110] relative h-full max-h-full overflow-hidden shrink-0">
                 <React.Suspense
                   fallback={
                     <div className="w-80 h-full bg-default-100 dark:bg-sidebar" />

@@ -1781,12 +1781,12 @@ export default function Sidebar() {
   };
 
   const content = (
-    <div className="dark h-full" data-theme="dark">
-      <div className="flex h-full z-20 bg-[#0B1121] text-foreground">
+    <div className="dark h-screen max-h-screen overflow-hidden" data-theme="dark">
+      <div className="flex h-full max-h-full overflow-hidden z-20 bg-[#0B1121] text-foreground">
         {/* Primary Column (Left Side Menu) */}
         <div
           className={cn(
-            "flex h-full flex-col transition-all duration-300 bg-[#0B1121] border-r border-white/5 relative",
+            "flex h-full max-h-full overflow-hidden flex-col transition-all duration-300 bg-[#0B1121] border-r border-white/5 relative",
             isSidebarOpen ? "w-80" : "w-16",
           )}
         >
@@ -3046,12 +3046,12 @@ export default function Sidebar() {
 
   if (!mounted) {
     return (
-      <div className="flex h-full border-r border-white/5 bg-[#0B1121] w-[64px] transition-all" />
+      <div className="flex h-screen max-h-screen overflow-hidden border-r border-white/5 bg-[#0B1121] w-[64px] transition-all" />
     );
   }
 
   return (
-    <div className="flex h-full border-r border-default-200">
+    <div className="flex h-screen max-h-screen overflow-hidden border-r border-default-200">
       {content}
       <Modal
         backdrop="opaque"
