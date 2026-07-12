@@ -27,9 +27,7 @@ export default function McpPage() {
   const [inputValue, setInputValue] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const placeholder = project
-    ? `MCP server for ${project.name}…`
-    : "Enter an MCP server URL...";
+  const placeholder = "Enter MCP link...";
 
   // Load on mount / when agentId changes
   useEffect(() => {

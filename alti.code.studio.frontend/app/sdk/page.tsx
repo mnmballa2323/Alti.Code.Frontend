@@ -27,9 +27,7 @@ export default function SdkPage() {
   const [inputValue, setInputValue] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const placeholder = project
-    ? `SDK for ${project.name}…`
-    : "Enter an SDK package...";
+  const placeholder = "Enter SDK link...";
 
   // Load on mount / when agentId changes
   useEffect(() => {

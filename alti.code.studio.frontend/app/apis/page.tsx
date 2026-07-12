@@ -27,9 +27,7 @@ export default function ApisPage() {
   const [inputValue, setInputValue] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const placeholder = project
-    ? `API for ${project.name}…`
-    : "Enter an API endpoint...";
+  const placeholder = "Enter API link...";
 
   // Load on mount / when agentId changes
   useEffect(() => {

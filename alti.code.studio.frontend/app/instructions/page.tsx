@@ -118,11 +118,7 @@ export default function InstructionsPage() {
                   inputWrapper:
                     "!bg-white dark:!bg-[#111111] data-[hover=true]:!bg-white data-[hover=true]:dark:!bg-[#111111] group-data-[focus=true]:!bg-white group-data-[focus=true]:dark:!bg-[#111111] border border-default-200 dark:border-default-100 shadow-sm rounded-2xl h-14 text-base pr-14",
                 }}
-                placeholder={
-                  project
-                    ? `Instruction for ${project.name}…`
-                    : "Enter a new system instruction..."
-                }
+                placeholder="Enter instruction..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
               />

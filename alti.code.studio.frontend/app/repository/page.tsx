@@ -27,9 +27,7 @@ export default function RepositoryPage() {
   const [inputValue, setInputValue] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  const placeholder = project
-    ? `Repository for ${project.name}…`
-    : "Enter a repository URL...";
+  const placeholder = "Enter repository link...";
 
   // Load on mount / when agentId changes
   useEffect(() => {
