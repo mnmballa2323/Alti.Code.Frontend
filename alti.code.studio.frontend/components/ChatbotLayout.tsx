@@ -151,7 +151,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
               {/* Right spacer for dragging: draggable */}
               <div
                 data-tauri-drag-region
-                className="w-[200px] h-full shrink-0 pointer-events-auto cursor-default"
+                className="w-[60px] h-full shrink-0 pointer-events-auto cursor-default"
               />
             </div>
           )}
