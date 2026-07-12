@@ -410,55 +410,10 @@ export default function TeamPage() {
                     </div>
 
 
-                    {/* Active Work Simulation Progress Bar */}
-                    {member.status !== "idle" && (
-                      <div className="w-full mt-3">
-                        <div className="flex justify-between items-center text-[9px] text-zinc-400 mb-1 font-medium">
-                          <span>Progress</span>
-                          <span>
-                            {member.status === "compiling" ? "Compiling build..." : "Running checks..."}
-                          </span>
-                        </div>
-                        <div className="w-full bg-zinc-100 dark:bg-white/[0.04] h-1.5 rounded-full overflow-hidden">
-                          <motion.div
-                            className="h-full rounded-full"
-                            style={{ backgroundColor: member.accentColor }}
-                            initial={{ width: "15%" }}
-                            animate={{
-                              width: member.status === "compiling"
-                                ? ["25%", "65%", "45%", "90%", "55%"]
-                                : ["30%", "55%", "80%", "35%", "95%"]
-                            }}
-                            transition={{
-                              repeat: Infinity,
-                              duration: 10,
-                              ease: "easeInOut"
-                            }}
-                          />
-                        </div>
-                      </div>
-                    )}
                   </div>
 
                   {/* Bottom Section: Specialties & Action */}
                   <div className="flex flex-col gap-4 mt-5">
-                    {/* Specialties Tags */}
-                    <div className="flex flex-wrap gap-1">
-                      {member.specialties.map((spec) => (
-                        <span
-                          key={spec}
-                          className="px-2 py-0.5 text-[9px] font-bold rounded-lg border transition-all"
-                          style={{
-                            backgroundColor: `${member.accentColor}10`,
-                            borderColor: `${member.accentColor}18`,
-                            color: member.accentColor,
-                          }}
-                        >
-                          {spec}
-                        </span>
-                      ))}
-                    </div>
-
                     {/* Action Button */}
                     <button
                       className="w-full flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-white/5 hover:!bg-[var(--accent-color)] hover:!text-white dark:hover:!text-black hover:border-transparent dark:hover:border-transparent hover:shadow-[0_4px_15px_rgba(var(--accent-rgb),0.2)] transition-all duration-300 group-hover:shadow-sm"
