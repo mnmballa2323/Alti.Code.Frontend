@@ -1792,7 +1792,7 @@ export default function Sidebar() {
         >
           {/* Sidebar Header (Workspace Name & Collapse Button) */}
           {isSidebarOpen ? (
-            <div className="w-full h-[60px] flex-none flex items-center justify-between px-4 border-b border-white/5 select-none">
+            <div className="w-full h-[72px] flex-none flex items-center justify-between px-4 border-b border-white/5 select-none">
               <span className="text-[12px] font-normal text-gray-300 dark:text-gray-200 truncate max-w-[200px]">
                 {activeProject?.name || "No Workspace"}
               </span>
@@ -1934,7 +1934,7 @@ export default function Sidebar() {
           {/* Search bar and + icon on the same line below the main menu */}
           <div
             className={cn(
-              "h-[68px] flex items-center border-b border-default-200 px-3",
+              "h-[80px] flex items-center border-b border-default-200 px-3",
               !isSidebarOpen && "hidden",
             )}
           >
