@@ -124,7 +124,7 @@ export default function TeamPage() {
   };
 
   return (
-    <div className="flex-1 w-full min-h-screen bg-gradient-to-br from-zinc-50 via-white to-zinc-100 dark:from-[#090a0f] dark:via-[#0e1017] dark:to-[#090a0f] p-6 lg:p-10 font-sans text-zinc-900 dark:text-zinc-100 overflow-y-auto relative">
+    <div className="flex-1 w-full min-h-screen bg-transparent p-6 lg:p-10 font-sans text-zinc-900 dark:text-zinc-100 overflow-y-auto relative">
       {/* Decorative Glow Elements */}
       <div className="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-primary/5 dark:bg-primary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[8000ms]" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-secondary/5 dark:bg-secondary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[6000ms]" />
