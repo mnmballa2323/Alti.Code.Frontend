@@ -106,10 +106,10 @@ export function WorkspaceDock() {
         isDockExpanded ? "w-64 min-w-[256px]" : "w-[88px] min-w-[88px]",
       )}
     >
-      {/* Top Spacer / Header Area matching Sidebar header heights (94px header + 54px menu + 84px search = 232px) */}
-      <div className="h-[232px] w-full flex-none flex flex-col select-none">
-        {/* Top spacer matching Sidebar Header height (94px) with border-b */}
-        <div className="h-[94px] w-full border-b border-white/5 flex-none" />
+      {/* Top Spacer / Header Area matching Sidebar header heights (68px header + 54px menu + 84px search = 206px) */}
+      <div className="h-[206px] w-full flex-none flex flex-col select-none">
+        {/* Top spacer matching Sidebar Header height (68px) with border-b */}
+        <div className="h-[68px] w-full border-b border-white/5 flex-none" />
 
         {/* Logo and toggle container matching navigation + search height (138px) with border-b */}
         <div
