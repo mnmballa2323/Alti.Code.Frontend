@@ -90,7 +90,7 @@ const RagPipelineTelemetry = ({ pipeline }: { pipeline?: any[] }) => {
   return (
     <div className="flex flex-wrap gap-2 items-center mt-2.5 mb-2.5 font-mono text-[10px]">
       <div className="text-default-400 font-semibold mr-1 flex items-center gap-1 select-none">
-        <Icon icon="solar:database-bold-duotone" className="size-3.5" />
+        <Icon className="size-3.5" icon="solar:database-bold-duotone" />
         <span>RAG Context:</span>
       </div>
       {pipeline.map((source, index) => {
@@ -116,13 +116,17 @@ const RagPipelineTelemetry = ({ pipeline }: { pipeline?: any[] }) => {
             size="sm"
             variant="flat"
           >
-            <span className="font-semibold text-default-500">{source.label}:</span>{" "}
-            <span className={cn(
-              "font-bold",
-              source.status === "done" && "text-success",
-              source.status === "skipped" && "text-default-400",
-              source.status === "error" && "text-danger"
-            )}>
+            <span className="font-semibold text-default-500">
+              {source.label}:
+            </span>{" "}
+            <span
+              className={cn(
+                "font-bold",
+                source.status === "done" && "text-success",
+                source.status === "skipped" && "text-default-400",
+                source.status === "error" && "text-danger",
+              )}
+            >
               {statusLabel}
             </span>
           </Chip>

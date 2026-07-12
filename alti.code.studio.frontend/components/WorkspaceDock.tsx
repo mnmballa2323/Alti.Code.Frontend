@@ -5,13 +5,7 @@ import type { RootState } from "@/store";
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
-import {
-  Plus,
-  ExternalLink,
-  X,
-  PanelLeftOpen,
-  PanelLeftClose,
-} from "lucide-react";
+import { Plus, ExternalLink, X } from "lucide-react";
 import { Tooltip, Button, Modal, ModalContent } from "@heroui/react";
 
 import { cn } from "@/lib/utils";
@@ -98,7 +92,6 @@ export function WorkspaceDock() {
           isDockExpanded ? "px-3" : "items-center px-2",
         )}
       >
-
         {tabs.map((tab) => {
           const isActive = tab.id === activeTabId;
           const initials = getInitials(tab.title);
@@ -232,11 +225,11 @@ export function WorkspaceDock() {
 
       {/* Footer Actions (Plus Button) */}
       <div
-        style={{ height: "76px", minHeight: "76px", maxHeight: "76px" }}
         className={cn(
           "mt-auto border-t border-default-200 w-full flex flex-col justify-center flex-none",
           isDockExpanded ? "px-3" : "items-center",
         )}
+        style={{ height: "76px", minHeight: "76px", maxHeight: "76px" }}
       >
         {isDockExpanded ? (
           <Button

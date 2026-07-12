@@ -269,6 +269,9 @@ label::after {
     outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
   }
   body {
+    --font-sans: var(--font-geist-sans) !important;
+    --font-secondary: var(--font-geist-sans) !important;
+    --font-serif: var(--font-geist-mono) !important;
     @apply bg-background text-foreground;
     overscroll-behavior-y: none;
   }

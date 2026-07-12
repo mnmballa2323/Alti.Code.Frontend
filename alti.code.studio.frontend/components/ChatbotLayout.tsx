@@ -140,9 +140,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
         <div className="relative w-full h-screen overflow-hidden bg-default-100 dark:bg-default-50">
           {/* Title Bar */}
           {isTauri && (
-            <div
-              className="absolute top-0 left-0 w-full h-10 bg-transparent flex items-center justify-between z-[100] select-none pointer-events-none"
-            >
+            <div className="absolute top-0 left-0 w-full h-10 bg-transparent flex items-center justify-between z-[100] select-none pointer-events-none">
               {/* Left spacer for macOS window traffic light buttons: draggable */}
               <div
                 data-tauri-drag-region

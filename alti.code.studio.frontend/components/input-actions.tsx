@@ -273,7 +273,9 @@ function PromptInputFullLineComponent({
   const { onOpen } = useModalStore();
   const { defaultModel, setDefaultModel } = useSettingsStore();
 
-  const [ragMode, setRagMode] = useState<"auto" | "forced" | "disabled">("auto");
+  const [ragMode, setRagMode] = useState<"auto" | "forced" | "disabled">(
+    "auto",
+  );
   const [selectedRagSources, setSelectedRagSources] = useState<string[]>([
     "vertex",
     "spanner",
@@ -1286,13 +1288,21 @@ function PromptInputFullLineComponent({
                       ? "text-default-400 hover:bg-default-100"
                       : ragMode === "forced"
                         ? "text-success bg-success/10 border-success/30 hover:bg-success/20"
-                        : "text-primary bg-primary/10 border-primary/30 hover:bg-primary/20"
+                        : "text-primary bg-primary/10 border-primary/30 hover:bg-primary/20",
                   )}
                   type="button"
                 >
-                  <Icon icon="solar:database-bold-duotone" className="size-4 shrink-0" />
+                  <Icon
+                    className="size-4 shrink-0"
+                    icon="solar:database-bold-duotone"
+                  />
                   <span>
-                    RAG: {ragMode === "auto" ? "Auto" : ragMode === "forced" ? "Forced" : "Off"}
+                    RAG:{" "}
+                    {ragMode === "auto"
+                      ? "Auto"
+                      : ragMode === "forced"
+                        ? "Forced"
+                        : "Off"}
                   </span>
                   <ChevronDown className="size-3.5 shrink-0 opacity-60 transition-transform group-aria-expanded:rotate-180" />
                 </button>
@@ -1305,158 +1315,225 @@ function PromptInputFullLineComponent({
                 <DropdownSection title="RAG Mode">
                   <DropdownItem
                     key="auto"
-                    className={cn("rounded-xl px-2 py-1.5", ragMode === "auto" && "bg-primary/10")}
+                    className={cn(
+                      "rounded-xl px-2 py-1.5",
+                      ragMode === "auto" && "bg-primary/10",
+                    )}
                     onPress={() => setRagMode("auto")}
                   >
                     <div className="flex items-center justify-between w-full">
                       <div className="flex flex-col text-left">
-                        <span className="text-xs font-bold text-[12px]">Auto (Smart Classifier)</span>
-                        <span className="text-[10px] text-default-400">Scan codebase only when needed</span>
+                        <span className="text-xs font-bold text-[12px]">
+                          Auto (Smart Classifier)
+                        </span>
+                        <span className="text-[10px] text-default-400">
+                          Scan codebase only when needed
+                        </span>
                       </div>
-                      {ragMode === "auto" && <Icon icon="lucide:check" className="size-4 text-primary" />}
+                      {ragMode === "auto" && (
+                        <Icon
+                          className="size-4 text-primary"
+                          icon="lucide:check"
+                        />
+                      )}
                     </div>
                   </DropdownItem>
                   <DropdownItem
                     key="forced"
-                    className={cn("rounded-xl px-2 py-1.5", ragMode === "forced" && "bg-success/10")}
+                    className={cn(
+                      "rounded-xl px-2 py-1.5",
+                      ragMode === "forced" && "bg-success/10",
+                    )}
                     onPress={() => setRagMode("forced")}
                   >
                     <div className="flex items-center justify-between w-full">
                       <div className="flex flex-col text-left">
-                        <span className="text-xs font-bold text-[12px]">Forced (Always search)</span>
-                        <span className="text-[10px] text-default-400">Force load codebase context</span>
+                        <span className="text-xs font-bold text-[12px]">
+                          Forced (Always search)
+                        </span>
+                        <span className="text-[10px] text-default-400">
+                          Force load codebase context
+                        </span>
                       </div>
-                      {ragMode === "forced" && <Icon icon="lucide:check" className="size-4 text-success" />}
+                      {ragMode === "forced" && (
+                        <Icon
+                          className="size-4 text-success"
+                          icon="lucide:check"
+                        />
+                      )}
                     </div>
                   </DropdownItem>
                   <DropdownItem
                     key="disabled"
-                    className={cn("rounded-xl px-2 py-1.5", ragMode === "disabled" && "bg-default-100")}
+                    className={cn(
+                      "rounded-xl px-2 py-1.5",
+                      ragMode === "disabled" && "bg-default-100",
+                    )}
                     onPress={() => setRagMode("disabled")}
                   >
                     <div className="flex items-center justify-between w-full">
                       <div className="flex flex-col text-left">
-                        <span className="text-xs font-bold text-[12px]">Disabled (No search)</span>
-                        <span className="text-[10px] text-default-400">Bypass RAG context entirely</span>
+                        <span className="text-xs font-bold text-[12px]">
+                          Disabled (No search)
+                        </span>
+                        <span className="text-[10px] text-default-400">
+                          Bypass RAG context entirely
+                        </span>
                       </div>
-                      {ragMode === "disabled" && <Icon icon="lucide:check" className="size-4 text-default-400" />}
+                      {ragMode === "disabled" && (
+                        <Icon
+                          className="size-4 text-default-400"
+                          icon="lucide:check"
+                        />
+                      )}
                     </div>
                   </DropdownItem>
                 </DropdownSection>
 
-                <DropdownSection title="RAG Sources" className={ragMode === "disabled" ? "opacity-40 pointer-events-none" : ""}>
+                <DropdownSection
+                  className={
+                    ragMode === "disabled"
+                      ? "opacity-40 pointer-events-none"
+                      : ""
+                  }
+                  title="RAG Sources"
+                >
                   <DropdownItem
                     key="src-vertex"
                     closeOnSelect={false}
                     onPress={() => {
-                      setSelectedRagSources(prev =>
-                        prev.includes("vertex") ? prev.filter(x => x !== "vertex") : [...prev, "vertex"]
+                      setSelectedRagSources((prev) =>
+                        prev.includes("vertex")
+                          ? prev.filter((x) => x !== "vertex")
+                          : [...prev, "vertex"],
                       );
                     }}
                   >
                     <div className="flex items-center gap-3">
                       <input
-                        type="checkbox"
-                        checked={selectedRagSources.includes("vertex")}
                         readOnly
+                        checked={selectedRagSources.includes("vertex")}
                         className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                        type="checkbox"
                       />
-                      <span className="text-xs text-[12px]">Vertex Discovery Engine</span>
+                      <span className="text-xs text-[12px]">
+                        Vertex Discovery Engine
+                      </span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
                     key="src-spanner"
                     closeOnSelect={false}
                     onPress={() => {
-                      setSelectedRagSources(prev =>
-                        prev.includes("spanner") ? prev.filter(x => x !== "spanner") : [...prev, "spanner"]
+                      setSelectedRagSources((prev) =>
+                        prev.includes("spanner")
+                          ? prev.filter((x) => x !== "spanner")
+                          : [...prev, "spanner"],
                       );
                     }}
                   >
                     <div className="flex items-center gap-3">
                       <input
-                        type="checkbox"
-                        checked={selectedRagSources.includes("spanner")}
                         readOnly
+                        checked={selectedRagSources.includes("spanner")}
                         className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                        type="checkbox"
                       />
-                      <span className="text-xs text-[12px]">Spanner Graph Topology</span>
+                      <span className="text-xs text-[12px]">
+                        Spanner Graph Topology
+                      </span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
                     key="src-cli"
                     closeOnSelect={false}
                     onPress={() => {
-                      setSelectedRagSources(prev =>
-                        prev.includes("cli") ? prev.filter(x => x !== "cli") : [...prev, "cli"]
+                      setSelectedRagSources((prev) =>
+                        prev.includes("cli")
+                          ? prev.filter((x) => x !== "cli")
+                          : [...prev, "cli"],
                       );
                     }}
                   >
                     <div className="flex items-center gap-3">
                       <input
-                        type="checkbox"
-                        checked={selectedRagSources.includes("cli")}
                         readOnly
+                        checked={selectedRagSources.includes("cli")}
                         className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                        type="checkbox"
                       />
-                      <span className="text-xs text-[12px]">Gemini CLI Expert</span>
+                      <span className="text-xs text-[12px]">
+                        Gemini CLI Expert
+                      </span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
                     key="src-filesearch"
                     closeOnSelect={false}
                     onPress={() => {
-                      setSelectedRagSources(prev =>
-                        prev.includes("filesearch") ? prev.filter(x => x !== "filesearch") : [...prev, "filesearch"]
+                      setSelectedRagSources((prev) =>
+                        prev.includes("filesearch")
+                          ? prev.filter((x) => x !== "filesearch")
+                          : [...prev, "filesearch"],
                       );
                     }}
                   >
                     <div className="flex items-center gap-3">
                       <input
-                        type="checkbox"
-                        checked={selectedRagSources.includes("filesearch")}
                         readOnly
+                        checked={selectedRagSources.includes("filesearch")}
                         className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                        type="checkbox"
                       />
-                      <span className="text-xs text-[12px]">Gemini File Search RAG</span>
+                      <span className="text-xs text-[12px]">
+                        Gemini File Search RAG
+                      </span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
                     key="src-knowledge_hub"
                     closeOnSelect={false}
                     onPress={() => {
-                      setSelectedRagSources(prev =>
-                        prev.includes("knowledge_hub") ? prev.filter(x => x !== "knowledge_hub") : [...prev, "knowledge_hub"]
+                      setSelectedRagSources((prev) =>
+                        prev.includes("knowledge_hub")
+                          ? prev.filter((x) => x !== "knowledge_hub")
+                          : [...prev, "knowledge_hub"],
                       );
                     }}
                   >
                     <div className="flex items-center gap-3">
                       <input
-                        type="checkbox"
-                        checked={selectedRagSources.includes("knowledge_hub")}
                         readOnly
+                        checked={selectedRagSources.includes("knowledge_hub")}
                         className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                        type="checkbox"
                       />
-                      <span className="text-xs text-[12px]">Knowledge Catalog Ingestion</span>
+                      <span className="text-xs text-[12px]">
+                        Knowledge Catalog Ingestion
+                      </span>
                     </div>
                   </DropdownItem>
                   <DropdownItem
                     key="src-lsp_telepathy"
                     closeOnSelect={false}
                     onPress={() => {
-                      setSelectedRagSources(prev =>
-                        prev.includes("lsp_telepathy") ? prev.filter(x => x !== "lsp_telepathy") : [...prev, "lsp_telepathy"]
+                      setSelectedRagSources((prev) =>
+                        prev.includes("lsp_telepathy")
+                          ? prev.filter((x) => x !== "lsp_telepathy")
+                          : [...prev, "lsp_telepathy"],
                       );
                     }}
                   >
                     <div className="flex items-center gap-3">
                       <input
-                        type="checkbox"
-                        checked={selectedRagSources.includes("lsp_telepathy")}
                         readOnly
+                        checked={selectedRagSources.includes("lsp_telepathy")}
                         className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                        type="checkbox"
                       />
-                      <span className="text-xs text-[12px]">LSP Telepathy Buffer</span>
+                      <span className="text-xs text-[12px]">
+                        LSP Telepathy Buffer
+                      </span>
                     </div>
                   </DropdownItem>
                 </DropdownSection>
@@ -1979,9 +2056,9 @@ export default function PromptInputFullLineWithBottomActions({
         }}
         showFigmaButton={showFigmaButton}
         showModelDropdown={showModelDropdown}
+        showRagToggle={showRagToggle}
         showResponsiveButton={showResponsiveButton}
         showSandboxButton={showSandboxButton}
-        showRagToggle={showRagToggle}
         onSend={onSend}
       />
     </div>

@@ -192,7 +192,8 @@ const messagesSlice = createSlice({
       // Handle AI response
       .addCase(sendMessage.fulfilled, (state, action) => {
         state.loading = false;
-        const { reply, sessionId, toolExecutions, ragPipeline } = action.payload;
+        const { reply, sessionId, toolExecutions, ragPipeline } =
+          action.payload;
 
         // Update the last message with the reply
         state.messages = state.messages.map((msg, index) =>
