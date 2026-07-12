@@ -222,7 +222,7 @@ export default function TeamPage() {
               setActiveCategory("All");
             }}
           >
-            Language Codex (60)
+            Language Codex ({teamMembers.filter(m => m.type === "language").length})
             {activeTab === "language" && (
               <motion.div
                 layoutId="activeTabSlider"
@@ -243,7 +243,7 @@ export default function TeamPage() {
               setActiveCategory("All");
             }}
           >
-            Functional Grid (60)
+            Functional Grid ({teamMembers.filter(m => m.type === "functional").length})
             {activeTab === "functional" && (
               <motion.div
                 layoutId="activeTabSlider"
