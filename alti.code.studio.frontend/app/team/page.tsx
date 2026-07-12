@@ -97,6 +97,76 @@ const getLanguageIcon = (id: string) => {
   }
 };
 
+const getLanguageDisplayName = (id: string) => {
+  switch (id) {
+    case "c-expert": return "C";
+    case "cpp-expert": return "C++";
+    case "rust-expert": return "Rust";
+    case "zig-expert": return "Zig";
+    case "go-expert": return "Go";
+    case "assembly-x86-expert": return "x86 Assembly";
+    case "assembly-arm-expert": return "ARM Assembly";
+    case "d-expert": return "D Language";
+    case "nim-expert": return "Nim";
+    case "carbon-expert": return "Carbon";
+    case "mojo-expert": return "Mojo";
+    case "ts-expert": return "TypeScript";
+    case "js-expert": return "JavaScript";
+    case "python-expert": return "Python";
+    case "php-expert": return "PHP";
+    case "ruby-expert": return "Ruby";
+    case "perl-expert": return "Perl";
+    case "lua-expert": return "Lua";
+    case "tcl-expert": return "Tcl";
+    case "bash-expert": return "Bash";
+    case "powershell-expert": return "PowerShell";
+    case "java-expert": return "Java";
+    case "csharp-expert": return "C#";
+    case "kotlin-lang-expert": return "Kotlin";
+    case "swift-lang-expert": return "Swift";
+    case "objc-expert": return "Objective-C";
+    case "scala-expert": return "Scala";
+    case "groovy-expert": return "Groovy";
+    case "haskell-expert": return "Haskell";
+    case "elixir-lang-expert": return "Elixir";
+    case "erlang-expert": return "Erlang";
+    case "fsharp-lang-expert": return "F#";
+    case "clojure-expert": return "Clojure";
+    case "ocaml-expert": return "OCaml";
+    case "lisp-expert": return "Lisp";
+    case "prolog-expert": return "Prolog";
+    case "sql-expert": return "SQL";
+    case "r-expert": return "R";
+    case "julia-expert": return "Julia";
+    case "matlab-expert": return "MATLAB";
+    case "fortran-expert": return "Fortran";
+    case "sas-expert": return "SAS";
+    case "cobol-expert": return "COBOL";
+    case "solidity-expert": return "Solidity";
+    case "vyper-expert": return "Vyper";
+    case "html-expert": return "HTML";
+    case "css-expert": return "CSS";
+    case "graphql-expert": return "GraphQL";
+    case "config-expert": return "Configuration";
+    case "latex-expert": return "LaTeX";
+    case "terraform-expert": return "Terraform";
+    case "unity-expert": return "Unity Engine";
+    case "unreal-expert": return "Unreal Engine";
+    case "ada-expert": return "Ada";
+    case "delphi-expert": return "Delphi";
+    case "vb-expert": return "Visual Basic";
+    case "plsql-expert": return "PL/SQL";
+    case "abap-expert": return "ABAP";
+    case "vhdl-expert": return "VHDL";
+    case "plc-expert": return "PLC / Logic";
+    case "gcode-expert": return "G-Code";
+    case "labview-expert": return "LabVIEW";
+    default:
+      const base = id.split("-")[0];
+      return base.charAt(0).toUpperCase() + base.slice(1);
+  }
+};
+
 // Helper to convert hex to RGB values for custom styling shadow functions
 function hexToRgb(hex: string) {
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -315,20 +385,27 @@ export default function TeamPage() {
                   {/* Top Section: Icon & Name */}
                   <div className="flex flex-col gap-3">
                     <div className="flex justify-between items-start">
-                      {/* Icon with Glowing Border */}
-                      <div
-                        className="p-2.5 rounded-xl border flex items-center justify-center bg-zinc-50 dark:bg-zinc-900/50 transition-all w-9 h-9 shrink-0"
-                        style={{
-                          borderColor: `${member.accentColor}25`,
-                          color: member.accentColor,
-                          boxShadow: `0 0 10px ${member.accentColor}08`,
-                        }}
-                      >
-                        {langIcon ? (
-                          <Icon icon={langIcon} className="w-5 h-5 shrink-0" />
-                        ) : (
-                          <CategoryIcon size={18} className="shrink-0" />
-                        )}
+                      <div className="flex items-center gap-3">
+                        {/* Icon with Glowing Border */}
+                        <div
+                          className="p-2.5 rounded-xl border flex items-center justify-center bg-zinc-50 dark:bg-zinc-900/50 transition-all w-9 h-9 shrink-0"
+                          style={{
+                            borderColor: `${member.accentColor}25`,
+                            color: member.accentColor,
+                            boxShadow: `0 0 10px ${member.accentColor}08`,
+                          }}
+                        >
+                          {langIcon ? (
+                            <Icon icon={langIcon} className="w-5 h-5 shrink-0" />
+                          ) : (
+                            <CategoryIcon size={18} className="shrink-0" />
+                          )}
+                        </div>
+                        
+                        {/* Language Name */}
+                        <span className="font-bold text-[13px] text-zinc-700 dark:text-zinc-300 truncate">
+                          {getLanguageDisplayName(member.id)}
+                        </span>
                       </div>
                     </div>
 
