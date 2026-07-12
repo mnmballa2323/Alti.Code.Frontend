@@ -1792,19 +1792,21 @@ export default function Sidebar() {
         >
           {/* Sidebar Header (Workspace Name & Collapse Button) */}
           {isSidebarOpen ? (
-            <div className="w-full h-[72px] flex-none flex items-center justify-between px-4 border-b border-white/5 select-none">
-              <span className="text-[12px] font-normal text-gray-300 dark:text-gray-200 truncate max-w-[200px]">
-                {activeProject?.name || "No Workspace"}
-              </span>
-              <Button
-                isIconOnly
-                className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
-                size="sm"
-                variant="light"
-                onClick={toggleLeftSidebar}
-              >
-                <PanelLeftClose className="size-4" />
-              </Button>
+            <div className="w-full h-[92px] flex-none flex flex-col justify-end pb-[20px] px-4 border-b border-white/5 select-none pt-[40px]">
+              <div className="flex items-center justify-between w-full h-8">
+                <span className="text-[12px] font-normal text-gray-300 dark:text-gray-200 truncate max-w-[200px]">
+                  {activeProject?.name || "No Workspace"}
+                </span>
+                <Button
+                  isIconOnly
+                  className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
+                  size="sm"
+                  variant="light"
+                  onClick={toggleLeftSidebar}
+                >
+                  <PanelLeftClose className="size-4" />
+                </Button>
+              </div>
             </div>
           ) : (
             <div className="w-full flex justify-center pt-3 pb-3 border-b border-white/5 select-none">
@@ -1934,13 +1936,13 @@ export default function Sidebar() {
           {/* Search bar and + icon on the same line below the main menu */}
           <div
             className={cn(
-              "h-[80px] flex items-center border-b border-default-200 px-3",
+              "h-[100px] flex flex-col justify-end pb-[40px] border-b border-default-200 px-3",
               !isSidebarOpen && "hidden",
             )}
           >
             <div
               className={cn(
-                "bg-white/5 border border-white/5 rounded-xl p-1 flex flex-row items-center justify-between gap-1 w-full",
+                "bg-white/5 border border-white/5 rounded-xl p-1 flex flex-row items-center justify-between gap-1 w-full h-[40px] flex-none",
               )}
             >
               {/* Search Input */}
