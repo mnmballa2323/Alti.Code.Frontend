@@ -44,6 +44,7 @@ import {
   Bot,
   Cpu,
   SlidersHorizontal,
+  Users,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
@@ -1173,6 +1174,13 @@ export default function Sidebar() {
       onClick: () => {},
     },
     {
+      label: "Team",
+      icon: Users,
+      path: "/team",
+      isActive: pathname === "/team" || pathname?.startsWith("/team/"),
+      onClick: () => {},
+    },
+    {
       label: "Agents",
       icon: Bot,
       path: "/agents",
@@ -1486,8 +1494,6 @@ export default function Sidebar() {
     };
   }, [pathname, token]);
 
-
-
   // Listen for knowledge file updates
   useEffect(() => {
     const handleKnowledgeFiles = (e: any) => {
@@ -1781,7 +1787,10 @@ export default function Sidebar() {
   };
 
   const content = (
-    <div className="dark h-screen max-h-screen overflow-hidden" data-theme="dark">
+    <div
+      className="dark h-screen max-h-screen overflow-hidden"
+      data-theme="dark"
+    >
       <div className="flex h-full max-h-full overflow-hidden z-20 bg-[#0B1121] text-foreground">
         {/* Primary Column (Left Side Menu) */}
         <div
@@ -1822,10 +1831,10 @@ export default function Sidebar() {
 
           <div
             className={cn(
-              "flex flex-col border-b border-white/5 w-full flex-none h-[212px]",
+              "flex flex-col border-b border-white/5 w-full flex-none h-[252px]",
               isSidebarOpen
                 ? "py-2 px-3 gap-1"
-                : "py-2 items-center justify-center gap-2",
+                : "py-2 items-center justify-center gap-1",
             )}
           >
             {filteredNavigationItems.map((item) => {
@@ -2995,11 +3004,11 @@ export default function Sidebar() {
           )}
 
           <div
-            style={{ height: "76px", minHeight: "76px", maxHeight: "76px" }}
             className={cn(
               "mt-auto border-t border-default-200 flex flex-col justify-center flex-none",
               isSidebarOpen ? "px-5" : "px-1 items-center",
             )}
+            style={{ height: "76px", minHeight: "76px", maxHeight: "76px" }}
           >
             {status === "unauthenticated" ? (
               <div className={cn("flex gap-2", !isSidebarOpen && "hidden")}>
