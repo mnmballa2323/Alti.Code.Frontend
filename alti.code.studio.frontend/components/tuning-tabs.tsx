@@ -21,7 +21,6 @@ const TABS = [
   { key: "/apis", icon: Webhook, label: "API" },
   { key: "/sdk", icon: Blocks, label: "SDK" },
   { key: "/mcp", icon: Plug, label: "MCP" },
-  { key: "/loops", icon: RefreshCw, label: "Loops" },
 ];
 
 export function TuningTabs() {
