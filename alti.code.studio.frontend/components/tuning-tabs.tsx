@@ -40,7 +40,7 @@ export function TuningTabs() {
   );
 
   return (
-    <nav className="flex items-center gap-1 bg-default-100 dark:bg-default-50 p-1 rounded-lg shadow-inner">
+    <nav className="flex flex-wrap items-center gap-1 bg-default-100 dark:bg-default-50 p-1 rounded-lg shadow-inner">
       {TABS.map(({ key, icon: Icon, label }) => {
         const isActive = activeKey === key;
 
@@ -48,7 +48,7 @@ export function TuningTabs() {
           <button
             key={key}
             className={[
-              "flex items-center gap-2 px-4 h-8 rounded-md text-sm font-medium transition-all duration-150 whitespace-nowrap",
+              "flex items-center gap-1.5 px-3 h-8 rounded-md text-sm font-medium transition-all duration-150 whitespace-nowrap",
               isActive
                 ? "bg-white dark:bg-default-200 text-foreground shadow-sm"
                 : "bg-transparent text-default-500 hover:text-foreground hover:bg-white/50 dark:hover:bg-default-200/50",
