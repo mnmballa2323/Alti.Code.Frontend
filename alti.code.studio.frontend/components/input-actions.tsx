@@ -973,7 +973,7 @@ function PromptInputFullLineComponent({
                     heading:
                       "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
                   }}
-                  title="Google Gemini"
+                  title="Gemini"
                 >
                   <DropdownItem
                     key="gemini-3.5-pro"
@@ -1013,7 +1013,7 @@ function PromptInputFullLineComponent({
                     heading:
                       "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
                   }}
-                  title="Google Vertex AI"
+                  title="Claude"
                 >
                   <DropdownItem
                     key="claude-fable-5"
