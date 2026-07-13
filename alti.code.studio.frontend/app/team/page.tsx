@@ -219,7 +219,7 @@ export default function TeamPage() {
   };
 
   return (
-    <div className="flex-1 w-full min-h-screen bg-transparent px-6 pb-6 pt-0 lg:px-10 lg:pb-10 lg:pt-0 font-sans text-zinc-900 dark:text-zinc-100 overflow-y-auto relative">
+    <div className="flex-1 w-full min-h-screen bg-transparent px-6 pb-6 pt-0 lg:px-10 lg:pb-10 lg:pt-0 font-sans text-zinc-900 dark:text-zinc-100 overflow-y-auto overflow-x-hidden relative">
       {/* Decorative Glow Elements */}
       <div className="absolute top-0 left-[-10%] w-[400px] h-[400px] rounded-full bg-primary/5 dark:bg-primary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[8000ms]" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-secondary/5 dark:bg-secondary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[6000ms]" />
