@@ -322,7 +322,7 @@ export default function TeamPage() {
       {/* Top Navigation Row (Toggle & Search Bar) */}
       <div className="sticky top-0 z-50 max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6 py-4 bg-white dark:bg-[#09090B] border-b border-zinc-200/50 dark:border-white/5 -mx-6 px-6 lg:-mx-10 lg:px-10">
         {/* Navigation Tab Toggle Slider */}
-        <div className="relative flex p-1 bg-zinc-100/80 dark:bg-white/[0.03] backdrop-blur-md rounded-2xl border border-zinc-200/50 dark:border-white/5 self-start shadow-sm">
+        <div className="relative flex p-1 bg-[#F3F4F6] dark:bg-[#0d1117] rounded-2xl border border-zinc-200/50 dark:border-white/5 self-start shadow-sm">
           <button
             className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 whitespace-nowrap ${
               activeTab === "language"
