@@ -95,6 +95,12 @@ const getLanguageDisplayName = (id: string) => {
     case "business-expert": return "Business Analyst";
     case "compliance-expert": return "Compliance & Legal";
     case "enterprise-architect": return "Enterprise Architecture";
+    case "aws-expert": return "AWS";
+    case "gcp-expert": return "GCP";
+    case "ibm-cloud-expert": return "IBM";
+    case "sap-expert": return "SAP";
+    case "sap-cloud-expert": return "SAP";
+    case "ntt-cloud-expert": return "NTT";
     default:
       const base = id.split("-")[0];
       return base.charAt(0).toUpperCase() + base.slice(1);
