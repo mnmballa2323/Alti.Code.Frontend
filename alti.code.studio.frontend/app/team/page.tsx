@@ -314,13 +314,13 @@ export default function TeamPage() {
   };
 
   return (
-    <div className="flex-1 w-full min-h-screen bg-transparent p-6 lg:p-10 font-sans text-zinc-900 dark:text-zinc-100 overflow-y-auto relative">
+    <div className="flex-1 w-full min-h-screen bg-transparent px-6 pb-6 pt-0 lg:px-10 lg:pb-10 lg:pt-0 font-sans text-zinc-900 dark:text-zinc-100 overflow-y-auto relative">
       {/* Decorative Glow Elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] rounded-full bg-primary/5 dark:bg-primary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[8000ms]" />
+      <div className="absolute top-0 left-[-10%] w-[400px] h-[400px] rounded-full bg-primary/5 dark:bg-primary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[8000ms]" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-secondary/5 dark:bg-secondary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[6000ms]" />
 
       {/* Top Navigation Row (Toggle & Search Bar) */}
-      <div className="sticky top-0 z-50 max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6 py-4 -mt-6 pt-6 lg:-mt-10 lg:pt-10 bg-[#FAFAFA]/80 dark:bg-[#09090B]/80 backdrop-blur-xl border-b border-zinc-200/50 dark:border-white/5 -mx-6 px-6 lg:-mx-10 lg:px-10">
+      <div className="sticky top-0 z-50 max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6 py-4 bg-[#FAFAFA]/80 dark:bg-[#09090B]/80 backdrop-blur-xl border-b border-zinc-200/50 dark:border-white/5 -mx-6 px-6 lg:-mx-10 lg:px-10">
         {/* Navigation Tab Toggle Slider */}
         <div className="relative flex p-1 bg-zinc-100/80 dark:bg-white/[0.03] backdrop-blur-md rounded-2xl border border-zinc-200/50 dark:border-white/5 self-start shadow-sm">
           <button
