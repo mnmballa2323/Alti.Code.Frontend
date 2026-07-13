@@ -324,7 +324,7 @@ export default function TeamPage() {
         {/* Navigation Tab Toggle Slider */}
         <div className="relative flex p-1 bg-zinc-100/80 dark:bg-white/[0.03] backdrop-blur-md rounded-2xl border border-zinc-200/50 dark:border-white/5 self-start shadow-sm">
           <button
-            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 ${
+            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 whitespace-nowrap ${
               activeTab === "language"
                 ? "text-black dark:text-white"
                 : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
@@ -334,7 +334,7 @@ export default function TeamPage() {
               setActiveCategory("All");
             }}
           >
-            Language Codex
+            Languages
             {activeTab === "language" && (
               <motion.div
                 layoutId="activeTabSlider"
@@ -345,7 +345,7 @@ export default function TeamPage() {
             )}
           </button>
           <button
-            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 ${
+            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 whitespace-nowrap ${
               activeTab === "framework"
                 ? "text-black dark:text-white"
                 : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
@@ -355,7 +355,7 @@ export default function TeamPage() {
               setActiveCategory("All");
             }}
           >
-            Frameworks & Tools
+            Frameworks
             {activeTab === "framework" && (
               <motion.div
                 layoutId="activeTabSlider"
@@ -366,7 +366,7 @@ export default function TeamPage() {
             )}
           </button>
           <button
-            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 ${
+            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 whitespace-nowrap ${
               activeTab === "role"
                 ? "text-black dark:text-white"
                 : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
@@ -376,7 +376,7 @@ export default function TeamPage() {
               setActiveCategory("All");
             }}
           >
-            Human Roles
+            Roles
             {activeTab === "role" && (
               <motion.div
                 layoutId="activeTabSlider"
