@@ -394,7 +394,7 @@ export default function TeamPage() {
             <Search size={16} />
           </div>
           <input
-            className="w-full pl-10 pr-4 py-2.5 text-sm rounded-2xl border border-zinc-200/50 dark:border-white/10 bg-zinc-100/80 dark:bg-white/[0.03] backdrop-blur-md text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/40 focus:border-primary transition-all duration-300 shadow-sm"
+            className="w-full pl-10 pr-4 py-2.5 text-sm rounded-2xl border border-zinc-200/50 dark:border-white/10 bg-[#F3F4F6] dark:bg-[#0d1117] text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/40 focus:border-primary transition-all duration-300 shadow-sm"
             placeholder="Search language, role or skill..."
             type="text"
             value={searchQuery}
