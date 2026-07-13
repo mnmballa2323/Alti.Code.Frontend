@@ -21,7 +21,7 @@ import {
 import { Icon } from "@iconify/react";
 import { teamMembers, TeamMember } from "./teamData";
 
-
+type TabType = "language" | "framework" | "role" | "cloud";
 
 const getLanguageDisplayName = (id: string) => {
   switch (id) {
@@ -277,6 +277,27 @@ export default function TeamPage() {
           >
             Roles
             {activeTab === "role" && (
+              <motion.div
+                layoutId="activeTabSlider"
+                className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                style={{ zIndex: -1 }}
+              />
+            )}
+          </button>
+          <button
+            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 whitespace-nowrap ${
+              activeTab === "cloud"
+                ? "text-black dark:text-white"
+                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
+            }`}
+            onClick={() => {
+              setActiveTab("cloud");
+              setActiveCategory("All");
+            }}
+          >
+            Cloud
+            {activeTab === "cloud" && (
               <motion.div
                 layoutId="activeTabSlider"
                 className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
