@@ -20,128 +20,7 @@ import {
 import { Icon } from "@iconify/react";
 import { teamMembers, TeamMember } from "./teamData";
 
-const getLanguageIcon = (id: string) => {
-  switch (id) {
-    case "c-expert": return "devicon:c";
-    case "cpp-expert": return "devicon:cplusplus";
-    case "rust-expert": return "devicon:rust";
-    case "zig-expert": return "devicon:zig";
-    case "go-expert": return "devicon:go";
-    case "assembly-x86-expert": return "devicon:nasm";
-    case "assembly-arm-expert": return "devicon:nasm";
-    case "d-expert": return "vscode-icons:file-type-dlang";
-    case "nim-expert": return "devicon:nim";
-    case "carbon-expert": return "devicon:carbon";
-    case "mojo-expert": return "vscode-icons:file-type-mojo";
-    case "ts-expert": return "devicon:typescript";
-    case "js-expert": return "devicon:javascript";
-    case "python-expert": return "devicon:python";
-    case "php-expert": return "devicon:php";
-    case "ruby-expert": return "devicon:ruby";
-    case "perl-expert": return "devicon:perl";
-    case "lua-expert": return "devicon:lua";
-    case "tcl-expert": return "vscode-icons:file-type-tcl";
-    case "bash-expert": return "devicon:bash";
-    case "powershell-expert": return "vscode-icons:file-type-powershell";
-    case "java-expert": return "devicon:java";
-    case "csharp-expert": return "devicon:csharp";
-    case "kotlin-lang-expert": return "devicon:kotlin";
-    case "swift-lang-expert": return "devicon:swift";
-    case "objc-expert": return "vscode-icons:file-type-objectivec";
-    case "scala-expert": return "devicon:scala";
-    case "groovy-expert": return "devicon:groovy";
-    case "haskell-expert": return "devicon:haskell";
-    case "elixir-lang-expert": return "devicon:elixir";
-    case "erlang-expert": return "devicon:erlang";
-    case "fsharp-lang-expert": return "devicon:fsharp";
-    case "clojure-expert": return "devicon:clojure";
-    case "ocaml-expert": return "devicon:ocaml";
-    case "lisp-expert": return "vscode-icons:file-type-lisp";
-    case "prolog-expert": return "vscode-icons:file-type-prolog";
-    case "sql-expert": return "vscode-icons:file-type-sql";
-    case "r-expert": return "devicon:r";
-    case "julia-expert": return "devicon:julia";
-    case "matlab-expert": return "devicon:matlab";
-    case "fortran-expert": return "devicon:fortran";
-    case "sas-expert": return "vscode-icons:file-type-sas";
-    case "cobol-expert": return "devicon:cobol";
-    case "solidity-expert": return "devicon:solidity";
-    case "vyper-expert": return "devicon:vyper";
-    case "html-expert": return "logos:html-5";
-    case "css-expert": return "devicon:css3";
-    case "graphql-expert": return "logos:graphql";
-    case "config-expert": return "logos:aws-config";
-    case "latex-expert": return "devicon:latex";
-    case "terraform-expert": return "logos:terraform";
-    case "unity-expert": return "logos:unity";
-    case "unreal-expert": return "logos:unrealengine";
-    case "ada-expert": return "vscode-icons:file-type-ada";
-    case "delphi-expert": return "devicon:delphi";
-    case "vb-expert": return "vscode-icons:file-type-vb";
-    case "plsql-expert": return "vscode-icons:file-type-plsql";
-    case "abap-expert": return "logos:sap";
-    case "vhdl-expert": return "vscode-icons:file-type-vhdl";
-    case "actionscript-expert": return "mdi:flash";
-    case "coldfusion-expert": return "vscode-icons:file-type-cf";
-    case "racket-expert": return "mdi:lambda";
-    case "smalltalk-expert": return "mdi:chat-processing-outline";
-    case "apex-expert": return "logos:salesforce";
-    case "pascal-expert": return "vscode-icons:file-type-pascal";
-    case "shopify-liquid-expert": return "logos:shopify";
-    case "wordpress-expert": return "logos:wordpress";
-    case "webgl-expert": return "logos:webgl";
-    case "webrtc-expert": return "logos:webrtc";
-    case "firebase-expert": return "logos:firebase";
-    case "cloudflare-workers-expert": return "logos:cloudflare-icon";
-    case "servicenow-expert": return "logos:servicenow";
-    case "sap-expert": return "logos:sap";
-    case "gis-expert": return "mdi:map-marker-path";
-    case "crypto-architect": return "mdi:shield-key";
-    case "plc-expert": return "mdi:robot-industrial";
-    case "gcode-expert": return "mdi:printer-3d";
-    case "labview-expert": return "vscode-icons:file-type-labview";
-    case "angular-expert": return "devicon:angular";
-    case "django-expert": return "devicon:django";
-    case "fastapi-expert": return "devicon:fastapi";
-    case "docker-expert": return "devicon:docker";
-    case "clickhouse-expert": return "logos:clickhouse";
-    case "android-expert": return "devicon:android";
-    case "chief-architect": return "mdi:account-tie";
-    case "business-expert": return "mdi:tie";
-    case "compliance-expert": return "mdi:shield-check";
-    case "devrel-expert": return "mdi:account-group-outline";
-    case "a11y-expert": return "mdi:human-wheelchair";
-    case "cicd-pipeline": return "mdi:rocket-launch";
-    case "enterprise-architect": return "mdi:domain";
-    default:
-      if (id.includes("typescript") || id.includes("ts-")) return "devicon:typescript";
-      if (id.includes("javascript") || id.includes("js-")) return "devicon:javascript";
-      if (id.includes("python")) return "devicon:python";
-      if (id.includes("rust")) return "devicon:rust";
-      if (id.includes("golang") || id.includes("go-")) return "devicon:go";
-      if (id.includes("cpp") || id.includes("cplusplus")) return "devicon:cplusplus";
-      if (id.includes("c-")) return "devicon:c";
-      if (id.includes("assembly")) return "devicon:nasm";
-      if (id.includes("angular")) return "devicon:angular";
-      if (id.includes("django")) return "devicon:django";
-      if (id.includes("fastapi")) return "devicon:fastapi";
-      if (id.includes("docker")) return "devicon:docker";
-      if (id.includes("clickhouse")) return "logos:clickhouse";
-      if (id.includes("android")) return "devicon:android";
-      if (id.includes("chief-architect")) return "mdi:account-tie";
-      if (id.includes("business")) return "mdi:tie";
-      if (id.includes("compliance")) return "mdi:shield-check";
-      if (id.includes("devrel")) return "mdi:account-group-outline";
-      if (id.includes("a11y")) return "mdi:human-wheelchair";
-      if (id.includes("cicd")) return "mdi:rocket-launch";
-      if (id.includes("enterprise")) return "mdi:domain";
-      if (id.includes("firebase")) return "logos:firebase";
-      if (id.includes("flutter")) return "devicon:flutter";
-      if (id.includes("gcp") || id.includes("googlecloud")) return "devicon:googlecloud";
-      if (id.includes("cloudflare")) return "logos:cloudflare-icon";
-      return "mdi:code-braces";
-  }
-};
+
 
 const getLanguageDisplayName = (id: string) => {
   switch (id) {
@@ -437,7 +316,7 @@ export default function TeamPage() {
               const statusInfo = getStatusClasses(member.status);
               const CategoryIcon = getCategoryIcon(member.category);
               const accentRgb = hexToRgb(member.accentColor);
-              const resolvedIcon = getLanguageIcon(member.id);
+              const resolvedIcon = member.icon || "mdi:code-braces";
               const langIcon = resolvedIcon !== "mdi:code-braces" ? resolvedIcon : null;
 
               return (
