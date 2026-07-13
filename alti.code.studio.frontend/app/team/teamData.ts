@@ -2076,7 +2076,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#24185B",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-f",
   },
   {
     id: "railway-expert",
@@ -2115,7 +2115,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#3B82F6",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-n",
   },
   {
     id: "zeabur-expert",
@@ -2193,7 +2193,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#00E599",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-n",
   },
   {
     id: "aiven-expert",
@@ -2206,7 +2206,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF3333",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-a",
   },
   {
     id: "mongodb-atlas-expert",
@@ -2414,7 +2414,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#2481D7",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-m",
   },
   {
     id: "plivo-expert",
@@ -2427,7 +2427,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#00B26E",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-p",
   },
   {
     id: "vonage-expert",
@@ -2544,7 +2544,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#000000",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-j",
   },
   {
     id: "packet-expert",
@@ -2570,7 +2570,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#004B87",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-k",
   },
   {
     id: "hostinger-expert",
@@ -2609,7 +2609,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#2956CC",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-b",
   },
   {
     id: "hostgator-expert",
@@ -2635,7 +2635,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF5E14",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-s",
   },
   {
     id: "dreamhost-expert",
@@ -2661,7 +2661,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#E35B00",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-a",
   },
   {
     id: "greengeeks-expert",
@@ -2674,7 +2674,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#8DC63F",
-    icon: "mdi:leaf",
+    icon: "tabler:letter-g",
   },
   {
     id: "inmotion-expert",
@@ -2700,7 +2700,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#C5172C",
-    icon: "mdi:cloud",
+    icon: "tabler:letter-l",
   },
   {
     id: "ionos-expert",
@@ -2765,7 +2765,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FC5F20",
-    icon: "mdi:image",
+    icon: "tabler:letter-i",
   },
   {
     id: "mux-expert",
