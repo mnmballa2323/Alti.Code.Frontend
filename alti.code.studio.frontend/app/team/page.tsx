@@ -100,6 +100,19 @@ const getLanguageIcon = (id: string) => {
     case "plc-expert": return "mdi:robot-industrial";
     case "gcode-expert": return "mdi:printer-3d";
     case "labview-expert": return "vscode-icons:file-type-labview";
+    case "angular-expert": return "devicon:angular";
+    case "django-expert": return "devicon:django";
+    case "fastapi-expert": return "devicon:fastapi";
+    case "docker-expert": return "devicon:docker";
+    case "clickhouse-expert": return "logos:clickhouse";
+    case "android-expert": return "devicon:android";
+    case "chief-architect": return "mdi:account-tie";
+    case "business-expert": return "mdi:tie";
+    case "compliance-expert": return "mdi:shield-check";
+    case "devrel-expert": return "mdi:account-group-outline";
+    case "a11y-expert": return "mdi:human-wheelchair";
+    case "cicd-pipeline": return "mdi:rocket-launch";
+    case "enterprise-architect": return "mdi:domain";
     default:
       if (id.includes("typescript") || id.includes("ts-")) return "devicon:typescript";
       if (id.includes("javascript") || id.includes("js-")) return "devicon:javascript";
@@ -177,6 +190,14 @@ const getLanguageDisplayName = (id: string) => {
     case "plc-expert": return "PLC / Logic";
     case "gcode-expert": return "G-Code";
     case "labview-expert": return "LabVIEW";
+    case "crypto-architect": return "Cryptography Architect";
+    case "chief-architect": return "Chief Architect";
+    case "cicd-pipeline": return "CI/CD Pipeline";
+    case "devrel-expert": return "Developer Relations";
+    case "a11y-expert": return "Accessibility";
+    case "business-expert": return "Business Analyst";
+    case "compliance-expert": return "Compliance & Legal";
+    case "enterprise-architect": return "Enterprise Architecture";
     default:
       const base = id.split("-")[0];
       return base.charAt(0).toUpperCase() + base.slice(1);
@@ -248,9 +269,7 @@ const getCategoryIcon = (category: string) => {
 export default function TeamPage() {
   const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<"language" | "functional">(
-    "language",
-  );
+  const [activeTab, setActiveTab] = useState<TabType>("language");
   const [activeCategory, setActiveCategory] = useState("All");
 
   // Get unique categories based on active tab
@@ -327,17 +346,38 @@ export default function TeamPage() {
           </button>
           <button
             className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 ${
-              activeTab === "functional"
+              activeTab === "framework"
                 ? "text-black dark:text-white"
                 : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
             }`}
             onClick={() => {
-              setActiveTab("functional");
+              setActiveTab("framework");
               setActiveCategory("All");
             }}
           >
-            Functional Grid
-            {activeTab === "functional" && (
+            Frameworks & Tools
+            {activeTab === "framework" && (
+              <motion.div
+                layoutId="activeTabSlider"
+                className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                style={{ zIndex: -1 }}
+              />
+            )}
+          </button>
+          <button
+            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 ${
+              activeTab === "role"
+                ? "text-black dark:text-white"
+                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
+            }`}
+            onClick={() => {
+              setActiveTab("role");
+              setActiveCategory("All");
+            }}
+          >
+            Human Roles
+            {activeTab === "role" && (
               <motion.div
                 layoutId="activeTabSlider"
                 className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
