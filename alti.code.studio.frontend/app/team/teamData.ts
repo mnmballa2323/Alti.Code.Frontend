@@ -26,7 +26,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle - Ready to compile",
     accentColor: "#F34F29",
-    icon: "devicon:c",
+    icon: "simple-icons:c",
   },
   {
     id: "cpp-expert",
@@ -39,7 +39,7 @@ export const teamMembers: TeamMember[] = [
     status: "active",
     statusText: "Analyzing pointers...",
     accentColor: "#00599C",
-    icon: "devicon:cplusplus",
+    icon: "hugeicons:cpp",
   },
   {
     id: "rust-expert",
@@ -52,7 +52,7 @@ export const teamMembers: TeamMember[] = [
     status: "compiling",
     statusText: "Compiling cargo build --release...",
     accentColor: "#DEA584",
-    icon: "devicon:rust",
+    icon: "simple-icons:rust",
   },
   {
     id: "zig-expert",
@@ -65,7 +65,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle - Ready",
     accentColor: "#F7A41D",
-    icon: "devicon:zig",
+    icon: "simple-icons:zig",
   },
   {
     id: "go-expert",
@@ -78,7 +78,7 @@ export const teamMembers: TeamMember[] = [
     status: "active",
     statusText: "Running go run main.go...",
     accentColor: "#00ADD8",
-    icon: "devicon:go",
+    icon: "simple-icons:go",
   },
   {
     id: "assembly-x86-expert",
@@ -108,7 +108,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#8E5C13",
-    icon: "devicon:nasm",
+    icon: "file-icons:assembly-arm",
   },
   {
     id: "d-expert",
@@ -121,7 +121,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#BA595E",
-    icon: "vscode-icons:file-type-dlang",
+    icon: "simple-icons:d",
   },
   {
     id: "nim-expert",
@@ -138,7 +138,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#37775B",
-    icon: "devicon:nim",
+    icon: "simple-icons:nim",
   },
   {
     id: "carbon-expert",
@@ -151,7 +151,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#007ACC",
-    icon: "devicon:carbon",
+    icon: "iconoir:carbon",
   },
   {
     id: "mojo-expert",
@@ -168,7 +168,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF5A09",
-    icon: "vscode-icons:file-type-mojo",
+    icon: "material-icon-theme:mojo",
   },
 
   // Web & Scripting
@@ -183,7 +183,7 @@ export const teamMembers: TeamMember[] = [
     status: "active",
     statusText: "Resolving type imports...",
     accentColor: "#3178C6",
-    icon: "devicon:typescript",
+    icon: "fluent:code-ts-16-filled",
   },
   {
     id: "js-expert",
@@ -196,7 +196,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#F7DF1E",
-    icon: "devicon:javascript",
+    icon: "picon:js",
   },
   {
     id: "python-expert",
@@ -209,7 +209,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#3776AB",
-    icon: "devicon:python",
+    icon: "simple-icons:python",
   },
   {
     id: "php-expert",
@@ -222,7 +222,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#777BB4",
-    icon: "devicon:php",
+    icon: "simple-icons:php",
   },
   {
     id: "ruby-expert",
@@ -235,7 +235,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#CC342D",
-    icon: "devicon:ruby",
+    icon: "simple-icons:ruby",
   },
   {
     id: "perl-expert",
@@ -248,7 +248,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#39457E",
-    icon: "devicon:perl",
+    icon: "simple-icons:perl",
   },
   {
     id: "lua-expert",
@@ -261,7 +261,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#000080",
-    icon: "devicon:lua",
+    icon: "simple-icons:lua",
   },
   {
     id: "tcl-expert",
@@ -278,7 +278,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#2F5F8F",
-    icon: "vscode-icons:file-type-tcl",
+    icon: "material-icon-theme:tcl",
   },
   {
     id: "bash-expert",
@@ -291,7 +291,7 @@ export const teamMembers: TeamMember[] = [
     status: "active",
     statusText: "Running deployment shell...",
     accentColor: "#4EAA25",
-    icon: "devicon:bash",
+    icon: "simple-icons:gnubash",
   },
   {
     id: "powershell-expert",
@@ -304,7 +304,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#53C1DE",
-    icon: "vscode-icons:file-type-powershell",
+    icon: "devicon-plain:powershell",
   },
 
   // Enterprise & JVM/CLR
@@ -319,7 +319,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#007396",
-    icon: "devicon:java",
+    icon: "logos:java",
   },
   {
     id: "csharp-expert",
@@ -332,7 +332,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#239120",
-    icon: "devicon:csharp",
+    icon: "devicon-plain:csharp",
   },
   {
     id: "kotlin-lang-expert",
@@ -384,7 +384,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#DC322F",
-    icon: "devicon:scala",
+    icon: "simple-icons:scala",
   },
   {
     id: "groovy-expert",
@@ -397,7 +397,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#4298B8",
-    icon: "devicon:groovy",
+    icon: "simple-icons:apachegroovy",
   },
 
   // Functional & Logic
@@ -412,7 +412,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#5E5086",
-    icon: "devicon:haskell",
+    icon: "simple-icons:haskell",
   },
   {
     id: "elixir-lang-expert",
@@ -438,7 +438,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#A90533",
-    icon: "devicon:erlang",
+    icon: "simple-icons:erlang",
   },
   {
     id: "fsharp-lang-expert",
@@ -464,7 +464,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#58B12F",
-    icon: "devicon:clojure",
+    icon: "simple-icons:clojure",
   },
   {
     id: "ocaml-expert",
@@ -477,7 +477,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#EE6A1A",
-    icon: "devicon:ocaml",
+    icon: "simple-icons:ocaml",
   },
   {
     id: "lisp-expert",
@@ -490,7 +490,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#3F80A0",
-    icon: "vscode-icons:file-type-lisp",
+    icon: "simple-icons:commonlisp",
   },
   {
     id: "prolog-expert",
@@ -503,7 +503,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#74283C",
-    icon: "vscode-icons:file-type-prolog",
+    icon: "devicon-plain:prolog",
   },
 
   // Data & Math
@@ -518,7 +518,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#E38B29",
-    icon: "vscode-icons:file-type-sql",
+    icon: "material-symbols:sql",
   },
   {
     id: "r-expert",
@@ -531,7 +531,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#198CE7",
-    icon: "devicon:r",
+    icon: "simple-icons:r",
   },
   {
     id: "julia-expert",
@@ -548,7 +548,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#9558B2",
-    icon: "devicon:julia",
+    icon: "simple-icons:julia",
   },
   {
     id: "matlab-expert",
@@ -561,7 +561,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#E1662A",
-    icon: "devicon:matlab",
+    icon: "devicon-plain:matlab",
   },
   {
     id: "fortran-expert",
@@ -578,7 +578,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#4D6B82",
-    icon: "devicon:fortran",
+    icon: "simple-icons:fortran",
   },
   {
     id: "sas-expert",
@@ -591,7 +591,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#005596",
-    icon: "vscode-icons:file-type-sas",
+    icon: "simple-icons:sass",
   },
   {
     id: "cobol-expert",
@@ -604,7 +604,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#1B3B6F",
-    icon: "devicon:cobol",
+    icon: "material-icon-theme:cobol",
   },
 
   // Web3 & Config
@@ -619,7 +619,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#AA82E6",
-    icon: "devicon:solidity",
+    icon: "simple-icons:solidity",
   },
   {
     id: "vyper-expert",
@@ -632,7 +632,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#5B75A6",
-    icon: "devicon:vyper",
+    icon: "file-icons:vyper",
   },
   {
     id: "html-expert",
@@ -645,7 +645,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#E34F26",
-    icon: "devicon:html5",
+    icon: "logos:html-5",
   },
   {
     id: "css-expert",
@@ -662,7 +662,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#1572B6",
-    icon: "devicon:css3",
+    icon: "simple-icons:css",
   },
   {
     id: "graphql-expert",
@@ -675,7 +675,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#E10098",
-    icon: "devicon:graphql",
+    icon: "simple-icons:graphql",
   },
   {
     id: "config-expert",
@@ -705,7 +705,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#008080",
-    icon: "devicon:latex",
+    icon: "simple-icons:latex",
   },
   {
     id: "terraform-expert",
@@ -718,7 +718,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#5C4EE5",
-    icon: "devicon:terraform",
+    icon: "simple-icons:terraform",
   },
   {
     id: "unity-expert",
@@ -731,7 +731,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#000000",
-    icon: "devicon:unity",
+    icon: "simple-icons:unity",
   },
   {
     id: "unreal-expert",
@@ -744,7 +744,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0E1128",
-    icon: "devicon:unrealengine",
+    icon: "simple-icons:unrealengine",
   },
   {
     id: "ada-expert",
@@ -757,7 +757,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#022B3A",
-    icon: "vscode-icons:file-type-ada",
+    icon: "simple-icons:ada",
   },
   {
     id: "delphi-expert",
@@ -770,7 +770,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#EE1F35",
-    icon: "devicon:delphi",
+    icon: "simple-icons:delphi",
   },
   {
     id: "vb-expert",
@@ -783,7 +783,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#185C9F",
-    icon: "vscode-icons:file-type-vb",
+    icon: "simple-icons:vbulletin",
   },
   {
     id: "plsql-expert",
@@ -809,7 +809,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#008FD3",
-    icon: "logos:sap",
+    icon: "material-icon-theme:abap",
   },
   {
     id: "vhdl-expert",
@@ -822,7 +822,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#1A5276",
-    icon: "vscode-icons:file-type-vhdl",
+    icon: "file-icons:vhdl",
   },
   {
     id: "plc-expert",
@@ -835,7 +835,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#D35400",
-    icon: "mdi:robot-industrial",
+    icon: "ix:plc",
   },
   {
     id: "gcode-expert",
@@ -848,7 +848,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#27AE60",
-    icon: "mdi:printer-3d",
+    icon: "vscode-icons:file-type-gcode",
   },
   {
     id: "labview-expert",
@@ -861,7 +861,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FFD100",
-    icon: "vscode-icons:file-type-labview",
+    icon: "simple-icons:labview",
   },
 
   // ==================== FUNCTIONAL ROLES ====================
@@ -1034,7 +1034,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF3E00",
-    icon: "devicon:svelte",
+    icon: "simple-icons:svelte",
   },
   {
     id: "solid-expert",
@@ -1051,7 +1051,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#4F88C6",
-    icon: "devicon:solidjs",
+    icon: "mynaui:x-solid",
   },
   {
     id: "ios-dev",
@@ -1120,7 +1120,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#00C4B4",
-    icon: "mdi:lightning-bolt",
+    icon: "simple-icons:perforce",
   },
 
   // Backend & Database Platforms
@@ -1283,7 +1283,7 @@ export const teamMembers: TeamMember[] = [
     status: "active",
     statusText: "Provisioning GKE pods...",
     accentColor: "#4285F4",
-    icon: "devicon:googlecloud",
+    icon: "material-icon-theme:gcp",
   },
   {
     id: "aws-expert",
@@ -1296,7 +1296,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF9900",
-    icon: "devicon:amazonwebservices-wordmark",
+    icon: "logos:aws",
   },
   {
     id: "azure-expert",
@@ -1309,7 +1309,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0089D6",
-    icon: "devicon:azure",
+    icon: "logos:microsoft-azure",
   },
   {
     id: "digitalocean-expert",
@@ -1322,7 +1322,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0080FF",
-    icon: "devicon:digitalocean",
+    icon: "simple-icons:digitalocean",
   },
   {
     id: "ibm-cloud-expert",
@@ -1348,7 +1348,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#F80000",
-    icon: "devicon:oracle",
+    icon: "logos:oracle",
   },
   {
     id: "vercel-expert",
@@ -1361,7 +1361,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#000000",
-    icon: "devicon:vercel",
+    icon: "simple-icons:vercel",
   },
   {
     id: "netlify-expert",
@@ -1374,7 +1374,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#00C7B7",
-    icon: "vscode-icons:file-type-netlify",
+    icon: "simple-icons:netlify",
   },
   {
     id: "heroku-expert",
@@ -1387,7 +1387,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#430098",
-    icon: "devicon:heroku",
+    icon: "logos:heroku",
   },
   {
     id: "render-expert",
@@ -1400,7 +1400,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#000000",
-    icon: "logos:render",
+    icon: "simple-icons:render",
   },
   {
     id: "k8s-expert",
@@ -1426,7 +1426,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#2496ED",
-    icon: "devicon:docker",
+    icon: "simple-icons:docker",
   },
 
   {
@@ -1470,7 +1470,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#9C27B0",
-    icon: "mdi:server-network",
+    icon: "logos:google-marketing-platform",
   },
   {
     id: "linux-kernel-expert",
@@ -1513,7 +1513,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#E040FB",
-    icon: "mdi:router-wireless",
+    icon: "mdi:network",
   },
 
   // Security, Sovereignty & QA
@@ -1562,7 +1562,7 @@ export const teamMembers: TeamMember[] = [
     status: "active",
     statusText: "Auditing package-lock.json licenses...",
     accentColor: "#00C853",
-    icon: "mdi:file-check",
+    icon: "grommet-icons:compliance",
   },
   {
     id: "playwright-expert",
@@ -1630,7 +1630,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#2979FF",
-    icon: "mdi:human-wheelchair",
+    icon: "streamline-ultimate:a11y-accessibility-disability",
   },
 
   // AI & Advanced Computing
@@ -1679,7 +1679,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#00E676",
-    icon: "devicon:python",
+    icon: "carbon:rag",
   },
   {
     id: "prompt-expert",
@@ -1692,7 +1692,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FFD600",
-    icon: "mdi:brain",
+    icon: "tabler:prompt",
   },
   {
     id: "quantum-expert",
@@ -1709,7 +1709,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#673AB7",
-    icon: "mdi:atom",
+    icon: "gcp:quantum-engine",
   },
 
   {
@@ -1723,7 +1723,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#007B8A",
-    icon: "vscode-icons:file-type-vhdl",
+    icon: "material-icon-theme:verilog",
   },
   {
     id: "pascal-expert",
@@ -1736,7 +1736,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#E25822",
-    icon: "vscode-icons:file-type-pascal",
+    icon: "material-icon-theme:pascal",
   },
   {
     id: "actionscript-expert",
@@ -1749,7 +1749,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF0000",
-    icon: "mdi:flash",
+    icon: "material-icon-theme:actionscript",
   },
   {
     id: "coldfusion-expert",
@@ -1762,7 +1762,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#ED8B00",
-    icon: "vscode-icons:file-type-cf",
+    icon: "material-icon-theme:coldfusion",
   },
   {
     id: "racket-expert",
@@ -1775,7 +1775,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#9F1D35",
-    icon: "mdi:lambda",
+    icon: "simple-icons:racket",
   },
   {
     id: "smalltalk-expert",
@@ -1788,7 +1788,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#1C88E3",
-    icon: "mdi:chat-processing-outline",
+    icon: "arcticons:smalltalk",
   },
   {
     id: "apex-expert",
@@ -1801,7 +1801,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#00A1E0",
-    icon: "logos:salesforce",
+    icon: "devicon:apex",
   },
   // Functional Specialties / Technologies
   {
@@ -1828,7 +1828,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#21759B",
-    icon: "devicon:wordpress",
+    icon: "simple-icons:wordpress",
   },
   {
     id: "webgl-expert",
@@ -1841,7 +1841,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF2B2B",
-    icon: "devicon:threejs",
+    icon: "simple-icons:webgl",
   },
   {
     id: "webrtc-expert",
@@ -1854,7 +1854,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#1A8E2E",
-    icon: "mdi:webrtc",
+    icon: "simple-icons:webrtc",
   },
   {
     id: "firebase-expert",
@@ -1867,7 +1867,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FFCA28",
-    icon: "devicon:firebase",
+    icon: "simple-icons:firebase",
   },
   {
     id: "cloudflare-workers-expert",
@@ -1880,7 +1880,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#F38020",
-    icon: "devicon:cloudflare",
+    icon: "logos:cloudflare-workers",
   },
   {
     id: "servicenow-expert",
@@ -1906,7 +1906,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0187FF",
-    icon: "logos:sap",
+    icon: "simple-icons:sap",
   },
   {
     id: "gis-expert",
@@ -1919,7 +1919,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#3E7B2B",
-    icon: "mdi:map-marker",
+    icon: "simple-icons:qgis",
   },
   {
     id: "crypto-architect",
@@ -1946,7 +1946,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF6600",
-    icon: "logos:alibaba-cloud",
+    icon: "simple-icons:alibabacloud",
   },
   {
     id: "tencent-cloud-expert",
@@ -1959,7 +1959,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0052D9",
-    icon: "mdi:cloud",
+    icon: "simple-icons:tencentqq",
   },
   {
     id: "baidu-cloud-expert",
@@ -1972,7 +1972,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#2932E1",
-    icon: "mdi:cloud",
+    icon: "simple-icons:baidu",
   },
   {
     id: "huawei-cloud-expert",
@@ -1985,7 +1985,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#C8102E",
-    icon: "mdi:cloud",
+    icon: "simple-icons:huawei",
   },
   {
     id: "linode-cloud-expert",
@@ -1998,7 +1998,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#00E08F",
-    icon: "devicon:linode",
+    icon: "logos:linode",
   },
   {
     id: "vultr-cloud-expert",
@@ -2011,7 +2011,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#007BFC",
-    icon: "mdi:cloud",
+    icon: "simple-icons:vultr",
   },
   {
     id: "upcloud-expert",
@@ -2024,7 +2024,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#7B00FF",
-    icon: "mdi:cloud",
+    icon: "simple-icons:upcloud",
   },
   {
     id: "hetzner-cloud-expert",
@@ -2037,7 +2037,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#D50C2D",
-    icon: "mdi:cloud",
+    icon: "simple-icons:hetzner",
   },
   {
     id: "scaleway-expert",
@@ -2050,7 +2050,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#4F0599",
-    icon: "mdi:cloud",
+    icon: "simple-icons:scaleway",
   },
   {
     id: "ovhcloud-expert",
@@ -2063,7 +2063,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#005096",
-    icon: "mdi:cloud",
+    icon: "cbi:ovhcloud",
   },
   {
     id: "fly-io-expert",
@@ -2089,7 +2089,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0B0D0E",
-    icon: "mdi:cloud",
+    icon: "simple-icons:railway",
   },
   {
     id: "koyeb-expert",
@@ -2102,7 +2102,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#111111",
-    icon: "mdi:cloud",
+    icon: "simple-icons:koyeb",
   },
   {
     id: "northflank-expert",
@@ -2128,7 +2128,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#512BD4",
-    icon: "mdi:cloud",
+    icon: "material-icon-theme:zeabur",
   },
   {
     id: "supabase-expert",
@@ -2141,7 +2141,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#3ECF8E",
-    icon: "devicon:supabase",
+    icon: "simple-icons:supabase",
   },
   {
     id: "snowflake-expert",
@@ -2154,7 +2154,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#29B5E8",
-    icon: "mdi:snowflake",
+    icon: "material-symbols:snowflake",
   },
   {
     id: "databricks-expert",
@@ -2167,7 +2167,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF3621",
-    icon: "mdi:cloud",
+    icon: "simple-icons:databricks",
   },
   {
     id: "planetscale-expert",
@@ -2180,7 +2180,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#000000",
-    icon: "mdi:cloud",
+    icon: "simple-icons:planetscale",
   },
   {
     id: "neon-db-expert",
@@ -2245,7 +2245,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF282D",
-    icon: "mdi:cloud",
+    icon: "simple-icons:fastly",
   },
   {
     id: "akamai-expert",
@@ -2258,7 +2258,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0096D6",
-    icon: "mdi:cloud",
+    icon: "simple-icons:akamai",
   },
   {
     id: "edgio-expert",
@@ -2271,7 +2271,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF3366",
-    icon: "mdi:cloud",
+    icon: "logos:edgio",
   },
   {
     id: "rackspace-expert",
@@ -2284,7 +2284,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#C61D23",
-    icon: "mdi:cloud",
+    icon: "logos:rackspace",
   },
   {
     id: "lumen-cloud-expert",
@@ -2297,7 +2297,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0055DA",
-    icon: "mdi:cloud",
+    icon: "simple-icons:lumen",
   },
   {
     id: "equinix-expert",
@@ -2310,7 +2310,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#ED1C24",
-    icon: "mdi:server",
+    icon: "simple-icons:equinixmetal",
   },
   {
     id: "ntt-cloud-expert",
@@ -2323,7 +2323,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0033A0",
-    icon: "mdi:cloud",
+    icon: "tdesign:view-gantt",
   },
   {
     id: "fujitsu-cloud-expert",
@@ -2336,7 +2336,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF0000",
-    icon: "mdi:cloud",
+    icon: "simple-icons:fujitsu",
   },
   {
     id: "salesforce-cloud-expert",
@@ -2349,7 +2349,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#00A1E0",
-    icon: "devicon:salesforce",
+    icon: "logos:salesforce",
   },
   {
     id: "workday-expert",
@@ -2362,7 +2362,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#005CB9",
-    icon: "mdi:cloud",
+    icon: "arcticons:workday",
   },
   {
     id: "sap-cloud-expert",
@@ -2375,7 +2375,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#008FD3",
-    icon: "mdi:cloud",
+    icon: "simple-icons:sap",
   },
   {
     id: "netsuite-expert",
@@ -2388,7 +2388,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#000000",
-    icon: "mdi:cloud",
+    icon: "cib:oracle-netsuite",
   },
   {
     id: "twilio-expert",
@@ -2401,7 +2401,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#F22F46",
-    icon: "mdi:cloud",
+    icon: "logos:twilio",
   },
   {
     id: "messagebird-expert",
@@ -2440,7 +2440,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#000000",
-    icon: "mdi:cloud",
+    icon: "simple-icons:vonage",
   },
   {
     id: "stripe-cloud-expert",
@@ -2453,7 +2453,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#635BFF",
-    icon: "mdi:credit-card",
+    icon: "simple-icons:stripe",
   },
   {
     id: "adyen-expert",
@@ -2466,7 +2466,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0ABF53",
-    icon: "mdi:credit-card",
+    icon: "simple-icons:adyen",
   },
   {
     id: "braintree-expert",
@@ -2479,7 +2479,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#000000",
-    icon: "mdi:credit-card",
+    icon: "simple-icons:braintree",
   },
   {
     id: "square-cloud-expert",
@@ -2492,7 +2492,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#000000",
-    icon: "mdi:square",
+    icon: "academicons:cv-square",
   },
   {
     id: "backblaze-expert",
@@ -2505,7 +2505,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#E01522",
-    icon: "mdi:cloud",
+    icon: "simple-icons:backblaze",
   },
   {
     id: "wasabi-expert",
@@ -2518,7 +2518,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#00D600",
-    icon: "mdi:cloud",
+    icon: "simple-icons:wasabi",
   },
   {
     id: "storj-expert",
@@ -2531,7 +2531,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#2683FF",
-    icon: "mdi:cloud",
+    icon: "selfhst:storj",
   },
   {
     id: "joyent-expert",
@@ -2557,7 +2557,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#000000",
-    icon: "mdi:server",
+    icon: "mingcute:red-packet-fill",
   },
   {
     id: "kamatera-expert",
@@ -2583,7 +2583,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#673DE6",
-    icon: "mdi:cloud",
+    icon: "simple-icons:hostinger",
   },
   {
     id: "godaddy-expert",
@@ -2596,7 +2596,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#1BDBDB",
-    icon: "mdi:cloud",
+    icon: "simple-icons:godaddy",
   },
   {
     id: "bluehost-expert",
@@ -2622,7 +2622,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#F7B819",
-    icon: "mdi:cloud",
+    icon: "logos:hostgator",
   },
   {
     id: "siteground-expert",
@@ -2648,7 +2648,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#003A5D",
-    icon: "mdi:cloud",
+    icon: "logos:dreamhost",
   },
   {
     id: "a2hosting-expert",
@@ -2687,7 +2687,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#C0252C",
-    icon: "mdi:cloud",
+    icon: "simple-icons:twinmotion",
   },
   {
     id: "liquidweb-expert",
@@ -2713,7 +2713,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#00305E",
-    icon: "mdi:cloud",
+    icon: "simple-icons:ionos",
   },
   {
     id: "kinsta-expert",
@@ -2726,7 +2726,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#5333ED",
-    icon: "mdi:cloud",
+    icon: "simple-icons:kinsta",
   },
   {
     id: "wpengine-expert",
@@ -2739,7 +2739,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#00E0D1",
-    icon: "mdi:cloud",
+    icon: "simple-icons:wpengine",
   },
   {
     id: "cloudinary-expert",
@@ -2752,7 +2752,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#F4A261",
-    icon: "mdi:image-multiple",
+    icon: "simple-icons:cloudinary",
   },
   {
     id: "imgix-expert",
@@ -2778,7 +2778,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#FF0000",
-    icon: "mdi:video",
+    icon: "simple-icons:tmux",
   },
   {
     id: "clever-cloud-expert",
@@ -2791,7 +2791,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#192A42",
-    icon: "mdi:cloud",
+    icon: "simple-icons:clevercloud",
   },
   {
     id: "deno-deploy-expert",
@@ -2817,7 +2817,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#F02E65",
-    icon: "devicon:appwrite",
+    icon: "simple-icons:appwrite",
   },
   {
     id: "nhost-expert",
@@ -2830,7 +2830,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0052CC",
-    icon: "mdi:graphql",
+    icon: "simple-icons:nhost",
   },
   {
     id: "hasura-cloud-expert",
@@ -2843,6 +2843,6 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#1EB4D4",
-    icon: "mdi:graphql",
+    icon: "simple-icons:hasura",
   },
 ];
