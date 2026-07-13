@@ -15,6 +15,7 @@ import {
   Database,
   ArrowUpRight,
   Code2,
+  Cloud,
 } from "lucide-react";
 
 import { Icon } from "@iconify/react";
@@ -157,6 +158,8 @@ const getCategoryIcon = (category: string) => {
       return Activity;
     case "Security":
       return Shield;
+    case "Cloud":
+      return Cloud;
     default:
       return Bot;
   }
