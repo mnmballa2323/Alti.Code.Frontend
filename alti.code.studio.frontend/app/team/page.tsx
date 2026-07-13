@@ -122,6 +122,23 @@ const getLanguageIcon = (id: string) => {
       if (id.includes("cpp") || id.includes("cplusplus")) return "devicon:cplusplus";
       if (id.includes("c-")) return "devicon:c";
       if (id.includes("assembly")) return "devicon:nasm";
+      if (id.includes("angular")) return "devicon:angular";
+      if (id.includes("django")) return "devicon:django";
+      if (id.includes("fastapi")) return "devicon:fastapi";
+      if (id.includes("docker")) return "devicon:docker";
+      if (id.includes("clickhouse")) return "logos:clickhouse";
+      if (id.includes("android")) return "devicon:android";
+      if (id.includes("chief-architect")) return "mdi:account-tie";
+      if (id.includes("business")) return "mdi:tie";
+      if (id.includes("compliance")) return "mdi:shield-check";
+      if (id.includes("devrel")) return "mdi:account-group-outline";
+      if (id.includes("a11y")) return "mdi:human-wheelchair";
+      if (id.includes("cicd")) return "mdi:rocket-launch";
+      if (id.includes("enterprise")) return "mdi:domain";
+      if (id.includes("firebase")) return "logos:firebase";
+      if (id.includes("flutter")) return "devicon:flutter";
+      if (id.includes("gcp") || id.includes("googlecloud")) return "devicon:googlecloud";
+      if (id.includes("cloudflare")) return "logos:cloudflare-icon";
       return "mdi:code-braces";
   }
 };
