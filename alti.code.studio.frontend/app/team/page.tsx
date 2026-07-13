@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -21,7 +22,7 @@ import {
 import { Icon } from "@iconify/react";
 import { teamMembers, TeamMember } from "./teamData";
 
-type TabType = "language" | "framework" | "role" | "cloud" | "integration";
+
 
 const getLanguageDisplayName = (id: string) => {
   switch (id) {
@@ -171,32 +172,19 @@ const getCategoryIcon = (category: string) => {
   }
 };
 
-export default function TeamPage() {
+function TeamContent() {
   const router = useRouter();
-  const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<TabType>("language");
-  const [activeCategory, setActiveCategory] = useState("All");
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams?.get("q") || "";
+  const activeTab = searchParams?.get("tab") || "Language";
 
-  // Get unique categories based on active tab
-  const categories = [
-    "All",
-    ...Array.from(
-      new Set(
-        teamMembers
-          .filter((member) => member.type === activeTab)
-          .map((member) => member.category),
-      ),
-    ),
-  ];
-
-  // Filter team members based on search, tab, and category
+  // Filter team members based on search and category
   const uniqueTeamMembers = Array.from(new Map(teamMembers.map(item => [item.id, item])).values());
   const filteredMembers = uniqueTeamMembers
     .filter((member) => {
-      const matchesTab = member.type === activeTab;
-      const matchesCategory =
-        activeCategory === "All" || member.category === activeCategory;
+      const matchesTab = searchQuery ? true : member.category === activeTab;
       const matchesSearch =
+        searchQuery === "" ||
         member.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         member.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
         member.bio.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -204,11 +192,11 @@ export default function TeamPage() {
           spec.toLowerCase().includes(searchQuery.toLowerCase()),
         );
 
-      return matchesTab && matchesCategory && matchesSearch;
+      return matchesTab && matchesSearch;
     })
     .sort((a, b) => {
-      const nameA = getLanguageDisplayName(a.id);
-      const nameB = getLanguageDisplayName(b.id);
+      const nameA = a.name.replace(" Specialist AI", "");
+      const nameB = b.name.replace(" Specialist AI", "");
       return nameA.localeCompare(nameB);
     });
 
@@ -219,142 +207,14 @@ export default function TeamPage() {
   };
 
   return (
-    <div className="flex-1 w-full min-h-screen bg-transparent px-6 pb-6 pt-0 lg:px-10 lg:pb-10 lg:pt-0 font-sans text-zinc-900 dark:text-zinc-100 overflow-y-auto overflow-x-hidden relative">
+    <div className="flex-1 w-full h-screen bg-transparent flex flex-col pt-[52px] pb-0 relative overflow-hidden font-sans text-zinc-900 dark:text-zinc-100">
       {/* Decorative Glow Elements */}
       <div className="absolute top-0 left-[-10%] w-[400px] h-[400px] rounded-full bg-primary/5 dark:bg-primary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[8000ms]" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-secondary/5 dark:bg-secondary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[6000ms]" />
 
-      {/* Top Navigation Row (Toggle & Search Bar) */}
-      <div className="sticky top-0 z-50 max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6 py-4 bg-white dark:bg-[#09090B] border-b border-zinc-200/50 dark:border-white/5 px-6 lg:px-10">
-        {/* Navigation Tab Toggle Slider */}
-        <div className="relative flex p-1 bg-[#F3F4F6] dark:bg-[#0d1117] rounded-2xl border border-zinc-200/50 dark:border-white/5 self-start shadow-sm">
-          <button
-            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 whitespace-nowrap ${
-              activeTab === "language"
-                ? "text-black dark:text-white"
-                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-            }`}
-            onClick={() => {
-              setActiveTab("language");
-              setActiveCategory("All");
-            }}
-          >
-            Languages
-            {activeTab === "language" && (
-              <motion.div
-                layoutId="activeTabSlider"
-                className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
-                transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                style={{ zIndex: -1 }}
-              />
-            )}
-          </button>
-          <button
-            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 whitespace-nowrap ${
-              activeTab === "framework"
-                ? "text-black dark:text-white"
-                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-            }`}
-            onClick={() => {
-              setActiveTab("framework");
-              setActiveCategory("All");
-            }}
-          >
-            Frameworks
-            {activeTab === "framework" && (
-              <motion.div
-                layoutId="activeTabSlider"
-                className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
-                transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                style={{ zIndex: -1 }}
-              />
-            )}
-          </button>
-          <button
-            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 whitespace-nowrap ${
-              activeTab === "role"
-                ? "text-black dark:text-white"
-                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-            }`}
-            onClick={() => {
-              setActiveTab("role");
-              setActiveCategory("All");
-            }}
-          >
-            Roles
-            {activeTab === "role" && (
-              <motion.div
-                layoutId="activeTabSlider"
-                className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
-                transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                style={{ zIndex: -1 }}
-              />
-            )}
-          </button>
-          <button
-            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 whitespace-nowrap ${
-              activeTab === "cloud"
-                ? "text-black dark:text-white"
-                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-            }`}
-            onClick={() => {
-              setActiveTab("cloud");
-              setActiveCategory("All");
-            }}
-          >
-            Cloud
-            {activeTab === "cloud" && (
-              <motion.div
-                layoutId="activeTabSlider"
-                className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
-                transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                style={{ zIndex: -1 }}
-              />
-            )}
-          </button>
-          <button
-            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 whitespace-nowrap ${
-              activeTab === "integration"
-                ? "text-black dark:text-white"
-                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
-            }`}
-            onClick={() => {
-              setActiveTab("integration");
-              setActiveCategory("All");
-            }}
-          >
-            Integrations
-            {activeTab === "integration" && (
-              <motion.div
-                layoutId="activeTabSlider"
-                className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
-                transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                style={{ zIndex: -1 }}
-              />
-            )}
-          </button>
-        </div>
-
-        {/* Search Bar */}
-        <div className="relative w-full sm:max-w-xs group">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 dark:text-zinc-500">
-            <Search size={16} />
-          </div>
-          <input
-            className="w-full pl-10 pr-4 py-2.5 text-sm rounded-2xl border border-zinc-200/50 dark:border-white/10 bg-[#F3F4F6] dark:bg-[#0d1117] text-black dark:text-white placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-primary/20 dark:focus:ring-primary/40 focus:border-primary transition-all duration-300 shadow-sm"
-            placeholder="Search language, role or skill..."
-            type="text"
-            value={searchQuery}
-            onChange={(e) => {
-              setSearchQuery(e.target.value);
-              if (activeCategory !== "All") setActiveCategory("All");
-            }}
-          />
-        </div>
-      </div>
-
-      {/* Main Grid Container */}
-      <div className="max-w-7xl mx-auto flex flex-col gap-6 relative z-10">
+      <div className="flex-1 w-full overflow-y-auto overflow-x-hidden px-6 lg:px-10">
+        {/* Main Grid Container */}
+        <div className="max-w-7xl mx-auto flex flex-col gap-6 relative z-10 h-full">
 
 
         {/* Roster Grid */}
@@ -403,7 +263,12 @@ export default function TeamPage() {
                           }}
                         >
                           {langIcon ? (
-                            <Icon icon={langIcon} className="w-5 h-5 shrink-0" />
+                            langIcon.startsWith('http') ? (
+                              /* eslint-disable-next-line @next/next/no-img-element */
+                              <img src={langIcon} className="w-5 h-5 shrink-0 object-contain rounded-[2px]" alt="Logo" />
+                            ) : (
+                              <Icon icon={langIcon} className="w-5 h-5 shrink-0" />
+                            )
                           ) : (
                             <CategoryIcon size={18} className="shrink-0" />
                           )}
@@ -411,7 +276,7 @@ export default function TeamPage() {
                         
                         {/* Language Name */}
                         <span className="font-bold text-[13px] text-zinc-700 dark:text-zinc-300 truncate">
-                          {getLanguageDisplayName(member.id)}
+                          {member.name.replace(" Specialist AI", "")}
                         </span>
                       </div>
                     </div>
@@ -439,5 +304,15 @@ export default function TeamPage() {
         </motion.div>
       </div>
     </div>
+    </div>
+  );
+}
+
+
+export default function TeamPage() {
+  return (
+    <Suspense fallback={<div className="flex-1 w-full min-h-screen bg-transparent" />}>
+      <TeamContent />
+    </Suspense>
   );
 }

@@ -936,8 +936,8 @@ function PromptInputFullLineComponent({
           classNames={{
             innerWrapper: "relative border-none outline-none focus:outline-none focus:ring-0",
             input:
-              "text-[15px] leading-normal font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-1.5 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none",
-            inputWrapper: "!bg-transparent shadow-none !border-0 px-2 py-0 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none focus-within:ring-0 focus-within:outline-none",
+              "text-[15px] leading-normal font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-1.5 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none group-data-[focus=true]:!ring-0",
+            inputWrapper: "!bg-transparent shadow-none !border-0 px-2 py-0 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none focus-within:ring-0 focus-within:outline-none group-data-[focus=true]:!ring-0 group-data-[focus=true]:!border-transparent group-data-[focus-visible=true]:!ring-0",
           }}
           maxRows={4}
           minRows={1}
