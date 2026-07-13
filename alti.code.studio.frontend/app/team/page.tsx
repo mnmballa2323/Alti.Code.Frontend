@@ -476,7 +476,7 @@ export default function TeamPage() {
                   <div className="flex flex-col gap-4 mt-5">
                     {/* Action Button */}
                     <button
-                      className="w-full flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-white/5 hover:!bg-[var(--accent-color)] hover:!text-white dark:hover:!text-black hover:border-transparent dark:hover:border-transparent hover:shadow-[0_4px_15px_rgba(var(--accent-rgb),0.2)] transition-all duration-300 group-hover:shadow-sm"
+                      className="w-full flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-white/5 hover:bg-zinc-900 hover:text-white dark:hover:bg-white dark:hover:text-zinc-900 hover:border-zinc-900 dark:hover:border-white transition-all duration-300 group-hover:shadow-sm"
                       onClick={() => handleDeploy(member)}
                     >
                       <span>Deploy Specialist</span>
