@@ -21,7 +21,7 @@ import {
 import { Icon } from "@iconify/react";
 import { teamMembers, TeamMember } from "./teamData";
 
-type TabType = "language" | "framework" | "role" | "cloud";
+type TabType = "language" | "framework" | "role" | "cloud" | "integration";
 
 const getLanguageDisplayName = (id: string) => {
   switch (id) {
@@ -225,7 +225,7 @@ export default function TeamPage() {
       <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] rounded-full bg-secondary/5 dark:bg-secondary/[0.04] blur-[120px] pointer-events-none animate-pulse duration-[6000ms]" />
 
       {/* Top Navigation Row (Toggle & Search Bar) */}
-      <div className="sticky top-0 z-50 max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6 py-4 bg-white dark:bg-[#09090B] border-b border-zinc-200/50 dark:border-white/5 -mx-6 px-6 lg:-mx-10 lg:px-10">
+      <div className="sticky top-0 z-50 max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mb-6 py-4 bg-white dark:bg-[#09090B] border-b border-zinc-200/50 dark:border-white/5 px-6 lg:px-10">
         {/* Navigation Tab Toggle Slider */}
         <div className="relative flex p-1 bg-[#F3F4F6] dark:bg-[#0d1117] rounded-2xl border border-zinc-200/50 dark:border-white/5 self-start shadow-sm">
           <button
@@ -304,6 +304,27 @@ export default function TeamPage() {
           >
             Cloud
             {activeTab === "cloud" && (
+              <motion.div
+                layoutId="activeTabSlider"
+                className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
+                transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                style={{ zIndex: -1 }}
+              />
+            )}
+          </button>
+          <button
+            className={`relative px-5 py-2.5 text-xs font-semibold rounded-xl transition-all duration-300 z-10 whitespace-nowrap ${
+              activeTab === "integration"
+                ? "text-black dark:text-white"
+                : "text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-300"
+            }`}
+            onClick={() => {
+              setActiveTab("integration");
+              setActiveCategory("All");
+            }}
+          >
+            Integrations
+            {activeTab === "integration" && (
               <motion.div
                 layoutId="activeTabSlider"
                 className="absolute inset-0 bg-white dark:bg-white/[0.06] shadow-[0_2px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_4px_12px_rgba(0,0,0,0.3)] border border-zinc-200/30 dark:border-white/10 rounded-xl"
