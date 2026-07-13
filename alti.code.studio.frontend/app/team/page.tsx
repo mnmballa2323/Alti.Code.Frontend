@@ -428,7 +428,7 @@ export default function TeamPage() {
                   key={member.id}
                   layout
                   animate={{ opacity: 1, y: 0 }}
-                  className="group relative flex flex-col justify-between p-5 rounded-2xl bg-white/70 dark:bg-[#0f1115]/80 backdrop-blur-md border border-zinc-200 dark:border-white/5 hover:!border-[var(--accent-color)] hover:shadow-[0_12px_40px_rgba(var(--accent-rgb),0.15)] dark:hover:shadow-[0_12px_40px_rgba(var(--accent-rgb),0.2)] transition-all duration-500 overflow-hidden"
+                  className="group relative flex flex-col justify-between p-5 rounded-2xl bg-white/70 dark:bg-[#0f1115]/80 backdrop-blur-md border border-zinc-200 dark:border-white/5 hover:border-zinc-300 dark:hover:border-zinc-600 hover:shadow-[0_12px_40px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_12px_40px_rgba(0,0,0,0.4)] transition-all duration-500 overflow-hidden"
                   exit={{ opacity: 0, scale: 0.95 }}
                   initial={{ opacity: 0, y: 15 }}
                   transition={{
