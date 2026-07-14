@@ -50,6 +50,17 @@ variable "environment" {
   }
 }
 
+variable "deployment_tier" {
+  description = "The AI infrastructure deployment tier"
+  type        = string
+  default     = "multi-tenant"
+
+  validation {
+    condition     = contains(["multi-tenant", "single-tenant", "fedramp"], var.deployment_tier)
+    error_message = "deployment_tier must be one of: multi-tenant, single-tenant, fedramp."
+  }
+}
+
 # ------------------------------------------------------------------------------
 # Vertex AI Search & Discovery Engine
 # ------------------------------------------------------------------------------
@@ -100,3 +111,5 @@ variable "vertex_ai_feature_store_max_nodes" {
     error_message = "vertex_ai_feature_store_max_nodes must be at least 1."
   }
 }
+
+

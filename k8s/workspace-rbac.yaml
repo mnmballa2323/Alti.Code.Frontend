@@ -1,0 +1,23 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: workspaces
+  name: workspace-orchestrator
+rules:
+- apiGroups: [""]
+  resources: ["pods", "pods/exec", "pods/log"]
+  verbs: ["create", "get", "list", "watch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: workspace-orchestrator-binding
+  namespace: workspaces
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: alti-backend
+roleRef:
+  kind: Role
+  name: workspace-orchestrator
+  apiGroup: rbac.authorization.k8s.io

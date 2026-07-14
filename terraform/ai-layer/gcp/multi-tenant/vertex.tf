@@ -15,6 +15,12 @@ terraform {
   }
 }
 
+locals {
+  is_gcp_single_tenant = var.deployment_tier == "single-tenant"
+  is_gcp_fedramp       = var.deployment_tier == "fedramp"
+  gcp_sovereignty      = local.is_gcp_fedramp ? "assured-workloads" : "commercial"
+}
+
 # Inherit provider configuration from root module
 variable "gcp_project_id" {
   type        = string
@@ -91,9 +97,10 @@ resource "google_vertex_ai_index" "code_embeddings" {
 
   labels = {
     environment = var.environment
-    sovereignty = "commercial"
+    sovereignty = local.gcp_sovereignty
     managed_by  = "terraform"
     component   = "ai-layer"
+    tenant_mode = var.deployment_tier
   }
 }
 
@@ -108,9 +115,10 @@ resource "google_vertex_ai_index_endpoint" "code_search" {
 
   labels = {
     environment = var.environment
-    sovereignty = "commercial"
+    sovereignty = local.gcp_sovereignty
     managed_by  = "terraform"
     component   = "ai-layer"
+    tenant_mode = var.deployment_tier
   }
 }
 

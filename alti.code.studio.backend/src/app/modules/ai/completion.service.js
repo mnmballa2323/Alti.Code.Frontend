@@ -1,5 +1,5 @@
 import { logger } from '../../../shared/logger.js';
-import { multiCloudInferenceService } from './multicloud_inference.service.js';
+import { gcpSovereignService } from './sovereign/gcp_sovereign.service.js';
 
 class CompletionService {
   constructor() {
@@ -14,7 +14,7 @@ class CompletionService {
     const prompt = `Complete the code:\nPREFIX:\n${prefix}\nSUFFIX:\n${suffix}`;
     try {
       const result =
-        await multiCloudInferenceService.executeMultiCloudInference(
+        await gcpSovereignService.executeInference(
           prompt,
           'completion',
           { modelId: 'gemini-3.5-flash' },

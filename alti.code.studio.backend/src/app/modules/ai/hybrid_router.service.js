@@ -1,4 +1,7 @@
-import { multiCloudInferenceService } from './multicloud_inference.service.js';
+import { awsSovereignService } from './sovereign/aws_sovereign.service.js';
+import { azureSovereignService } from './sovereign/azure_sovereign.service.js';
+import { gcpSovereignService } from './sovereign/gcp_sovereign.service.js';
+import TenantResolverService from './tenant_resolver.service.js';
 import { logger } from '../../../shared/logger.js';
 import axios from 'axios';
 
@@ -11,67 +14,40 @@ import axios from 'axios';
  * architectural tasks to Gemini 3.1 Pro.
  */
 class HybridRouterService {
-  constructor() {
-    // Typically Ollama or vLLM local proxy port
-    this.localInferenceUrl = 'http://127.0.0.1:11434/api/generate';
-  }
+  constructor() {}
 
   /**
    * Determines the optimal execution venue (Local vs Cloud) based on mathematical complexity.
+   * COMPLIANCE: Local Edge Model routing has been explicitly banned per GEMINI.md.
+   * All requests strictly route to the Sovereign Cloud providers.
    */
-  async executeAgent(prompt, temperature = 0.5) {
-    const isComplex =
-      prompt.length > 1500 ||
-      /(architect|refactor|design|complex|optimize|system|secure|dag|mesh)/i.test(
-        prompt,
-      );
+  async executeAgent(prompt, temperature = 0.5, options = {}) {
 
-    if (!isComplex) {
-      try {
-        // Attempt Local Zero-Latency Execution (Air-Gapped)
-        logger.info(
-          `⚡ [HybridRouter] Task complexity low. Routing execution to Local Edge Model (Zero-Latency)`,
-        );
+    // Sovereign Cloud Execution (Dynamic Provider)
+    const preferredProvider = options.preferredCloud || 'gcp-vertex';
+    const preferredModel = options.preferredModel || 'gemini-3.5-pro';
+    const userId = options.userId; // Passed down from auth context
 
-        const response = await axios.post(
-          this.localInferenceUrl,
-          {
-            model: 'codegemma', // or llama3
-            prompt: prompt,
-            stream: false,
-            options: { temperature },
-          },
-          { timeout: 2000 },
-        );
-
-        if (response.data && response.data.response) {
-          logger.info(
-            `✅ [HybridRouter] Local Edge Model completed task flawlessly.`,
-          );
-          return { content: response.data.response, venue: 'LOCAL_EDGE' };
-        }
-      } catch (error) {
-        // Graceful fallback to Cloud if local inference engine is offline
-        logger.warn(
-          `⚠️ [HybridRouter] Local Edge Model unreachable (CodeGemma offline). Bouncing to Multi-Cloud System.`,
-        );
+    let resolvedClusterUrl = 'https://api.shared.gcp.alticodestudio.com';
+    try {
+      if (userId) {
+        resolvedClusterUrl = await TenantResolverService.resolveClusterUrl(userId);
       }
+    } catch (e) {
+      logger.warn(`[HybridRouter] Could not resolve strict tenant boundary for user ${userId}. Defaulting to shared pool.`);
     }
 
-    // Sovereign GCP-Exclusive Execution (Heavy Lifting)
-    let preferredProvider = 'gcp-vertex';
-
     logger.info(
-      `☁️ [HybridRouter] Task requires heavy intelligence. Routing to Sovereign Google Cloud Vertex AI...`,
+      `☁️ [HybridRouter] Task requires heavy intelligence. Routing to Sovereign Cloud (${preferredProvider}) at Isolated Cluster: ${resolvedClusterUrl}...`,
     );
-    const result = await multiCloudInferenceService.executeMultiCloudInference(
-      prompt,
-      'jules',
-      {
-        preferredProvider,
-        modelId: 'gemini-3.5-pro',
-      },
-    );
+    let result;
+    if (preferredProvider === 'aws' || preferredProvider === 'aws-bedrock') {
+      result = await awsSovereignService.executeInference(prompt, 'jules', { modelId: preferredModel, clusterUrl: resolvedClusterUrl });
+    } else if (preferredProvider === 'azure' || preferredProvider === 'azure-foundry') {
+      result = await azureSovereignService.executeInference(prompt, 'jules', { modelId: preferredModel, clusterUrl: resolvedClusterUrl });
+    } else {
+      result = await gcpSovereignService.executeInference(prompt, 'jules', { modelId: preferredModel, clusterUrl: resolvedClusterUrl });
+    }
     return { content: result.content, venue: result.venue };
   }
 }

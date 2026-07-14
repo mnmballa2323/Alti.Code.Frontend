@@ -521,6 +521,24 @@ export default function CliAnythingPage() {
                     onChange={(e) => setAppName(e.target.value)}
                   />
                 </div>
+                
+                <div className="flex items-center gap-2 mt-2">
+                  <input
+                    type="checkbox"
+                    id="isolated-env-toggle"
+                    className="rounded bg-default-100/50 dark:bg-white/5 border-default-200"
+                    defaultChecked
+                  />
+                  <label htmlFor="isolated-env-toggle" className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                    Run in isolated Docker container (Pure Isolation)
+                  </label>
+                  
+                  {/* Container Status Indicator (Mock representation) */}
+                  <span className="ml-auto flex items-center gap-1.5 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Running
+                  </span>
+                </div>
               </div>
 
               {compilingStatus === "idle" ? (

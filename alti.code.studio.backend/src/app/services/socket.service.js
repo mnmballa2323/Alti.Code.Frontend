@@ -93,6 +93,55 @@ class SocketService {
         });
       });
 
+      // --- Workspace Terminal Streaming ---
+      socket.on('workspace_terminal_connect', async (data) => {
+        const { workspaceId, command = '/bin/bash' } = data;
+        logger.info(`🖥️ Terminal connect for workspace: ${workspaceId}`);
+        
+        try {
+          // Dynamic import to avoid breaking environments without node-pty
+          const pty = await import('node-pty');
+          
+          // Using docker exec with PTY. In a real environment, you'd fetch the containerId 
+          // from the database, but this is the structural implementation.
+          const term = pty.spawn('docker', ['exec', '-it', `workspace-${workspaceId}`, command], {
+            name: 'xterm-color',
+            cols: 80,
+            rows: 30,
+            cwd: process.env.HOME,
+            env: process.env
+          });
+
+          term.onData((output) => {
+            socket.emit('workspace_terminal_data', { workspaceId, output });
+          });
+
+          socket.on(`workspace_terminal_input_${workspaceId}`, (input) => {
+            term.write(input);
+          });
+
+          socket.on('disconnect', () => {
+            term.kill();
+          });
+        } catch (error) {
+          logger.error(`Failed to spawn PTY for workspace ${workspaceId}`, error);
+          socket.emit('workspace_terminal_error', { workspaceId, error: 'PTY Spawn Failed' });
+        }
+      });
+
+      // --- Workspace LSP Synchronization ---
+      socket.on('workspace_lsp_sync', (data) => {
+        const { workspaceId, rpcPayload } = data;
+        // In production, this pipes JSON-RPC directly to the container's stdin for tsserver/pylsp
+        logger.info(`🧠 LSP sync for workspace ${workspaceId}: ${rpcPayload.method}`);
+        
+        // Mock echoing back a response for architecture demonstration
+        socket.emit('workspace_lsp_response', {
+          workspaceId,
+          rpcPayload: { jsonrpc: '2.0', id: rpcPayload.id, result: 'Acknowledged by backend LSP bridge' }
+        });
+      });
+
       socket.on('disconnect', () => {
         logger.info(`🔌 Socket.io: Client disconnected ${socket.id}`);
         // Notify others that cursor/presence left

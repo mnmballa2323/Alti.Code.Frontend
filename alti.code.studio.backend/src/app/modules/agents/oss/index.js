@@ -31,7 +31,6 @@ export { ollamaOssAgent } from './ollama.agent.js';
 
 // ── Category 4: Databases & ORMs ──────────────────────────────────────────────
 export { supabaseOssAgent } from './supabase.agent.js';
-export { redisOssAgent } from './redis.agent.js';
 export { mongodbOssAgent } from './mongodb.agent.js';
 
 // ── Category 5: DevOps / Infrastructure ──────────────────────────────────────
@@ -112,7 +111,6 @@ export { reactQueryOssAgent } from './react_query.agent.js';
 export { axiosOssAgent } from './axios.agent.js';
 export { apolloOssAgent } from './apollo.agent.js';
 export { sequelizeOssAgent } from './sequelize.agent.js';
-export { mongooseOssAgent } from './mongoose.agent.js';
 
 // ── Category 23: Frontend Tooling & Libraries (Batch 8) ──────────────────────
 export { prettierOssAgent } from './prettier.agent.js';
@@ -135,7 +133,6 @@ export { phpOssAgent } from './php.agent.js';
 export { bashOssAgent } from './bash.agent.js';
 export { htmlCssOssAgent } from './html_css.agent.js';
 export { mysqlOssAgent } from './mysql.agent.js';
-export { elasticsearchOssAgent } from './elasticsearch.agent.js';
 
 // ── Category 25: Specialized Databases & Messaging (Batch 10 - Core moved) ─────────
 export { cassandraOssAgent } from './cassandra.agent.js';

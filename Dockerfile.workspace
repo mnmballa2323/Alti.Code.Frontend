@@ -1,0 +1,36 @@
+FROM ubuntu:22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install common system dependencies and Python
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    git \
+    build-essential \
+    python3 \
+    python3-pip \
+    sudo \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Node.js (LTS)
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g pnpm yarn \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Go
+RUN curl -OL https://golang.org/dl/go1.22.1.linux-amd64.tar.gz \
+    && tar -C /usr/local -xzf go1.22.1.linux-amd64.tar.gz \
+    && rm go1.22.1.linux-amd64.tar.gz
+ENV PATH=$PATH:/usr/local/go/bin
+
+# Create a non-root developer user
+RUN useradd -ms /bin/bash developer \
+    && echo "developer ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+USER developer
+WORKDIR /workspace
+
+# Keep the container alive
+CMD ["tail", "-f", "/dev/null"]

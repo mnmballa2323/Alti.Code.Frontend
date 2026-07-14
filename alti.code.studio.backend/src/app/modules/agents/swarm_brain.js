@@ -141,7 +141,7 @@ class SwarmBrain {
     );
   }
 
-  async getSpecialistWorkflow(prompt) {
+  async getSpecialistWorkflow(prompt, userOptions = {}) {
     let workflowData;
 
     // 0. Slash Command Direct Invocation Bypass
@@ -312,6 +312,7 @@ If you require assistance from another specialized agent to complete your task, 
           const result = await hybridRouterService.executeAgent(
             systemPrompt,
             node.temperature,
+            userOptions
           );
           return result.content; // Return raw string for DAG execution pipeline
         },
@@ -331,7 +332,7 @@ If you require assistance from another specialized agent to complete your task, 
    * @param {Array} context
    * @param {Function} onProgress
    */
-  async executeTask(prompt, context = [], onProgress = null) {
+  async executeTask(prompt, context = [], onProgress = null, userOptions = {}) {
     logger.info(`🧠 SwarmBrain: Commencing execution pipeline for prompt...`);
     if (onProgress)
       onProgress({
@@ -642,7 +643,7 @@ If you require assistance from another specialized agent to complete your task, 
       );
     }
 
-    const { nodes, edges } = await this.getSpecialistWorkflow(injectedPrompt);
+    const { nodes, edges } = await this.getSpecialistWorkflow(injectedPrompt, userOptions);
     logger.info(
       `🧠 SwarmBrain: Orchestrating Non-Linear DAG with ${nodes.length} nodes and ${edges.length} edges.`,
     );
@@ -815,6 +816,7 @@ If you require assistance from another specialized agent to complete your task, 
                   const res = await hybridRouterService.executeAgent(
                     dynamicPrompt,
                     0.5,
+                    userOptions
                   );
                   return res.content;
                 },

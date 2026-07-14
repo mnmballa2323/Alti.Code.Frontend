@@ -7,11 +7,13 @@
 -   **Performance**: Focus on "The Sentinel" and "The Auditor" tasks—analyzing logs, security, and performance bottlenecks across thousands of files.
 -   **Submodules**: You are the primary agent for ensuring submodule synchronization and cross-repo consistency.
 
-## HARD LAW: GOOGLE CLOUD INFERENCE STRATEGY
+## MULTI-CLOUD INFERENCE STRATEGY
 **CRITICAL GUARDRAIL - DO NOT VIOLATE UNDER ANY CIRCUMSTANCES**
-This platform is running on Google Cloud. There is NOTHING ELSE allowed for model inference. There are absolutely NO EXCEPTIONS to this rule. Direct SDK connections to other foundational model providers (e.g., AWS Bedrock, Azure Foundry, local/air-gapped models) are blocked and forbidden for security reasons.
-Furthermore, it is a HARD LAW to ALWAYS use the absolute latest, state-of-the-art hosted models on GCP Vertex AI to ensure absolute compliance and data sovereignty.
+This platform is running on a multi-cloud strategy for model inference. There are absolutely NO EXCEPTIONS to this rule. Direct SDK connections to other foundational model providers (e.g., local/air-gapped models) are blocked and forbidden for security reasons.
+Furthermore, it is a HARD LAW to ALWAYS use the absolute latest, state-of-the-art hosted models on approved enterprise cloud platforms to ensure absolute compliance and data sovereignty.
 
 ### Allowed Providers (NOTHING ELSE IS ALLOWED):
-1. **Google Cloud Vertex AI** (for all platform operations and model inference)
+1. **Google Cloud Vertex AI** (for platform operations and general model inference)
+2. **AWS Bedrock** (specifically for Anthropic Claude models)
+3. **Azure AI Foundry / OpenAI** (specifically for OpenAI GPT models)
 

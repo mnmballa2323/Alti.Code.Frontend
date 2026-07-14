@@ -25,6 +25,9 @@ const UserValidationSchema = z.object({
       confirmPassword: z.string(),
       role: z.enum(userRoleValues).default('unauthorized'),
       profile: z.string().optional(),
+      preferredCloud: z.enum(['gcp', 'aws', 'azure']).optional(),
+      preferredModel: z.string().optional(),
+      deploymentTier: z.enum(['MULTI_TENANT', 'SINGLE_TENANT', 'FEDRAMP']).optional(),
       confirmationToken: z.string().optional(),
       confirmationTokenExpires: z.date().optional(),
     })

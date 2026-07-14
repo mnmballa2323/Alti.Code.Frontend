@@ -36,7 +36,7 @@ const deleteUserAccountService = async userId => {
 };
 
 const registerService = async req => {
-  const { password, email, companyName } = req.body;
+  const { password, email, companyName, preferredCloud, preferredModel, deploymentTier } = req.body;
 
   const existingEmail = await UserRepository.findByEmail(email);
   if (existingEmail) {
@@ -49,6 +49,9 @@ const registerService = async req => {
       email,
       password: hashedPassword,
       companyName,
+      preferredCloud,
+      preferredModel,
+      deploymentTier,
     });
 
     // Dispatch live transactional verification email via Google Workspace

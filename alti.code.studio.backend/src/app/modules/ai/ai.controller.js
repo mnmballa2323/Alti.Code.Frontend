@@ -53,7 +53,11 @@ const executeTask = catchAsync(async (req, res) => {
   };
 
   try {
-    await swarmBrain.executeTask(prompt, context, onProgress);
+    const userOptions = {
+      preferredCloud: req.user?.preferredCloud || 'gcp',
+      preferredModel: req.user?.preferredModel || 'gemini-3.5-pro',
+    };
+    await swarmBrain.executeTask(prompt, context, onProgress, userOptions);
 
     // 🧠 AgentMemory: End session — triggers summarization + graph extraction
     AgentMemoryHooks.endSession(

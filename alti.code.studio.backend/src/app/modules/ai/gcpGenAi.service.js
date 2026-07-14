@@ -1,4 +1,4 @@
-import { multiCloudInferenceService } from './multicloud_inference.service.js';
+import { gcpSovereignService } from './sovereign/gcp_sovereign.service.js';
 import { logger } from '../../../shared/logger.js';
 
 const PRIMARY_MODEL = 'gemini-3.5-flash';
@@ -9,7 +9,7 @@ const generateContent = async (
   temperature = 0.5,
 ) => {
   logger.info(`🧠 [GcpGenAi] Running generation on GCP Vertex AI...`);
-  const result = await multiCloudInferenceService.executeMultiCloudInference(
+  const result = await gcpSovereignService.executeInference(
     prompt,
     'gcp_genai',
     { modelId: modelName },
@@ -32,7 +32,7 @@ const getGenerativeModel = (modelName, temperature = 0.5) => {
             .join('\n')
         : contents;
       const result =
-        await multiCloudInferenceService.executeMultiCloudInference(
+        await gcpSovereignService.executeInference(
           prompt,
           'gcp_genai_model',
           { modelId: modelName },
@@ -48,7 +48,7 @@ const getGenerativeModel = (modelName, temperature = 0.5) => {
         sendMessage: async msg => {
           const prompt = Array.isArray(msg) ? JSON.stringify(msg) : msg;
           const result =
-            await multiCloudInferenceService.executeMultiCloudInference(
+            await gcpSovereignService.executeInference(
               prompt,
               'gcp_genai_chat',
               { modelId: modelName },
