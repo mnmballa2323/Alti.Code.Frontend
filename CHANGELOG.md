@@ -5,6 +5,12 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.1.6] - 2026-07-14 — Taste-Skill Frontend Design Agent Integration
+
+### Added
+- **Taste-Skill Integration**: Integrated the `taste-skill` library (by Leonxlnx, MIT License) into `submodules/openclaw/skills` and `alti.code.studio.backend/submodules/openclaw/skills`, exposing 13 design-engineering agent skills to the Alti.Code.Studio platform backend.
+- **Workspace Agent Customizations**: Configured `.agents/skills` workspace customization roots to automatically load the taste-skill rules for developer agents.
+
 ## [53.1.5] - 2026-07-02 — OpenWiki Integration and Local Proxy
 
 ### Added
