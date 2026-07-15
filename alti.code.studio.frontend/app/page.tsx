@@ -44,12 +44,9 @@ export default function LandingPage() {
         "electron" in window ||
         window.navigator.userAgent.includes("Electron"))
     ) {
-      setIsDesktopApp(true);
       router.replace("/new-chat");
     }
   }, [router]);
-
-  if (isDesktopApp) return null;
 
   return (
     <div className="flex flex-col min-h-screen bg-[#030014] text-white w-full overflow-x-hidden font-sans relative">

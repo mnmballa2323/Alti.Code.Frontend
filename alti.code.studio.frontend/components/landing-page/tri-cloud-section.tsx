@@ -4,47 +4,56 @@ import React from "react";
 
 const deployments = [
   {
+    name: "Amazon Web Services",
+    subtitle: "AWS Bedrock",
+    icon: (
+      <img
+        alt="AWS"
+        className="w-8 h-8"
+        src="/assets/cloud-logos/aws.svg"
+      />
+    ),
+    features: [
+      { title: "Multi-Tenant", description: "Elastic EC2 compute instances optimized for rapid scaling in shared public zones." },
+      { title: "Single-Tenant", description: "AWS Dedicated Hosts providing complete physical isolation for your instances." },
+      { title: "AWS GovCloud", description: "Isolated AWS regions certified for FedRAMP High and sensitive workloads." }
+    ]
+  },
+  {
+    name: "Microsoft Azure",
+    subtitle: "Azure AI Foundry",
+    icon: (
+      <img
+        alt="Azure"
+        className="w-8 h-8"
+        src="/assets/cloud-logos/azure.svg"
+      />
+    ),
+    features: [
+      { title: "Multi-Tenant", description: "Highly-available Azure compute VMs optimized for scaling in public regions." },
+      { title: "Single-Tenant", description: "Azure Dedicated Hosts providing complete physical isolation for your VMs." },
+      { title: "Azure Government", description: "Isolated Azure regions certified for FedRAMP High and sensitive workloads." }
+    ]
+  },
+  {
     name: "Google Cloud",
-    subtitle: "Multi-tenant Google Cloud",
+    subtitle: "Vertex AI",
     icon: (
       <img
-        alt="Google Cloud"
+        alt="GCP"
         className="w-8 h-8"
         src="/assets/cloud-logos/gcp.svg"
       />
     ),
-    description:
-      "Deploy scalable cloud compute resources optimized for rapid deployment while ensuring compliance in public zones.",
-  },
-  {
-    name: "Dedicated Cloud",
-    subtitle: "Single-tenant Google Cloud",
-    icon: (
-      <img
-        alt="Dedicated Cloud"
-        className="w-8 h-8"
-        src="/assets/cloud-logos/gcp.svg"
-      />
-    ),
-    description:
-      "Deploy dedicated single tenant cloud infrastructure featuring complete physical data isolation and advanced virtual networks.",
-  },
-  {
-    name: "Assured Workloads",
-    subtitle: "Sovereign Google Cloud",
-    icon: (
-      <img
-        alt="Assured Workloads"
-        className="w-8 h-8"
-        src="/assets/cloud-logos/gcp.svg"
-      />
-    ),
-    description:
-      "Deploy compliant sovereign cloud instances certified for FedRAMP High and government regulations for sensitive public workloads.",
+    features: [
+      { title: "Multi-Tenant", description: "Scalable Compute Engine resources optimized for scaling in public regions." },
+      { title: "Single-Tenant", description: "Sole-tenant nodes providing complete physical isolation for your instances." },
+      { title: "Assured Workloads", description: "Compliant GCP environments certified for FedRAMP High sensitive workloads." }
+    ]
   },
 ];
 
-export default function GcpSovereignSection() {
+export default function TriCloudSection() {
   return (
     <section
       className="w-full py-32 bg-[#030014] text-white px-4 sm:px-6 lg:px-8 relative overflow-hidden"
@@ -56,11 +65,11 @@ export default function GcpSovereignSection() {
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-6 max-w-5xl">
           <h3 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white leading-tight">
-            Google Cloud. Sovereign Security.
+            Deploy Anywhere. Sovereign Security.
           </h3>
           <p className="text-base sm:text-lg md:text-xl text-zinc-400 leading-relaxed font-medium max-w-4xl">
-            Deploy sovereign AI agent swarms on Google Cloud, Dedicated, and
-            Assured Workloads. Enforce absolute compliance and physical data
+            Deploy sovereign AI agent swarms on AWS Bedrock, Azure Foundry, and
+            Google Vertex AI. Enforce absolute compliance and physical data
             isolation tailored to your enterprise.
           </p>
         </div>
@@ -93,10 +102,18 @@ export default function GcpSovereignSection() {
                   </span>
                 </div>
 
-                {/* Description */}
-                <p className="text-sm text-zinc-400 font-medium leading-relaxed">
-                  {deployment.description}
-                </p>
+                {/* Features List */}
+                <ul className="flex flex-col gap-4 mt-2">
+                  {deployment.features.map((feature, i) => (
+                    <li key={i} className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 shrink-0 shadow-[0_0_8px_rgba(59,130,246,0.8)]" />
+                      <div className="flex flex-col">
+                        <span className="text-sm font-semibold text-zinc-200">{feature.title}</span>
+                        <span className="text-sm text-zinc-400 font-medium leading-relaxed">{feature.description}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           ))}

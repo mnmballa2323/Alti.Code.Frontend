@@ -25,7 +25,7 @@ export function Logout() {
       window.location.href = "/";
     } else {
       await signOut({
-        redirect: false,
+        callbackUrl: "/",
       });
       onClose();
     }
