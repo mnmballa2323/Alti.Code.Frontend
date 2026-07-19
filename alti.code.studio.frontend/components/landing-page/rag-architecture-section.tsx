@@ -46,7 +46,7 @@ export default function RagArchitectureSection() {
             },
           }}
         >
-          Stop relying on simple search. Inso code uses a massive retrieval augmented generation pipeline designed <br className="hidden md:block" />for sovereign codebase ingestion, relationship mapping, and precise inline citations.
+          Stop relying on simple search. Inso code uses a massive retrieval augmented generation pipeline <br className="hidden md:block" />designed for sovereign codebase ingestion, relationship mapping, and precise inline citations.
         </motion.p>
 
         {/* Simple Features Grid */}
