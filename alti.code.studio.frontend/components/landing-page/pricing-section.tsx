@@ -135,7 +135,7 @@ export default function PricingSection() {
  {/* Header */}
  <div className="flex flex-col items-center text-center gap-4 max-w-3xl mb-20">
  <h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-black leading-tight">
- Predictable Pricing.
+ Predictable Pricing
  </h2>
  <p className="text-lg text-zinc-600 leading-relaxed font-medium">
  Enterprise licensing for sovereign agent orchestration and secure

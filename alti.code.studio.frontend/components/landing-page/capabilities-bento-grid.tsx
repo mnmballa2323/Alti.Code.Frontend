@@ -32,7 +32,7 @@ export default function CapabilitiesBentoGrid() {
  }}
  >
  <h3 className="text-3xl md:text-4xl font-bold tracking-tight text-black leading-[1.1]">
- Engineered for scale.
+ Engineered for scale
  </h3>
  <p className="text-lg text-zinc-600 leading-relaxed font-medium">
  Under the hood, inso code uses system level components that coordinate local daemons

@@ -26,7 +26,7 @@ export default function TriumvirateSection() {
           }}
         >
           <h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-black mb-6">
-            The Triumvirate of Power.
+            The Triumvirate of Power
           </h2>
           <p className="text-lg text-zinc-600 w-full font-medium tracking-tight leading-relaxed">
             AI should not just assist developers; it should participate as a peer. Inso code moves beyond basic copilots by separating concerns across the enterprise structure.
