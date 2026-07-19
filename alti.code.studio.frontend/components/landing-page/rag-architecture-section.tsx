@@ -59,7 +59,7 @@ export default function RagArchitectureSection() {
           <FeatureCard
             description="Performs dense vector similarity search across your codebase text, logic, and historical commits."
             icon={<Search className="w-8 h-8 text-[#0000ff]" />}
-            title="Deep Vector Discovery"
+            title="Vector Search"
           />
           <FeatureCard
             description="Aggregates exact contextual snippets into a prompt for flawless citations and implementation."
