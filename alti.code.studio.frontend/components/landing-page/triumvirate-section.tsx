@@ -29,7 +29,7 @@ export default function TriumvirateSection() {
             The Triumvirate of Power
           </h2>
           <p className="text-lg text-zinc-600 w-full font-medium tracking-tight leading-relaxed">
-            AI should not just assist developers; it should participate as a peer. Inso code moves <br className="hidden md:block" />beyond basic copilots by separating concerns across the enterprise structure.
+            AI should not just assist developers, it should participate as a peer. Inso code moves <br className="hidden md:block" />beyond basic copilots by separating concerns across the enterprise structure.
           </p>
         </motion.div>
 
