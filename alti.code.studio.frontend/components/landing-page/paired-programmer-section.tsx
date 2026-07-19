@@ -97,7 +97,7 @@ function FeatureCard({
         <div className="bg-white p-3 rounded-2xl border border-zinc-200 shadow-sm shrink-0">
           {icon}
         </div>
-        <h3 className="text-2xl font-bold text-black tracking-tight">
+        <h3 className="text-lg font-bold text-black tracking-tight">
           {title}
         </h3>
       </div>
