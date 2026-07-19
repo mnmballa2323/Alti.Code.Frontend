@@ -8,7 +8,7 @@ import { useAppSelector } from "@/store";
 
 const plans = [
  {
- name: "Cloud",
+ name: "Multi-Tenant",
  price: "1,000",
  commitment: "Min. 1 seat",
  backendPlan: "launch",
@@ -21,12 +21,12 @@ const plans = [
  ),
  features: [ "Multi tenant deployment", "Google Cloud host", "Shared infrastructure", "Fastest deployment",
  ],
- cta: "Deploy Cloud",
+ cta: "Deploy Multi-Tenant",
  buttonClass: "bg-[#0000ff] text-white hover:opacity-90",
  isContact: false,
  },
  {
- name: "Dedicated",
+ name: "Single-Tenant",
  price: "2,500",
  commitment: "Min. 5 seats",
  backendPlan: "build",
@@ -39,12 +39,12 @@ const plans = [
  ),
  features: [ "Single tenant deployment", "Google Cloud host", "Dedicated infrastructure", "Enhanced security & data isolation",
  ],
- cta: "Deploy Dedicated",
+ cta: "Deploy Single-Tenant",
  buttonClass: "bg-[#0000ff] text-white hover:opacity-90",
  isContact: false,
  },
  {
- name: "Sovereign",
+ name: "Government",
  price: "5,000",
  commitment: "Min. 10 seats",
  backendPlan: "scale",
@@ -57,7 +57,7 @@ const plans = [
  ),
  features: [ "Sovereign deployment", "Google Cloud Assured Workloads", "FedRAMP High capable", "Sovereign security controls",
  ],
- cta: "Deploy Sovereign",
+ cta: "Deploy Government",
  buttonClass: "bg-[#0000ff] text-white hover:opacity-90",
  isContact: true,
  },
