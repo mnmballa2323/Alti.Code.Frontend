@@ -206,28 +206,12 @@ export default function LiveWikiSection() {
  </div>
 
  {/* Center Connector: OpenWiki engine */}
- <div className="col-span-12 lg:col-span-2 flex lg:flex-col items-center justify-center gap-4 lg:py-12">
- <div className="w-full lg:w-0.5 h-0.5 lg:h-24 lg: /0 /50 /0" />
- <div className="relative flex items-center justify-center w-16 h-16 rounded-2xl bg-zinc-100 border border-zinc-200   group hover:border-zinc-300 transition-all duration-300">
- <div className="absolute inset-0 bg-blue-500/10 rounded-2xl blur-md group-hover:bg-blue-500/20 transition-all duration-300" />
+ <div className="col-span-12 lg:col-span-2 flex items-center justify-center py-4 lg:py-0">
+ <div className="flex items-center justify-center w-12 h-12 rounded-full bg-zinc-50 border border-zinc-200 shadow-sm transition-all duration-300">
  <RefreshCw
- className={`w-8 h-8 text-blue-400 relative z-10 ${isProcessing ? "animate-spin" : ""}`}
+ className={`w-5 h-5 text-zinc-500 ${isProcessing ? "animate-spin" : ""}`}
  />
  </div>
-
- {/* Sync Progress Bar */}
- <div className="flex-1 lg:flex-none w-full max-w-[140px] flex flex-col gap-1.5 text-center mt-2">
- <div className="h-1 bg-zinc-100 rounded-full overflow-hidden w-full">
- <div
- className="h-full transition-all duration-100 ease-out"
- style={{ width: `${progress}%` }}
- />
- </div>
- <span className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest">
- {isProcessing ? "Parsing AST..." : "Synced"}
- </span>
- </div>
- <div className="w-full lg:w-0.5 h-0.5 lg:h-24 lg: /0 /50 /0" />
  </div>
 
  {/* Right Panel: Wiki Output */}

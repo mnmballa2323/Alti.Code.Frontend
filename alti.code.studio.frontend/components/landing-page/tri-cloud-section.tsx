@@ -10,7 +10,7 @@ const deployments = [
  <img
  alt="AWS"
  className="w-8 h-8"
- src="/assets/cloud-logos/aws.svg"
+ src="/assets/cloud-logos/aws.svg?v=2"
  />
  ),
  features: [
@@ -85,7 +85,7 @@ export default function TriCloudSection() {
  <div className="flex flex-col gap-6 relative z-10">
  {/* Header Row: Icon */}
  <div className="flex items-center justify-between w-full">
- <div className="w-14 h-14 bg-blue-900/30 border border-zinc-200 rounded-2xl flex items-center justify-center p-3 shadow-sm">
+ <div className="w-14 h-14 bg-white border border-zinc-200 rounded-2xl flex items-center justify-center p-3 shadow-sm">
  {deployment.icon}
  </div>
  </div>
