@@ -54,12 +54,7 @@ type SecretEntry = {
 
 const VAULT_TABS: { id: VaultMode; label: string }[] = [
   { id: "api-key", label: "API Key" },
-  { id: "login", label: "Login" },
   { id: "ssh", label: "SSH Key" },
-  { id: "database", label: "Database" },
-  { id: "oauth", label: "OAuth" },
-  { id: "cloud-iam", label: "Cloud IAM" },
-  { id: "encryption", label: "Encryption" },
   { id: "env-config", label: "Environment" },
 ];
 
@@ -577,30 +572,30 @@ export default function VaultPage() {
   return (
     <ChatBotLayout>
       <div className="flex flex-col h-full bg-default-100 dark:bg-default-50 w-full font-sans">
-        {/* Premium top header with tabs */}
-        <div className="shrink-0 w-full bg-white/80 dark:bg-[#111111]/90 backdrop-blur-md border-b border-default-200/60 dark:border-white/5 flex items-center justify-center h-14 px-8">
-          {!selectedSecretId && (
-            <div className="flex items-center bg-default-100 dark:bg-default-50 p-1 rounded-lg border-none shadow-inner">
-              {VAULT_TABS.map((tab) => (
-                <button
-                  key={tab.id}
-                  className={`h-8 px-4 flex items-center rounded-md text-sm font-medium whitespace-nowrap transition-all duration-200 ${
-                    vaultMode === tab.id
-                      ? "bg-white dark:bg-default-200 text-foreground shadow-sm"
-                      : "text-default-500 hover:text-foreground/80 hover:bg-default-200/50"
-                  }`}
-                  type="button"
-                  onClick={() => setVaultMode(tab.id)}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* Header removed to place tabs near the input box */}
         <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full">
-          <div className="relative flex flex-1 w-full flex-col items-center justify-center overflow-hidden">
+          <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[15vh] overflow-y-auto">
             <div className="flex w-full flex-col items-center gap-5 z-20 px-6">
+              
+              {!selectedSecretId && (
+                <div className="flex items-center gap-1 bg-white dark:bg-black border border-default-200 dark:border-default-100 p-1 rounded-lg shadow-sm">
+                  {VAULT_TABS.map((tab) => (
+                    <button
+                      key={tab.id}
+                      className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-sm font-medium transition-all duration-150 whitespace-nowrap ${
+                        vaultMode === tab.id
+                          ? "bg-default-100 dark:bg-default-200 text-foreground"
+                          : "bg-transparent text-default-500 hover:text-foreground hover:bg-default-50 dark:hover:bg-default-100/50"
+                      }`}
+                      type="button"
+                      onClick={() => setVaultMode(tab.id)}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+
               {/* ── Saved secret detail view ── */}
               <div className="flex w-full flex-col gap-4 max-w-2xl">
                 {selectedSecretId ? (
