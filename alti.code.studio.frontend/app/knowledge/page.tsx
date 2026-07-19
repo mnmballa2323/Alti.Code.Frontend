@@ -7,7 +7,6 @@ import { useSession } from "next-auth/react";
 import { toast } from "sonner";
 import axios from "axios";
 
-import { TuningTabs } from "@/components/tuning-tabs";
 import ChatBotLayout from "@/components/ChatbotLayout";
 import { useActiveProject } from "@/hooks/useActiveProject";
 
@@ -138,10 +137,7 @@ export default function KnowledgePage() {
   return (
     <ChatBotLayout>
       <div className="flex flex-col h-full bg-default-100 dark:bg-default-50">
-        {/* Premium top header with tabs */}
-        <div className="shrink-0 w-full bg-white/80 dark:bg-[#111111]/90 backdrop-blur-md border-b border-default-200/60 dark:border-white/5 flex items-center justify-center h-14 px-8">
-          <TuningTabs />
-        </div>
+        {" "}
         <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide flex flex-col items-center justify-center">
           <div className="w-full max-w-2xl mb-14">
             {/* Upload zone — styled like the input bar on other tabs */}
@@ -217,7 +213,6 @@ export default function KnowledgePage() {
             )}
           </div>
         </div>
-
         {/* Delete Confirmation Modal */}
         {fileToDelete !== null && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/20 dark:bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">

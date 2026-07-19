@@ -102,13 +102,11 @@ export default function InstructionsPage() {
   return (
     <ChatBotLayout>
       <div className="flex flex-col h-full bg-default-100 dark:bg-default-50">
-        {/* Premium top header with tabs */}
-        <div className="shrink-0 w-full bg-white/80 dark:bg-[#111111]/90 backdrop-blur-md border-b border-default-200/60 dark:border-white/5 flex items-center justify-center h-14 px-8">
-          <TuningTabs />
-        </div>
-
         <div className="flex-1 overflow-y-auto p-8 font-sans scrollbar-hide flex flex-col items-center justify-center">
           <div className="w-full max-w-2xl mb-14">
+            <div className="flex justify-center mb-6">
+              <TuningTabs />
+            </div>
             <form
               className="relative flex items-center w-full shadow-sm rounded-2xl"
               onSubmit={handleSend}

@@ -31,7 +31,7 @@ export function TuningTabs() {
   }, [pathname]);
 
   return (
-    <nav className="flex flex-wrap items-center gap-1 bg-default-100 dark:bg-default-50 p-1 rounded-lg shadow-inner">
+    <nav className="flex flex-nowrap overflow-x-auto scrollbar-hide items-center gap-1 bg-white dark:bg-black border border-default-200 dark:border-default-100 p-1 rounded-lg shadow-sm">
       {TABS.map(({ key, icon: Icon, label }) => {
         const isActive = activeKey === key;
 
@@ -39,10 +39,10 @@ export function TuningTabs() {
           <Link
             key={key}
             className={[
-              "flex items-center gap-1.5 px-3 h-8 rounded-md text-sm font-medium transition-all duration-150 whitespace-nowrap",
+              "flex items-center gap-1.5 px-2 h-8 rounded-md text-sm font-medium transition-all duration-150 whitespace-nowrap",
               isActive
-                ? "bg-white dark:bg-default-200 text-foreground shadow-sm"
-                : "bg-transparent text-default-500 hover:text-foreground hover:bg-white/50 dark:hover:bg-default-200/50",
+                ? "bg-default-100 dark:bg-default-200 text-foreground"
+                : "bg-transparent text-default-500 hover:text-foreground hover:bg-default-50 dark:hover:bg-default-100/50",
             ].join(" ")}
             href={key}
           >
@@ -51,6 +51,8 @@ export function TuningTabs() {
           </Link>
         );
       })}
+      {/* Spacer to fix browser bug where right padding is lost in scrollable flex containers */}
+      <div className="min-w-[4px] w-[4px] h-1 shrink-0" aria-hidden="true" />
     </nav>
   );
 }

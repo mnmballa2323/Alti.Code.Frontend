@@ -367,7 +367,7 @@ function Navbar() {
             <div
               className={cn(
                 "flex items-center gap-1.5 p-1.5 rounded-full transition-all duration-300 backdrop-blur-md shadow-sm",
-                "bg-zinc-100/80 border border-zinc-200"
+                "bg-zinc-100/80 border border-zinc-200",
               )}
             >
               {sections.map((sec, index) => {
@@ -403,7 +403,7 @@ function Navbar() {
               <>
                 <Button
                   className={cn(
-                    "rounded-full px-6 transition-all duration-200 shadow-sm border border-zinc-200 bg-transparent text-zinc-900 hover:bg-zinc-200 micro-beam-btn"
+                    "rounded-full px-6 transition-all duration-200 shadow-sm border border-zinc-200 bg-transparent text-zinc-900 hover:bg-zinc-200 micro-beam-btn",
                   )}
                   size="sm"
                   onClick={() => {
@@ -420,7 +420,7 @@ function Navbar() {
                 </Button>
                 <Button
                   className={cn(
-                    "rounded-full px-6 transition-all duration-200 shadow-sm bg-black text-white hover:bg-zinc-800 micro-beam-btn"
+                    "rounded-full px-6 transition-all duration-200 shadow-sm bg-black text-white hover:bg-zinc-800 micro-beam-btn",
                   )}
                   size="sm"
                   onClick={() => {
@@ -435,7 +435,7 @@ function Navbar() {
                 <Button
                   className={cn(
                     "rounded-full px-6 transition-all duration-200 shadow-sm bg-black text-white hover:bg-zinc-800 micro-beam-btn",
-                    isDesktopApp && "w-[160px]"
+                    isDesktopApp && "w-[160px]",
                   )}
                   size="sm"
                   onClick={() => {
@@ -452,7 +452,9 @@ function Navbar() {
                   <Button
                     className={cn(
                       "rounded-full px-6 transition-all duration-200 shadow-sm border border-zinc-200 text-zinc-900 micro-beam-btn",
-                      !isTransparent ? "bg-white hover:bg-zinc-50" : "bg-zinc-100 hover:bg-zinc-200"
+                      !isTransparent
+                        ? "bg-white hover:bg-zinc-50"
+                        : "bg-zinc-100 hover:bg-zinc-200",
                     )}
                     size="sm"
                     onClick={() => router.push("/register")}
