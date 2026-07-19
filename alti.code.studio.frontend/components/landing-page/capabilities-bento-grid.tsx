@@ -104,10 +104,10 @@ export default function CapabilitiesBentoGrid() {
  >
 
  <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
- <h4 className="text-base xl:text-lg font-bold tracking-tight text-black">
+ <h4 className="text-lg xl:text-xl font-bold tracking-tight text-black">
  AST Traversal Edits
  </h4>
- <p className="text-[11px] xl:text-xs text-zinc-600 leading-relaxed font-medium">
+ <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
  Instead of simple regex matching, our agents build Abstract
  Syntax Trees to surgically modify nodes with extreme precision.
  </p>
@@ -128,10 +128,10 @@ export default function CapabilitiesBentoGrid() {
  >
 
  <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
- <h4 className="text-base xl:text-lg font-bold tracking-tight text-black">
+ <h4 className="text-lg xl:text-xl font-bold tracking-tight text-black">
  Gossip Mesh Coordination
  </h4>
- <p className="text-[11px] xl:text-xs text-zinc-600 leading-relaxed font-medium">
+ <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
  25,000 specialist agents remain perfectly synchronized via a
  peer to peer gossip network to propagate state in sub 10ms.
  </p>
@@ -152,10 +152,10 @@ export default function CapabilitiesBentoGrid() {
  >
 
  <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
- <h4 className="text-base xl:text-lg font-bold tracking-tight text-black">
+ <h4 className="text-lg xl:text-xl font-bold tracking-tight text-black">
  Semantic Cache
  </h4>
- <p className="text-[11px] xl:text-xs text-zinc-600 leading-relaxed font-medium">
+ <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
  Saves up to 80% on inference costs. Prompt prefix caching
  detects identical requests and serves them locally with zero
  delay.
@@ -177,10 +177,10 @@ export default function CapabilitiesBentoGrid() {
  >
 
  <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
- <h4 className="text-base xl:text-lg font-bold tracking-tight text-black">
+ <h4 className="text-lg xl:text-xl font-bold tracking-tight text-black">
  Submodule Auto Sync
  </h4>
- <p className="text-[11px] xl:text-xs text-zinc-600 leading-relaxed font-medium">
+ <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
  Our primary agent automatically coordinates submodules, matching
  branch revisions and verifying integrity across repositories.
  </p>
@@ -246,10 +246,10 @@ export default function CapabilitiesBentoGrid() {
         }}
       >
         <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
-          <h4 className="text-base xl:text-lg font-bold tracking-tight text-black">
+          <h4 className="text-lg xl:text-xl font-bold tracking-tight text-black">
             Self-Evolving Dev Environment
           </h4>
-          <p className="text-[11px] xl:text-xs text-zinc-600 leading-relaxed font-medium">
+          <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
             The IDE works while you sleep—autonomously noticing bugs, writing test cases, fixing the bugs, and pushing commits.
           </p>
         </div>
@@ -268,10 +268,10 @@ export default function CapabilitiesBentoGrid() {
         }}
       >
         <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
-          <h4 className="text-base xl:text-lg font-bold tracking-tight text-black">
+          <h4 className="text-lg xl:text-xl font-bold tracking-tight text-black">
             Native GitOps & Declarative Infra
           </h4>
-          <p className="text-[11px] xl:text-xs text-zinc-600 leading-relaxed font-medium">
+          <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
             Deep native integration with Terraform and ArgoCD for fully automated, highly available continuous deployment directly from Git.
           </p>
         </div>
