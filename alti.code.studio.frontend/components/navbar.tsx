@@ -452,7 +452,7 @@ function Navbar() {
                   <Button
                     className={cn(
                       "rounded-full px-6 transition-all duration-200 shadow-sm border border-zinc-200 text-zinc-900 micro-beam-btn",
-                      !isTransparent ? "bg-white hover:bg-zinc-50" : "bg-transparent hover:bg-zinc-200"
+                      !isTransparent ? "bg-white hover:bg-zinc-50" : "bg-zinc-100 hover:bg-zinc-200"
                     )}
                     size="sm"
                     onClick={() => router.push("/register")}
