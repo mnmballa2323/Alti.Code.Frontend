@@ -52,17 +52,17 @@ export default function RagArchitectureSection() {
         {/* Simple Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
           <FeatureCard
-            description='Manages deep semantic relationships between files, classes, and microservices (e.g., "Service A depends on Interface B").'
+            description="Manages deep semantic relationships between files, classes, and microservices for precise context."
             icon={<Database className="w-8 h-8 text-[#0000ff]" />}
             title="Graph Database"
           />
           <FeatureCard
-            description="Performs dense vector similarity search across the actual code text, implementation logic, and historical commits."
+            description="Performs dense vector similarity search across your codebase text, logic, and historical commits."
             icon={<Search className="w-8 h-8 text-[#0000ff]" />}
             title="Deep Vector Discovery"
           />
           <FeatureCard
-            description="Aggregates exact contextual snippets into a monolithic prompt to generate flawless inline citations and implementation strategies."
+            description="Aggregates exact contextual snippets into a prompt for flawless citations and implementation."
             icon={<Cpu className="w-8 h-8 text-[#0000ff]" />}
             title="Neural Synthesis"
           />
