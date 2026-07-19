@@ -131,9 +131,9 @@ function PreFooter() {
  </p>
  <div className="footer-muted flex flex-col gap-2 font-secondary font-normal text-sm leading-6">
  <p>
- 755 W Big Beaver Rd
+ 575 Market Street
  <br />
- Troy, MI 48084
+ San Francisco, CA 94105
  </p>
  </div>
  </div>
