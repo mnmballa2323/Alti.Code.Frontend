@@ -37,7 +37,7 @@ export default function TriumvirateSection() {
           <FeatureCard
             icon={<Code2 className="w-8 h-8 text-[#0000ff]" />}
             title="Architect"
-            description="The developer's domain. Gain access to local execution, native compilers, and full system terminal control."
+            description="The developer's domain. Gain access to local execution, native compilers, and your full system terminal control."
           />
           <FeatureCard
             icon={<ShieldAlert className="w-8 h-8 text-[#0000ff]" />}
