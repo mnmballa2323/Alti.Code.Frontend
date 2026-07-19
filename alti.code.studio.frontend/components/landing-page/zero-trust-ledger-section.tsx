@@ -75,7 +75,7 @@ export default function ZeroTrustLedgerSection() {
  Every single agent execution is fully sandboxed and recorded to a
  local, tamper proof cryptographic ledger. Before any file context
  leaves your secure enterprise workspace, native Data Loss
- Prevention (DLP) rules automatically scan, mask, and redact API
+ Prevention rules automatically scan, mask, and redact API
  keys, database credentials, and proprietary secrets, guaranteeing
  absolute data privacy and sovereign compliance without slowing
  down your engineering cycles or impacting your team's overall

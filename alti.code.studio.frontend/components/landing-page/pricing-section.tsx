@@ -52,7 +52,7 @@ const plans = [
  description: (
  <>
  FedRAMP High and strict sovereignty compliant environments built
- exclusively for classified public sector workloads.
+ exclusively <br /> for classified public sector workloads.
  </>
  ),
  features: [ "Sovereign deployment", "Google Cloud Assured Workloads", "FedRAMP High capable", "Sovereign security controls",
