@@ -108,8 +108,7 @@ export default function CapabilitiesBentoGrid() {
  AST Traversal Edits
  </h4>
  <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
- Instead of simple regex matching, our agents build Abstract
- Syntax Trees to surgically modify nodes with extreme precision.
+ Instead of regex matching, agents build Abstract Syntax Trees to surgically modify nodes with precision.
  </p>
  </div>
  </motion.div>
@@ -132,8 +131,7 @@ export default function CapabilitiesBentoGrid() {
  Gossip Mesh Coordination
  </h4>
  <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
- 25,000 specialist agents remain perfectly synchronized via a
- peer to peer gossip network to propagate state in sub 10ms.
+ 25,000 specialist agents stay perfectly synchronized via a gossip network, propagating state in sub 10ms.
  </p>
  </div>
  </motion.div>
@@ -156,9 +154,7 @@ export default function CapabilitiesBentoGrid() {
  Semantic Cache
  </h4>
  <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
- Saves up to 80% on inference costs. Prompt prefix caching
- detects identical requests and serves them locally with zero
- delay.
+ Saves up to 80% on inference. Prefix caching detects identical requests and serves them with zero delay.
  </p>
  </div>
  </motion.div>
@@ -181,8 +177,7 @@ export default function CapabilitiesBentoGrid() {
  Submodule Auto Sync
  </h4>
  <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
- Our primary agent automatically coordinates submodules, matching
- branch revisions and verifying integrity across repositories.
+ Our agent automatically coordinates submodules, matching revisions and verifying integrity across repos.
  </p>
  </div>
  </motion.div>
@@ -247,10 +242,10 @@ export default function CapabilitiesBentoGrid() {
       >
         <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
           <h4 className="text-lg xl:text-xl font-bold tracking-tight text-black">
-            Self-Evolving Dev Environment
+            Self Evolving Dev Environment
           </h4>
           <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
-            The IDE works while you sleep—autonomously noticing bugs, writing test cases, fixing the bugs, and pushing commits.
+            The IDE works while you sleep, autonomously noticing bugs, writing comprehensive test cases, fixing complex issues locally, and seamlessly pushing fully verified commits.
           </p>
         </div>
       </motion.div>
@@ -272,7 +267,7 @@ export default function CapabilitiesBentoGrid() {
             Native GitOps & Declarative Infra
           </h4>
           <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
-            Deep native integration with Terraform and ArgoCD for fully automated, highly available continuous deployment directly from Git.
+            Deep native integration with Terraform and ArgoCD enables fully automated, highly available continuous deployment directly from Git, while managing your entire cloud infrastructure.
           </p>
         </div>
       </motion.div>
