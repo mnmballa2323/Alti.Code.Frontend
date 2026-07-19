@@ -51,7 +51,7 @@ export default function RagArchitectureSection() {
                 <Database className="w-8 h-8" />
               </div>
               <div className="relative z-10">
-                <h3 className="text-2xl font-bold tracking-tight mb-3">Google Cloud Spanner Graph</h3>
+                <h3 className="text-2xl font-bold tracking-tight mb-3">Enterprise Graph Database</h3>
                 <p className="text-zinc-600 leading-relaxed font-medium">
                   Manages deep semantic relationships between files, classes, and microservices (e.g., "Service A depends on Interface B").
                 </p>
@@ -70,7 +70,7 @@ export default function RagArchitectureSection() {
                 <FileSearch className="w-8 h-8" />
               </div>
               <div className="relative z-10">
-                <h3 className="text-2xl font-bold tracking-tight mb-3">Vertex AI Discovery</h3>
+                <h3 className="text-2xl font-bold tracking-tight mb-3">Deep Vector Discovery</h3>
                 <p className="text-zinc-600 leading-relaxed font-medium">
                   Performs dense vector similarity search across the actual code text, implementation logic, and historical commits.
                 </p>
@@ -89,7 +89,7 @@ export default function RagArchitectureSection() {
                 <BrainCircuit className="w-8 h-8" />
               </div>
               <div className="relative z-10">
-                <h3 className="text-2xl font-bold tracking-tight mb-3">Gemini Synthesis</h3>
+                <h3 className="text-2xl font-bold tracking-tight mb-3">Neural Context Synthesis</h3>
                 <p className="text-zinc-600 leading-relaxed font-medium">
                   Aggregates exact contextual snippets into a monolithic prompt to generate flawless inline citations and implementation strategies.
                 </p>
