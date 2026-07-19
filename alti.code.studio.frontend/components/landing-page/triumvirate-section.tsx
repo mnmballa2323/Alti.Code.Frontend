@@ -37,17 +37,17 @@ export default function TriumvirateSection() {
           <FeatureCard
             icon={<Code2 className="w-8 h-8 text-[#0000ff]" />}
             title="Architect"
-            description="The Developer's domain. Gain access to local execution, native compilers, and the terminal."
+            description="The developer's domain. Gain access to local execution, native compilers, and the system terminal."
           />
           <FeatureCard
             icon={<ShieldAlert className="w-8 h-8 text-[#0000ff]" />}
             title="Sentinel"
-            description="The Admin's domain. Ensure strict policy enforcement, live security scanning, and role controls."
+            description="The admin's domain. Ensure strict policy enforcement, live security scanning, and role controls."
           />
           <FeatureCard
             icon={<LineChart className="w-8 h-8 text-[#0000ff]" />}
             title="Overseer"
-            description="The Business Owner's domain. Drive intelligent resource allocation and deep cloud cost analysis."
+            description="The business owner's domain. Drive intelligent resource allocation and comprehensive cost analysis."
           />
         </div>
       </div>
