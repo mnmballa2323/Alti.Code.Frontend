@@ -8,6 +8,12 @@ As of the latest ingestion phase, the environment locally hosts **5,609 fully ha
 
 The entire architecture is fortified by enterprise-grade **Zero-Trust constraints**, sub-millisecond **Redis Data Caching**, and **Vectorized Semantic Caching** to achieve unprecedented execution speed, absolute security, and zero token-waste.
 
+### Tri-Cloud Sovereign Deployment
+Alti Code Studio supports native, sovereign-compliant deployments across the three major AI infrastructure providers:
+- **AWS Bedrock**: Securely deploy LLMs using AWS PrivateLink to ensure no training data leakage.
+- **Azure Foundry**: VNet-isolated sovereign compute enclaves for regulatory compliance in Europe and North America.
+- **Google Cloud Vertex AI**: Regional endpoints (`us-central1`) locked down with VPC Service Controls.
+
 ---
 
 ## The Zero-Trust Sovereign Citadel

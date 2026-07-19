@@ -139,7 +139,7 @@ export default function LiveWikiSection() {
  <p className="text-lg text-zinc-600 leading-relaxed font-medium max-w-3xl mx-auto">
  Documentation that evolves as fast as your code. OpenWiki analyzes git commits
  <br className="hidden md:block" />
- in real time, automatically compiling and committing markdown docs.
+ in real time, automatically compiling and committing updated markdown docs.
  </p>
  </div>
 

@@ -16,7 +16,7 @@ const plans = [
  description: (
  <>
  Sovereign agent systems in standard multi tenant zones for strict
- corporate compliance and comprehensive data security.
+ corporate compliance and robust comprehensive data security.
  </>
  ),
  features: [ "Multi tenant deployment", "Google Cloud host", "Shared infrastructure", "Fastest deployment",
@@ -33,7 +33,7 @@ const plans = [
  backendPrice: 250000,
  description: (
  <>
- Dedicated single tenant infrastructure entirely isolated on private
+ Dedicated single tenant infrastructure isolated on private
  networks for unparalleled security and complete data isolation.
  </>
  ),

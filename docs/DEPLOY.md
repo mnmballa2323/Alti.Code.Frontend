@@ -1,30 +1,54 @@
-# Alti.Code.Studio Deployment Guide
+# Alti Code Studio Deployment Guide
 
 ## 🚀 Prerequisites
--   Docker & Docker Compose
--   Node.js 20+
--   Redis instance
+- Docker & Docker Compose
+- Node.js 20+
+- Redis instance (for caching and queues)
+- Valid API keys for GCP Vertex AI, AWS Bedrock, or Azure Foundry
 
-## 📦 Deployment Steps
+## 📦 Local Development
 
-### 1. Update Submodules
-Ensure you are deploying the latest stable commits.
+### Desktop Application
+To launch the Inso Code desktop application (which bundles the Next.js frontend and Node.js backend):
 ```bash
-git submodule update --init --recursive
+cd alti.code.studio.desktop
+npm run dev:desktop
+```
+*Note: This automatically handles port assignment, backend initialization, and Tauri boot.*
+
+### Web Application (Standalone)
+If running outside the desktop container:
+```bash
+# Backend (Port 5000/5001)
+cd alti.code.studio.backend
+npm run dev
+
+# Frontend (Port 3001)
+cd alti.code.studio.frontend
+npm run dev
 ```
 
-### 2. Environment Configuration
-Copy `.env.example` to `.env` in both `frontend` and `backend` directories and populate secrets.
+## 🌍 Production Deployment
+
+### 1. Environment Configuration
+Copy `.env.example` to `.env` in both `frontend` and `backend` directories. Ensure you configure your multi-cloud AI provider settings (`GCP_PROJECT_ID`, etc.).
+
+### 2. Tri-Cloud Infrastructure
+Alti Code Studio supports deploying sovereign AI agent swarms across three major clouds. Use Terraform to provision your target environment:
+- **GCP Vertex AI**: Requires `us-central1` regional endpoints.
+- **AWS Bedrock**: Provision via the provided AWS CDK/Terraform scripts.
+- **Azure Foundry**: Ensure VNet isolation is enabled for sovereign compliance.
 
 ### 3. Build & Run (Docker)
+We use `docker-compose.prod.yml` for production deployments:
 ```bash
-docker-compose up --build -d
+docker-compose -f docker-compose.prod.yml up --build -d
 ```
 
 ### 4. Verification
--   Frontend: `http://localhost:3000`
--   Backend Health: `http://localhost:5000/health` (or equivalent endpoint)
+- Frontend Application: `http://localhost:3000` (Docker mapped port)
+- Backend Health Check: `http://localhost:5000/healthz` (Standardized health endpoint)
 
 ## 🔄 CI/CD Pipeline
--   **GitHub Actions**: Triggers on push to `main`.
--   **The Overseer**: Automates testing and linting before build.
+- **GitHub Actions**: Triggers automatically on push to `main`.
+- **The Overseer**: Automates testing, linting, and license compliance checking before build.

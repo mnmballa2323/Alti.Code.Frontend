@@ -73,12 +73,13 @@ export default function ZeroTrustLedgerSection() {
  </h3>
  <p className="text-lg text-zinc-600 leading-relaxed font-medium max-w-3xl">
  Every single agent execution is fully sandboxed and recorded to a
- local, tamper-proof cryptographic ledger. Before any file context
+ local, tamper proof cryptographic ledger. Before any file context
  leaves your secure enterprise workspace, native Data Loss
  Prevention (DLP) rules automatically scan, mask, and redact API
- keys, database credentials, and proprietary secrets—guaranteeing
+ keys, database credentials, and proprietary secrets, guaranteeing
  absolute data privacy and sovereign compliance without slowing
- down your engineering cycles.
+ down your engineering cycles or impacting your team's overall
+ development velocity.
  </p>
  </div>
  </div>

@@ -103,8 +103,8 @@ export default function AgentForgeSection() {
  </h3>
  <p className="text-lg text-zinc-600 leading-relaxed font-medium max-w-3xl">
  Specify your database, API, or integration requirements and allow
- the forge to autonomously construct, test, and deploy a new
- specialized expert to your swarm in seconds.
+ the forge to autonomously construct, test, and deploy a new highly
+ specialized expert to your swarm in a matter of mere seconds.
  </p>
  </div>
  </div>

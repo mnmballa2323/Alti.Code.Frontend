@@ -37,7 +37,7 @@ export default function CapabilitiesBentoGrid() {
  <p className="text-lg text-zinc-600 leading-relaxed font-medium">
  Under the hood, inso code uses system level components that coordinate local daemons
  <br className="hidden md:block" />
- for unmatched speed, enterprise security, and absolute precision.
+ for unmatched execution speed, strict enterprise security, and absolute precision.
  </p>
  </motion.div>
 
