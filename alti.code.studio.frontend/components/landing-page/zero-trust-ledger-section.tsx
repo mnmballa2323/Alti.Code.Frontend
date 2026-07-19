@@ -86,7 +86,7 @@ export default function ZeroTrustLedgerSection() {
 
  {/* Right Column: Ledger Timeline */}
  <div className="lg:col-span-5 w-full lg:w-[130%] lg:translate-x-8">
- <div className="border border-zinc-200 rounded-[32px] shadow-xl p-6 md:p-8 flex flex-col gap-6 select-none relative lg:h-[460px] overflow-hidden justify-between lightning-glow-card-active">
+ <div className="bg-zinc-100 border border-zinc-200 rounded-[32px] shadow-xl p-6 md:p-8 flex flex-col gap-6 select-none relative lg:h-[460px] overflow-hidden justify-between lightning-glow-card-active">
  {/* Header */}
  <div className="flex items-center justify-between pb-4 border-b border-zinc-200 shrink-0">
  <div className="flex items-center gap-2">
