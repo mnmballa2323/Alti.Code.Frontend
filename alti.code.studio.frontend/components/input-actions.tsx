@@ -905,7 +905,7 @@ function PromptInputFullLineComponent({
         />
       </div>
 
-      <div className="flex flex-row items-center w-full gap-2 pl-3 pr-3 py-1.5 bg-white dark:bg-[#161616] rounded-full border border-gray-300 dark:border-zinc-700 shadow-sm">
+      <div className="flex flex-row items-center w-full gap-2 pl-3 pr-3 py-1.5 bg-white dark:bg-[#161616] rounded-full border border-gray-300 dark:border-zinc-700">
         <Tooltip>
           <TooltipTrigger asChild>
             <button
@@ -934,10 +934,12 @@ function PromptInputFullLineComponent({
           autoFocus
           className="flex-1 max-h-[120px] min-h-[36px] resize-none border-none shadow-none outline-none placeholder:text-default-400 focus-visible:ring-0"
           classNames={{
-            innerWrapper: "relative border-none outline-none focus:outline-none focus:ring-0",
+            innerWrapper:
+              "relative border-none outline-none focus:outline-none focus:ring-0",
             input:
               "text-[15px] leading-normal font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-1.5 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none group-data-[focus=true]:!ring-0",
-            inputWrapper: "!bg-transparent shadow-none !border-0 px-2 py-0 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none focus-within:ring-0 focus-within:outline-none group-data-[focus=true]:!ring-0 group-data-[focus=true]:!border-transparent group-data-[focus-visible=true]:!ring-0",
+            inputWrapper:
+              "!bg-transparent shadow-none !border-0 px-2 py-0 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none focus-within:ring-0 focus-within:outline-none group-data-[focus=true]:!ring-0 group-data-[focus=true]:!border-transparent group-data-[focus-visible=true]:!ring-0",
           }}
           maxRows={4}
           minRows={1}
@@ -1745,7 +1747,7 @@ function DaemonStatusViewer() {
       {/* 🏭 Autonomous Agent Factory Badge */}
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 backdrop-blur-md dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-purple-500/30 dark:hover:border-purple-500/30">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-purple-500/30 dark:hover:border-purple-500/30">
             <span className="relative flex h-2 w-2">
               {isDaemonRunning && (
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75" />
@@ -1772,7 +1774,7 @@ function DaemonStatusViewer() {
           </div>
         </TooltipTrigger>
         <TooltipContent
-          className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs"
+          className="bg-background/95 border border-default-200/80 dark:border-white/10 shadow-xl p-3 rounded-xl max-w-xs text-xs"
           side="top"
         >
           <div className="space-y-1.5">
@@ -1803,7 +1805,7 @@ function DaemonStatusViewer() {
       {/* 🖥️ Backend API / System Core Badge */}
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 backdrop-blur-md dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-emerald-500/30 dark:hover:border-emerald-500/30">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-emerald-500/30 dark:hover:border-emerald-500/30">
             <span className="relative flex h-2 w-2">
               {systemStatus === "nominal" && (
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
@@ -1836,7 +1838,7 @@ function DaemonStatusViewer() {
           </div>
         </TooltipTrigger>
         <TooltipContent
-          className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs"
+          className="bg-background/95 border border-default-200/80 dark:border-white/10 shadow-xl p-3 rounded-xl max-w-xs text-xs"
           side="top"
         >
           <div className="space-y-1.5">
@@ -1865,7 +1867,7 @@ function DaemonStatusViewer() {
       {/* 🐍 Python Daemons */}
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 backdrop-blur-md dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-500/30 dark:hover:border-blue-500/30">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-blue-500/30 dark:hover:border-blue-500/30">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500" />
@@ -1881,7 +1883,7 @@ function DaemonStatusViewer() {
           </div>
         </TooltipTrigger>
         <TooltipContent
-          className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs"
+          className="bg-background/95 border border-default-200/80 dark:border-white/10 shadow-xl p-3 rounded-xl max-w-xs text-xs"
           side="top"
         >
           <div className="space-y-1.5">
@@ -1920,7 +1922,7 @@ function DaemonStatusViewer() {
       {/* 🐙 Git Matrix sync */}
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 backdrop-blur-md dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-indigo-500/30 dark:hover:border-indigo-500/30">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full border bg-default-100/40 dark:bg-default-50/10 border-default-200/60 dark:border-white/10 text-xs font-medium cursor-default select-none shadow-sm transition-all duration-300 hover:shadow-md hover:border-indigo-500/30 dark:hover:border-indigo-500/30">
             <span className="relative flex h-2 w-2">
               {!gitDirty && (
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75" />
@@ -1950,7 +1952,7 @@ function DaemonStatusViewer() {
           </div>
         </TooltipTrigger>
         <TooltipContent
-          className="bg-background/95 border border-default-200/80 dark:border-white/10 backdrop-blur-md shadow-xl p-3 rounded-xl max-w-xs text-xs"
+          className="bg-background/95 border border-default-200/80 dark:border-white/10 shadow-xl p-3 rounded-xl max-w-xs text-xs"
           side="top"
         >
           <div className="space-y-1.5">

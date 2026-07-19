@@ -1,6 +1,9 @@
 import { config } from 'dotenv';
 import path from 'path';
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
+import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { SecretClient } from '@azure/keyvault-secrets';
+import { DefaultAzureCredential } from '@azure/identity';
 
 config({ path: path.join(process.cwd(), '.env') });
 
@@ -151,9 +154,10 @@ export const loadEnterpriseSecrets = async () => {
     }
   }
 
-  // Google Secret Manager integration
+  // Google Secret Manager integration (Only for GCP provider)
+  const cloudProvider = (process.env.CLOUD_PROVIDER || 'GCP').toUpperCase();
   const projectId = process.env.GCP_PROJECT_ID;
-  if (projectId) {
+  if (projectId && cloudProvider === 'GCP') {
     console.log(
       `[GCP Secret Manager] Initializing secret loader for project: ${projectId}`,
     );
@@ -186,6 +190,70 @@ export const loadEnterpriseSecrets = async () => {
     }
   }
 
+  // AWS Secrets Manager integration (Only for AWS provider)
+  if (cloudProvider === 'AWS') {
+    console.log('[AWS Secrets Manager] Initializing secret loader for AWS...');
+    try {
+      const region = process.env.AWS_REGION || 'us-east-1';
+      const client = new SecretsManagerClient({ region });
+
+      for (const [key, updater] of Object.entries(secretsMap)) {
+        const secretId = `alti-sec-${process.env.CUSTOMER_ID || 'enterprise-tenant'}-${process.env.NODE_ENV || 'prod'}-${key.toLowerCase().replace(/_/g, '-')}`;
+        
+        try {
+          const command = new GetSecretValueCommand({ SecretId: secretId });
+          const response = await client.send(command);
+          let secretValue;
+          
+          if (response.SecretString) {
+            secretValue = response.SecretString.trim();
+          } else if (response.SecretBinary) {
+            const buff = Buffer.from(response.SecretBinary);
+            secretValue = buff.toString('utf8').trim();
+          }
+
+          if (secretValue) {
+            updater(secretValue);
+            console.log(`[AWS Secrets Manager] Loaded secret: ${key}`);
+          }
+        } catch (secretErr) {
+          console.warn(`⚠️ [AWS Secrets Manager] Failed to load ${key}: ${secretErr.message}. Using environment default.`);
+        }
+      }
+    } catch (err) {
+      console.error('❌ [AWS Secrets Manager] Failed to initialize SecretsManagerClient:', err.message);
+    }
+  }
+
+  // Azure Key Vault integration (Only for AZURE provider)
+  if (cloudProvider === 'AZURE') {
+    console.log('[Azure Key Vault] Initializing secret loader for Azure...');
+    try {
+      const vaultUrl = process.env.AZURE_KEYVAULT_URL;
+      if (!vaultUrl) {
+        throw new Error('AZURE_KEYVAULT_URL is not set.');
+      }
+      
+      const credential = new DefaultAzureCredential();
+      const client = new SecretClient(vaultUrl, credential);
+
+      for (const [key, updater] of Object.entries(secretsMap)) {
+        const secretName = `alti-sec-${process.env.CUSTOMER_ID || 'enterprise-tenant'}-${process.env.NODE_ENV || 'prod'}-${key.toLowerCase().replace(/_/g, '-')}`;
+        
+        try {
+          const secret = await client.getSecret(secretName);
+          if (secret && secret.value) {
+            updater(secret.value.trim());
+            console.log(`[Azure Key Vault] Loaded secret: ${key}`);
+          }
+        } catch (secretErr) {
+          console.warn(`⚠️ [Azure Key Vault] Failed to load ${key}: ${secretErr.message}. Using environment default.`);
+        }
+      }
+    } catch (err) {
+      console.error('❌ [Azure Key Vault] Failed to initialize SecretClient:', err.message);
+    }
+  }
 
 };
 

@@ -14,7 +14,9 @@
 
 ## 📖 Overview
 
-Inso Code is an **Enterprise AI Development Platform** powered by a self-orchestrating armada of 25,000+ hyper-specialized AI agents covering every aspects of modern software engineering — from programming languages and cloud providers to dedicated open-source tools and **35 distinct industry verticals** including Real Estate, EdTech, Cybersecurity, FinTech, Healthcare, Gaming, and more.
+Inso Code is part of the broader **Inso Technologies** ecosystem. This repository serves as the **Universal Multi-Cloud PaaS Engine** responsible for orchestrating the infrastructure for all 9 Inso products across 3 distinct cloud providers (AWS, Azure, GCP) and 3 deployment tiers (Commercial, Dedicated, Government).
+
+The platform itself is powered by a self-orchestrating armada of 25,000+ hyper-specialized AI agents covering every aspect of modern software engineering — from programming languages and cloud providers to dedicated open-source tools and **35 distinct industry verticals**.
 
 **Three Operating Modes:**
 - 🖥️ **Desktop App** — Electron-based AI IDE for developers
@@ -121,7 +123,17 @@ VHDL/SystemVerilog · Apex · ABAP · Prolog · Dart · Wolfram · PL/SQL**
 
 ---
 
-## 🛠️ Installation & Setup
+## 🛠️ Multi-Cloud Enterprise Deployment (PaaS)
+
+This repository contains the `deploy_enterprise.sh` orchestrator, which dynamically routes infrastructure deployments for all 9 Inso Technologies products across **AWS, Azure, and GCP**.
+
+```bash
+# Example: Deploying the Inso Law product to Azure on Dedicated infrastructure
+./deploy_enterprise.sh --cloud azure --deployment-option dedicated --app-name inso-law
+
+# Example: Deploying the Inso Health product to GCP on Government infrastructure
+./deploy_enterprise.sh --cloud gcp --deployment-option government --app-name inso-health
+```
 
 ### Local Development (Docker Compose)
 For local testing and development, you can use the provided Docker Compose stack:

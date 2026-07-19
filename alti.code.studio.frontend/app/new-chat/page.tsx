@@ -75,7 +75,7 @@ export default function Home() {
           <div className="flex w-full flex-col items-center gap-6 z-20 px-6 md:px-12 lg:px-16">
             <div className="flex flex-col items-center text-center z-30 mb-6">
               <h1
-                className="text-4xl font-semibold tracking-tight text-foreground drop-shadow-sm opacity-80"
+                className="text-4xl font-semibold tracking-tight text-foreground"
                 style={{ fontFamily: "var(--font-secondary)" }}
               >
                 Build The Future

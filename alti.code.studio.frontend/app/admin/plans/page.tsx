@@ -38,8 +38,8 @@ const plans = [
     backendPrice: 250000,
     description: (
       <>
-        Dedicated single tenant infrastructure entirely isolated on private
-        networks for unparalleled security and complete data isolation.
+        Dedicated single tenant infrastructure built on private networks for
+        strict security and complete enterprise data isolation.
       </>
     ),
     features: [

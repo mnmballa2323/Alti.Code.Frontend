@@ -323,7 +323,7 @@ agentRegistry.register({
 agentRegistry.register({
   name: 'devops',
   description:
-    'Universal Cloud Orchestrator — Prompt-based autonomous deployments to Google Cloud, GCP, Google Cloud, and Vercel.',
+    'Universal Cloud Orchestrator — Prompt-based autonomous deployments to AWS, Azure, Google Cloud, and Vercel.',
   queue: 'devops-queue',
   capabilities: [
     'multi-cloud-deployment',
@@ -404,7 +404,7 @@ agentRegistry.register({
 agentRegistry.register({
   name: 'nomad',
   description:
-    'Cross-Cloud Migration Specialist — Autonomous mobility between Google Cloud, GCP, Google Cloud, and Vercel.',
+    'Cross-Cloud Migration Specialist — Autonomous mobility between AWS, Azure, Google Cloud, and Vercel.',
   queue: 'migration-queue',
   capabilities: [
     'cross-cloud-migration',
@@ -766,29 +766,29 @@ agentRegistry.register({
 
 // ──── TIER 6: CLOUD-SPECIFIC ────
 agentRegistry.register({
-  name: 'gcp',
+  name: 'aws',
   description:
-    'Google Cloud Solutions Architecture — IAM, Deployment Manager, GCP Console, cost optimization.',
-  queue: 'gcp-queue',
-  capabilities: ['gcp', 'iam', 'deployment-manager', 'gcs', 'cloud-functions'],
+    'AWS Solutions Architecture — IAM, CloudFormation, CDK, cost optimization.',
+  queue: 'aws-queue',
+  capabilities: ['aws', 'iam', 'cloudformation', 'cdk', 's3', 'lambda'],
+  version: '1.0.0',
+});
+
+agentRegistry.register({
+  name: 'azure',
+  description:
+    'Azure Architecture — RBAC, ARM/Bicep, AKS, Cosmos DB, Synapse Analytics.',
+  queue: 'azure-queue',
+  capabilities: ['azure', 'rbac', 'arm', 'bicep', 'aks', 'cosmos-db'],
   version: '1.0.0',
 });
 
 agentRegistry.register({
   name: 'gcp',
   description:
-    'Google Cloud Architecture — IAM bindings, Terraform, Google Cloud Run, BigQuery.',
+    'Google Cloud Solutions Architecture — IAM bindings, Terraform, GKE, Cloud Run, Cloud Spanner.',
   queue: 'gcp-queue',
-  capabilities: ['gcp', 'cloud-run', 'bigquery', 'gke', 'firebase'],
-  version: '1.0.0',
-});
-
-agentRegistry.register({
-  name: 'gcp',
-  description:
-    'Google Cloud Solutions Architecture — IAM/RBAC, Terraform/Deployment Manager, GKE, Cloud Spanner.',
-  queue: 'gcp-queue',
-  capabilities: ['gcp', 'rbac', 'terraform', 'gke', 'spanner'],
+  capabilities: ['gcp', 'iam', 'terraform', 'gke', 'cloud-run', 'spanner'],
   version: '1.0.0',
 });
 

@@ -140,7 +140,14 @@ class OmniCloudIngestionService {
                 logger.info(
                   `🔥 [Hermes] Triggering Deep Sovereign Audit for Tier 1 Cloud Repo: ${repo.full_name}`,
                 );
-                const hermesPrompt = `Conduct a Sovereign Cloud Security Audit for ${repo.clone_url}. Analyze its IaC definitions for GCP/Vertex AI compliance and generate an executive summary.`;
+                
+                const cloudProvider = process.env.CLOUD_PROVIDER || 'Cloud';
+                let aiService = 'AI Engine';
+                if (cloudProvider === 'AWS') aiService = 'Bedrock';
+                else if (cloudProvider === 'AZURE') aiService = 'Azure OpenAI';
+                else if (cloudProvider === 'GCP') aiService = 'Vertex AI';
+
+                const hermesPrompt = `Conduct a Sovereign Cloud Security Audit for ${repo.clone_url}. Analyze its IaC definitions for ${cloudProvider}/${aiService} compliance and generate an executive summary.`;
                 hermesAgentBridge.executeTask(hermesPrompt).catch(e => {
                   logger.error(
                     `[Hermes] Failed to execute deep audit for ${repo.full_name}: ${e.message}`,

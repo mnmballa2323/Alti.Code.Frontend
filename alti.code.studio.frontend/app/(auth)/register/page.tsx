@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@heroui/react";
+import { Input, Select, SelectItem } from "@heroui/react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import Link from "next/link";
@@ -24,6 +24,8 @@ export default function RegisterPage() {
     const password = formData.get("password") as string;
     const confirmPassword = formData.get("confirmPassword") as string;
     const companyName = formData.get("companyName") as string;
+    const preferredCloud = formData.get("preferredCloud") as string;
+    const deploymentTier = formData.get("deploymentTier") as string;
 
     if (!companyName || !companyName.trim()) {
       toast.error("Company Name is required");
@@ -75,6 +77,8 @@ export default function RegisterPage() {
             password,
             confirmPassword,
             companyName,
+            preferredCloud,
+            deploymentTier,
           }),
         },
       );
@@ -266,6 +270,46 @@ export default function RegisterPage() {
               variant="flat"
               onValueChange={setConfirmPasswordValue}
             />
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Select
+              className="max-w-full"
+              classNames={{
+                trigger:
+                  "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                value: "text-black text-[13px] font-light",
+              }}
+              name="preferredCloud"
+              placeholder="Select Cloud Provider"
+              variant="flat"
+            >
+              <SelectItem key="gcp">Google Cloud Platform (GCP)</SelectItem>
+              <SelectItem key="aws">Amazon Web Services (AWS)</SelectItem>
+              <SelectItem key="azure">Microsoft Azure</SelectItem>
+            </Select>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <Select
+              className="max-w-full"
+              classNames={{
+                trigger:
+                  "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                value: "text-black text-[13px] font-light",
+              }}
+              name="deploymentTier"
+              placeholder="Select Deployment Option"
+              variant="flat"
+            >
+              <SelectItem key="MULTI_TENANT">
+                Multi-Tenant (Standard)
+              </SelectItem>
+              <SelectItem key="SINGLE_TENANT">
+                Single-Tenant (Dedicated DB)
+              </SelectItem>
+              <SelectItem key="FEDRAMP">FedRAMP (Government)</SelectItem>
+            </Select>
           </div>
 
           <div className="flex flex-col gap-3 mt-4">

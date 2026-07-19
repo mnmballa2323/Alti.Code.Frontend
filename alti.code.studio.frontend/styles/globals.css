@@ -419,14 +419,13 @@ div[class*="tabs"] > button:not([role="tab"]) {
 .lightning-glow-card-active {
   animation: border-beam 3s ease-in-out infinite;
   border-color: rgba(59, 130, 246, 0.6) !important;
-  background: rgba(255, 255, 255, 0.03) !important;
 }
 
 /* Premium Animated Grid Background */
 .moving-grid-bg {
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
   background-size: 50px 50px;
   animation: grid-slide 25s linear infinite;
 }

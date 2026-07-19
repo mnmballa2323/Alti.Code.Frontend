@@ -332,7 +332,7 @@ function Navbar() {
         className={cn(
           "flex items-center justify-between h-[80px] z-[100] fixed top-0 left-0 right-0 w-full transition-all duration-300",
           !isTransparent
-            ? "bg-[#030014]/90 border-b border-white/10 backdrop-blur-md shadow-lg"
+            ? "bg-zinc-100 border-b border-zinc-200 shadow-sm"
             : "bg-transparent border-b border-transparent",
         )}
       >
@@ -346,17 +346,17 @@ function Navbar() {
               <Image
                 priority
                 alt="Inso Logo Icon"
-                className="h-8 w-auto object-contain"
+                className="h-8 w-auto object-contain transition-all duration-300"
                 height={32}
-                src="/logo-white.png"
+                src="/logo-black.png"
                 width={37}
               />
               <Image
                 priority
                 alt="Inso Code"
-                className="h-6 w-auto object-contain"
+                className="h-6 w-auto object-contain transition-all duration-300"
                 height={24}
-                src="/inso-logo-white.png"
+                src="/inso-logo-black.png"
                 width={120}
               />
             </div>
@@ -366,7 +366,8 @@ function Navbar() {
           <div className="hidden lg:flex items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <div
               className={cn(
-                "flex items-center gap-1.5 p-1.5 rounded-full transition-all duration-300 bg-white/5 border border-white/10 backdrop-blur-md shadow-lg",
+                "flex items-center gap-1.5 p-1.5 rounded-full transition-all duration-300 backdrop-blur-md shadow-sm",
+                "bg-zinc-100/80 border border-zinc-200"
               )}
             >
               {sections.map((sec, index) => {
@@ -380,14 +381,14 @@ function Navbar() {
                       "relative group p-2.5 rounded-full transition-all duration-300",
                       isActive
                         ? "bg-white text-black shadow-md scale-105"
-                        : "text-white/70 hover:text-white hover:bg-white/20",
+                        : "text-zinc-500 hover:text-black hover:bg-zinc-200/50",
                     )}
                     onClick={() => handleSectionClick(index)}
                   >
                     <IconComponent className="w-[20px] h-[20px]" />
 
                     {/* Tooltip */}
-                    <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 px-2.5 py-1 text-[11px] font-semibold text-white bg-black dark:bg-zinc-950 border border-zinc-700/50 rounded-lg shadow-xl opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
+                    <span className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 px-2.5 py-1 text-[11px] font-semibold text-zinc-900 bg-zinc-50 shadow-sm border border-zinc-200 dark:bg-zinc-950 border border-zinc-700/50 rounded-lg shadow-xl opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200 pointer-events-none whitespace-nowrap z-50">
                       {sec.name}
                     </span>
                   </button>
@@ -402,7 +403,7 @@ function Navbar() {
               <>
                 <Button
                   className={cn(
-                    "rounded-full bg-transparent px-6 transition-colors border border-white/25 text-white hover:bg-white/10 micro-beam-btn",
+                    "rounded-full px-6 transition-all duration-200 shadow-sm border border-zinc-200 bg-transparent text-zinc-900 hover:bg-zinc-200 micro-beam-btn"
                   )}
                   size="sm"
                   onClick={() => {
@@ -419,7 +420,7 @@ function Navbar() {
                 </Button>
                 <Button
                   className={cn(
-                    "rounded-full px-6 transition-all duration-200 shadow-sm bg-white text-black hover:bg-zinc-100 micro-beam-btn",
+                    "rounded-full px-6 transition-all duration-200 shadow-sm bg-black text-white hover:bg-zinc-800 micro-beam-btn"
                   )}
                   size="sm"
                   onClick={() => {
@@ -433,8 +434,8 @@ function Navbar() {
               <>
                 <Button
                   className={cn(
-                    "rounded-full px-6 transition-all duration-200 shadow-sm bg-white text-black hover:bg-zinc-100 micro-beam-btn",
-                    isDesktopApp && "w-[160px]",
+                    "rounded-full px-6 transition-all duration-200 shadow-sm bg-black text-white hover:bg-zinc-800 micro-beam-btn",
+                    isDesktopApp && "w-[160px]"
                   )}
                   size="sm"
                   onClick={() => {
@@ -450,7 +451,7 @@ function Navbar() {
                 {!isDesktopApp && (
                   <Button
                     className={cn(
-                      "rounded-full px-6 transition-all duration-200 shadow-sm bg-transparent border border-white/20 text-white hover:bg-white/10 micro-beam-btn",
+                      "rounded-full px-6 transition-all duration-200 shadow-sm border border-zinc-200 bg-transparent text-zinc-900 hover:bg-zinc-200 micro-beam-btn"
                     )}
                     size="sm"
                     onClick={() => router.push("/register")}
@@ -470,7 +471,7 @@ function Navbar() {
           {/* <div className="lg:hidden flex items-center gap-4">
             <Button
               onClick={() => router.push("/login")}
-              className="rounded-full dark:bg-white dark:text-black bg-black text-white text-xs px-4 py-2"
+              className="rounded-full dark:bg-white dark:text-black bg-zinc-50 shadow-sm border border-zinc-200 text-zinc-900 text-xs px-4 py-2"
               size="sm"
             >
               Login
@@ -501,7 +502,7 @@ function Navbar() {
               exit="closed"
               variants={overlayVariants}
               onClick={() => setIsDrawerOpen(false)}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
+              className="fixed inset-0 bg-zinc-50 shadow-sm border border-zinc-200/50 backdrop-blur-sm z-40 lg:hidden"
             />{" "}
             <motion.div
               initial="closed"
@@ -585,7 +586,7 @@ function Navbar() {
                   {" "}
                   <Button
                     onClick={() => handleAuthClick("/register")}
-                    className="w-full rounded-full dark:bg-white dark:text-black bg-black text-white hover:opacity-90 transition-opacity duration-200"
+                    className="w-full rounded-full dark:bg-white dark:text-black bg-zinc-50 shadow-sm border border-zinc-200 text-zinc-900 hover:opacity-90 transition-opacity duration-200"
                   >
                     {" "}
                     Get Started{" "}
@@ -595,7 +596,7 @@ function Navbar() {
                     Already have an account?{" "}
                     <button
                       onClick={() => handleAuthClick("/login")}
-                      className="text-black dark:text-white font-medium hover:underline"
+                      className="text-black dark:text-zinc-900 font-medium hover:underline"
                     >
                       {" "}
                       Sign in{" "}

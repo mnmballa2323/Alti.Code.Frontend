@@ -137,7 +137,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
             "Hi! 👋 How can I assist you with your code or deployments today?",
         }}
       >
-        <div className="relative w-full h-screen overflow-hidden bg-default-100 dark:bg-default-50">
+        <div className="relative w-full h-screen overflow-hidden bg-background">
           {/* Title Bar */}
           {isTauri && (
             <div className="absolute top-0 left-0 w-full h-10 bg-transparent flex items-center justify-between z-[100] select-none pointer-events-none">
@@ -209,7 +209,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
               </Group>
             ) : (
               /* Full-width content — no resizable panel wrapper needed */
-              <div className="flex-1 h-full bg-default-100 dark:bg-default-50 flex flex-col overflow-hidden z-10 relative">
+              <div className="flex-1 h-full flex flex-col overflow-hidden bg-default-100 dark:bg-default-50 z-10 relative">
                 {children}
               </div>
             )}

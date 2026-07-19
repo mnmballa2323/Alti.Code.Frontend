@@ -1,0 +1,125 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alti-frontend
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: alti-frontend
+  template:
+    metadata:
+      labels:
+        app: alti-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: alticodestudio/frontend:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: BACKEND_URL
+          value: "http://alti-backend:5000"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alti-frontend
+  namespace: default
+spec:
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: alti-frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alti-backend
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: alti-backend
+  template:
+    metadata:
+      labels:
+        app: alti-backend
+    spec:
+      containers:
+      - name: backend
+        image: alticodestudio/backend:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: NODE_ENV
+          value: production
+        - name: DATABASE_URL
+          value: "postgresql://inso_admin:dummy_password@postgresql:5432/alticodedb"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alti-backend
+  namespace: default
+spec:
+  ports:
+  - port: 5000
+    targetPort: 5000
+  selector:
+    app: alti-backend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: terraform-orchestrator
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: terraform-orchestrator
+  template:
+    metadata:
+      labels:
+        app: terraform-orchestrator
+    spec:
+      containers:
+      - name: orchestrator
+        image: hashicorp/terraform:latest
+        command: ["/bin/sh", "-c", "while true; do sleep 30; done;"] # Stub for orchestrator worker
+        env:
+        - name: TF_LOG
+          value: INFO
+        - name: AWS_ACCESS_KEY_ID
+          valueFrom:
+            secretKeyRef:
+              name: cloud-credentials
+              key: aws-access-key
+              optional: true
+        - name: AWS_SECRET_ACCESS_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cloud-credentials
+              key: aws-secret-key
+              optional: true
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "/secrets/gcp/sa.json"
+        volumeMounts:
+        - name: gcp-credentials
+          mountPath: /secrets/gcp
+          readOnly: true
+        - name: terraform-state
+          mountPath: /terraform
+      volumes:
+      - name: gcp-credentials
+        secret:
+          secretName: gcp-credentials
+          optional: true
+      - name: terraform-state
+        emptyDir: {}

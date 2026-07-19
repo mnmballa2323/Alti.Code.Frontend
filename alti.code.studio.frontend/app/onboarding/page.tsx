@@ -20,6 +20,7 @@ import {
   Brain,
   ToggleLeft,
   ToggleRight,
+  Cloud,
 } from "lucide-react";
 
 import { API_URL } from "@/lib/config";
@@ -35,7 +36,8 @@ interface TeamMember {
 
 const STEPS = [
   { label: "Organization", icon: Building2 },
-  { label: "Choose Plan", icon: CreditCard },
+  { label: "Cloud Provider", icon: Cloud },
+  { label: "Deployment Tier", icon: CreditCard },
   { label: "Team Setup", icon: Users },
   { label: "AI Config", icon: Bot },
 ];
@@ -48,76 +50,93 @@ const INDUSTRIES = [
   "Other",
 ];
 
+const CLOUDS = [
+  {
+    id: "aws",
+    name: "Amazon Web Services (AWS)",
+    description: "Inference powered by AWS Bedrock. Best for global reach.",
+    icon: Cloud,
+  },
+  {
+    id: "azure",
+    name: "Microsoft Azure",
+    description:
+      "Inference powered by Azure AI Foundry. Best for enterprise Microsoft shops.",
+    icon: Cloud,
+  },
+  {
+    id: "gcp",
+    name: "Google Cloud Platform (GCP)",
+    description:
+      "Inference powered by Vertex AI. Best for Kubernetes-native shops.",
+    icon: Cloud,
+  },
+];
+
 const PLANS = [
   {
-    id: "cloud",
-    name: "Cloud",
+    id: "multi-tenant",
+    name: "Multi-Tenant (Shared)",
     price: "$49",
     period: "/mo",
     badge: "Most Popular",
     badgeColor: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
-    tokens: "5M tokens",
-    agents: "10 agents",
+    description: "Shared serverless compute resources.",
     features: [
-      "Shared Vertex AI infrastructure",
-      "Community support",
+      "Logically isolated application",
+      "Shared compute (Fargate/Cloud Run)",
+      "Standard database tier",
       "Standard SLA (99.5%)",
-      "5 concurrent sessions",
-      "Basic guardrails",
     ],
   },
   {
-    id: "dedicated",
-    name: "Dedicated",
+    id: "single-tenant",
+    name: "Single-Tenant (Dedicated)",
     price: "$499",
     period: "/mo",
     badge: "Best Value",
     badgeColor: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
-    tokens: "50M tokens",
-    agents: "50 agents",
+    description: "Dedicated bare-metal hardware. Absolute physical isolation.",
     features: [
-      "Dedicated Vertex AI endpoints",
-      "Priority support (4hr SLA)",
+      "Physically isolated application",
+      "Dedicated Hosts / Sole-Tenant Nodes",
+      "Highly Available (Multi-AZ) Database",
       "Enterprise SLA (99.9%)",
-      "50 concurrent sessions",
-      "Advanced guardrails & audit logs",
     ],
   },
   {
-    id: "sovereign",
-    name: "Sovereign",
+    id: "government",
+    name: "Government",
     price: "Custom",
     period: "",
-    badge: "Enterprise",
+    badge: "Compliance",
     badgeColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
-    tokens: "500M tokens",
-    agents: "500 agents",
+    description: "Deployed to GovCloud/Assured Workloads.",
     features: [
-      "Sovereign GCP deployment (IL5)",
+      "FedRAMP High Compliant Regions",
+      "Strict data residency",
       "Dedicated success engineer",
       "Custom SLA (99.99%)",
-      "Unlimited concurrent sessions",
-      "Full compliance & data residency",
     ],
   },
 ];
 
 const MODELS = [
   {
-    id: "gemini-2.5-pro",
-    name: "Gemini 2.5 Pro",
+    id: "premium",
+    name: "Premium Model Tier",
     description:
       "Most capable — complex reasoning, code generation, long-context analysis",
   },
   {
-    id: "gemini-2.5-flash",
-    name: "Gemini 2.5 Flash",
+    id: "standard",
+    name: "Standard Model Tier",
     description:
       "Balanced — fast responses with strong reasoning at lower cost",
   },
   {
-    id: "gemini-2.0-flash",
-    name: "Gemini 2.0 Flash",
+    id: "fast",
+    name: "Fast Model Tier",
     description:
       "Ultra-fast — high throughput for simple tasks and rapid iteration",
   },
@@ -136,16 +155,19 @@ export default function OnboardingPage() {
   const [domain, setDomain] = useState("");
   const [industry, setIndustry] = useState("Technology");
 
-  // Step 2 — Plan
-  const [selectedPlan, setSelectedPlan] = useState("dedicated");
+  // Step 2 — Cloud
+  const [selectedCloud, setSelectedCloud] = useState("aws");
 
-  // Step 3 — Team
+  // Step 3 — Plan
+  const [selectedPlan, setSelectedPlan] = useState("multi-tenant");
+
+  // Step 4 — Team
   const [teamMembers, setTeamMembers] = useState<TeamMember[]>([
     { email: "", role: "developer" },
   ]);
 
-  // Step 4 — AI Config
-  const [defaultModel, setDefaultModel] = useState("gemini-2.5-pro");
+  // Step 5 — AI Config
+  const [defaultModel, setDefaultModel] = useState("premium");
   const [guardrails, setGuardrails] = useState(true);
   const [codeExecution, setCodeExecution] = useState(false);
 
@@ -173,7 +195,7 @@ export default function OnboardingPage() {
     try {
       const token = localStorage.getItem("token");
 
-      await fetch(`${API_URL}/onboarding/setup`, {
+      await fetch(`${API_URL}/v1/onboarding/setup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -181,7 +203,8 @@ export default function OnboardingPage() {
         },
         body: JSON.stringify({
           organization: { name: orgName, domain, industry },
-          plan: selectedPlan,
+          cloudProvider: selectedCloud,
+          deploymentTier: selectedPlan,
           team: teamMembers.filter((m) => m.email.trim() !== ""),
           aiConfig: { defaultModel, guardrails, codeExecution },
         }),
@@ -202,7 +225,7 @@ export default function OnboardingPage() {
 
   /* ── Step Indicator ─────────────────────────────────────────────── */
   const renderStepper = () => (
-    <div className="flex items-center justify-center gap-2 mb-10">
+    <div className="flex items-center justify-center gap-2 mb-10 overflow-x-auto pb-4">
       {STEPS.map((step, idx) => {
         const StepIcon = step.icon;
         const isActive = idx === currentStep;
@@ -210,7 +233,7 @@ export default function OnboardingPage() {
 
         return (
           <React.Fragment key={step.label}>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-shrink-0">
               <div
                 className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-300 ${
                   isComplete
@@ -236,7 +259,7 @@ export default function OnboardingPage() {
             </div>
             {idx < STEPS.length - 1 && (
               <div
-                className={`w-10 h-px transition-colors duration-300 ${
+                className={`w-6 sm:w-10 h-px transition-colors duration-300 flex-shrink-0 ${
                   idx < currentStep
                     ? "bg-emerald-400"
                     : "bg-default-200 dark:bg-white/10"
@@ -314,7 +337,70 @@ export default function OnboardingPage() {
     </div>
   );
 
-  /* ── Step 2: Plan Selection ─────────────────────────────────────── */
+  /* ── Step 2: Cloud Selection ─────────────────────────────────────── */
+  const renderCloudStep = () => (
+    <div className="animate-in fade-in slide-in-from-right-4 duration-400">
+      <div className="text-center mb-8">
+        <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center mx-auto mb-4">
+          <Cloud className="w-7 h-7 text-indigo-500" />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
+          Select Cloud Provider
+        </h2>
+        <p className="text-sm text-gray-500 mt-2">
+          Your entire environment and inference will run natively on your chosen
+          cloud.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {CLOUDS.map((cloud) => {
+          const isSelected = selectedCloud === cloud.id;
+          const CloudIcon = cloud.icon;
+
+          return (
+            <Card
+              key={cloud.id}
+              isPressable
+              className={`relative overflow-visible transition-all duration-300 ${
+                isSelected
+                  ? "border-2 border-primary shadow-lg shadow-primary/10 scale-[1.02]"
+                  : "border border-default-200 dark:border-white/10 hover:border-default-300"
+              } bg-white dark:bg-black/40`}
+              onPress={() => setSelectedCloud(cloud.id)}
+            >
+              <CardBody className="p-5">
+                <div className="flex items-center justify-between mb-4">
+                  {isSelected ? (
+                    <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center ml-auto">
+                      <Check className="text-white" size={12} />
+                    </div>
+                  ) : (
+                    <div className="w-5 h-5 rounded-full border-2 border-default-200 ml-auto" />
+                  )}
+                </div>
+
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-default-100 dark:bg-white/5 flex items-center justify-center">
+                    <CloudIcon
+                      className="text-gray-600 dark:text-gray-300"
+                      size={20}
+                    />
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                    {cloud.name}
+                  </h3>
+                </div>
+                <p className="text-sm text-gray-500">{cloud.description}</p>
+              </CardBody>
+            </Card>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  /* ── Step 3: Plan Selection ─────────────────────────────────────── */
   const renderPlanStep = () => (
     <div className="animate-in fade-in slide-in-from-right-4 duration-400">
       <div className="text-center mb-8">
@@ -322,10 +408,11 @@ export default function OnboardingPage() {
           <CreditCard className="w-7 h-7 text-emerald-500" />
         </div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
-          Choose Your Plan
+          Deployment Tier
         </h2>
         <p className="text-sm text-gray-500 mt-2">
-          All plans run exclusively on Google Cloud Vertex AI
+          Select your hardware isolation level for{" "}
+          {CLOUDS.find((c) => c.id === selectedCloud)?.name}
         </p>
       </div>
 
@@ -333,9 +420,9 @@ export default function OnboardingPage() {
         {PLANS.map((plan) => {
           const isSelected = selectedPlan === plan.id;
           const PlanIcon =
-            plan.id === "cloud"
+            plan.id === "multi-tenant"
               ? Sparkles
-              : plan.id === "dedicated"
+              : plan.id === "single-tenant"
                 ? Crown
                 : Shield;
 
@@ -373,7 +460,7 @@ export default function OnboardingPage() {
                       size={20}
                     />
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">
                     {plan.name}
                   </h3>
                 </div>
@@ -386,15 +473,9 @@ export default function OnboardingPage() {
                   <span className="text-sm text-gray-500">{plan.period}</span>
                 </div>
 
-                {/* Token & Agent count */}
-                <div className="flex gap-3 mb-4">
-                  <span className="text-xs font-medium px-2 py-1 rounded-lg bg-default-100 dark:bg-white/5 text-gray-600 dark:text-gray-400">
-                    {plan.tokens}
-                  </span>
-                  <span className="text-xs font-medium px-2 py-1 rounded-lg bg-default-100 dark:bg-white/5 text-gray-600 dark:text-gray-400">
-                    {plan.agents}
-                  </span>
-                </div>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 h-10">
+                  {plan.description}
+                </p>
 
                 {/* Features */}
                 <ul className="space-y-2">
@@ -419,7 +500,7 @@ export default function OnboardingPage() {
     </div>
   );
 
-  /* ── Step 3: Team Setup ─────────────────────────────────────────── */
+  /* ── Step 4: Team Setup ─────────────────────────────────────────── */
   const renderTeamStep = () => (
     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-400">
       <div className="text-center mb-8">
@@ -478,7 +559,7 @@ export default function OnboardingPage() {
     </div>
   );
 
-  /* ── Step 4: AI Configuration ───────────────────────────────────── */
+  /* ── Step 5: AI Configuration ───────────────────────────────────── */
   const renderAIConfigStep = () => (
     <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-400">
       <div className="text-center mb-8">
@@ -489,14 +570,15 @@ export default function OnboardingPage() {
           Configure AI Defaults
         </h2>
         <p className="text-sm text-gray-500 mt-2">
-          Set your default model and safety preferences
+          Set your default model tier and safety preferences for your{" "}
+          {selectedCloud.toUpperCase()} deployment.
         </p>
       </div>
 
       {/* Model Selection */}
       <div className="space-y-3">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Default Model
+          Default Model Tier
         </label>
         {MODELS.map((model) => {
           const isSelected = defaultModel === model.id;
@@ -597,6 +679,7 @@ export default function OnboardingPage() {
   /* ── Render ──────────────────────────────────────────────────────── */
   const stepRenderers = [
     renderOrgStep,
+    renderCloudStep,
     renderPlanStep,
     renderTeamStep,
     renderAIConfigStep,
@@ -629,10 +712,10 @@ export default function OnboardingPage() {
           </button>
 
           <div className="flex items-center gap-3">
-            {currentStep === 2 && (
+            {currentStep === 3 && (
               <button
                 className="px-5 py-2.5 rounded-xl text-sm font-medium text-gray-500 hover:bg-default-100 dark:hover:bg-white/5 transition-all"
-                onClick={() => setCurrentStep(3)}
+                onClick={() => setCurrentStep(4)}
               >
                 Skip
               </button>

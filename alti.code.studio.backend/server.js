@@ -18,7 +18,7 @@ import { agentRegistry } from './src/app/modules/agents/agent.registry.js';
 import { startDataRetentionCron } from './src/app/scripts/dataRetention.cron.js';
 import crypto from 'crypto';
 import { auditFipsCompliance } from './src/shared/security/fipsCheck.js';
-import { gcpStartupValidator } from './src/app/modules/gcpCloud/gcpStartupValidator.service.js';
+import { cloudStartupValidator } from './src/app/modules/cloudProvider/cloudStartupValidator.service.js';
 
 // Enforce FIPS 140-3 Cryptography for Defense/Gov (DoD IL5/IL6)
 if (process.env.NODE_ENV === 'production') {
@@ -47,19 +47,19 @@ mongoose.set('bufferCommands', false);
 
 async function main() {
   try {
-    // 0. Initialize GCP Observability (MUST be first for trace context propagation)
+    // 0. Initialize Cloud Observability (MUST be first for trace context propagation)
     try {
-      const { initializeObservability } = await import('./src/app/modules/gcpCloud/gcpObservability.service.js');
-      await initializeObservability();
+      const { cloudFactory } = await import('./src/app/modules/cloudProvider/cloudFactory.service.js');
+      await cloudFactory.initializeObservability();
     } catch (obsErr) {
-      logger.warn(`⚠️ GCP Observability init bypassed: ${obsErr.message}`);
+      logger.warn(`⚠️ Cloud Observability init bypassed: ${obsErr.message}`);
     }
 
-    // 1. Load GCP Secret Manager / sovereign enterprise secrets
+    // 1. Load Cloud Secret Manager / sovereign enterprise secrets
     try {
-      const { loadEnterpriseSecrets } = await import('./config/index.js');
-      await loadEnterpriseSecrets();
-      logger.info('🔑 [GCP Secret Manager] Sovereign Enterprise secrets synchronized.');
+      const { cloudFactory } = await import('./src/app/modules/cloudProvider/cloudFactory.service.js');
+      await cloudFactory.loadEnterpriseSecrets();
+      logger.info('🔑 [Cloud Secret Manager] Sovereign Enterprise secrets synchronized.');
     } catch (secretErr) {
       logger.warn(`⚠️ Enterprise Key Vault auto-inject bypassed: ${secretErr.message}`);
     }
@@ -71,13 +71,13 @@ async function main() {
     logger.info('✅ Strict Database Policy Enforced: Legacy MongoDB and MongoMemoryServer disabled.');
     logger.info('   All systems now exclusively utilize the robust PostgreSQL (Prisma) data store.');
 
-    // 3.5 Run GCP Startup Validation Dashboard
-    await gcpStartupValidator.validate();
+    // 3.5 Run Multi-Cloud Startup Validation Dashboard
+    await cloudStartupValidator.validate();
 
-    // 4. Initialize GCP Cloud Platform (all 24 services)
-    import('./src/app/modules/gcpCloud/gcpBootstrap.service.js').then(async ({ initializeGcpServices }) => {
-      await initializeGcpServices();
-    }).catch(err => logger.error('❌ Failed to initialize GCP Cloud Platform', err));
+    // 4. Initialize Core Cloud Platform (all 24 services)
+    import('./src/app/modules/cloudProvider/cloudFactory.service.js').then(async ({ cloudFactory }) => {
+      await cloudFactory.initializeCoreServices();
+    }).catch(err => logger.error('❌ Failed to initialize Cloud Platform', err));
 
     // Seed initial agent skills for SkillOpt catalog
     try {
@@ -232,7 +232,7 @@ async function main() {
       logger.info('✅ ARD Federated Catalogs Sync Scheduler active (6h interval)');
     }).catch(err => logger.error('❌ Failed to start ARD Catalogs Sync Service', err));
 
-    // 🌌 Omni-Cloud Epic: Boot the massive GCP Open Source Ingestion Engine
+    // 🌌 Omni-Cloud Epic: Boot the massive Multi-Cloud Open Source Ingestion Engine
     import('./src/app/modules/agents/omni_cloud_ingestion.service.js').then(({ omniCloudIngestionService }) => {
       omniCloudIngestionService.init();
     }).catch(err => logger.error('❌ Failed to start Omni-Cloud Ingestion Engine', err));
@@ -300,11 +300,11 @@ const gracefulShutdown = async (signal) => {
           logger.info('✅ AgentMemory shutdown initiated.');
         }).catch(() => logger.warn('AgentMemory shutdown bypassed.'));
 
-        // Shutdown GCP Cloud Platform services
-        import('./src/app/modules/gcpCloud/gcpBootstrap.service.js').then(async ({ shutdownGcpServices }) => {
-          await shutdownGcpServices();
-          logger.info('✅ GCP Cloud Platform shutdown complete.');
-        }).catch(() => logger.warn('GCP shutdown bypassed.'));
+        // Shutdown Cloud Platform services
+        import('./src/app/modules/cloudProvider/cloudFactory.service.js').then(async ({ cloudFactory }) => {
+          await cloudFactory.shutdownServices();
+          logger.info('✅ Cloud Platform shutdown complete.');
+        }).catch(() => logger.warn('Cloud Platform shutdown bypassed.'));
 
         // Shutdown MiMo Dream Service
         import('./src/app/modules/memory/mimo_dream.service.js').then(({ mimoDreamService }) => {

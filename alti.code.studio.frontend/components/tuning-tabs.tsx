@@ -38,13 +38,13 @@ export function TuningTabs() {
         return (
           <Link
             key={key}
-            href={key}
             className={[
               "flex items-center gap-1.5 px-3 h-8 rounded-md text-sm font-medium transition-all duration-150 whitespace-nowrap",
               isActive
                 ? "bg-white dark:bg-default-200 text-foreground shadow-sm"
                 : "bg-transparent text-default-500 hover:text-foreground hover:bg-white/50 dark:hover:bg-default-200/50",
             ].join(" ")}
+            href={key}
           >
             <Icon className="w-4 h-4 shrink-0" />
             <span>{label}</span>

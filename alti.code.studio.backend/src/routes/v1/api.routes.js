@@ -3,6 +3,7 @@ import { database } from '../../shared/database.js';
 import { modelRouter } from '../../shared/modelRouter.js';
 import { apiGateway } from '../../shared/apiGateway.js';
 import { logger } from '../../shared/logger.js';
+import { orchestrator } from '../../shared/orchestrator.js';
 
 export const apiRoutes = express.Router();
 
@@ -85,5 +86,36 @@ apiRoutes.post('/ai/prompt', async (req, res) => {
   } catch (err) {
     logger.error('Error executing prompt', err);
     res.status(500).json(apiGateway.errorEnvelope('AI Execution Failed', 'AI_ERROR', req.requestId));
+  }
+});
+
+/**
+ * @route POST /v1/onboarding/setup
+ * @desc Initialize a new tenant environment and trigger multi-cloud deployment
+ */
+apiRoutes.post('/onboarding/setup', async (req, res) => {
+  try {
+    const { organization, cloudProvider, deploymentTier, team, aiConfig } = req.body;
+    
+    // In a real application, you would create the Tenant record in the database here.
+    // For this demonstration, we'll generate a dummy tenant ID based on the org name.
+    const tenantId = organization?.name ? organization.name.toLowerCase().replace(/[^a-z0-9]/g, '-') : 'tenant-' + Date.now();
+    
+    logger.info(`Received onboarding request for ${organization?.name}. Triggering orchestrator for ${cloudProvider} (${deploymentTier}).`);
+    
+    // Trigger the Terraform Orchestrator asynchronously
+    const orchestrationResult = await orchestrator.provisionEnvironment({
+      tenantId,
+      cloudProvider,
+      deploymentTier
+    });
+
+    res.json(apiGateway.successEnvelope({
+      message: 'Onboarding successful. Environment provisioning started.',
+      orchestration: orchestrationResult
+    }));
+  } catch (err) {
+    logger.error('Error during onboarding setup', err);
+    res.status(500).json(apiGateway.errorEnvelope('Onboarding Failed', 'ONBOARDING_ERROR', req.requestId));
   }
 });

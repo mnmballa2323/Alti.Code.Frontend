@@ -168,40 +168,36 @@ const routeCompletion = async (
   let actualModelName = modelName;
   if (
     subscription &&
-    [
-      'enterprise-gcp-commercial',
-      'enterprise-gcp-il5',
-      'enterprise-gcp-il6',
-      'enterprise-gcp',
-    ].includes(subscription.plan_name)
+    subscription.plan_name.startsWith('enterprise-')
   ) {
+    const activeCloud = process.env.CLOUD_PROVIDER ? process.env.CLOUD_PROVIDER.toLowerCase() : 'gcp';
     logger.info(
-      `🏢 [LlmGateway] Enforcing GCP Sovereign exclusive mode for ${subscription.plan_name}`,
+      `🏢 [LlmGateway] Enforcing ${activeCloud.toUpperCase()} Sovereign exclusive mode for ${subscription.plan_name}`,
     );
     if (
       !actualModelName ||
       actualModelName === 'auto' ||
       actualModelName === 'default'
     ) {
-      if (subscription.plan_name === 'enterprise-gcp-il6') {
-        actualModelName = 'gcp/il6-gpt-5.4';
-      } else if (subscription.plan_name === 'enterprise-gcp-il5') {
-        actualModelName = 'gcp/il5-gpt-5.4';
+      if (subscription.plan_name.includes('il6')) {
+        actualModelName = `${activeCloud}/il6-gpt-5.4`;
+      } else if (subscription.plan_name.includes('il5')) {
+        actualModelName = `${activeCloud}/il5-gpt-5.4`;
       } else {
-        actualModelName = 'gcp/gpt-5.4';
+        actualModelName = `${activeCloud}/gpt-5.4`;
       }
       logger.info(
-        `🏢 [LlmGateway] Enterprise GCP: Auto-routing overridden to default GCP Vertex AI model: ${actualModelName}`,
+        `🏢 [LlmGateway] Enterprise ${activeCloud.toUpperCase()}: Auto-routing overridden to default sovereign model: ${actualModelName}`,
       );
     } else {
-      const isGCPOrLocal =
-        actualModelName.startsWith('gcp/') ||
+      const isSovereignOrLocal =
+        actualModelName.startsWith(`${activeCloud}/`) ||
         actualModelName.startsWith('local/') ||
         actualModelName === 'gpt-5.4';
-      if (!isGCPOrLocal) {
+      if (!isSovereignOrLocal) {
         throw new ApiError(
           httpStatus.FORBIDDEN,
-          `Security Enforcement: Your GCP Sovereign Enterprise plan restricts you exclusively to GCP Vertex AI models. Model '${actualModelName}' is blocked.`,
+          `Security Enforcement: Your Sovereign Enterprise plan restricts you exclusively to ${activeCloud.toUpperCase()} models. Model '${actualModelName}' is blocked.`,
         );
       }
     }
@@ -486,11 +482,11 @@ Return ONLY 'RAG' if it requires codebase search, or 'GENERAL' if it is a genera
   // Secure key loading from Vault
   const creds = await VaultService.getRawCredentials(userId);
 
-  // Force Google Vertex AI Sovereign Cloud connection for all model requests (Sovereign Mode)
-  const isGptModel = actualModelName.includes('gpt');
-  const preferredProvider = isGptModel ? 'gcp' : 'gcp-vertex';
+  // Honor dynamic Multi-Cloud environment from IaC injected environment variable
+  const activeCloud = process.env.CLOUD_PROVIDER ? process.env.CLOUD_PROVIDER.toLowerCase() : 'gcp';
+  const preferredProvider = activeCloud;
   logger.info(
-    `🧠 [LlmGateway] Routing inference to ${preferredProvider === 'gcp' ? 'GCP Vertex AI' : 'Google Vertex AI'}...`,
+    `🧠 [LlmGateway] Routing inference to Sovereign Cloud: ${preferredProvider.toUpperCase()}...`,
   );
   try {
     const cleanModelName = actualModelName.startsWith('gcp/')

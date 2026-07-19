@@ -227,7 +227,7 @@ export default function MessageContainer() {
                 </div>
 
                 {/* Glow Effect */}
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent to-primary/5 pointer-events-none" />
+                {/* Removed gradient background */}
               </div>
             }
             messageClassName="bg-transparent text-white w-full max-w-full"

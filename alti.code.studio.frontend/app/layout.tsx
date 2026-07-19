@@ -32,7 +32,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html suppressHydrationWarning lang="en" className="overflow-x-hidden">
+    <html suppressHydrationWarning className="overflow-x-hidden" lang="en">
       <head>
         <link href="/.well-known/ai-catalog.json" rel="ai-catalog" />
       </head>

@@ -39,7 +39,7 @@ ARG BUILD_SHA=unknown
 ARG BUILD_DATE=unknown
 
 ENV NODE_ENV=production
-ENV PORT=5000
+ENV PORT=8080
 
 # Security: run as non-root
 RUN addgroup --system --gid 1001 appgroup && \
@@ -62,21 +62,21 @@ COPY --from=builder --chown=appuser:appgroup /app/node_modules/.prisma ./node_mo
 
 # OCI Image Metadata Labels
 LABEL org.opencontainers.image.title="Alti Code Studio Backend" \
-      org.opencontainers.image.description="Sovereign AI coding platform — 100% Google Cloud native" \
+      org.opencontainers.image.description="Sovereign AI coding platform — Multi-Cloud native (AWS, Azure, GCP)" \
       org.opencontainers.image.vendor="Alti Code Studio" \
       org.opencontainers.image.source="https://github.com/alticodestudio/alti.code.studio" \
       org.opencontainers.image.revision="${BUILD_SHA}" \
       org.opencontainers.image.created="${BUILD_DATE}" \
-      cloud.provider="google-cloud-platform" \
+      cloud.provider="multi-cloud" \
       deployment.modes="cloud,byoc,airgap"
 
 USER appuser
 
-EXPOSE 5000
+EXPOSE 8080
 
 # Healthcheck aligned with Kubernetes-style /healthz endpoint
 HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
-  CMD wget --no-verbose --tries=1 --spider http://localhost:5000/healthz || exit 1
+  CMD wget --no-verbose --tries=1 --spider http://localhost:8080/healthz || exit 1
 
 CMD ["node", "server.js"]
 

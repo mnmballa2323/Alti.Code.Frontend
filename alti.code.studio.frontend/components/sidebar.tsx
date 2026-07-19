@@ -44,15 +44,14 @@ import {
   Bot,
   Cpu,
   SlidersHorizontal,
-  Users,
   Network,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
 
 import MyAccountDropdown from "./MyAccountDropdown";
 import NotificationBell from "./NotificationBell";
-import { teamMembers } from "@/app/team/teamData";
 
+import { teamMembers } from "@/app/team/teamData";
 import { readProjectData } from "@/lib/project";
 import { useActiveProject } from "@/hooks/useActiveProject";
 import { setActiveProject } from "@/lib/project";
@@ -1956,7 +1955,10 @@ export default function Sidebar() {
                   onChange={(e) => {
                     setLeftSidebarSearch(e.target.value);
                     if (pathname === "/team") {
-                      const params = new URLSearchParams(searchParams?.toString() || "");
+                      const params = new URLSearchParams(
+                        searchParams?.toString() || "",
+                      );
+
                       if (e.target.value) {
                         params.set("q", e.target.value);
                       } else {
@@ -2961,102 +2963,167 @@ export default function Sidebar() {
               ) : pathname === "/team" ? (
                 <div className="flex flex-col gap-0.5 px-2 mt-2 pb-6 w-full">
                   <div className="mb-4">
-
                     {(() => {
                       const categoryIconMap: Record<string, string> = {
-                        "Language": "solar:code-square-linear",
-                        "Framework": "solar:box-linear",
-                        "Frontend": "solar:window-frame-linear",
-                        "Backend": "solar:server-square-linear",
-                        "Database": "solar:database-linear",
-                        "Cloud": "solar:cloud-linear",
-                        "DevOps": "solar:tuning-square-linear",
-                        "Mobile": "solar:smartphone-linear",
+                        Language: "solar:code-square-linear",
+                        Framework: "solar:box-linear",
+                        Frontend: "solar:window-frame-linear",
+                        Backend: "solar:server-square-linear",
+                        Database: "solar:database-linear",
+                        Cloud: "solar:cloud-linear",
+                        DevOps: "solar:tuning-square-linear",
+                        Mobile: "solar:smartphone-linear",
                         "Game Dev": "solar:gamepad-linear",
-                        "Security": "solar:shield-keyhole-linear",
-                        "Integration": "solar:link-circle-linear",
-                        "Productivity": "solar:chat-square-check-linear",
-                        "AI": "solar:cpu-bolt-linear",
+                        Security: "solar:shield-keyhole-linear",
+                        Integration: "solar:link-circle-linear",
+                        Productivity: "solar:chat-square-check-linear",
+                        AI: "solar:cpu-bolt-linear",
                         "AI Models": "solar:cpu-bolt-linear",
-                        "Architecture": "solar:buildings-linear",
-                        "Compliance": "solar:shield-check-linear",
-                        "Infrastructure": "solar:server-square-cloud-linear",
-                        "API": "solar:programming-linear",
-                        "Performance": "solar:graph-up-linear",
-                        "IoT": "solar:bluetooth-square-linear",
-                        "Documentation": "solar:document-text-linear",
-                        "Cost": "solar:wallet-linear",
-                        "QA": "solar:checklist-linear",
-                        "Monitoring": "solar:graph-linear",
-                        "Analytics": "solar:chart-square-linear",
-                        "Web3": "solar:link-round-linear",
-                        "Networking": "solar:global-linear",
+                        Architecture: "solar:buildings-linear",
+                        Compliance: "solar:shield-check-linear",
+                        Infrastructure: "solar:server-square-cloud-linear",
+                        API: "solar:programming-linear",
+                        Performance: "solar:graph-up-linear",
+                        IoT: "solar:bluetooth-square-linear",
+                        Documentation: "solar:document-text-linear",
+                        Cost: "solar:wallet-linear",
+                        QA: "solar:checklist-linear",
+                        Monitoring: "solar:graph-linear",
+                        Analytics: "solar:chart-square-linear",
+                        Web3: "solar:link-round-linear",
+                        Networking: "solar:global-linear",
                         "E-Commerce": "solar:shop-linear",
-                        "CMS": "solar:widget-linear",
-                        "Communications": "solar:chat-round-dots-linear",
-                        "Communication": "solar:chat-round-dots-linear",
-                        "Payments": "solar:card-linear",
-                        "Design": "solar:palette-linear",
-                        "Enterprise": "solar:buildings-2-linear",
-                        "Data": "solar:database-linear",
-                        "Search": "solar:magnifer-linear",
-                        "Storage": "solar:cloud-storage-linear",
-                        "Identity": "solar:user-id-linear",
+                        CMS: "solar:widget-linear",
+                        Communications: "solar:chat-round-dots-linear",
+                        Communication: "solar:chat-round-dots-linear",
+                        Payments: "solar:card-linear",
+                        Design: "solar:palette-linear",
+                        Enterprise: "solar:buildings-2-linear",
+                        Data: "solar:database-linear",
+                        Search: "solar:magnifer-linear",
+                        Storage: "solar:cloud-storage-linear",
+                        Identity: "solar:user-id-linear",
                         "Customer Support": "solar:headphones-round-linear",
-                        "Creative": "solar:magic-stick-linear",
+                        Creative: "solar:magic-stick-linear",
                         "Backend as a Service": "solar:server-path-linear",
-                        "Systems": "solar:cpu-linear",
+                        Systems: "solar:cpu-linear",
                         "Machine Learning": "solar:graph-new-up-linear",
-                        "Science": "solar:test-tube-linear",
-                        "Research": "solar:book-linear",
-                        "Marketing": "solar:chart-2-linear",
-                        "Social": "solar:share-circle-linear",
-                        "Desktop": "solar:monitor-linear",
-                        "CRM": "solar:users-group-two-rounded-linear",
-                        "Authentication": "solar:lock-linear",
-                        "Legal": "solar:document-add-linear",
-                        "Debugging": "solar:bug-linear",
-                        "Scraping": "solar:scissors-linear",
-                        "Processing": "solar:refresh-circle-linear",
-                        "Tooling": "solar:settings-linear",
-                        "Quality": "solar:verified-check-linear",
+                        Science: "solar:test-tube-linear",
+                        Research: "solar:book-linear",
+                        Marketing: "solar:chart-2-linear",
+                        Social: "solar:share-circle-linear",
+                        Desktop: "solar:monitor-linear",
+                        CRM: "solar:users-group-two-rounded-linear",
+                        Authentication: "solar:lock-linear",
+                        Legal: "solar:document-add-linear",
+                        Debugging: "solar:bug-linear",
+                        Scraping: "solar:scissors-linear",
+                        Processing: "solar:refresh-circle-linear",
+                        Tooling: "solar:settings-linear",
+                        Quality: "solar:verified-check-linear",
                       };
                       // Dynamically derive unique categories from teamData, preserving a sensible order
                       const priorityOrder = [
-                        "Language", "Framework", "Frontend", "Backend", "Database", "Cloud", "DevOps",
-                        "Infrastructure", "Security", "Compliance", "AI", "AI Models", "Data", "Analytics",
-                        "API", "QA", "Performance", "Monitoring", "Mobile", "Game Dev",
-                        "Integration", "Enterprise", "Web3", "IoT", "Payments", "Networking",
-                        "E-Commerce", "CMS", "Communications", "Communication", "Documentation",
-                        "Design", "Cost", "Productivity", "Search", "Storage", "Identity",
-                        "Customer Support", "Creative", "Backend as a Service", "Systems",
-                        "Machine Learning", "Science", "Research", "Marketing", "Social",
-                        "Desktop", "CRM", "Authentication", "Legal", "Debugging", "Scraping",
-                        "Processing", "Tooling", "Quality",
+                        "Language",
+                        "Framework",
+                        "Frontend",
+                        "Backend",
+                        "Database",
+                        "Cloud",
+                        "DevOps",
+                        "Infrastructure",
+                        "Security",
+                        "Compliance",
+                        "AI",
+                        "AI Models",
+                        "Data",
+                        "Analytics",
+                        "API",
+                        "QA",
+                        "Performance",
+                        "Monitoring",
+                        "Mobile",
+                        "Game Dev",
+                        "Integration",
+                        "Enterprise",
+                        "Web3",
+                        "IoT",
+                        "Payments",
+                        "Networking",
+                        "E-Commerce",
+                        "CMS",
+                        "Communications",
+                        "Communication",
+                        "Documentation",
+                        "Design",
+                        "Cost",
+                        "Productivity",
+                        "Search",
+                        "Storage",
+                        "Identity",
+                        "Customer Support",
+                        "Creative",
+                        "Backend as a Service",
+                        "Systems",
+                        "Machine Learning",
+                        "Science",
+                        "Research",
+                        "Marketing",
+                        "Social",
+                        "Desktop",
+                        "CRM",
+                        "Authentication",
+                        "Legal",
+                        "Debugging",
+                        "Scraping",
+                        "Processing",
+                        "Tooling",
+                        "Quality",
                       ];
-                      const allCats = Array.from(new Set(teamMembers.map(m => m.category)));
+                      const allCats = Array.from(
+                        new Set(teamMembers.map((m) => m.category)),
+                      );
                       const sorted = allCats.sort((a, b) => {
                         const ai = priorityOrder.indexOf(a);
                         const bi = priorityOrder.indexOf(b);
+
                         return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
                       });
+
                       return sorted.map((catName) => {
-                        const isActive = (searchParams?.get("tab") || "Language") === catName;
-                        const catIcon = categoryIconMap[catName] || "solar:widget-2-linear";
-                        const count = teamMembers.filter(m => m.category === catName).length;
+                        const isActive =
+                          (searchParams?.get("tab") || "Language") === catName;
+                        const catIcon =
+                          categoryIconMap[catName] || "solar:widget-2-linear";
+                        const count = teamMembers.filter(
+                          (m) => m.category === catName,
+                        ).length;
+
                         return (
                           <Link
                             key={catName}
-                            href={`/team?tab=${encodeURIComponent(catName)}`}
                             className={`w-full text-left px-3 py-2 rounded-xl text-[13px] flex items-center gap-3 transition-colors mb-0.5 ${
                               isActive
                                 ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium"
                                 : "text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5"
                             }`}
+                            href={`/team?tab=${encodeURIComponent(catName)}`}
                           >
-                            <Icon icon={catIcon} className={isActive ? "text-indigo-600 dark:text-indigo-400" : "text-gray-400"} fontSize={18} />
+                            <Icon
+                              className={
+                                isActive
+                                  ? "text-indigo-600 dark:text-indigo-400"
+                                  : "text-gray-400"
+                              }
+                              fontSize={18}
+                              icon={catIcon}
+                            />
                             <span className="truncate flex-1">{catName}</span>
-                            <span className={`text-[11px] tabular-nums ${isActive ? "text-indigo-500 dark:text-indigo-400" : "text-gray-400"}`}>{count}</span>
+                            <span
+                              className={`text-[11px] tabular-nums ${isActive ? "text-indigo-500 dark:text-indigo-400" : "text-gray-400"}`}
+                            >
+                              {count}
+                            </span>
                           </Link>
                         );
                       });
