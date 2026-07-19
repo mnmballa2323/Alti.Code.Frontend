@@ -79,7 +79,7 @@ export default function ZeroTrustLedgerSection() {
  keys, database credentials, and proprietary secrets, guaranteeing
  absolute data privacy and sovereign compliance without slowing
  down your engineering cycles or impacting your team's overall
- development velocity.
+ development velocity or product release timelines.
  </p>
  </div>
  </div>
