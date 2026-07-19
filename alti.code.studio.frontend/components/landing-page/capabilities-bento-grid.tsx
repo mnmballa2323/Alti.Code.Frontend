@@ -61,9 +61,7 @@ export default function CapabilitiesBentoGrid() {
  Desktop IPC & CLI Steering
  </h4>
  <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
- Inso Code runs tools and modifies code directly on your machine
- via secure local IPC, bypassing slow virtual machines
- completely.
+ Inso Code runs tools and modifies code directly on your machine via secure local IPC, bypassing the need for slow virtual machines completely.
  </p>
  </div>
 
@@ -154,7 +152,7 @@ export default function CapabilitiesBentoGrid() {
  Semantic Cache
  </h4>
  <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
- Saves up to 80% on inference. Prefix caching detects identical requests and serves them with zero delay.
+ Saves up to 80% on inference. Prefix caching detects identical requests and serves them all with zero delay.
  </p>
  </div>
  </motion.div>
