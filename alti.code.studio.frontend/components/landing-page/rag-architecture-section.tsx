@@ -52,7 +52,7 @@ export default function RagArchitectureSection() {
         {/* Simple Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
           <FeatureCard
-            description="Manages deep semantic relationships between files, classes, and microservices for precise context."
+            description="Manages deep semantic relationships between files, modules, classes, and microservices for precise context."
             icon={<Database className="w-8 h-8 text-[#0000ff]" />}
             title="Graph Database"
           />
