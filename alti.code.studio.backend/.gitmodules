@@ -22,3 +22,9 @@
 [submodule "submodules/ponytail"]
 	path = submodules/ponytail
 	url = https://github.com/DietrichGebert/ponytail
+[submodule "submodules/lingbot-map"]
+	path = submodules/lingbot-map
+	url = https://github.com/Robbyant/lingbot-map
+[submodule "submodules/ossie"]
+	path = submodules/ossie
+	url = https://github.com/apache/ossie
