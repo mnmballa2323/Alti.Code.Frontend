@@ -131,7 +131,7 @@ export default function CapabilitiesBentoGrid() {
  Gossip Mesh Coordination
  </h4>
  <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
- 25,000 specialist agents stay perfectly synchronized via a gossip network, propagating state in sub 10ms.
+ 25,000 specialist agents stay synchronized via a gossip network, propagating state in sub 10ms.
  </p>
  </div>
  </motion.div>
@@ -267,7 +267,7 @@ export default function CapabilitiesBentoGrid() {
             Native GitOps & Declarative Infra
           </h4>
           <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
-            Deep native integration with Terraform and ArgoCD enables fully automated, highly available continuous deployment directly from Git, while managing your entire cloud infrastructure.
+            Deep native integration with Terraform and ArgoCD enables fully automated, highly available continuous deployment from Git, while managing cloud infrastructure.
           </p>
         </div>
       </motion.div>
