@@ -162,7 +162,7 @@ export default function DeterministicControlSection() {
  </div>
 
  {/* Right Column (Animation Window) */}
- <div className="relative w-full aspect-[4/3] sm:aspect-[1.2/1] max-w-md mx-auto bg-white/[0.02] border border-zinc-200   p-5 flex flex-col justify-between overflow-hidden text-black select-none rounded-2xl">
+ <div className="relative w-full aspect-[4/3] sm:aspect-[1.2/1] max-w-md mx-auto bg-zinc-100 border border-zinc-200   p-5 flex flex-col justify-between overflow-hidden text-black select-none rounded-2xl">
  {/* SVG Swarm Canvas */}
  <div className="flex-1 min-h-0 relative flex items-center justify-center py-2">
  <style
