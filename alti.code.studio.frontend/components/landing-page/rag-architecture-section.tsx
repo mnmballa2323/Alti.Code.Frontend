@@ -46,7 +46,7 @@ export default function RagArchitectureSection() {
             },
           }}
         >
-          Stop relying on simple regex searches. Alti Code Studio uses a massive triple-threat Retrieval-Augmented Generation (RAG) pipeline designed for sovereign codebase ingestion, relationship mapping, and precise inline citations.
+          Stop relying on simple regex searches. Inso Code uses a massive triple-threat Retrieval-Augmented Generation (RAG) pipeline designed for sovereign codebase ingestion, relationship mapping, and precise inline citations.
         </motion.p>
 
         {/* Simple Features Grid */}
