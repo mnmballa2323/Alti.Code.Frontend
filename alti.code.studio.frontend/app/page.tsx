@@ -61,42 +61,42 @@ export default function LandingPage() {
  <Navbar />
 
  <main className="flex-1 flex flex-col w-full relative z-10">
- <div id="section-0">
- <HeroSwarm />
- </div>
- <div id="section-how-it-works">
- <HowItWorksSection />
- </div>
- <div id="section-1">
- <PairedProgrammerSection />
- </div>
-        <div id="section-rag">
-          <RagArchitectureSection />
-        </div>
- <div id="section-wiki">
- <LiveWikiSection />
- </div>
- <div id="section-2">
- <GcpSovereignSection />
- </div>
- <div id="section-4">
- <DeterministicControlSection />
- </div>
- <div id="section-8">
- <AgentForgeSection />
- </div>
- <div id="section-9">
- <ZeroTrustLedgerSection />
- </div>
-        <div id="section-triumvirate">
-          <TriumvirateSection />
-        </div>
- <div id="section-10">
- <CapabilitiesBentoGrid />
- </div>
- <div id="section-12">
- <PricingSection />
- </div>
+  <div id="section-0">
+  <HeroSwarm />
+  </div>
+  <div id="section-how-it-works">
+  <HowItWorksSection />
+  </div>
+  <div id="section-triumvirate">
+  <TriumvirateSection />
+  </div>
+  <div id="section-10">
+  <CapabilitiesBentoGrid />
+  </div>
+  <div id="section-1">
+  <PairedProgrammerSection />
+  </div>
+  <div id="section-8">
+  <AgentForgeSection />
+  </div>
+  <div id="section-rag">
+  <RagArchitectureSection />
+  </div>
+  <div id="section-wiki">
+  <LiveWikiSection />
+  </div>
+  <div id="section-4">
+  <DeterministicControlSection />
+  </div>
+  <div id="section-9">
+  <ZeroTrustLedgerSection />
+  </div>
+  <div id="section-2">
+  <GcpSovereignSection />
+  </div>
+  <div id="section-12">
+  <PricingSection />
+  </div>
  </main>
 
  <PreFooter />
