@@ -89,9 +89,9 @@ function PreFooter() {
  <p className="font-medium text-base">Office</p>
  <ul className="footer-muted flex flex-col gap-2 lg:gap-3 font-secondary font-normal text-sm leading-relaxed">
  <li>
- 755 W Big Beaver Rd
+ 575 Market Street
  <br />
- Troy, MI 48084
+ San Francisco, CA 94105
  </li>
  </ul>
  </div>
