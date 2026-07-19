@@ -12,7 +12,7 @@ export default function RagArchitectureSection() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-5xl mx-auto mb-16"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -25,10 +25,10 @@ export default function RagArchitectureSection() {
             },
           }}
         >
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-black mb-6 whitespace-nowrap">
             The Sovereign Knowledge Pipeline.
           </h2>
-          <p className="text-lg text-zinc-600 leading-relaxed font-medium">
+          <p className="text-lg text-zinc-600 w-full font-medium tracking-tight mb-16 leading-relaxed">
             Stop relying on simple regex searches. Alti Code Studio uses a massive triple-threat Retrieval-Augmented Generation (RAG) pipeline designed for sovereign codebase ingestion, relationship mapping, and precise inline citations.
           </p>
         </motion.div>
