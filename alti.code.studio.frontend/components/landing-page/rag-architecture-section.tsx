@@ -62,7 +62,7 @@ export default function RagArchitectureSection() {
             title="Vector Search"
           />
           <FeatureCard
-            description="Aggregates exact contextual snippets into a prompt for flawless citations and implementation strategies."
+            description="Aggregates exact contextual snippets into a prompt for flawless citations and rapid implementation strategies."
             icon={<Cpu className="w-8 h-8 text-[#0000ff]" />}
             title="Neural Synthesis"
           />
