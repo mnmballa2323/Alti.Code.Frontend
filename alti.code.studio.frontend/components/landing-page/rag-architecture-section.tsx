@@ -26,7 +26,7 @@ export default function RagArchitectureSection() {
           }}
         >
           <h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-black mb-6 whitespace-nowrap">
-            The Sovereign Knowledge Pipeline.
+            Sovereign Knowledge Pipeline
           </h2>
           <p className="text-lg text-zinc-600 w-full font-medium tracking-tight mb-16 leading-relaxed">
             Stop relying on simple regex searches. Alti Code Studio uses a massive triple-threat Retrieval-Augmented Generation (RAG) pipeline designed for sovereign codebase ingestion, relationship mapping, and precise inline citations.
