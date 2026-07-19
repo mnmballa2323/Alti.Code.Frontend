@@ -97,11 +97,11 @@ function FeatureCard({
         <div className="bg-white p-3 rounded-2xl border border-zinc-200 shadow-sm shrink-0">
           {icon}
         </div>
-        <h3 className="text-lg font-bold text-black tracking-tight">
+        <h3 className="text-base md:text-[15px] lg:text-base font-bold text-black tracking-tight leading-tight">
           {title}
         </h3>
       </div>
-      <p className="text-zinc-600 leading-relaxed font-medium">{description}</p>
+      <p className="text-sm text-zinc-600 leading-relaxed font-medium">{description}</p>
     </motion.div>
   );
 }
