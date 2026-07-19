@@ -42,7 +42,7 @@ export default function TriumvirateSection() {
           <FeatureCard
             icon={<ShieldAlert className="w-8 h-8 text-[#0000ff]" />}
             title="Sentinel"
-            description="The admin's domain. Ensure strict policy enforcement, live security scanning, and role controls."
+            description="The admin's domain. Ensure strict policy enforcement, live security scanning, and complete role controls."
           />
           <FeatureCard
             icon={<LineChart className="w-8 h-8 text-[#0000ff]" />}
