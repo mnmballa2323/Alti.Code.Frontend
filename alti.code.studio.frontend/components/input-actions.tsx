@@ -305,6 +305,10 @@ function PromptInputFullLineComponent({
         return "Gemini 3.5 Flash";
       case "gemini-3.5-pro":
         return "Gemini 3.1 Pro";
+      case "gpt-5.4":
+        return "GPT 5.4";
+      case "gpt-5.4-pro":
+        return "GPT 5.4 Pro";
       default:
         return "Gemini 3.5 Flash";
     }
@@ -982,7 +986,7 @@ function PromptInputFullLineComponent({
                           : (defaultModel || "").includes("claude")
                             ? "simple-icons:claude"
                             : (defaultModel || "").includes("gpt")
-                              ? "simple-icons:google"
+                              ? "simple-icons:openai"
                               : "lucide:sparkles"
                       }
                     />
@@ -1003,7 +1007,7 @@ function PromptInputFullLineComponent({
                     heading:
                       "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
                   }}
-                  title="Google Gemini"
+                  title="Google (Gemini)"
                 >
                   <DropdownItem
                     key="gemini-3.5-pro"
@@ -1043,7 +1047,7 @@ function PromptInputFullLineComponent({
                     heading:
                       "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
                   }}
-                  title="Anthropic Claude"
+                  title="AWS (Claude)"
                 >
                   <DropdownItem
                     key="claude-fable-5"
@@ -1090,6 +1094,46 @@ function PromptInputFullLineComponent({
                       />
                       <span className="text-xs font-medium text-foreground text-[12px]">
                         Claude Sonnet 4.6
+                      </span>
+                    </div>
+                  </DropdownItem>
+                </DropdownSection>
+                <DropdownSection
+                  classNames={{
+                    heading:
+                      "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
+                  }}
+                  title="Azure (GPT)"
+                >
+                  <DropdownItem
+                    key="gpt-5.4-pro"
+                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="GPT 5.4 Pro"
+                    onPress={() => setDefaultModel("gpt-5.4-pro")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-foreground shrink-0"
+                        icon="simple-icons:openai"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        GPT 5.4 Pro
+                      </span>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="gpt-5.4"
+                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="GPT 5.4"
+                    onPress={() => setDefaultModel("gpt-5.4")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-foreground shrink-0"
+                        icon="simple-icons:openai"
+                      />
+                      <span className="text-xs font-medium text-foreground text-[12px]">
+                        GPT 5.4
                       </span>
                     </div>
                   </DropdownItem>

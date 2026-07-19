@@ -9,234 +9,253 @@ import { m } from "framer-motion";
 import React from "react";
 
 export type VerticalStepProps = {
- className?: string;
- description?: React.ReactNode;
- title?: React.ReactNode;
+  className?: string;
+  description?: React.ReactNode;
+  title?: React.ReactNode;
 };
 
 export interface VerticalStepsProps
- extends React.HTMLAttributes<HTMLButtonElement> {
- /**
- * An array of steps.
- *
- * @default []
- */
- steps?: VerticalStepProps[];
- /**
- * The color of the steps.
- *
- * @default "primary"
- */
- color?: ButtonProps["color"];
- /**
- * The current step index.
- */
- currentStep?: number;
- /**
- * The default step index.
- *
- * @default 0
- */
- defaultStep?: number;
- /**
- * Whether to hide the progress bars.
- *
- * @default false
- */
- hideProgressBars?: boolean;
- /**
- * The custom class for the steps wrapper.
- */
- className?: string;
- /**
- * The custom class for the step.
- */
- stepClassName?: string;
- /**
- * Callback function when the step index changes.
- */
- onStepChange?: (stepIndex: number) => void;
+  extends React.HTMLAttributes<HTMLButtonElement> {
+  /**
+   * An array of steps.
+   *
+   * @default []
+   */
+  steps?: VerticalStepProps[];
+  /**
+   * The color of the steps.
+   *
+   * @default "primary"
+   */
+  color?: ButtonProps["color"];
+  /**
+   * The current step index.
+   */
+  currentStep?: number;
+  /**
+   * The default step index.
+   *
+   * @default 0
+   */
+  defaultStep?: number;
+  /**
+   * Whether to hide the progress bars.
+   *
+   * @default false
+   */
+  hideProgressBars?: boolean;
+  /**
+   * The custom class for the steps wrapper.
+   */
+  className?: string;
+  /**
+   * The custom class for the step.
+   */
+  stepClassName?: string;
+  /**
+   * Callback function when the step index changes.
+   */
+  onStepChange?: (stepIndex: number) => void;
 }
 
 function CheckIcon(props: ComponentProps<"svg">) {
- return (
- <svg
- {...props}
- fill="none"
- stroke="currentColor"
- strokeWidth={2}
- viewBox="0 0 24 24"
- >
- <m.path
- animate={{ pathLength: 1 }}
- d="M5 13l4 4L19 7"
- initial={{ pathLength: 0 }}
- strokeLinecap="round"
- strokeLinejoin="round"
- transition={{
- delay: 0.2,
- type: "tween",
- ease: "easeOut",
- duration: 0.3,
- }}
- />
- </svg>
- );
+  return (
+    <svg
+      {...props}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      viewBox="0 0 24 24"
+    >
+      <m.path
+        animate={{ pathLength: 1 }}
+        d="M5 13l4 4L19 7"
+        initial={{ pathLength: 0 }}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        transition={{
+          delay: 0.2,
+          type: "tween",
+          ease: "easeOut",
+          duration: 0.3,
+        }}
+      />
+    </svg>
+  );
 }
 
 const VerticalSteps = React.forwardRef<HTMLButtonElement, VerticalStepsProps>(
- (
- {
- color = "primary",
- steps = [],
- defaultStep = 0,
- onStepChange,
- currentStep: currentStepProp,
- hideProgressBars = false,
- stepClassName,
- className,
- ...props
- },
- ref,
- ) => {
- const [currentStep, setCurrentStep] = useControlledState(
- currentStepProp,
- defaultStep,
- onStepChange,
- );
+  (
+    {
+      color = "primary",
+      steps = [],
+      defaultStep = 0,
+      onStepChange,
+      currentStep: currentStepProp,
+      hideProgressBars = false,
+      stepClassName,
+      className,
+      ...props
+    },
+    ref,
+  ) => {
+    const [currentStep, setCurrentStep] = useControlledState(
+      currentStepProp,
+      defaultStep,
+      onStepChange,
+    );
 
- const colors = React.useMemo(() => {
- let userColor;
- let fgColor;
+    const colors = React.useMemo(() => {
+      let userColor;
+      let fgColor;
 
- const colorsVars = [ "[--active-fg-color:var(--step-fg-color)]", "[--active-border-color:var(--step-color)]", "[--active-color:var(--step-color)]", "[--complete-background-color:var(--step-color)]", "[--complete-border-color:var(--step-color)]", "[--inactive-border-color:hsl(var(--heroui-default-300))]", "[--inactive-color:hsl(var(--heroui-default-300))]",
- ];
+      const colorsVars = [
+        "[--active-fg-color:var(--step-fg-color)]",
+        "[--active-border-color:var(--step-color)]",
+        "[--active-color:var(--step-color)]",
+        "[--complete-background-color:var(--step-color)]",
+        "[--complete-border-color:var(--step-color)]",
+        "[--inactive-border-color:hsl(var(--heroui-default-300))]",
+        "[--inactive-color:hsl(var(--heroui-default-300))]",
+      ];
 
- switch (color) {
- case "primary":
- userColor = "[--step-color:hsl(var(--heroui-primary))]";
- fgColor = "[--step-fg-color:hsl(var(--heroui-primary-foreground))]";
- break;
- case "secondary":
- userColor = "[--step-color:hsl(var(--heroui-secondary))]";
- fgColor = "[--step-fg-color:hsl(var(--heroui-secondary-foreground))]";
- break;
- case "success":
- userColor = "[--step-color:hsl(var(--heroui-success))]";
- fgColor = "[--step-fg-color:hsl(var(--heroui-success-foreground))]";
- break;
- case "warning":
- userColor = "[--step-color:hsl(var(--heroui-warning))]";
- fgColor = "[--step-fg-color:hsl(var(--heroui-warning-foreground))]";
- break;
- case "danger":
- userColor = "[--step-color:hsl(var(--heroui-error))]";
- fgColor = "[--step-fg-color:hsl(var(--heroui-error-foreground))]";
- break;
- case "default":
- userColor = "[--step-color:hsl(var(--heroui-default))]";
- fgColor = "[--step-fg-color:hsl(var(--heroui-default-foreground))]";
- break;
- default:
- userColor = "[--step-color:hsl(var(--heroui-primary))]";
- fgColor = "[--step-fg-color:hsl(var(--heroui-primary-foreground))]";
- break;
- }
+      switch (color) {
+        case "primary":
+          userColor = "[--step-color:hsl(var(--heroui-primary))]";
+          fgColor = "[--step-fg-color:hsl(var(--heroui-primary-foreground))]";
+          break;
+        case "secondary":
+          userColor = "[--step-color:hsl(var(--heroui-secondary))]";
+          fgColor = "[--step-fg-color:hsl(var(--heroui-secondary-foreground))]";
+          break;
+        case "success":
+          userColor = "[--step-color:hsl(var(--heroui-success))]";
+          fgColor = "[--step-fg-color:hsl(var(--heroui-success-foreground))]";
+          break;
+        case "warning":
+          userColor = "[--step-color:hsl(var(--heroui-warning))]";
+          fgColor = "[--step-fg-color:hsl(var(--heroui-warning-foreground))]";
+          break;
+        case "danger":
+          userColor = "[--step-color:hsl(var(--heroui-error))]";
+          fgColor = "[--step-fg-color:hsl(var(--heroui-error-foreground))]";
+          break;
+        case "default":
+          userColor = "[--step-color:hsl(var(--heroui-default))]";
+          fgColor = "[--step-fg-color:hsl(var(--heroui-default-foreground))]";
+          break;
+        default:
+          userColor = "[--step-color:hsl(var(--heroui-primary))]";
+          fgColor = "[--step-fg-color:hsl(var(--heroui-primary-foreground))]";
+          break;
+      }
 
- if (!className?.includes("--step-fg-color")) colorsVars.unshift(fgColor);
- if (!className?.includes("--step-color")) colorsVars.unshift(userColor);
- if (!className?.includes("--inactive-bar-color"))
- colorsVars.push( "[--inactive-bar-color:hsl(var(--heroui-default-300))]",
- );
+      if (!className?.includes("--step-fg-color")) colorsVars.unshift(fgColor);
+      if (!className?.includes("--step-color")) colorsVars.unshift(userColor);
+      if (!className?.includes("--inactive-bar-color"))
+        colorsVars.push(
+          "[--inactive-bar-color:hsl(var(--heroui-default-300))]",
+        );
 
- return colorsVars;
- }, [color, className]);
+      return colorsVars;
+    }, [color, className]);
 
- return (
- <nav aria-label="Progress" className="max-w-fit">
- <ol className={cn("flex flex-col gap-y-3", colors, className)}>
- {steps?.map((step, stepIdx) => {
- let status =
- currentStep === stepIdx
- ? "active"
- : currentStep < stepIdx
- ? "inactive"
- : "complete";
+    return (
+      <nav aria-label="Progress" className="max-w-fit">
+        <ol className={cn("flex flex-col gap-y-3", colors, className)}>
+          {steps?.map((step, stepIdx) => {
+            let status =
+              currentStep === stepIdx
+                ? "active"
+                : currentStep < stepIdx
+                  ? "inactive"
+                  : "complete";
 
- return (
- <li key={stepIdx} className="relative">
- <div className="flex w-full max-w-full items-center">
- <button
- key={stepIdx}
- ref={ref}
- aria-current={status === "active" ? "step" : undefined}
- className={cn( "group rounded-large flex w-full cursor-pointer items-start justify-center gap-4 px-3 py-2.5",
- stepClassName,
- )}
- onClick={() => setCurrentStep(stepIdx)}
- {...props}
- >
- <div className="flex h-full items-center">
- <div className="relative">
- <div
- className={cn( "border-2 text-medium relative flex h-[34px] w-[34px] items-center justify-center rounded-full font-semibold transition-all duration-300",
- { "bg-zinc-900 border-zinc-900 text-black shadow-md":
- status === "complete", "border-zinc-900 text-zinc-900 bg-transparent":
- status === "active", "border-zinc-200 text-zinc-600 bg-transparent":
- status === "inactive",
- },
- )}
- data-status={status}
- >
- <span>{stepIdx + 1}</span>
- </div>
- </div>
- </div>
- <div className="flex-1 text-left">
- <div>
- <div
- className={cn( "text-medium text-zinc-900 font-semibold transition-[color,opacity] duration-300 group-active:opacity-70",
- { "text-zinc-600 font-medium":
- status === "inactive",
- },
- )}
- >
- {step.title}
- </div>
- <div
- className={cn( "text-tiny lg:text-small max-lg:min-w-[300px] lg:max-w-[300px] text-zinc-500 transition-all duration-300 overflow-hidden",
- { "max-h-0 opacity-0 mt-0 pointer-events-none":
- status !== "active", "max-h-40 opacity-100 mt-1.5":
- status === "active",
- },
- )}
- >
- {step.description}
- </div>
- </div>
- </div>
- </button>
- </div>
- {stepIdx < steps.length - 1 && !hideProgressBars && (
- <div
- aria-hidden="true"
- className="pointer-events-none absolute left-[28px] top-[42px] bottom-[-16px] w-0.5"
- >
- <div
- className={cn( "relative h-full w-full bg-zinc-200 transition-colors duration-300", "after:absolute after:block after:h-0 after:w-full after:bg-zinc-900 after:transition-[height] after:duration-300 after:content-['']",
- { "after:h-full": stepIdx < currentStep,
- },
- )}
- />
- </div>
- )}
- </li>
- );
- })}
- </ol>
- </nav>
- );
- },
+            return (
+              <li key={stepIdx} className="relative">
+                <div className="flex w-full max-w-full items-center">
+                  <button
+                    key={stepIdx}
+                    ref={ref}
+                    aria-current={status === "active" ? "step" : undefined}
+                    className={cn(
+                      "group rounded-large flex w-full cursor-pointer items-start justify-center gap-4 px-3 py-2.5",
+                      stepClassName,
+                    )}
+                    onClick={() => setCurrentStep(stepIdx)}
+                    {...props}
+                  >
+                    <div className="flex h-full items-center">
+                      <div className="relative">
+                        <div
+                          className={cn(
+                            "border-2 text-medium relative flex h-[34px] w-[34px] items-center justify-center rounded-full font-semibold transition-all duration-300",
+                            {
+                              "bg-zinc-900 border-zinc-900 text-black shadow-md":
+                                status === "complete",
+                              "border-zinc-900 text-zinc-900 bg-transparent":
+                                status === "active",
+                              "border-zinc-200 text-zinc-600 bg-transparent":
+                                status === "inactive",
+                            },
+                          )}
+                          data-status={status}
+                        >
+                          <span>{stepIdx + 1}</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div>
+                        <div
+                          className={cn(
+                            "text-medium text-zinc-900 font-semibold transition-[color,opacity] duration-300 group-active:opacity-70",
+                            {
+                              "text-zinc-600 font-medium":
+                                status === "inactive",
+                            },
+                          )}
+                        >
+                          {step.title}
+                        </div>
+                        <div
+                          className={cn(
+                            "text-tiny lg:text-small max-lg:min-w-[300px] lg:max-w-[300px] text-zinc-500 transition-all duration-300 overflow-hidden",
+                            {
+                              "max-h-0 opacity-0 mt-0 pointer-events-none":
+                                status !== "active",
+                              "max-h-40 opacity-100 mt-1.5":
+                                status === "active",
+                            },
+                          )}
+                        >
+                          {step.description}
+                        </div>
+                      </div>
+                    </div>
+                  </button>
+                </div>
+                {stepIdx < steps.length - 1 && !hideProgressBars && (
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute left-[28px] top-[42px] bottom-[-16px] w-0.5"
+                  >
+                    <div
+                      className={cn(
+                        "relative h-full w-full bg-zinc-200 transition-colors duration-300",
+                        "after:absolute after:block after:h-0 after:w-full after:bg-zinc-900 after:transition-[height] after:duration-300 after:content-['']",
+                        { "after:h-full": stepIdx < currentStep },
+                      )}
+                    />
+                  </div>
+                )}
+              </li>
+            );
+          })}
+        </ol>
+      </nav>
+    );
+  },
 );
 
 VerticalSteps.displayName = "VerticalSteps";

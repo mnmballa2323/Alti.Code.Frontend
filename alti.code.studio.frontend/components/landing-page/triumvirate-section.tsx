@@ -14,8 +14,6 @@ export default function TriumvirateSection() {
         <motion.div
           className="text-center max-w-3xl mx-auto mb-16"
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
           variants={{
             hidden: { opacity: 0, y: 30 },
             visible: {
@@ -24,30 +22,35 @@ export default function TriumvirateSection() {
               transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
             },
           }}
+          viewport={{ once: true, margin: "-100px" }}
+          whileInView="visible"
         >
           <h2 className="text-3xl md:text-4xl font-bold tracking-tighter text-black mb-6">
             The Triumvirate of Power
           </h2>
           <p className="text-lg text-zinc-600 w-full font-medium tracking-tight leading-relaxed">
-            AI should not just assist developers, it should participate as a peer. Inso code moves <br className="hidden md:block" />beyond basic copilots by separating concerns across the enterprise structure.
+            AI should not just assist developers, it should participate as a
+            peer. Inso code moves <br className="hidden md:block" />
+            beyond basic copilots by separating concerns across the enterprise
+            structure.
           </p>
         </motion.div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl mx-auto relative z-10">
           <FeatureCard
+            description="The developer's domain. Gain access to local execution, native compilers, and your full system terminal control."
             icon={<Code2 className="w-8 h-8 text-[#0000ff]" />}
             title="Architect"
-            description="The developer's domain. Gain access to local execution, native compilers, and your full system terminal control."
           />
           <FeatureCard
+            description="The admin's domain. Ensure strict policy enforcement, live security scanning, and complete role controls."
             icon={<ShieldAlert className="w-8 h-8 text-[#0000ff]" />}
             title="Sentinel"
-            description="The admin's domain. Ensure strict policy enforcement, live security scanning, and complete role controls."
           />
           <FeatureCard
+            description="The business owner's domain. Drive intelligent resource allocation and comprehensive cost analysis."
             icon={<LineChart className="w-8 h-8 text-[#0000ff]" />}
             title="Overseer"
-            description="The business owner's domain. Drive intelligent resource allocation and comprehensive cost analysis."
           />
         </div>
       </div>
@@ -80,11 +83,11 @@ function FeatureCard({
         <div className="bg-white p-3 rounded-2xl border border-zinc-200 shadow-sm shrink-0">
           {icon}
         </div>
-        <h3 className="text-lg font-bold text-black tracking-tight">
-          {title}
-        </h3>
+        <h3 className="text-lg font-bold text-black tracking-tight">{title}</h3>
       </div>
-      <p className="text-sm text-zinc-600 leading-relaxed font-medium">{description}</p>
+      <p className="text-sm text-zinc-600 leading-relaxed font-medium">
+        {description}
+      </p>
     </motion.div>
   );
 }

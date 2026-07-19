@@ -46,7 +46,10 @@ export default function RagArchitectureSection() {
             },
           }}
         >
-          Stop relying on simple search. Inso code uses a massive retrieval augmented generation pipeline <br className="hidden md:block" />designed for sovereign codebase ingestion, relationship mapping, and precise inline citations.
+          Stop relying on simple search. Inso code uses a massive retrieval
+          augmented generation pipeline <br className="hidden md:block" />
+          designed for sovereign codebase ingestion, relationship mapping, and
+          precise inline citations.
         </motion.p>
 
         {/* Simple Features Grid */}
@@ -97,11 +100,11 @@ function FeatureCard({
         <div className="bg-white p-3 rounded-2xl border border-zinc-200 shadow-sm shrink-0">
           {icon}
         </div>
-        <h3 className="text-lg font-bold text-black tracking-tight">
-          {title}
-        </h3>
+        <h3 className="text-lg font-bold text-black tracking-tight">{title}</h3>
       </div>
-      <p className="text-sm text-zinc-600 leading-relaxed font-medium">{description}</p>
+      <p className="text-sm text-zinc-600 leading-relaxed font-medium">
+        {description}
+      </p>
     </motion.div>
   );
 }
