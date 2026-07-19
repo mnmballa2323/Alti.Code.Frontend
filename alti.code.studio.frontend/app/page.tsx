@@ -17,8 +17,6 @@ import PricingSection from "@/components/landing-page/pricing-section";
 import HowItWorksSection from "@/components/landing-page/how-it-works-section";
 import RagArchitectureSection from "@/components/landing-page/rag-architecture-section";
 import TriumvirateSection from "@/components/landing-page/triumvirate-section";
-import RagArchitectureSection from "@/components/landing-page/rag-architecture-section";
-import TriumvirateSection from "@/components/landing-page/triumvirate-section";
 
 export default function LandingPage() {
  const router = useRouter();
