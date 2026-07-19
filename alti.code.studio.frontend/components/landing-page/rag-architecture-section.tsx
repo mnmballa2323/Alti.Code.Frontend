@@ -54,7 +54,7 @@ export default function RagArchitectureSection() {
           <FeatureCard
             description='Manages deep semantic relationships between files, classes, and microservices (e.g., "Service A depends on Interface B").'
             icon={<Database className="w-8 h-8 text-[#0000ff]" />}
-            title="Enterprise Graph Database"
+            title="Graph Database"
           />
           <FeatureCard
             description="Performs dense vector similarity search across the actual code text, implementation logic, and historical commits."
@@ -64,7 +64,7 @@ export default function RagArchitectureSection() {
           <FeatureCard
             description="Aggregates exact contextual snippets into a monolithic prompt to generate flawless inline citations and implementation strategies."
             icon={<Cpu className="w-8 h-8 text-[#0000ff]" />}
-            title="Neural Context Synthesis"
+            title="Neural Synthesis"
           />
         </div>
       </motion.div>
