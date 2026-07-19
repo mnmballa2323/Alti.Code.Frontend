@@ -15,6 +15,10 @@ import ZeroTrustLedgerSection from "@/components/landing-page/zero-trust-ledger-
 import CapabilitiesBentoGrid from "@/components/landing-page/capabilities-bento-grid";
 import PricingSection from "@/components/landing-page/pricing-section";
 import HowItWorksSection from "@/components/landing-page/how-it-works-section";
+import RagArchitectureSection from "@/components/landing-page/rag-architecture-section";
+import TriumvirateSection from "@/components/landing-page/triumvirate-section";
+import RagArchitectureSection from "@/components/landing-page/rag-architecture-section";
+import TriumvirateSection from "@/components/landing-page/triumvirate-section";
 
 export default function LandingPage() {
  const router = useRouter();
@@ -68,6 +72,9 @@ export default function LandingPage() {
  <div id="section-1">
  <PairedProgrammerSection />
  </div>
+        <div id="section-rag">
+          <RagArchitectureSection />
+        </div>
  <div id="section-wiki">
  <LiveWikiSection />
  </div>
@@ -83,6 +90,9 @@ export default function LandingPage() {
  <div id="section-9">
  <ZeroTrustLedgerSection />
  </div>
+        <div id="section-triumvirate">
+          <TriumvirateSection />
+        </div>
  <div id="section-10">
  <CapabilitiesBentoGrid />
  </div>

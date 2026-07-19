@@ -232,6 +232,51 @@ export default function CapabilitiesBentoGrid() {
  </div>
  </div>
  </motion.div>
+
+      {/* Card 7: SEDE */}
+      <motion.div
+        className="col-span-12 lg:col-span-6 rounded-[32px] bg-zinc-100  border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-200   px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group "
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+          },
+        }}
+      >
+        <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
+          <h4 className="text-base xl:text-lg font-bold tracking-tight text-black">
+            Self-Evolving Dev Environment
+          </h4>
+          <p className="text-[11px] xl:text-xs text-zinc-600 leading-relaxed font-medium">
+            The IDE works while you sleep—autonomously noticing bugs, writing test cases, fixing the bugs, and pushing commits.
+          </p>
+        </div>
+      </motion.div>
+
+      {/* Card 8: GitOps */}
+      <motion.div
+        className="col-span-12 lg:col-span-6 rounded-[32px] bg-zinc-100  border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-200   px-5 py-2.5 xl:px-6 xl:py-3.5 flex flex-col justify-center transition-all duration-500 overflow-hidden relative group "
+        variants={{
+          hidden: { opacity: 0, y: 20 },
+          visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+          },
+        }}
+      >
+        <div className="flex flex-col gap-2 xl:gap-3 relative z-10">
+          <h4 className="text-base xl:text-lg font-bold tracking-tight text-black">
+            Native GitOps & Declarative Infra
+          </h4>
+          <p className="text-[11px] xl:text-xs text-zinc-600 leading-relaxed font-medium">
+            Deep native integration with Terraform and ArgoCD for fully automated, highly available continuous deployment directly from Git.
+          </p>
+        </div>
+      </motion.div>
+
  </div>
  </motion.div>
  </section>
