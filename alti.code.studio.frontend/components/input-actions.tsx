@@ -280,6 +280,7 @@ function PromptInputFullLineComponent({
 }) {
   const router = useRouter();
   const { onOpen } = useModalStore();
+  const mockCloudProvider = "all";
   const { defaultModel, setDefaultModel } = useSettingsStore();
 
   const [ragMode, setRagMode] = useState<"auto" | "forced" | "disabled">(
@@ -1061,25 +1062,27 @@ function PromptInputFullLineComponent({
           autoFocus
           className="max-h-[300px] w-full resize-none border-none shadow-none outline-none focus-visible:ring-0"
           classNames={{
+            base: "![mask-image:none] ![-webkit-mask-image:none]",
             innerWrapper:
-              "relative border-none outline-none focus:outline-none focus:ring-0",
+              "relative border-none outline-none focus:outline-none focus:ring-0 !bg-none bg-transparent [&::after]:hidden [&::before]:hidden ![mask-image:none] ![-webkit-mask-image:none]",
             input:
-            "text-[15px] leading-relaxed font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-default-400 placeholder:font-normal py-0 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none group-data-[focus=true]:!ring-0",
-          inputWrapper:
-            "!bg-transparent shadow-none !border-0 px-4 pt-3 pb-1 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none focus-within:ring-0 focus-within:outline-none group-data-[focus=true]:!ring-0 group-data-[focus=true]:!border-transparent group-data-[focus-visible=true]:!ring-0",
-        }}
-        maxRows={16}
-        minRows={1}
-        name="content"
-        placeholder="Enter prompt here..."
-        radius="none"
-        spellCheck={"false"}
-        value={prompt}
-        variant="flat"
-        onKeyDown={handleKeyDown}
-        onPaste={handlePaste}
-        onValueChange={setPrompt}
-      />
+              "text-[15px] leading-relaxed font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-default-400 placeholder:font-normal py-0 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none group-data-[focus=true]:!ring-0 !bg-none bg-transparent ![mask-image:none] ![-webkit-mask-image:none]",
+            inputWrapper:
+              "!bg-transparent shadow-none !border-0 px-4 pt-3 pb-1 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none focus-within:ring-0 focus-within:outline-none group-data-[focus=true]:!ring-0 group-data-[focus=true]:!border-transparent group-data-[focus-visible=true]:!ring-0 !bg-none [&::after]:hidden [&::before]:hidden ![mask-image:none] ![-webkit-mask-image:none] group-data-[hover=true]:!bg-transparent group-data-[focus=true]:!bg-transparent",
+          }}
+          maxRows={16}
+          minRows={1}
+          name="content"
+          placeholder="Enter prompt here..."
+          radius="none"
+          spellCheck={"false"}
+          value={prompt}
+          variant="light"
+          disableAnimation={true}
+          onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
+          onValueChange={setPrompt}
+        />
 
       <div className="flex w-full flex-row items-center justify-between px-4 pb-3 pt-2 mt-1 border-t-[0.5px] border-default-200 dark:border-zinc-800/50">
           <div className="flex flex-col gap-1.5">
@@ -1104,13 +1107,13 @@ function PromptInputFullLineComponent({
                   </button>
                 </TooltipTrigger>
                 <TooltipContent side="top">
-                  <p>Add context (files, images)</p>
+                  <p>Attach Files</p>
                 </TooltipContent>
               </Tooltip>
 
               {showModelDropdown && (
                 <Dropdown
-                  className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[260px] p-2"
+                  className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[240px] p-2"
                   placement="top-start"
                 >
                   <DropdownTrigger>
@@ -1158,170 +1161,166 @@ function PromptInputFullLineComponent({
                       description: "text-[11px] text-default-400 mt-0.5",
                     }}
                   >
+                    {customAgents.length > 0 && (
+                      <DropdownSection
+                        showDivider
+                        title="Custom Agents"
+                        classNames={{
+                          heading:
+                            "text-[10px] font-semibold tracking-wider text-default-400 uppercase px-2 mb-2",
+                          divider: "my-2 border-default-200/50",
+                        }}
+                      >
+                        {customAgents.map((agent) => (
+                          <DropdownItem
+                            key={`custom-agent-${agent.id}`}
+                            description={agent.description || "Custom AI Agent"}
+                            startContent={
+                              <div className="size-6 rounded-md bg-purple-500/10 dark:bg-purple-500/20 flex items-center justify-center shrink-0">
+                                <Icon
+                                  icon="solar:bot-bold-duotone"
+                                  className="text-purple-500 size-3.5"
+                                />
+                              </div>
+                            }
+                            onPress={() =>
+                              setDefaultModel(`custom-agent-${agent.id}`)
+                            }
+                          >
+                            {agent.name}
+                          </DropdownItem>
+                        ))}
+                      </DropdownSection>
+                    )}
                     <DropdownSection
-                      showDivider
-                      title="Custom Agents"
                       classNames={{
-                        heading:
-                          "text-[10px] font-semibold tracking-wider text-default-400 uppercase px-2 mb-2",
-                        divider: "my-2 border-default-200/50",
+                        heading: "hidden",
                       }}
                     >
-                      {customAgents.map((agent) => (
+                      {/* GEMINI MODELS (Available ONLY on Google Cloud) */}
+                      {(mockCloudProvider === "gcp" || mockCloudProvider === "all") && (
                         <DropdownItem
-                          key={`custom-agent-${agent.id}`}
-                          description={agent.description || "Custom AI Agent"}
+                          key="gemini-3.5-pro"
                           startContent={
-                            <div className="size-6 rounded-md bg-purple-500/10 dark:bg-purple-500/20 flex items-center justify-center shrink-0">
+                            <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
                               <Icon
-                                icon="solar:bot-bold-duotone"
-                                className="text-purple-500 size-3.5"
+                                icon="simple-icons:googlegemini"
+                                className="text-[#1A73E8] size-3.5"
                               />
                             </div>
                           }
-                          onPress={() =>
-                            setDefaultModel(`custom-agent-${agent.id}`)
-                          }
+                          onPress={() => setDefaultModel("gemini-3.5-pro")}
                         >
-                          {agent.name}
+                          Gemini 3.1 Pro
                         </DropdownItem>
-                      ))}
-                    </DropdownSection>
-                    <DropdownSection
-                      showDivider
-                      title="Frontier Models"
-                      classNames={{
-                        heading:
-                          "text-[10px] font-semibold tracking-wider text-default-400 uppercase px-2 mb-2",
-                        divider: "my-2 border-default-200/50",
-                      }}
-                    >
+                      )}
+                      {(mockCloudProvider === "gcp" || mockCloudProvider === "all") && (
+                        <DropdownItem
+                          key="gemini-3.5-flash"
+                          startContent={
+                            <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
+                              <Icon
+                                icon="simple-icons:googlegemini"
+                                className="text-[#1A73E8] size-3.5"
+                              />
+                            </div>
+                          }
+                          onPress={() => setDefaultModel("gemini-3.5-flash")}
+                        >
+                          Gemini 3.5 Flash
+                        </DropdownItem>
+                      )}
+
+                      {/* GPT MODELS (Available ONLY on Azure) */}
+                      {(mockCloudProvider === "azure" || mockCloudProvider === "all") && (
+                        <DropdownItem
+                          key="gpt-5.4-pro"
+                          startContent={
+                            <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
+                              <Icon
+                                icon="simple-icons:openai"
+                                className="text-black dark:text-white size-3.5"
+                              />
+                            </div>
+                          }
+                          onPress={() => setDefaultModel("gpt-5.4-pro")}
+                        >
+                          GPT 5.4 Pro
+                        </DropdownItem>
+                      )}
+                      {(mockCloudProvider === "azure" || mockCloudProvider === "all") && (
+                        <DropdownItem
+                          key="gpt-5.4"
+                          startContent={
+                            <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
+                              <Icon
+                                icon="simple-icons:openai"
+                                className="text-black dark:text-white size-3.5"
+                              />
+                            </div>
+                          }
+                          onPress={() => setDefaultModel("gpt-5.4")}
+                        >
+                          GPT 5.4
+                        </DropdownItem>
+                      )}
+
+                      {/* CLAUDE MODELS (Available on ALL clouds) */}
                       <DropdownItem
-                        key="gemini-3.5-pro"
-                        description="Most capable • Recommended for complex tasks"
+                        key="claude-fable-5"
                         startContent={
                           <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
                             <Icon
-                              icon="simple-icons:googlegemini"
-                              className="text-[#1A73E8] size-3.5"
+                              icon="simple-icons:claude"
+                              className="text-[#CC9980] size-3.5"
                             />
                           </div>
                         }
-                        onPress={() => setDefaultModel("gemini-3.5-pro")}
-                      >
-                        Gemini 3.1 Pro
-                      </DropdownItem>
-                      <DropdownItem
-                        key="gemini-3.5-flash"
-                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Gemini 3.5 Flash"
-                        onPress={() => setDefaultModel("gemini-3.5-flash")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <Icon
-                            className="size-4 text-[#1A73E8] shrink-0"
-                            icon="simple-icons:googlegemini"
-                          />
-                          <span className="text-xs font-medium text-foreground text-[12px]">
-                            Gemini 3.5 Flash
-                          </span>
-                        </div>
-                      </DropdownItem>
-                    </DropdownSection>
-                    <DropdownSection
-                      classNames={{
-                        heading:
-                          "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
-                      }}
-                      title="AWS (Claude)"
-                    >
-                      <DropdownItem
-                        key="claude-fable-5"
-                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Claude Fable 5"
                         onPress={() => setDefaultModel("claude-fable-5")}
                       >
-                        <div className="flex items-center gap-3 text-left">
-                          <Icon
-                            className="size-4 text-[#CC9980] shrink-0"
-                            icon="simple-icons:claude"
-                          />
-                          <span className="text-xs font-medium text-foreground text-[12px]">
-                            Claude Fable 5
-                          </span>
-                        </div>
+                        Claude Fable 5
                       </DropdownItem>
                       <DropdownItem
                         key="claude-opus-4.8"
-                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Claude Opus 4.8"
+                        startContent={
+                          <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
+                            <Icon
+                              icon="simple-icons:claude"
+                              className="text-[#CC9980] size-3.5"
+                            />
+                          </div>
+                        }
                         onPress={() => setDefaultModel("claude-opus-4.8")}
                       >
-                        <div className="flex items-center gap-3 text-left">
-                          <Icon
-                            className="size-4 text-[#CC9980] shrink-0"
-                            icon="simple-icons:claude"
-                          />
-                          <span className="text-xs font-medium text-foreground text-[12px]">
-                            Claude Opus 4.8
-                          </span>
-                        </div>
+                        Claude Opus 4.8
                       </DropdownItem>
                       <DropdownItem
-                        key="claude-sonnet-4.6"
-                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="Claude Sonnet 4.6"
-                        onPress={() => setDefaultModel("claude-sonnet-4.6")}
+                        key="claude-sonnet-5"
+                        startContent={
+                          <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
+                            <Icon
+                              icon="simple-icons:claude"
+                              className="text-[#CC9980] size-3.5"
+                            />
+                          </div>
+                        }
+                        onPress={() => setDefaultModel("claude-sonnet-5")}
                       >
-                        <div className="flex items-center gap-3 text-left">
-                          <Icon
-                            className="size-4 text-[#CC9980] shrink-0"
-                            icon="simple-icons:claude"
-                          />
-                          <span className="text-xs font-medium text-foreground text-[12px]">
-                            Claude Sonnet 4.6
-                          </span>
-                        </div>
-                      </DropdownItem>
-                    </DropdownSection>
-                    <DropdownSection
-                      classNames={{
-                        heading:
-                          "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
-                      }}
-                      title="Azure (GPT)"
-                    >
-                      <DropdownItem
-                        key="gpt-5.4-pro"
-                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="GPT 5.4 Pro"
-                        onPress={() => setDefaultModel("gpt-5.4-pro")}
-                      >
-                        <div className="flex items-center gap-3 text-left">
-                          <Icon
-                            className="size-4 text-foreground shrink-0"
-                            icon="simple-icons:openai"
-                          />
-                          <span className="text-xs font-medium text-foreground text-[12px]">
-                            GPT 5.4 Pro
-                          </span>
-                        </div>
+                        Claude Sonnet 5
                       </DropdownItem>
                       <DropdownItem
-                        key="gpt-5.4"
-                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                        textValue="GPT 5.4"
-                        onPress={() => setDefaultModel("gpt-5.4")}
+                        key="claude-haiku-4.5"
+                        startContent={
+                          <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
+                            <Icon
+                              icon="simple-icons:claude"
+                              className="text-[#CC9980] size-3.5"
+                            />
+                          </div>
+                        }
+                        onPress={() => setDefaultModel("claude-haiku-4.5")}
                       >
-                        <div className="flex items-center gap-3 text-left">
-                          <Icon
-                            className="size-4 text-foreground shrink-0"
-                            icon="simple-icons:openai"
-                          />
-                          <span className="text-xs font-medium text-foreground text-[12px]">
-                            GPT 5.4
-                          </span>
-                        </div>
+                        Claude Haiku 4.5
                       </DropdownItem>
                     </DropdownSection>
                     <DropdownSection
