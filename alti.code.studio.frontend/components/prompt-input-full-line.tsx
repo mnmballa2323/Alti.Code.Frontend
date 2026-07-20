@@ -197,10 +197,11 @@ export function PromptInputFullLineComponent({
         autoFocus
         className="max-h-[300px] w-full resize-none border-none shadow-none outline-none focus-visible:ring-0"
         classNames={{
-          innerWrapper: "relative",
+          base: "![mask-image:none] ![-webkit-mask-image:none]",
+          innerWrapper: "relative !bg-none bg-transparent [&::after]:hidden [&::before]:hidden ![mask-image:none] ![-webkit-mask-image:none]",
           input:
-            "text-[15px] leading-relaxed font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-default-400 placeholder:font-normal py-0",
-          inputWrapper: "!bg-transparent shadow-none !border-0 px-4 pt-3 pb-1",
+            "text-[15px] leading-relaxed font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-default-400 placeholder:font-normal py-0 !bg-none bg-transparent ![mask-image:none] ![-webkit-mask-image:none]",
+          inputWrapper: "!bg-transparent shadow-none !border-0 px-4 pt-3 pb-1 !bg-none [&::after]:hidden [&::before]:hidden ![mask-image:none] ![-webkit-mask-image:none] group-data-[hover=true]:!bg-transparent group-data-[focus=true]:!bg-transparent",
         }}
         maxRows={16}
         minRows={1}
@@ -209,7 +210,8 @@ export function PromptInputFullLineComponent({
         radius="none"
         spellCheck={"false"}
         value={prompt}
-        variant="flat"
+        variant="light"
+        disableAnimation={true}
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
         onValueChange={setPrompt}

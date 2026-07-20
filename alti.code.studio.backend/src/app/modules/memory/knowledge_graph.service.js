@@ -43,6 +43,13 @@ class KnowledgeGraphService {
   }
 
   /**
+   * Alias for embedAstPatch to support OssLicenseMiner
+   */
+  async embedPatch(bugContext, patchData) {
+    return this.embedAstPatch(bugContext, patchData);
+  }
+
+  /**
    * Embeds a successfully validated AST patch into the Vector Database.
    * @param {string} bugContext - The original bug or feature intent
    * @param {Object} patchData - The JSON structure of the applied patch

@@ -11,9 +11,11 @@
 
 import { logger } from '../../../../shared/logger.js';
 import { GeminiAiService } from '../gemini/gemini.service.js';
+import { BaseSpecialistAgent } from '../../base_specialist.agent.js';
 
-export class SurgeonAgent {
+export class SurgeonAgent extends BaseSpecialistAgent {
   constructor() {
+    super();
     this.name = 'surgeon';
     this.description = 'Autonomic Core Mutator and Self-Healing Routine';
     this.capabilities = [
@@ -21,14 +23,36 @@ export class SurgeonAgent {
       'Determine cognitive logic deficits or missing configuration parameters',
       'Synthesize a safe AST rewrite payload granting the system self-improvement capabilities',
     ];
+    // Omni-Economy Taxonomy
+    this.taxonomy = {
+      practiceGroup: 'Cybersecurity',
+      interpreter: 'English',
+      engineer: 'JavaScript/AST'
+    };
+  }
+
+  /**
+   * Required by BaseSpecialistAgent.
+   */
+  async _invoke(prompt, contextData, tenantId, spanId) {
+    let fileContent = '// Unknown Core File';
+    let mutationGoal = prompt || 'Self-Optimize Logic';
+
+    if (Array.isArray(contextData)) {
+      const fileCtx = contextData.find(ctx => ctx.path && !ctx.path.includes('tenantId'));
+      if (fileCtx) fileContent = fileCtx.content;
+    } else if (contextData && typeof contextData === 'object') {
+      fileContent = contextData.content || fileContent;
+    }
+
+    const report = await this.synthesizeMutation(fileContent, mutationGoal);
+    return JSON.stringify(report);
   }
 
   /**
    * Examines a core internal file and proposes a self-improvement source mutation.
-   * @param {string} internalFileContent The raw text of a core system script (e.g. an agent definition)
-   * @param {string} mutationGoal The objective (e.g. "Add a new capability vector")
    */
-  async syntesizeMutation(internalFileContent, mutationGoal) {
+  async synthesizeMutation(internalFileContent, mutationGoal) {
     logger.warn(
       `🔪 Surgeon Agent Alert: Initiating Autonomic Surgery protocol. Analyzing core logic file...`,
     );
@@ -79,7 +103,7 @@ export class SurgeonAgent {
     const fileContent = state.data?.content || '// Unknown Core File';
     const goal = state.data?.context || state.goal || 'Self-Optimize Logic';
 
-    const report = await this.syntesizeMutation(fileContent, goal);
+    const report = await this.synthesizeMutation(fileContent, goal);
 
     return {
       ...state,

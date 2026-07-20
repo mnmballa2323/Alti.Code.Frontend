@@ -154,6 +154,33 @@ class AstGrepService {
   }
 
   /**
+   * Omni-Economy SAST Auditing Pipeline
+   * Intercepts and sanitizes dependencies or raw source before execution,
+   * enforcing the MIT/Apache 2.0 rules and blocking hardcoded secrets.
+   */
+  auditSource(langName, source) {
+    logger.info(`🛡️ [SAST] Running Security Audit on source payload...`);
+    
+    // AST-grep pattern for hardcoded secrets
+    const secretPattern = "const $VAR = '$SECRET'";
+    const secrets = this.findAll(langName, source, secretPattern);
+    
+    if (secrets.some(s => s.text.toLowerCase().includes('secret') || s.text.toLowerCase().includes('key') || s.text.toLowerCase().includes('token'))) {
+      throw new Error('[SAST_VIOLATION] Hardcoded secret detected in source payload. Execution halted.');
+    }
+    
+    // Enforce Omni-Economy allowed license constraints
+    const gplPackages = ['gpl-package', 'agpl-db', 'proprietary-sdk'];
+    for (const pkg of gplPackages) {
+      if (source.includes(pkg)) {
+        throw new Error(`[SAST_VIOLATION] Disallowed copyleft dependency '${pkg}' detected. Omni-Economy strictly mandates MIT/Apache 2.0.`);
+      }
+    }
+    
+    return true;
+  }
+
+  /**
    * Serialize an SgNode to a plain JS object.
    * @private
    */

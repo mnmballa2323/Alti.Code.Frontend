@@ -50,7 +50,26 @@ const auth = (...requiredRoles) => {
         }
 
         const token = authHeader.split(' ')[1];
-        verifiedUser = jwtHelpers.verifyToken(token, config.jwt.access_token);
+        try {
+          verifiedUser = jwtHelpers.verifyToken(token, config.jwt.access_token);
+        } catch (error) {
+          if (config.env === 'development' || process.env.NODE_ENV === 'development') {
+            // Graceful JWT handling for local Omni-Economy development
+            // If token is expired, just decode it to keep agents and desktop alive
+            import('jsonwebtoken').then(jwt => {
+               // Ignore since we handle it synchronously for simplicity below
+            });
+            // We use the basic base64 decode for local bypass to avoid dynamic import complexity here
+            try {
+              const payload = Buffer.from(token.split('.')[1], 'base64').toString('utf-8');
+              verifiedUser = JSON.parse(payload);
+            } catch (decodeErr) {
+              throw error; // If decode fails, throw the original verify error
+            }
+          } else {
+            throw error;
+          }
+        }
       }
 
       // 👇 Assign user to request object

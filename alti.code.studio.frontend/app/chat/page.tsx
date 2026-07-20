@@ -72,7 +72,7 @@ export default function ChatHome() {
               <div className="w-full mt-auto">
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
-                  hideDropdown={true}
+                  showModelDropdown={true}
                   placeholder="Enter prompt here..."
                   onSend={handleFirstMessageSend}
                 />
@@ -93,7 +93,7 @@ export default function ChatHome() {
               <div className="flex w-full flex-col gap-4 max-w-2xl lg:max-w-3xl">
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
-                  hideDropdown={true}
+                  showModelDropdown={true}
                   placeholder="Enter prompt here..."
                   onSend={handleFirstMessageSend}
                 />

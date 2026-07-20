@@ -1,5 +1,5 @@
 import { neo4jService } from './neo4j.service.js';
-import { logger } from '../shared/logger.js';
+import { logger } from '../../shared/logger.js';
 
 /**
  * Neo4j Graph Data Science (GDS) Service
