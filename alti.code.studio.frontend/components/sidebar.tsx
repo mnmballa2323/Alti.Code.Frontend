@@ -1860,7 +1860,7 @@ export default function Sidebar() {
                         ? "h-[36px] w-full px-3 gap-3 rounded-xl text-xs font-semibold"
                         : "h-[36px] w-[36px] rounded-xl justify-center",
                       item.isActive
-                        ? "bg-white/10 text-white shadow-sm"
+                        ? "bg-white/15 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)] border border-white/10"
                         : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
                     )}
                     href={item.path}

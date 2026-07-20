@@ -576,7 +576,6 @@ export default function VaultPage() {
         <div className="flex-1 overflow-hidden bg-transparent flex flex-col h-full">
           <div className="relative flex flex-1 w-full flex-col items-center justify-start pt-[15vh] overflow-y-auto">
             <div className="flex w-full flex-col items-center gap-5 z-20 px-6">
-              
               {!selectedSecretId && (
                 <div className="flex items-center gap-1 bg-white dark:bg-black border border-default-200 dark:border-default-100 p-1 rounded-lg shadow-sm">
                   {VAULT_TABS.map((tab) => (

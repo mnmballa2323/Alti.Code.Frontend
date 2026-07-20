@@ -19,87 +19,89 @@ import RagArchitectureSection from "@/components/landing-page/rag-architecture-s
 import TriumvirateSection from "@/components/landing-page/triumvirate-section";
 
 export default function LandingPage() {
- const router = useRouter();
- const [isDesktopApp, setIsDesktopApp] = useState(false);
+  const router = useRouter();
+  const [isDesktopApp, setIsDesktopApp] = useState(false);
 
- // Performance-friendly cursor-tracking spotlight
- useEffect(() => {
- if (typeof window === "undefined") return;
+  // Performance-friendly cursor-tracking spotlight
+  useEffect(() => {
+    if (typeof window === "undefined") return;
 
- const handleMouseMove = (e: MouseEvent) => {
- document.documentElement.style.setProperty("--mouse-x", `${e.clientX}px`);
- document.documentElement.style.setProperty("--mouse-y", `${e.clientY}px`);
- };
+    const handleMouseMove = (e: MouseEvent) => {
+      document.documentElement.style.setProperty("--mouse-x", `${e.clientX}px`);
+      document.documentElement.style.setProperty("--mouse-y", `${e.clientY}px`);
+    };
 
- window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mousemove", handleMouseMove);
 
- return () => {
- window.removeEventListener("mousemove", handleMouseMove);
- };
- }, []);
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
 
- useEffect(() => {
- if (
- typeof window !== "undefined" &&
- ("__TAURI__" in window || "__TAURI_INTERNALS__" in window || "electron" in window ||
- window.navigator.userAgent.includes("Electron"))
- ) {
- router.replace("/new-chat");
- }
- }, [router]);
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      ("__TAURI__" in window ||
+        "__TAURI_INTERNALS__" in window ||
+        "electron" in window ||
+        window.navigator.userAgent.includes("Electron"))
+    ) {
+      router.replace("/new-chat");
+    }
+  }, [router]);
 
- return (
- <div className="flex flex-col min-h-screen bg-white text-black w-full overflow-x-hidden font-sans relative">
- {/* Background Micro-Grid & Spotlight Layer */}
- <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
- {/* Animated Moving Grid */}
- <div className="absolute inset-0 moving-grid-bg opacity-[0.25]" />
- {/* Ambient Top & Bottom Fades */}
- <div className="absolute inset-0 from-white to-white" />
- </div>
+  return (
+    <div className="flex flex-col min-h-screen bg-white text-black w-full overflow-x-hidden font-sans relative">
+      {/* Background Micro-Grid & Spotlight Layer */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        {/* Animated Moving Grid */}
+        <div className="absolute inset-0 moving-grid-bg opacity-[0.25]" />
+        {/* Ambient Top & Bottom Fades */}
+        <div className="absolute inset-0 from-white to-white" />
+      </div>
 
- <Navbar />
+      <Navbar />
 
- <main className="flex-1 flex flex-col w-full relative z-10">
-  <div id="section-0">
-  <HeroSwarm />
-  </div>
-  <div id="section-how-it-works">
-  <HowItWorksSection />
-  </div>
-  <div id="section-triumvirate">
-  <TriumvirateSection />
-  </div>
-  <div id="section-10">
-  <CapabilitiesBentoGrid />
-  </div>
-  <div id="section-1">
-  <PairedProgrammerSection />
-  </div>
-  <div id="section-8">
-  <AgentForgeSection />
-  </div>
-  <div id="section-rag">
-  <RagArchitectureSection />
-  </div>
-  <div id="section-wiki">
-  <LiveWikiSection />
-  </div>
-  <div id="section-4">
-  <DeterministicControlSection />
-  </div>
-  <div id="section-9">
-  <ZeroTrustLedgerSection />
-  </div>
-  <div id="section-2">
-  <GcpSovereignSection />
-  </div>
-  <div id="section-12">
-  <PricingSection />
-  </div>
- </main>
+      <main className="flex-1 flex flex-col w-full relative z-10">
+        <div id="section-0">
+          <HeroSwarm />
+        </div>
+        <div id="section-how-it-works">
+          <HowItWorksSection />
+        </div>
+        <div id="section-triumvirate">
+          <TriumvirateSection />
+        </div>
+        <div id="section-10">
+          <CapabilitiesBentoGrid />
+        </div>
+        <div id="section-1">
+          <PairedProgrammerSection />
+        </div>
+        <div id="section-8">
+          <AgentForgeSection />
+        </div>
+        <div id="section-rag">
+          <RagArchitectureSection />
+        </div>
+        <div id="section-wiki">
+          <LiveWikiSection />
+        </div>
+        <div id="section-4">
+          <DeterministicControlSection />
+        </div>
+        <div id="section-9">
+          <ZeroTrustLedgerSection />
+        </div>
+        <div id="section-2">
+          <GcpSovereignSection />
+        </div>
+        <div id="section-12">
+          <PricingSection />
+        </div>
+      </main>
 
- <PreFooter />
- </div>
- );
+      <PreFooter />
+    </div>
+  );
 }

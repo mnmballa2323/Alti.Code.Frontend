@@ -2,6 +2,7 @@ import NextAuth, { User } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GithubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
+import KeycloakProvider from "next-auth/providers/keycloak";
 
 // Extend User to include the custom token and _id
 interface ExtendedUser extends User {
@@ -46,6 +47,11 @@ const handler = NextAuth({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+    }),
+    KeycloakProvider({
+      clientId: process.env.KEYCLOAK_CLIENT_ID ?? "",
+      clientSecret: process.env.KEYCLOAK_CLIENT_SECRET ?? "",
+      issuer: process.env.KEYCLOAK_ISSUER ?? "",
     }),
     CredentialsProvider({
       name: "Credentials",

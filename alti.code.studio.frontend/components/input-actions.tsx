@@ -14,8 +14,6 @@ import {
 import { Icon } from "@iconify/react";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
 import {
-  ArrowUp,
-  Plus,
   ChevronDown,
   Figma,
   Codesandbox,
@@ -229,6 +227,17 @@ function PromptInputAssets({
   );
 }
 
+export interface QueuedMessage {
+  id: string;
+  prompt: string;
+  model: string;
+  domain: string;
+  language?: string;
+  ragMode: "auto" | "forced" | "disabled";
+  ragSources: string[];
+  expiresAt: number;
+}
+
 function PromptInputFullLineComponent({
   prompt,
   setPrompt,
@@ -285,6 +294,21 @@ function PromptInputFullLineComponent({
     "lsp_telepathy",
   ]);
 
+  const [queuedMessages, setQueuedMessages] = useState<QueuedMessage[]>([]);
+
+  const handleEditQueued = useCallback(
+    (msg: QueuedMessage) => {
+      setPrompt(msg.prompt);
+      if (msg.model) setDefaultModel(msg.model);
+      setQueuedMessages((prev) => prev.filter((m) => m.id !== msg.id));
+    },
+    [setPrompt, setDefaultModel],
+  );
+
+  const handleDeleteQueued = useCallback((id: string) => {
+    setQueuedMessages((prev) => prev.filter((m) => m.id !== id));
+  }, []);
+
   const getModelDisplayName = (modelKey: string): string => {
     if (modelKey && modelKey.startsWith("custom-agent-")) {
       const match = customAgents.find((a) => a.id === modelKey);
@@ -337,6 +361,62 @@ function PromptInputFullLineComponent({
   const token = session?.user?.accessToken ?? null;
   const sessionId = useSelector((state: RootState) => state.messages.sessionId);
   const [customAgents, setCustomAgents] = useState<any[]>([]);
+
+  const handleSendQueued = useCallback(
+    (msg: QueuedMessage) => {
+      // Prevent multiple sends if it's already processed
+      if (!queuedMessages.find((m) => m.id === msg.id)) return;
+      
+      if (onSend) {
+        onSend(
+          msg.prompt,
+          msg.model,
+          msg.domain,
+          msg.language,
+          msg.ragMode,
+          msg.ragSources,
+        );
+      } else {
+        dispatch(
+          sendMessage({
+            prompt: msg.prompt,
+            model: msg.model,
+            domain: msg.domain,
+            language: msg.language,
+            sessionId,
+            token,
+            ragMode: msg.ragMode,
+            ragSources: msg.ragSources,
+          }),
+        );
+      }
+      setQueuedMessages((prev) => prev.filter((m) => m.id !== msg.id));
+    },
+    [dispatch, onSend, sessionId, token, queuedMessages],
+  );
+
+  useEffect(() => {
+    if (queuedMessages.length === 0) return;
+
+    const interval = setInterval(() => {
+      const now = Date.now();
+      let hasExpired = false;
+
+      queuedMessages.forEach((msg) => {
+        if (now >= msg.expiresAt) {
+          handleSendQueued(msg);
+          hasExpired = true;
+        }
+      });
+
+      if (!hasExpired) {
+        // Trigger a re-render to update the countdown UI
+        setQueuedMessages((prev) => [...prev]);
+      }
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [queuedMessages, handleSendQueued]);
 
   useEffect(() => {
     if (!token) return;
@@ -429,35 +509,22 @@ function PromptInputFullLineComponent({
     const domain = "Full Stack";
     const language = undefined;
 
-    if (onSend) {
-      onSend(prompt, mode, domain, language, ragMode, selectedRagSources);
-    } else {
-      dispatch(
-        sendMessage({
-          prompt,
-          model: mode,
-          domain,
-          language,
-          sessionId,
-          token,
-          ragMode,
-          ragSources: selectedRagSources,
-        }),
-      );
-    }
+    const newMsg: QueuedMessage = {
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 9),
+      prompt,
+      model: mode,
+      domain,
+      language,
+      ragMode,
+      ragSources: selectedRagSources,
+      expiresAt: Date.now() + 5000,
+    };
+
+    setQueuedMessages((prev) => [...prev, newMsg]);
+
     setPrompt("");
     inputRef.current?.focus();
-  }, [
-    prompt,
-    setPrompt,
-    defaultModel,
-    dispatch,
-    sessionId,
-    token,
-    onSend,
-    ragMode,
-    selectedRagSources,
-  ]);
+  }, [prompt, setPrompt, defaultModel, ragMode, selectedRagSources]);
 
   const onSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -891,826 +958,952 @@ function PromptInputFullLineComponent({
   };
 
   return (
-    <Form
-      className="mx-auto w-full max-w-full flex flex-col overflow-visible bg-transparent border-none shadow-none"
-      onSubmit={onSubmit}
-    >
-      <div
-        className={cn(
-          "group flex flex-wrap gap-2 max-h-[100px] overflow-y-auto pl-[20px] pr-3 mb-2 scrollbar-thin scrollbar-thumb-default-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent",
-          assets.length > 0 ? "pt-2" : "hidden",
-        )}
+    <>
+      {queuedMessages.length > 0 && (
+        <div className="mx-auto w-full max-w-4xl flex flex-col mb-4 overflow-hidden bg-content2 dark:bg-content1 rounded-[24px] border border-default-200 shadow-lg relative z-50">
+          <div className="flex items-center justify-between px-4 pt-3 pb-2 border-b border-default-200">
+            <span className="text-xs font-semibold text-default-600 flex items-center gap-2">
+              Queued Messages{" "}
+              <span className="bg-default-200 text-default-600 px-1.5 py-0.5 rounded-full text-[10px]">
+                {queuedMessages.length}
+              </span>
+            </span>
+          </div>
+          <div className="flex flex-col max-h-[300px] overflow-y-auto">
+            {queuedMessages.map((msg, idx) => (
+              <div
+                key={msg.id}
+                className={
+                  "flex flex-col gap-2 p-3 hover:bg-default-100/50 transition-colors " +
+                  (idx !== queuedMessages.length - 1
+                    ? "border-b border-default-100"
+                    : "")
+                }
+              >
+                <div className="flex justify-between items-start gap-4">
+                  <div className="text-[14px] text-foreground whitespace-pre-wrap">
+                    {msg.prompt}
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          className="p-1.5 text-default-400 hover:text-default-700 hover:bg-default-200 rounded-md transition-colors"
+                          type="button"
+                          onClick={() => handleEditQueued(msg)}
+                        >
+                          <Icon icon="solar:pen-linear" width={16} />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        <p>Edit message</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <button
+                          className="p-1.5 text-default-400 hover:text-danger hover:bg-danger/10 rounded-md transition-colors"
+                          type="button"
+                          onClick={() => handleDeleteQueued(msg.id)}
+                        >
+                          <Icon
+                            icon="solar:trash-bin-trash-linear"
+                            width={16}
+                          />
+                        </button>
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        <p>Delete message</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between mt-1">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-medium text-default-500 bg-default-200/50 px-2 py-1 rounded-md flex items-center gap-1.5">
+                      <Icon icon="solar:cpu-linear" width={12} />{" "}
+                      {getModelDisplayName(msg.model)}
+                    </span>
+                  </div>
+                  <button
+                    className="flex items-center gap-1.5 text-[11px] font-medium text-white bg-black hover:bg-black/80 px-3 py-1.5 rounded-full transition-colors"
+                    type="button"
+                    onClick={() => handleSendQueued(msg)}
+                  >
+                    Send Now ({Math.ceil(Math.max(0, msg.expiresAt - Date.now()) / 1000)}s) <Icon icon="solar:plain-bold" width={12} />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      <Form
+        className="mx-auto w-full max-w-4xl flex flex-col overflow-hidden bg-white dark:bg-[#161b22] rounded-[24px] border border-default-200 dark:border-zinc-800/50 transition-all duration-300 shadow-sm"
+        onSubmit={onSubmit}
       >
-        <PromptInputAssets
-          assets={assets}
-          onRemoveAsset={(index) =>
-            setAssets((prev) => prev.filter((_, i) => i !== index))
-          }
-        />
-      </div>
-
-      <div className="flex flex-row items-center w-full gap-2 pl-3 pr-3 py-1.5 bg-white dark:bg-[#161616] rounded-full border border-gray-300 dark:border-zinc-700">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 flex items-center justify-center mr-1"
-              type="button"
-              onClick={() => fileInputRef.current?.click()}
-            >
-              <Plus className="size-4.5" />
-              <VisuallyHidden>
-                <input
-                  ref={fileInputRef}
-                  multiple
-                  type="file"
-                  onChange={handleFileUpload}
-                />
-              </VisuallyHidden>
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="top">
-            <p>Add context (files, images)</p>
-          </TooltipContent>
-        </Tooltip>
+        <div
+          className={cn(
+            "group flex flex-wrap gap-2 max-h-[100px] overflow-y-auto pl-[20px] pr-3 mb-2 scrollbar-thin scrollbar-thumb-default-300 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent",
+            assets.length > 0 ? "pt-2" : "hidden",
+          )}
+        >
+          <PromptInputAssets
+            assets={assets}
+            onRemoveAsset={(index) =>
+              setAssets((prev) => prev.filter((_, i) => i !== index))
+            }
+          />
+        </div>
 
         <PromptInput
           ref={inputRef}
           autoFocus
-          className="flex-1 max-h-[120px] min-h-[36px] resize-none border-none shadow-none outline-none placeholder:text-default-400 focus-visible:ring-0"
+          className="max-h-[300px] w-full resize-none border-none shadow-none outline-none focus-visible:ring-0"
           classNames={{
             innerWrapper:
               "relative border-none outline-none focus:outline-none focus:ring-0",
             input:
-              "text-[15px] leading-normal font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] py-1.5 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none group-data-[focus=true]:!ring-0",
-            inputWrapper:
-              "!bg-transparent shadow-none !border-0 px-2 py-0 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none focus-within:ring-0 focus-within:outline-none group-data-[focus=true]:!ring-0 group-data-[focus=true]:!border-transparent group-data-[focus-visible=true]:!ring-0",
-          }}
-          maxRows={4}
-          minRows={1}
-          name="content"
-          placeholder={placeholder}
-          radius="lg"
-          spellCheck={"false"}
-          value={prompt}
-          variant="flat"
-          onKeyDown={handleKeyDown}
-          onPaste={handlePaste}
-          onValueChange={setPrompt}
-        />
+            "text-[15px] leading-relaxed font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-default-400 placeholder:font-normal py-0 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none group-data-[focus=true]:!ring-0",
+          inputWrapper:
+            "!bg-transparent shadow-none !border-0 px-4 pt-3 pb-1 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none focus-within:ring-0 focus-within:outline-none group-data-[focus=true]:!ring-0 group-data-[focus=true]:!border-transparent group-data-[focus-visible=true]:!ring-0",
+        }}
+        maxRows={16}
+        minRows={1}
+        name="content"
+        placeholder="Enter prompt here..."
+        radius="none"
+        spellCheck={"false"}
+        value={prompt}
+        variant="flat"
+        onKeyDown={handleKeyDown}
+        onPaste={handlePaste}
+        onValueChange={setPrompt}
+      />
 
-        <div className="flex flex-row items-center gap-2 flex-nowrap shrink-0">
-          {showModelDropdown && !prompt && (
-            <Dropdown
-              className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[245px] p-2 translate-x-[48px]"
-              placement="top-end"
-            >
-              <DropdownTrigger>
-                <button
-                  className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0"
-                  type="button"
+      <div className="flex w-full flex-row items-center justify-between px-4 pb-3 pt-2 mt-1 border-t-[0.5px] border-default-200 dark:border-zinc-800/50">
+          <div className="flex flex-col gap-1.5">
+            {/* Top row of bottom section */}
+            <div className="flex items-center gap-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    className="size-7 flex-none cursor-pointer rounded-full text-default-500 transition-transform hover:scale-110 active:scale-95 bg-default-200/50 hover:bg-default-200 flex items-center justify-center min-w-[28px]"
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <Icon icon="mingcute:add-line" width={18} />
+                    <VisuallyHidden>
+                      <input
+                        ref={fileInputRef}
+                        multiple
+                        type="file"
+                        onChange={handleFileUpload}
+                      />
+                    </VisuallyHidden>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="top">
+                  <p>Add context (files, images)</p>
+                </TooltipContent>
+              </Tooltip>
+
+              {showModelDropdown && (
+                <Dropdown
+                  className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[260px] p-2"
+                  placement="top-start"
                 >
-                  {defaultModel && (
-                    <Icon
-                      className={cn(
-                        "size-4 shrink-0 transition-colors duration-200",
-                        (defaultModel || "").includes("gemini") &&
-                          "text-[#1A73E8]",
-                        (defaultModel || "").includes("claude") &&
-                          "text-[#CC9980]",
-                        (defaultModel || "").includes("gpt") &&
-                          "text-black dark:text-white",
-                      )}
-                      icon={
-                        (defaultModel || "").includes("gemini")
-                          ? "simple-icons:googlegemini"
-                          : (defaultModel || "").includes("claude")
-                            ? "simple-icons:claude"
-                            : (defaultModel || "").includes("gpt")
-                              ? "simple-icons:openai"
-                              : "lucide:sparkles"
-                      }
-                    />
-                  )}
-                  <span className="transition-colors duration-200">
-                    {getModelDisplayName(defaultModel)}
-                  </span>
-                  <ChevronDown className="size-3.5 shrink-0 opacity-60 transition-transform group-aria-expanded:rotate-180" />
-                </button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Model Options"
-                className="p-1 overflow-hidden"
-                variant="flat"
-              >
-                <DropdownSection
-                  classNames={{
-                    heading:
-                      "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
-                  }}
-                  title="Google (Gemini)"
-                >
-                  <DropdownItem
-                    key="gemini-3.5-pro"
-                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="Gemini 3.1 Pro"
-                    onPress={() => setDefaultModel("gemini-3.5-pro")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-[#1A73E8] shrink-0"
-                        icon="simple-icons:googlegemini"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        Gemini 3.1 Pro
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gemini-3.5-flash"
-                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="Gemini 3.5 Flash"
-                    onPress={() => setDefaultModel("gemini-3.5-flash")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-[#1A73E8] shrink-0"
-                        icon="simple-icons:googlegemini"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        Gemini 3.5 Flash
-                      </span>
-                    </div>
-                  </DropdownItem>
-                </DropdownSection>
-                <DropdownSection
-                  classNames={{
-                    heading:
-                      "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
-                  }}
-                  title="AWS (Claude)"
-                >
-                  <DropdownItem
-                    key="claude-fable-5"
-                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="Claude Fable 5"
-                    onPress={() => setDefaultModel("claude-fable-5")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-[#CC9980] shrink-0"
-                        icon="simple-icons:claude"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        Claude Fable 5
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="claude-opus-4.8"
-                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="Claude Opus 4.8"
-                    onPress={() => setDefaultModel("claude-opus-4.8")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-[#CC9980] shrink-0"
-                        icon="simple-icons:claude"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        Claude Opus 4.8
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="claude-sonnet-4.6"
-                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="Claude Sonnet 4.6"
-                    onPress={() => setDefaultModel("claude-sonnet-4.6")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-[#CC9980] shrink-0"
-                        icon="simple-icons:claude"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        Claude Sonnet 4.6
-                      </span>
-                    </div>
-                  </DropdownItem>
-                </DropdownSection>
-                <DropdownSection
-                  classNames={{
-                    heading:
-                      "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
-                  }}
-                  title="Azure (GPT)"
-                >
-                  <DropdownItem
-                    key="gpt-5.4-pro"
-                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="GPT 5.4 Pro"
-                    onPress={() => setDefaultModel("gpt-5.4-pro")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-foreground shrink-0"
-                        icon="simple-icons:openai"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        GPT 5.4 Pro
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="gpt-5.4"
-                    className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                    textValue="GPT 5.4"
-                    onPress={() => setDefaultModel("gpt-5.4")}
-                  >
-                    <div className="flex items-center gap-3 text-left">
-                      <Icon
-                        className="size-4 text-foreground shrink-0"
-                        icon="simple-icons:openai"
-                      />
-                      <span className="text-xs font-medium text-foreground text-[12px]">
-                        GPT 5.4
-                      </span>
-                    </div>
-                  </DropdownItem>
-                </DropdownSection>
-                <DropdownSection
-                  classNames={{
-                    heading:
-                      customAgents.length > 0
-                        ? "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5"
-                        : "hidden",
-                  }}
-                  title={customAgents.length > 0 ? "Custom Agents" : ""}
-                >
-                  {customAgents.map((agent) => (
-                    <DropdownItem
-                      key={agent.id}
-                      className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                      textValue={agent.name}
-                      onPress={() => setDefaultModel(agent.id)}
+                  <DropdownTrigger>
+                    <button
+                      className="group flex items-center justify-center gap-1.5 h-8 px-3 rounded-full text-default-500 hover:text-foreground hover:bg-default-100 dark:hover:bg-zinc-800 transition-all text-[13px] font-medium cursor-pointer border border-transparent hover:border-default-200 dark:hover:border-zinc-700 outline-none shrink-0"
+                      type="button"
                     >
-                      <div className="flex items-center gap-3 text-left">
+                      {defaultModel.includes("gemini") ? (
                         <Icon
-                          className="size-4 text-primary shrink-0"
-                          icon="solar:user-speak-bold"
+                          className="size-4 shrink-0 text-[#1A73E8]"
+                          icon="simple-icons:googlegemini"
                         />
-                        <span className="text-xs font-medium text-foreground text-[12px] truncate max-w-[150px]">
+                      ) : defaultModel.includes("claude") ? (
+                        <Icon
+                          className="size-4 shrink-0 text-[#CC9980]"
+                          icon="simple-icons:claude"
+                        />
+                      ) : defaultModel.includes("gpt") ? (
+                        <Icon
+                          className="size-4 shrink-0 text-foreground"
+                          icon="simple-icons:openai"
+                        />
+                      ) : (
+                        <Icon
+                          className="size-4 shrink-0 text-primary"
+                          icon="solar:bot-bold-duotone"
+                        />
+                      )}
+                      <span className="transition-colors duration-200">
+                        {getModelDisplayName(defaultModel)}
+                      </span>
+                      <Icon
+                        className="text-default-400 shrink-0 transition-transform group-aria-expanded:rotate-180"
+                        icon="solar:alt-arrow-down-linear"
+                        width={14}
+                      />
+                    </button>
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    aria-label="Select Model"
+                    className="w-full"
+                    itemClasses={{
+                      base: "gap-3 py-2 px-3 data-[hover=true]:bg-default-100/50 dark:data-[hover=true]:bg-zinc-800/50",
+                      title: "text-[13px] font-medium text-default-700",
+                      description: "text-[11px] text-default-400 mt-0.5",
+                    }}
+                  >
+                    <DropdownSection
+                      showDivider
+                      title="Custom Agents"
+                      classNames={{
+                        heading:
+                          "text-[10px] font-semibold tracking-wider text-default-400 uppercase px-2 mb-2",
+                        divider: "my-2 border-default-200/50",
+                      }}
+                    >
+                      {customAgents.map((agent) => (
+                        <DropdownItem
+                          key={`custom-agent-${agent.id}`}
+                          description={agent.description || "Custom AI Agent"}
+                          startContent={
+                            <div className="size-6 rounded-md bg-purple-500/10 dark:bg-purple-500/20 flex items-center justify-center shrink-0">
+                              <Icon
+                                icon="solar:bot-bold-duotone"
+                                className="text-purple-500 size-3.5"
+                              />
+                            </div>
+                          }
+                          onPress={() =>
+                            setDefaultModel(`custom-agent-${agent.id}`)
+                          }
+                        >
                           {agent.name}
+                        </DropdownItem>
+                      ))}
+                    </DropdownSection>
+                    <DropdownSection
+                      showDivider
+                      title="Frontier Models"
+                      classNames={{
+                        heading:
+                          "text-[10px] font-semibold tracking-wider text-default-400 uppercase px-2 mb-2",
+                        divider: "my-2 border-default-200/50",
+                      }}
+                    >
+                      <DropdownItem
+                        key="gemini-3.5-pro"
+                        description="Most capable • Recommended for complex tasks"
+                        startContent={
+                          <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
+                            <Icon
+                              icon="simple-icons:googlegemini"
+                              className="text-[#1A73E8] size-3.5"
+                            />
+                          </div>
+                        }
+                        onPress={() => setDefaultModel("gemini-3.5-pro")}
+                      >
+                        Gemini 3.1 Pro
+                      </DropdownItem>
+                      <DropdownItem
+                        key="gemini-3.5-flash"
+                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Gemini 3.5 Flash"
+                        onPress={() => setDefaultModel("gemini-3.5-flash")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Icon
+                            className="size-4 text-[#1A73E8] shrink-0"
+                            icon="simple-icons:googlegemini"
+                          />
+                          <span className="text-xs font-medium text-foreground text-[12px]">
+                            Gemini 3.5 Flash
+                          </span>
+                        </div>
+                      </DropdownItem>
+                    </DropdownSection>
+                    <DropdownSection
+                      classNames={{
+                        heading:
+                          "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
+                      }}
+                      title="AWS (Claude)"
+                    >
+                      <DropdownItem
+                        key="claude-fable-5"
+                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Claude Fable 5"
+                        onPress={() => setDefaultModel("claude-fable-5")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Icon
+                            className="size-4 text-[#CC9980] shrink-0"
+                            icon="simple-icons:claude"
+                          />
+                          <span className="text-xs font-medium text-foreground text-[12px]">
+                            Claude Fable 5
+                          </span>
+                        </div>
+                      </DropdownItem>
+                      <DropdownItem
+                        key="claude-opus-4.8"
+                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Claude Opus 4.8"
+                        onPress={() => setDefaultModel("claude-opus-4.8")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Icon
+                            className="size-4 text-[#CC9980] shrink-0"
+                            icon="simple-icons:claude"
+                          />
+                          <span className="text-xs font-medium text-foreground text-[12px]">
+                            Claude Opus 4.8
+                          </span>
+                        </div>
+                      </DropdownItem>
+                      <DropdownItem
+                        key="claude-sonnet-4.6"
+                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="Claude Sonnet 4.6"
+                        onPress={() => setDefaultModel("claude-sonnet-4.6")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Icon
+                            className="size-4 text-[#CC9980] shrink-0"
+                            icon="simple-icons:claude"
+                          />
+                          <span className="text-xs font-medium text-foreground text-[12px]">
+                            Claude Sonnet 4.6
+                          </span>
+                        </div>
+                      </DropdownItem>
+                    </DropdownSection>
+                    <DropdownSection
+                      classNames={{
+                        heading:
+                          "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5",
+                      }}
+                      title="Azure (GPT)"
+                    >
+                      <DropdownItem
+                        key="gpt-5.4-pro"
+                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="GPT 5.4 Pro"
+                        onPress={() => setDefaultModel("gpt-5.4-pro")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Icon
+                            className="size-4 text-foreground shrink-0"
+                            icon="simple-icons:openai"
+                          />
+                          <span className="text-xs font-medium text-foreground text-[12px]">
+                            GPT 5.4 Pro
+                          </span>
+                        </div>
+                      </DropdownItem>
+                      <DropdownItem
+                        key="gpt-5.4"
+                        className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                        textValue="GPT 5.4"
+                        onPress={() => setDefaultModel("gpt-5.4")}
+                      >
+                        <div className="flex items-center gap-3 text-left">
+                          <Icon
+                            className="size-4 text-foreground shrink-0"
+                            icon="simple-icons:openai"
+                          />
+                          <span className="text-xs font-medium text-foreground text-[12px]">
+                            GPT 5.4
+                          </span>
+                        </div>
+                      </DropdownItem>
+                    </DropdownSection>
+                    <DropdownSection
+                      classNames={{
+                        heading:
+                          customAgents.length > 0
+                            ? "text-[9px] font-semibold text-default-400 dark:text-default-500 uppercase tracking-wider px-1 py-0.5"
+                            : "hidden",
+                      }}
+                      title={customAgents.length > 0 ? "Custom Agents" : ""}
+                    >
+                      {customAgents.map((agent) => (
+                        <DropdownItem
+                          key={agent.id}
+                          className="rounded-xl px-3 py-1.5 hover:bg-black/10 data-[hover=true]:bg-black/10 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                          textValue={agent.name}
+                          onPress={() => setDefaultModel(agent.id)}
+                        >
+                          <div className="flex items-center gap-3 text-left">
+                            <Icon
+                              className="size-4 text-primary shrink-0"
+                              icon="solar:user-speak-bold"
+                            />
+                            <span className="text-xs font-medium text-foreground text-[12px] truncate max-w-[150px]">
+                              {agent.name}
+                            </span>
+                          </div>
+                        </DropdownItem>
+                      ))}
+                    </DropdownSection>
+                  </DropdownMenu>
+                </Dropdown>
+              )}
+            </div>
+          </div>
+
+          <div className="flex items-center gap-1">
+            {false && !hideRunLocally && !hideDropdown && (
+              <Dropdown
+                className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[220px] p-2"
+                placement="top-start"
+              >
+                <DropdownTrigger>
+                  <button
+                    className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0 -ml-1"
+                    type="button"
+                  >
+                    <span className="transition-colors duration-200">
+                      Select Function
+                    </span>
+                    <ChevronDown className="size-3.5 shrink-0 opacity-60 transition-transform group-aria-expanded:rotate-180" />
+                  </button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="Function Options"
+                  className="p-1 overflow-hidden"
+                  variant="flat"
+                >
+                  <DropdownItem
+                    key="security"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Security Sweep"
+                    onPress={() => handleFunctionSelect("security")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-danger shrink-0"
+                        icon="solar:shield-keyhole-bold-duotone"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-semibold text-foreground text-[12px]">
+                          Security Sweep
+                        </span>
+                        <span className="text-[10px] text-default-400">
+                          Scan & patch vulnerabilities
+                        </span>
+                      </div>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="qa"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Autonomous QA"
+                    onPress={() => handleFunctionSelect("qa")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-warning shrink-0"
+                        icon="solar:test-tube-minimalistic-bold-duotone"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-semibold text-foreground text-[12px]">
+                          Autonomous QA
+                        </span>
+                        <span className="text-[10px] text-default-400">
+                          TDD check & auto patch
+                        </span>
+                      </div>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="refactor"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Dead Code Cleanup"
+                    onPress={() => handleFunctionSelect("refactor")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-success shrink-0"
+                        icon="solar:magic-stick-3-bold-duotone"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-semibold text-foreground text-[12px]">
+                          Dead Code Cleanup
+                        </span>
+                        <span className="text-[10px] text-default-400">
+                          Prune unused functions
+                        </span>
+                      </div>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="architect"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Architecture Audit"
+                    onPress={() => handleFunctionSelect("architect")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-primary shrink-0"
+                        icon="solar:structure-bold-duotone"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-semibold text-foreground text-[12px]">
+                          Architecture Audit
+                        </span>
+                        <span className="text-[10px] text-default-400">
+                          Map scalability bottlenecks
+                        </span>
+                      </div>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="docs"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Sync Documentation"
+                    onPress={() => handleFunctionSelect("docs")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-[#CC9980] shrink-0"
+                        icon="solar:document-text-bold-duotone"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-semibold text-foreground text-[12px]">
+                          Sync Documentation
+                        </span>
+                        <span className="text-[10px] text-default-400">
+                          Update code guides
+                        </span>
+                      </div>
+                    </div>
+                  </DropdownItem>
+                  <DropdownItem
+                    key="deploy"
+                    className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
+                    textValue="Deploy Cloud Infrastructure"
+                    onPress={() => handleFunctionSelect("deploy")}
+                  >
+                    <div className="flex items-center gap-3 text-left">
+                      <Icon
+                        className="size-4 text-purple-500 shrink-0"
+                        icon="solar:cloud-upload-bold-duotone"
+                      />
+                      <div className="flex flex-col">
+                        <span className="text-xs font-semibold text-foreground text-[12px]">
+                          Deploy Cloud Infrastructure
+                        </span>
+                        <span className="text-[10px] text-default-400">
+                          Deploy to Cloud
+                        </span>
+                      </div>
+                    </div>
+                  </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            )}
+
+            {showRagToggle && (
+              <Dropdown
+                className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[260px] p-3 text-foreground"
+                placement="top-start"
+              >
+                <DropdownTrigger>
+                  <button
+                    className={cn(
+                      "group flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-full transition-colors text-[13px] font-semibold cursor-pointer border border-default-200 dark:border-gray-800 outline-none shrink-0",
+                      ragMode === "disabled"
+                        ? "text-default-400 hover:bg-default-100"
+                        : ragMode === "forced"
+                          ? "text-success bg-success/10 border-success/30 hover:bg-success/20"
+                          : "text-primary bg-primary/10 border-primary/30 hover:bg-primary/20",
+                    )}
+                    type="button"
+                  >
+                    <Icon
+                      className="size-4 shrink-0"
+                      icon="solar:database-bold-duotone"
+                    />
+                    <span>
+                      RAG:{" "}
+                      {ragMode === "auto"
+                        ? "Auto"
+                        : ragMode === "forced"
+                          ? "Forced"
+                          : "Off"}
+                    </span>
+                    <ChevronDown className="size-3.5 shrink-0 opacity-60 transition-transform group-aria-expanded:rotate-180" />
+                  </button>
+                </DropdownTrigger>
+                <DropdownMenu
+                  aria-label="RAG Options"
+                  closeOnSelect={false}
+                  variant="flat"
+                >
+                  <DropdownSection title="RAG Mode">
+                    <DropdownItem
+                      key="auto"
+                      className={cn(
+                        "rounded-xl px-2 py-1.5",
+                        ragMode === "auto" && "bg-primary/10",
+                      )}
+                      onPress={() => setRagMode("auto")}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="flex flex-col text-left">
+                          <span className="text-xs font-bold text-[12px]">
+                            Auto (Smart Classifier)
+                          </span>
+                          <span className="text-[10px] text-default-400">
+                            Scan codebase only when needed
+                          </span>
+                        </div>
+                        {ragMode === "auto" && (
+                          <Icon
+                            className="size-4 text-primary"
+                            icon="lucide:check"
+                          />
+                        )}
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem
+                      key="forced"
+                      className={cn(
+                        "rounded-xl px-2 py-1.5",
+                        ragMode === "forced" && "bg-success/10",
+                      )}
+                      onPress={() => setRagMode("forced")}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="flex flex-col text-left">
+                          <span className="text-xs font-bold text-[12px]">
+                            Forced (Always search)
+                          </span>
+                          <span className="text-[10px] text-default-400">
+                            Force load codebase context
+                          </span>
+                        </div>
+                        {ragMode === "forced" && (
+                          <Icon
+                            className="size-4 text-success"
+                            icon="lucide:check"
+                          />
+                        )}
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem
+                      key="disabled"
+                      className={cn(
+                        "rounded-xl px-2 py-1.5",
+                        ragMode === "disabled" && "bg-default-100",
+                      )}
+                      onPress={() => setRagMode("disabled")}
+                    >
+                      <div className="flex items-center justify-between w-full">
+                        <div className="flex flex-col text-left">
+                          <span className="text-xs font-bold text-[12px]">
+                            Disabled (No search)
+                          </span>
+                          <span className="text-[10px] text-default-400">
+                            Bypass RAG context entirely
+                          </span>
+                        </div>
+                        {ragMode === "disabled" && (
+                          <Icon
+                            className="size-4 text-default-400"
+                            icon="lucide:check"
+                          />
+                        )}
+                      </div>
+                    </DropdownItem>
+                  </DropdownSection>
+
+                  <DropdownSection
+                    className={
+                      ragMode === "disabled"
+                        ? "opacity-40 pointer-events-none"
+                        : ""
+                    }
+                    title="RAG Sources"
+                  >
+                    <DropdownItem
+                      key="src-vertex"
+                      closeOnSelect={false}
+                      onPress={() => {
+                        setSelectedRagSources((prev) =>
+                          prev.includes("vertex")
+                            ? prev.filter((x) => x !== "vertex")
+                            : [...prev, "vertex"],
+                        );
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          readOnly
+                          checked={selectedRagSources.includes("vertex")}
+                          className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                          type="checkbox"
+                        />
+                        <span className="text-xs text-[12px]">
+                          Vertex Discovery Engine
                         </span>
                       </div>
                     </DropdownItem>
-                  ))}
-                </DropdownSection>
-              </DropdownMenu>
-            </Dropdown>
-          )}
+                    <DropdownItem
+                      key="src-spanner"
+                      closeOnSelect={false}
+                      onPress={() => {
+                        setSelectedRagSources((prev) =>
+                          prev.includes("spanner")
+                            ? prev.filter((x) => x !== "spanner")
+                            : [...prev, "spanner"],
+                        );
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          readOnly
+                          checked={selectedRagSources.includes("spanner")}
+                          className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                          type="checkbox"
+                        />
+                        <span className="text-xs text-[12px]">
+                          Spanner Graph Topology
+                        </span>
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem
+                      key="src-cli"
+                      closeOnSelect={false}
+                      onPress={() => {
+                        setSelectedRagSources((prev) =>
+                          prev.includes("cli")
+                            ? prev.filter((x) => x !== "cli")
+                            : [...prev, "cli"],
+                        );
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          readOnly
+                          checked={selectedRagSources.includes("cli")}
+                          className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                          type="checkbox"
+                        />
+                        <span className="text-xs text-[12px]">
+                          Gemini CLI Expert
+                        </span>
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem
+                      key="src-filesearch"
+                      closeOnSelect={false}
+                      onPress={() => {
+                        setSelectedRagSources((prev) =>
+                          prev.includes("filesearch")
+                            ? prev.filter((x) => x !== "filesearch")
+                            : [...prev, "filesearch"],
+                        );
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          readOnly
+                          checked={selectedRagSources.includes("filesearch")}
+                          className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                          type="checkbox"
+                        />
+                        <span className="text-xs text-[12px]">
+                          Gemini File Search RAG
+                        </span>
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem
+                      key="src-knowledge_hub"
+                      closeOnSelect={false}
+                      onPress={() => {
+                        setSelectedRagSources((prev) =>
+                          prev.includes("knowledge_hub")
+                            ? prev.filter((x) => x !== "knowledge_hub")
+                            : [...prev, "knowledge_hub"],
+                        );
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          readOnly
+                          checked={selectedRagSources.includes("knowledge_hub")}
+                          className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                          type="checkbox"
+                        />
+                        <span className="text-xs text-[12px]">
+                          Knowledge Catalog Ingestion
+                        </span>
+                      </div>
+                    </DropdownItem>
+                    <DropdownItem
+                      key="src-lsp_telepathy"
+                      closeOnSelect={false}
+                      onPress={() => {
+                        setSelectedRagSources((prev) =>
+                          prev.includes("lsp_telepathy")
+                            ? prev.filter((x) => x !== "lsp_telepathy")
+                            : [...prev, "lsp_telepathy"],
+                        );
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          readOnly
+                          checked={selectedRagSources.includes("lsp_telepathy")}
+                          className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
+                          type="checkbox"
+                        />
+                        <span className="text-xs text-[12px]">
+                          LSP Telepathy Buffer
+                        </span>
+                      </div>
+                    </DropdownItem>
+                  </DropdownSection>
+                </DropdownMenu>
+              </Dropdown>
+            )}
 
-          {false && !hideRunLocally && !hideDropdown && (
-            <Dropdown
-              className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[220px] p-2"
-              placement="top-start"
-            >
-              <DropdownTrigger>
+            {customActions}
+
+            {!hideAgents && (
+              <>
+                {showFigmaButton && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Figma
+                        className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-[#F24E1E] hover:text-[#F24E1E]"
+                        onClick={() => {
+                          const figmaPrompt =
+                            prompt.trim() ||
+                            "Sync with Figma: Paste your Figma URL to convert designs to React components.";
+
+                          setPrompt(figmaPrompt);
+                          if (onSend) {
+                            onSend(
+                              figmaPrompt,
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
+                            );
+                          }
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Sync with Figma</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+
+                {showSandboxButton && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Codesandbox
+                        className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-blue-400 hover:text-blue-400"
+                        onClick={() => {
+                          const sandboxPrompt =
+                            prompt.trim() ||
+                            "Export to CodeSandbox: Create a live interactive preview of this design.";
+
+                          setPrompt(sandboxPrompt);
+                          if (onSend) {
+                            onSend(
+                              sandboxPrompt,
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
+                            );
+                          }
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Export to Sandbox</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+
+                {showResponsiveButton && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <MonitorSmartphone
+                        className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-emerald-400 hover:text-emerald-400"
+                        onClick={() => {
+                          const responsivePrompt =
+                            prompt.trim() ||
+                            "Make Responsive: Ensure this design is fully responsive and looks perfect on mobile, tablet, and desktop screens using Tailwind breakpoints.";
+
+                          setPrompt(responsivePrompt);
+                          if (onSend) {
+                            onSend(
+                              responsivePrompt,
+                              selectedLanguage === "Mode"
+                                ? "default"
+                                : selectedLanguage.toLowerCase(),
+                              selectedModel === "Stack"
+                                ? "fullstack"
+                                : selectedModel.toLowerCase(),
+                              selectedProgLang === "Language"
+                                ? "typescript"
+                                : selectedProgLang.toLowerCase(),
+                            );
+                          }
+                        }}
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>Make Responsive</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+              </>
+            )}
+
+            {rightActions}
+
+            <Tooltip>
+              <TooltipTrigger asChild>
                 <button
-                  className="group flex items-center justify-center gap-1 h-8 px-2 rounded-full text-gray-400 hover:text-primary hover:bg-primary/10 transition-colors text-[13px] font-medium select-none cursor-pointer bg-transparent border-none outline-none shrink-0 -ml-1"
+                  className="bg-[#161b22] text-white hover:bg-[#161b22]/90 dark:bg-primary dark:text-primary-foreground shadow-sm size-6 flex items-center justify-center rounded-md transition-all"
                   type="button"
+                  onClick={prompt ? handleSubmit : undefined}
                 >
-                  <span className="transition-colors duration-200">
-                    Select Function
-                  </span>
-                  <ChevronDown className="size-3.5 shrink-0 opacity-60 transition-transform group-aria-expanded:rotate-180" />
+                  <Icon icon="solar:arrow-right-linear" width={14} />
                 </button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="Function Options"
-                className="p-1 overflow-hidden"
-                variant="flat"
-              >
-                <DropdownItem
-                  key="security"
-                  className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Security Sweep"
-                  onPress={() => handleFunctionSelect("security")}
-                >
-                  <div className="flex items-center gap-3 text-left">
-                    <Icon
-                      className="size-4 text-danger shrink-0"
-                      icon="solar:shield-keyhole-bold-duotone"
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-foreground text-[12px]">
-                        Security Sweep
-                      </span>
-                      <span className="text-[10px] text-default-400">
-                        Scan & patch vulnerabilities
-                      </span>
-                    </div>
-                  </div>
-                </DropdownItem>
-                <DropdownItem
-                  key="qa"
-                  className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Autonomous QA"
-                  onPress={() => handleFunctionSelect("qa")}
-                >
-                  <div className="flex items-center gap-3 text-left">
-                    <Icon
-                      className="size-4 text-warning shrink-0"
-                      icon="solar:test-tube-minimalistic-bold-duotone"
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-foreground text-[12px]">
-                        Autonomous QA
-                      </span>
-                      <span className="text-[10px] text-default-400">
-                        TDD check & auto patch
-                      </span>
-                    </div>
-                  </div>
-                </DropdownItem>
-                <DropdownItem
-                  key="refactor"
-                  className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Dead Code Cleanup"
-                  onPress={() => handleFunctionSelect("refactor")}
-                >
-                  <div className="flex items-center gap-3 text-left">
-                    <Icon
-                      className="size-4 text-success shrink-0"
-                      icon="solar:magic-stick-3-bold-duotone"
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-foreground text-[12px]">
-                        Dead Code Cleanup
-                      </span>
-                      <span className="text-[10px] text-default-400">
-                        Prune unused functions
-                      </span>
-                    </div>
-                  </div>
-                </DropdownItem>
-                <DropdownItem
-                  key="architect"
-                  className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Architecture Audit"
-                  onPress={() => handleFunctionSelect("architect")}
-                >
-                  <div className="flex items-center gap-3 text-left">
-                    <Icon
-                      className="size-4 text-primary shrink-0"
-                      icon="solar:structure-bold-duotone"
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-foreground text-[12px]">
-                        Architecture Audit
-                      </span>
-                      <span className="text-[10px] text-default-400">
-                        Map scalability bottlenecks
-                      </span>
-                    </div>
-                  </div>
-                </DropdownItem>
-                <DropdownItem
-                  key="docs"
-                  className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Sync Documentation"
-                  onPress={() => handleFunctionSelect("docs")}
-                >
-                  <div className="flex items-center gap-3 text-left">
-                    <Icon
-                      className="size-4 text-[#CC9980] shrink-0"
-                      icon="solar:document-text-bold-duotone"
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-foreground text-[12px]">
-                        Sync Documentation
-                      </span>
-                      <span className="text-[10px] text-default-400">
-                        Update code guides
-                      </span>
-                    </div>
-                  </div>
-                </DropdownItem>
-                <DropdownItem
-                  key="deploy"
-                  className="rounded-xl px-3 py-1.5 hover:bg-default-100 data-[hover=true]:bg-default-100 dark:hover:bg-white/10 dark:data-[hover=true]:bg-white/10 transition-colors"
-                  textValue="Deploy Cloud Infrastructure"
-                  onPress={() => handleFunctionSelect("deploy")}
-                >
-                  <div className="flex items-center gap-3 text-left">
-                    <Icon
-                      className="size-4 text-purple-500 shrink-0"
-                      icon="solar:cloud-upload-bold-duotone"
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-xs font-semibold text-foreground text-[12px]">
-                        Deploy Cloud Infrastructure
-                      </span>
-                      <span className="text-[10px] text-default-400">
-                        Deploy to Cloud
-                      </span>
-                    </div>
-                  </div>
-                </DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          )}
-
-          {showRagToggle && (
-            <Dropdown
-              className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[260px] p-3 text-foreground"
-              placement="top-start"
-            >
-              <DropdownTrigger>
-                <button
-                  className={cn(
-                    "group flex items-center justify-center gap-1.5 h-8 px-2.5 rounded-full transition-colors text-[13px] font-semibold cursor-pointer border border-default-200 dark:border-gray-800 outline-none shrink-0",
-                    ragMode === "disabled"
-                      ? "text-default-400 hover:bg-default-100"
-                      : ragMode === "forced"
-                        ? "text-success bg-success/10 border-success/30 hover:bg-success/20"
-                        : "text-primary bg-primary/10 border-primary/30 hover:bg-primary/20",
-                  )}
-                  type="button"
-                >
-                  <Icon
-                    className="size-4 shrink-0"
-                    icon="solar:database-bold-duotone"
-                  />
-                  <span>
-                    RAG:{" "}
-                    {ragMode === "auto"
-                      ? "Auto"
-                      : ragMode === "forced"
-                        ? "Forced"
-                        : "Off"}
-                  </span>
-                  <ChevronDown className="size-3.5 shrink-0 opacity-60 transition-transform group-aria-expanded:rotate-180" />
-                </button>
-              </DropdownTrigger>
-              <DropdownMenu
-                aria-label="RAG Options"
-                closeOnSelect={false}
-                variant="flat"
-              >
-                <DropdownSection title="RAG Mode">
-                  <DropdownItem
-                    key="auto"
-                    className={cn(
-                      "rounded-xl px-2 py-1.5",
-                      ragMode === "auto" && "bg-primary/10",
-                    )}
-                    onPress={() => setRagMode("auto")}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex flex-col text-left">
-                        <span className="text-xs font-bold text-[12px]">
-                          Auto (Smart Classifier)
-                        </span>
-                        <span className="text-[10px] text-default-400">
-                          Scan codebase only when needed
-                        </span>
-                      </div>
-                      {ragMode === "auto" && (
-                        <Icon
-                          className="size-4 text-primary"
-                          icon="lucide:check"
-                        />
-                      )}
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="forced"
-                    className={cn(
-                      "rounded-xl px-2 py-1.5",
-                      ragMode === "forced" && "bg-success/10",
-                    )}
-                    onPress={() => setRagMode("forced")}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex flex-col text-left">
-                        <span className="text-xs font-bold text-[12px]">
-                          Forced (Always search)
-                        </span>
-                        <span className="text-[10px] text-default-400">
-                          Force load codebase context
-                        </span>
-                      </div>
-                      {ragMode === "forced" && (
-                        <Icon
-                          className="size-4 text-success"
-                          icon="lucide:check"
-                        />
-                      )}
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="disabled"
-                    className={cn(
-                      "rounded-xl px-2 py-1.5",
-                      ragMode === "disabled" && "bg-default-100",
-                    )}
-                    onPress={() => setRagMode("disabled")}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex flex-col text-left">
-                        <span className="text-xs font-bold text-[12px]">
-                          Disabled (No search)
-                        </span>
-                        <span className="text-[10px] text-default-400">
-                          Bypass RAG context entirely
-                        </span>
-                      </div>
-                      {ragMode === "disabled" && (
-                        <Icon
-                          className="size-4 text-default-400"
-                          icon="lucide:check"
-                        />
-                      )}
-                    </div>
-                  </DropdownItem>
-                </DropdownSection>
-
-                <DropdownSection
-                  className={
-                    ragMode === "disabled"
-                      ? "opacity-40 pointer-events-none"
-                      : ""
-                  }
-                  title="RAG Sources"
-                >
-                  <DropdownItem
-                    key="src-vertex"
-                    closeOnSelect={false}
-                    onPress={() => {
-                      setSelectedRagSources((prev) =>
-                        prev.includes("vertex")
-                          ? prev.filter((x) => x !== "vertex")
-                          : [...prev, "vertex"],
-                      );
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <input
-                        readOnly
-                        checked={selectedRagSources.includes("vertex")}
-                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
-                        type="checkbox"
-                      />
-                      <span className="text-xs text-[12px]">
-                        Vertex Discovery Engine
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="src-spanner"
-                    closeOnSelect={false}
-                    onPress={() => {
-                      setSelectedRagSources((prev) =>
-                        prev.includes("spanner")
-                          ? prev.filter((x) => x !== "spanner")
-                          : [...prev, "spanner"],
-                      );
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <input
-                        readOnly
-                        checked={selectedRagSources.includes("spanner")}
-                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
-                        type="checkbox"
-                      />
-                      <span className="text-xs text-[12px]">
-                        Spanner Graph Topology
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="src-cli"
-                    closeOnSelect={false}
-                    onPress={() => {
-                      setSelectedRagSources((prev) =>
-                        prev.includes("cli")
-                          ? prev.filter((x) => x !== "cli")
-                          : [...prev, "cli"],
-                      );
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <input
-                        readOnly
-                        checked={selectedRagSources.includes("cli")}
-                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
-                        type="checkbox"
-                      />
-                      <span className="text-xs text-[12px]">
-                        Gemini CLI Expert
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="src-filesearch"
-                    closeOnSelect={false}
-                    onPress={() => {
-                      setSelectedRagSources((prev) =>
-                        prev.includes("filesearch")
-                          ? prev.filter((x) => x !== "filesearch")
-                          : [...prev, "filesearch"],
-                      );
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <input
-                        readOnly
-                        checked={selectedRagSources.includes("filesearch")}
-                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
-                        type="checkbox"
-                      />
-                      <span className="text-xs text-[12px]">
-                        Gemini File Search RAG
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="src-knowledge_hub"
-                    closeOnSelect={false}
-                    onPress={() => {
-                      setSelectedRagSources((prev) =>
-                        prev.includes("knowledge_hub")
-                          ? prev.filter((x) => x !== "knowledge_hub")
-                          : [...prev, "knowledge_hub"],
-                      );
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <input
-                        readOnly
-                        checked={selectedRagSources.includes("knowledge_hub")}
-                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
-                        type="checkbox"
-                      />
-                      <span className="text-xs text-[12px]">
-                        Knowledge Catalog Ingestion
-                      </span>
-                    </div>
-                  </DropdownItem>
-                  <DropdownItem
-                    key="src-lsp_telepathy"
-                    closeOnSelect={false}
-                    onPress={() => {
-                      setSelectedRagSources((prev) =>
-                        prev.includes("lsp_telepathy")
-                          ? prev.filter((x) => x !== "lsp_telepathy")
-                          : [...prev, "lsp_telepathy"],
-                      );
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <input
-                        readOnly
-                        checked={selectedRagSources.includes("lsp_telepathy")}
-                        className="rounded border-gray-300 text-primary focus:ring-primary size-3.5"
-                        type="checkbox"
-                      />
-                      <span className="text-xs text-[12px]">
-                        LSP Telepathy Buffer
-                      </span>
-                    </div>
-                  </DropdownItem>
-                </DropdownSection>
-              </DropdownMenu>
-            </Dropdown>
-          )}
-
-          {customActions}
-
-          {!hideAgents && (
-            <>
-              {showFigmaButton && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Figma
-                      className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-[#F24E1E] hover:text-[#F24E1E]"
-                      onClick={() => {
-                        const figmaPrompt =
-                          prompt.trim() ||
-                          "Sync with Figma: Paste your Figma URL to convert designs to React components.";
-
-                        setPrompt(figmaPrompt);
-                        if (onSend) {
-                          onSend(
-                            figmaPrompt,
-                            selectedLanguage === "Mode"
-                              ? "default"
-                              : selectedLanguage.toLowerCase(),
-                            selectedModel === "Stack"
-                              ? "fullstack"
-                              : selectedModel.toLowerCase(),
-                            selectedProgLang === "Language"
-                              ? "typescript"
-                              : selectedProgLang.toLowerCase(),
-                          );
-                        }
-                      }}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>Sync with Figma</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
-
-              {showSandboxButton && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Codesandbox
-                      className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-blue-400 hover:text-blue-400"
-                      onClick={() => {
-                        const sandboxPrompt =
-                          prompt.trim() ||
-                          "Export to CodeSandbox: Create a live interactive preview of this design.";
-
-                        setPrompt(sandboxPrompt);
-                        if (onSend) {
-                          onSend(
-                            sandboxPrompt,
-                            selectedLanguage === "Mode"
-                              ? "default"
-                              : selectedLanguage.toLowerCase(),
-                            selectedModel === "Stack"
-                              ? "fullstack"
-                              : selectedModel.toLowerCase(),
-                            selectedProgLang === "Language"
-                              ? "typescript"
-                              : selectedProgLang.toLowerCase(),
-                          );
-                        }
-                      }}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>Export to Sandbox</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
-
-              {showResponsiveButton && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <MonitorSmartphone
-                      className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 hover:border-emerald-400 hover:text-emerald-400"
-                      onClick={() => {
-                        const responsivePrompt =
-                          prompt.trim() ||
-                          "Make Responsive: Ensure this design is fully responsive and looks perfect on mobile, tablet, and desktop screens using Tailwind breakpoints.";
-
-                        setPrompt(responsivePrompt);
-                        if (onSend) {
-                          onSend(
-                            responsivePrompt,
-                            selectedLanguage === "Mode"
-                              ? "default"
-                              : selectedLanguage.toLowerCase(),
-                            selectedModel === "Stack"
-                              ? "fullstack"
-                              : selectedModel.toLowerCase(),
-                            selectedProgLang === "Language"
-                              ? "typescript"
-                              : selectedProgLang.toLowerCase(),
-                          );
-                        }
-                      }}
-                    />
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>Make Responsive</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
-            </>
-          )}
-
-          {rightActions}
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <ArrowUp
-                className="size-8 flex-none cursor-pointer rounded-full border-2 p-1.5 text-white transition-transform hover:scale-110 active:scale-95 bg-black border-gray-300 flex items-center justify-center"
-                onClick={prompt ? handleSubmit : undefined}
-              />
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              <p>Send Prompt</p>
-            </TooltipContent>
-          </Tooltip>
+              </TooltipTrigger>
+              <TooltipContent side="top">
+                <p>Send Prompt</p>
+              </TooltipContent>
+            </Tooltip>
+          </div>
         </div>
-      </div>
-    </Form>
+      </Form>
+    </>
   );
 }
 

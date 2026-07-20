@@ -87,7 +87,11 @@ jobs:
       run: |
         TAG="${GITHUB_SHA::7}"
         docker build -t backend-local ./alti.code.studio.backend
-        docker build -t frontend-local ./alti.code.studio.frontend
+        docker build -t frontend-local \
+          --build-arg KEYCLOAK_CLIENT_ID=${{ secrets.KEYCLOAK_CLIENT_ID }} \
+          --build-arg KEYCLOAK_CLIENT_SECRET=${{ secrets.KEYCLOAK_CLIENT_SECRET }} \
+          --build-arg KEYCLOAK_ISSUER=${{ secrets.KEYCLOAK_ISSUER }} \
+          ./alti.code.studio.frontend
 
     # Scan the backend image for OS & application package vulnerabilities
     - name: Scan Backend Image with Trivy

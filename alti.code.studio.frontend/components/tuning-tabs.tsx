@@ -52,7 +52,7 @@ export function TuningTabs() {
         );
       })}
       {/* Spacer to fix browser bug where right padding is lost in scrollable flex containers */}
-      <div className="min-w-[4px] w-[4px] h-1 shrink-0" aria-hidden="true" />
+      <div aria-hidden="true" className="min-w-[4px] w-[4px] h-1 shrink-0" />
     </nav>
   );
 }

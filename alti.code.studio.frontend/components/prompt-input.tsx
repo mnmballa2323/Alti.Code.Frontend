@@ -7,7 +7,7 @@ import { Textarea } from "@heroui/react";
 import { cn } from "@heroui/react";
 
 const PromptInput = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
-  ({ classNames = {}, ...props }, ref) => {
+  ({ classNames = {}, placeholder = "Enter a prompt here", ...props }, ref) => {
     return (
       <Textarea
         ref={ref}
@@ -19,7 +19,7 @@ const PromptInput = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
           input: cn("py-0", classNames?.input),
         }}
         minRows={1}
-        placeholder="Enter a prompt here"
+        placeholder={placeholder}
         radius="lg"
         variant="flat"
         {...props}
