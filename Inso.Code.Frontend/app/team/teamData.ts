@@ -50,7 +50,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#4285F4",
-    icon: "simple-icons:googlecloud",
+    icon: "logos:google-cloud",
   },
   {
     id: "microsoftazure-expert",
@@ -63,7 +63,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#0089D6",
-    icon: "simple-icons:microsoftazure",
+    icon: "logos:microsoft-azure",
   },
   {
     id: "alibaba-cloud-expert",
@@ -167,7 +167,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#2AE95C",
-    icon: "logos:c",
+    icon: "logos:c-plusplus",
   },
   {
     id: "csharp-expert",
@@ -180,7 +180,7 @@ export const teamMembers: TeamMember[] = [
     status: "idle",
     statusText: "Idle",
     accentColor: "#F532ED",
-    icon: "logos:c",
+    icon: "logos:c-sharp",
   },
   {
     id: "golang-expert",

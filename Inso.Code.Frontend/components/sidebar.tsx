@@ -2986,6 +2986,11 @@ export default function Sidebar() {
                           {member.icon ? (
                             <Icon
                               className="text-gray-400 flex-shrink-0"
+                              style={
+                                member.id === "rust-expert"
+                                  ? { filter: "brightness(0) invert(1)" }
+                                  : undefined
+                              }
                               fontSize={18}
                               height={18}
                               icon={member.icon}
@@ -3024,6 +3029,12 @@ export default function Sidebar() {
                           {member.icon ? (
                             <Icon
                               className="text-gray-400 flex-shrink-0"
+                              style={
+                                member.id === "amazonaws-expert" ||
+                                member.id === "ibm-cloud-expert"
+                                  ? { filter: "brightness(0) invert(1)" }
+                                  : undefined
+                              }
                               fontSize={18}
                               height={18}
                               icon={member.icon}
