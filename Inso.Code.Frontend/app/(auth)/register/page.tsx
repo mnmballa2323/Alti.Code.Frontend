@@ -13,6 +13,7 @@ export default function RegisterPage() {
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [passwordValue, setPasswordValue] = useState("");
   const [confirmPasswordValue, setConfirmPasswordValue] = useState("");
+  const [selectedCloud, setSelectedCloud] = useState("");
   const toggleVisibility = () => setIsVisible(!isVisible);
   const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
   const router = useRouter();
@@ -278,11 +279,16 @@ export default function RegisterPage() {
               classNames={{
                 trigger:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
-                value: "text-black text-[13px] font-light",
+                value:
+                  "text-zinc-400 data-[has-value=true]:text-black text-[13px] font-light",
               }}
               name="preferredCloud"
               placeholder="Select Cloud Provider"
+              selectedKeys={selectedCloud ? [selectedCloud] : []}
               variant="flat"
+              onSelectionChange={(keys) =>
+                setSelectedCloud(Array.from(keys)[0] as string)
+              }
             >
               <SelectItem key="gcp">Google Cloud Platform (GCP)</SelectItem>
               <SelectItem key="aws">Amazon Web Services (AWS)</SelectItem>
@@ -296,8 +302,10 @@ export default function RegisterPage() {
               classNames={{
                 trigger:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
-                value: "text-black text-[13px] font-light",
+                value:
+                  "text-zinc-400 data-[has-value=true]:text-black text-[13px] font-light",
               }}
+              isDisabled={!selectedCloud}
               name="deploymentTier"
               placeholder="Select Deployment Option"
               variant="flat"
