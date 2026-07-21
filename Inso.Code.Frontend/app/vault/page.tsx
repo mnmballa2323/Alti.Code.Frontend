@@ -583,7 +583,7 @@ export default function VaultPage() {
                       key={tab.id}
                       className={`flex items-center gap-1.5 px-3 h-8 rounded-md text-sm font-medium transition-all duration-150 whitespace-nowrap ${
                         vaultMode === tab.id
-                          ? "bg-[#0000ff]/20 text-white shadow-[0_0_15px_rgba(0,0,255,0.6)] border border-[#0000ff]"
+                          ? "bg-[#0000ff] text-white border border-[#0000ff]"
                           : "bg-transparent border border-transparent text-default-500 hover:text-foreground hover:bg-default-50 dark:hover:bg-default-100/50"
                       }`}
                       type="button"
