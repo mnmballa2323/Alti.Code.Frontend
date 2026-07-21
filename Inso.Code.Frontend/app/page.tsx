@@ -68,11 +68,11 @@ export default function LandingPage() {
         <div id="section-0">
           <HeroSwarm />
         </div>
-        <div id="section-languages">
-          <LanguagesScrollingBanner />
-        </div>
         <div id="section-how-it-works">
           <HowItWorksSection />
+        </div>
+        <div id="section-languages">
+          <LanguagesScrollingBanner />
         </div>
         <div id="section-triumvirate">
           <TriumvirateSection />
