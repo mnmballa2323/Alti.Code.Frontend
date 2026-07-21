@@ -1,6 +1,7 @@
 "use client";
 
-import { Badge, Button, cn, Form, Image, Tooltip } from "@heroui/react";
+import { Badge, Button, cn, Form, Image, Tooltip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
+import { ChevronDown } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
 import React, { useCallback, useState } from "react";
@@ -79,6 +80,8 @@ export function PromptInputFullLineComponent({
   prompt,
   setPrompt,
 }: PromptInputProps) {
+  const [showLocalToggle, setShowLocalToggle] = useState(false);
+  const [isLocalMode, setIsLocalMode] = useState(false);
   const [assets, setAssets] = useState<string[]>([]);
 
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
@@ -210,7 +213,7 @@ export function PromptInputFullLineComponent({
         radius="none"
         spellCheck={"false"}
         value={prompt}
-        variant="light"
+        variant="flat"
         disableAnimation={true}
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}

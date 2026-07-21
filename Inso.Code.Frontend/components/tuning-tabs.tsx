@@ -41,8 +41,8 @@ export function TuningTabs() {
             className={[
               "flex items-center gap-1.5 px-2 h-8 rounded-md text-sm font-medium transition-all duration-150 whitespace-nowrap",
               isActive
-                ? "bg-default-100 dark:bg-default-200 text-foreground"
-                : "bg-transparent text-default-500 hover:text-foreground hover:bg-default-50 dark:hover:bg-default-100/50",
+                ? "bg-[#0000ff]/20 text-white shadow-[0_0_15px_rgba(0,0,255,0.6)] border border-[#0000ff]"
+                : "bg-transparent border border-transparent text-default-500 hover:text-foreground hover:bg-default-50 dark:hover:bg-default-100/50",
             ].join(" ")}
             href={key}
           >

@@ -39,7 +39,7 @@ export function WorkspaceDock() {
     dispatch(setActiveTab(tab.id));
     dispatch(setActiveWorkspace(tab.projectPath));
     setActiveProject({ id: tab.projectPath, name: tab.title });
-    router.push(tab.activeView);
+    router.push("/code");
   };
 
   const handleCloseWorkspace = (e: React.MouseEvent, tabId: string) => {
@@ -103,14 +103,14 @@ export function WorkspaceDock() {
                 className={cn(
                   "group relative flex items-center justify-between w-full h-11 px-3 rounded-xl cursor-pointer transition-all duration-200",
                   isActive
-                    ? "bg-white/10 border border-white/10"
+                    ? "bg-[#0000ff]/20 border border-[#0000ff] shadow-[0_0_15px_rgba(0,0,255,0.6)] text-white"
                     : "hover:bg-white/5 border border-transparent",
                 )}
                 onClick={() => handleWorkspaceClick(tab)}
               >
                 {/* Left active line */}
                 {isActive && (
-                  <div className="absolute left-0 top-3 bottom-3 w-1 bg-primary rounded-r-md" />
+                  <div className="absolute left-0 top-3 bottom-3 w-1 bg-[#0000ff] shadow-[0_0_10px_rgba(0,0,255,0.8)] rounded-r-md" />
                 )}
 
                 <div className="flex items-center gap-3 min-w-0">
@@ -119,7 +119,7 @@ export function WorkspaceDock() {
                     className={cn(
                       "w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold tracking-wider shrink-0 transition-all",
                       isActive
-                        ? "bg-white/15 text-white"
+                        ? "bg-[#0000ff]/20 text-white"
                         : "bg-white/5 text-gray-400 group-hover:text-white",
                     )}
                   >
@@ -203,7 +203,7 @@ export function WorkspaceDock() {
               >
                 {/* Left Active Indicator Bar (Discord style) */}
                 {isActive && (
-                  <div className="absolute left-[-8px] w-1 h-7 bg-primary rounded-r-md transition-all duration-300" />
+                  <div className="absolute left-[-8px] w-1 h-7 bg-[#0000ff] shadow-[0_0_10px_rgba(0,0,255,0.8)] rounded-r-md transition-all duration-300" />
                 )}
 
                 {/* Workspace Icon / Initial square */}
@@ -211,7 +211,7 @@ export function WorkspaceDock() {
                   className={cn(
                     "w-11 h-11 rounded-xl flex items-center justify-center text-xs font-semibold tracking-wider transition-all duration-200 relative",
                     isActive
-                      ? "bg-white/10 text-white shadow-sm border border-white/10"
+                      ? "bg-[#0000ff]/20 text-white shadow-[0_0_15px_rgba(0,0,255,0.6)] border border-[#0000ff]"
                       : "bg-transparent border border-transparent text-gray-400 hover:text-white hover:bg-white/5 hover:rounded-xl",
                   )}
                 >

@@ -4,7 +4,7 @@ metadata:
   name: inso-code
 build:
   artifacts:
-    - image: alti-backend
+    - image: inso-backend
       docker:
         dockerfile: Inso.Code.Backend/Dockerfile
   googleCloudBuild:

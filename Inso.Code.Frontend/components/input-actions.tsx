@@ -280,7 +280,7 @@ function PromptInputFullLineComponent({
 }) {
   const router = useRouter();
   const { onOpen } = useModalStore();
-  const mockCloudProvider = "all";
+  const mockCloudProvider: string = "all";
   const { defaultModel, setDefaultModel } = useSettingsStore();
 
   const [ragMode, setRagMode] = useState<"auto" | "forced" | "disabled">(
@@ -1077,7 +1077,7 @@ function PromptInputFullLineComponent({
           radius="none"
           spellCheck={"false"}
           value={prompt}
-          variant="light"
+          variant="flat"
           disableAnimation={true}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
@@ -1161,7 +1161,7 @@ function PromptInputFullLineComponent({
                       description: "text-[11px] text-default-400 mt-0.5",
                     }}
                   >
-                    {customAgents.length > 0 && (
+                    {(customAgents.length > 0 ? (
                       <DropdownSection
                         showDivider
                         title="Custom Agents"
@@ -1191,14 +1191,14 @@ function PromptInputFullLineComponent({
                           </DropdownItem>
                         ))}
                       </DropdownSection>
-                    )}
+                    ) : null as any)}
                     <DropdownSection
                       classNames={{
                         heading: "hidden",
                       }}
                     >
                       {/* GEMINI MODELS (Available ONLY on Google Cloud) */}
-                      {(mockCloudProvider === "gcp" || mockCloudProvider === "all") && (
+                      {(mockCloudProvider === "gcp" || mockCloudProvider === "all") ? (
                         <DropdownItem
                           key="gemini-3.5-pro"
                           startContent={
@@ -1213,8 +1213,8 @@ function PromptInputFullLineComponent({
                         >
                           Gemini 3.1 Pro
                         </DropdownItem>
-                      )}
-                      {(mockCloudProvider === "gcp" || mockCloudProvider === "all") && (
+                      ) : null as any}
+                      {(mockCloudProvider === "gcp" || mockCloudProvider === "all") ? (
                         <DropdownItem
                           key="gemini-3.5-flash"
                           startContent={
@@ -1229,10 +1229,10 @@ function PromptInputFullLineComponent({
                         >
                           Gemini 3.5 Flash
                         </DropdownItem>
-                      )}
+                      ) : null as any}
 
                       {/* GPT MODELS (Available ONLY on Azure) */}
-                      {(mockCloudProvider === "azure" || mockCloudProvider === "all") && (
+                      {(mockCloudProvider === "azure" || mockCloudProvider === "all") ? (
                         <DropdownItem
                           key="gpt-5.4-pro"
                           startContent={
@@ -1247,8 +1247,8 @@ function PromptInputFullLineComponent({
                         >
                           GPT 5.4 Pro
                         </DropdownItem>
-                      )}
-                      {(mockCloudProvider === "azure" || mockCloudProvider === "all") && (
+                      ) : null as any}
+                      {(mockCloudProvider === "azure" || mockCloudProvider === "all") ? (
                         <DropdownItem
                           key="gpt-5.4"
                           startContent={
@@ -1263,7 +1263,7 @@ function PromptInputFullLineComponent({
                         >
                           GPT 5.4
                         </DropdownItem>
-                      )}
+                      ) : null as any}
 
                       {/* CLAUDE MODELS (Available on ALL clouds) */}
                       <DropdownItem

@@ -134,7 +134,7 @@ function AgentPageContent() {
     setInputValue("");
   };
 
-  const handleChatSend = (e?: React.FormEvent, promptOverride?: string) => {
+  const handleChatSend = async (e?: React.FormEvent, promptOverride?: string) => {
     if (e) e.preventDefault();
     const text = promptOverride || chatMessage;
 
@@ -144,62 +144,60 @@ function AgentPageContent() {
     setMockMessages((prev) => [...prev, { role: "user", content: text }]);
     if (!promptOverride) setChatMessage("");
 
-    // Simulate Agent Background Work
-    setTimeout(() => {
-      setMockMessages((prev) => [
-        ...prev,
+    // Indicate processing
+    setMockMessages((prev) => [
+      ...prev,
+      {
+        role: "assistant",
+        content: "",
+        action: "Consulting agent...",
+        actionStatus: "pending",
+      },
+    ]);
+
+    try {
+      const res = await axios.post(
+        `${API_BASE_URL}/agents/custom/chat`,
         {
-          role: "assistant",
-          content: "",
-          action: "Analyzing request...",
-          actionStatus: "pending",
+          agentId: agentId,
+          prompt: text,
         },
-      ]);
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
 
-      setTimeout(() => {
-        setMockMessages((prev) => {
-          const updated = [...prev];
+      setMockMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          ...updated[updated.length - 1],
+          actionStatus: "done",
+        };
 
-          updated[updated.length - 1] = {
-            ...updated[updated.length - 1],
-            actionStatus: "done",
-          };
-
-          return [
-            ...updated,
-            {
-              role: "assistant",
-              content: "",
-              action: "Searching codebase...",
-              actionStatus: "pending",
-            },
-          ];
-        });
-
-        setTimeout(() => {
-          setMockMessages((prev) => {
-            const updated = [...prev];
-
-            updated[updated.length - 1] = {
-              ...updated[updated.length - 1],
-              actionStatus: "done",
-            };
-
-            // Remove action blocks since the final output is delivered
-            const filtered = updated.filter((msg) => !msg.action);
-
-            return [
-              ...filtered,
-              {
-                role: "assistant",
-                content:
-                  "I found the relevant files and have prepared a plan for you.",
-              },
-            ];
-          });
-        }, 1500);
-      }, 1500);
-    }, 500);
+        return [
+          ...updated,
+          {
+            role: "assistant",
+            content: res.data?.data || res.data?.response || res.data?.message || "Agent responded.",
+          },
+        ];
+      });
+    } catch (err: any) {
+      setMockMessages((prev) => {
+        const updated = [...prev];
+        updated[updated.length - 1] = {
+          ...updated[updated.length - 1],
+          actionStatus: "done",
+        };
+        return [
+          ...updated,
+          {
+            role: "assistant",
+            content: `Error communicating with agent: ${err.message}`,
+          },
+        ];
+      });
+    }
   };
 
   return (
@@ -221,7 +219,7 @@ function AgentPageContent() {
               <div className="flex w-full flex-col gap-4 max-w-2xl">
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
-                  hideDropdown={true}
+                  showModelDropdown={true}
                   placeholder="Describe the agent you want to build..."
                   prompt={inputValue}
                   setPrompt={setInputValue}
@@ -268,7 +266,7 @@ function AgentPageContent() {
                     <div className="flex w-full flex-col gap-4 mt-6">
                       <PromptInputFullLineWithBottomActions
                         hideAgents={true}
-                        hideDropdown={true}
+                        showModelDropdown={true}
                         placeholder={`Message ${agentName}...`}
                         prompt={inputValue}
                         setPrompt={setInputValue}
@@ -315,34 +313,17 @@ function AgentPageContent() {
                   </div>
 
                   {/* Input Area */}
-                  <div className="p-6 bg-transparent">
-                    <form className="relative group" onSubmit={handleChatSend}>
-                      <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500" />
-                      <div className="relative flex items-center bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm focus-within:ring-2 focus-within:ring-indigo-500/50 transition-all p-2 gap-1">
-                        <button
-                          className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors shrink-0"
-                          type="button"
-                        >
-                          <Paperclip size={20} />
-                        </button>
-                        <input
-                          className="flex-1 bg-transparent border-none outline-none px-2 py-3 text-[15px] text-gray-900 dark:text-white placeholder:text-gray-400"
-                          placeholder="Message your agent..."
-                          type="text"
-                          value={chatMessage}
-                          onChange={(e) => setChatMessage(e.target.value)}
-                        />
-                        <ArrowUp
-                          className="w-10 h-10 p-2 cursor-pointer rounded-xl bg-black dark:bg-white text-white dark:text-black flex items-center justify-center transition-opacity shrink-0 hover:opacity-80"
-                          style={{ opacity: 1 }}
-                          onClick={
-                            chatMessage
-                              ? (e: any) => handleChatSend(e)
-                              : undefined
-                          }
-                        />
-                      </div>
-                    </form>
+                  <div className="p-6 bg-transparent w-full">
+                    <PromptInputFullLineWithBottomActions
+                      hideAgents={true}
+                      showModelDropdown={true}
+                      placeholder={`Message ${agentName}...`}
+                      prompt={chatMessage}
+                      setPrompt={setChatMessage}
+                      onSend={(prompt) => {
+                        handleChatSend(undefined, prompt);
+                      }}
+                    />
                   </div>
                 </div>
               )}

@@ -1860,7 +1860,7 @@ export default function Sidebar() {
                         ? "h-[36px] w-full px-3 gap-3 rounded-xl text-xs font-semibold"
                         : "h-[36px] w-[36px] rounded-xl justify-center",
                       item.isActive
-                        ? "bg-white/15 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)] border border-white/10"
+                        ? "bg-[#0000ff]/20 text-white shadow-[0_0_15px_rgba(0,0,255,0.6)] border border-[#0000ff]"
                         : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
                     )}
                     href={item.path}
@@ -3172,7 +3172,12 @@ export default function Sidebar() {
                     return filtered.map((item) => (
                       <button
                         key={item?._id}
-                        className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate cursor-pointer"
+                        className={cn(
+                          "w-full text-left px-3 py-2.5 rounded-xl text-[13px] transition-all truncate cursor-pointer",
+                          pathname === `/chat/${item?.sessionId}` || sessionId === item?.sessionId
+                            ? "bg-[#0000ff]/20 text-white border border-[#0000ff] shadow-[0_0_15px_rgba(0,0,255,0.6)]"
+                            : "text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 border border-transparent"
+                        )}
                         onClick={() =>
                           item?.sessionId && submitForm(item?.sessionId)
                         }
