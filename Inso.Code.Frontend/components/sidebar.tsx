@@ -1174,6 +1174,13 @@ export default function Sidebar() {
       onClick: () => {},
     },
     {
+      label: "Agents",
+      icon: Bot,
+      path: "/agents",
+      isActive: pathname === "/agents" || pathname?.startsWith("/agents/"),
+      onClick: () => {},
+    },
+    {
       label: "Languages",
       icon: Code,
       path: "/languages",
@@ -1186,13 +1193,6 @@ export default function Sidebar() {
       icon: Cloud,
       path: "/clouds",
       isActive: pathname === "/clouds" || pathname?.startsWith("/clouds/"),
-      onClick: () => {},
-    },
-    {
-      label: "Agents",
-      icon: Bot,
-      path: "/agents",
-      isActive: pathname === "/agents" || pathname?.startsWith("/agents/"),
       onClick: () => {},
     },
     {
