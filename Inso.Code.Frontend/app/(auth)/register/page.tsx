@@ -298,10 +298,10 @@ export default function RegisterPage() {
 
           <div className="flex flex-col gap-1.5">
             <Select
-              className={`max-w-full ${!selectedCloud ? "pointer-events-none select-none" : ""}`}
+              className={`max-w-full opacity-100 !opacity-100 ${!selectedCloud ? "pointer-events-none select-none" : ""}`}
               classNames={{
                 trigger:
-                  "font-sans h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
+                  "font-sans h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none opacity-100 !opacity-100",
                 value:
                   "font-sans text-zinc-400 data-[has-value=true]:text-black text-[13px] font-light",
               }}
