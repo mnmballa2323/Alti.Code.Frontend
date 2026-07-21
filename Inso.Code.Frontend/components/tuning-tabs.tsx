@@ -38,12 +38,11 @@ export function TuningTabs() {
         return (
           <Link
             key={key}
-            className={[
-              "flex items-center gap-1.5 px-2 h-8 rounded-md text-sm font-medium transition-all duration-150 whitespace-nowrap",
+            className={`flex items-center gap-1.5 px-2 h-8 rounded-md text-sm font-medium transition-all duration-150 whitespace-nowrap ${
               isActive
                 ? "bg-[#0000ff] text-white border border-[#0000ff]"
-                : "bg-transparent border border-transparent text-default-500 hover:text-foreground hover:bg-default-50 dark:hover:bg-default-100/50",
-            ].join(" ")}
+                : "bg-transparent border border-transparent text-default-500 hover:text-foreground hover:bg-default-50 dark:hover:bg-default-100/50"
+            }`}
             href={key}
           >
             <Icon className="w-4 h-4 shrink-0" />

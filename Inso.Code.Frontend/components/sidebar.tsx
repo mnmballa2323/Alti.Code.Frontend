@@ -3174,9 +3174,9 @@ export default function Sidebar() {
                         key={item?._id}
                         className={cn(
                           "w-full text-left px-3 py-2.5 rounded-xl text-[13px] transition-all truncate cursor-pointer",
-                          pathname === `/chat/${item?.sessionId}` || sessionId === item?.sessionId
+                          pathname === `/chat/${item?.sessionId}`
                             ? "bg-[#0000ff]/20 text-white border border-[#0000ff] shadow-[0_0_15px_rgba(0,0,255,0.6)]"
-                            : "text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 border border-transparent"
+                            : "text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 border border-transparent",
                         )}
                         onClick={() =>
                           item?.sessionId && submitForm(item?.sessionId)
