@@ -124,7 +124,7 @@ export default function RegisterPage() {
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input:
-                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light outline-none focus:outline-none !outline-none !focus:outline-none",
               }}
               name="companyName"
               placeholder="Company Name"
@@ -140,7 +140,7 @@ export default function RegisterPage() {
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input:
-                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light outline-none focus:outline-none !outline-none !focus:outline-none",
               }}
               name="email"
               placeholder="Company Email"
@@ -155,7 +155,7 @@ export default function RegisterPage() {
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input:
-                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light outline-none focus:outline-none !outline-none !focus:outline-none",
               }}
               endContent={
                 passwordValue.length > 0 && (
@@ -217,7 +217,7 @@ export default function RegisterPage() {
                 inputWrapper:
                   "h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 input:
-                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light",
+                  "text-black text-[13px] font-light placeholder:text-[13px] placeholder:font-light outline-none focus:outline-none !outline-none !focus:outline-none",
               }}
               endContent={
                 confirmPasswordValue.length > 0 && (
