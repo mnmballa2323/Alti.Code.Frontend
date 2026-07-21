@@ -280,7 +280,7 @@ export default function RegisterPage() {
                 trigger:
                   "font-sans h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none",
                 value:
-                  "font-sans text-zinc-400 data-[has-value=true]:text-black text-[13px] font-light",
+                  "font-sans text-zinc-500 data-[has-value=true]:text-black text-[13px] font-light",
               }}
               name="preferredCloud"
               placeholder="Select Cloud Provider"
@@ -303,7 +303,7 @@ export default function RegisterPage() {
                 trigger:
                   "font-sans h-12 bg-gray-100 !bg-gray-100 hover:!bg-gray-100 focus-within:!bg-gray-100 data-[focus=true]:!bg-gray-100 data-[hover=true]:!bg-gray-100 rounded-2xl border-none shadow-none !ring-0 !outline-none data-[focus=true]:!ring-0 data-[focus=true]:!outline-none opacity-100 !opacity-100",
                 value:
-                  "font-sans text-zinc-400 data-[has-value=true]:text-black text-[13px] font-light",
+                  "font-sans text-zinc-500 data-[has-value=true]:text-black text-[13px] font-light",
               }}
               name="deploymentTier"
               placeholder="Select Deployment Option"
