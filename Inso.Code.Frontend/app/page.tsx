@@ -18,6 +18,7 @@ import HowItWorksSection from "@/components/landing-page/how-it-works-section";
 import RagArchitectureSection from "@/components/landing-page/rag-architecture-section";
 import TriumvirateSection from "@/components/landing-page/triumvirate-section";
 import LanguagesScrollingBanner from "@/components/landing-page/languages-scrolling-banner";
+import CloudsSection from "@/components/landing-page/clouds-section";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -75,6 +76,9 @@ export default function LandingPage() {
         </div>
         <div id="section-triumvirate">
           <TriumvirateSection />
+        </div>
+        <div id="section-clouds">
+          <CloudsSection />
         </div>
         <div id="section-10">
           <CapabilitiesBentoGrid />
