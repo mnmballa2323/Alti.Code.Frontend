@@ -116,7 +116,7 @@ const marqueeLanguages = [...languages, ...languages, ...languages];
 
 export default function LanguagesScrollingBanner() {
   return (
-    <section className="w-full py-16 bg-white dark:bg-[#030303] text-black dark:text-white px-4 sm:px-6 lg:px-8 border-y border-zinc-100 dark:border-zinc-900 transition-colors duration-300 overflow-hidden relative">
+    <section className="w-full py-16 bg-white dark:bg-[#030303] text-black dark:text-white px-4 sm:px-6 lg:px-8 border-none transition-colors duration-300 overflow-hidden relative">
       {/* Soft background grid lines or subtle glow */}
       <div className="absolute inset-0 moving-grid-bg opacity-[0.05] pointer-events-none" />
 
@@ -126,7 +126,8 @@ export default function LanguagesScrollingBanner() {
             Universal Language Roster
           </h3>
           <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium max-w-2xl mx-auto">
-            Supporting the core 15 languages that represent 98%+ of production codebases, tooling pipelines, and enterprise deployments globally.
+            Supporting the core 15 languages that represent 98%+ of production
+            codebases, tooling pipelines, and enterprise deployments globally.
           </p>
         </div>
 
