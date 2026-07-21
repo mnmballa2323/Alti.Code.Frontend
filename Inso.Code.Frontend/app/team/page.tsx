@@ -273,8 +273,8 @@ function TeamContent() {
       return matchesTab && matchesSearch;
     })
     .sort((a, b) => {
-      const nameA = a.name.replace(" Specialist AI", "");
-      const nameB = b.name.replace(" Specialist AI", "");
+      const nameA = a.name;
+      const nameB = b.name;
 
       return nameA.localeCompare(nameB);
     });
@@ -361,7 +361,7 @@ function TeamContent() {
 
                           {/* Language Name */}
                           <span className="font-bold text-[13px] text-zinc-700 dark:text-zinc-300 truncate">
-                            {member.name.replace(" Specialist AI", "")}
+                            {member.name}
                           </span>
                         </div>
                       </div>
