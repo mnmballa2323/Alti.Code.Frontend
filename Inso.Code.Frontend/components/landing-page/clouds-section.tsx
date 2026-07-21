@@ -28,9 +28,10 @@ const clouds = [
   {
     id: "alibaba",
     name: "Alibaba Cloud",
-    icon: "logos:alibaba-cloud",
+    icon: "simple-icons:alibabacloud",
     rgb: "255, 102, 0",
     color: "#FF6600",
+    isMonochrome: true,
   },
   {
     id: "oracle",
@@ -80,7 +81,15 @@ export default function CloudsSection() {
                 }
               >
                 <div className="w-6 h-6 flex items-center justify-center shrink-0 group-hover:rotate-6 transition-transform duration-300">
-                  <Icon className="w-5 h-5 object-contain" icon={cloud.icon} />
+                  <Icon
+                    className="w-5 h-5 object-contain"
+                    icon={cloud.icon}
+                    style={
+                      "isMonochrome" in cloud && cloud.isMonochrome
+                        ? { color: cloud.color }
+                        : undefined
+                    }
+                  />
                 </div>
                 <span className="text-[13px] sm:text-sm font-semibold tracking-tight text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-zinc-50 transition-colors whitespace-nowrap">
                   {cloud.name}
