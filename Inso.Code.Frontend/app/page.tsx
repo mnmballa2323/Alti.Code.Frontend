@@ -17,6 +17,7 @@ import PricingSection from "@/components/landing-page/pricing-section";
 import HowItWorksSection from "@/components/landing-page/how-it-works-section";
 import RagArchitectureSection from "@/components/landing-page/rag-architecture-section";
 import TriumvirateSection from "@/components/landing-page/triumvirate-section";
+import LanguagesScrollingBanner from "@/components/landing-page/languages-scrolling-banner";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -65,6 +66,9 @@ export default function LandingPage() {
       <main className="flex-1 flex flex-col w-full relative z-10">
         <div id="section-0">
           <HeroSwarm />
+        </div>
+        <div id="section-languages">
+          <LanguagesScrollingBanner />
         </div>
         <div id="section-how-it-works">
           <HowItWorksSection />
