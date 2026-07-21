@@ -14,21 +14,21 @@ const clouds = [
   {
     id: "google-cloud",
     name: "Google Cloud",
-    icon: "simple-icons:googlecloud",
+    icon: "logos:google-cloud",
     rgb: "66, 133, 244",
     color: "#4285F4",
   },
   {
     id: "azure",
     name: "Microsoft Azure",
-    icon: "simple-icons:microsoftazure",
+    icon: "logos:microsoft-azure",
     rgb: "0, 137, 214",
     color: "#0089D6",
   },
   {
     id: "alibaba",
     name: "Alibaba Cloud",
-    icon: "simple-icons:alibabacloud",
+    icon: "logos:alibaba-cloud",
     rgb: "255, 102, 0",
     color: "#FF6600",
   },
@@ -50,7 +50,7 @@ const clouds = [
 
 export default function CloudsSection() {
   return (
-    <section className="w-full py-16 bg-white dark:bg-[#030303] text-black dark:text-white px-4 sm:px-6 lg:px-8 border-y border-zinc-100 dark:border-zinc-900 transition-colors duration-300 overflow-hidden relative">
+    <section className="w-full py-16 bg-white dark:bg-[#030303] text-black dark:text-white px-4 sm:px-6 lg:px-8 border-none transition-colors duration-300 overflow-hidden relative">
       {/* Soft background grid lines */}
       <div className="absolute inset-0 moving-grid-bg opacity-[0.05] pointer-events-none" />
 
@@ -71,7 +71,7 @@ export default function CloudsSection() {
             {clouds.map((cloud, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-3.5 px-6 py-4 rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/30 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_2px_8px_rgba(0,0,0,0.01)] group hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-white dark:hover:bg-zinc-900 hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+                className="flex items-center gap-3 px-4 py-4 rounded-2xl bg-zinc-50/50 dark:bg-zinc-900/30 border border-zinc-200/60 dark:border-zinc-800/60 shadow-[0_2px_8px_rgba(0,0,0,0.01)] group hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-white dark:hover:bg-zinc-900 hover:scale-[1.02] transition-all duration-300 cursor-pointer"
                 style={
                   {
                     "--accent-color": cloud.color,
@@ -82,7 +82,7 @@ export default function CloudsSection() {
                 <div className="w-6 h-6 flex items-center justify-center shrink-0 group-hover:rotate-6 transition-transform duration-300">
                   <Icon className="w-5 h-5 object-contain" icon={cloud.icon} />
                 </div>
-                <span className="text-sm font-semibold tracking-tight text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-zinc-50 transition-colors truncate">
+                <span className="text-[13px] sm:text-sm font-semibold tracking-tight text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-zinc-50 transition-colors whitespace-nowrap">
                   {cloud.name}
                 </span>
               </div>
