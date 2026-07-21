@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { Icon } from "@iconify/react";
 
-import { teamMembers, TeamMember } from "./teamData";
+import { teamMembers, TeamMember } from "@/app/team/teamData";
 
 const getLanguageDisplayName = (id: string) => {
   switch (id) {
@@ -248,11 +248,11 @@ const getCategoryIcon = (category: string) => {
   }
 };
 
-function TeamContent() {
+function CloudsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const searchQuery = searchParams?.get("q") || "";
-  const activeTab = searchParams?.get("tab") || "Language";
+  const activeTab = "Cloud";
 
   // Filter team members based on search and category
   const uniqueTeamMembers = Array.from(
@@ -391,12 +391,12 @@ function TeamContent() {
   );
 }
 
-export default function TeamPage() {
+export default function CloudsPage() {
   return (
     <Suspense
       fallback={<div className="flex-1 w-full min-h-screen bg-transparent" />}
     >
-      <TeamContent />
+      <CloudsContent />
     </Suspense>
   );
 }
