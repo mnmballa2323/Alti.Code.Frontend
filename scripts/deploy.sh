@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# ALTI CODE STUDIO: Production Deployment Script
+# INSO CODE: Production Deployment Script
 # ==============================================================================
 # Deploys the platform to one of three GCP deployment tiers:
 #   1. cloud   — Cloud Run SaaS (multi-tenant)
@@ -50,7 +50,7 @@ fi
 FULL_IMAGE="${REGISTRY}/${PROJECT_ID}/${REPO}/${IMAGE_NAME}:${TAG}"
 
 echo "═══════════════════════════════════════════════════════"
-echo "  🚀 ALTI CODE STUDIO: Production Deployment"
+echo "  🚀 INSO CODE: Production Deployment"
 echo "  📍 Mode:    ${DEPLOYMENT_MODE}"
 echo "  📍 Project: ${PROJECT_ID}"
 echo "  📍 Region:  ${REGION}"
@@ -68,7 +68,7 @@ docker build \
   --build-arg BUILD_SHA="${TAG}" \
   --build-arg BUILD_DATE="${BUILD_DATE}" \
   -t "${FULL_IMAGE}" \
-  -f alti.code.studio.backend/Dockerfile \
+  -f Inso.Code.Backend/Dockerfile \
   .
 
 # ── Step 3: Push to Artifact Registry ──
@@ -79,7 +79,7 @@ docker push "${FULL_IMAGE}"
 case "${DEPLOYMENT_MODE}" in
   cloud)
     echo "☁️  Step 4: Deploying to Cloud Run (SaaS multi-tenant)..."
-    gcloud run deploy alti-code-studio-backend \
+    gcloud run deploy inso-code-backend \
       --image "${FULL_IMAGE}" \
       --region "${REGION}" \
       --project "${PROJECT_ID}" \
@@ -167,7 +167,7 @@ sleep 10
 
 case "${DEPLOYMENT_MODE}" in
   cloud)
-    SERVICE_URL=$(gcloud run services describe alti-code-studio-backend \
+    SERVICE_URL=$(gcloud run services describe inso-code-backend \
       --region "${REGION}" \
       --project "${PROJECT_ID}" \
       --format="value(status.url)")

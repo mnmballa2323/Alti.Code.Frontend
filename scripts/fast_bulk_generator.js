@@ -4,10 +4,10 @@ const { execSync } = require('child_process');
 
 const workspaceRoot = path.resolve(__dirname, '..');
 const rootSkillsDir = path.join(workspaceRoot, '.agent', 'skills');
-const rootBackupSkillsDir = path.join(workspaceRoot, 'Alti.Code.Studio.backup', '.agent', 'skills');
-const backendDir = path.join(workspaceRoot, 'alti.code.studio.backend');
+const rootBackupSkillsDir = path.join(workspaceRoot, 'Inso.Code.backup', '.agent', 'skills');
+const backendDir = path.join(workspaceRoot, 'Inso.Code.Backend');
 const backendSkillsDir = path.join(backendDir, '.agent', 'skills');
-const backendBackupSkillsDir = path.join(backendDir, 'Alti.Code.Studio.backup', '.agent', 'skills');
+const backendBackupSkillsDir = path.join(backendDir, 'Inso.Code.backup', '.agent', 'skills');
 
 const OFFLINE_PREFIXES = ["Ultra-Fast", "Elastic", "Resilient", "Real-Time-Stream", "Zero-Trust", "Defense-in-Depth", "Self-Healing", "Autonomous", "Edge-Optimized", "Distributed-Consensus", "Hyper-Scalable", "Quantum-Safe", "Fault-Tolerant", "Sub-Millisecond", "Geo-Replicated", "Cognitive", "Adaptive", "Self-Tuning", "Immutable", "Ephemeral"];
 const OFFLINE_CORES = ["Concurrency", "Virtualization", "Query-Execution", "Hypervisor", "Secure-Boot", "Symmetric-Crypto", "Neural-Network", "Container-Sandbox", "Distributed-Tracing", "Microservices", "Event-Bus", "Stream-Processor", "Memory-Allocator", "Garbage-Collector", "Load-Balancer", "Ingress-Gateway", "Storage-Engine", "Graph-Database", "Service-Mesh", "Observability-Pipeline"];

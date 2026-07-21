@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 // ==============================================================================
-// ALTI CODE STUDIO: NON-STOP AUTONOMOUS LICENSE COMPLIANT DEPENDENCY RUNNER
+// INSO CODE: NON-STOP AUTONOMOUS LICENSE COMPLIANT DEPENDENCY RUNNER
 // ==============================================================================
 // Configured for GCP Sovereign deployments
 // ==============================================================================
@@ -151,7 +151,7 @@ function run() {
 
     try {
       // 1. Update package.json dependencies and version
-      const pkgPath = 'alti.code.studio.backend/package.json';
+      const pkgPath = 'Inso.Code.Backend/package.json';
       console.log(`• Updating ${pkgPath} with packages...`);
       const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
       Object.assign(pkg.dependencies, phase.packages);
@@ -174,17 +174,17 @@ function run() {
 
       // 3. Install packages
       console.log('• Running npm install...');
-      runCommand('npm install --legacy-peer-deps', 'alti.code.studio.backend');
+      runCommand('npm install --legacy-peer-deps', 'Inso.Code.Backend');
       console.log('✔ NPM Installation completed successfully.');
 
       // 4. Run License compliance scan
       console.log('• Running license compliance check...');
-      runCommand('npm run license-check', 'alti.code.studio.backend');
+      runCommand('npm run license-check', 'Inso.Code.Backend');
       console.log('✔ License compliance check completed successfully.');
 
       // 5. Run Integration tests
       console.log('• Running Vitest integration tests...');
-      runCommand('npx vitest run tests/integration/v49_features.test.js tests/integration/v50_features.test.js tests/integration/v52_features.test.js tests/integration/v53_features.test.js', 'alti.code.studio.backend');
+      runCommand('npx vitest run tests/integration/v49_features.test.js tests/integration/v50_features.test.js tests/integration/v52_features.test.js tests/integration/v53_features.test.js', 'Inso.Code.Backend');
       console.log('✔ Vitest integration tests completed successfully.');
 
       // 6. Update CHANGELOG.md
@@ -262,7 +262,7 @@ ${phase.descriptions.map(d => `- ${d}`).join('\n')}
 
       // 9. Commit and push changes
       console.log('• Committing and pushing changes...');
-      runCommand('git add CHANGELOG.md VERSION docs/MEMORY.md alti.code.studio.backend/package.json alti.code.studio.backend/package-lock.json');
+      runCommand('git add CHANGELOG.md VERSION docs/MEMORY.md Inso.Code.Backend/package.json Inso.Code.Backend/package-lock.json');
       runCommand(`git commit -m "feat: Phase ${phase.number} OSS License-Compliant Dependencies Installation"`);
       runCommand('git push origin main && git push unified main');
       console.log(`✔ Phase ${phase.number} successfully completed and pushed to both remotes!`);
@@ -271,7 +271,7 @@ ${phase.descriptions.map(d => `- ${d}`).join('\n')}
     } catch (error) {
       console.error(`\n❌ ERROR occurred during Phase ${phase.number}:`, error.message);
       console.log('• Reverting changes in git working tree...');
-      runCommand('git restore CHANGELOG.md VERSION docs/MEMORY.md alti.code.studio.backend/package.json alti.code.studio.backend/package-lock.json');
+      runCommand('git restore CHANGELOG.md VERSION docs/MEMORY.md Inso.Code.Backend/package.json Inso.Code.Backend/package-lock.json');
       console.log('🛑 Autonomous loop execution terminated due to error.');
       process.exit(1);
     }

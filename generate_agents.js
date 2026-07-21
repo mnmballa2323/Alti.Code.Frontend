@@ -3,10 +3,10 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 const targetTotal = 25000;
-const agentsDir = path.join(__dirname, 'alti.code.studio.backend', 'src', 'app', 'modules', 'agents', 'custom');
+const agentsDir = path.join(__dirname, 'Inso.Code.Backend', 'src', 'app', 'modules', 'agents', 'custom');
 
 // Find true total across the backend
-const result = execSync('find alti.code.studio.backend -type f -name "*.agent.js" | wc -l');
+const result = execSync('find Inso.Code.Backend -type f -name "*.agent.js" | wc -l');
 const currentTotal = parseInt(result.toString().trim(), 10);
 
 let agentsToCreate = targetTotal - currentTotal;

@@ -1,9 +1,0 @@
-{
-  "watch": ["src", "server.js", "index.js"],
-  "ext": "js,json,cjs,mjs",
-  "ignore": [
-    "src/app/modules/agents/custom",
-    "src/app/modules/agents/definitions",
-    "data"
-  ]
-}

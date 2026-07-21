@@ -2,14 +2,14 @@
 
 ## Overview
 
-The **Alti Code Studio Sovereign Cloud Architecture** is a deeply integrated, highly sterile local environment that physicalizes massive amounts of cloud-native infrastructure code. By autonomously tracking, cloning, and auditing thousands of repositories from leading hyperscalers and edge providers, it equips the Swarm Brain with localized, zero-latency context.
+The **Inso Code Sovereign Cloud Architecture** is a deeply integrated, highly sterile local environment that physicalizes massive amounts of cloud-native infrastructure code. By autonomously tracking, cloning, and auditing thousands of repositories from leading hyperscalers and edge providers, it equips the Swarm Brain with localized, zero-latency context.
 
 As of the latest ingestion phase, the environment locally hosts **5,609 fully hardened, audited repositories** representing the infrastructure blueprints of **44 distinct cloud organizations**.
 
 The entire architecture is fortified by enterprise-grade **Zero-Trust constraints**, sub-millisecond **Redis Data Caching**, and **Vectorized Semantic Caching** to achieve unprecedented execution speed, absolute security, and zero token-waste.
 
 ### Tri-Cloud Sovereign Deployment
-Alti Code Studio supports native, sovereign-compliant deployments across the three major AI infrastructure providers:
+Inso Code supports native, sovereign-compliant deployments across the three major AI infrastructure providers:
 - **AWS Bedrock**: Securely deploy LLMs using AWS PrivateLink to ensure no training data leakage.
 - **Azure Foundry**: VNet-isolated sovereign compute enclaves for regulatory compliance in Europe and North America.
 - **Google Cloud Vertex AI**: Regional endpoints (`us-central1`) locked down with VPC Service Controls.
@@ -74,7 +74,7 @@ The **Cicero Law Enforcement Matrix** provides fully automated compliance and SL
 ---
 
 ## Pre-Bundled Gemini CLI Extensions Engine (Phase 9)
-To deliver a fully sterile, offline-ready developer execution engine, Alti Code Studio integrates the complete public catalog of Gemini CLI extensions:
+To deliver a fully sterile, offline-ready developer execution engine, Inso Code integrates the complete public catalog of Gemini CLI extensions:
 *   **Sovereign Compliance**: All **65 public repositories** from the `gemini-cli-extensions` organization that are licensed under the Apache-2.0 standard are pre-packaged as local git submodules inside `submodules/`.
 *   **Docker Container Sandbox**: The backend builder copies the entire `/submodules` folder into the runner image (configured via parent context redirection in `docker-compose.yml` and COPY targets in the `Dockerfile`), providing complete runtime isolation.
 *   **Startup Auto-Preloader & Caching**: The backend dynamically scans the submodules folder on startup. It runs concurrent installations (batches of 5) and creates a `.preloaded_cache.json` ledger file to bypass redundant startup shell checks on subsequent boots (0ms startup overhead).

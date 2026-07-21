@@ -32,7 +32,7 @@ jobs:
     needs: submodule-sync
     defaults:
       run:
-        working-directory: alti.code.studio.backend
+        working-directory: Inso.Code.Backend
     steps:
       - uses: actions/checkout@v4
         with:
@@ -43,7 +43,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: alti.code.studio.backend/package-lock.json
+          cache-dependency-path: Inso.Code.Backend/package-lock.json
 
       - name: Install dependencies
         run: npm ci
@@ -59,7 +59,7 @@ jobs:
     needs: submodule-sync
     defaults:
       run:
-        working-directory: alti.code.studio.frontend
+        working-directory: Inso.Code.Frontend
     steps:
       - uses: actions/checkout@v4
         with:
@@ -70,7 +70,7 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: alti.code.studio.frontend/package-lock.json
+          cache-dependency-path: Inso.Code.Frontend/package-lock.json
 
       - name: Install dependencies
         run: npm ci

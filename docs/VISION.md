@@ -1,7 +1,7 @@
-# Alti.Code.Studio Vision
+# Inso.Code Vision
 
 ## 🌌 The "Universe" Philosophy
-Alti.Code.Studio is built on the belief that **AI should not just assist developers; it should participate as a peer.**
+Inso.Code is built on the belief that **AI should not just assist developers; it should participate as a peer.**
 
 We are moving away from "Copilots" (passive assistance) to "Agents" (active participants).
 

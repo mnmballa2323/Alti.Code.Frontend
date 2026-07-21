@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'alti.code.studio.backend/**'
+      - 'Inso.Code.Backend/**'
       - '.github/workflows/deploy-backend.yml'
 
 jobs:
@@ -36,8 +36,8 @@ jobs:
       - name: Build and Push Docker Container Image
         uses: docker/build-push-action@v5
         with:
-          context: ./alti.code.studio.backend
-          file: ./alti.code.studio.backend/Dockerfile
+          context: ./Inso.Code.Backend
+          file: ./Inso.Code.Backend/Dockerfile
           push: true
           tags: us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/inso-registry/backend:${{ github.sha }}
           cache-from: type=gha

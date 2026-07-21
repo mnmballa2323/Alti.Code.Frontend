@@ -1,6 +1,6 @@
 # GitHub Repository About Metadata
 
-Use the following information to update the **About** section of your GitHub repository (`mnmballa2323/Alti.Code.Studio.Frontend`):
+Use the following information to update the **About** section of your GitHub repository (`mnmballa2323/Inso.Code.Frontend`):
 
 ### 📝 Description
 ```text

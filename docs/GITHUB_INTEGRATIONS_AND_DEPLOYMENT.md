@@ -1,6 +1,6 @@
 # GCP Sovereign Deployment & GitHub Integration Guide
 
-This document defines the architecture, endpoints, and deployment tiers for **Alti.Code.Studio** exclusively on **Google Cloud Platform (GCP)**, supporting three core options: Commercial Cloud, Assured Workloads (Government) Cloud, and Classified & Air-Gapped Cloud.
+This document defines the architecture, endpoints, and deployment tiers for **Inso.Code** exclusively on **Google Cloud Platform (GCP)**, supporting three core options: Commercial Cloud, Assured Workloads (Government) Cloud, and Classified & Air-Gapped Cloud.
 
 ---
 
@@ -9,10 +9,10 @@ This document defines the architecture, endpoints, and deployment tiers for **Al
 The platform integrates directly with the official GitHub REST API and GraphQL engine utilizing the **Octokit SDK** with a custom, zero-dependency service layer. This enables high-performance, real-time repository auditing, automated security remediation, and collaborative workspace workflows.
 
 ### 1. Core Architecture
-* **Service Module:** [github.service.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/github/github.service.js)
-* **Controller Layer:** [github.controller.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/github/github.controller.js)
-* **Routing Module:** [github.route.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/github/github.route.js)
-* **Testing Suite:** [github.service.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/github/github.service.test.js)
+* **Service Module:** [github.service.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/src/app/modules/github/github.service.js)
+* **Controller Layer:** [github.controller.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/src/app/modules/github/github.controller.js)
+* **Routing Module:** [github.route.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/src/app/modules/github/github.route.js)
+* **Testing Suite:** [github.service.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/src/app/modules/github/github.service.test.js)
 
 ### 2. Supported Feature Domains (17 Ingestion Phases)
 The wrapper exposes **100+ endpoints** mapping to the following GitHub capabilities:

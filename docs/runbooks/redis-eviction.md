@@ -4,8 +4,8 @@
 ## Detection
 - **Cloud Monitoring metric**: `redis.googleapis.com/stats/evicted_keys` > 0 sustained
 - **Memory utilization**: `redis.googleapis.com/stats/memory/usage_ratio` > 90%
-- **Alerting policy**: `alti-code-studio-redis-eviction` fires on eviction count > 0 or memory > 85%
-- **Dashboard**: Check **Alti Code Studio — Cache Health** dashboard
+- **Alerting policy**: `inso-code-redis-eviction` fires on eviction count > 0 or memory > 85%
+- **Dashboard**: Check **Inso Code — Cache Health** dashboard
 - **Application logs**: Cache miss rate spikes; `MISSES` increasing relative to `HITS`
 
 ## Symptoms
@@ -27,15 +27,15 @@
 ## Immediate Response (< 5 min)
 1. **Check current memory usage and eviction count**:
    ```bash
-   gcloud redis instances describe alti-code-studio-redis \
-     --region=us-central1 --project=alti-code-studio \
+   gcloud redis instances describe inso-code-redis \
+     --region=us-central1 --project=inso-code \
      --format="value(memorySizeGb, currentLocationId)"
    ```
 2. **Connect to Redis and check stats**:
    ```bash
    # Get connection info
-   gcloud redis instances describe alti-code-studio-redis \
-     --region=us-central1 --project=alti-code-studio \
+   gcloud redis instances describe inso-code-redis \
+     --region=us-central1 --project=inso-code \
      --format="value(host, port)"
 
    # Via redis-cli (from a Compute Engine VM in same VPC)
@@ -54,18 +54,18 @@
 ## Resolution
 1. **Scale up the instance** to stop immediate eviction:
    ```bash
-   gcloud redis instances update alti-code-studio-redis \
+   gcloud redis instances update inso-code-redis \
      --region=us-central1 \
      --size=4 \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 2. **Set appropriate eviction policy**:
    ```bash
-   gcloud redis instances update alti-code-studio-redis \
+   gcloud redis instances update inso-code-redis \
      --region=us-central1 \
      --redis-config="maxmemory-policy=allkeys-lru" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 3. **Add TTLs to keys missing them** — deploy application fix:
@@ -96,10 +96,10 @@
 
 5. **Update application cache configuration**:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --update-env-vars="REDIS_DEFAULT_TTL=3600,REDIS_MAX_VALUE_SIZE=1048576,REDIS_KEY_PREFIX=v2:" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 ## Verification

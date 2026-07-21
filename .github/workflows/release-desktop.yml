@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: './alti.code.studio.frontend/package-lock.json'
+          cache-dependency-path: './Inso.Code.Frontend/package-lock.json'
 
       - name: Install Rust Toolchain
         uses: dtolnay/rust-toolchain@stable
@@ -44,7 +44,7 @@ jobs:
 
       - name: Build Web Frontend Assets
         run: |
-          cd alti.code.studio.frontend
+          cd Inso.Code.Frontend
           npm ci
           npm run build
 
@@ -74,9 +74,9 @@ jobs:
           APPLE_API_KEY_ISSUER: ${{ secrets.APPLE_API_KEY_ISSUER }}
         with:
           tagName: ${{ github.ref_name }}
-          releaseName: "Alti.Code.Studio Desktop v__VERSION__"
+          releaseName: "Inso.Code Desktop v__VERSION__"
           releaseBody: "Enterprise-grade production release. Includes auto-updater package signatures."
           releaseDraft: true
           prerelease: false
           args: ${{ matrix.args }}
-          projectPath: "./alti.code.studio.desktop"
+          projectPath: "./Inso.Code.Desktop"

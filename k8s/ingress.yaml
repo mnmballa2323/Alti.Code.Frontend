@@ -4,7 +4,7 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: alti-code-studio-cert
+  name: inso-code-cert
   namespace: default
 spec:
   secretName: alti-tls-secret
@@ -12,9 +12,9 @@ spec:
     name: letsencrypt-prod
     kind: ClusterIssuer
   dnsNames:
-    - alti.code.studio
-    - api.alti.code.studio
-    - fossflow.alti.code.studio
+    - inso.code
+    - api.inso.code
+    - fossflow.inso.code
 
 ---
 # -------------------------------------------------------------
@@ -35,12 +35,12 @@ metadata:
 spec:
   tls:
     - hosts:
-        - alti.code.studio
-        - api.alti.code.studio
-        - fossflow.alti.code.studio
+        - inso.code
+        - api.inso.code
+        - fossflow.inso.code
       secretName: alti-tls-secret
   rules:
-  - host: alti.code.studio
+  - host: inso.code
     http:
       paths:
       - path: /
@@ -51,7 +51,7 @@ spec:
             port:
               number: 80
   
-  - host: api.alti.code.studio
+  - host: api.inso.code
     http:
       paths:
       - path: /api/v1/gcp
@@ -69,7 +69,7 @@ spec:
             port:
               number: 80
 
-  - host: fossflow.alti.code.studio
+  - host: fossflow.inso.code
     http:
       paths:
       - path: /

@@ -43,9 +43,9 @@ jobs:
         run: |
           cd marketplace/gcp
           # Assuming a generic Dockerfile for the deployer exists
-          docker build -t gcr.io/${{ secrets.GCP_MARKETPLACE_PROJECT_ID }}/alti-code-studio-deployer:${{ github.sha }} .
+          docker build -t gcr.io/${{ secrets.GCP_MARKETPLACE_PROJECT_ID }}/inso-code-deployer:${{ github.sha }} .
           gcloud auth configure-docker
-          docker push gcr.io/${{ secrets.GCP_MARKETPLACE_PROJECT_ID }}/alti-code-studio-deployer:${{ github.sha }}
+          docker push gcr.io/${{ secrets.GCP_MARKETPLACE_PROJECT_ID }}/inso-code-deployer:${{ github.sha }}
 
       - name: Sync Partner Portal
         run: |

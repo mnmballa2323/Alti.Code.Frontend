@@ -1,0 +1,3502 @@
+"use client";
+
+import type { ComponentProps } from "react";
+import type { RootState } from "@/store";
+
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { Icon } from "@iconify/react";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Button,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  ScrollShadow,
+  cn,
+  useDisclosure,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Tooltip,
+  Input,
+} from "@heroui/react";
+import { useCallback, useEffect, useState, useRef } from "react";
+import {
+  Search,
+  Plus,
+  Code,
+  MessageSquare,
+  MoreHorizontal,
+  Edit2,
+  Trash2,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Lock,
+  Cloud,
+  Server,
+  Bot,
+  Cpu,
+  SlidersHorizontal,
+  Network,
+} from "lucide-react";
+import { useSession } from "next-auth/react";
+
+import MyAccountDropdown from "./MyAccountDropdown";
+import NotificationBell from "./NotificationBell";
+
+import { teamMembers } from "@/app/team/teamData";
+import { readProjectData } from "@/lib/project";
+import { useActiveProject } from "@/hooks/useActiveProject";
+import { setActiveProject } from "@/lib/project";
+import { removeDocument, setActiveWorkspace } from "@/store/systemSlice";
+import { addTab } from "@/store/tabsSlice";
+import { useModalStore } from "@/store/useModalStore";
+import useFetchChatHistory from "@/hooks/useFetchChatHistory";
+import { startNewChat } from "@/store/messagesSlice";
+import { SAAS_MOCKS } from "@/app/connect-apps/catalog";
+
+const ENGINE_DISPLAY_NAMES: Record<string, string> = {
+  jules: "Digital Swarm Dispatch Assistant",
+  licenseGuardian: "Compliance Licensing Guard",
+  diplomat: "Multi-Agent Protocol Negotiator",
+  auditor: "Financial Activity Verifier",
+  architect: "Systems Structure Planner",
+  conductor: "Swarm Workflow Orchestrator",
+  devops: "Systems Infrastructure Automation",
+  zx: "Terminal Process Runner",
+  octopus: "Multi-Task Pipeline Coordinator",
+  specter: "Performance Footprint Monitor",
+  centurion: "Deployment Gatekeeper",
+  titan: "Compute Resource Allocator",
+  nomad: "Workload Scheduler",
+  audit: "Cryptographic Ledger Verifier",
+  git: "Repository Version Control",
+  refactor: "Codebase Structural Optimizer",
+  security: "Systems Vulnerability Inspector",
+  sandyaa: "Sandbox Environment Runner",
+  qa: "Automated Test Validator",
+  monitoring: "Live Health Telemetry",
+  iac: "Infrastructure Configuration Designer",
+  cicd: "Automated Delivery Pipeline",
+  notification: "Real-Time Alerts Dispatcher",
+  codeReview: "Architectural Code Evaluator",
+  documentation: "Project Document Generator",
+  debug: "Error Stack Tracer",
+  architecture: "Component Design Advisor",
+  database: "Query Tuning Manager",
+  migration: "Database Schema Updates",
+  performance: "Runtime Latency Analyzer",
+  cost: "Cloud Budget Estimator",
+  compliance: "Standard Security Checker",
+  accessibility: "Inclusive Design Validator",
+  dependency: "External Package Auditor",
+  e2eTest: "User Flow Validator",
+  release: "Deployment Package Builder",
+  overseer: "Swarm Activity Supervisor",
+  incident: "System Outage Responder",
+  analytics: "Swarm Health Reporter",
+  knowledge: "Enterprise Data Indexer",
+  seo: "Search Visibility Optimizer",
+  opencode: "Autonomous Code Generator",
+  openspec: "Specification Design Planner",
+  website_cloner: "Layout Template Generator",
+  translation: "Multi-Language Localizer",
+  onboarding: "Workspace Setup Assistant",
+  apiDesign: "Endpoint Architecture Planner",
+  gcp: "Cloud Compute Provider",
+  python: "Scripting Execution Engine",
+  typescript: "Typed Code Generator",
+  rust: "Systems Safety Validator",
+  golang: "Microservice Build Engine",
+  linter: "Static Rules Evaluator",
+  formatter: "Style Layout Adjuster",
+  "background-agents": "Worker Loop Dispatcher",
+  pentagi: "External Assessment Agent",
+  fossflow: "Open Source Auditor",
+  envValidator: "Secret Values Inspector",
+  secretScanner: "Secret Token Detector",
+  deadCode: "Redundant Logic Cleaner",
+  importSorter: "Import Ordering Formatter",
+  gcpSearch: "Cloud Documentation Indexer",
+  surfer: "Web Research Explorer",
+  siren: "Voice Telemetry Synthesizer",
+  vector: "Semantic Memory Manager",
+  engine: "Core Swarm Processor",
+  strategist: "Logical Step Planner",
+  critic: "Reasoning Quality Checker",
+  regex: "Pattern Matching Evaluator",
+  docker: "Isolated Container Manager",
+  kubernetes: "Container Swarm Orchestrator",
+  nginx: "Reverse Proxy Router",
+  graphql: "Query Endpoint Designer",
+  bash: "System Command Executor",
+  cron: "Scheduled Job Runner",
+  ffmpeg: "Multimedia Processing Tool",
+  jwt: "Token Authentication Builder",
+  threejs: "3D Render Engine",
+  stripe: "Financial Payment Gateway",
+  redis: "Memory Cache Manager",
+  supabase: "Database Platform Assistant",
+  chairman: "Swarm Governance Director",
+  ceo: "Strategic Decision Authority",
+  coo: "Operations Process Manager",
+  cfo: "Financial Budget Director",
+  cmo: "Marketing Campaign Manager",
+  cro: "Revenue Stream Optimizer",
+  lawyer: "Contract Agreement Reviewer",
+  accountant: "Ledger Balance Auditor",
+  pm: "Product Lifecycle Planner",
+  scrum: "Scrum Cycle Organizer",
+  designer: "Visual Interface Planner",
+  frontend: "Visual Component Builder",
+  backend: "Server Side Developer",
+  dba: "Database Administrator",
+  ai: "Model Tuning Advisor",
+  writer: "Professional Content Copywriter",
+  support: "Customer Service Agent",
+  cto: "Technology Systems Director",
+  ciso: "Information Security Officer",
+  prisma: "Database Integration Mapper",
+  webrtc: "Live Connection Streamer",
+  solidity: "Smart Contract Developer",
+  svelte: "Client Side Compiler",
+  vue: "Reactive Interface Builder",
+  storybook: "Design System Reviewer",
+  opentelemetry: "Distributed Telemetry Collector",
+  ansible: "Infrastructure Provisioning Manager",
+  terraform: "Cloud Resource Configurator",
+  langchain: "Model Swarm Builder",
+  mlops: "Model Pipeline Manager",
+  prompteng: "Prompt Design Specialist",
+  reactnative: "Multi-Platform App Developer",
+  flutter: "Client Layout Compiler",
+  pwa: "Desktop Web Builder",
+  vitest: "Fast Test Runner",
+  playwright: "Browser Automation Tester",
+  sql: "Database Query Generator",
+  elasticsearch: "Fast Search Indexer",
+  kafka: "Real-Time Event Streamer",
+  pentest: "Security Penetration Tester",
+  githubactions: "Workflow Pipeline Automator",
+  figma: "Graphic Layout Importer",
+  wasm: "Assembly Compiler Runner",
+  deno: "Safe Runtime Processor",
+  mongodb: "Document Storage Database",
+  grpc: "High-Speed API Connector",
+  tailwind: "Style Sheet Utility Compiler",
+  i18n: "Language Translation Manager",
+  websocket: "Real-Time Socket Connection",
+  cloudflare: "Edge Protection Network",
+  vercel: "Front-End Deployment Platform",
+  netlify: "Static Site Deployer",
+  digitalocean: "Virtual Server Cloud",
+  oracle: "Database Platform Manager",
+  ibmcloud: "Enterprise Cloud Provider",
+  alibaba: "International Cloud Provider",
+  hetzner: "Dedicated Server Cloud",
+  flyio: "Global Microservice Deployer",
+  railway: "Dynamic Deploy Hosting",
+  render: "Fast App Deployer",
+  linode: "Cloud Host Server",
+  vultr: "High-Speed Virtual Servers",
+  scaleway: "European Cloud Server",
+  ovhcloud: "Dedicated Cloud Hosting",
+  neon: "Serverless Database Provider",
+  fastly: "Edge Delivery Cache",
+  backblaze: "Secure Object Storage",
+  heroku: "Managed Application Host",
+  planetscale: "Scalable Database Platform",
+  upcloud: "Premium Virtual Cloud",
+  exoscale: "Swiss Cloud Server",
+  civo: "Managed Kubernetes Cloud",
+  coreweave: "High-Performance Compute Cloud",
+  lambdalabs: "Model Training Cloud",
+  runpod: "Model Container Cloud",
+  paperspace: "Machine Learning Workspace",
+  tencent: "Asian Cloud Platform",
+  huawei: "Enterprise Cloud Service",
+  baidu: "AI Search Cloud",
+  yandex: "Search Infrastructure Cloud",
+  equinix: "Bare Metal Cloud",
+  cloudinary: "Media Asset Optimizer",
+  snowflake: "Data Warehouse Analyzer",
+  databricks: "Data Lakehouse Platform",
+  denodeploy: "Global Edge Runner",
+  turso: "Edge SQLite Database",
+  akamai: "Global Content Guard",
+  supabasecloud: "Managed Database Cloud",
+  apprunner: "Containerized Application Host",
+  contextEngineering: "Context Optimizer",
+  deepResearch: "Web Neural Searcher",
+  pageIndexRAG: "Local Documentation Searcher",
+  nanoCodeAgent: "Micro Task SWE Agent",
+  product_manager: "Product Requirement Planner",
+  system_architect: "Systems Architecture Planner",
+  gemini_coder: "Swarm Code Builder",
+  cloud_run_deployer: "Serverless Container Deployer",
+  stackdriver_analyst: "Cloud Log Telemetry Monitor",
+  "videoGenerationAgent.name": "Video Clip Animator",
+  "spatial3DNerfAgent.name": "3D Scene Reconstruction",
+  "neuralBciParserAgent.name": "Brain Signal Decoder",
+  "hapticKinematicsAgent.name": "Robotics Motion Controller",
+  "omniAudioSynthesisAgent.name": "Voice Waveform Generator",
+  "agentSAgent.name": "OS Action Agent",
+  "browserUseAgent.name": "Web Automation Swarm",
+  "fazmAgent.name": "Low-Code Logic Engine",
+  "figmaExporterAgent.name": "Visual Design Asset Converter",
+  "researchPaperScraperAgent.name": "Academic Document Harvester",
+  "voiceDesktopLauncherAgent.name": "Voice Command System Controller",
+  "spreadsheetFormatterAgent.name": "Automated Data Sheet Organizer",
+  "socialMediaMonitorAgent.name": "Social Sentiment Analyst",
+  "voiceMeetingMinuterAgent.name": "Meeting Transcript Summarizer",
+  "desktopFileOrganizerAgent.name": "System Directory Cleaner",
+  "webDependencyAuditorAgent.name": "Third-Party Package Inspector",
+  "voiceEmailDictatorAgent.name": "Email Draft Dictation Assistant",
+  "systemPreferencesTunerAgent.name": "OS Environment Tuner",
+  "webPriceTrackerAgent.name": "Online Catalog Monitor",
+  "voiceCalendarSchedulerAgent.name": "Voice Meeting Planner",
+  "mulesoftAnypointAgent.name": "Enterprise Integration Connector",
+  "servicenowItsmAgent.name": "IT Workflows Automator",
+  "soxItgcComplianceAgent.name": "Security Control Auditor",
+  "as400RpgleModernizerAgent.name": "Legacy Code Modernizer",
+  "paloAltoPanosAgent.name": "Network Firewall Rule Administrator",
+  "dynamics365ErpAgent.name": "Business Resource Planner",
+  "databricksSparkAgent.name": "Large Scale Data Processor",
+  "uipathRpaBotAgent.name": "Desktop Action Bot",
+  "intuneMdmPolicyAgent.name": "Device Policy Administrator",
+  "peoplesoftHcmBridgeAgent.name": "Corporate Directory Sync Connector",
+  cicero_law_enforcement: "Municipal Policy Legal Verifier",
+};
+
+const getEngineDisplayName = (name: string): string => {
+  return (
+    ENGINE_DISPLAY_NAMES[name] ||
+    name.replace(/_|-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+  );
+};
+
+const FALLBACK_ENGINES_SIDEBAR = [
+  {
+    name: "opencode",
+    description: "Autonomous SWE Coding Agent",
+    capabilities: ["opencode"],
+  },
+  {
+    name: "openspec",
+    description: "Spec-Driven Development Planner",
+    capabilities: ["openspec"],
+  },
+  {
+    name: "website_cloner",
+    description: "AI Website Cloner",
+    capabilities: ["website-cloning"],
+  },
+  {
+    name: "auditor",
+    description: "Cloud FinOps Auditor",
+    capabilities: ["cost-audit"],
+  },
+];
+
+type AppIntegration = {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  logo?: string;
+  color: string;
+  status: "connected" | "disconnected" | "connecting";
+  type: "official" | "custom";
+};
+
+const SUPPORTED_DATABASES = [
+  { id: "cassandra", name: "Cassandra", icon: "logos:cassandra" },
+  { id: "clickhouse", name: "ClickHouse", icon: "logos:clickhouse" },
+  { id: "databricks", name: "Databricks", icon: "simple-icons:databricks" },
+  { id: "elasticsearch", name: "Elasticsearch", icon: "logos:elasticsearch" },
+  { id: "influxdb", name: "InfluxDB", icon: "logos:influxdb" },
+  { id: "mongodb", name: "MongoDB", icon: "logos:mongodb-icon" },
+  { id: "mysql", name: "MySQL", icon: "logos:mysql" },
+  { id: "neo4j", name: "Neo4j", icon: "logos:neo4j" },
+  { id: "neon", name: "Neon", icon: "logos:neon-icon" },
+  { id: "oracle", name: "Oracle", icon: "logos:oracle" },
+  { id: "pinecone", name: "Pinecone", icon: "logos:pinecone" },
+  { id: "postgresql", name: "PostgreSQL", icon: "logos:postgresql" },
+  { id: "qdrant", name: "Qdrant", icon: "logos:qdrant" },
+  { id: "redis", name: "Redis", icon: "logos:redis" },
+  { id: "singlestore", name: "SingleStore", icon: "simple-icons:singlestore" },
+  { id: "snowflake", name: "Snowflake", icon: "logos:snowflake-icon" },
+  { id: "sqlite", name: "SQLite", icon: "logos:sqlite" },
+  { id: "supabase", name: "Supabase", icon: "logos:supabase-icon" },
+];
+
+const AppIcon = ({
+  app,
+  className = "w-8 h-8",
+}: {
+  app: AppIntegration;
+  className?: string;
+}) => {
+  const [imageError, setImageError] = useState(false);
+  const [urlIndex, setUrlIndex] = useState(0);
+
+  if (app.id === "custom-mcp-launcher") {
+    return (
+      <div
+        className={cn(
+          "w-full h-full flex items-center justify-center bg-primary/10 text-primary rounded-lg",
+          className,
+        )}
+      >
+        <Plus className="size-4 shrink-0" />
+      </div>
+    );
+  }
+
+  const slug = app.id.replace("app-", "").toLowerCase();
+  let cleanSlug = slug.startsWith("_") ? slug.slice(1) : slug;
+
+  if (cleanSlug.startsWith("mcp_toolbox_")) {
+    cleanSlug = cleanSlug.slice(12);
+  } else if (cleanSlug.startsWith("mcp_")) {
+    cleanSlug = cleanSlug.slice(4);
+  }
+
+  const localSVGRegistry: Record<string, React.ReactNode> = {
+    ansible: (
+      <svg
+        className="w-full h-full p-0.5 object-contain"
+        role="img"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <title>Ansible</title>
+        <path
+          d="M10.617 11.473l4.686 3.695-3.102-7.662zM12 0C5.371 0 0 5.371 0 12s5.371 12 12 12 12-5.371 12-12S18.629 0 12 0zm5.797 17.305c-.011.471-.403.842-.875.83-.236 0-.416-.09-.664-.293l-6.19-5-2.079 5.203H6.191L11.438 5.44c.124-.314.427-.52.764-.506.326-.014.63.189.742.506l4.774 11.494c.045.111.08.234.08.348-.001.009-.001.009-.001.023z"
+          fill="#EE0000"
+        />
+      </svg>
+    ),
+
+    apollo_graphql: (
+      <svg
+        className="w-full h-full p-0.5 object-contain"
+        role="img"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <title>Apollo GraphQL</title>
+        <path
+          d="M12,0C5.372,0 0,5.373 0,12 0,18.628 5.372,24 12,24 18.627,24 24,18.628 24,12A12.014,12.014 0 0 0 23.527,8.657 0.6,0.6 0 0 0 22.4,9.066H22.398C22.663,10.009 22.8,10.994 22.8,12A10.73,10.73 0 0 1 19.637,19.637 10.729,10.729 0 0 1 12,22.8 10.73,10.73 0 0 1 4.363,19.637 10.728,10.728 0 0 1 1.2,12 10.73,10.73 0 0 1 4.363,4.363 10.728,10.728 0 0 1 12,1.2C14.576,1.2 17.013,2.096 18.958,3.74A1.466,1.466 0 1 0 19.82,2.9 11.953,11.953 0 0 0 12,0ZM10.56,5.88 6.36,16.782H8.99L9.677,14.934H13.646L12.927,12.892H10.314L12.014,8.201 15.038,16.781H17.669L13.47,5.88Z"
+          fill="#311C87"
+        />
+      </svg>
+    ),
+    argocd: (
+      <svg
+        className="w-full h-full p-0.5 object-contain"
+        role="img"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <title>ArgoCD</title>
+        <path
+          d="M12.581 0c.436.037.871.1 1.299.186 1.679.383 3.121 1.213 4.382 2.365 1.161 1.06 1.917 2.372 2.335 3.881.089.321.216.56.586.624.205.035.238.245.239.43.003.646.002 1.294.002 1.94l-.002 1.21c-.001.356-.116.479-.466.474-.211-.003-.293.119-.344.291-.146.489-.33.966-.552 1.426-.818 1.682-2.084 2.938-3.688 3.87-.077.045-.155.088-.233.131-.252.137-.258.146-.155.415.114.299.358.529.664.625.269.096.553.134.827.21a.672.672 0 0 1 .236.094c-.066.082-.156.067-.231.082-.36.073-.713.184-1.086.17a1.275 1.275 0 0 1-.438-.064c-.114-.045-.152-.006-.176.109a5.354 5.354 0 0 0-.084.92c-.015.617-.071 1.23-.112 1.844-.042.598-.018.651.558.842.281.094.563.187.842.286.069.024.15.038.192.117-.04.057-.098.035-.146.035-.493.003-.985.005-1.478.001-.524-.005-.806-.282-.845-.803-.055-.762-.12-1.524-.182-2.286a.947.947 0 0 0-.026-.12c-.079.455-.065.879-.084 1.298-.023.528-.008 1.057-.007 1.584 0 .27.086.388.335.483.359.135.711.295 1.114.262.141-.012.276.062.402.129.032.017.073.033.069.073-.004.043-.049.047-.084.045-.657-.019-1.317.065-1.972-.028-.323-.046-.533-.236-.631-.552-.094-.303-.114-.617-.137-.93-.046-.626-.078-1.253-.116-1.88a.222.222 0 0 0-.061-.171.282.282 0 0 0-.031.193c-.002.956-.002 1.911-.001 2.866 0 .388.123.575.494.708.481.172.976.298 1.47.423.11.028.225.047.242.192h-1.852c-.051-.01-.103-.022-.155-.03-.701-.1-1.001-.372-1.143-1.042l-.067-.331-.226-1.103c-.069.12-.118.25-.144.386-.083.399-.151.802-.243 1.2-.113.493-.444.763-.932.857l-.33.063H8.558c.057-.171.216-.185.355-.221.476-.127.96-.223 1.417-.409a.603.603 0 0 0 .397-.521c.058-.435.002-.865-.013-1.296a1.528 1.528 0 0 0-.078-.315.405.405 0 0 0-.071.207c-.026.296-.049.591-.075.886-.038.432-.273.716-.679.81a1.702 1.702 0 0 1-.37.045c-.557.003-1.115-.001-1.673-.005-.048 0-.109.019-.148-.065.178-.103.377-.168.582-.187a5.67 5.67 0 0 0 .939-.193c.42-.114.522-.249.512-.687-.023-.931-.091-1.86-.069-2.791.004-.184.001-.368.001-.551a2.387 2.387 0 0 0-.05.385 40.299 40.299 0 0 1-.186 2.623c-.052.513-.296.748-.804.805-.446.051-.889.002-1.332-.02-.108-.006-.234.012-.339-.064.043-.066.106-.07.16-.087.362-.115.725-.224 1.086-.344.246-.081.35-.235.355-.492a2.241 2.241 0 0 0-.003-.232 45.315 45.315 0 0 1-.105-2.149 5.487 5.487 0 0 0-.035-.478c-.024-.188-.131-.287-.295-.258-.505.092-.99-.006-1.473-.139-.059-.016-.134-.007-.178-.088a.986.986 0 0 1 .285-.09c.255-.052.507-.121.753-.208.312-.112.564-.347.695-.651.089-.203.056-.317-.112-.398-1.418-.683-2.512-1.73-3.391-3.017a8.152 8.152 0 0 1-1.123-2.447c-.067-.246-.156-.3-.383-.26-.306.053-.401.006-.535-.273v-3.49c.144-.303.205-.341.534-.329.235.01.247-.004.309-.242.396-1.508 1.082-2.861 2.171-3.988C6.9 1.42 8.523.631 10.34.203c.456-.108.922-.15 1.387-.203h.854Zm7.974 8.948a7.34 7.34 0 0 0-.048-.938 8.353 8.353 0 0 0-.099-.65c-.598-2.964-2.344-5.02-5.051-6.268-1.553-.715-3.21-.835-4.878-.511-3.248.633-5.396 2.583-6.539 5.652-.436 1.173-.495 2.406-.37 3.65.087.935.339 1.846.745 2.694.585 1.213 1.444 2.207 2.477 3.058.343.286.719.528 1.121.719.235.111.247.105.245-.146.006-.16.003-.32-.009-.48-.125-1.02-.142-2.045-.169-3.069a.392.392 0 0 0-.184-.353c-.385-.268-.713-.592-.921-1.019-.474-.97-.372-2.361.813-3.215.136-.097.217-.19.198-.373a1.724 1.724 0 0 1 .031-.442c.177-1.187.748-2.138 1.722-2.84.68-.492 1.442-.772 2.286-.782.483-.007.953.11 1.414.244 1.609.467 2.846 2.07 2.845 3.697a.64.64 0 0 0 .268.565c.463.371.821.83.943 1.426.22 1.077-.083 1.982-.979 2.634-.266.194-.347.406-.333.698.002.047 0 .095-.002.142l-.062 1.439c-.025.586-.138 1.165-.117 1.754.008.223.006.226.201.128a7.46 7.46 0 0 0 2.393-1.903c1.32-1.577 2.074-3.372 2.059-5.511ZM9.117 12.102c1.489.021 2.443-1.578 1.716-2.879a1.937 1.937 0 0 0-1.699-.991c-1.094-.004-1.954.822-1.958 1.881-.005 1.148.813 1.985 1.941 1.989Zm5.794 0c1.101.002 1.935-.823 1.935-1.917 0-1.091-.846-1.949-1.92-1.947-1.064.003-1.94.866-1.943 1.915-.003 1.105.831 1.948 1.928 1.949Zm-1.472 1.937c-.208.128-.407.277-.63.384-.536.257-1.063.257-1.579-.048-.158-.094-.308-.201-.464-.298-.047-.028-.092-.103-.15-.062-.044.03-.01.1-.001.151.037.179.064.362.082.544.027.565.293.992.742 1.31a.984.984 0 0 0 .791.186c.565-.119 1.025-.614 1.124-1.218.043-.266.005-.544.109-.803a.133.133 0 0 0-.024-.146Zm-8.78-4.92c-.012-1.102.143-2.055.54-2.961.633-1.443 1.642-2.553 2.98-3.374a.378.378 0 0 1 .459.067c.06.06.036.118.01.178a1.09 1.09 0 0 1-.48.51c-1.079.639-1.829 1.571-2.357 2.688a6.325 6.325 0 0 0-.618 2.986c.055 1.309.439 2.516 1.213 3.588.088.104.148.23.173.365.01.08.059.168-.031.228a.312.312 0 0 1-.288.041.502.502 0 0 1-.234-.185c-.72-.979-1.193-2.056-1.331-3.273-.036-.326-.004-.653-.036-.858ZM8.94 2.34a.373.373 0 0 1 .378-.382c.211.001.409.226.416.473.004.138-.309.39-.476.386-.189-.005-.318-.2-.318-.477Zm-.465 7.48a.609.609 0 0 1 .586-.631c.38-.003.671.271.675.633.004.356-.27.622-.639.621-.38-.002-.621-.241-.622-.623Zm6.496.623c-.381-.002-.625-.255-.621-.646a.635.635 0 0 1 .596-.613.656.656 0 0 1 .669.643c.001.354-.275.618-.644.616Z"
+          fill="#EF6A39"
+        />
+      </svg>
+    ),
+  };
+
+  if (localSVGRegistry[cleanSlug]) {
+    return (
+      <div
+        className={cn(
+          "rounded-lg flex items-center justify-center bg-transparent shrink-0",
+          className,
+        )}
+      >
+        {localSVGRegistry[cleanSlug]}
+      </div>
+    );
+  }
+
+  const localLogoMappings: Record<string, string> = {
+    github: "github.png",
+    slack: "slack.svg",
+    jira: "jira.svg",
+    notion: "notion.svg",
+    linear: "linear.png",
+    googledrive: "google-drive.svg",
+    googlesheets: "google-sheets.svg",
+    discord: "discord.svg",
+    gmail: "gmail.svg",
+    git: "git.svg",
+    filesystem: "filesystem.svg",
+    supabase: "supabase.jpeg",
+    posthog: "posthog.svg",
+    sentry: "sentry.svg",
+    docker: "docker-icon.png",
+    kubernetes: "kubernetes.png",
+  };
+
+  const simpleIconsMapping: Record<string, string> = {
+    apollo_graphql: "apollographql",
+    google_drive: "googledrive",
+    google_sheets: "googlesheets",
+    google_calendar: "googlecalendar",
+    google_maps: "googlemaps",
+    bun_runtime: "bun",
+    deno_runtime: "deno",
+    prisma_orm: "prisma",
+    hasura_graphql: "hasura",
+    stripe_dev: "stripe",
+    teams: "microsoftteams",
+    nextjs: "nextdotjs",
+    springboot: "springboot",
+    brave_search: "brave",
+    argocd: "argo",
+    ansible: "ansible",
+  };
+
+  const getUrlsToTry = () => {
+    const urls: string[] = [];
+    const addUrl = (url: string) => {
+      if (url && !urls.includes(url)) urls.push(url);
+    };
+
+    // 1. Try explicit app.logo if provided
+    if (app.logo) {
+      addUrl(app.logo);
+    }
+
+    // 2. Try local mapped asset (offline-first!)
+    const localFile = localLogoMappings[cleanSlug] || localLogoMappings[slug];
+
+    if (localFile) {
+      addUrl(`/assets/apps-logos/${localFile}`);
+    }
+
+    // 3. Try official jsDelivr/unpkg Simple Icons npm CDN (highly CSP-compliant and fast)
+    const simpleIconBrand =
+      simpleIconsMapping[cleanSlug] || cleanSlug.replace(/_/g, "");
+
+    addUrl(
+      `https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/${simpleIconBrand}.svg`,
+    );
+    addUrl(
+      `https://unpkg.com/simple-icons@latest/icons/${simpleIconBrand}.svg`,
+    );
+    addUrl(`https://cdn.simpleicons.org/${simpleIconBrand}`);
+
+    // 5. Try Clearbit Logo API
+    addUrl(`https://logo.clearbit.com/${simpleIconBrand}.com`);
+
+    return urls;
+  };
+
+  const urlsToTry = getUrlsToTry();
+  const currentLogoUrl = urlsToTry[urlIndex];
+
+  const handleImageError = () => {
+    if (urlIndex < urlsToTry.length - 1) {
+      setUrlIndex(urlIndex + 1);
+    } else {
+      setImageError(true);
+    }
+  };
+
+  const getAvatarColor = (name: string) => {
+    const colors = [
+      "from-blue-500 to-indigo-600 text-white",
+      "from-purple-500 to-pink-600 text-white",
+      "from-emerald-500 to-teal-600 text-white",
+      "from-amber-500 to-orange-600 text-white",
+      "from-rose-500 to-red-600 text-white",
+      "from-cyan-500 to-blue-600 text-white",
+    ];
+    let hash = 0;
+
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % colors.length;
+
+    return colors[index];
+  };
+
+  // Render the image if we haven't exhausted our fallback options
+  if (!imageError && currentLogoUrl) {
+    return (
+      <img
+        alt={`${app.name} logo`}
+        className={cn(className, "object-contain p-0.5 rounded-lg shrink-0")}
+        src={currentLogoUrl}
+        onError={handleImageError}
+      />
+    );
+  }
+
+  // Fallback 1: System custom server icon
+  if (app.type === "custom") {
+    return (
+      <div
+        className={cn(
+          "rounded-lg flex items-center justify-center bg-gradient-to-br from-indigo-500 to-purple-600 text-white shrink-0",
+          className,
+        )}
+      >
+        <Server className="size-4 text-white shrink-0" />
+      </div>
+    );
+  }
+
+  // Fallback 2: Ultimate bulletproof initials box (strictly bypasses broken Iconify components to ensure no blank circles!)
+  const initials = app.name.slice(0, 2).toUpperCase();
+  const gradientClass = getAvatarColor(app.name);
+
+  return (
+    <div
+      className={cn(
+        "rounded-lg flex items-center justify-center font-bold text-[10px] bg-gradient-to-br tracking-tight shrink-0",
+        gradientClass,
+        className,
+      )}
+    >
+      {initials}
+    </div>
+  );
+};
+
+const CORE_APPS: AppIntegration[] = [
+  {
+    id: "github",
+    name: "GitHub",
+    description: "Sync repositories, read PRs, and commit code directly.",
+    icon: "mdi:github",
+    color: "bg-gray-800 dark:bg-white text-white dark:text-gray-900",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "slack",
+    name: "Slack",
+    description: "Read channel messages and send notifications.",
+    icon: "logos:slack-icon",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "jira",
+    name: "Jira",
+    description: "Manage sprints, update tickets, and track velocity.",
+    icon: "logos:jira",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "notion",
+    name: "Notion",
+    description: "Search internal docs and update knowledge base.",
+    icon: "logos:notion-icon",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "linear",
+    name: "Linear",
+    description:
+      "Modern issue tracking and project management for software teams.",
+    icon: "logos:linear",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "googledrive",
+    name: "Google Drive",
+    description: "Read and write documents directly to Google Workspace.",
+    icon: "logos:google-drive",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "salesforce",
+    name: "Salesforce",
+    description:
+      "CRM integration to manage leads, contacts, and custom objects.",
+    icon: "logos:salesforce",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+  {
+    id: "discord",
+    name: "Discord",
+    description:
+      "Interact with community channels, manage roles, and deploy bots.",
+    icon: "logos:discord-icon",
+    color: "bg-white border border-gray-200",
+    status: "disconnected",
+    type: "official",
+  },
+];
+
+const coreAppIds = new Set(CORE_APPS.map((app) => app.id));
+
+const FALLBACK_APPS: AppIntegration[] = [
+  ...CORE_APPS,
+  ...SAAS_MOCKS.filter((mockApp) => !coreAppIds.has(mockApp.slug)).map(
+    (mockApp) => ({
+      id: `app-${mockApp.slug}`,
+      name: mockApp.name,
+      description: `Seamlessly connect and automate workflows directly with ${mockApp.name}.`,
+      icon: mockApp.icon,
+      color: "bg-white border border-gray-200",
+      status: "disconnected" as const,
+      type: "official" as const,
+    }),
+  ),
+].sort((a, b) => a.name.localeCompare(b.name));
+
+import { AppDispatch } from "@/store";
+
+const API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api/v1";
+
+// Define types for the responses
+type AiItem = {
+  _id: string;
+  prompt: string;
+  reply: string;
+};
+
+type AiSession = {
+  _id: string;
+  user?: string;
+  sessionId?: string;
+  createdAt: string;
+  responses: AiItem[];
+};
+
+type ApiResponse = {
+  success: boolean;
+  data: {
+    llamaAiSessions: AiSession[];
+  };
+};
+
+// Code-related chat history
+const codeHistory = [
+  {
+    topic: "React Component Lifecycle Methods",
+    chat: [
+      {
+        from: "user",
+        message: "When should I use componentDidMount vs useEffect in React?",
+      },
+      {
+        from: "assistant",
+        message:
+          "componentDidMount is for class components and runs once after initial render. For functional components, use useEffect with an empty dependency array (useEffect(() => {}, [])) to achieve the same behavior.",
+      },
+    ],
+  },
+  {
+    topic: "CSS Grid Layout Issues",
+    chat: [
+      {
+        from: "user",
+        message: "My grid items aren't respecting the defined column sizes",
+      },
+      {
+        from: "assistant",
+        message:
+          "Try adding grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)) to your grid container. Also check for min-width constraints on child elements that might be overriding your grid layout.",
+      },
+    ],
+  },
+  {
+    topic: "API Fetch Error Handling",
+    chat: [
+      {
+        from: "user",
+        message: "How can I properly handle 404 errors from my API calls?",
+      },
+      {
+        from: "assistant",
+        message:
+          "Wrap your fetch in a try-catch block and check response.ok. For example: `if (!response.ok) throw new Error('Not found');` Then display appropriate UI in your catch block.",
+      },
+    ],
+  },
+  {
+    topic: "TypeScript Interface vs Type",
+    chat: [
+      {
+        from: "user",
+        message: "When should I use interface versus type in TypeScript?",
+      },
+      {
+        from: "assistant",
+        message:
+          "Use interfaces for object shapes that may be extended or implemented. Use type for unions, tuples, or complex type compositions. For simple object shapes, either works but interfaces are generally preferred.",
+      },
+    ],
+  },
+  {
+    topic: "Deploying to Vercel",
+    chat: [
+      {
+        from: "user",
+        message: "My Next.js app deployment fails with 'Module not found'",
+      },
+      {
+        from: "assistant",
+        message:
+          "This typically happens when dependencies aren't properly installed. Try deleting node_modules and package-lock.json, then run 'npm install' before redeploying. Also verify all imports match your package.json.",
+      },
+    ],
+  },
+];
+
+// Chat-related history
+const chatHistory = [
+  {
+    topic: "Planning a Weekend Trip",
+    chat: [
+      {
+        from: "user",
+        message:
+          "I want to plan a weekend getaway. Any suggestions for a relaxing destination?",
+      },
+      {
+        from: "assistant",
+        message:
+          "Consider visiting a mountain cabin or a lakeside retreat. Both offer peaceful environments away from city noise. What kind of activities do you enjoy - hiking, reading, or water sports?",
+      },
+    ],
+  },
+  {
+    topic: "Healthy Meal Prep Ideas",
+    chat: [
+      {
+        from: "user",
+        message: "I need some healthy meal prep ideas for the week",
+      },
+      {
+        from: "assistant",
+        message:
+          "Try preparing quinoa bowls with various toppings, overnight oats for breakfast, and sheet pan vegetables. Batch cooking proteins like grilled chicken or baked tofu saves time too.",
+      },
+    ],
+  },
+  {
+    topic: "Book Recommendations",
+    chat: [
+      {
+        from: "user",
+        message: "Can you recommend some good fiction books?",
+      },
+      {
+        from: "assistant",
+        message:
+          "Based on popular choices: 'The Seven Husbands of Evelyn Hugo' for contemporary fiction, 'The Name of the Wind' for fantasy, or 'Where the Crawdads Sing' for literary fiction. What genres do you usually enjoy?",
+      },
+    ],
+  },
+  {
+    topic: "Learning a New Language",
+    chat: [
+      {
+        from: "user",
+        message: "What's the best way to start learning Spanish?",
+      },
+      {
+        from: "assistant",
+        message:
+          "Start with basic conversational phrases, use apps like Duolingo or Babbel for daily practice, and try to consume Spanish media with subtitles. Consistent daily practice, even 15 minutes, is more effective than longer sporadic sessions.",
+      },
+    ],
+  },
+  {
+    topic: "Home Organization Tips",
+    chat: [
+      {
+        from: "user",
+        message: "My home feels cluttered. How can I organize it better?",
+      },
+      {
+        from: "assistant",
+        message:
+          "Start with one room at a time using the 'keep, donate, trash' method. Invest in storage solutions that fit your space, and follow the 'one in, one out' rule to prevent future clutter buildup.",
+      },
+    ],
+  },
+];
+
+function AvatarDropdownIcon(props: ComponentProps<"svg">) {
+  return (
+    <svg
+      {...props}
+      fill="none"
+      height="20"
+      viewBox="0 0 20 20"
+      width="20"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clipPath="url(#clip0_3076_10614)">
+        <path
+          d="M6.6665 7.50008L9.99984 4.16675L13.3332 7.50008"
+          stroke="#A1A1AA"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M13.3332 12.5L9.99984 15.8333L6.6665 12.5"
+          stroke="#A1A1AA"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_3076_10614">
+          <rect fill="white" height="20" width="20" />
+        </clipPath>
+      </defs>
+    </svg>
+  );
+}
+
+function RecentPromptDropdown() {
+  // const dispatch = useDispatch();
+  return (
+    <Dropdown className="min-w-fit p-0 rounded-lg">
+      <DropdownTrigger>
+        <Icon
+          className="text-default-500 opacity-0 group-hover:opacity-100"
+          icon="solar:menu-dots-bold"
+          width={24}
+        />
+      </DropdownTrigger>
+      <DropdownMenu
+        aria-label="Dropdown menu with icons"
+        className="p-0 w-fit"
+        variant="faded"
+      >
+        <DropdownItem
+          // onClick={() => {
+          //   dispatch(setDeleteModel(true));
+          // }}
+          key="delete"
+          className="dark:text-white text-black dark:data-[hover=true]:text-white data-[hover=true]:text-black"
+          color="danger"
+          startContent={
+            <Icon
+              className="dark:text-white text-black"
+              height={20}
+              icon="solar:trash-bin-minimalistic-linear"
+              width={20}
+            />
+          }
+        >
+          Delete
+        </DropdownItem>
+      </DropdownMenu>
+    </Dropdown>
+  );
+}
+
+export default function Sidebar() {
+  const { isOpen, onOpenChange } = useDisclosure();
+  const { onOpen } = useModalStore();
+  const router = useRouter();
+  const pathname = usePathname();
+  const dispatch = useDispatch<AppDispatch>();
+  const { data: session, status } = useSession();
+  const token = session?.user?.accessToken ?? null;
+  const [repoSearch, setRepoSearch] = useState("");
+  const [isTauri, setIsTauri] = useState(false);
+  const [isWorkspaceModalOpen, setIsWorkspaceModalOpen] = useState(false);
+  const [localWorkspacePath, setLocalWorkspacePath] = useState("");
+  const [localWorkspaceName, setLocalWorkspaceName] = useState("");
+  const [isConnectingWorkspace, setIsConnectingWorkspace] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
+  const [isNameInputFocused, setIsNameInputFocused] = useState(false);
+
+  useEffect(() => {
+    if (
+      typeof window !== "undefined" &&
+      (window as any).__TAURI_INTERNALS__ !== undefined
+    ) {
+      setIsTauri(true);
+    }
+
+    const handleOpenSelector = () => {
+      handleOpenLocalWorkspace();
+    };
+
+    window.addEventListener("open-workspace-selector", handleOpenSelector);
+
+    return () => {
+      window.removeEventListener("open-workspace-selector", handleOpenSelector);
+    };
+  }, []);
+
+  const handleOpenLocalWorkspace = async () => {
+    if (
+      typeof window !== "undefined" &&
+      ((window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__)
+    ) {
+      try {
+        const tauri =
+          (window as any).__TAURI__ || (window as any).__TAURI_INTERNALS__;
+        const invokeFn = tauri?.core?.invoke || tauri?.tauri?.invoke;
+
+        if (invokeFn) {
+          const selectedPath = await invokeFn("selectdir");
+
+          if (selectedPath) {
+            await connectWorkspaceDirectory(selectedPath, localWorkspaceName);
+
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Tauri workspace directory invoke error:", e);
+      }
+    }
+    setIsWorkspaceModalOpen(true);
+  };
+
+  const connectWorkspaceDirectory = async (
+    directoryPath: string,
+    customName?: string,
+  ) => {
+    setIsConnectingWorkspace(true);
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/git/change-directory`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ path: directoryPath }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (data.success) {
+        const parts = directoryPath.split(/[/\\]/);
+        const folderName = parts.pop() || parts.pop() || "local-workspace";
+        const titleName = customName?.trim() || folderName;
+
+        dispatch(
+          addTab({
+            title: titleName,
+            projectPath: folderName,
+            activeView: "/chat",
+            chatSessionId: null,
+          }),
+        );
+        dispatch(setActiveWorkspace(folderName));
+        setActiveProject({ id: folderName, name: folderName });
+        toast.success(`Successfully connected workspace: ${folderName}`);
+        setIsWorkspaceModalOpen(false);
+      } else {
+        toast.error(data.message || "Failed to switch workspace directory");
+      }
+    } catch (error: any) {
+      toast.error(
+        error.message || "Network error while connecting workspace directory",
+      );
+    } finally {
+      setIsConnectingWorkspace(false);
+    }
+  };
+
+  const selectedRepo =
+    useSelector((state: RootState) => state.system.activeWorkspace) ||
+    "inso.code";
+
+  // ── Active project context ─────────────────────────────────────────────
+  const activeProject = useActiveProject();
+  const activeAgentId = activeProject?.id ?? null;
+
+  // ── Vault secrets – per project ─────────────────────────────────
+  const [vaultSecrets, setVaultSecrets] = useState<
+    { id: string; name: string; service: string }[]
+  >([]);
+
+  // Reload vault secrets whenever active project changes
+  useEffect(() => {
+    const stored = readProjectData<
+      { id: string; name: string; service: string }[]
+    >(activeAgentId, "vault_secrets", []);
+
+    setVaultSecrets(stored);
+  }, [activeAgentId]);
+
+  useEffect(() => {
+    const handleNewSecret = (e: any) => {
+      const newSecret = e.detail;
+
+      setVaultSecrets((prev) => {
+        const exists = prev.find((s) => s.id === newSecret.id);
+
+        if (exists) {
+          return prev.map((s) => (s.id === newSecret.id ? newSecret : s));
+        }
+
+        return [newSecret, ...prev];
+      });
+    };
+    const handleDeleteSecret = (e: any) => {
+      setVaultSecrets((prev) => prev.filter((s) => s.id !== e.detail));
+    };
+
+    window.addEventListener("update-vault-secret", handleNewSecret);
+    window.addEventListener("delete-vault-secret", handleDeleteSecret);
+
+    return () => {
+      window.removeEventListener("update-vault-secret", handleNewSecret);
+      window.removeEventListener("delete-vault-secret", handleDeleteSecret);
+    };
+  }, []);
+
+  // Prefetch all key sidebar routes on mount to ensure instant 0ms transitions!
+  useEffect(() => {
+    router.prefetch("/");
+    router.prefetch("/chat");
+    router.prefetch("/agents-showcase");
+    router.prefetch("/vault");
+    router.prefetch("/cloud");
+    router.prefetch("/instructions");
+    router.prefetch("/guardrails");
+    router.prefetch("/documents");
+    router.prefetch("/connect-apps");
+  }, [router]);
+
+  const getHistoryTitle = () => {
+    if (pathname?.startsWith("/chat/")) return "Chat";
+
+    switch (pathname) {
+      case "/":
+        return "Code";
+      case "/chat":
+        return "Chat";
+      case "/agents-showcase":
+        return "Agent Arcade";
+      case "/documents":
+        return "Documentation";
+      case "/instructions":
+        return "Instructions";
+      case "/guardrails":
+        return "Guardrails";
+      case "/knowledge":
+        return "Data";
+      case "/connect-apps":
+      case "/integrations":
+        return "Apps";
+
+      case "/vault":
+        return "Vault";
+      case "/cloud":
+        return "Cloud";
+
+      default:
+        return "Code";
+    }
+  };
+  const [currentMode, setCurrentMode] = useState<"chat" | "code">("chat");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("inso_sidebar_open");
+
+      return stored === null ? true : stored === "true";
+    }
+
+    return true;
+  });
+
+  useEffect(() => {
+    window.dispatchEvent(
+      new CustomEvent("sidebar-state-change", { detail: isSidebarOpen }),
+    );
+
+    const handleToggleSidebar = (e: Event) => {
+      const customEvent = e as CustomEvent;
+      const targetState =
+        customEvent.detail !== undefined ? customEvent.detail : !isSidebarOpen;
+
+      setIsSidebarOpen(targetState);
+      localStorage.setItem("inso_sidebar_open", String(targetState));
+    };
+
+    window.addEventListener("toggle-sidebar", handleToggleSidebar);
+
+    return () => {
+      window.removeEventListener("toggle-sidebar", handleToggleSidebar);
+    };
+  }, [isSidebarOpen]);
+
+  const [leftSidebarSearch, setLeftSidebarSearch] = useState("");
+
+  const navigationItems = [
+    {
+      label: "Code",
+      icon: Code,
+      path: "/new-chat",
+      isActive: pathname === "/new-chat" || pathname === "/code",
+      onClick: () => {
+        dispatch(startNewChat());
+      },
+    },
+
+    {
+      label: "Chat",
+      icon: MessageSquare,
+      path: "/chat",
+      isActive: pathname?.startsWith("/chat"),
+      onClick: () => {},
+    },
+    {
+      label: "Team",
+      icon: Network,
+      path: "/team",
+      isActive: pathname === "/team" || pathname?.startsWith("/team/"),
+      onClick: () => {},
+    },
+    {
+      label: "Agents",
+      icon: Bot,
+      path: "/agents",
+      isActive: pathname === "/agents" || pathname?.startsWith("/agents/"),
+      onClick: () => {},
+    },
+    {
+      label: "Tuning",
+      icon: SlidersHorizontal,
+      path: "/instructions",
+      isActive:
+        pathname === "/instructions" ||
+        pathname === "/guardrails" ||
+        pathname === "/knowledge" ||
+        pathname === "/repository" ||
+        pathname === "/apis" ||
+        pathname === "/sdk" ||
+        pathname === "/mcp",
+      onClick: () => {},
+    },
+    {
+      label: "Vault",
+      icon: Lock,
+      path: "/vault",
+      isActive: pathname === "/vault",
+      onClick: () => {
+        if (pathname === "/vault") {
+          window.dispatchEvent(
+            new CustomEvent("select-secret", { detail: null }),
+          );
+        }
+      },
+    },
+  ];
+
+  const filteredNavigationItems = navigationItems;
+
+  const getPlusTooltipContent = () => {
+    if (pathname === "/" || pathname === "/code") return "New Code";
+    if (pathname?.startsWith("/chat")) return "New Chat";
+    if (pathname === "/vault") return "New Vault";
+    if (pathname === "/instructions") return "New Instruction";
+    if (pathname === "/guardrails") return "New Guardrail";
+    if (pathname === "/knowledge") return "New Data";
+    if (pathname === "/documents") return "New Documentation";
+
+    return "New";
+  };
+
+  const [dataFolders, setDataFolders] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [instructions, setInstructions] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const repositories = useSelector(
+    (state: RootState) => state.system.repositories || [],
+  );
+  const [guardrails, setGuardrails] = useState<{ id: string; name: string }[]>(
+    [],
+  );
+  const [tuningRepos, setTuningRepos] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [tuningApis, setTuningApis] = useState<{ id: string; name: string }[]>(
+    [],
+  );
+  const [tuningSkds, setTuningSdks] = useState<{ id: string; name: string }[]>(
+    [],
+  );
+  const [tuningMcps, setTuningMcps] = useState<{ id: string; name: string }[]>(
+    [],
+  );
+  const [knowledgeFolders, setKnowledgeFolders] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [knowledgeFiles, setKnowledgeFiles] = useState<
+    { id: string; name: string }[]
+  >([]);
+  const [selectedKnowledgeFolderId, setSelectedKnowledgeFolderId] = useState<
+    string | null
+  >(null);
+
+  const [customAgents, setCustomAgents] = useState<
+    { id: string; name: string; prompt: string }[]
+  >([]);
+  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
+
+  const searchParams = useSearchParams();
+  const agentIdParam = searchParams?.get("agentId");
+  const agentNameParam = searchParams?.get("name");
+
+  useEffect(() => {
+    const loadCustomAgents = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/agents/custom`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+
+        if (res.data && res.data.success) {
+          let list = res.data.data || [];
+
+          if (agentIdParam && agentNameParam) {
+            if (!list.find((a: any) => a.id === agentIdParam)) {
+              list = [
+                ...list,
+                { id: agentIdParam, name: agentNameParam, prompt: "" },
+              ];
+            }
+            setSelectedAgentId(agentIdParam);
+          }
+          setCustomAgents(list);
+        }
+      } catch (err) {
+        console.error("Failed to load custom agents:", err);
+      }
+    };
+
+    if (pathname === "/agents" || pathname?.startsWith("/agents/")) {
+      loadCustomAgents();
+    }
+  }, [pathname, token, agentIdParam, agentNameParam]);
+
+  // States and fetchers for engines
+  const [sidebarEngines, setSidebarEngines] = useState<any[]>([]);
+  const [selectedEngineName, setSelectedEngineName] = useState<string | null>(
+    null,
+  );
+  const [loadingEngines, setLoadingEngines] = useState(false);
+
+  useEffect(() => {
+    if (pathname !== "/engines") return;
+
+    const loadEngines = async () => {
+      setLoadingEngines(true);
+      try {
+        const res = await axios.get(`${API_URL}/engines/list`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+
+        if (res.data && res.data.success) {
+          setSidebarEngines(res.data.data);
+        } else {
+          setSidebarEngines(FALLBACK_ENGINES_SIDEBAR);
+        }
+      } catch (err) {
+        setSidebarEngines(FALLBACK_ENGINES_SIDEBAR);
+      } finally {
+        setLoadingEngines(false);
+      }
+    };
+
+    loadEngines();
+  }, [pathname, token]);
+
+  useEffect(() => {
+    const handleSelect = (e: any) => {
+      if (e.detail) {
+        setSelectedEngineName(e.detail.name);
+      }
+    };
+
+    window.addEventListener("select-engine", handleSelect);
+
+    return () => window.removeEventListener("select-engine", handleSelect);
+  }, []);
+
+  // States and dynamic handlers for integrations / connect-apps catalog
+  const [apps, setApps] = useState<AppIntegration[]>([]);
+  const [loadingApps, setLoadingApps] = useState(true);
+  const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
+
+  // Prefetch all navigation routes on mount to ensure instant, zero-latency page transitions
+  useEffect(() => {
+    router.prefetch("/new-chat");
+    router.prefetch("/chat");
+    router.prefetch("/agents");
+    router.prefetch("/instructions");
+    router.prefetch("/guardrails");
+    router.prefetch("/knowledge");
+    router.prefetch("/vault");
+    router.prefetch("/connect-apps");
+    router.prefetch("/database");
+    router.prefetch("/cloud");
+  }, [router]);
+
+  useEffect(() => {
+    setLeftSidebarSearch("");
+  }, [pathname]);
+
+  useEffect(() => {
+    const handleActiveApp = (e: any) => {
+      setSelectedAppId(e.detail?.id || null);
+    };
+
+    window.addEventListener("active-connect-app", handleActiveApp);
+
+    return () =>
+      window.removeEventListener("active-connect-app", handleActiveApp);
+  }, []);
+
+  useEffect(() => {
+    if (pathname !== "/connect-apps") return;
+
+    const fetchConnections = async () => {
+      if (!token) {
+        setApps(FALLBACK_APPS);
+        setLoadingApps(false);
+
+        return;
+      }
+
+      try {
+        // Fetch local active tools first
+        let activeTools: any[] = [];
+
+        try {
+          const toolsRes = await axios.get(`${API_URL}/mcp/tools/local`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (toolsRes.data && toolsRes.data.success) {
+            activeTools = toolsRes.data.data || [];
+          }
+        } catch (e) {
+          console.error("Failed to fetch active tools in sidebar:", e);
+        }
+
+        // Fetch custom registered MCP servers
+        let customServers: any[] = [];
+
+        try {
+          const customRes = await axios.get(`${API_URL}/mcp/custom`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (customRes.data && customRes.data.success) {
+            customServers = customRes.data.data || [];
+          }
+        } catch (e) {
+          console.error("Failed to fetch custom servers in sidebar:", e);
+        }
+
+        const connectedIds = new Set<string>();
+
+        // Custom MCP Apps
+        const customAppsMapped = customServers.map((s: any) => ({
+          id: `app-${s.name}`,
+          name: s.title,
+          description: s.description,
+          icon: "solar:server-square-bold",
+          color: "bg-white border border-gray-200",
+          status: activeTools.some((t: any) => t.server === s.name)
+            ? ("connected" as const)
+            : ("disconnected" as const),
+          type: "custom" as const,
+        }));
+
+        // Standard SaaS & Presets
+        const standardAppsMapped = FALLBACK_APPS.map((app) => {
+          const slug = app.id.replace("app-", "").toLowerCase();
+
+          if (slug.startsWith("mcp_") || slug.startsWith("mcp_toolbox_")) {
+            const active = activeTools.some((t: any) => t.server === slug);
+
+            return {
+              ...app,
+              status: active
+                ? ("connected" as const)
+                : ("disconnected" as const),
+            };
+          }
+
+          if (connectedIds.has(slug)) {
+            return { ...app, status: "connected" as const };
+          }
+          if (app.status === "connecting") return app;
+
+          return { ...app, status: "disconnected" as const };
+        });
+
+        // Sort all custom + standard apps alphabetically by name
+        const otherAppsSorted = [
+          ...customAppsMapped,
+          ...standardAppsMapped,
+        ].sort((a, b) => a.name.localeCompare(b.name));
+
+        setApps(otherAppsSorted);
+      } catch (err) {
+        console.error("Failed to fetch connections in sidebar:", err);
+      } finally {
+        setLoadingApps(false);
+      }
+    };
+
+    // Initialize list
+    setApps(FALLBACK_APPS);
+    fetchConnections();
+
+    // Listen for sync event to re-fetch connection statuses
+    const handleSync = () => {
+      fetchConnections();
+    };
+
+    window.addEventListener("sync-connect-apps", handleSync);
+
+    return () => {
+      window.removeEventListener("sync-connect-apps", handleSync);
+    };
+  }, [pathname, token]);
+
+  // Listen for knowledge file updates
+  useEffect(() => {
+    const handleKnowledgeFiles = (e: any) => {
+      if (e.detail && Array.isArray(e.detail)) {
+        setKnowledgeFiles(e.detail);
+      }
+    };
+
+    window.addEventListener("refresh-knowledge-files", handleKnowledgeFiles);
+
+    return () => {
+      window.removeEventListener(
+        "refresh-knowledge-files",
+        handleKnowledgeFiles,
+      );
+    };
+  }, []);
+
+  // ── Rules – load from per-project localStorage, react to project changes ──────
+  const fetchRules = useCallback(() => {
+    const rulesLocal = readProjectData<{
+      instructions: { id: string; name: string }[];
+      guardrails: { id: string; name: string }[];
+      repositories: { id: string; name: string }[];
+      apis: { id: string; name: string }[];
+      sdks: { id: string; name: string }[];
+      mcps: { id: string; name: string }[];
+    }>(activeAgentId, "rules", {
+      instructions: [],
+      guardrails: [],
+      repositories: [],
+      apis: [],
+      sdks: [],
+      mcps: [],
+    });
+
+    setInstructions(rulesLocal.instructions || []);
+    setGuardrails(rulesLocal.guardrails || []);
+    setTuningRepos(rulesLocal.repositories || []);
+    setTuningApis(rulesLocal.apis || []);
+    setTuningSdks(rulesLocal.sdks || []);
+    setTuningMcps(rulesLocal.mcps || []);
+  }, [activeAgentId]);
+
+  useEffect(() => {
+    fetchRules();
+  }, [fetchRules]);
+
+  useEffect(() => {
+    const handleRefresh = (e: Event) => {
+      const customEvent = e as CustomEvent;
+
+      if (customEvent.detail) {
+        if (customEvent.detail.instructions)
+          setInstructions(customEvent.detail.instructions);
+        if (customEvent.detail.guardrails)
+          setGuardrails(customEvent.detail.guardrails);
+        if (customEvent.detail.repositories)
+          setTuningRepos(customEvent.detail.repositories);
+        if (customEvent.detail.apis) setTuningApis(customEvent.detail.apis);
+        if (customEvent.detail.sdks) setTuningSdks(customEvent.detail.sdks);
+        if (customEvent.detail.mcps) setTuningMcps(customEvent.detail.mcps);
+      } else {
+        fetchRules();
+      }
+    };
+
+    window.addEventListener("refresh-rules-sidebar", handleRefresh);
+
+    return () => {
+      window.removeEventListener("refresh-rules-sidebar", handleRefresh);
+    };
+  }, [fetchRules]);
+
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (isInitialLoad || !token) return;
+
+    if (saveTimeoutRef.current) {
+      clearTimeout(saveTimeoutRef.current);
+    }
+
+    saveTimeoutRef.current = setTimeout(async () => {
+      try {
+        await axios.post(
+          `${API_URL}/rules`,
+          { instructions, guardrails },
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            params: activeAgentId ? { agentId: activeAgentId } : undefined,
+          },
+        );
+      } catch (err) {
+        console.error("Failed to save codebase rules:", err);
+      }
+    }, 500);
+
+    return () => {
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    };
+  }, [instructions, guardrails, token, isInitialLoad, activeAgentId]);
+
+  const documents = useSelector(
+    (state: RootState) => state.system.documents || [],
+  );
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const {
+    isOpen: isDeleteModalOpen,
+    onOpen: openDeleteModal,
+    onClose: closeDeleteModal,
+  } = useDisclosure();
+  const [itemToDelete, setItemToDelete] = useState<{
+    id: string;
+    type: "instruction" | "guardrail";
+  } | null>(null);
+
+  const {
+    isOpen: isKnowledgeModalOpen,
+    onOpen: openKnowledgeModal,
+    onClose: closeKnowledgeModal,
+  } = useDisclosure();
+  const [knowledgeFolderName, setKnowledgeFolderName] = useState("");
+
+  const confirmDelete = () => {
+    if (!itemToDelete) return;
+    if (itemToDelete.type === "instruction") {
+      setInstructions((prev) => prev.filter((i) => i.id !== itemToDelete.id));
+    } else if (itemToDelete.type === "guardrail") {
+      setGuardrails((prev) => prev.filter((i) => i.id !== itemToDelete.id));
+    }
+    closeDeleteModal();
+    setItemToDelete(null);
+  };
+
+  useEffect(() => {
+    const handleAddInstruction = (e: any) =>
+      setInstructions((prev) => [
+        ...prev,
+        { id: "inst-" + Date.now(), name: e.detail },
+      ]);
+    const handleUpdateInstruction = (e: any) =>
+      setInstructions((prev) =>
+        prev.map((i) =>
+          i.id === e.detail.id ? { ...i, name: e.detail.name } : i,
+        ),
+      );
+    const handleDeleteInstruction = (e: any) => {
+      setItemToDelete({ id: e.detail, type: "instruction" });
+      openDeleteModal();
+    };
+
+    const handleAddGuardrail = (e: any) =>
+      setGuardrails((prev) => [
+        ...prev,
+        { id: "gr-" + Date.now(), name: e.detail },
+      ]);
+    const handleUpdateGuardrail = (e: any) =>
+      setGuardrails((prev) =>
+        prev.map((i) =>
+          i.id === e.detail.id ? { ...i, name: e.detail.name } : i,
+        ),
+      );
+    const handleDeleteGuardrail = (e: any) => {
+      setItemToDelete({ id: e.detail, type: "guardrail" });
+      openDeleteModal();
+    };
+
+    const handleOpenKnowledgeModal = () => {
+      setKnowledgeFolderName("");
+      openKnowledgeModal();
+    };
+
+    const handleCreateAgent = (e: any) => {
+      const newAgentId = "agent-" + Date.now();
+      let newAgent;
+
+      if (typeof e.detail === "string") {
+        const prompt = e.detail;
+        const nameMatch = prompt.split(" ").slice(0, 3).join(" ") + "...";
+
+        newAgent = { id: newAgentId, name: nameMatch, prompt: prompt };
+      } else {
+        newAgent = {
+          id: newAgentId,
+          name: e.detail.name || "Untitled Agent",
+          prompt: e.detail.instructions || "",
+          ...e.detail,
+        };
+      }
+
+      setCustomAgents((prev) => [...prev, newAgent]);
+      setSelectedAgentId(newAgentId);
+
+      // Navigate to the newly created agent
+      router.push(
+        `/agents?agentId=${newAgentId}&name=${encodeURIComponent(newAgent.name)}`,
+      );
+    };
+
+    window.addEventListener("add-instruction", handleAddInstruction);
+    window.addEventListener("update-instruction", handleUpdateInstruction);
+    window.addEventListener("delete-instruction", handleDeleteInstruction);
+    window.addEventListener("add-guardrail", handleAddGuardrail);
+    window.addEventListener("update-guardrail", handleUpdateGuardrail);
+    window.addEventListener("delete-guardrail", handleDeleteGuardrail);
+    window.addEventListener("open-knowledge-modal", handleOpenKnowledgeModal);
+    window.addEventListener("create-agent", handleCreateAgent);
+
+    return () => {
+      window.removeEventListener("add-instruction", handleAddInstruction);
+      window.removeEventListener("update-instruction", handleUpdateInstruction);
+      window.removeEventListener("delete-instruction", handleDeleteInstruction);
+      window.removeEventListener("add-guardrail", handleAddGuardrail);
+      window.removeEventListener("update-guardrail", handleUpdateGuardrail);
+      window.removeEventListener("delete-guardrail", handleDeleteGuardrail);
+      window.removeEventListener(
+        "open-knowledge-modal",
+        handleOpenKnowledgeModal,
+      );
+      window.removeEventListener("create-agent", handleCreateAgent);
+    };
+  }, []);
+
+  const {
+    data: aiSessions,
+    isLoading,
+    error,
+    refetch,
+  } = useFetchChatHistory(token);
+
+  const sortedChats = aiSessions
+    ? [...aiSessions].sort(
+        (a, b) =>
+          new Date(b?.createdAt).getTime() - new Date(a?.createdAt).getTime(),
+      )
+    : [];
+
+  const submitForm = useCallback(
+    (sessionId: string) => {
+      router.push(`/chat/${sessionId}`);
+    },
+    [router],
+  );
+
+  const getCurrentHistory = () => {
+    return currentMode === "code" ? codeHistory : chatHistory;
+  };
+
+  const [logoHovered, setLogoHovered] = useState(false);
+
+  const handleLogoMouseEnter = () => {
+    if (!isSidebarOpen) {
+      setLogoHovered(true);
+    }
+  };
+
+  const toggleLeftSidebar = () => {
+    localStorage.setItem("inso_sidebar_open", String(!isSidebarOpen));
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const { data: repos = [], isFetching: isRepoLoading } = useQuery({
+    queryKey: ["repos", token, repoSearch],
+    queryFn: async () => {
+      if (!token) return [];
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/git/repositories?q=${repoSearch}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      const data = await res.json();
+
+      return data.success ? data.data : [];
+    },
+    enabled: !!token,
+    staleTime: 1000 * 60 * 5, // Cache for 5 minutes
+  });
+
+  const handleRepoSearch = (val: string) => {
+    setRepoSearch(val);
+  };
+
+  const content = (
+    <div
+      className="dark h-screen max-h-screen overflow-hidden"
+      data-theme="dark"
+    >
+      <div className="flex h-full max-h-full overflow-hidden z-20 bg-[#0B1121] text-foreground">
+        {/* Primary Column (Left Side Menu) */}
+        <div
+          className={cn(
+            "flex h-full max-h-full overflow-hidden flex-col transition-all duration-300 bg-[#0B1121] border-r border-white/5 relative",
+            isSidebarOpen ? "w-72" : "w-16",
+          )}
+        >
+          {/* Sidebar Header (Workspace Name & Collapse Button) */}
+          {isSidebarOpen ? (
+            <div className="w-full h-[52px] flex-none flex items-center justify-between px-4 border-b border-white/5 select-none">
+              <span className="text-[12px] font-normal text-gray-300 dark:text-gray-200 truncate max-w-[200px]">
+                {activeProject?.name || "No Workspace"}
+              </span>
+              <Button
+                isIconOnly
+                className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
+                size="sm"
+                variant="light"
+                onClick={toggleLeftSidebar}
+              >
+                <PanelLeftClose className="size-4" />
+              </Button>
+            </div>
+          ) : (
+            <div className="w-full h-[52px] flex-none flex items-center justify-center border-b border-white/5 select-none">
+              <Button
+                isIconOnly
+                className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
+                size="sm"
+                variant="light"
+                onClick={toggleLeftSidebar}
+              >
+                <PanelLeftOpen className="size-4" />
+              </Button>
+            </div>
+          )}
+
+          <div
+            className={cn(
+              "flex flex-col border-b border-white/5 w-full flex-none h-[252px]",
+              isSidebarOpen
+                ? "py-2 px-3 gap-1"
+                : "py-2 items-center justify-center gap-1",
+            )}
+          >
+            {filteredNavigationItems.map((item) => {
+              const IconComponent = item.icon;
+
+              return (
+                <Tooltip
+                  key={item.label}
+                  showArrow
+                  classNames={{
+                    content:
+                      "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                  }}
+                  closeDelay={0}
+                  content={item.label}
+                  delay={0}
+                  isDisabled={isSidebarOpen}
+                  placement="right"
+                >
+                  <Link
+                    className={cn(
+                      "flex items-center transition-all duration-200 relative group min-w-0 min-h-0",
+                      isSidebarOpen
+                        ? "h-[36px] w-full px-3 gap-3 rounded-xl text-xs font-semibold"
+                        : "h-[36px] w-[36px] rounded-xl justify-center",
+                      item.isActive
+                        ? "bg-white/15 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)] border border-white/10"
+                        : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
+                    )}
+                    href={item.path}
+                    onClick={(e) => {
+                      if (item.onClick) {
+                        item.onClick();
+                      }
+                    }}
+                  >
+                    <IconComponent
+                      className={isSidebarOpen ? "size-4 shrink-0" : "size-4"}
+                    />
+                    {isSidebarOpen && (
+                      <span className="truncate">{item.label}</span>
+                    )}
+                  </Link>
+                </Tooltip>
+              );
+            })}
+            {isSidebarOpen && filteredNavigationItems.length === 0 && (
+              <div className="w-full text-center py-2 text-xs text-default-400 italic">
+                No results found
+              </div>
+            )}
+          </div>
+
+          {/* Dedicated Workspace Engines Option Row - Hidden for Phase 2
+        <div
+          className={cn(
+            "border-b border-default-200",
+            isSidebarOpen ? "px-3 py-2" : "py-2 px-1",
+          )}
+        >
+          <Tooltip
+            showArrow
+            classNames={{
+              content: "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg",
+            }}
+            closeDelay={0}
+            content="Workspace Engines"
+            delay={0}
+            placement={isSidebarOpen ? "top" : "right"}
+          >
+            <button
+              className={cn(
+                "w-full transition-all duration-200 flex items-center gap-2.5 min-w-0 min-h-0 cursor-pointer outline-none",
+                isSidebarOpen
+                  ? "h-[36px] px-3 justify-start rounded-xl"
+                  : "h-[30px] w-[30px] p-0 justify-center rounded-md",
+                pathname === "/engines"
+                  ? "bg-white dark:bg-default-100 border border-default-200 text-default-900 dark:text-white shadow-sm"
+                  : "bg-default-100/50 dark:bg-default-50/50 hover:bg-default-100 dark:hover:bg-default-50 text-default-600 dark:text-gray-300 border border-transparent",
+              )}
+              onClick={() => {
+                router.push("/engines");
+              }}
+              onMouseEnter={() => {
+                router.prefetch("/engines");
+              }}
+            >
+              <Cpu className={isSidebarOpen ? "size-4 text-primary shrink-0" : "size-3.5 shrink-0"} />
+              {isSidebarOpen && (
+                <>
+                  <span className="text-xs font-semibold flex-1 text-left">Engines</span>
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-bold">216</span>
+                </>
+              )}
+            </button>
+          </Tooltip>
+        </div>
+        */}
+
+          {/* Search bar and + icon on the same line below the main menu */}
+          <div
+            className={cn(
+              "h-[56px] flex items-center border-b border-white/5 px-3",
+              !isSidebarOpen && "hidden",
+            )}
+          >
+            <div
+              className={cn(
+                "bg-white/5 border border-white/5 rounded-xl p-1 flex flex-row items-center justify-between gap-1 w-full h-[40px] flex-none",
+              )}
+            >
+              {/* Search Input */}
+              <div className="relative flex-1 h-[32px]">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 size-3.5 text-default-400 z-10" />
+                <input
+                  className="w-full h-full bg-transparent hover:bg-white/5 border-none rounded-lg pl-8 pr-2 py-0 text-xs focus:outline-none focus:ring-0 transition-all text-white placeholder:text-default-500"
+                  placeholder="Search..."
+                  value={leftSidebarSearch}
+                  onChange={(e) => {
+                    setLeftSidebarSearch(e.target.value);
+                    if (pathname === "/team") {
+                      const params = new URLSearchParams(
+                        searchParams?.toString() || "",
+                      );
+
+                      if (e.target.value) {
+                        params.set("q", e.target.value);
+                      } else {
+                        params.delete("q");
+                      }
+                      router.replace(`${pathname}?${params.toString()}`);
+                    }
+                  }}
+                />
+              </div>
+
+              {/* Divider */}
+              <div className="w-[1px] h-7 bg-white/10 shrink-0 mx-1" />
+
+              {/* Plus Button */}
+              <Tooltip
+                showArrow
+                classNames={{
+                  content:
+                    "bg-[#1E293B] text-white px-2 py-1 text-xs rounded-md shadow-lg",
+                }}
+                closeDelay={0}
+                content={getPlusTooltipContent()}
+                delay={0}
+                placement="top"
+              >
+                <Button
+                  isIconOnly
+                  className="bg-transparent hover:bg-white/5 border-none rounded-lg text-default-500 hover:text-white flex-shrink-0 shadow-none h-[32px] w-[32px] min-w-[32px]"
+                  size="sm"
+                  variant="flat"
+                  onClick={() => {
+                    if (pathname === "/vault") {
+                      window.dispatchEvent(new CustomEvent("open-vault-modal"));
+                    } else if (pathname === "/documents") {
+                      window.dispatchEvent(
+                        new CustomEvent("open-document-modal"),
+                      );
+                    } else if (pathname === "/knowledge") {
+                      window.dispatchEvent(
+                        new CustomEvent("open-knowledge-modal"),
+                      );
+                    } else {
+                      dispatch(startNewChat());
+                      router.push("/new-chat");
+                    }
+                  }}
+                  onMouseEnter={() => {
+                    if (pathname === "/vault") {
+                      router.prefetch("/vault");
+                    } else if (pathname === "/documents") {
+                      router.prefetch("/documents");
+                    } else {
+                      router.prefetch("/new-chat");
+                    }
+                  }}
+                >
+                  <Plus className="size-3.5" />
+                </Button>
+              </Tooltip>
+            </div>
+          </div>
+
+          {!isSidebarOpen && <div className="flex-1" />}
+
+          {isSidebarOpen && (
+            <ScrollShadow
+              hideScrollBar
+              className="flex-1 px-2 mt-1 min-h-0 w-full scrollbar-hide overflow-y-auto"
+            >
+              {pathname === "/engines" ? (
+                <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
+                  {loadingEngines ? (
+                    <div className="flex flex-col items-center justify-center py-20 gap-3">
+                      <Icon
+                        className="text-2xl text-primary animate-spin"
+                        icon="line-md:loading-twotone-loop"
+                      />
+                      <span className="text-xs text-default-400">
+                        Loading engines...
+                      </span>
+                    </div>
+                  ) : (
+                    (() => {
+                      const filtered = sidebarEngines.filter(
+                        (e) =>
+                          getEngineDisplayName(e.name)
+                            .toLowerCase()
+                            .includes(leftSidebarSearch.toLowerCase()) ||
+                          e.description
+                            .toLowerCase()
+                            .includes(leftSidebarSearch.toLowerCase()),
+                      );
+
+                      if (filtered.length === 0) {
+                        return (
+                          <span className="text-xs text-default-400 text-center py-12">
+                            No engines found
+                          </span>
+                        );
+                      }
+
+                      return filtered.map((e) => {
+                        const isActive = selectedEngineName === e.name;
+                        const displayName = getEngineDisplayName(e.name);
+
+                        return (
+                          <button
+                            key={e.name}
+                            className={cn(
+                              "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
+                              isActive
+                                ? "bg-primary/20 text-white font-semibold"
+                                : "hover:bg-white/5 text-default-400 hover:text-default-200",
+                            )}
+                            onClick={() => {
+                              setSelectedEngineName(e.name);
+                              window.dispatchEvent(
+                                new CustomEvent("select-engine", {
+                                  detail: e,
+                                }),
+                              );
+                            }}
+                          >
+                            <div className="flex items-center gap-3 min-w-0">
+                              <div
+                                className={cn(
+                                  "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50",
+                                  isActive
+                                    ? "bg-white dark:bg-black"
+                                    : "bg-[#1E293B] border-white/5",
+                                )}
+                              >
+                                <Cpu className="size-4 text-default-500" />
+                              </div>
+                              <span className="text-xs text-left truncate pr-2">
+                                {displayName}
+                              </span>
+                            </div>
+
+                            <div className="flex items-center gap-1.5 shrink-0">
+                              <Icon
+                                className={cn(
+                                  "text-xs text-default-400 transition-transform",
+                                  isActive
+                                    ? "translate-x-0.5 text-primary"
+                                    : "",
+                                )}
+                                icon="solar:alt-arrow-right-linear"
+                              />
+                            </div>
+                          </button>
+                        );
+                      });
+                    })()
+                  )}
+                </div>
+              ) : pathname?.startsWith("/database") ? (
+                <div className="flex flex-1 overflow-y-auto p-1.5 flex-col gap-1 w-full">
+                  {(() => {
+                    const filtered = SUPPORTED_DATABASES.filter((db) =>
+                      db.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (filtered.length === 0) {
+                      return (
+                        <span className="text-xs text-default-400 text-center py-12">
+                          No databases found
+                        </span>
+                      );
+                    }
+
+                    return filtered.map((db) => {
+                      const isActive = pathname === `/database/${db.id}`;
+
+                      return (
+                        <button
+                          key={db.id}
+                          className={cn(
+                            "w-full flex items-center justify-between p-2.5 rounded-xl transition-all duration-200",
+                            isActive
+                              ? "bg-primary/20 text-white font-semibold"
+                              : "hover:bg-white/5 text-default-400 hover:text-default-200",
+                          )}
+                          onClick={() => {
+                            router.push(`/database/${db.id}`, {
+                              scroll: false,
+                            });
+                          }}
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <div
+                              className={cn(
+                                "w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border border-default-200/50 overflow-hidden",
+                                isActive
+                                  ? "bg-white dark:bg-black"
+                                  : "bg-[#1E293B] border-white/5",
+                              )}
+                            >
+                              <img
+                                alt={db.name}
+                                className="w-5 h-5 object-contain"
+                                src={`/database-logos/${db.id}.${db.id === "alloydb" ? "png" : "svg"}`}
+                              />
+                            </div>
+                            <span className="text-xs text-left truncate pr-2">
+                              {db.name}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <Icon
+                              className={cn(
+                                "text-xs text-default-400 transition-transform",
+                                isActive ? "translate-x-0.5 text-primary" : "",
+                              )}
+                              icon="solar:alt-arrow-right-linear"
+                            />
+                          </div>
+                        </button>
+                      );
+                    });
+                  })()}
+                </div>
+              ) : pathname === "/vault" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = vaultSecrets.filter((stream) =>
+                      stream.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:lock-keyhole-minimalistic-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            {leftSidebarSearch
+                              ? "No results found"
+                              : "No secrets added yet"}
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((stream) => (
+                      <button
+                        key={stream.id}
+                        className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate flex items-center justify-between group cursor-pointer"
+                        onClick={() =>
+                          window.dispatchEvent(
+                            new CustomEvent("select-secret", {
+                              detail: stream.id,
+                            }),
+                          )
+                        }
+                      >
+                        <span>{stream.name}</span>
+                        <Lock
+                          className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                          size={14}
+                        />
+                      </button>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/repository" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = tuningRepos.filter((repo) =>
+                      repo.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (tuningRepos.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:folder-with-files-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No repositories added yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:folder-with-files-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((repo) => (
+                      <div
+                        key={repo.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        <span className="truncate">{repo.name}</span>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/apis" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = tuningApis.filter((api) =>
+                      api.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (tuningApis.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:server-square-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No APIs connected yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:server-square-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((api) => (
+                      <div
+                        key={api.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        <span className="truncate">{api.name}</span>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/sdk" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = tuningSkds.filter((sdk) =>
+                      sdk.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (tuningSkds.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:box-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No SDKs configured yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:box-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((sdk) => (
+                      <div
+                        key={sdk.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        <span className="truncate">{sdk.name}</span>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/mcp" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = tuningMcps.filter((mcp) =>
+                      mcp.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (tuningMcps.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:plug-circle-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No MCP connections yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:plug-circle-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((mcp) => (
+                      <div
+                        key={mcp.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        <span className="truncate">{mcp.name}</span>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/instructions" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = instructions.filter((inst) =>
+                      inst.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (instructions.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:document-text-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No instructions added yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:document-text-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((inst) => (
+                      <div
+                        key={inst.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                        onClick={() =>
+                          window.dispatchEvent(
+                            new CustomEvent("edit-instruction", {
+                              detail: inst,
+                            }),
+                          )
+                        }
+                      >
+                        <span className="truncate">{inst.name}</span>
+                        <Dropdown
+                          className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                          placement="bottom-end"
+                        >
+                          <DropdownTrigger>
+                            <button
+                              className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <MoreHorizontal size={16} />
+                            </button>
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Instruction options"
+                            className="p-0"
+                            variant="flat"
+                          >
+                            <DropdownItem
+                              key="edit"
+                              className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
+                              startContent={
+                                <Edit2 className="text-default-500" size={14} />
+                              }
+                              onClick={() =>
+                                window.dispatchEvent(
+                                  new CustomEvent("edit-instruction", {
+                                    detail: inst,
+                                  }),
+                                )
+                              }
+                            >
+                              Edit
+                            </DropdownItem>
+                            <DropdownItem
+                              key="delete"
+                              className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                              color="danger"
+                              startContent={<Trash2 size={14} />}
+                              onClick={() =>
+                                window.dispatchEvent(
+                                  new CustomEvent("delete-instruction", {
+                                    detail: inst.id,
+                                  }),
+                                )
+                              }
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/guardrails" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = guardrails.filter((gr) =>
+                      gr.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (guardrails.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:shield-warning-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No guardrails added yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:shield-warning-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((gr) => (
+                      <div
+                        key={gr.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                        onClick={() =>
+                          window.dispatchEvent(
+                            new CustomEvent("edit-guardrail", {
+                              detail: gr,
+                            }),
+                          )
+                        }
+                      >
+                        <span className="truncate">{gr.name}</span>
+                        <Dropdown
+                          className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                          placement="bottom-end"
+                        >
+                          <DropdownTrigger>
+                            <button
+                              className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <MoreHorizontal size={16} />
+                            </button>
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Guardrail options"
+                            className="p-0"
+                            variant="flat"
+                          >
+                            <DropdownItem
+                              key="edit"
+                              className="text-default-700 data-[hover=true]:bg-default-100 data-[hover=true]:text-foreground rounded-lg transition-colors py-2"
+                              startContent={
+                                <Edit2 className="text-default-500" size={14} />
+                              }
+                              onClick={() =>
+                                window.dispatchEvent(
+                                  new CustomEvent("edit-guardrail", {
+                                    detail: gr,
+                                  }),
+                                )
+                              }
+                            >
+                              Edit
+                            </DropdownItem>
+                            <DropdownItem
+                              key="delete"
+                              className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                              color="danger"
+                              startContent={<Trash2 size={14} />}
+                              onClick={() =>
+                                window.dispatchEvent(
+                                  new CustomEvent("delete-guardrail", {
+                                    detail: gr.id,
+                                  }),
+                                )
+                              }
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/knowledge" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = knowledgeFiles.filter((kf) =>
+                      kf.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (knowledgeFiles.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 h-full text-center w-full">
+                          <span className="text-xs text-default-500 font-medium">
+                            No data files yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 h-full text-center w-full">
+                          <span className="text-xs text-default-500 font-medium">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((kf) => (
+                      <div
+                        key={kf.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                      >
+                        <span className="truncate">{kf.name}</span>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/agents" || pathname?.startsWith("/agents/") ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = customAgents.filter((agent) =>
+                      agent.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (customAgents.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <span className="text-xs text-default-400">
+                            No agents created yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((agent) => (
+                      <button
+                        key={agent.id}
+                        className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-left text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer ${
+                          agent.id === selectedAgentId
+                            ? "bg-black/5 dark:bg-white/5 font-medium text-black dark:text-white"
+                            : ""
+                        }`}
+                        type="button"
+                        onClick={() => {
+                          setSelectedAgentId(agent.id);
+                          setActiveProject({ id: agent.id, name: agent.name });
+                          router.push(
+                            `/agents?agentId=${agent.id}&name=${encodeURIComponent(agent.name)}`,
+                          );
+                        }}
+                      >
+                        <span className="truncate">{agent.name}</span>
+                      </button>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/documents" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = documents.filter((doc) =>
+                      doc.name
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (documents.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:book-open-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No documents added yet
+                          </span>
+                        </div>
+                      );
+                    }
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:book-open-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            No results found
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((doc) => (
+                      <div
+                        key={doc.id}
+                        className="group w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors cursor-pointer"
+                        onClick={() =>
+                          window.dispatchEvent(
+                            new CustomEvent("edit-document", { detail: doc }),
+                          )
+                        }
+                      >
+                        <span className="truncate">{doc.name}</span>
+                        <Dropdown
+                          className="min-w-[120px] bg-white dark:bg-default-50 border border-default-200 shadow-lg rounded-xl p-1"
+                          placement="bottom-end"
+                        >
+                          <DropdownTrigger>
+                            <button
+                              className="opacity-0 group-hover:opacity-100 flex-shrink-0 text-gray-400 hover:text-gray-600 transition-colors"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <MoreHorizontal size={16} />
+                            </button>
+                          </DropdownTrigger>
+                          <DropdownMenu
+                            aria-label="Document options"
+                            className="p-0"
+                            variant="flat"
+                          >
+                            <DropdownItem
+                              key="delete"
+                              className="text-danger data-[hover=true]:bg-danger/10 data-[hover=true]:text-danger rounded-lg transition-colors py-2"
+                              color="danger"
+                              startContent={<Trash2 size={14} />}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                dispatch(removeDocument(doc.id));
+                              }}
+                            >
+                              Delete
+                            </DropdownItem>
+                          </DropdownMenu>
+                        </Dropdown>
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/cloud" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 pb-6 w-full">
+                  {(() => {
+                    const groups = [
+                      {
+                        category: "GCP Sovereign Cloud",
+                        providers: [
+                          "GCP Commercial",
+                          "GCP Dedicated",
+                          "GCP Government",
+                        ],
+                      },
+                      {
+                        category: "PaaS & Deployment",
+                        providers: [
+                          "Vercel",
+                          "Heroku",
+                          "Netlify",
+                          "Render",
+                          "DigitalOcean",
+                          "Fly.io",
+                          "Railway",
+                          "Porter",
+                          "Zeet",
+                        ],
+                      },
+                      {
+                        category: "Databases & BaaS",
+                        providers: [
+                          "Supabase",
+                          "MongoDB Atlas",
+                          "Neon",
+                          "PlanetScale",
+                          "Upstash",
+                          "Redis Enterprise Cloud",
+                          "Snowflake",
+                          "Databricks",
+                          "SingleStore",
+                          "CockroachLabs",
+                          "Fauna",
+                          "Xata",
+                          "Convex",
+                          "Turso",
+                          "Appwrite",
+                        ],
+                      },
+                      {
+                        category: "Vector Databases",
+                        providers: [
+                          "Pinecone",
+                          "Weaviate",
+                          "Qdrant",
+                          "Milvus",
+                          "Chroma",
+                        ],
+                      },
+                      {
+                        category: "Edge, CDN & Networking",
+                        providers: [
+                          "Cloudflare",
+                          "Fastly",
+                          "Akamai",
+                          "GCP Cloud Armor",
+                          "Edgio",
+                          "Tailscale",
+                          "Ngrok",
+                        ],
+                      },
+                      {
+                        category: "Containers & Orchestration",
+                        providers: [
+                          "Docker Hub",
+                          "Kubernetes",
+                          "Google Cloud Run",
+                          "Google Kubernetes Engine (GKE)",
+                          "HashiCorp Nomad",
+                        ],
+                      },
+                      {
+                        category: "Serverless & Compute",
+                        providers: [
+                          "Google Cloud Functions (Commercial)",
+                          "Google Cloud Functions (Dedicated)",
+                          "Google Cloud Functions (Government)",
+                          "Cloudflare Workers",
+                          "Deno Deploy",
+                        ],
+                      },
+                      {
+                        category: "CI/CD & DevOps",
+                        providers: [
+                          "GitHub Actions",
+                          "GitLab CI",
+                          "Bitbucket Pipelines",
+                          "CircleCI",
+                          "Travis CI",
+                          "Google Cloud Build",
+                          "ArgoCD",
+                          "Spinnaker",
+                        ],
+                      },
+                      {
+                        category: "Event Streaming",
+                        providers: [
+                          "Confluent",
+                          "RabbitMQ Cloud",
+                          "Google Cloud Pub/Sub",
+                          "Google Cloud Eventarc",
+                        ],
+                      },
+                    ];
+
+                    const groupRenderData = groups
+                      .map((group) => {
+                        const filteredProviders = group.providers.filter(
+                          (provider) =>
+                            provider
+                              .toLowerCase()
+                              .includes(leftSidebarSearch.toLowerCase()),
+                        );
+
+                        return { ...group, providers: filteredProviders };
+                      })
+                      .filter((group) => group.providers.length > 0);
+
+                    if (groupRenderData.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon="solar:cloud-linear"
+                          />
+                          <span className="text-xs text-default-400">
+                            {leftSidebarSearch
+                              ? "No results found"
+                              : "No cloud nodes added yet"}
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    return groupRenderData.map((group) => (
+                      <div key={group.category} className="mb-4 last:mb-0">
+                        <div className="px-3 py-1.5 text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                          {group.category}
+                        </div>
+                        {group.providers.map((provider) => (
+                          <button
+                            key={provider}
+                            className="w-full text-left px-3 py-2 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors flex items-center gap-2 truncate"
+                            onClick={() =>
+                              window.dispatchEvent(
+                                new CustomEvent("select-cloud-provider", {
+                                  detail: provider,
+                                }),
+                              )
+                            }
+                          >
+                            <Cloud
+                              className="text-gray-400 flex-shrink-0"
+                              size={14}
+                            />
+                            <span className="truncate">{provider}</span>
+                          </button>
+                        ))}
+                      </div>
+                    ));
+                  })()}
+                </div>
+              ) : pathname === "/team" ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 pb-6 w-full">
+                  <div className="mb-4">
+                    {(() => {
+                      const categoryIconMap: Record<string, string> = {
+                        Language: "solar:code-square-linear",
+                        Framework: "solar:box-linear",
+                        Frontend: "solar:window-frame-linear",
+                        Backend: "solar:server-square-linear",
+                        Database: "solar:database-linear",
+                        Cloud: "solar:cloud-linear",
+                        DevOps: "solar:tuning-square-linear",
+                        Mobile: "solar:smartphone-linear",
+                        "Game Dev": "solar:gamepad-linear",
+                        Security: "solar:shield-keyhole-linear",
+                        Integration: "solar:link-circle-linear",
+                        Productivity: "solar:chat-square-check-linear",
+                        AI: "solar:cpu-bolt-linear",
+                        "AI Models": "solar:cpu-bolt-linear",
+                        Architecture: "solar:buildings-linear",
+                        Compliance: "solar:shield-check-linear",
+                        Infrastructure: "solar:server-square-cloud-linear",
+                        API: "solar:programming-linear",
+                        Performance: "solar:graph-up-linear",
+                        IoT: "solar:bluetooth-square-linear",
+                        Documentation: "solar:document-text-linear",
+                        Cost: "solar:wallet-linear",
+                        QA: "solar:checklist-linear",
+                        Monitoring: "solar:graph-linear",
+                        Analytics: "solar:chart-square-linear",
+                        Web3: "solar:link-round-linear",
+                        Networking: "solar:global-linear",
+                        "E-Commerce": "solar:shop-linear",
+                        CMS: "solar:widget-linear",
+                        Communications: "solar:chat-round-dots-linear",
+                        Communication: "solar:chat-round-dots-linear",
+                        Payments: "solar:card-linear",
+                        Design: "solar:palette-linear",
+                        Enterprise: "solar:buildings-2-linear",
+                        Data: "solar:database-linear",
+                        Search: "solar:magnifer-linear",
+                        Storage: "solar:cloud-storage-linear",
+                        Identity: "solar:user-id-linear",
+                        "Customer Support": "solar:headphones-round-linear",
+                        Creative: "solar:magic-stick-linear",
+                        "Backend as a Service": "solar:server-path-linear",
+                        Systems: "solar:cpu-linear",
+                        "Machine Learning": "solar:graph-new-up-linear",
+                        Science: "solar:test-tube-linear",
+                        Research: "solar:book-linear",
+                        Marketing: "solar:chart-2-linear",
+                        Social: "solar:share-circle-linear",
+                        Desktop: "solar:monitor-linear",
+                        CRM: "solar:users-group-two-rounded-linear",
+                        Authentication: "solar:lock-linear",
+                        Legal: "solar:document-add-linear",
+                        Debugging: "solar:bug-linear",
+                        Scraping: "solar:scissors-linear",
+                        Processing: "solar:refresh-circle-linear",
+                        Tooling: "solar:settings-linear",
+                        Quality: "solar:verified-check-linear",
+                      };
+                      // Dynamically derive unique categories from teamData, preserving a sensible order
+                      const priorityOrder = [
+                        "Language",
+                        "Framework",
+                        "Frontend",
+                        "Backend",
+                        "Database",
+                        "Cloud",
+                        "DevOps",
+                        "Infrastructure",
+                        "Security",
+                        "Compliance",
+                        "AI",
+                        "AI Models",
+                        "Data",
+                        "Analytics",
+                        "API",
+                        "QA",
+                        "Performance",
+                        "Monitoring",
+                        "Mobile",
+                        "Game Dev",
+                        "Integration",
+                        "Enterprise",
+                        "Web3",
+                        "IoT",
+                        "Payments",
+                        "Networking",
+                        "E-Commerce",
+                        "CMS",
+                        "Communications",
+                        "Communication",
+                        "Documentation",
+                        "Design",
+                        "Cost",
+                        "Productivity",
+                        "Search",
+                        "Storage",
+                        "Identity",
+                        "Customer Support",
+                        "Creative",
+                        "Backend as a Service",
+                        "Systems",
+                        "Machine Learning",
+                        "Science",
+                        "Research",
+                        "Marketing",
+                        "Social",
+                        "Desktop",
+                        "CRM",
+                        "Authentication",
+                        "Legal",
+                        "Debugging",
+                        "Scraping",
+                        "Processing",
+                        "Tooling",
+                        "Quality",
+                      ];
+                      const allCats = Array.from(
+                        new Set(teamMembers.map((m) => m.category)),
+                      );
+                      const sorted = allCats.sort((a, b) => {
+                        const ai = priorityOrder.indexOf(a);
+                        const bi = priorityOrder.indexOf(b);
+
+                        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+                      });
+
+                      return sorted.map((catName) => {
+                        const isActive =
+                          (searchParams?.get("tab") || "Language") === catName;
+                        const catIcon =
+                          categoryIconMap[catName] || "solar:widget-2-linear";
+                        const count = teamMembers.filter(
+                          (m) => m.category === catName,
+                        ).length;
+
+                        return (
+                          <Link
+                            key={catName}
+                            className={`w-full text-left px-3 py-2 rounded-xl text-[13px] flex items-center gap-3 transition-colors mb-0.5 ${
+                              isActive
+                                ? "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 font-medium"
+                                : "text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5"
+                            }`}
+                            href={`/team?tab=${encodeURIComponent(catName)}`}
+                          >
+                            <Icon
+                              className={
+                                isActive
+                                  ? "text-indigo-600 dark:text-indigo-400"
+                                  : "text-gray-400"
+                              }
+                              fontSize={18}
+                              icon={catIcon}
+                            />
+                            <span className="truncate flex-1">{catName}</span>
+                            <span
+                              className={`text-[11px] tabular-nums ${isActive ? "text-indigo-500 dark:text-indigo-400" : "text-gray-400"}`}
+                            >
+                              {count}
+                            </span>
+                          </Link>
+                        );
+                      });
+                    })()}
+                  </div>
+                </div>
+              ) : isLoading ? (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full" />
+              ) : (
+                <div className="flex flex-col gap-0.5 px-2 mt-2 w-full">
+                  {(() => {
+                    const filtered = sortedChats.filter((item) =>
+                      (item?.responses[0]?.prompt || "Untitled Chat")
+                        .toLowerCase()
+                        .includes(leftSidebarSearch.toLowerCase()),
+                    );
+
+                    if (sortedChats.length === 0) {
+                      return (
+                        <div className="flex flex-col items-center justify-center py-12 text-center w-full">
+                          <Icon
+                            className="text-2xl text-default-400 mb-2"
+                            icon={
+                              pathname === "/" || pathname === "/code"
+                                ? "solar:code-square-linear"
+                                : "solar:chat-square-linear"
+                            }
+                          />
+                          <span className="text-xs text-default-400">
+                            {pathname === "/" || pathname === "/code"
+                              ? "No code history yet"
+                              : "No chat history yet"}
+                          </span>
+                        </div>
+                      );
+                    }
+
+                    if (filtered.length === 0) {
+                      return (
+                        <div className="px-3 py-8 text-center text-xs text-default-400">
+                          No results found
+                        </div>
+                      );
+                    }
+
+                    return filtered.map((item) => (
+                      <button
+                        key={item?._id}
+                        className="w-full text-left px-3 py-2.5 rounded-xl text-[13px] text-gray-600 dark:text-gray-300 hover:bg-black/5 dark:hover:bg-white/5 transition-colors truncate cursor-pointer"
+                        onClick={() =>
+                          item?.sessionId && submitForm(item?.sessionId)
+                        }
+                      >
+                        {item?.responses[0]?.prompt || "Untitled Chat"}
+                      </button>
+                    ));
+                  })()}
+                </div>
+              )}
+            </ScrollShadow>
+          )}
+
+          <div
+            className={cn(
+              "mt-auto border-t border-default-200 flex flex-col justify-center flex-none",
+              isSidebarOpen ? "px-5" : "px-1 items-center",
+            )}
+            style={{ height: "76px", minHeight: "76px", maxHeight: "76px" }}
+          >
+            {status === "unauthenticated" ? (
+              <div className={cn("flex gap-2", !isSidebarOpen && "hidden")}>
+                <Button
+                  className="flex-1 h-9 bg-black text-white text-[13px] font-medium rounded-md"
+                  onClick={() => {
+                    if (
+                      typeof window !== "undefined" &&
+                      ("__TAURI__" in window || "__TAURI_INTERNALS__" in window)
+                    ) {
+                      useModalStore.getState().onOpen({ type: "login" });
+                    } else {
+                      window.location.href = "/login";
+                    }
+                  }}
+                >
+                  Login
+                </Button>
+              </div>
+            ) : (
+              <div
+                className={cn(
+                  "flex w-full items-center gap-2",
+                  !isSidebarOpen && "hidden",
+                )}
+              >
+                <div className="flex-1">
+                  <MyAccountDropdown />
+                </div>
+                <NotificationBell />
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  if (!mounted) {
+    return (
+      <div className="flex h-screen max-h-screen overflow-hidden border-r border-white/5 bg-[#0B1121] w-[64px] transition-all" />
+    );
+  }
+
+  return (
+    <div className="flex h-screen max-h-screen overflow-hidden border-r border-default-200">
+      {content}
+      <Modal
+        backdrop="opaque"
+        classNames={{ backdrop: "bg-black/20 backdrop-blur-sm" }}
+        isOpen={isDeleteModalOpen}
+        size="sm"
+        onClose={closeDeleteModal}
+      >
+        <ModalContent className="bg-white dark:bg-default-50 border border-default-200 shadow-2xl rounded-2xl p-2">
+          <ModalHeader className="flex flex-col gap-1 text-black dark:text-white">
+            Confirm Deletion
+          </ModalHeader>
+          <ModalBody>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Are you sure you want to delete this item?
+            </p>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 text-sm font-medium rounded-xl transition-colors"
+              onPress={closeDeleteModal}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium rounded-xl transition-colors"
+              onPress={confirmDelete}
+            >
+              Delete
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal
+        hideCloseButton
+        backdrop="opaque"
+        classNames={{
+          backdrop: "bg-black/20 backdrop-blur-sm",
+          base: "bg-white dark:bg-[#18181b] rounded-3xl overflow-hidden shadow-2xl max-w-[420px] p-0",
+        }}
+        isOpen={isKnowledgeModalOpen}
+        placement="center"
+        onClose={closeKnowledgeModal}
+      >
+        <ModalContent>
+          <div className="flex flex-col items-center pt-8 pb-6 px-6 gap-2">
+            <h2 className="text-lg font-bold text-black dark:text-white">
+              Create Knowledge Folder
+            </h2>
+            <div className="w-full mt-4">
+              <Input
+                autoFocus
+                classNames={{
+                  inputWrapper:
+                    "!bg-[#f4f4f5] dark:!bg-[#27272a] hover:!bg-[#e4e4e7] focus-within:!bg-[#f4f4f5] shadow-none",
+                }}
+                placeholder="Enter Folder Name"
+                size="md"
+                value={knowledgeFolderName}
+                variant="flat"
+                onChange={(e) => setKnowledgeFolderName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && knowledgeFolderName) {
+                    e.preventDefault();
+                    const newFolder = {
+                      id: "kf-" + Date.now(),
+                      name: knowledgeFolderName,
+                    };
+
+                    setKnowledgeFolders((prev) => [...prev, newFolder]);
+                    setSelectedKnowledgeFolderId(newFolder.id);
+                    window.dispatchEvent(
+                      new CustomEvent("select-knowledge-folder", {
+                        detail: newFolder,
+                      }),
+                    );
+                    closeKnowledgeModal();
+                  }
+                }}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-row border-t border-gray-200 dark:border-gray-800 w-full">
+            <Button
+              disableRipple
+              className="flex-1 bg-transparent hover:bg-default-100 rounded-none h-14 text-black dark:text-white font-medium text-sm"
+              onPress={closeKnowledgeModal}
+            >
+              Cancel
+            </Button>
+            <div className="w-[1px] shrink-0 bg-gray-200 dark:bg-gray-800 h-14" />
+            <Button
+              disableRipple
+              className="flex-1 bg-transparent hover:bg-default-100 rounded-none h-14 text-black dark:text-white font-medium text-sm"
+              isDisabled={!knowledgeFolderName}
+              onPress={() => {
+                const newFolder = {
+                  id: "kf-" + Date.now(),
+                  name: knowledgeFolderName,
+                };
+
+                setKnowledgeFolders((prev) => [...prev, newFolder]);
+                setSelectedKnowledgeFolderId(newFolder.id);
+                window.dispatchEvent(
+                  new CustomEvent("select-knowledge-folder", {
+                    detail: newFolder,
+                  }),
+                );
+                closeKnowledgeModal();
+              }}
+            >
+              Create
+            </Button>
+          </div>
+        </ModalContent>
+      </Modal>
+
+      {/* Local Workspace Connection Modal */}
+      <Modal
+        backdrop="blur"
+        classNames={{
+          backdrop: "bg-background/40 backdrop-blur-md",
+          base: "border border-default-100 bg-background/90 text-foreground dark:bg-default-50/90",
+        }}
+        isOpen={isWorkspaceModalOpen}
+        onClose={() => setIsWorkspaceModalOpen(false)}
+      >
+        <ModalContent className="rounded-2xl p-2 shadow-2xl">
+          <ModalHeader className="flex flex-col gap-1">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
+                <Icon className="size-5" icon="solar:folder-opened-bold" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-sm font-semibold">Open Local Workspace</h3>
+                <p className="text-[10px] text-default-400 font-normal">
+                  Connect any codebase folder from your local machine
+                </p>
+              </div>
+            </div>
+          </ModalHeader>
+          <ModalBody className="py-4">
+            <div className="flex flex-col gap-4">
+              {/* Workspace Name Input */}
+              <div className="flex flex-col gap-1.5 text-left">
+                <label className="text-xs font-semibold text-default-600">
+                  Workspace Name
+                </label>
+                <Input
+                  className="w-full"
+                  classNames={{
+                    inputWrapper:
+                      "h-11 rounded-xl bg-default-100 hover:bg-default-100 focus-within:!bg-default-100 group-data-[hover=true]:bg-default-100 group-data-[focus=true]:bg-default-100 border-none border-transparent shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all",
+                    input: "text-xs text-default-800",
+                  }}
+                  placeholder={
+                    isNameInputFocused
+                      ? ""
+                      : "e.g. My Awesome Project (Optional)"
+                  }
+                  value={localWorkspaceName}
+                  variant="flat"
+                  onBlur={() => setIsNameInputFocused(false)}
+                  onChange={(e) => setLocalWorkspaceName(e.target.value)}
+                  onFocus={() => setIsNameInputFocused(true)}
+                />
+              </div>
+
+              {/* Local Folder Path Input */}
+              <div className="flex flex-col gap-1.5 text-left">
+                <label className="text-xs font-semibold text-default-600">
+                  Local Folder Path
+                </label>
+                <div className="flex gap-2 items-center">
+                  <Input
+                    className="flex-1"
+                    classNames={{
+                      inputWrapper:
+                        "h-11 rounded-xl bg-default-100 hover:bg-default-100 focus-within:!bg-default-100 group-data-[hover=true]:bg-default-100 group-data-[focus=true]:bg-default-100 border-none border-transparent shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all",
+                      input: "text-xs text-default-800",
+                    }}
+                    placeholder={isInputFocused ? "" : "/path/to/your/project"}
+                    value={localWorkspacePath}
+                    variant="flat"
+                    onBlur={() => setIsInputFocused(false)}
+                    onChange={(e) => setLocalWorkspacePath(e.target.value)}
+                    onFocus={() => setIsInputFocused(true)}
+                  />
+                  {isTauri && (
+                    <Tooltip
+                      classNames={{
+                        content:
+                          "bg-white text-zinc-900 border border-zinc-200 px-3 py-1.5 text-xs rounded-lg shadow-xl font-medium tracking-wide",
+                      }}
+                      closeDelay={0}
+                      content="Browse Folder"
+                      delay={300}
+                      placement="top"
+                    >
+                      <Button
+                        isIconOnly
+                        className="h-11 w-11 rounded-xl shrink-0 bg-default-100 hover:bg-default-100/90 border-none border-transparent text-default-600 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all"
+                        onPress={async () => {
+                          try {
+                            const tauri =
+                              (window as any).__TAURI__ ||
+                              (window as any).__TAURI_INTERNALS__;
+                            const invokeFn =
+                              tauri?.core?.invoke || tauri?.tauri?.invoke;
+
+                            if (invokeFn) {
+                              const selected = await invokeFn("selectdir");
+
+                              if (selected) {
+                                setLocalWorkspacePath(selected);
+                              }
+                            }
+                          } catch (err) {
+                            console.error("Browse click error:", err);
+                          }
+                        }}
+                      >
+                        <Icon
+                          className="size-5"
+                          icon="solar:folder-with-files-bold"
+                        />
+                      </Button>
+                    </Tooltip>
+                  )}
+                </div>
+              </div>
+            </div>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              className="rounded-xl px-4 text-xs font-medium bg-default-100 hover:bg-default-200/80 text-default-700 transition-all"
+              onPress={() => setIsWorkspaceModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              className="rounded-xl px-4 text-xs font-semibold shadow-lg shadow-primary/20"
+              color="primary"
+              isDisabled={!localWorkspacePath.trim()}
+              isLoading={isConnectingWorkspace}
+              onPress={() =>
+                connectWorkspaceDirectory(
+                  localWorkspacePath,
+                  localWorkspaceName,
+                )
+              }
+            >
+              Open Folder
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </div>
+  );
+}

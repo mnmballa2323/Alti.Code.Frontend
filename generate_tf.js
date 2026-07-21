@@ -32,7 +32,7 @@ variable "environment" {
 }
 
 variable "docker_image" {
-  description = "The Docker image for alti.code.studio"
+  description = "The Docker image for inso.code"
   type        = string
 }
 `;
@@ -45,18 +45,18 @@ provider "aws" {
 }
 
 resource "aws_ecs_cluster" "main" {
-  name = "alti-code-studio-multi-\${var.environment}"
+  name = "inso-code-multi-\${var.environment}"
 }
 
 resource "aws_ecs_task_definition" "app" {
-  family                   = "alti-code-studio-task"
+  family                   = "inso-code-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = 256
   memory                   = 512
 
   container_definitions = jsonencode([{
-    name      = "alti-code-studio"
+    name      = "inso-code"
     image     = var.docker_image
     essential = true
     environment = [
@@ -80,7 +80,7 @@ provider "aws" {
 module "eks" {
   source          = "terraform-aws-modules/eks/aws"
   version         = "19.15.3"
-  cluster_name    = "alti-code-studio-single-\${var.environment}"
+  cluster_name    = "inso-code-single-\${var.environment}"
   cluster_version = "1.27"
   vpc_id          = "vpc-12345678"
   subnet_ids      = ["subnet-12345678", "subnet-87654321"]
@@ -105,7 +105,7 @@ resource "aws_instance" "app" {
   instance_type = "m5.large"
   
   tags = {
-    Name = "alti-code-studio-gov-\${var.environment}"
+    Name = "inso-code-gov-\${var.environment}"
     Compliance = "FedRAMP-High"
   }
 
@@ -128,12 +128,12 @@ resource "aws_instance" "app" {
   gcp: {
     multi_tenant: `
 provider "google" {
-  project = "alti-code-studio"
+  project = "inso-code"
   region  = "us-central1"
 }
 
 resource "google_cloud_run_service" "app" {
-  name     = "alti-code-studio-multi-\${var.environment}"
+  name     = "inso-code-multi-\${var.environment}"
   location = "us-central1"
 
   template {
@@ -171,12 +171,12 @@ resource "google_cloud_run_service" "app" {
 `,
     single_tenant: `
 provider "google" {
-  project = "alti-code-studio"
+  project = "inso-code"
   region  = "us-central1"
 }
 
 resource "google_container_cluster" "primary" {
-  name     = "alti-code-studio-single-\${var.environment}"
+  name     = "inso-code-single-\${var.environment}"
   location = "us-central1"
 
   remove_default_node_pool = true
@@ -196,7 +196,7 @@ resource "google_container_node_pool" "primary_nodes" {
 `,
     government: `
 provider "google" {
-  project = "alti-code-studio-gov"
+  project = "inso-code-gov"
   region  = "us-central1"
 }
 
@@ -209,7 +209,7 @@ resource "google_assured_workloads_workload" "gov_workload" {
 }
 
 resource "google_compute_instance" "app" {
-  name         = "alti-code-studio-gov-\${var.environment}"
+  name         = "inso-code-gov-\${var.environment}"
   machine_type = "e2-standard-4"
   zone         = "us-central1-a"
 
@@ -258,7 +258,7 @@ resource "azurerm_container_group" "app" {
   os_type             = "Linux"
 
   container {
-    name   = "alti-code-studio"
+    name   = "inso-code"
     image  = var.docker_image
     cpu    = "1.0"
     memory = "1.5"

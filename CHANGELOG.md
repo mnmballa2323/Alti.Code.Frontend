@@ -8,7 +8,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ## [53.1.6] - 2026-07-14 — Taste-Skill Frontend Design Agent Integration
 
 ### Added
-- **Taste-Skill Integration**: Integrated the `taste-skill` library (by Leonxlnx, MIT License) into `submodules/openclaw/skills` and `alti.code.studio.backend/submodules/openclaw/skills`, exposing 13 design-engineering agent skills to the Alti.Code.Studio platform backend.
+- **Taste-Skill Integration**: Integrated the `taste-skill` library (by Leonxlnx, MIT License) into `submodules/openclaw/skills` and `Inso.Code.Backend/submodules/openclaw/skills`, exposing 13 design-engineering agent skills to the Inso.Code platform backend.
 - **Workspace Agent Customizations**: Configured `.agents/skills` workspace customization roots to automatically load the taste-skill rules for developer agents.
 
 ## [53.1.5] - 2026-07-02 — OpenWiki Integration and Local Proxy
@@ -50,13 +50,13 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - **Legacy Frontend Owner Routes**: Deleted Azure Active Directory and Liberty Center One (OpenStack) provider portals (`app/owner/azure`, `app/owner/liberty`).
 
 ### Added
-- **GCP Legal Notice Service**: Implemented [gcp_legal_notice.service.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/compliance/gcp_legal_notice.service.js) to dispatch compliance SLA notices to GCP endpoints or Pub/Sub topics.
-- **GCP Owner Console**: Added an interactive Google Cloud Platform dashboard page at [app/owner/gcp/page.tsx](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.frontend/app/owner/gcp/page.tsx).
+- **GCP Legal Notice Service**: Implemented [gcp_legal_notice.service.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/src/app/modules/compliance/gcp_legal_notice.service.js) to dispatch compliance SLA notices to GCP endpoints or Pub/Sub topics.
+- **GCP Owner Console**: Added an interactive Google Cloud Platform dashboard page at [app/owner/gcp/page.tsx](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Frontend/app/owner/gcp/page.tsx).
 
 ### Changed
-- **Cicero Compliance Integration**: Refactored [cicero_law_enforcement.service.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/compliance/cicero_law_enforcement.service.js) and [compliance.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/compliance/compliance.test.js) to route SLA compliance dispatches through GCP instead of Azure.
-- **Frontend Sidebar Re-branding**: Updated [layout.tsx](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.frontend/app/owner/layout.tsx) under `app/owner/` to link to the new Google Cloud Platform dashboard instead of Microsoft Azure and Liberty Center One.
-- **Dynamic Swarm Registry Purge**: Updated [expand_registry_to_50k.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/scripts/expand_registry_to_50k.js) to generate GCP-native prefixes, and completely purged **1,328** Azure, AWS, and OpenStack-related agent templates from [polyglots_registry.json](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/agents/polyglots_registry.json).
+- **Cicero Compliance Integration**: Refactored [cicero_law_enforcement.service.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/src/app/modules/compliance/cicero_law_enforcement.service.js) and [compliance.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/src/app/modules/compliance/compliance.test.js) to route SLA compliance dispatches through GCP instead of Azure.
+- **Frontend Sidebar Re-branding**: Updated [layout.tsx](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Frontend/app/owner/layout.tsx) under `app/owner/` to link to the new Google Cloud Platform dashboard instead of Microsoft Azure and Liberty Center One.
+- **Dynamic Swarm Registry Purge**: Updated [expand_registry_to_50k.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/scripts/expand_registry_to_50k.js) to generate GCP-native prefixes, and completely purged **1,328** Azure, AWS, and OpenStack-related agent templates from [polyglots_registry.json](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/src/app/modules/agents/polyglots_registry.json).
 
 ## [53.0.66] - 2026-06-21 — Global Discovery Sync & Federated Search
 
@@ -1673,7 +1673,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 ### Changed
 
 - **Build Tooling**:
-  - Generalized `scripts/license_compliance_check.js` to scan all active backend folders in the workspace: `alti.code.studio.backend`, `alti.code.studio.backend.aws`, `alti.code.studio.backend.azure`, and `alti.code.studio.backend.gcp`.
+  - Generalized `scripts/license_compliance_check.js` to scan all active backend folders in the workspace: `Inso.Code.Backend`, `Inso.Code.Backend.aws`, `Inso.Code.Backend.azure`, and `Inso.Code.Backend.gcp`.
   - Executed a deep scan across the entire backend microservice ecosystem, verifying that all dependencies are commercially compliant and free of restricted code/licenses.
 
 ## [39.37.162] - 2026-06-07 — Disable Elastic Scroll Bounce
@@ -3077,7 +3077,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - **Server-Sent Events Thought Telemetry Stream (`subscribeThoughtStream`)**: Designed a real-time SSE streaming manager that allows developers to watch the swarm's inner cognitive thoughts, task assignments, and execution logs dynamically.
 - **Thought-Stream Controllers**: Added `streamSwarmThoughts` and `triggerSecuritySweep` static actions inside `githubDocs.controller.js`.
 - **Exposed Gateway Routes**: Mounted `/thought-stream` and `/sweeper/run` POST endpoints under `githubDocs.route.js`.
-- **Decoupled Integration Tests**: Deployed a dedicated integration test suite at [githubSweeper.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/tests/integration/githubSweeper.test.js) validating the background sweeps and SSE streams. Verified 100% green test success.
+- **Decoupled Integration Tests**: Deployed a dedicated integration test suite at [githubSweeper.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/tests/integration/githubSweeper.test.js) validating the background sweeps and SSE streams. Verified 100% green test success.
 
 ## [39.8.0] - 2026-05-25 — Swarm Repository Autopilot & Stateful Conversational Memory
 
@@ -3087,7 +3087,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - **Stateful Conversational Memory (`consultStatefulSession`)**: Implemented dynamic session-based state management that maintains persistent conversation history context. Automatically enriches multi-turn user queries with historical assistant thoughts, allowing users to direct the specialized swarm progressively.
 - **Controller Action Methods**: Implemented `triggerAutopilotPr` and `consultStatefulSession` inside `githubDocs.controller.js` to process client validations and return rich payload states.
 - **Exposed Gateway Routes**: Mounted `/autopilot/create-pr` and `/session/consult` POST endpoints within `githubDocs.route.js`.
-- **Decoupled Integration Tests**: Deployed a dedicated integration test suite at [githubAutopilot.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/tests/integration/githubAutopilot.test.js) validating the workspace autopilot pipeline and stateful session caching. Verified 100% green test success.
+- **Decoupled Integration Tests**: Deployed a dedicated integration test suite at [githubAutopilot.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/tests/integration/githubAutopilot.test.js) validating the workspace autopilot pipeline and stateful session caching. Verified 100% green test success.
 
 ## [39.7.0] - 2026-05-25 — Swarm Cognitive Intelligence & Self-Healing Webhook Loop
 
@@ -3099,16 +3099,16 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - **AST Dependency Blast-Radius Calculator (`analyzePullRequestBlastRadius`)**: Built an AST import dependency traversal mechanism leveraging Google Cloud Spanner Graph GQL queries, recursively analyzing files impacted by pull requests and cross-referencing against parsed repo-level `CODEOWNERS` rules to output precise reviewer assignments.
 - **Multimodal Visual PR Layout Auditor (`auditPrVisualLayout`)**: Added layout auditing on base64 screenshots of deployment previews using Gemini Pro Vision, validating design system tokens compliance, CSS centerings/margins alignment, and reporting visual regressions.
 - **Mounted Gateway Routes**: Registered and exposed `/webhook/healing`, `/visual-audit`, `/orchestrate`, and `/blast-radius` POST endpoints under `githubDocs.route.js` and `githubDocs.controller.js`.
-- **Exhaustive Integration Tests**: Deployed a comprehensive suite at [githubCognitiveIntelligence.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/tests/integration/githubCognitiveIntelligence.test.js) asserting all five capabilities. Isolated existing router tests to guarantee 100% successful backward compatibility across all 31 tests.
+- **Exhaustive Integration Tests**: Deployed a comprehensive suite at [githubCognitiveIntelligence.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/tests/integration/githubCognitiveIntelligence.test.js) asserting all five capabilities. Isolated existing router tests to guarantee 100% successful backward compatibility across all 31 tests.
 
 ## [39.6.0] - 2026-05-24 — Autonomous GitHub Swarm Factory (120+ Specialists Swarm)
 
 ### Added
 
-- **Swarm Factory Generation Engine**: Designed and deployed the dynamic compiler [github_swarm_factory.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/src/app/modules/agents/github_swarm_factory.js) containing a highly structured, granular database taxonomy of **120+ specialized GitHub agents**. Programmatically compiled and wrote all 120+ dynamic specialist agent `.agent.js` files into `src/app/modules/agents/plugins/`.
+- **Swarm Factory Generation Engine**: Designed and deployed the dynamic compiler [github_swarm_factory.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/src/app/modules/agents/github_swarm_factory.js) containing a highly structured, granular database taxonomy of **120+ specialized GitHub agents**. Programmatically compiled and wrote all 120+ dynamic specialist agent `.agent.js` files into `src/app/modules/agents/plugins/`.
 - **Complete API Coverage (12 Domains)**: Scaffolded 10 custom specialists under each of the 12 primary developer domains (Repositories, Pull Requests, Actions CI/CD, Apps & Integrations, Projects v2, Governance & Enterprise, Gists & Snippets, Discussions, Issues, Security & Compliance, Copilot Extensions, Billing & Administration).
 - **Specificity-Weighted Semantic Routing**: Refactored the dynamic capability matcher in `dispatchQueryToSwarm` inside `githubDocsService` to score and rank query relevance dynamically based on matched core capability and name keywords. Employs a custom `Math.max()` capability filter with exact word boundary matching (e.g. `\b${word}s?\b`) to avoid duplicate keyword weighting, ensuring flawless semantic routing to the single most specific specialist.
-- **Factory Integration Tests**: Authoritative Vitest suite inside [githubSwarmFactory.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend/tests/integration/githubSwarmFactory.test.js) asserting file-compilation on disk, dynamic registry bootstrap loading, and high-precision query routing for all 120+ generated agents.
+- **Factory Integration Tests**: Authoritative Vitest suite inside [githubSwarmFactory.test.js](file:///Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend/tests/integration/githubSwarmFactory.test.js) asserting file-compilation on disk, dynamic registry bootstrap loading, and high-precision query routing for all 120+ generated agents.
 
 ---
 
@@ -3180,7 +3180,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 - **Sovereign Cloud Orchestrator**: Developed `omni_cloud_orchestrator.js` background daemon for continuous execution.
 - **Massive Cloud Ingestion**: Successfully integrated and physically ingested **5,609 repositories** across **44 distinct cloud platforms** (AWS, Azure, GCP, Vercel, Supabase, Databricks, RedHat, Cloudflare, etc.).
 - **Hard Law Guardian**: Engineered `hard_law_scrubber.cjs` to continuously sweep the ecosystem and instantly purge any non-compliant licenses. The environment strictly enforces Pure MIT and Pure Apache 2.0 with absolute zero tolerance for mixtures or GPL/BSD traces.
-- **Monorepo Consolidation**: Synchronized, merged, and moved the remote submodules (`alti.code.studio.backend` and `alti.code.studio.frontend`) entirely into the unified monorepo root structure.
+- **Monorepo Consolidation**: Synchronized, merged, and moved the remote submodules (`Inso.Code.Backend` and `Inso.Code.Frontend`) entirely into the unified monorepo root structure.
 
 ---
 
@@ -3207,7 +3207,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Added
 
-- **Omni-Box Command Interface**: Redesigned the primary user interface in `alti.code.studio.frontend` to be a centralized, minimalist Omni-Box (Raycast/Spotlight UI), effortlessly routing queries to 571+ agents.
+- **Omni-Box Command Interface**: Redesigned the primary user interface in `Inso.Code.Frontend` to be a centralized, minimalist Omni-Box (Raycast/Spotlight UI), effortlessly routing queries to 571+ agents.
 - **Backend CapabilityRouter Optimization**: Rewrote `capability.router.js` to utilize O(1) Pre-tokenized NLP Sets with fuzzy-prefix matching, collapsing 403 keyword linear routing down to < 5ms mathematical execution.
 - **Unified Telemetry Wrapping**: Upgraded `BaseSpecialistAgent` to return highly structured JSON telemetry wrappers natively `{ agent, confidence, type, content, execution_time_ms }` instead of raw strings, preventing UI parsing faults.
 - **End-to-End Integration Hardening**: Created `routing_telemetry.test.js` to mathematically lock the architectural flow from query ingestion to telemetry execution.

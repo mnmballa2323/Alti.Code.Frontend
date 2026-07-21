@@ -2,20 +2,20 @@
 set -euo pipefail
 
 # =============================================================================
-# ALTI CODE STUDIO — Production Deployment Orchestrator
+# INSO CODE — Production Deployment Orchestrator
 # =============================================================================
 # Usage: ./scripts/deploy-production.sh [cloud|byoc|airgap]
 # =============================================================================
 
 DEPLOY_MODE="${1:-cloud}"
-PROJECT_ID="${GCP_PROJECT_ID:-alti-code-studio}"
+PROJECT_ID="${GCP_PROJECT_ID:-inso-code}"
 REGION="${GCP_REGION:-us-central1}"
 BACKEND_SERVICE="alti-backend"
 FRONTEND_SERVICE="alti-frontend"
 TIMESTAMP=$(date +%Y%m%d-%H%M%S)
 
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  ALTI CODE STUDIO — Production Deployment"
+echo "  INSO CODE — Production Deployment"
 echo "  Mode: ${DEPLOY_MODE} | Project: ${PROJECT_ID}"
 echo "  Region: ${REGION} | Time: ${TIMESTAMP}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -49,7 +49,7 @@ preflight() {
 # -- Database migrations --
 migrate() {
   echo "\n📦 Running database migrations..."
-  cd alti.code.studio.backend
+  cd Inso.Code.Backend
   npx prisma migrate deploy
   echo "✅ Migrations applied"
   cd ..
@@ -58,7 +58,7 @@ migrate() {
 # -- Build and deploy backend --
 deploy_backend() {
   echo "\n🚀 Deploying backend to Cloud Run..."
-  cd alti.code.studio.backend
+  cd Inso.Code.Backend
   
   # Build container
   gcloud builds submit \
@@ -90,7 +90,7 @@ deploy_backend() {
 # -- Build and deploy frontend --
 deploy_frontend() {
   echo "\n🎨 Deploying frontend to Cloud Run..."
-  cd alti.code.studio.frontend
+  cd Inso.Code.Frontend
   
   gcloud builds submit \
     --tag "gcr.io/${PROJECT_ID}/${FRONTEND_SERVICE}:${TIMESTAMP}" \

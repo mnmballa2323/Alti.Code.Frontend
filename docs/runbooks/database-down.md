@@ -5,8 +5,8 @@
 - **Cloud SQL / AlloyDB metrics**: `cloudsql.googleapis.com/database/network/connections` drops to zero or spikes to max
 - **Prisma connection errors**: `PrismaClientInitializationError: Can't reach database server` in Cloud Run logs
 - **Uptime checks**: `/api/health` endpoint returning 503 with `"database": "unhealthy"`
-- **Alerting policy**: `alti-code-studio-db-connection-failure` fires in Cloud Monitoring
-- **Dashboard**: Check **Alti Code Studio — Database Health** dashboard in Cloud Monitoring
+- **Alerting policy**: `inso-code-db-connection-failure` fires in Cloud Monitoring
+- **Dashboard**: Check **Inso Code — Database Health** dashboard in Cloud Monitoring
 
 ## Symptoms
 - API requests return `500 Internal Server Error` with `"Database connection failed"`
@@ -26,17 +26,17 @@
 ## Immediate Response (< 5 min)
 1. **Confirm the outage scope** — check if all services are affected or just one:
    ```bash
-   gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="alti-code-studio-backend" AND textPayload=~"PrismaClient"' \
-     --project=alti-code-studio --limit=20 --format=json
+   gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="inso-code-backend" AND textPayload=~"PrismaClient"' \
+     --project=inso-code --limit=20 --format=json
    ```
 2. **Check AlloyDB / Cloud SQL instance status**:
    ```bash
-   gcloud alloydb instances list --cluster=alti-code-studio-cluster \
-     --region=us-central1 --project=alti-code-studio
+   gcloud alloydb instances list --cluster=inso-code-cluster \
+     --region=us-central1 --project=inso-code
    ```
 3. **Verify network connectivity** from Cloud Run to the database:
    ```bash
-   gcloud run services describe alti-code-studio-backend \
+   gcloud run services describe inso-code-backend \
      --region=us-central1 --format="value(spec.template.spec.containers[0].env)"
    ```
 4. **Check active connections** on the database:
@@ -55,37 +55,37 @@
    ```
    Then redeploy to reset connection pools:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --update-env-vars="DATABASE_POOL_SIZE=20,DATABASE_POOL_TIMEOUT=10" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 2. **If AlloyDB instance is down** — check for maintenance or trigger failover:
    ```bash
    # Check instance operations
-   gcloud alloydb operations list --cluster=alti-code-studio-cluster \
-     --region=us-central1 --project=alti-code-studio
+   gcloud alloydb operations list --cluster=inso-code-cluster \
+     --region=us-central1 --project=inso-code
 
    # Failover to read replica (if configured)
-   gcloud alloydb instances failover alti-code-studio-primary \
-     --cluster=alti-code-studio-cluster \
-     --region=us-central1 --project=alti-code-studio
+   gcloud alloydb instances failover inso-code-primary \
+     --cluster=inso-code-cluster \
+     --region=us-central1 --project=inso-code
    ```
 
 3. **If Cloud SQL Auth Proxy is crashed** — restart the proxy sidecar:
    ```bash
    # For Cloud Run with sidecar proxy
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --update-containers="proxy=gcr.io/cloud-sql-connectors/cloud-sql-proxy:latest" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 4. **If network partition** — verify VPC connector status:
    ```bash
    gcloud compute networks vpc-access connectors describe alti-vpc-connector \
-     --region=us-central1 --project=alti-code-studio
+     --region=us-central1 --project=inso-code
    ```
 
 ## Verification
@@ -98,7 +98,7 @@
   SELECT count(*) FROM pg_stat_activity;
   ```
 - Check Cloud Run logs for successful database queries post-fix
-- Monitor the **Alti Code Studio — Database Health** dashboard for 15 minutes
+- Monitor the **Inso Code — Database Health** dashboard for 15 minutes
 
 ## Prevention
 - Set `DATABASE_POOL_SIZE` to match Cloud Run max concurrency (pool per instance)
@@ -109,7 +109,7 @@
 - Schedule maintenance windows during low-traffic periods
 
 ## Escalation
-- **After 5 min**: Page the on-call SRE via PagerDuty — `alti-code-studio-p1`
+- **After 5 min**: Page the on-call SRE via PagerDuty — `inso-code-p1`
 - **After 15 min without resolution**: Escalate to the Platform Engineering lead
 - **If AlloyDB control plane issue**: Open a P1 support case with Google Cloud Support
 - **Slack channel**: `#alti-incidents`

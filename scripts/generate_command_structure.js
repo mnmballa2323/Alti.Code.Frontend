@@ -3,7 +3,7 @@ const path = require('path');
 
 const workspaces = [
   '/Users/michaelmeram/workspace/alti.code.studio',
-  '/Users/michaelmeram/workspace/alti.code.studio/alti.code.studio.backend'
+  '/Users/michaelmeram/workspace/alti.code.studio/Inso.Code.Backend'
 ];
 
 const generals = [
@@ -81,7 +81,7 @@ model: ${model}
 tools: ["Delegate", "Read", "Write"]
 ---
 # Directives
-You are ${name}, a ${tier} in the Alti Code Studio autonomous swarm.
+You are ${name}, a ${tier} in the Inso Code autonomous swarm.
 Your primary responsibility is to reason about the user's objective and securely delegate tasks down the chain of command using the 'Delegate' tool.
 DO NOT execute manual file modifications unless absolutely necessary. Rely on your subordinate ranks.
 `;

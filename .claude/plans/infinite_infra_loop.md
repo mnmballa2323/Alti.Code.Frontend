@@ -3,7 +3,7 @@
 # Pattern: Infinite
 
 ## Objective
-Continuously and autonomously improve the Multi-Cloud Infrastructure (AWS, Azure, GCP) for Alti Code Studio.
+Continuously and autonomously improve the Multi-Cloud Infrastructure (AWS, Azure, GCP) for Inso Code.
 
 ## Execution Vectors
 1. **Chaos Engineering**: Inject failure testing scripts into the K8s clusters to prove resilience.

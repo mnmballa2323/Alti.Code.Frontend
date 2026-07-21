@@ -5,7 +5,7 @@ steps:
 - name: backend-test
   image: node:20
   commands:
-  - cd alti.code.studio.backend
+  - cd Inso.Code.Backend
   - git submodule update --init --recursive
   - npm ci
   - npm test
@@ -13,7 +13,7 @@ steps:
 - name: frontend-build
   image: node:20
   commands:
-  - cd alti.code.studio.frontend
+  - cd Inso.Code.Frontend
   - git submodule update --init --recursive
   - npm ci
   - npm run build
@@ -23,8 +23,8 @@ steps:
   settings:
     dry_run: true
     repo: inso-backend
-    dockerfile: alti.code.studio.backend/Dockerfile
-    context: alti.code.studio.backend
+    dockerfile: Inso.Code.Backend/Dockerfile
+    context: Inso.Code.Backend
     tags: latest
 
 - name: build-frontend-image
@@ -32,6 +32,6 @@ steps:
   settings:
     dry_run: true
     repo: inso-frontend
-    dockerfile: alti.code.studio.frontend/Dockerfile
-    context: alti.code.studio.frontend
+    dockerfile: Inso.Code.Frontend/Dockerfile
+    context: Inso.Code.Frontend
     tags: latest

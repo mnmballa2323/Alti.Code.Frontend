@@ -1,4 +1,4 @@
-# Alti Code Studio — Service Level Objectives
+# Inso Code — Service Level Objectives
 
 ## Platform SLOs
 

@@ -1,7 +1,7 @@
 {
     "name": "@alticodestudio/openclaw-skill",
     "version": "1.0.0",
-    "description": "Official OpenClaw Skill for interfacing with the Alti.Code.Studio Autonomous Swarm.",
+    "description": "Official OpenClaw Skill for interfacing with the Inso.Code Autonomous Swarm.",
     "main": "dist/index.js",
     "scripts": {
         "build": "tsc",
@@ -11,11 +11,11 @@
         "openclaw",
         "assistant",
         "skill",
-        "alti-code-studio",
+        "inso-code",
         "ai",
         "swarm"
     ],
-    "author": "Alti.Code.Studio Swarm",
+    "author": "Inso.Code Swarm",
     "license": "MIT",
     "dependencies": {
         "@openclaw/openclaw-sdk": "^1.0.0"

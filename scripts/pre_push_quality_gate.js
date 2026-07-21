@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso.Code
  * 
  * Strict Pre-Push Quality Gate Validator
  * Verifies that generated agent skill files (.md) meet absolute premium production standards.

@@ -1,4 +1,4 @@
-# Alti.Code.Studio Memory
+# Inso.Code Memory
 
 > *Persistent context and architectural notes for AI Agents.*
 
@@ -81,6 +81,6 @@
 -   **Submodule CI**: `git submodule update --init --recursive` is not yet wired into the CI pipeline (TODO.md item).
 
 ## 🔍 Submodule References
--   `alti.code.studio.backend`: The core API and agent logic. Currently at `src/app/modules/` with 133+ modules.
--   `alti.code.studio.frontend`: The user interface. Next.js 15, 22 app routes, 111 components.
+-   `Inso.Code.Backend`: The core API and agent logic. Currently at `src/app/modules/` with 133+ modules.
+-   `Inso.Code.Frontend`: The user interface. Next.js 15, 22 app routes, 111 components.
 

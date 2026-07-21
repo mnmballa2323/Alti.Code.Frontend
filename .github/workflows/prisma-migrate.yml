@@ -3,11 +3,11 @@ name: Database Migration Pipeline
 on:
   push:
     paths:
-      - 'alti.code.studio.backend/prisma/**'
+      - 'Inso.Code.Backend/prisma/**'
     branches: [main]
   pull_request:
     paths:
-      - 'alti.code.studio.backend/prisma/**'
+      - 'Inso.Code.Backend/prisma/**'
 
 env:
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -22,14 +22,14 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: alti.code.studio.backend/package-lock.json
+          cache-dependency-path: Inso.Code.Backend/package-lock.json
       - name: Install dependencies
-        run: cd alti.code.studio.backend && npm ci --ignore-scripts
+        run: cd Inso.Code.Backend && npm ci --ignore-scripts
       - name: Validate Prisma schema
-        run: cd alti.code.studio.backend && npx prisma validate
+        run: cd Inso.Code.Backend && npx prisma validate
       - name: Check for drift
         run: |
-          cd alti.code.studio.backend
+          cd Inso.Code.Backend
           npx prisma migrate diff \
             --from-migrations ./prisma/migrations \
             --to-schema-datamodel ./prisma/schema.prisma \
@@ -45,12 +45,12 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: alti.code.studio.backend/package-lock.json
+          cache-dependency-path: Inso.Code.Backend/package-lock.json
       - name: Install dependencies
-        run: cd alti.code.studio.backend && npm ci --ignore-scripts
+        run: cd Inso.Code.Backend && npm ci --ignore-scripts
       - name: Generate diff
         run: |
-          cd alti.code.studio.backend
+          cd Inso.Code.Backend
           echo "### 📊 Prisma Migration Diff" >> $GITHUB_STEP_SUMMARY
           echo '```sql' >> $GITHUB_STEP_SUMMARY
           npx prisma migrate diff \
@@ -71,9 +71,9 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: alti.code.studio.backend/package-lock.json
+          cache-dependency-path: Inso.Code.Backend/package-lock.json
       - name: Install dependencies
-        run: cd alti.code.studio.backend && npm ci --ignore-scripts
+        run: cd Inso.Code.Backend && npm ci --ignore-scripts
       - id: auth
         uses: google-github-actions/auth@v2
         with:
@@ -86,11 +86,11 @@ jobs:
           sleep 5
       - name: Apply migrations
         run: |
-          cd alti.code.studio.backend
+          cd Inso.Code.Backend
           npx prisma migrate deploy
       - name: Verify migration
         run: |
-          cd alti.code.studio.backend
+          cd Inso.Code.Backend
           npx prisma migrate status
 
   apply-production:
@@ -105,9 +105,9 @@ jobs:
         with:
           node-version: '22'
           cache: 'npm'
-          cache-dependency-path: alti.code.studio.backend/package-lock.json
+          cache-dependency-path: Inso.Code.Backend/package-lock.json
       - name: Install dependencies
-        run: cd alti.code.studio.backend && npm ci --ignore-scripts
+        run: cd Inso.Code.Backend && npm ci --ignore-scripts
       - id: auth
         uses: google-github-actions/auth@v2
         with:
@@ -122,9 +122,9 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL_PROD }}
         run: |
-          cd alti.code.studio.backend
+          cd Inso.Code.Backend
           npx prisma migrate deploy
       - name: Verify
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL_PROD }}
-        run: cd alti.code.studio.backend && npx prisma migrate status
+        run: cd Inso.Code.Backend && npx prisma migrate status

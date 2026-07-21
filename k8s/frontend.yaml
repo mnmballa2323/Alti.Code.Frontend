@@ -17,14 +17,14 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: us-central1-docker.pkg.dev/alti-code-studio-production/alti-repo/alti-frontend:latest
+        image: us-central1-docker.pkg.dev/inso-code-production/alti-repo/alti-frontend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
         env:
         # Assumes routing happens through the same domain via Ingress rules
         - name: NEXT_PUBLIC_API_URL
-          value: "https://api.alti.code.studio/v1"
+          value: "https://api.inso.code/v1"
         resources:
           requests:
             cpu: "250m"

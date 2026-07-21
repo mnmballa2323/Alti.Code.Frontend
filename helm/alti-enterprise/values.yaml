@@ -7,7 +7,7 @@ global:
   
   # Connection tether back to Liberty Center One Control Plane
   controlPlane:
-    url: "https://controlplane.alti.code.studio.internal"
+    url: "https://controlplane.inso.code.internal"
     mTLSCert: ""
     mTLSKey: ""
 
@@ -16,7 +16,7 @@ microservices:
     enabled: true
     replicaCount: 3
     image:
-      repository: registry.alti.code.studio/alti-backend-gcp
+      repository: registry.inso.code/alti-backend-gcp
       tag: "latest"
     nodeSelector:
       "cloud.google.com/gke-nodepool": "default-pool"
@@ -25,4 +25,4 @@ telemetry:
   openTelemetry:
     enabled: true
     # Force usage metrics back to Liberty Center One for billing
-    endpoint: "https://otel.alti.code.studio.internal:4317"
+    endpoint: "https://otel.inso.code.internal:4317"

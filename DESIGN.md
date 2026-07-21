@@ -1,5 +1,5 @@
 ---
-name: Alti Code Studio Visual System
+name: Inso Code Visual System
 version: 1.0.0
 tokens:
   colors:
@@ -45,12 +45,12 @@ tokens:
     radius-button: "0.75rem"
 ---
 
-# DESIGN.md — Alti Code Studio Visual System Contract
+# DESIGN.md — Inso Code Visual System Contract
 
-This document acts as the visual system contract and design token repository for the Alti Code Studio platform. All frontend user interfaces (chat windows, settings dashboards, file managers, and serverless center panes) must map their styling configurations to the tokens defined in the YAML front matter.
+This document acts as the visual system contract and design token repository for the Inso Code platform. All frontend user interfaces (chat windows, settings dashboards, file managers, and serverless center panes) must map their styling configurations to the tokens defined in the YAML front matter.
 
 ## Overview
-Alti Code Studio targets a clean, minimal, premium design aesthetic. We enforce:
+Inso Code targets a clean, minimal, premium design aesthetic. We enforce:
 *   **Curated Palettes**: Lean heavily on pure contrast ratios, using crisp off-whites, solid black accents, and deep charcoal slate grays instead of saturated, generic primary colors.
 *   **Rounded Geometry**: Card surfaces and interactive dialog buttons must have unified rounded shapes (radii of `24px` for panels and `12px` for buttons) to convey modern premium quality.
 *   **Micro-Animations**: Hover actions must transition smoothly over `200ms` with active fade-in slides to make the interface feel alive.

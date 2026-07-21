@@ -5,26 +5,26 @@ import {
 } from '@openclaw/openclaw-sdk'; // Assuming standard OpenClaw SDK
 
 /**
- * Alti.Code.Studio Official OpenClaw Skill
+ * Inso.Code Official OpenClaw Skill
  * Allows a personal OpenClaw instance to natively interface with
- * the Alti.Code.Studio autonomous swarm in the cloud.
+ * the Inso.Code autonomous swarm in the cloud.
  */
 export default class AltiCodeStudioSkill extends Skill {
 
-    name = "Alti.Code.Studio Swarm Controller";
-    description = "Delegate complex engineering tasks, schedule sprints, and monitor your Alti.Code.Studio cloud deployment.";
+    name = "Inso.Code Swarm Controller";
+    description = "Delegate complex engineering tasks, schedule sprints, and monitor your Inso.Code cloud deployment.";
     version = "1.0.0";
 
     // Required configuration standard for OpenClaw Skills
     configSchema = {
         api_key: {
             type: "string",
-            description: "Your Alti.Code.Studio Personal Access Token",
+            description: "Your Inso.Code Personal Access Token",
             required: true
         },
         base_url: {
             type: "string",
-            description: "URL of your Alti.Code.Studio backend API (e.g. https://api.yourstudio.com)",
+            description: "URL of your Inso.Code backend API (e.g. https://api.yourstudio.com)",
             default: "http://localhost:3000"
         }
     };
@@ -34,7 +34,7 @@ export default class AltiCodeStudioSkill extends Skill {
             name: "Schedule Sprint",
             description: "Creates a new autonomous sprint goal and adds it to the Swarm backlog.",
             samples: [
-                "Start a new sprint for Alti.Code.Studio to fix the login bug.",
+                "Start a new sprint for Inso.Code to fix the login bug.",
                 "Tell the Swarm to upgrade to React 19.",
                 "Add a sprint goal: Implement Redis caching layer."
             ],
@@ -42,10 +42,10 @@ export default class AltiCodeStudioSkill extends Skill {
         },
         {
             name: "Platform Status",
-            description: "Check the current status of the Alti.Code.Studio Swarm.",
+            description: "Check the current status of the Inso.Code Swarm.",
             samples: [
                 "What is the swarm doing right now?",
-                "Check Alti.Code.Studio status.",
+                "Check Inso.Code status.",
                 "Is the swarm currently running any sprints?"
             ],
             handler: this.handlePlatformStatus.bind(this)
@@ -54,7 +54,7 @@ export default class AltiCodeStudioSkill extends Skill {
 
     /**
      * Translates the user's Natural Language request from WhatsApp/iMessage
-     * into a JSON payload and forwards it to the Alti.Code.Studio Webhook.
+     * into a JSON payload and forwards it to the Inso.Code Webhook.
      */
     async handleScheduleSprint(context: IntentContext): Promise<MessageResponse> {
         const { text, source, senderId } = context.message;
@@ -77,7 +77,7 @@ export default class AltiCodeStudioSkill extends Skill {
             });
 
             if (!response.ok) {
-                return { text: `❌ Failed to reach Alti.Code.Studio Swarm. Status: ${response.status}` };
+                return { text: `❌ Failed to reach Inso.Code Swarm. Status: ${response.status}` };
             }
 
             const data = await response.json();
@@ -85,20 +85,20 @@ export default class AltiCodeStudioSkill extends Skill {
 
         } catch (error) {
             this.logger.error("Skill Error:", error);
-            return { text: `⚠️ Could not connect to Alti.Code.Studio. Error: ${error.message}` };
+            return { text: `⚠️ Could not connect to Inso.Code. Error: ${error.message}` };
         }
     }
 
     async handlePlatformStatus(context: IntentContext): Promise<MessageResponse> {
         const config = this.getConfig();
         try {
-            // Mock API hit to the Alti.Code.Studio backend
+            // Mock API hit to the Inso.Code backend
             const response = await fetch(`${config.base_url}/api/v1/health`, {
                 headers: { 'Authorization': `Bearer ${config.api_key}` }
             });
 
             if (response.ok) {
-                return { text: "🐝 The Alti.Code.Studio Swarm is currently online and idle. No active sprints." };
+                return { text: "🐝 The Inso.Code Swarm is currently online and idle. No active sprints." };
             }
             return { text: "⚠️ The Swarm is currently offline or unreachable." };
         } catch (error) {

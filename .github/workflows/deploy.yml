@@ -5,20 +5,20 @@ on:
     branches:
       - main
     paths:
-      - 'alti.code.studio.backend/**'
-      - 'alti.code.studio.frontend/**'
+      - 'Inso.Code.Backend/**'
+      - 'Inso.Code.Frontend/**'
       - 'k8s/**'
       - '.github/workflows/deploy.yml'
 
 env:
-  PROJECT_ID: alti-code-studio-production
+  PROJECT_ID: inso-code-production
   GAR_LOCATION: us-central1
   REPOSITORY: alti-repo
   BACKEND_IMAGE: alti-backend
   FRONTEND_IMAGE: alti-frontend
   # Set via Terraform Output
   WORKLOAD_IDENTITY_PROVIDER: 'projects/123456789/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
-  SERVICE_ACCOUNT: 'github-actions-deployer@alti-code-studio-production.iam.gserviceaccount.com'
+  SERVICE_ACCOUNT: 'github-actions-deployer@inso-code-production.iam.gserviceaccount.com'
 
 jobs:
   # ----------------------------------------------------------------------------
@@ -37,18 +37,18 @@ jobs:
 
     - name: Install Backend Dependencies
       run: |
-        cd alti.code.studio.backend
+        cd Inso.Code.Backend
         npm ci --legacy-peer-deps
 
     - name: Run ESLint (Static Security Check)
       run: |
-        cd alti.code.studio.backend
+        cd Inso.Code.Backend
         # Runs the newly configured eslint-plugin-security rules
         npm run lint
 
     - name: Audit Backend Dependencies
       run: |
-        cd alti.code.studio.backend
+        cd Inso.Code.Backend
         # Fail the build if high or critical dependencies vulnerabilities are found
         npm audit --audit-level=high
 
@@ -86,12 +86,12 @@ jobs:
     - name: Build Local Images
       run: |
         TAG="${GITHUB_SHA::7}"
-        docker build -t backend-local ./alti.code.studio.backend
+        docker build -t backend-local ./Inso.Code.Backend
         docker build -t frontend-local \
           --build-arg KEYCLOAK_CLIENT_ID=${{ secrets.KEYCLOAK_CLIENT_ID }} \
           --build-arg KEYCLOAK_CLIENT_SECRET=${{ secrets.KEYCLOAK_CLIENT_SECRET }} \
           --build-arg KEYCLOAK_ISSUER=${{ secrets.KEYCLOAK_ISSUER }} \
-          ./alti.code.studio.frontend
+          ./Inso.Code.Frontend
 
     # Scan the backend image for OS & application package vulnerabilities
     - name: Scan Backend Image with Trivy

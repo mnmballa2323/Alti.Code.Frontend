@@ -4,8 +4,8 @@
 ## Detection
 - **Cloud Monitoring metric**: `run.googleapis.com/request_latencies` p99 > 10,000ms
 - **Instance scaling events**: `run.googleapis.com/container/instance_count` shows rapid scale-from-zero
-- **Alerting policy**: `alti-code-studio-cold-start-latency` fires on sustained p99 > 10s
-- **Dashboard**: Check **Alti Code Studio — API Performance** dashboard, panel "Request Latency Percentiles"
+- **Alerting policy**: `inso-code-cold-start-latency` fires on sustained p99 > 10s
+- **Dashboard**: Check **Inso Code — API Performance** dashboard, panel "Request Latency Percentiles"
 - **User reports**: First requests after idle periods are extremely slow
 
 ## Symptoms
@@ -26,40 +26,40 @@
 ## Immediate Response (< 5 min)
 1. **Check current instance count and scaling config**:
    ```bash
-   gcloud run services describe alti-code-studio-backend \
-     --region=us-central1 --project=alti-code-studio \
+   gcloud run services describe inso-code-backend \
+     --region=us-central1 --project=inso-code \
      --format="value(spec.template.metadata.annotations['autoscaling.knative.dev/minScale'],spec.template.metadata.annotations['autoscaling.knative.dev/maxScale'])"
    ```
 2. **Set min-instances immediately** to keep warm instances:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --min-instances=2 \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 3. **Enable CPU boost** for faster startup:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --cpu-boost \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 4. **Check container image size**:
    ```bash
    gcloud artifacts docker images describe \
-     us-central1-docker.pkg.dev/alti-code-studio/alti-images/alti-code-studio-backend:latest \
-     --project=alti-code-studio
+     us-central1-docker.pkg.dev/inso-code/alti-images/inso-code-backend:latest \
+     --project=inso-code
    ```
 
 ## Resolution
 1. **Set appropriate min-instances** based on traffic patterns:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --min-instances=3 \
      --max-instances=50 \
      --cpu-boost \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 2. **Optimize container image size** — switch to a slim base:
@@ -80,36 +80,36 @@
    ```
    Then rebuild and deploy:
    ```bash
-   gcloud builds submit --tag us-central1-docker.pkg.dev/alti-code-studio/alti-images/alti-code-studio-backend:latest \
-     --project=alti-code-studio
-   gcloud run deploy alti-code-studio-backend \
-     --image=us-central1-docker.pkg.dev/alti-code-studio/alti-images/alti-code-studio-backend:latest \
-     --region=us-central1 --project=alti-code-studio
+   gcloud builds submit --tag us-central1-docker.pkg.dev/inso-code/alti-images/inso-code-backend:latest \
+     --project=inso-code
+   gcloud run deploy inso-code-backend \
+     --image=us-central1-docker.pkg.dev/inso-code/alti-images/inso-code-backend:latest \
+     --region=us-central1 --project=inso-code
    ```
 
 3. **Defer heavy initialization** — lazy-load non-critical modules:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --update-env-vars="LAZY_LOAD_AI_MODELS=true,DEFER_DB_MIGRATIONS=true" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 4. **Configure startup probe** to signal readiness properly:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --startup-cpu-boost \
      --cpu-throttling=false \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 5. **Enable session affinity** to reduce repeated cold starts per user:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --session-affinity \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 ## Verification
@@ -117,12 +117,12 @@
   ```bash
   gcloud monitoring metrics read \
     "run.googleapis.com/request_latencies" \
-    --project=alti-code-studio --interval="30m" \
-    --filter='resource.labels.service_name="alti-code-studio-backend"'
+    --project=inso-code --interval="30m" \
+    --filter='resource.labels.service_name="inso-code-backend"'
   ```
 - Confirm min-instances are running:
   ```bash
-  gcloud run services describe alti-code-studio-backend \
+  gcloud run services describe inso-code-backend \
     --region=us-central1 --format="value(status.traffic[0].latestRevision)"
   ```
 - Test cold-start time by deploying a new revision and timing first request
@@ -139,7 +139,7 @@
     --schedule="*/5 * * * *" \
     --uri="https://api.alticode.studio/api/health" \
     --http-method=GET \
-    --project=alti-code-studio
+    --project=inso-code
   ```
 - Profile and optimize application startup time as part of CI/CD
 

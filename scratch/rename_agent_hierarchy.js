@@ -4,7 +4,7 @@ const path = require('path');
 const targetDir = '/Users/michaelmeram/workspace/alti.code.studio/.agent/hierarchy';
 
 const replacements = [
-  { search: /Alti Code Studio/gi, replace: 'Inso Code' },
+  { search: /Inso Code/gi, replace: 'Inso Code' },
   { search: /Alti\.Code\.Studio/gi, replace: 'Inso Code' },
   { search: /Alti Code/gi, replace: 'Inso Code' },
   { search: /Alti/gi, replace: 'Inso' }

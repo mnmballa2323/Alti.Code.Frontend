@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso.Code
  * 
  * Strict License Compliance Auditor
  * Enforces:
@@ -13,7 +13,7 @@ const path = require('path');
 
 const WORKSPACE_ROOT = path.resolve(__dirname, '..');
 const BACKEND_DIRS = [
-    path.join(WORKSPACE_ROOT, 'alti.code.studio.backend')
+    path.join(WORKSPACE_ROOT, 'Inso.Code.Backend')
 ];
 
 const BLOCKED_KEYWORDS = [

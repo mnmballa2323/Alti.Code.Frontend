@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2026 Alti.Code.Studio
+ * Copyright (c) 2026 Inso.Code
  * 
  * Deep License Scanner
  * Recursively scans all submodules and every single package inside backend's node_modules
@@ -10,7 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 const WORKSPACE_ROOT = path.resolve(__dirname, '..');
-const BACKEND_DIR = path.join(WORKSPACE_ROOT, 'alti.code.studio.backend');
+const BACKEND_DIR = path.join(WORKSPACE_ROOT, 'Inso.Code.Backend');
 const NODE_MODULES_DIR = path.join(BACKEND_DIR, 'node_modules');
 
 const ALLOWED_LICENSES = ['MIT', 'Apache-2.0', 'Apache 2.0', 'Apache-2.0 WITH LLVM-exception'];

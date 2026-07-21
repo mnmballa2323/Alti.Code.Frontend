@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================================================================
-# ALTI CODE STUDIO: NON-STOP AUTONOMOUS ENTERPRISE DEVELOPMENT RUNNER
+# INSO CODE: NON-STOP AUTONOMOUS ENTERPRISE DEVELOPMENT RUNNER
 # ==============================================================================
 # Optimized for: GCP Sovereign Cloud (Commercial, Government, and Classified)
 # Backed by: GCP Sovereign Inference Strategy (Vertex AI)
@@ -21,7 +21,7 @@ MAGENTA='\033[0;35m'
 NC='\033[0m' # No Color
 
 echo -e "${CYAN}================================================================${NC}"
-echo -e "${CYAN}  🛡️  ALTI CODE STUDIO: AUTONOMOUS ENTERPRISE PIPELINE RUNNER     ${NC}"
+echo -e "${CYAN}  🛡️  INSO CODE: AUTONOMOUS ENTERPRISE PIPELINE RUNNER     ${NC}"
 echo -e "${CYAN}  ☁️  Optimized for GCP Sovereign Cloud & Vertex AI              ${NC}"
 echo -e "${CYAN}================================================================${NC}"
 
@@ -105,7 +105,7 @@ for i in "${!PHASES[@]}"; do
     # Step 4c: Quality Gate Verification (Vitest runner)
     echo -e "${CYAN}• Step 4c: Executing Quality Gate verification...${NC}"
     # Run vitest to ensure all tests pass (compliance + new phase tests)
-    cd alti.code.studio.backend
+    cd Inso.Code.Backend
     if npx vitest run src/app/modules/compliance/; then
         echo -e "${GREEN}✔ All quality gate tests passed successfully.${NC}"
         cd ..
@@ -130,11 +130,11 @@ for i in "${!PHASES[@]}"; do
     # Update package.json version field
     node -e "
       const fs = require('fs');
-      const pkg = JSON.parse(fs.readFileSync('alti.code.studio.backend/package.json', 'utf8'));
+      const pkg = JSON.parse(fs.readFileSync('Inso.Code.Backend/package.json', 'utf8'));
       pkg.version = '$NEXT_VERSION';
-      fs.writeFileSync('alti.code.studio.backend/package.json', JSON.stringify(pkg, null, 2) + '\n');
+      fs.writeFileSync('Inso.Code.Backend/package.json', JSON.stringify(pkg, null, 2) + '\n');
     "
-    git add VERSION alti.code.studio.backend/package.json
+    git add VERSION Inso.Code.Backend/package.json
     git commit -m "chore: bump version to $NEXT_VERSION" || true
 
     echo -e "${GREEN}✔ Successfully completed and versioned Phase $((i + 10))!${NC}"

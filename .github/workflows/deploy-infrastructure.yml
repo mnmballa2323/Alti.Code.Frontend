@@ -25,7 +25,7 @@ on:
       gcp_project_id:
         description: 'Target Google Cloud Project ID'
         required: true
-        default: 'alti-code-studio-prod'
+        default: 'inso-code-prod'
         type: string
       auto_approve:
         description: 'Bypass interactive prompts and auto-apply changes'
@@ -71,7 +71,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          cd alti.code.studio.backend
+          cd Inso.Code.Backend
           npm ci --legacy-peer-deps
 
       - name: Run Deployer Script

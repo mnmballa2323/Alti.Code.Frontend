@@ -1,8 +1,8 @@
-# Contributing to Alti Code Studio
+# Contributing to Inso Code
 
-Welcome! This document outlines the available scripts across the frontend and backend of the Alti Code Studio monorepo.
+Welcome! This document outlines the available scripts across the frontend and backend of the Inso Code monorepo.
 
-## Frontend Scripts (`alti.code.studio.frontend`)
+## Frontend Scripts (`Inso.Code.Frontend`)
 
 | Command | Description |
 |---------|-------------|
@@ -15,7 +15,7 @@ Welcome! This document outlines the available scripts across the frontend and ba
 | `npm run test:coverage` | Runs the Vitest test suite and generates a coverage report. |
 | `npm run test:e2e` | Runs end-to-end tests using Playwright. |
 
-## Backend Scripts (`alti.code.studio.backend`)
+## Backend Scripts (`Inso.Code.Backend`)
 
 | Command | Description |
 |---------|-------------|
@@ -34,7 +34,7 @@ Welcome! This document outlines the available scripts across the frontend and ba
 | `npm run openwiki:init` | Initializes the OpenWiki service. |
 | `npm run openwiki:update` | Updates the OpenWiki service. |
 
-## Desktop App Scripts (`alti.code.studio.desktop`)
+## Desktop App Scripts (`Inso.Code.Desktop`)
 
 | Command | Description |
 |---------|-------------|

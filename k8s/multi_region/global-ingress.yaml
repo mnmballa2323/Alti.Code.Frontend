@@ -44,7 +44,7 @@ metadata:
   name: alti-global-ingress
   namespace: default
   annotations:
-    networking.gke.io/managed-certificates: "alti-code-studio-cert"
+    networking.gke.io/managed-certificates: "inso-code-cert"
     networking.gke.io/v1beta1.FrontendConfig: "alti-frontend-config"
 spec:
   template:
@@ -53,7 +53,7 @@ spec:
         serviceName: alti-frontend-mcs
         servicePort: 80
       rules:
-      - host: alti.code.studio
+      - host: inso.code
         http:
           paths:
           - backend:
@@ -61,7 +61,7 @@ spec:
               servicePort: 80
             pathType: ImplementationSpecific
       
-      - host: api.alti.code.studio
+      - host: api.inso.code
         http:
           paths:
           - backend:

@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================================================================
-# ALTI CODE STUDIO: NON-STOP AUTONOMOUS DEVELOPMENT RUNNER
+# INSO CODE: NON-STOP AUTONOMOUS DEVELOPMENT RUNNER
 # ==============================================================================
 # Iterates through subsequent development phases autonomously using Claude Code
 # in non-interactive mode. Runs verification gates and auto-commits on success.
@@ -16,7 +16,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 echo -e "${CYAN}================================================================${NC}"
-echo -e "${CYAN}  🤖  ALTI CODE STUDIO: AUTONOMOUS DEVELOPMENT LOOP RUNNER      ${NC}"
+echo -e "${CYAN}  🤖  INSO CODE: AUTONOMOUS DEVELOPMENT LOOP RUNNER      ${NC}"
 echo -e "${CYAN}================================================================${NC}"
 
 # Define the upcoming phases

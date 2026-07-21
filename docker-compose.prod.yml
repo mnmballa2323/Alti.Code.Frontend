@@ -1,5 +1,5 @@
 # ═══════════════════════════════════════════════════════════════
-# ALTI CODE STUDIO — Production Docker Compose Override
+# INSO CODE — Production Docker Compose Override
 # ═══════════════════════════════════════════════════════════════
 # Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
 # ═══════════════════════════════════════════════════════════════
@@ -7,7 +7,7 @@
 services:
   backend:
     build:
-      context: ./alti.code.studio.backend
+      context: ./Inso.Code.Backend
       dockerfile: Dockerfile
     restart: unless-stopped
     deploy:
@@ -34,7 +34,7 @@ services:
 
   frontend:
     build:
-      context: ./alti.code.studio.frontend
+      context: ./Inso.Code.Frontend
       dockerfile: Dockerfile
     restart: unless-stopped
     deploy:

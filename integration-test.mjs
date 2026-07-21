@@ -1,6 +1,6 @@
 /**
  * ═══════════════════════════════════════════════════════════════════════
- * ALTI CODE STUDIO — FULL SYSTEM INTEGRATION TEST
+ * INSO CODE — FULL SYSTEM INTEGRATION TEST
  * ═══════════════════════════════════════════════════════════════════════
  *
  * Tests the entire unified flow:
@@ -527,7 +527,7 @@ async function testSystemCohesion() {
 
 async function runAllTests() {
   console.log(`\n${BOLD}${CYAN}╔══════════════════════════════════════════════════════════════╗${RESET}`);
-  console.log(`${BOLD}${CYAN}║  ALTI CODE STUDIO — FULL SYSTEM INTEGRATION TEST            ║${RESET}`);
+  console.log(`${BOLD}${CYAN}║  INSO CODE — FULL SYSTEM INTEGRATION TEST            ║${RESET}`);
   console.log(`${BOLD}${CYAN}╚══════════════════════════════════════════════════════════════╝${RESET}`);
   console.log(`${DIM}  Backend:  ${BACKEND}${RESET}`);
   console.log(`${DIM}  Frontend: ${FRONTEND}${RESET}`);

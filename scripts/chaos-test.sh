@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# ALTI CODE STUDIO: Chaos Engineering Test Runner
+# INSO CODE: Chaos Engineering Test Runner
 # ==============================================================================
 # Runs chaos engineering experiments against the platform in a safe,
 # controlled manner. Tests are in k8s/ directory.

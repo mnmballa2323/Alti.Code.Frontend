@@ -1,6 +1,6 @@
 # Zero Trust DevSecOps & Hardening
 
-As of **v8.0.0**, the Alti.Code.Studio platform abandoned perimeter-based security in favor of a mathematically rigorous **Zero Trust** architecture running within the Kubernetes Swarm.
+As of **v8.0.0**, the Inso.Code platform abandoned perimeter-based security in favor of a mathematically rigorous **Zero Trust** architecture running within the Kubernetes Swarm.
 
 ---
 

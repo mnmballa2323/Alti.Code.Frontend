@@ -1,8 +1,8 @@
 # Environment Variables Reference
 
-This document outlines the required and optional environment variables across the Alti Code Studio platform.
+This document outlines the required and optional environment variables across the Inso Code platform.
 
-## Frontend Environment Variables (`alti.code.studio.frontend`)
+## Frontend Environment Variables (`Inso.Code.Frontend`)
 
 | Variable | Description | Example |
 |----------|-------------|---------|
@@ -11,7 +11,7 @@ This document outlines the required and optional environment variables across th
 | `NEXTAUTH_SECRET` | A random 32-character secret string for securing sessions. | `your-random-secret-here` |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Public key for Stripe payments (use test key for dev). | `pk_test_YOUR_STRIPE_KEY` |
 
-## Backend Environment Variables (`alti.code.studio.backend`)
+## Backend Environment Variables (`Inso.Code.Backend`)
 
 ### Core Configuration
 | Variable | Description | Example |

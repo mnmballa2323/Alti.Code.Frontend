@@ -1,5 +1,5 @@
 const fs = require('fs');
-const path = './alti.code.studio.frontend/app/team/teamData.ts';
+const path = './Inso.Code.Frontend/app/team/teamData.ts';
 let content = fs.readFileSync(path, 'utf8');
 
 // Add icon to TeamMember interface

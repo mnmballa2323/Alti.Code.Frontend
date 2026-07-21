@@ -1,5 +1,5 @@
 # ==============================================================================
-# ALTI CODE STUDIO: Cloud Run Production Service Definition
+# INSO CODE: Cloud Run Production Service Definition
 # ==============================================================================
 # Deploy with: gcloud run services replace cloud-run-service.yaml
 # ==============================================================================
@@ -7,10 +7,10 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: alti-code-studio-backend
+  name: inso-code-backend
   labels:
     cloud.googleapis.com/location: us-central1
-    app: alti-code-studio
+    app: inso-code
     tier: backend
   annotations:
     run.googleapis.com/ingress: all

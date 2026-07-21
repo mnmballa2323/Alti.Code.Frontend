@@ -1,6 +1,6 @@
 # Enterprise Infrastructure
 
-As of **v8.1.0**, Alti.Code.Studio is deployed natively on **Google Cloud Platform (GCP)** using a highly available, declarative infrastructure stack defined in Terraform, with continuous deployment managed via **ArgoCD (GitOps)**.
+As of **v8.1.0**, Inso.Code is deployed natively on **Google Cloud Platform (GCP)** using a highly available, declarative infrastructure stack defined in Terraform, with continuous deployment managed via **ArgoCD (GitOps)**.
 
 This document serves as a guide for platform engineers managing the production deployment.
 

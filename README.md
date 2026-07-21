@@ -139,9 +139,9 @@ This repository contains the `deploy_enterprise.sh` orchestrator, which dynamica
 For local testing and development, you can use the provided Docker Compose stack:
 
 ```bash
-git clone --recurse-submodules https://github.com/mnmballa2323/alti.code.studio.git
-cd alti.code.studio
-cp alti.code.studio.backend/.env.example alti.code.studio.backend/.env
+git clone --recurse-submodules https://github.com/mnmballa2323/Inso.Code.git
+cd inso.code
+cp Inso.Code.Backend/.env.example Inso.Code.Backend/.env
 docker-compose up --build
 ```
 
@@ -184,8 +184,8 @@ kubectl apply -f .
 ## 📁 Repository Structure
 
 ```
-alti.code.studio/               ← Monorepo root
-├── alti.code.studio.backend/  ← Node.js/Express API + Agent Swarm
+inso.code/               ← Monorepo root
+├── Inso.Code.Backend/  ← Node.js/Express API + Agent Swarm
 │   ├── src/app/modules/
 │   │   ├── agents/            ← 245+ specialist agent files
 │   │   │   ├── capability.router.js   ← 141-route semantic router
@@ -195,7 +195,7 @@ alti.code.studio/               ← Monorepo root
 │   │   └── ...
 │   ├── scripts/               ← Test harnesses, utilities
 │   └── docs/                  ← Architecture, ADRs, reports
-└── alti.code.studio.frontend/ ← Next.js 14 dashboard + Electron IDE
+└── Inso.Code.Frontend/ ← Next.js 14 dashboard + Electron IDE
     └── app/agents-showcase/   ← 16-section agent showcase page
 ```
 
@@ -205,14 +205,14 @@ alti.code.studio/               ← Monorepo root
 
 | Document | Description |
 |----------|-------------|
-| [Backend README](alti.code.studio.backend/README.md) | Backend setup, API reference |
-| [ARCHITECTURE.md](alti.code.studio.backend/ARCHITECTURE.md) | Detailed system architecture (v8.3.0) |
-| [AGENTS.md](alti.code.studio.backend/AGENTS.md) | Full agent roster with 16 industry verticals |
-| [INDUSTRY_AGENTS.md](alti.code.studio.backend/INDUSTRY_AGENTS.md) | Deep-dive into all industry vertical agents |
+| [Backend README](Inso.Code.Backend/README.md) | Backend setup, API reference |
+| [ARCHITECTURE.md](Inso.Code.Backend/ARCHITECTURE.md) | Detailed system architecture (v8.3.0) |
+| [AGENTS.md](Inso.Code.Backend/AGENTS.md) | Full agent roster with 16 industry verticals |
+| [INDUSTRY_AGENTS.md](Inso.Code.Backend/INDUSTRY_AGENTS.md) | Deep-dive into all industry vertical agents |
 | [ULTIMATE_RAG_ARCHITECTURE.md](docs/ULTIMATE_RAG_ARCHITECTURE.md) | Triple-threat Retrieval Pipeline & UI architecture |
-| [ELITE_ARCHITECT_PREAMBLES.md](alti.code.studio.backend/docs/ELITE_ARCHITECT_PREAMBLES.md) | v8.3.0 agent preamble standard & upgraded agent reference |
-| [OPEN_SOURCE_AGENTS.md](alti.code.studio.backend/docs/OPEN_SOURCE_AGENTS.md) | Deep-dive into all 116 new Open Source specialist agents |
-| [OPENCLAW_INTEGRATION.md](alti.code.studio.backend/docs/OPENCLAW_INTEGRATION.md) | Deep integration guide for 19 OpenClaw submodules |
+| [ELITE_ARCHITECT_PREAMBLES.md](Inso.Code.Backend/docs/ELITE_ARCHITECT_PREAMBLES.md) | v8.3.0 agent preamble standard & upgraded agent reference |
+| [OPEN_SOURCE_AGENTS.md](Inso.Code.Backend/docs/OPEN_SOURCE_AGENTS.md) | Deep-dive into all 116 new Open Source specialist agents |
+| [OPENCLAW_INTEGRATION.md](Inso.Code.Backend/docs/OPENCLAW_INTEGRATION.md) | Deep integration guide for 19 OpenClaw submodules |
 | [CHANGELOG.md](CHANGELOG.md) | Version history |
 | [ROADMAP.md](ROADMAP.md) | Planned features |
 | [docs/LLM_INSTRUCTIONS.md](docs/LLM_INSTRUCTIONS.md) | LLM agent operating instructions |

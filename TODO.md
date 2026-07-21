@@ -9,10 +9,10 @@
 - [x] **Error Handling**: Frontend WS reconnect — `useSocket` exponential backoff + `WsBanner` component wired into `ChatBotLayout`.
 
 ## 🟢 Low Priority
-- [x] **Refactor**: Cleaned up unused assets in `alti.code.studio.frontend/public` (removed vercel.svg, next.svg, insoBlack.png, insoWhite.png, insocode1-4.png).
+- [x] **Refactor**: Cleaned up unused assets in `Inso.Code.Frontend/public` (removed vercel.svg, next.svg, insoBlack.png, insoWhite.png, insocode1-4.png).
 - [x] **Style**: Standardized button styles — `lib/buttonStyles.ts` provides `btn.primary`, `btn.danger`, `btn.secondary`, `btn.ghost`, `btn.icon` constants.
 
 ## ✅ Completed
 - [x] **Version Display**: Backend and Frontend UIs now display the global project version.
-- [x] **Documentation Sync**: Consolidate `Alti.Code.Studio.backup/AGENTS.md` into the global `docs/LLM_INSTRUCTIONS.md`.
+- [x] **Documentation Sync**: Consolidate `Inso.Code.backup/AGENTS.md` into the global `docs/LLM_INSTRUCTIONS.md`.
 - [x] **Submodule Dashboard**: Create a script/page to visualize submodule status.

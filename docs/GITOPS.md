@@ -1,6 +1,6 @@
 # GitOps Enterprise Workflow
 
-As part of the **v7.4.0 Absolute GitOps Evolution**, Alti.Code.Studio employs a GitOps continuous delivery paradigm using **ArgoCD** and **GCP Workload Identity Federation**.
+As part of the **v7.4.0 Absolute GitOps Evolution**, Inso.Code employs a GitOps continuous delivery paradigm using **ArgoCD** and **GCP Workload Identity Federation**.
 
 ## The Security Paradigm
 1. **No Static Keys**: We do not store Google Cloud Service Account JSON keys in GitHub Secrets.

@@ -1,4 +1,4 @@
-# Alti Code Studio Deployment Guide
+# Inso Code Deployment Guide
 
 ## 🚀 Prerequisites
 - Docker & Docker Compose
@@ -11,7 +11,7 @@
 ### Desktop Application
 To launch the Inso Code desktop application (which bundles the Next.js frontend and Node.js backend):
 ```bash
-cd alti.code.studio.desktop
+cd Inso.Code.Desktop
 npm run dev:desktop
 ```
 *Note: This automatically handles port assignment, backend initialization, and Tauri boot.*
@@ -20,11 +20,11 @@ npm run dev:desktop
 If running outside the desktop container:
 ```bash
 # Backend (Port 5000/5001)
-cd alti.code.studio.backend
+cd Inso.Code.Backend
 npm run dev
 
 # Frontend (Port 3001)
-cd alti.code.studio.frontend
+cd Inso.Code.Frontend
 npm run dev
 ```
 
@@ -34,7 +34,7 @@ npm run dev
 Copy `.env.example` to `.env` in both `frontend` and `backend` directories. Ensure you configure your multi-cloud AI provider settings (`GCP_PROJECT_ID`, etc.).
 
 ### 2. Tri-Cloud Infrastructure
-Alti Code Studio supports deploying sovereign AI agent swarms across three major clouds. Use Terraform to provision your target environment:
+Inso Code supports deploying sovereign AI agent swarms across three major clouds. Use Terraform to provision your target environment:
 - **GCP Vertex AI**: Requires `us-central1` regional endpoints.
 - **AWS Bedrock**: Provision via the provided AWS CDK/Terraform scripts.
 - **Azure Foundry**: Ensure VNet isolation is enabled for sovereign compliance.

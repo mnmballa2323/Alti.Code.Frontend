@@ -4,8 +4,8 @@
 ## Detection
 - **Cloud Monitoring metric**: `pubsub.googleapis.com/subscription/num_undelivered_messages` > 10,000
 - **Oldest unacked message age**: `pubsub.googleapis.com/subscription/oldest_unacked_message_age` > 300s
-- **Alerting policy**: `alti-code-studio-pubsub-backlog` fires when undelivered messages exceed threshold
-- **Dashboard**: Check **Alti Code Studio — Async Processing** dashboard
+- **Alerting policy**: `inso-code-pubsub-backlog` fires when undelivered messages exceed threshold
+- **Dashboard**: Check **Inso Code — Async Processing** dashboard
 - **Subscriber logs**: Cloud Run subscriber service showing errors or no activity
 
 ## Symptoms
@@ -27,29 +27,29 @@
 1. **Check backlog size and growth rate**:
    ```bash
    gcloud pubsub subscriptions describe alti-code-analysis-sub \
-     --project=alti-code-studio \
+     --project=inso-code \
      --format="value(messageRetentionDuration, ackDeadlineSeconds)"
 
    # Check current backlog
    gcloud monitoring metrics read \
      "pubsub.googleapis.com/subscription/num_undelivered_messages" \
-     --project=alti-code-studio --interval="5m"
+     --project=inso-code --interval="5m"
    ```
 2. **Check subscriber health**:
    ```bash
-   gcloud run services describe alti-code-studio-subscriber \
-     --region=us-central1 --project=alti-code-studio \
+   gcloud run services describe inso-code-subscriber \
+     --region=us-central1 --project=inso-code \
      --format="value(status.conditions)"
    ```
 3. **Check subscriber logs for errors**:
    ```bash
-   gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="alti-code-studio-subscriber" AND severity>=ERROR' \
-     --project=alti-code-studio --limit=20 --freshness=15m
+   gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="inso-code-subscriber" AND severity>=ERROR' \
+     --project=inso-code --limit=20 --freshness=15m
    ```
 4. **Identify poison messages** (if applicable):
    ```bash
    gcloud pubsub subscriptions pull alti-code-analysis-sub \
-     --project=alti-code-studio --limit=5 --auto-ack=false \
+     --project=inso-code --limit=5 --auto-ack=false \
      --format=json
    ```
 
@@ -57,37 +57,37 @@
 1. **If subscriber is crashed** — restart the service:
    ```bash
    # Force a new revision deployment
-   gcloud run services update alti-code-studio-subscriber \
+   gcloud run services update inso-code-subscriber \
      --region=us-central1 \
      --update-env-vars="RESTART_TIMESTAMP=$(date +%s)" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 2. **If poison messages are blocking** — move them to dead-letter:
    ```bash
    # Configure dead-letter topic if not already set
    gcloud pubsub subscriptions update alti-code-analysis-sub \
-     --dead-letter-topic=projects/alti-code-studio/topics/alti-dead-letter \
+     --dead-letter-topic=projects/inso-code/topics/alti-dead-letter \
      --max-delivery-attempts=5 \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 3. **Scale up subscribers** to process the backlog:
    ```bash
-   gcloud run services update alti-code-studio-subscriber \
+   gcloud run services update inso-code-subscriber \
      --region=us-central1 \
      --min-instances=3 \
      --max-instances=20 \
      --concurrency=10 \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 4. **If IAM permissions issue** — re-grant subscriber role:
    ```bash
    gcloud pubsub subscriptions add-iam-policy-binding alti-code-analysis-sub \
-     --member="serviceAccount:alti-code-studio-subscriber@alti-code-studio.iam.gserviceaccount.com" \
+     --member="serviceAccount:inso-code-subscriber@inso-code.iam.gserviceaccount.com" \
      --role="roles/pubsub.subscriber" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 5. **If backlog is unrecoverable** (stale messages) — seek and destroy:
@@ -95,19 +95,19 @@
    # Seek to timestamp to skip old messages (DESTRUCTIVE)
    gcloud pubsub subscriptions seek alti-code-analysis-sub \
      --time="$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 ## Verification
 - Confirm backlog is decreasing:
   ```bash
   watch -n 10 "gcloud pubsub subscriptions describe alti-code-analysis-sub \
-    --project=alti-code-studio --format='value(numUndeliveredMessages)'"
+    --project=inso-code --format='value(numUndeliveredMessages)'"
   ```
 - Verify subscriber instances are healthy and processing:
   ```bash
-  gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="alti-code-studio-subscriber" AND textPayload=~"processed"' \
-    --project=alti-code-studio --limit=10 --freshness=5m
+  gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="inso-code-subscriber" AND textPayload=~"processed"' \
+    --project=inso-code --limit=10 --freshness=5m
   ```
 - Check dead-letter topic for accumulated poison messages
 - Monitor async feature completion from the user perspective

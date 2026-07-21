@@ -4,9 +4,9 @@
 ## Detection
 - **User reports**: Users report that legitimate code snippets, documents, or chat messages are blocked
 - **DLP finding logs**: `dlp.googleapis.com/finding` entries with `LIKELY` or `VERY_LIKELY` on benign content
-- **Application logs**: `Content blocked by DLP policy` errors in `alti-code-studio-backend` logs
-- **Alerting policy**: `alti-code-studio-dlp-false-positive-rate` fires when block rate exceeds 5% of scans
-- **Dashboard**: Check **Alti Code Studio — Content Moderation** dashboard, panel "DLP Block Rate"
+- **Application logs**: `Content blocked by DLP policy` errors in `inso-code-backend` logs
+- **Alerting policy**: `inso-code-dlp-false-positive-rate` fires when block rate exceeds 5% of scans
+- **Dashboard**: Check **Inso Code — Content Moderation** dashboard, panel "DLP Block Rate"
 
 ## Symptoms
 - Users cannot submit code that contains patterns resembling sensitive data (e.g., test UUIDs, sample API keys in docs)
@@ -26,33 +26,33 @@
 ## Immediate Response (< 5 min)
 1. **Identify the blocked content** — check DLP findings:
    ```bash
-   gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="alti-code-studio-backend" AND jsonPayload.message=~"DLP" AND severity>=WARNING' \
-     --project=alti-code-studio --limit=20 --freshness=1h
+   gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="inso-code-backend" AND jsonPayload.message=~"DLP" AND severity>=WARNING' \
+     --project=inso-code --limit=20 --freshness=1h
    ```
 2. **Check the DLP inspection template**:
    ```bash
    gcloud dlp inspect-templates list \
-     --project=alti-code-studio --format=table
+     --project=inso-code --format=table
    ```
 3. **Review the specific finding** that caused the block:
    ```bash
-   gcloud dlp inspect-templates describe alti-code-studio-inspect-template \
-     --project=alti-code-studio --format=yaml
+   gcloud dlp inspect-templates describe inso-code-inspect-template \
+     --project=inso-code --format=yaml
    ```
 4. **Temporarily lower blocking severity** if critical user flows are affected:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --update-env-vars="DLP_BLOCK_THRESHOLD=VERY_LIKELY,DLP_LOG_ONLY_MODE=true" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 ## Resolution
 1. **Adjust the likelihood threshold** to reduce false positives:
    ```bash
    # Update the inspection template to only flag VERY_LIKELY findings
-   gcloud dlp inspect-templates update alti-code-studio-inspect-template \
-     --project=alti-code-studio \
+   gcloud dlp inspect-templates update inso-code-inspect-template \
+     --project=inso-code \
      --min-likelihood=VERY_LIKELY
    ```
 
@@ -77,16 +77,16 @@
    }
    EOF
 
-   gcloud dlp inspect-templates update alti-code-studio-inspect-template \
-     --project=alti-code-studio \
+   gcloud dlp inspect-templates update inso-code-inspect-template \
+     --project=inso-code \
      --template-content-file=/tmp/dlp-template-update.json
    ```
 
 3. **Remove overly broad info types** that cause noise in a code platform:
    ```bash
    # Review current info types
-   gcloud dlp inspect-templates describe alti-code-studio-inspect-template \
-     --project=alti-code-studio --format=json | \
+   gcloud dlp inspect-templates describe inso-code-inspect-template \
+     --project=inso-code --format=json | \
      jq '.inspectConfig.infoTypes[].name'
 
    # Remove problematic info types (e.g., GENERIC_ID catches UUIDs in code)
@@ -95,18 +95,18 @@
 
 4. **Add context-aware rules** — only scan user-generated text, not code blocks:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --update-env-vars="DLP_SKIP_CODE_BLOCKS=true,DLP_SCAN_COMMENTS_ONLY=false" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 5. **Disable log-only mode** after confirming reduced false positives:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --update-env-vars="DLP_LOG_ONLY_MODE=false,DLP_BLOCK_THRESHOLD=VERY_LIKELY" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 ## Verification

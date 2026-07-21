@@ -6,7 +6,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2635308Z [36
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2635598Z [36;1m  --deployment-option "cloud"[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2636176Z [36;1m  --customer "enterprise-tenant"[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2636544Z [36;1m  --region "us-central1"[0m
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2636903Z [36;1m  --project "alti-code-studio-prod"[0m
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2636903Z [36;1m  --project "inso-code-prod"[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2637264Z [36;1m)[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2637504Z [36;1m[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2637760Z [36;1mif [ "true" = "true" ]; then[0m
@@ -22,26 +22,26 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2640534Z [36
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2931129Z shell: /usr/bin/bash -e ***0***
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2931535Z env:
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2931989Z   TERRAFORM_CLI_PATH: /home/runner/work/_temp/4d89ff85-ffa9-4c49-a76a-61178da75fb2
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2932883Z   CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE: /home/runner/work/Alti.Code.Studio/Alti.Code.Studio/gha-creds-ba9d09c45cd8f1b5.json
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2933892Z   GOOGLE_APPLICATION_CREDENTIALS: /home/runner/work/Alti.Code.Studio/Alti.Code.Studio/gha-creds-ba9d09c45cd8f1b5.json
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2934813Z   GOOGLE_GHA_CREDS_PATH: /home/runner/work/Alti.Code.Studio/Alti.Code.Studio/gha-creds-ba9d09c45cd8f1b5.json
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2935477Z   CLOUDSDK_CORE_PROJECT: alti-code-studio-prod
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2936050Z   CLOUDSDK_PROJECT: alti-code-studio-prod
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2936465Z   GCLOUD_PROJECT: alti-code-studio-prod
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2936854Z   GCP_PROJECT: alti-code-studio-prod
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2937244Z   GOOGLE_CLOUD_PROJECT: alti-code-studio-prod
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2932883Z   CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE: /home/runner/work/Inso.Code/Inso.Code/gha-creds-ba9d09c45cd8f1b5.json
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2933892Z   GOOGLE_APPLICATION_CREDENTIALS: /home/runner/work/Inso.Code/Inso.Code/gha-creds-ba9d09c45cd8f1b5.json
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2934813Z   GOOGLE_GHA_CREDS_PATH: /home/runner/work/Inso.Code/Inso.Code/gha-creds-ba9d09c45cd8f1b5.json
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2935477Z   CLOUDSDK_CORE_PROJECT: inso-code-prod
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2936050Z   CLOUDSDK_PROJECT: inso-code-prod
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2936465Z   GCLOUD_PROJECT: inso-code-prod
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2936854Z   GCP_PROJECT: inso-code-prod
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2937244Z   GOOGLE_CLOUD_PROJECT: inso-code-prod
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2937725Z   CLOUDSDK_METRICS_ENVIRONMENT: github-actions-setup-gcloud
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2938207Z   CLOUDSDK_METRICS_ENVIRONMENT_VERSION: 2.2.1
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.2938589Z ##[endgroup]
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.3037240Z [0;36m================================================================[0m
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.3042870Z [0;36m 🌍 ALTI CODE STUDIO: GCP SOVEREIGN ENTERPRISE DEPLOYER        🌍 [0m
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.3042870Z [0;36m 🌍 INSO CODE: GCP SOVEREIGN ENTERPRISE DEPLOYER        🌍 [0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.3048444Z [0;36m================================================================[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:31.3054919Z [1;33m⚠️ SSH Public Key not found. Auto-generating new SSH key pair...[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:32.1898718Z [0;32m✔ SSH Key successfully generated at ~/.ssh/id_rsa.pub[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:32.1899553Z 
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:32.1932801Z [1/3] [1;33mValidating Google Cloud credentials for cloud...[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:32.1934585Z [0;32m✔ GOOGLE_APPLICATION_CREDENTIALS detected. Using environment service account authentication.[0m
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:32.1936384Z [0;32m✔ Target Project ID configured: [0;36malti-code-studio-prod[0m
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:32.1936384Z [0;32m✔ Target Project ID configured: [0;36minso-code-prod[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:32.1937017Z 
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:32.1937590Z [2/3] [1;33mExecuting Terraform IaC for GCP cloud...[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:32.4658108Z 
@@ -66,10 +66,10 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:34.0163416Z If y
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:34.0164656Z rerun this command to reinitialize your working directory. If you forget, other
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:34.0166126Z commands will detect it and remind you to do so if necessary.[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:36.4291307Z [1;33m⚠️ VPC Network inso-production-vpc already exists. Importing into Terraform state...[0m
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:37.3486089Z [0m[1mgoogle_compute_network.private_network: Importing from ID "projects/alti-code-studio-prod/global/networks/inso-production-vpc"...[0m
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:37.3486089Z [0m[1mgoogle_compute_network.private_network: Importing from ID "projects/inso-code-prod/global/networks/inso-production-vpc"...[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:37.3488509Z [0m[1m[32mgoogle_compute_network.private_network: Import prepared![0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:37.3490426Z [0m[32m  Prepared google_compute_network for import[0m
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:37.3492951Z [0m[1mgoogle_compute_network.private_network: Refreshing state... [id=projects/alti-code-studio-prod/global/networks/inso-production-vpc][0m
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:37.3492951Z [0m[1mgoogle_compute_network.private_network: Refreshing state... [id=projects/inso-code-prod/global/networks/inso-production-vpc][0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:37.6986099Z [0m[32m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:37.6986936Z Import successful!
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:37.6987450Z 
@@ -80,7 +80,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:38.8649209Z [1;
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:39.7559838Z [0m[1mgoogle_compute_security_policy.waf_policy: Importing from ID "inso-production-waf-policy"...[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:39.7581699Z [0m[1m[32mgoogle_compute_security_policy.waf_policy: Import prepared![0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:39.7600158Z [0m[32m  Prepared google_compute_security_policy for import[0m
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:39.7603116Z [0m[1mgoogle_compute_security_policy.waf_policy: Refreshing state... [id=projects/alti-code-studio-prod/global/securityPolicies/inso-production-waf-policy][0m
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:39.7603116Z [0m[1mgoogle_compute_security_policy.waf_policy: Refreshing state... [id=projects/inso-code-prod/global/securityPolicies/inso-production-waf-policy][0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:40.0022006Z [0m[32m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:40.0024286Z Import successful!
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:40.0024800Z 
@@ -89,8 +89,8 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:40.0027244Z your
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:40.0028164Z [0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:40.0119301Z 
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:40.0120026Z [0;32mApplying Terraform changes...[0m
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.0430537Z [0m[1mgoogle_compute_network.private_network: Refreshing state... [id=projects/alti-code-studio-prod/global/networks/inso-production-vpc][0m
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.0502835Z [0m[1mgoogle_compute_security_policy.waf_policy: Refreshing state... [id=projects/alti-code-studio-prod/global/securityPolicies/inso-production-waf-policy][0m
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.0430537Z [0m[1mgoogle_compute_network.private_network: Refreshing state... [id=projects/inso-code-prod/global/networks/inso-production-vpc][0m
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.0502835Z [0m[1mgoogle_compute_security_policy.waf_policy: Refreshing state... [id=projects/inso-code-prod/global/securityPolicies/inso-production-waf-policy][0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5389628Z 
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5408651Z Terraform used the selected providers to generate the following execution
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5417303Z plan. Resource actions are indicated with the following symbols:
@@ -107,9 +107,9 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5428170Z     
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5429618Z       [32m+[0m[0m id                 = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5430697Z       [32m+[0m[0m label_fingerprint  = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5431801Z       [32m+[0m[0m name               = "private-ip-address"
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5433256Z       [32m+[0m[0m network            = "projects/alti-code-studio-prod/global/networks/inso-production-vpc"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5433256Z       [32m+[0m[0m network            = "projects/inso-code-prod/global/networks/inso-production-vpc"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5434525Z       [32m+[0m[0m prefix_length      = 16
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5435582Z       [32m+[0m[0m project            = "alti-code-studio-prod"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5435582Z       [32m+[0m[0m project            = "inso-code-prod"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5436916Z       [32m+[0m[0m purpose            = "VPC_PEERING"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5437982Z       [32m+[0m[0m self_link          = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5439090Z       [32m+[0m[0m terraform_labels   = (known after apply)
@@ -142,7 +142,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5477467Z     
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5478393Z       [32m+[0m[0m metadata_fingerprint = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5479538Z       [32m+[0m[0m min_cpu_platform     = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5480812Z       [32m+[0m[0m name                 = "alti-enterprise-tenant-commercial-node"
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5482376Z       [32m+[0m[0m project              = "alti-code-studio-prod"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5482376Z       [32m+[0m[0m project              = "inso-code-prod"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5483514Z       [32m+[0m[0m self_link            = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5484888Z       [32m+[0m[0m tags_fingerprint     = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5486135Z       [32m+[0m[0m terraform_labels     = ***
@@ -215,10 +215,10 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5551283Z     
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5552340Z       [32m+[0m[0m ip_cidr_range              = "10.0.1.0/24"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5553400Z       [32m+[0m[0m ipv6_cidr_range            = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5554526Z       [32m+[0m[0m name                       = "inso-commercial-subnet"
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5556170Z       [32m+[0m[0m network                    = "projects/alti-code-studio-prod/global/networks/inso-production-vpc"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5556170Z       [32m+[0m[0m network                    = "projects/inso-code-prod/global/networks/inso-production-vpc"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5557586Z       [32m+[0m[0m private_ip_google_access   = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5558846Z       [32m+[0m[0m private_ipv6_google_access = (known after apply)
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5560093Z       [32m+[0m[0m project                    = "alti-code-studio-prod"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5560093Z       [32m+[0m[0m project                    = "inso-code-prod"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5561202Z       [32m+[0m[0m purpose                    = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5562272Z       [32m+[0m[0m region                     = "us-central1"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5563347Z       [32m+[0m[0m secondary_ip_range         = (known after apply)
@@ -231,7 +231,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5568808Z [0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5569939Z       [32m+[0m[0m alternative_location_id  = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5570971Z       [32m+[0m[0m auth_enabled             = false
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5571987Z       [32m+[0m[0m auth_string              = (sensitive value)
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5573466Z       [32m+[0m[0m authorized_network       = "projects/alti-code-studio-prod/global/networks/inso-production-vpc"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5573466Z       [32m+[0m[0m authorized_network       = "projects/inso-code-prod/global/networks/inso-production-vpc"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5574901Z       [32m+[0m[0m connect_mode             = "PRIVATE_SERVICE_ACCESS"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5576228Z       [32m+[0m[0m create_time              = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5577432Z       [32m+[0m[0m current_location_id      = (known after apply)
@@ -247,7 +247,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5588274Z     
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5589367Z       [32m+[0m[0m nodes                    = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5590402Z       [32m+[0m[0m persistence_iam_identity = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5591505Z       [32m+[0m[0m port                     = (known after apply)
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5592659Z       [32m+[0m[0m project                  = "alti-code-studio-prod"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5592659Z       [32m+[0m[0m project                  = "inso-code-prod"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5593949Z       [32m+[0m[0m read_endpoint            = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5598131Z       [32m+[0m[0m read_endpoint_port       = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5599389Z       [32m+[0m[0m read_replicas_mode       = (known after apply)
@@ -282,7 +282,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5626702Z
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5627746Z [1m  # google_service_networking_connection.private_vpc_connection[0m will be created
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5629605Z [0m  [32m+[0m[0m resource "google_service_networking_connection" "private_vpc_connection" ***
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5631076Z       [32m+[0m[0m id                      = (known after apply)
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5632755Z       [32m+[0m[0m network                 = "projects/alti-code-studio-prod/global/networks/inso-production-vpc"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5632755Z       [32m+[0m[0m network                 = "projects/inso-code-prod/global/networks/inso-production-vpc"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5634333Z       [32m+[0m[0m peering                 = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5635556Z       [32m+[0m[0m reserved_peering_ranges = [
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5636802Z           [32m+[0m[0m "private-ip-address",
@@ -298,7 +298,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5646116Z     
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5647260Z       [32m+[0m[0m id              = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5648415Z       [32m+[0m[0m instance        = "inso-production-db"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5649579Z       [32m+[0m[0m name            = "alticodestudio"
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5650720Z       [32m+[0m[0m project         = "alti-code-studio-prod"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5650720Z       [32m+[0m[0m project         = "inso-code-prod"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5651939Z       [32m+[0m[0m self_link       = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5652816Z     ***
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5653246Z 
@@ -318,7 +318,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5671402Z     
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5672633Z       [32m+[0m[0m master_instance_name           = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5673968Z       [32m+[0m[0m name                           = "inso-production-db"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5675415Z       [32m+[0m[0m private_ip_address             = (known after apply)
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5676951Z       [32m+[0m[0m project                        = "alti-code-studio-prod"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5676951Z       [32m+[0m[0m project                        = "inso-code-prod"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5678327Z       [32m+[0m[0m psc_service_attachment_link    = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5679729Z       [32m+[0m[0m public_ip_address              = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5680938Z       [32m+[0m[0m region                         = "us-central1"
@@ -356,7 +356,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5713122Z
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5713667Z           [32m+[0m[0m ip_configuration ***
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5714937Z               [32m+[0m[0m enable_private_path_for_google_cloud_services = true
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5716455Z               [32m+[0m[0m ipv4_enabled                                  = false
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5718234Z               [32m+[0m[0m private_network                               = "projects/alti-code-studio-prod/global/networks/inso-production-vpc"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5718234Z               [32m+[0m[0m private_network                               = "projects/inso-code-prod/global/networks/inso-production-vpc"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5719906Z               [32m+[0m[0m require_ssl                                   = true
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5721343Z               [32m+[0m[0m server_ca_mode                                = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5722979Z               [32m+[0m[0m ssl_mode                                      = (known after apply)
@@ -371,7 +371,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5730887Z     
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5732081Z       [32m+[0m[0m instance                = "inso-production-db"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5733094Z       [32m+[0m[0m name                    = "inso_admin"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5734191Z       [32m+[0m[0m password                = (sensitive value)
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5735254Z       [32m+[0m[0m project                 = "alti-code-studio-prod"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5735254Z       [32m+[0m[0m project                 = "inso-code-prod"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5736536Z       [32m+[0m[0m sql_server_user_details = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5737719Z     ***
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5738231Z 
@@ -387,7 +387,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5748846Z     
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5749871Z       [32m+[0m[0m min_throughput     = 200
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5751166Z       [32m+[0m[0m name               = "inso-vpc-conn"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5752288Z       [32m+[0m[0m network            = "inso-production-vpc"
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5753423Z       [32m+[0m[0m project            = "alti-code-studio-prod"
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5753423Z       [32m+[0m[0m project            = "inso-code-prod"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5754997Z       [32m+[0m[0m region             = "us-central1"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5760868Z       [32m+[0m[0m self_link          = (known after apply)
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:41.5762113Z       [32m+[0m[0m state              = (known after apply)
@@ -407,7 +407,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.0440650Z [0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.0447066Z [0m[1mgoogle_vpc_access_connector.vpc_connector: Creating...[0m[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5790515Z [31m╷[0m[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5791237Z [33m╷[0m[0m
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5793685Z [31m│[0m [0m[1m[31mError: [0m[0m[1mError creating GlobalAddress: googleapi: Error 409: The resource 'projects/alti-code-studio-prod/global/addresses/private-ip-address' already exists, alreadyExists[0m
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5793685Z [31m│[0m [0m[1m[31mError: [0m[0m[1mError creating GlobalAddress: googleapi: Error 409: The resource 'projects/inso-code-prod/global/addresses/private-ip-address' already exists, alreadyExists[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5795471Z [31m│[0m [0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5796988Z [31m│[0m [0m[0m  with google_compute_global_address.private_ip_address,
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5798371Z [31m│[0m [0m  on main.tf line 29, in resource "google_compute_global_address" "private_ip_address":
@@ -415,7 +415,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5799886Z [31
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5800758Z [31m│[0m [0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5801271Z [31m╵[0m[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5801762Z [31m╷[0m[0m
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5814115Z [31m│[0m [0m[1m[31mError: [0m[0m[1mError creating Connector: googleapi: Error 403: Permission 'vpcaccess.connectors.create' denied on resource '//vpcaccess.googleapis.com/projects/alti-code-studio-prod/locations/us-central1' (or it may not exist). Remediate access with this Troubleshooter URL or share it with your administrator - https://console.cloud.google.com/iam-admin/troubleshooter;errorId=CiQwMTlmMTEwMS1kYzJkLTc2MDQtOTBjYy0yZWU4NDc1YmZkOTgSNHByb2plY3RzL2FsdGktY29kZS1zdHVkaW8tcHJvZC9sb2NhdGlvbnMvdXMtY2VudHJhbDE%3D .
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5814115Z [31m│[0m [0m[1m[31mError: [0m[0m[1mError creating Connector: googleapi: Error 403: Permission 'vpcaccess.connectors.create' denied on resource '//vpcaccess.googleapis.com/projects/inso-code-prod/locations/us-central1' (or it may not exist). Remediate access with this Troubleshooter URL or share it with your administrator - https://console.cloud.google.com/iam-admin/troubleshooter;errorId=CiQwMTlmMTEwMS1kYzJkLTc2MDQtOTBjYy0yZWU4NDc1YmZkOTgSNHByb2plY3RzL2FsdGktY29kZS1zdHVkaW8tcHJvZC9sb2NhdGlvbnMvdXMtY2VudHJhbDE%3D .
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5818157Z [31m│[0m [0mDetails:
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5818668Z [31m│[0m [0m[
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5819194Z [31m│[0m [0m  ***
@@ -424,7 +424,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5821263Z [31
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5822017Z [31m│[0m [0m    "metadata": ***
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5824098Z [31m│[0m [0m      "error_info_id": "CiQwMTlmMTEwMS1kYzJkLTc2MDQtOTBjYy0yZWU4NDc1YmZkOTgSNHByb2plY3RzL2FsdGktY29kZS1zdHVkaW8tcHJvZC9sb2NhdGlvbnMvdXMtY2VudHJhbDE=",
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5826209Z [31m│[0m [0m      "permission": "vpcaccess.connectors.create",
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5827394Z [31m│[0m [0m      "resource": "projects/alti-code-studio-prod/locations/us-central1",
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5827394Z [31m│[0m [0m      "resource": "projects/inso-code-prod/locations/us-central1",
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5830497Z [31m│[0m [0m      "troubleshooter_url": "https://console.cloud.google.com/iam-admin/troubleshooter;errorId=CiQwMTlmMTEwMS1kYzJkLTc2MDQtOTBjYy0yZWU4NDc1YmZkOTgSNHByb2plY3RzL2FsdGktY29kZS1zdHVkaW8tcHJvZC9sb2NhdGlvbnMvdXMtY2VudHJhbDE%3D"
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5832641Z [31m│[0m [0m    ***,
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5833657Z [31m│[0m [0m    "reason": "IAM_PERMISSION_DENIED"
@@ -437,7 +437,7 @@ Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5858173Z [31
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5859076Z [31m│[0m [0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5859586Z [31m╵[0m[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5860071Z [31m╷[0m[0m
-Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5862165Z [31m│[0m [0m[1m[31mError: [0m[0m[1mError creating Subnetwork: googleapi: Error 409: The resource 'projects/alti-code-studio-prod/regions/us-central1/subnetworks/inso-commercial-subnet' already exists, alreadyExists[0m
+Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5862165Z [31m│[0m [0m[1m[31mError: [0m[0m[1mError creating Subnetwork: googleapi: Error 409: The resource 'projects/inso-code-prod/regions/us-central1/subnetworks/inso-commercial-subnet' already exists, alreadyExists[0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5863754Z [31m│[0m [0m
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5864575Z [31m│[0m [0m[0m  with google_compute_subnetwork.commercial_subnet[0],
 Deploy Alti Infrastructure	Run Deployer Script	2026-06-29T01:32:42.5865829Z [31m│[0m [0m  on subnets.tf line 2, in resource "google_compute_subnetwork" "commercial_subnet":

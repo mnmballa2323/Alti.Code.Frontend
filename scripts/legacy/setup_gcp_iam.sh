@@ -1,6 +1,6 @@
 #!/bin/bash
 # ==============================================================================
-# ALTI CODE STUDIO: GCP IAM & WORKLOAD IDENTITY FEDERATION SETUP
+# INSO CODE: GCP IAM & WORKLOAD IDENTITY FEDERATION SETUP
 # ==============================================================================
 # Automates the setup of Google Cloud IAM permissions, Service Accounts,
 # and Workload Identity Federation for GitHub Actions deployments.
@@ -26,7 +26,7 @@ elif ! command -v gcloud &>/dev/null; then
 fi
 
 echo -e "${CYAN}================================================================${NC}"
-echo -e "${CYAN} 🔐 ALTI CODE STUDIO: GCP IAM & WORKLOAD IDENTITY AUTO-SETUP     🔐 ${NC}"
+echo -e "${CYAN} 🔐 INSO CODE: GCP IAM & WORKLOAD IDENTITY AUTO-SETUP     🔐 ${NC}"
 echo -e "${CYAN}================================================================${NC}"
 
 # Read GCP Project ID
@@ -45,7 +45,7 @@ SERVICE_ACCOUNT_NAME="github-actions-deployer"
 SERVICE_ACCOUNT_EMAIL="${SERVICE_ACCOUNT_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 POOL_NAME="github-actions-pool"
 PROVIDER_NAME="github-actions-provider"
-REPO_PATH="mnmballa2323/alti.code.studio" # Target Repository
+REPO_PATH="mnmballa2323/Inso.Code" # Target Repository
 
 echo -e "\n[1/5] ${YELLOW}Enabling required Google Cloud Service APIs...${NC}"
 APIS_TO_ENABLE=(
@@ -71,7 +71,7 @@ if gcloud iam service-accounts describe "$SERVICE_ACCOUNT_EMAIL" --project="$PRO
   echo -e "${GREEN}✔ Service account already exists.${NC}"
 else
   gcloud iam service-accounts create "$SERVICE_ACCOUNT_NAME" \
-      --description="Deployer for Alti Code Studio via GitHub Actions" \
+      --description="Deployer for Inso Code via GitHub Actions" \
       --display-name="GitHub Actions Deployer" \
       --project="$PROJECT_ID"
   echo -e "${GREEN}✔ Service account created successfully.${NC}"

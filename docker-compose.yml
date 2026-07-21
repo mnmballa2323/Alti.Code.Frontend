@@ -22,7 +22,7 @@ services:
   backend:
     build:
       context: .
-      dockerfile: alti.code.studio.backend/Dockerfile
+      dockerfile: Inso.Code.Backend/Dockerfile
     container_name: alti_backend
     ports:
       - "5000:5000"
@@ -50,7 +50,7 @@ services:
 
   # 🖥️ The Face: Frontend
   frontend:
-    build: ./alti.code.studio.frontend
+    build: ./Inso.Code.Frontend
     container_name: alti_frontend
     ports:
       - "3000:3000"
@@ -205,7 +205,7 @@ services:
       - PORT=7130
       - PROJECT_ROOT=/app
       - JWT_SECRET=dev-secret-please-change-in-production
-      - ADMIN_EMAIL=admin@alti.code.studio
+      - ADMIN_EMAIL=admin@inso.code
       - ADMIN_PASSWORD=admin
       - POSTGRES_HOST=insforge_postgres
       - POSTGRES_PORT=5432

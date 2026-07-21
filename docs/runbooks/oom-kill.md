@@ -5,8 +5,8 @@
 - **Cloud Run metrics**: `run.googleapis.com/container/memory/utilizations` > 95% sustained
 - **Container restarts**: `run.googleapis.com/container/instance_count` shows repeated scaling with short-lived instances
 - **Log entry**: `Memory limit of XXX MiB exceeded with YYY MiB used. Consider increasing the memory limit.`
-- **Alerting policy**: `alti-code-studio-oom-alert` fires in Cloud Monitoring
-- **Dashboard**: Check **Alti Code Studio — Resource Utilization** dashboard
+- **Alerting policy**: `inso-code-oom-alert` fires in Cloud Monitoring
+- **Dashboard**: Check **Inso Code — Resource Utilization** dashboard
 
 ## Symptoms
 - Cloud Run instances restart frequently (visible in Revision details)
@@ -26,46 +26,46 @@
 ## Immediate Response (< 5 min)
 1. **Confirm OOM is occurring** — check recent logs:
    ```bash
-   gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="alti-code-studio-backend" AND textPayload=~"memory"' \
-     --project=alti-code-studio --limit=20 --freshness=10m
+   gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="inso-code-backend" AND textPayload=~"memory"' \
+     --project=inso-code --limit=20 --freshness=10m
    ```
 2. **Check current memory allocation**:
    ```bash
-   gcloud run services describe alti-code-studio-backend \
+   gcloud run services describe inso-code-backend \
      --region=us-central1 --format="value(spec.template.spec.containers[0].resources.limits.memory)"
    ```
 3. **Temporarily increase memory limit** to stop the bleeding:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --memory=2Gi \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 4. **Scale max instances down** if a runaway leak is suspected:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --max-instances=5 \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 ## Resolution
 1. **Set Node.js heap limit** to stay within container memory:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --update-env-vars="NODE_OPTIONS=--max-old-space-size=1536" \
      --memory=2Gi \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 2. **Identify the leak** — enable heap profiling in a staging environment:
    ```bash
    # Add heap snapshot endpoint (staging only)
-   gcloud run services update alti-code-studio-backend-staging \
+   gcloud run services update inso-code-backend-staging \
      --region=us-central1 \
      --update-env-vars="ENABLE_HEAP_PROFILING=true" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
    Then capture a heap snapshot:
    ```bash
@@ -75,40 +75,40 @@
 
 3. **If caused by large payloads** — add streaming and size limits:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --update-env-vars="MAX_REQUEST_BODY_SIZE=10485760,STREAM_AI_RESPONSES=true" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 4. **If caused by unbounded cache** — set max cache size or switch to Redis:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --update-env-vars="IN_MEMORY_CACHE_MAX_MB=256,USE_REDIS_CACHE=true" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 5. **Right-size the container** after fixing the root cause:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --memory=1Gi \
      --cpu=2 \
      --concurrency=80 \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 ## Verification
 - Monitor memory utilization for 30 minutes — should stay below 80%:
   ```bash
   gcloud monitoring metrics list --filter='metric.type="run.googleapis.com/container/memory/utilizations"' \
-    --project=alti-code-studio
+    --project=inso-code
   ```
 - Confirm zero container restarts:
   ```bash
-  gcloud run revisions list --service=alti-code-studio-backend \
-    --region=us-central1 --project=alti-code-studio --limit=5
+  gcloud run revisions list --service=inso-code-backend \
+    --region=us-central1 --project=inso-code --limit=5
   ```
 - Run a load test against staging to validate the fix under pressure
 - Check error rate returns to baseline on the dashboard
@@ -122,8 +122,8 @@
 - Run periodic load tests with memory profiling enabled
 - Add `--cpu-boost` to reduce startup memory pressure:
   ```bash
-  gcloud run services update alti-code-studio-backend \
-    --region=us-central1 --cpu-boost --project=alti-code-studio
+  gcloud run services update inso-code-backend \
+    --region=us-central1 --cpu-boost --project=inso-code
   ```
 
 ## Escalation

@@ -1,6 +1,6 @@
 # 🔍 Ultimate RAG Architecture: The Sovereign Knowledge Pipeline
 
-The **Alti Code Studio Search Engine** relies on a massive triple-threat Retrieval-Augmented Generation (RAG) pipeline designed for sovereign codebase ingestion, relationship mapping, and precise inline citations.
+The **Inso Code Search Engine** relies on a massive triple-threat Retrieval-Augmented Generation (RAG) pipeline designed for sovereign codebase ingestion, relationship mapping, and precise inline citations.
 
 ## 1. Architectural Overview
 

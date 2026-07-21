@@ -338,11 +338,11 @@ async function run() {
   
   // Setup directories for both Unified Root and Backend repo
   const rootSkillsDir = path.join(workspaceRoot, '.agent', 'skills');
-  const rootBackupSkillsDir = path.join(workspaceRoot, 'Alti.Code.Studio.backup', '.agent', 'skills');
+  const rootBackupSkillsDir = path.join(workspaceRoot, 'Inso.Code.backup', '.agent', 'skills');
   
-  const backendDir = path.join(workspaceRoot, 'alti.code.studio.backend');
+  const backendDir = path.join(workspaceRoot, 'Inso.Code.Backend');
   const backendSkillsDir = path.join(backendDir, '.agent', 'skills');
-  const backendBackupSkillsDir = path.join(backendDir, 'Alti.Code.Studio.backup', '.agent', 'skills');
+  const backendBackupSkillsDir = path.join(backendDir, 'Inso.Code.backup', '.agent', 'skills');
 
   console.log(`=== Starting Autonomous Agent Generator Loop ===`);
   console.log(`Workspace: ${workspaceRoot}`);

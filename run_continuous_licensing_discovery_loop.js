@@ -3,7 +3,7 @@ const path = require('path');
 const { execSync } = require('child_process');
 
 // ==============================================================================
-// ALTI CODE STUDIO: CONTINUOUS SOVEREIGN LICENSE COMPLIANT RUNNER & DAEMON
+// INSO CODE: CONTINUOUS SOVEREIGN LICENSE COMPLIANT RUNNER & DAEMON
 // ==============================================================================
 // Designed for GCP Sovereign deployments.
 // Integrates predefined phases and listens for dynamic packages in candidates.json.
@@ -132,7 +132,7 @@ async function processDynamicCandidates(pkgNames) {
   currentVer[2]++; // increment build number
   const nextPlatformVersion = currentVer.join('.');
 
-  const pkgPath = 'alti.code.studio.backend/package.json';
+  const pkgPath = 'Inso.Code.Backend/package.json';
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
   const currentBackendVer = pkg.version.split('.').map(Number);
   currentBackendVer[2]++;
@@ -156,13 +156,13 @@ async function processDynamicCandidates(pkgNames) {
     fs.writeFileSync('VERSION', nextPlatformVersion + '\n');
 
     // 3. Install
-    runCommand('npm install --legacy-peer-deps', 'alti.code.studio.backend');
+    runCommand('npm install --legacy-peer-deps', 'Inso.Code.Backend');
 
     // 4. License compliance sweep
-    runCommand('npm run license-check', 'alti.code.studio.backend');
+    runCommand('npm run license-check', 'Inso.Code.Backend');
 
     // 5. Run tests
-    runCommand('npx vitest run tests/integration/v49_features.test.js tests/integration/v50_features.test.js tests/integration/v52_features.test.js tests/integration/v53_features.test.js', 'alti.code.studio.backend');
+    runCommand('npx vitest run tests/integration/v49_features.test.js tests/integration/v50_features.test.js tests/integration/v52_features.test.js tests/integration/v53_features.test.js', 'Inso.Code.Backend');
 
     // 6. Update CHANGELOG.md
     const changelogPath = 'CHANGELOG.md';
@@ -227,7 +227,7 @@ ${descriptions.map(d => `- ${d}`).join('\n')}
     }
 
     // 9. Commit and Push
-    runCommand('git add CHANGELOG.md VERSION docs/MEMORY.md alti.code.studio.backend/package.json alti.code.studio.backend/package-lock.json');
+    runCommand('git add CHANGELOG.md VERSION docs/MEMORY.md Inso.Code.Backend/package.json Inso.Code.Backend/package-lock.json');
     runCommand(`git commit -m "feat: Dynamic Phase ${currentVer[2]} OSS License-Compliant Dependencies Installation"`);
     runCommand('git push origin main && git push unified main');
     console.log(`✔ Dynamic Phase successfully completed and pushed to both remotes!`);
@@ -235,7 +235,7 @@ ${descriptions.map(d => `- ${d}`).join('\n')}
   } catch (err) {
     console.error(`❌ Error in dynamic installation:`, err.message);
     console.log('• Reverting changes in git working tree...');
-    runCommand('git restore CHANGELOG.md VERSION docs/MEMORY.md alti.code.studio.backend/package.json alti.code.studio.backend/package-lock.json');
+    runCommand('git restore CHANGELOG.md VERSION docs/MEMORY.md Inso.Code.Backend/package.json Inso.Code.Backend/package-lock.json');
   }
 }
 
@@ -281,7 +281,7 @@ async function run() {
 
     try {
       // 1. Update package.json dependencies and version
-      const pkgPath = 'alti.code.studio.backend/package.json';
+      const pkgPath = 'Inso.Code.Backend/package.json';
       console.log(`• Updating ${pkgPath} with packages...`);
       const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
       Object.assign(pkg.dependencies, phase.packages);
@@ -304,17 +304,17 @@ async function run() {
 
       // 3. Install packages
       console.log('• Running npm install...');
-      runCommand('npm install --legacy-peer-deps', 'alti.code.studio.backend');
+      runCommand('npm install --legacy-peer-deps', 'Inso.Code.Backend');
       console.log('✔ NPM Installation completed successfully.');
 
       // 4. Run License compliance scan
       console.log('• Running license compliance check...');
-      runCommand('npm run license-check', 'alti.code.studio.backend');
+      runCommand('npm run license-check', 'Inso.Code.Backend');
       console.log('✔ License compliance check completed successfully.');
 
       // 5. Run Integration tests
       console.log('• Running Vitest integration tests...');
-      runCommand('npx vitest run tests/integration/v49_features.test.js tests/integration/v50_features.test.js tests/integration/v52_features.test.js tests/integration/v53_features.test.js', 'alti.code.studio.backend');
+      runCommand('npx vitest run tests/integration/v49_features.test.js tests/integration/v50_features.test.js tests/integration/v52_features.test.js tests/integration/v53_features.test.js', 'Inso.Code.Backend');
       console.log('✔ Vitest integration tests completed successfully.');
 
       // 6. Update CHANGELOG.md
@@ -392,7 +392,7 @@ ${phase.descriptions.map(d => `- ${d}`).join('\n')}
 
       // 9. Commit and push changes
       console.log('• Committing and pushing changes...');
-      runCommand('git add CHANGELOG.md VERSION docs/MEMORY.md alti.code.studio.backend/package.json alti.code.studio.backend/package-lock.json');
+      runCommand('git add CHANGELOG.md VERSION docs/MEMORY.md Inso.Code.Backend/package.json Inso.Code.Backend/package-lock.json');
       runCommand(`git commit -m "feat: Phase ${phase.number} OSS License-Compliant Dependencies Installation"`);
       runCommand('git push origin main && git push unified main');
       console.log(`✔ Phase ${phase.number} successfully completed and pushed to both remotes!`);
@@ -401,7 +401,7 @@ ${phase.descriptions.map(d => `- ${d}`).join('\n')}
     } catch (error) {
       console.error(`\n❌ ERROR occurred during Phase ${phase.number}:`, error.message);
       console.log('• Reverting changes in git working tree...');
-      runCommand('git restore CHANGELOG.md VERSION docs/MEMORY.md alti.code.studio.backend/package.json alti.code.studio.backend/package-lock.json');
+      runCommand('git restore CHANGELOG.md VERSION docs/MEMORY.md Inso.Code.Backend/package.json Inso.Code.Backend/package-lock.json');
       console.log('🛑 Autonomous loop execution terminated due to error.');
       process.exit(1);
     }

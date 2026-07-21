@@ -18,7 +18,7 @@ spec:
       containers:
       - name: backend
         # In production this would be replaced with your private container registry URI
-        image: us-central1-docker.pkg.dev/alti-code-studio-production/alti-repo/alti-backend:latest
+        image: us-central1-docker.pkg.dev/inso-code-production/alti-repo/alti-backend:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 5000

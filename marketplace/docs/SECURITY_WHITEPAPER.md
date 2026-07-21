@@ -4,7 +4,7 @@
 **Prepared for: AWS FTR, Azure Security Review, GCP App Validation**
 
 ## 1. EXECUTIVE SUMMARY
-Alti Code Studio provides a military-grade, Bring Your Own Cloud (BYOC) sovereign data plane for enterprise AI coding. This architecture guarantees that proprietary source code and intellectual property never leave the boundaries of the customer's physically isolated infrastructure.
+Inso Code provides a military-grade, Bring Your Own Cloud (BYOC) sovereign data plane for enterprise AI coding. This architecture guarantees that proprietary source code and intellectual property never leave the boundaries of the customer's physically isolated infrastructure.
 
 ## 2. HARDWARE CONFIDENTIAL COMPUTING
 Inso Code deploys its containerized workloads directly onto hardware-encrypted memory partitions.

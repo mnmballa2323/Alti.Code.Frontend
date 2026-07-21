@@ -1,6 +1,6 @@
 # Google Cloud VPC Service Controls (VPC-SC) & Private Endpoints
 
-For defense, government, and sovereign enterprise tenants, Alti.Code.Studio enforces a perimeter security boundary inside Google Cloud using **VPC Service Controls (VPC-SC)** and **Private Endpoints (Private Service Connect)**.
+For defense, government, and sovereign enterprise tenants, Inso.Code enforces a perimeter security boundary inside Google Cloud using **VPC Service Controls (VPC-SC)** and **Private Endpoints (Private Service Connect)**.
 
 This prevents data exfiltration and restricts network traffic to explicitly authorized paths.
 

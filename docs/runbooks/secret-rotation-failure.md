@@ -5,8 +5,8 @@
 - **Cloud Function errors**: `cloudfunctions.googleapis.com/function/execution_count` with status `error` for rotation functions
 - **Eventarc trigger failures**: Eventarc trigger logs show failed deliveries for `SECRET_ROTATE` events
 - **Secret Manager audit logs**: `SecretManagerService.AddSecretVersion` not appearing on schedule
-- **Alerting policy**: `alti-code-studio-secret-rotation-failure` fires when rotation function errors > 0
-- **Dashboard**: Check **Alti Code Studio — Security Operations** dashboard, panel "Secret Rotation Status"
+- **Alerting policy**: `inso-code-secret-rotation-failure` fires when rotation function errors > 0
+- **Dashboard**: Check **Inso Code — Security Operations** dashboard, panel "Secret Rotation Status"
 - **Staleness check**: Secret versions older than rotation policy period
 
 ## Symptoms
@@ -28,32 +28,32 @@
 1. **Check rotation function execution logs**:
    ```bash
    gcloud logging read 'resource.type="cloud_function" AND resource.labels.function_name=~"secret-rotation" AND severity>=ERROR' \
-     --project=alti-code-studio --limit=20 --freshness=24h
+     --project=inso-code --limit=20 --freshness=24h
    ```
 2. **List secret versions to identify stale secrets**:
    ```bash
    # Check all secrets and their latest version dates
-   for secret in $(gcloud secrets list --project=alti-code-studio --format="value(name)"); do
+   for secret in $(gcloud secrets list --project=inso-code --format="value(name)"); do
      echo "=== $secret ==="
-     gcloud secrets versions list "$secret" --project=alti-code-studio --limit=3 --format=table
+     gcloud secrets versions list "$secret" --project=inso-code --limit=3 --format=table
    done
    ```
 3. **Check Eventarc trigger status**:
    ```bash
    gcloud eventarc triggers list \
-     --project=alti-code-studio --location=us-central1 \
+     --project=inso-code --location=us-central1 \
      --filter="name:secret-rotation"
    ```
 4. **Check rotation function's IAM permissions**:
    ```bash
    gcloud functions describe secret-rotation-function \
-     --region=us-central1 --project=alti-code-studio \
+     --region=us-central1 --project=inso-code \
      --format="value(serviceAccountEmail)"
 
    # Then check its roles
-   gcloud projects get-iam-policy alti-code-studio \
+   gcloud projects get-iam-policy inso-code \
      --flatten="bindings[].members" \
-     --filter="bindings.members:secret-rotation-sa@alti-code-studio.iam.gserviceaccount.com" \
+     --filter="bindings.members:secret-rotation-sa@inso-code.iam.gserviceaccount.com" \
      --format=table
    ```
 
@@ -62,7 +62,7 @@
    ```bash
    # View the function source
    gcloud functions describe secret-rotation-function \
-     --region=us-central1 --project=alti-code-studio \
+     --region=us-central1 --project=inso-code \
      --format="value(sourceUploadUrl)"
 
    # Redeploy after fixing
@@ -72,21 +72,21 @@
      --source=./functions/secret-rotation/ \
      --entry-point=rotateSecret \
      --trigger-eventarc \
-     --service-account=secret-rotation-sa@alti-code-studio.iam.gserviceaccount.com \
-     --project=alti-code-studio
+     --service-account=secret-rotation-sa@inso-code.iam.gserviceaccount.com \
+     --project=inso-code
    ```
 
 2. **If IAM permissions are missing** — re-grant required roles:
    ```bash
    # Grant Secret Manager admin to rotation SA
    gcloud secrets add-iam-policy-binding alti-db-password \
-     --member="serviceAccount:secret-rotation-sa@alti-code-studio.iam.gserviceaccount.com" \
+     --member="serviceAccount:secret-rotation-sa@inso-code.iam.gserviceaccount.com" \
      --role="roles/secretmanager.secretVersionAdder" \
-     --project=alti-code-studio
+     --project=inso-code
 
    # Grant access to dependent service (e.g., AlloyDB)
-   gcloud projects add-iam-policy-binding alti-code-studio \
-     --member="serviceAccount:secret-rotation-sa@alti-code-studio.iam.gserviceaccount.com" \
+   gcloud projects add-iam-policy-binding inso-code \
+     --member="serviceAccount:secret-rotation-sa@inso-code.iam.gserviceaccount.com" \
      --role="roles/alloydb.admin"
    ```
 
@@ -97,8 +97,8 @@
      --destination-run-service=secret-rotation-function \
      --destination-run-region=us-central1 \
      --event-filters="type=google.cloud.secretmanager.secret.v1.rotationNeeded" \
-     --service-account=secret-rotation-sa@alti-code-studio.iam.gserviceaccount.com \
-     --project=alti-code-studio
+     --service-account=secret-rotation-sa@inso-code.iam.gserviceaccount.com \
+     --project=inso-code
    ```
 
 4. **Perform manual rotation** for the stale secret:
@@ -108,35 +108,35 @@
 
    # Add new secret version
    echo -n "$NEW_PASSWORD" | gcloud secrets versions add alti-db-password \
-     --data-file=- --project=alti-code-studio
+     --data-file=- --project=inso-code
 
    # Update the dependent service with the new credential
    gcloud alloydb users set-password alti-app-user \
-     --cluster=alti-code-studio-cluster \
+     --cluster=inso-code-cluster \
      --region=us-central1 \
      --password="$NEW_PASSWORD" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 5. **Restart dependent services** to pick up the new secret:
    ```bash
-   gcloud run services update alti-code-studio-backend \
+   gcloud run services update inso-code-backend \
      --region=us-central1 \
      --update-env-vars="SECRET_REFRESH_TIMESTAMP=$(date +%s)" \
-     --project=alti-code-studio
+     --project=inso-code
    ```
 
 ## Verification
 - Confirm the new secret version is active:
   ```bash
   gcloud secrets versions list alti-db-password \
-    --project=alti-code-studio --limit=3 --format=table
+    --project=inso-code --limit=3 --format=table
   ```
 - Test the rotation function manually:
   ```bash
   gcloud functions call secret-rotation-function \
-    --region=us-central1 --project=alti-code-studio \
-    --data='{"secretName":"projects/alti-code-studio/secrets/alti-db-password"}'
+    --region=us-central1 --project=inso-code \
+    --data='{"secretName":"projects/inso-code/secrets/alti-db-password"}'
   ```
 - Verify dependent services are working with the new credential
 - Check that the Eventarc trigger is active and delivering events

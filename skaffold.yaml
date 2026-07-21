@@ -1,12 +1,12 @@
 apiVersion: skaffold/v4beta7
 kind: Config
 metadata:
-  name: alti-code-studio
+  name: inso-code
 build:
   artifacts:
     - image: alti-backend
       docker:
-        dockerfile: alti.code.studio.backend/Dockerfile
+        dockerfile: Inso.Code.Backend/Dockerfile
   googleCloudBuild:
     projectId: '{{.GCP_PROJECT_ID}}'
     machineType: E2_HIGHCPU_8

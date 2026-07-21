@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - 'alti.code.studio.backend/openwiki/**'
+      - 'Inso.Code.Backend/openwiki/**'
 
 permissions:
   contents: write
@@ -26,14 +26,14 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: alti.code.studio.backend/package-lock.json
+          cache-dependency-path: Inso.Code.Backend/package-lock.json
 
       - name: Install dependencies
-        working-directory: alti.code.studio.backend
+        working-directory: Inso.Code.Backend
         run: npm install --legacy-peer-deps
 
       - name: Start Backend Proxy Server
-        working-directory: alti.code.studio.backend
+        working-directory: Inso.Code.Backend
         run: |
           npm run start:dev &
           echo "⏳ Waiting for backend proxy server to start..."
@@ -50,7 +50,7 @@ jobs:
           VERTEX_API_KEY: ${{ secrets.VERTEX_API_KEY }}
 
       - name: Run OpenWiki Documentation Update
-        working-directory: alti.code.studio.backend
+        working-directory: Inso.Code.Backend
         run: npx openwiki --update -p
         env:
           OPENWIKI_PROVIDER: google
@@ -65,7 +65,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
           # Stage the updated openwiki directory
-          git add alti.code.studio.backend/openwiki/ || true
+          git add Inso.Code.Backend/openwiki/ || true
           
           # Check if there are staged changes to commit
           if ! git diff --cached --quiet; then
