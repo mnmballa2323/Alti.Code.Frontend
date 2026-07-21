@@ -11,3 +11,4 @@ terraform/.terraform/
 terraform/terraform-bin/
 deployer-key.json
 *.json
+Inso.Code.Desktop.backup.tar.gz
