@@ -134,6 +134,40 @@ spec:
                   name: jwt-secret
                   key: latest
 
+            # ── Stripe Billing (Live Keys via Secret Manager) ──
+            - name: STRIPE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-secret-key
+                  key: latest
+            - name: STRIPE_WEBHOOK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-webhook-secret
+                  key: latest
+            - name: STRIPE_PRICE_LAUNCH
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-price-launch
+                  key: latest
+            - name: STRIPE_PRICE_BUILD
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-price-build
+                  key: latest
+            - name: STRIPE_PRICE_SCALE
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-price-scale
+                  key: latest
+
+            # ── Database Connection Pool ──
+            # DATABASE_URL should include pool params:
+            # ?connection_limit=10&pool_timeout=20&connect_timeout=10
+            # Set via the 'database-url' Secret Manager secret.
+            - name: DATABASE_POOL_MAX
+              value: "10"
+
   traffic:
     - percent: 100
       latestRevision: true

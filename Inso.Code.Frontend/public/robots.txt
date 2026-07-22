@@ -1,0 +1,29 @@
+# ==============================================================================
+# Inso Code — robots.txt
+# ==============================================================================
+# Allow public marketing pages; block all authenticated + API surfaces.
+# ==============================================================================
+
+User-agent: *
+
+# Public pages — allow crawling
+Allow: /$
+Allow: /blog/
+Allow: /news/
+Allow: /faq/
+Allow: /contact
+Allow: /download
+Allow: /marketplace
+
+# Block authenticated app surfaces
+Disallow: /admin
+Disallow: /owner
+Disallow: /dashboard
+
+# Block API and internal routes
+Disallow: /api/
+Disallow: /_next/
+Disallow: /auth/
+
+# Sitemap
+Sitemap: https://alticode.studio/sitemap.xml
