@@ -20,28 +20,29 @@ describe("PricingSection Component", () => {
     render(<PricingSection />);
 
     // Verify presence of core plans
-    expect(screen.getByText("Cloud")).toBeInTheDocument();
-    expect(screen.getByText("Dedicated")).toBeInTheDocument();
-    expect(screen.getByText("Sovereign")).toBeInTheDocument();
+    expect(screen.getByText("GCP Cloud")).toBeInTheDocument();
+    expect(screen.getByText("GCP Dedicated")).toBeInTheDocument();
+    expect(screen.getByText("GCP Government")).toBeInTheDocument();
   });
 
-  it("renders prices and billing commitments correctly", () => {
+  it("renders prices correctly", () => {
     render(<PricingSection />);
 
-    // Cloud price & commitment
+    // Cloud price
     expect(screen.getByText("$1,000")).toBeInTheDocument();
-    expect(screen.getByText(/Min. 1 seat/)).toBeInTheDocument();
 
-    // Dedicated price & commitment
+    // Dedicated price
     expect(screen.getByText("$2,500")).toBeInTheDocument();
-    expect(screen.getByText(/Min. 5 seats/)).toBeInTheDocument();
+
+    // Government price
+    expect(screen.getByText("$5,000")).toBeInTheDocument();
   });
 
   it("renders the calls to action for pricing packages", () => {
     render(<PricingSection />);
 
-    expect(screen.getByText("Deploy Cloud")).toBeInTheDocument();
-    expect(screen.getByText("Deploy Dedicated")).toBeInTheDocument();
-    expect(screen.getByText("Deploy Sovereign")).toBeInTheDocument();
+    expect(screen.getByText("Deploy GCP Cloud")).toBeInTheDocument();
+    expect(screen.getByText("Deploy GCP Dedicated")).toBeInTheDocument();
+    expect(screen.getByText("Deploy GCP Government")).toBeInTheDocument();
   });
 });

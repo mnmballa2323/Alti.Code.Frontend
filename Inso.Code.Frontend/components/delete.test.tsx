@@ -26,7 +26,7 @@ describe("DeleteModal Component", () => {
         onLogout={() => {}}
       />,
     );
-    expect(screen.getByText("Delete")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Delete" })).toBeInTheDocument();
     expect(
       screen.getByText("Are you sure you want to delete this project?"),
     ).toBeInTheDocument();

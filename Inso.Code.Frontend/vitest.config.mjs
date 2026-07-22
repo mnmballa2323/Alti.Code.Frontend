@@ -9,11 +9,13 @@ export default defineConfig({
       '@/store': path.resolve(__dirname, './test-mocks/store.js'),
       '@': path.resolve(__dirname, './'),
       '@asamuzakjp/css-color': path.resolve(__dirname, './test-mocks/css-color.js'),
+      '@csstools/css-calc': path.resolve(__dirname, './test-mocks/css-color.js'),
     },
   },
   test: {
     environment: 'jsdom',
     globals: true,
     setupFiles: './vitest.setup.ts',
+    exclude: ['**/node_modules/**', '**/dist/**', 'e2e/**'],
   },
 });
