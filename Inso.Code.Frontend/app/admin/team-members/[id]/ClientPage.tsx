@@ -73,8 +73,8 @@ const ALL_MODELS = [
     price: "$12.00 in / $18.00 out",
   },
   {
-    id: "gemini-3.5-flash",
-    name: "Gemini 3.5 Flash",
+    id: "gemini-3.6-flash",
+    name: "Gemini 3.6 Flash",
     price: "$1.50 in / $9.00 out",
   },
 ];

@@ -326,12 +326,12 @@ function PromptInputFullLineComponent({
         return "Claude Opus 4.8";
       case "claude-fable-5":
         return "Claude Fable 5";
-      case "gemini-3.5-flash":
-        return "Gemini 3.5 Flash";
+      case "gemini-3.6-flash":
+        return "Gemini 3.6 Flash";
       case "gemini-3.5-pro":
         return "Gemini 3.1 Pro";
       default:
-        return "Gemini 3.5 Flash";
+        return "Gemini 3.6 Flash";
     }
   };
 
@@ -1220,7 +1220,7 @@ function PromptInputFullLineComponent({
                       {mockCloudProvider === "gcp" ||
                       mockCloudProvider === "all" ? (
                         <DropdownItem
-                          key="gemini-3.5-flash"
+                          key="gemini-3.6-flash"
                           startContent={
                             <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
                               <Icon
@@ -1229,9 +1229,9 @@ function PromptInputFullLineComponent({
                               />
                             </div>
                           }
-                          onPress={() => setDefaultModel("gemini-3.5-flash")}
+                          onPress={() => setDefaultModel("gemini-3.6-flash")}
                         >
-                          Gemini 3.5 Flash
+                          Gemini 3.6 Flash
                         </DropdownItem>
                       ) : (
                         (null as any)

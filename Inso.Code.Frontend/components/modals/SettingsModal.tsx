@@ -281,8 +281,8 @@ const SettingsModal = () => {
                       <SelectItem key="gemini-3.5-pro">
                         Gemini 3.5 Pro
                       </SelectItem>
-                      <SelectItem key="gemini-3.5-flash">
-                        Gemini 3.5 Flash
+                      <SelectItem key="gemini-3.6-flash">
+                        Gemini 3.6 Flash
                       </SelectItem>
                       <SelectItem key="claude-fable-5">
                         Claude Fable 5
