@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.1.9] - 2026-07-22 — Simplified Pricing CTA Labels
+
+### Changed
+- **Pricing CTA Simplification**: Updated CTA buttons for "Multi-Tenant Public Cloud" and "Single-Tenant Private Cloud" tiers to read "Deploy Public Cloud" and "Deploy Private Cloud" respectively.
+
 ## [53.1.8] - 2026-07-22 — Tri-Cloud Deployment Cards Branding Update
 
 ### Changed
