@@ -8,51 +8,51 @@ import { useAppSelector } from "@/store";
 
 const plans = [
   {
-    name: "Multi-Tenant Public Cloud",
+    name: "GCP Cloud",
     price: "1,000",
     commitment: "Min. 1 seat",
     backendPlan: "launch",
     backendPrice: 100000,
     description: (
       <>
-        Sovereign agent systems in standard multi tenant zones for strict
-        corporate compliance and robust comprehensive data security.
+        Commercial multi-tenant deployment. Sovereign agent systems in standard
+        GCP zones for strict corporate compliance and robust comprehensive data security.
       </>
     ),
     features: [
-      "Multi tenant deployment",
-      "Google Cloud host",
-      "Shared infrastructure",
-      "Fastest deployment",
+      "Commercial multi-tenant",
+      "Shared GCP infrastructure",
+      "Standard compliance controls",
+      "Fastest automated setup",
     ],
-    cta: "Deploy Public Cloud",
-    buttonClass: "bg-[#0000ff] text-white hover:opacity-90",
+    cta: "Deploy GCP Cloud",
+    buttonClass: "bg-white text-zinc-900 border border-zinc-300 hover:bg-zinc-50 hover:border-zinc-400",
     isContact: false,
   },
   {
-    name: "Single-Tenant Private Cloud",
+    name: "GCP Dedicated",
     price: "2,500",
     commitment: "Min. 5 seats",
     backendPlan: "build",
     backendPrice: 250000,
     description: (
       <>
-        Dedicated single tenant infrastructure isolated on private networks for
-        unparalleled security and complete data isolation.
+        Single-tenant deployment isolated on physical GCP Sole-Tenant Hosts for
+        maximum CPU control, predictable performance, and private network isolation.
       </>
     ),
     features: [
-      "Single tenant deployment",
-      "Google Cloud host",
-      "Dedicated infrastructure",
-      "Enhanced security & data isolation",
+      "Single-tenant deployment",
+      "GCP Sole-Tenant Hosts",
+      "Private VPC & networking",
+      "Dedicated compute resources",
     ],
-    cta: "Deploy Private Cloud",
-    buttonClass: "bg-[#0000ff] text-white hover:opacity-90",
+    cta: "Deploy GCP Dedicated",
+    buttonClass: "bg-white text-zinc-900 border border-zinc-300 hover:bg-zinc-50 hover:border-zinc-400",
     isContact: false,
   },
   {
-    name: "Government Tier",
+    name: "GCP Government",
     price: "5,000",
     commitment: "Min. 10 seats",
     backendPlan: "scale",
@@ -60,16 +60,16 @@ const plans = [
     description: (
       <>
         FedRAMP High and strict sovereignty compliant environments built
-        exclusively <br /> for classified public sector workloads.
+        exclusively <br /> for classified public sector workloads using GCP Assured Workloads.
       </>
     ),
     features: [
       "Sovereign deployment",
-      "Google Cloud Assured Workloads",
+      "GCP Assured Workloads",
       "FedRAMP High capable",
       "Sovereign security controls",
     ],
-    cta: "Deploy Government Tier",
+    cta: "Deploy GCP Government",
     buttonClass: "bg-[#0000ff] text-white hover:opacity-90",
     isContact: true,
   },

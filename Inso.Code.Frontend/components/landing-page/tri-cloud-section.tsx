@@ -4,82 +4,74 @@ import React from "react";
 
 const deployments = [
   {
-    name: "Amazon Web Services",
-    subtitle: "AWS Bedrock",
-    icon: (
-      <img
-        alt="AWS"
-        className="w-8 h-8"
-        src="/assets/cloud-logos/aws.svg?v=2"
-      />
-    ),
-    features: [
-      {
-        title: "Multi-Tenant Public Cloud",
-        description:
-          "Elastic EC2 compute instances optimized for rapid scaling in shared public zones.",
-      },
-      {
-        title: "Single-Tenant Private Cloud",
-        description:
-          "AWS Dedicated Hosts providing complete physical isolation for your instances.",
-      },
-      {
-        title: "AWS GovCloud",
-        description:
-          "Isolated AWS regions certified for FedRAMP High and sensitive workloads.",
-      },
-    ],
-  },
-  {
-    name: "Microsoft Azure",
-    subtitle: "Azure AI Foundry",
-    icon: (
-      <img
-        alt="Azure"
-        className="w-8 h-8"
-        src="/assets/cloud-logos/azure.svg"
-      />
-    ),
-    features: [
-      {
-        title: "Multi-Tenant Public Cloud",
-        description:
-          "Highly-available Azure compute VMs optimized for scaling in public regions.",
-      },
-      {
-        title: "Single-Tenant Private Cloud",
-        description:
-          "Azure Dedicated Hosts providing complete physical isolation for your VMs.",
-      },
-      {
-        title: "Azure Government",
-        description:
-          "Isolated Azure regions certified for FedRAMP High and sensitive workloads.",
-      },
-    ],
-  },
-  {
-    name: "Google Cloud",
-    subtitle: "Vertex AI",
+    name: "GCP Cloud",
+    subtitle: "cloud option",
     icon: (
       <img alt="GCP" className="w-8 h-8" src="/assets/cloud-logos/gcp.svg" />
     ),
     features: [
       {
-        title: "Multi-Tenant Public Cloud",
+        title: "GCP Cloud",
         description:
-          "Scalable Compute Engine resources optimized for scaling in public regions.",
+          "Scalable Compute Engine resources optimized for rapid deployments.",
       },
       {
-        title: "Single-Tenant Private Cloud",
+        title: "Standard Compliance",
         description:
-          "Sole-tenant nodes providing complete physical isolation for your instances.",
+          "Standard GCP compliance features and secure default environment profiles.",
       },
       {
-        title: "Assured Workloads",
+        title: "Data Residency",
         description:
-          "Compliant GCP environments certified for FedRAMP High sensitive workloads.",
+          "Keep all application database storage locked within regional boundaries.",
+      },
+    ],
+  },
+  {
+    name: "GCP Dedicated",
+    subtitle: "dedicated option",
+    icon: (
+      <img alt="GCP" className="w-8 h-8" src="/assets/cloud-logos/gcp.svg" />
+    ),
+    features: [
+      {
+        title: "GCP Dedicated",
+        description:
+          "Deploy on dedicated sole-tenant nodes for complete physical isolation.",
+      },
+      {
+        title: "Private VPC",
+        description:
+          "Run securely isolated inside your own private VPC with custom routing.",
+      },
+      {
+        title: "Customer-Managed Keys",
+        description:
+          "Complete control over all storage encryption using customer-managed keys.",
+      },
+    ],
+  },
+  {
+    name: "GCP Government",
+    subtitle: "government option",
+    icon: (
+      <img alt="GCP" className="w-8 h-8" src="/assets/cloud-logos/gcp.svg" />
+    ),
+    features: [
+      {
+        title: "GCP Government",
+        description:
+          "Deployed within physically isolated, government-certified Assured zones.",
+      },
+      {
+        title: "FedRAMP High",
+        description:
+          "Strict compliance certified for FedRAMP High government-level workloads.",
+      },
+      {
+        title: "Sovereign Controls",
+        description:
+          "Sovereignty controls restricting cloud support and operations to citizens.",
       },
     ],
   },
@@ -95,14 +87,12 @@ export default function TriCloudSection() {
         {/* Header */}
         <div className="flex flex-col items-center text-center gap-6 max-w-5xl">
           <h3 className="text-3xl sm:text-3xl md:text-4xl font-bold tracking-tight text-black leading-tight">
-            Deploy Anywhere. Sovereign Security.
+            Sovereign GCP Deployments. Absolute Security.
           </h3>
           <p className="text-lg text-zinc-600 leading-relaxed font-medium max-w-4xl mx-auto">
-            Deploy sovereign AI agent swarms on AWS Bedrock, Azure Foundry, and
-            Google Vertex AI.
+            Deploy sovereign AI agent swarms across three Google Cloud deployment tiers.
             <br className="hidden md:block" />
-            Enforce absolute compliance and physical data isolation tailored to
-            your enterprise.
+            Enforce strict compliance, VPC network privacy, and physical data isolation tailored to your enterprise.
           </p>
         </div>
 

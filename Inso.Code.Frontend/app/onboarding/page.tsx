@@ -76,7 +76,7 @@ const CLOUDS = [
 const PLANS = [
   {
     id: "multi-tenant",
-    name: "Multi-Tenant (Shared)",
+    name: "GCP Cloud (Shared)",
     price: "$49",
     period: "/mo",
     badge: "Most Popular",
@@ -91,7 +91,7 @@ const PLANS = [
   },
   {
     id: "single-tenant",
-    name: "Single-Tenant (Dedicated)",
+    name: "GCP Dedicated",
     price: "$499",
     period: "/mo",
     badge: "Best Value",
@@ -106,7 +106,7 @@ const PLANS = [
   },
   {
     id: "government",
-    name: "Government",
+    name: "GCP Government",
     price: "Custom",
     period: "",
     badge: "Compliance",
