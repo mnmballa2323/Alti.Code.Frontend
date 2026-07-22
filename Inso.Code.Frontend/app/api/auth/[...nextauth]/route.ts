@@ -18,9 +18,12 @@ declare module "next-auth/jwt" {
   interface JWT {
     _id?: string;
     accessToken?: string;
+    refreshToken?: string;
+    tokenExpiry?: number; // unix ms — when the access token expires
     role?: string;
     tenantId?: string;
     mfaRequired?: boolean;
+    error?: string; // set to 'RefreshAccessTokenError' when refresh fails
   }
 }
 
@@ -33,6 +36,7 @@ declare module "next-auth" {
       role?: string;
       tenantId?: string;
       mfaRequired?: boolean;
+      error?: string;
     };
   }
 }
@@ -141,7 +145,7 @@ const handler = NextAuth({
       return true;
     },
     async jwt({ token, user, account }) {
-      // Handles initial login (Credentials or OAuth)
+      // ── Initial sign-in: populate token from backend response ──────────────
       if (user && account) {
         if (["github", "google"].includes(account.provider)) {
           try {
@@ -165,10 +169,13 @@ const handler = NextAuth({
 
               if (data.success && data.data) {
                 token.accessToken = data.data.accessToken;
+                token.refreshToken = data.data.refreshToken;
                 token._id = data.data._id;
                 token.role = data.data.role;
                 token.tenantId = data.data.tenantId;
                 token.mfaRequired = data.data.mfaRequired || false;
+                // Access tokens expire in 1 hour — store expiry so we can refresh proactively
+                token.tokenExpiry = Date.now() + 55 * 60 * 1000; // 55 min (5 min early)
               }
             }
           } catch (error) {
@@ -176,14 +183,59 @@ const handler = NextAuth({
           }
         } else if (account.provider === "credentials") {
           token.accessToken = (user as ExtendedUser).token;
+          token.refreshToken = (user as ExtendedUser & { refreshToken?: string }).refreshToken;
           token._id = (user as ExtendedUser)._id;
           token.role = (user as ExtendedUser).role;
           token.tenantId = (user as ExtendedUser).tenantId;
           token.mfaRequired = (user as ExtendedUser).mfaRequired;
+          token.tokenExpiry = Date.now() + 55 * 60 * 1000;
         }
+        return token;
       }
 
-      return token;
+      // ── Subsequent calls: silently refresh if token is near expiry ──────────
+      const isExpiredOrNearExpiry =
+        token.tokenExpiry && Date.now() > token.tokenExpiry;
+
+      if (!isExpiredOrNearExpiry) {
+        // Token still valid — return as-is
+        return token;
+      }
+
+      // Token expired — attempt refresh
+      if (!token.refreshToken) {
+        // No refresh token stored (e.g. old session before this change) — force re-login
+        return { ...token, error: "RefreshAccessTokenError" };
+      }
+
+      try {
+        const refreshRes = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/auth/refresh-token`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ refreshToken: token.refreshToken }),
+          },
+        );
+
+        const refreshData = await refreshRes.json();
+
+        if (!refreshRes.ok || !refreshData.success || !refreshData.data?.accessToken) {
+          console.error("[NextAuth] Token refresh failed:", refreshData.message);
+          return { ...token, error: "RefreshAccessTokenError" };
+        }
+
+        return {
+          ...token,
+          accessToken: refreshData.data.accessToken,
+          refreshToken: refreshData.data.refreshToken ?? token.refreshToken,
+          tokenExpiry: Date.now() + 55 * 60 * 1000,
+          error: undefined,
+        };
+      } catch (err) {
+        console.error("[NextAuth] Token refresh network error:", err);
+        return { ...token, error: "RefreshAccessTokenError" };
+      }
     },
     async session({ session, token }) {
       session.user = {
@@ -192,6 +244,8 @@ const handler = NextAuth({
         role: token.role,
         tenantId: token.tenantId,
         mfaRequired: token.mfaRequired,
+        // Surface the error so client-side code can redirect to login
+        error: token.error,
       };
 
       return session;

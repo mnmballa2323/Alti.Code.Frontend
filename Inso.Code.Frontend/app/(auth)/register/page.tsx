@@ -18,6 +18,10 @@ export default function RegisterPage() {
   const toggleConfirmVisibility = () => setIsConfirmVisible(!isConfirmVisible);
   const router = useRouter();
 
+  // Track registration step: 'form' | 'success'
+  const [step, setStep] = useState<'form' | 'success'>('form');
+  const [registeredEmail, setRegisteredEmail] = useState("");
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -94,13 +98,56 @@ export default function RegisterPage() {
         return;
       }
 
-      toast.success(data?.message || "Account created successfully!");
-      router.push("/login");
+      // Show the 'check your email' confirmation step instead of silently routing to login
+      setRegisteredEmail(email);
+      setStep('success');
     } catch (error) {
       toast.dismiss(loading);
       toast.error("An unexpected error occurred.");
     }
   };
+
+  // ── Email verification confirmation screen ─────────────────────────────────
+  if (step === 'success') {
+    return (
+      <div className="flex w-full flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#F5F5F7] text-black shadow-inner text-3xl">
+            ✉️
+          </div>
+          <div className="text-center">
+            <h1 className="text-3xl font-semibold tracking-tight text-black">Check Your Email</h1>
+            <p className="text-center text-gray-500 text-sm mt-2 font-medium max-w-xs">
+              We sent a verification link to{" "}
+              <span className="font-semibold text-black">{registeredEmail}</span>.
+              Click it to activate your account before signing in.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3 mt-4">
+          <p className="text-center text-xs text-gray-400">
+            Didn&apos;t receive it? Check your spam folder, or{" "}
+            <button
+              className="text-black font-semibold hover:underline"
+              type="button"
+              onClick={() => setStep('form')}
+            >
+              try registering again
+            </button>
+            .
+          </p>
+          <button
+            className="w-full h-12 font-semibold bg-black text-white rounded-2xl shadow-md mt-2 hover:bg-gray-900 transition-colors"
+            type="button"
+            onClick={() => router.push('/login')}
+          >
+            Go to Sign In
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex w-full flex-col gap-6">
