@@ -27,6 +27,15 @@ This document outlines the required and optional environment variables across th
 | `REDIS_URL` | Redis connection string. | `redis://127.0.0.1:6379` |
 | `DISABLE_REDIS` | Set to `true` to disable Redis cache (optional). | `true` |
 
+### Stripe & Billing Configuration
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `STRIPE_SECRET_KEY` | Stripe API Secret Key (use live key in production). | `sk_live_...` |
+| `STRIPE_WEBHOOK_SECRET` | Stripe webhook signature verification key. | `whsec_...` |
+| `STRIPE_PRICE_LAUNCH` | Stripe Price ID for GCP Cloud tier ($1,000/user/mo). | `price_1P...` |
+| `STRIPE_PRICE_BUILD` | Stripe Price ID for GCP Dedicated tier ($2,500/user/mo). | `price_1P...` |
+| `STRIPE_PRICE_SCALE` | Stripe Price ID for GCP Government tier ($5,000/user/mo). | `price_1P...` |
+
 ### Authentication Secrets
 | Variable | Description | Example |
 |----------|-------------|---------|
