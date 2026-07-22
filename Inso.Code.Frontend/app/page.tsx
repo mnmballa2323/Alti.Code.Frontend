@@ -19,6 +19,7 @@ import RagArchitectureSection from "@/components/landing-page/rag-architecture-s
 import TriumvirateSection from "@/components/landing-page/triumvirate-section";
 import LanguagesScrollingBanner from "@/components/landing-page/languages-scrolling-banner";
 import CloudsSection from "@/components/landing-page/clouds-section";
+import GlobalReachSection from "@/components/landing-page/global-reach-section";
 
 export default function LandingPage() {
   const router = useRouter();
@@ -100,6 +101,9 @@ export default function LandingPage() {
         </div>
         <div id="section-9">
           <ZeroTrustLedgerSection />
+        </div>
+        <div id="section-global-reach">
+          <GlobalReachSection />
         </div>
         <div id="section-2">
           <GcpSovereignSection />

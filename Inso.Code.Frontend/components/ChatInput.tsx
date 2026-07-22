@@ -24,9 +24,9 @@ const ChatInput = () => {
                 className="opacity-0 absolute left-0 w-[24px] cursor-pointer"
               />
             </div>
-            <button 
-              type="submit"
+            <button
               className="flex items-center justify-center cursor-pointer rounded-md bg-black text-white h-7 w-7 hover:bg-gray-800 transition-colors shadow-sm"
+              type="submit"
             >
               <ArrowRight size={16} strokeWidth={2.5} />
             </button>

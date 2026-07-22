@@ -84,7 +84,9 @@ export default function CloudsSection() {
                   <Icon
                     className="w-5 h-5 object-contain"
                     icon={cloud.icon}
-                    style={cloud.isMonochrome ? { color: cloud.color } : undefined}
+                    style={
+                      cloud.isMonochrome ? { color: cloud.color } : undefined
+                    }
                   />
                 </div>
                 <span className="text-[13px] sm:text-sm font-semibold tracking-tight text-zinc-700 dark:text-zinc-300 group-hover:text-zinc-900 dark:group-hover:text-zinc-50 transition-colors whitespace-nowrap">

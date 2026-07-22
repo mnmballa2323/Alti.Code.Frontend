@@ -1,6 +1,17 @@
 "use client";
 
-import { Badge, Button, cn, Form, Image, Tooltip, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from "@heroui/react";
+import {
+  Badge,
+  Button,
+  cn,
+  Form,
+  Image,
+  Tooltip,
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@heroui/react";
 import { ChevronDown } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { VisuallyHidden } from "@react-aria/visually-hidden";
@@ -172,9 +183,7 @@ export function PromptInputFullLineComponent({
           icon="solar:folder-bold"
           width={16}
         />
-        <span className="text-xs font-medium text-default-500">
-          inso.code
-        </span>
+        <span className="text-xs font-medium text-default-500">inso.code</span>
         <Icon
           className="text-default-400"
           icon="solar:alt-arrow-down-linear"
@@ -201,11 +210,14 @@ export function PromptInputFullLineComponent({
         className="max-h-[300px] w-full resize-none border-none shadow-none outline-none focus-visible:ring-0"
         classNames={{
           base: "![mask-image:none] ![-webkit-mask-image:none]",
-          innerWrapper: "relative !bg-none bg-transparent [&::after]:hidden [&::before]:hidden ![mask-image:none] ![-webkit-mask-image:none]",
+          innerWrapper:
+            "relative !bg-none bg-transparent [&::after]:hidden [&::before]:hidden ![mask-image:none] ![-webkit-mask-image:none]",
           input:
             "text-[15px] leading-relaxed font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-default-400 placeholder:font-normal py-0 !bg-none bg-transparent ![mask-image:none] ![-webkit-mask-image:none]",
-          inputWrapper: "!bg-transparent shadow-none !border-0 px-4 pt-3 pb-1 !bg-none [&::after]:hidden [&::before]:hidden ![mask-image:none] ![-webkit-mask-image:none] group-data-[hover=true]:!bg-transparent group-data-[focus=true]:!bg-transparent",
+          inputWrapper:
+            "!bg-transparent shadow-none !border-0 px-4 pt-3 pb-1 !bg-none [&::after]:hidden [&::before]:hidden ![mask-image:none] ![-webkit-mask-image:none] group-data-[hover=true]:!bg-transparent group-data-[focus=true]:!bg-transparent",
         }}
+        disableAnimation={true}
         maxRows={16}
         minRows={1}
         name="content"
@@ -214,12 +226,11 @@ export function PromptInputFullLineComponent({
         spellCheck={"false"}
         value={prompt}
         variant="flat"
-        disableAnimation={true}
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
         onValueChange={setPrompt}
       />
-      
+
       <div className="flex w-full flex-row items-center justify-between px-4 pb-4 pt-4 mt-1 border-t-[0.5px] border-default-200 dark:border-zinc-800/50">
         <div className="flex items-center gap-1">
           {showLocalToggle && (

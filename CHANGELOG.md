@@ -5,6 +5,13 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.1.7] - 2026-07-22 — Global Reach and Sovereignty Landing Page Section
+
+### Added
+- **Global Reach & Sovereignty Section**: Implemented the `GlobalReachSection` component showcasing supported natural languages and localized country compliance standards (e.g., GDPR, HIPAA, SecNumCloud, APPI).
+- **Interactive Bento Features**: Added a 3-column interactive bento grid detailing cross-border code translation, isolated cloud operations, and regional compliance mappings.
+- **Marquee Scrolling Tracks**: Configured hardware-accelerated dual scrolling marquees for dynamic language and compliance badges.
+
 ## [53.1.6] - 2026-07-14 — Taste-Skill Frontend Design Agent Integration
 
 ### Added

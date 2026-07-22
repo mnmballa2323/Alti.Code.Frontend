@@ -367,7 +367,7 @@ function PromptInputFullLineComponent({
     (msg: QueuedMessage) => {
       // Prevent multiple sends if it's already processed
       if (!queuedMessages.find((m) => m.id === msg.id)) return;
-      
+
       if (onSend) {
         onSend(
           msg.prompt,
@@ -1031,7 +1031,9 @@ function PromptInputFullLineComponent({
                     type="button"
                     onClick={() => handleSendQueued(msg)}
                   >
-                    Send Now ({Math.ceil(Math.max(0, msg.expiresAt - Date.now()) / 1000)}s) <Icon icon="solar:plain-bold" width={12} />
+                    Send Now (
+                    {Math.ceil(Math.max(0, msg.expiresAt - Date.now()) / 1000)}
+                    s) <Icon icon="solar:plain-bold" width={12} />
                   </button>
                 </div>
               </div>
@@ -1070,6 +1072,7 @@ function PromptInputFullLineComponent({
             inputWrapper:
               "!bg-transparent shadow-none !border-0 px-4 pt-3 pb-1 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none focus-within:ring-0 focus-within:outline-none group-data-[focus=true]:!ring-0 group-data-[focus=true]:!border-transparent group-data-[focus-visible=true]:!ring-0 !bg-none [&::after]:hidden [&::before]:hidden ![mask-image:none] ![-webkit-mask-image:none] group-data-[hover=true]:!bg-transparent group-data-[focus=true]:!bg-transparent",
           }}
+          disableAnimation={true}
           maxRows={16}
           minRows={1}
           name="content"
@@ -1078,13 +1081,12 @@ function PromptInputFullLineComponent({
           spellCheck={"false"}
           value={prompt}
           variant="flat"
-          disableAnimation={true}
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
           onValueChange={setPrompt}
         />
 
-      <div className="flex w-full flex-row items-center justify-between px-4 pb-3 pt-2 mt-1 border-t-[0.5px] border-default-200 dark:border-zinc-800/50">
+        <div className="flex w-full flex-row items-center justify-between px-4 pb-3 pt-2 mt-1 border-t-[0.5px] border-default-200 dark:border-zinc-800/50">
           <div className="flex flex-col gap-1.5">
             {/* Top row of bottom section */}
             <div className="flex items-center gap-2">
@@ -1161,15 +1163,15 @@ function PromptInputFullLineComponent({
                       description: "text-[11px] text-default-400 mt-0.5",
                     }}
                   >
-                    {(customAgents.length > 0 ? (
+                    {customAgents.length > 0 ? (
                       <DropdownSection
                         showDivider
-                        title="Custom Agents"
                         classNames={{
                           heading:
                             "text-[10px] font-semibold tracking-wider text-default-400 uppercase px-2 mb-2",
                           divider: "my-2 border-default-200/50",
                         }}
+                        title="Custom Agents"
                       >
                         {customAgents.map((agent) => (
                           <DropdownItem
@@ -1178,8 +1180,8 @@ function PromptInputFullLineComponent({
                             startContent={
                               <div className="size-6 rounded-md bg-purple-500/10 dark:bg-purple-500/20 flex items-center justify-center shrink-0">
                                 <Icon
-                                  icon="solar:bot-bold-duotone"
                                   className="text-purple-500 size-3.5"
+                                  icon="solar:bot-bold-duotone"
                                 />
                               </div>
                             }
@@ -1191,21 +1193,24 @@ function PromptInputFullLineComponent({
                           </DropdownItem>
                         ))}
                       </DropdownSection>
-                    ) : null as any)}
+                    ) : (
+                      (null as any)
+                    )}
                     <DropdownSection
                       classNames={{
                         heading: "hidden",
                       }}
                     >
                       {/* GEMINI MODELS (Available ONLY on Google Cloud) */}
-                      {(mockCloudProvider === "gcp" || mockCloudProvider === "all") ? (
+                      {mockCloudProvider === "gcp" ||
+                      mockCloudProvider === "all" ? (
                         <DropdownItem
                           key="gemini-3.5-pro"
                           startContent={
                             <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
                               <Icon
-                                icon="simple-icons:googlegemini"
                                 className="text-[#1A73E8] size-3.5"
+                                icon="simple-icons:googlegemini"
                               />
                             </div>
                           }
@@ -1213,15 +1218,18 @@ function PromptInputFullLineComponent({
                         >
                           Gemini 3.1 Pro
                         </DropdownItem>
-                      ) : null as any}
-                      {(mockCloudProvider === "gcp" || mockCloudProvider === "all") ? (
+                      ) : (
+                        (null as any)
+                      )}
+                      {mockCloudProvider === "gcp" ||
+                      mockCloudProvider === "all" ? (
                         <DropdownItem
                           key="gemini-3.5-flash"
                           startContent={
                             <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
                               <Icon
-                                icon="simple-icons:googlegemini"
                                 className="text-[#1A73E8] size-3.5"
+                                icon="simple-icons:googlegemini"
                               />
                             </div>
                           }
@@ -1229,17 +1237,20 @@ function PromptInputFullLineComponent({
                         >
                           Gemini 3.5 Flash
                         </DropdownItem>
-                      ) : null as any}
+                      ) : (
+                        (null as any)
+                      )}
 
                       {/* GPT MODELS (Available ONLY on Azure) */}
-                      {(mockCloudProvider === "azure" || mockCloudProvider === "all") ? (
+                      {mockCloudProvider === "azure" ||
+                      mockCloudProvider === "all" ? (
                         <DropdownItem
                           key="gpt-5.4-pro"
                           startContent={
                             <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
                               <Icon
-                                icon="simple-icons:openai"
                                 className="text-black dark:text-white size-3.5"
+                                icon="simple-icons:openai"
                               />
                             </div>
                           }
@@ -1247,15 +1258,18 @@ function PromptInputFullLineComponent({
                         >
                           GPT 5.4 Pro
                         </DropdownItem>
-                      ) : null as any}
-                      {(mockCloudProvider === "azure" || mockCloudProvider === "all") ? (
+                      ) : (
+                        (null as any)
+                      )}
+                      {mockCloudProvider === "azure" ||
+                      mockCloudProvider === "all" ? (
                         <DropdownItem
                           key="gpt-5.4"
                           startContent={
                             <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
                               <Icon
-                                icon="simple-icons:openai"
                                 className="text-black dark:text-white size-3.5"
+                                icon="simple-icons:openai"
                               />
                             </div>
                           }
@@ -1263,7 +1277,9 @@ function PromptInputFullLineComponent({
                         >
                           GPT 5.4
                         </DropdownItem>
-                      ) : null as any}
+                      ) : (
+                        (null as any)
+                      )}
 
                       {/* CLAUDE MODELS (Available on ALL clouds) */}
                       <DropdownItem
@@ -1271,8 +1287,8 @@ function PromptInputFullLineComponent({
                         startContent={
                           <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
                             <Icon
-                              icon="simple-icons:claude"
                               className="text-[#CC9980] size-3.5"
+                              icon="simple-icons:claude"
                             />
                           </div>
                         }
@@ -1285,8 +1301,8 @@ function PromptInputFullLineComponent({
                         startContent={
                           <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
                             <Icon
-                              icon="simple-icons:claude"
                               className="text-[#CC9980] size-3.5"
+                              icon="simple-icons:claude"
                             />
                           </div>
                         }
@@ -1299,8 +1315,8 @@ function PromptInputFullLineComponent({
                         startContent={
                           <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
                             <Icon
-                              icon="simple-icons:claude"
                               className="text-[#CC9980] size-3.5"
+                              icon="simple-icons:claude"
                             />
                           </div>
                         }
@@ -1313,8 +1329,8 @@ function PromptInputFullLineComponent({
                         startContent={
                           <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
                             <Icon
-                              icon="simple-icons:claude"
                               className="text-[#CC9980] size-3.5"
+                              icon="simple-icons:claude"
                             />
                           </div>
                         }

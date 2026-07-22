@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-import { CheckCircle2, ArrowUp, Paperclip } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 
@@ -134,7 +134,10 @@ function AgentPageContent() {
     setInputValue("");
   };
 
-  const handleChatSend = async (e?: React.FormEvent, promptOverride?: string) => {
+  const handleChatSend = async (
+    e?: React.FormEvent,
+    promptOverride?: string,
+  ) => {
     if (e) e.preventDefault();
     const text = promptOverride || chatMessage;
 
@@ -164,11 +167,12 @@ function AgentPageContent() {
         },
         {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
-        }
+        },
       );
 
       setMockMessages((prev) => {
         const updated = [...prev];
+
         updated[updated.length - 1] = {
           ...updated[updated.length - 1],
           actionStatus: "done",
@@ -178,17 +182,23 @@ function AgentPageContent() {
           ...updated,
           {
             role: "assistant",
-            content: res.data?.data || res.data?.response || res.data?.message || "Agent responded.",
+            content:
+              res.data?.data ||
+              res.data?.response ||
+              res.data?.message ||
+              "Agent responded.",
           },
         ];
       });
     } catch (err: any) {
       setMockMessages((prev) => {
         const updated = [...prev];
+
         updated[updated.length - 1] = {
           ...updated[updated.length - 1],
           actionStatus: "done",
         };
+
         return [
           ...updated,
           {
@@ -219,10 +229,10 @@ function AgentPageContent() {
               <div className="flex w-full flex-col gap-4 max-w-2xl">
                 <PromptInputFullLineWithBottomActions
                   hideAgents={true}
-                  showModelDropdown={true}
                   placeholder="Describe the agent you want to build..."
                   prompt={inputValue}
                   setPrompt={setInputValue}
+                  showModelDropdown={true}
                   onSend={handleSend}
                 />
               </div>
@@ -266,10 +276,10 @@ function AgentPageContent() {
                     <div className="flex w-full flex-col gap-4 mt-6">
                       <PromptInputFullLineWithBottomActions
                         hideAgents={true}
-                        showModelDropdown={true}
                         placeholder={`Message ${agentName}...`}
                         prompt={inputValue}
                         setPrompt={setInputValue}
+                        showModelDropdown={true}
                         onSend={(prompt) => {
                           handleChatSend(undefined, prompt);
                         }}
@@ -316,10 +326,10 @@ function AgentPageContent() {
                   <div className="p-6 bg-transparent w-full">
                     <PromptInputFullLineWithBottomActions
                       hideAgents={true}
-                      showModelDropdown={true}
                       placeholder={`Message ${agentName}...`}
                       prompt={chatMessage}
                       setPrompt={setChatMessage}
+                      showModelDropdown={true}
                       onSend={(prompt) => {
                         handleChatSend(undefined, prompt);
                       }}
