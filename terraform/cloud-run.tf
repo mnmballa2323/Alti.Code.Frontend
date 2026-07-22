@@ -171,7 +171,6 @@ resource "google_cloud_run_v2_service" "backend" {
         }
       }
 
-      # Static environment variables
       env {
         name  = "NODE_ENV"
         value = "production"
@@ -180,6 +179,28 @@ resource "google_cloud_run_v2_service" "backend" {
       env {
         name  = "PORT"
         value = "5000"
+      }
+
+      # ── GCP Sovereignty ─────────────────────────────────────────────────────
+      env {
+        name  = "CLOUD_PROVIDER"
+        value = "GCP"
+      }
+
+      # ── OpenTelemetry → Cloud Trace ─────────────────────────────────────────
+      # Routes all OTLP spans to GCP Cloud Trace via the managed OTLP endpoint.
+      # Authentication is handled automatically by Workload Identity.
+      env {
+        name  = "OTEL_SERVICE_NAME"
+        value = "inso-backend-${var.environment}"
+      }
+      env {
+        name  = "OTEL_EXPORTER_OTLP_ENDPOINT"
+        value = "https://cloudtrace.googleapis.com"
+      }
+      env {
+        name  = "OTEL_EXPORTER_OTLP_PROTOCOL"
+        value = "http/protobuf"
       }
 
       # Cloud SQL Unix Socket mount
