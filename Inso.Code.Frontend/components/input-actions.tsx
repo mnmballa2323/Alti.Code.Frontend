@@ -330,10 +330,6 @@ function PromptInputFullLineComponent({
         return "Gemini 3.5 Flash";
       case "gemini-3.5-pro":
         return "Gemini 3.1 Pro";
-      case "gpt-5.4":
-        return "GPT 5.4";
-      case "gpt-5.4-pro":
-        return "GPT 5.4 Pro";
       default:
         return "Gemini 3.5 Flash";
     }
@@ -1236,46 +1232,6 @@ function PromptInputFullLineComponent({
                           onPress={() => setDefaultModel("gemini-3.5-flash")}
                         >
                           Gemini 3.5 Flash
-                        </DropdownItem>
-                      ) : (
-                        (null as any)
-                      )}
-
-                      {/* GPT MODELS (Available ONLY on Azure) */}
-                      {mockCloudProvider === "azure" ||
-                      mockCloudProvider === "all" ? (
-                        <DropdownItem
-                          key="gpt-5.4-pro"
-                          startContent={
-                            <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
-                              <Icon
-                                className="text-black dark:text-white size-3.5"
-                                icon="simple-icons:openai"
-                              />
-                            </div>
-                          }
-                          onPress={() => setDefaultModel("gpt-5.4-pro")}
-                        >
-                          GPT 5.4 Pro
-                        </DropdownItem>
-                      ) : (
-                        (null as any)
-                      )}
-                      {mockCloudProvider === "azure" ||
-                      mockCloudProvider === "all" ? (
-                        <DropdownItem
-                          key="gpt-5.4"
-                          startContent={
-                            <div className="size-6 rounded-md bg-[#1A73E8]/10 dark:bg-[#1A73E8]/20 flex items-center justify-center shrink-0">
-                              <Icon
-                                className="text-black dark:text-white size-3.5"
-                                icon="simple-icons:openai"
-                              />
-                            </div>
-                          }
-                          onPress={() => setDefaultModel("gpt-5.4")}
-                        >
-                          GPT 5.4
                         </DropdownItem>
                       ) : (
                         (null as any)

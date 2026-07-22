@@ -551,10 +551,10 @@ export default function CloudPage() {
                               </span>
                               <div className="text-xs font-semibold text-gray-900 dark:text-gray-100 mt-1">
                                 {selectedProvider === "GCP Government"
-                                  ? "GPT-4o (Gov/IL5)"
+                                  ? "Gemini 3.5 Pro (Gov/IL5)"
                                   : selectedProvider === "GCP Dedicated"
-                                    ? "GPT-4o (Dedicated/IL2)"
-                                    : "GPT-4o (Commercial)"}
+                                    ? "Gemini 3.5 Pro (Dedicated/IL2)"
+                                    : "Gemini 3.5 Pro (Commercial)"}
                               </div>
                             </div>
                           </div>

@@ -15,7 +15,7 @@ const STREAMING_CODE_LINES = [
   "  });",
   "",
   "  const coder = new CoderAgent({",
-  "    model: 'sovereign-gpt-4o',",
+  "    model: 'gemini-3.5-pro',",
   "    sandbox: 'secure-vpc-sandbox'",
   "  });",
   "",
