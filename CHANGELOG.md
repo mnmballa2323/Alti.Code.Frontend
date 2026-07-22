@@ -5,6 +5,11 @@ All notable changes to **Inso Code** will be documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)  
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
+## [53.1.8] - 2026-07-22 — Tri-Cloud Deployment Cards Branding Update
+
+### Changed
+- **Branding Update**: Renamed "Multi-Tenant" to "Multi-Tenant Public Cloud" and "Single-Tenant" to "Single-Tenant Private Cloud" across all three cloud provider deployment cards.
+
 ## [53.1.7] - 2026-07-22 — Global Reach and Sovereignty Landing Page Section
 
 ### Added

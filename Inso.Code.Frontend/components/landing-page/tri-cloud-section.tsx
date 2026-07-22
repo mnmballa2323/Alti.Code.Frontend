@@ -15,12 +15,12 @@ const deployments = [
     ),
     features: [
       {
-        title: "Multi-Tenant",
+        title: "Multi-Tenant Public Cloud",
         description:
           "Elastic EC2 compute instances optimized for rapid scaling in shared public zones.",
       },
       {
-        title: "Single-Tenant",
+        title: "Single-Tenant Private Cloud",
         description:
           "AWS Dedicated Hosts providing complete physical isolation for your instances.",
       },
@@ -43,12 +43,12 @@ const deployments = [
     ),
     features: [
       {
-        title: "Multi-Tenant",
+        title: "Multi-Tenant Public Cloud",
         description:
           "Highly-available Azure compute VMs optimized for scaling in public regions.",
       },
       {
-        title: "Single-Tenant",
+        title: "Single-Tenant Private Cloud",
         description:
           "Azure Dedicated Hosts providing complete physical isolation for your VMs.",
       },
@@ -67,12 +67,12 @@ const deployments = [
     ),
     features: [
       {
-        title: "Multi-Tenant",
+        title: "Multi-Tenant Public Cloud",
         description:
           "Scalable Compute Engine resources optimized for scaling in public regions.",
       },
       {
-        title: "Single-Tenant",
+        title: "Single-Tenant Private Cloud",
         description:
           "Sole-tenant nodes providing complete physical isolation for your instances.",
       },

@@ -8,7 +8,7 @@ import { useAppSelector } from "@/store";
 
 const plans = [
   {
-    name: "Multi-Tenant",
+    name: "Multi-Tenant Public Cloud",
     price: "1,000",
     commitment: "Min. 1 seat",
     backendPlan: "launch",
@@ -25,12 +25,12 @@ const plans = [
       "Shared infrastructure",
       "Fastest deployment",
     ],
-    cta: "Deploy Multi-Tenant",
+    cta: "Deploy Multi-Tenant Public Cloud",
     buttonClass: "bg-[#0000ff] text-white hover:opacity-90",
     isContact: false,
   },
   {
-    name: "Single-Tenant",
+    name: "Single-Tenant Private Cloud",
     price: "2,500",
     commitment: "Min. 5 seats",
     backendPlan: "build",
@@ -47,12 +47,12 @@ const plans = [
       "Dedicated infrastructure",
       "Enhanced security & data isolation",
     ],
-    cta: "Deploy Single-Tenant",
+    cta: "Deploy Single-Tenant Private Cloud",
     buttonClass: "bg-[#0000ff] text-white hover:opacity-90",
     isContact: false,
   },
   {
-    name: "Government",
+    name: "Government Tier",
     price: "5,000",
     commitment: "Min. 10 seats",
     backendPlan: "scale",
@@ -69,7 +69,7 @@ const plans = [
       "FedRAMP High capable",
       "Sovereign security controls",
     ],
-    cta: "Deploy Government",
+    cta: "Deploy Government Tier",
     buttonClass: "bg-[#0000ff] text-white hover:opacity-90",
     isContact: true,
   },
