@@ -550,12 +550,16 @@ input:-webkit-autofill:active {
   background-color: #e5e7eb !important; /* Slightly darker gray for contrast */
   border-color: rgba(59, 130, 246, 0.3) !important;
   box-shadow: 0 0 12px 1px rgba(59, 130, 246, 0.12), 0 2px 4px rgba(0, 0, 0, 0.01) !important;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
 }
 
-.inso-prompt-box:focus-within {
-  border-color: rgba(59, 130, 246, 0.55) !important;
-  box-shadow: 0 0 16px 2px rgba(59, 130, 246, 0.22), 0 2px 4px rgba(0, 0, 0, 0.01) !important;
+/* Ensure no visual changes, borders, outlines, or shadows on any children when focused or clicked */
+.inso-prompt-box *:focus,
+.inso-prompt-box *:focus-within,
+.inso-prompt-box *[data-focus="true"],
+.inso-prompt-box *[data-focus-visible="true"] {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
 }
 
 .inso-prompt-box,
