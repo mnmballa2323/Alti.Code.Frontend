@@ -576,8 +576,8 @@ input:-webkit-autofill:active {
   color: #6b7280 !important; /* Darker gray placeholder for clear visibility */
 }
 
-.inso-prompt-box svg,
-.inso-prompt-box path,
+.inso-prompt-box svg:not(.inso-brand-icon),
+.inso-prompt-box svg:not(.inso-brand-icon) path,
 .inso-prompt-box button {
   color: #4b5563 !important; /* Muted dark gray for icons and action buttons */
 }

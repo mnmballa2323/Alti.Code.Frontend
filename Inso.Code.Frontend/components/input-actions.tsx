@@ -1131,22 +1131,22 @@ function PromptInputFullLineComponent({
                     >
                       {defaultModel.includes("gemini") ? (
                         <Icon
-                          className="size-4 shrink-0 text-[#1A73E8]"
+                          className="size-4 shrink-0 text-[#1A73E8] inso-brand-icon"
                           icon="simple-icons:googlegemini"
                         />
                       ) : defaultModel.includes("claude") ? (
                         <Icon
-                          className="size-4 shrink-0 text-[#CC9980]"
+                          className="size-4 shrink-0 text-[#CC9980] inso-brand-icon"
                           icon="simple-icons:claude"
                         />
                       ) : defaultModel.includes("gpt") ? (
                         <Icon
-                          className="size-4 shrink-0 text-foreground"
+                          className="size-4 shrink-0 text-foreground inso-brand-icon"
                           icon="simple-icons:openai"
                         />
                       ) : (
                         <Icon
-                          className="size-4 shrink-0 text-primary"
+                          className="size-4 shrink-0 text-primary inso-brand-icon"
                           icon="solar:bot-bold-duotone"
                         />
                       )}
