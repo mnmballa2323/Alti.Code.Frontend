@@ -1868,7 +1868,7 @@ export default function Sidebar() {
                         : "h-[36px] w-[36px] rounded-xl justify-center",
                       item.isActive
                         ? "bg-[#0000ff]/20 text-white shadow-[0_0_15px_rgba(0,0,255,0.6)] border border-[#0000ff]"
-                        : "bg-transparent border-transparent text-gray-400 hover:text-white hover:bg-white/5",
+                        : "bg-transparent border-transparent text-gray-400 hover:text-white",
                     )}
                     href={item.path}
                     onClick={(e) => {

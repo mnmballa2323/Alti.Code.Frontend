@@ -1116,7 +1116,7 @@ function PromptInputFullLineComponent({
                 >
                   <DropdownTrigger>
                     <button
-                      className="group flex items-center justify-center gap-1.5 h-8 px-3 rounded-full text-default-500 hover:text-foreground hover:bg-default-100 dark:hover:bg-zinc-800 transition-all text-[13px] font-medium cursor-pointer border border-transparent hover:border-default-200 dark:hover:border-zinc-700 outline-none shrink-0"
+                      className="group flex items-center justify-center gap-1.5 h-8 px-3 rounded-full text-default-500 hover:text-foreground transition-all text-[13px] font-medium cursor-pointer border border-transparent outline-none shrink-0"
                       type="button"
                     >
                       {defaultModel.includes("gemini") ? (
