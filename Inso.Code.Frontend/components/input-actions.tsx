@@ -311,7 +311,9 @@ function PromptInputFullLineComponent({
   }, []);
 
   const getModelDisplayName = (modelKey: string): string => {
-    if (modelKey && modelKey.startsWith("custom-agent-")) {
+    if (!modelKey) return "Select Model";
+
+    if (modelKey.startsWith("custom-agent-")) {
       const match = customAgents.find((a) => a.id === modelKey);
 
       return match ? `Agent: ${match.name}` : "Custom Agent";
@@ -322,6 +324,10 @@ function PromptInputFullLineComponent({
         return "Select Model";
       case "claude-sonnet-4.6":
         return "Claude Sonnet 4.6";
+      case "claude-sonnet-5":
+        return "Claude Sonnet 5";
+      case "claude-haiku-4.5":
+        return "Claude Haiku 4.5";
       case "claude-opus-4.8":
         return "Claude Opus 4.8";
       case "claude-fable-5":
@@ -331,7 +337,11 @@ function PromptInputFullLineComponent({
       case "gemini-3.5-pro":
         return "Gemini 3.1 Pro";
       default:
-        return "Gemini 3.6 Flash";
+        // Format kebab-case keys dynamically (e.g. gemini-2.5-pro -> Gemini 2.5 Pro)
+        return modelKey
+          .split("-")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
     }
   };
 
