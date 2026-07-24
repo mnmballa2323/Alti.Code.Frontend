@@ -370,7 +370,7 @@ function LanguagesContent() {
                     {/* Bottom Section: Specialties & Action */}
                     <div className="flex flex-col gap-4 mt-5">
                       <button
-                        className="w-full flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-white/5 hover:bg-[#0D0D0D] hover:text-white hover:border-[#0D0D0D] transition-all duration-300 group-hover:shadow-sm"
+                        className="w-full flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs font-bold rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-white/5 hover:bg-[#0B1121] hover:text-white hover:border-[#0B1121] transition-all duration-300 group-hover:shadow-sm"
                         onClick={() => handleDeploy(member)}
                       >
                         <span>Deploy Specialist</span>

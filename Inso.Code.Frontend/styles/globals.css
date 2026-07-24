@@ -96,7 +96,7 @@ label::after {
   to { transform: translateY(calc(-50% - var(--gap)/2)); }
 }
 
-:root, .light {
+:root {
   --font-sans: var(--font-geist-sans);
   --font-secondary: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -177,17 +177,17 @@ label::after {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --default-50: oklch(0.18 0 0);  /* Dark gray */
-  --default-100: oklch(0.22 0 0); /* Slightly lighter gray */
-  --default-200: oklch(0.28 0 0);
-  --default-300: oklch(0.34 0 0);
-  --default-400: oklch(0.44 0 0);
-  --default-500: oklch(0.55 0 0);
-  --default-600: oklch(0.68 0 0);
-  --default-700: oklch(0.78 0 0);
-  --default-800: oklch(0.88 0 0);
-  --default-900: oklch(0.95 0 0);
-  --content1: oklch(0.20 0 0);
+  --default-50: oklch(0.18 0.035 250);  /* Deep, sophisticated midnight blue bg (~#111A2E) */
+  --default-100: oklch(0.22 0.035 250); /* panel backgrounds */
+  --default-200: oklch(0.26 0.03 250);
+  --default-300: oklch(0.32 0.03 250);
+  --default-400: oklch(0.42 0.02 250);
+  --default-500: oklch(0.55 0.02 250);
+  --default-600: oklch(0.68 0.02 250);
+  --default-700: oklch(0.78 0.01 250);
+  --default-800: oklch(0.88 0.01 250);
+  --default-900: oklch(0.95 0.005 250);
+  --content1: oklch(0.20 0.035 250);
 }
 
 .midnight-navy {
@@ -547,9 +547,15 @@ input:-webkit-autofill:active {
 
 /* ── Inso Prompt Box Light Gray Style ── */
 .inso-prompt-box {
-  background-color: #e5e7eb !important;
-  border-color: #d1d5db !important;
-  box-shadow: none !important;
+  background-color: #e5e7eb !important; /* Slightly darker gray for contrast */
+  border-color: rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 0 12px 1px rgba(59, 130, 246, 0.12), 0 2px 4px rgba(0, 0, 0, 0.01) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.inso-prompt-box:focus-within {
+  border-color: rgba(59, 130, 246, 0.55) !important;
+  box-shadow: 0 0 16px 2px rgba(59, 130, 246, 0.22), 0 2px 4px rgba(0, 0, 0, 0.01) !important;
 }
 
 .inso-prompt-box,
@@ -570,16 +576,6 @@ input:-webkit-autofill:active {
 .inso-prompt-box path,
 .inso-prompt-box button {
   color: #4b5563 !important; /* Muted dark gray for icons and action buttons */
-}
-
-/* ── Brand Colors for Selected Model Icons ── */
-.inso-prompt-box svg.text-\[\#1A73E8\],
-.inso-prompt-box svg.text-\[\#1A73E8\] * {
-  color: #1A73E8 !important;
-}
-.inso-prompt-box svg.text-\[\#CC9980\],
-.inso-prompt-box svg.text-\[\#CC9980\] * {
-  color: #CC9980 !important;
 }
 
 .inso-prompt-box button:hover svg {

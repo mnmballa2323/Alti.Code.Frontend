@@ -61,12 +61,13 @@ export function ThemePickerModal() {
         </div>
 
         <div className="flex flex-row border-t border-gray-200 dark:border-gray-800 w-full">
-          <button
-            className="flex-1 bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent rounded-none h-12 text-black dark:text-white font-medium text-xs outline-none border-none cursor-pointer"
-            onClick={onClose}
+          <Button
+            disableRipple
+            className="flex-1 bg-transparent hover:bg-default-100 dark:hover:bg-default-200 rounded-none h-12 text-black dark:text-white font-medium text-xs"
+            onPress={onClose}
           >
             Done
-          </button>
+          </Button>
         </div>
       </ModalContent>
     </Modal>

@@ -1797,17 +1797,17 @@ export default function Sidebar() {
       className="dark h-screen max-h-screen overflow-hidden"
       data-theme="dark"
     >
-      <div className="flex h-full max-h-full overflow-hidden z-20 bg-[#0D0D0D] text-foreground">
+      <div className="flex h-full max-h-full overflow-hidden z-20 bg-[#121212] text-foreground">
         {/* Primary Column (Left Side Menu) */}
         <div
           className={cn(
-            "flex h-full max-h-full overflow-hidden flex-col transition-all duration-300 bg-[#0D0D0D] border-r border-white/5 relative",
+            "flex h-full max-h-full overflow-hidden flex-col transition-all duration-300 bg-[#121212] border-r border-white/5 relative",
             isSidebarOpen ? "w-72" : "w-16",
           )}
         >
           {/* Sidebar Header (Workspace Name & Collapse Button) */}
           {isSidebarOpen ? (
-            <div className="w-full h-[52px] flex-none flex items-center justify-between px-4 border-b border-zinc-800/80 select-none">
+            <div className="w-full h-[52px] flex-none flex items-center justify-between px-4 border-b border-white/5 select-none">
               <span className="text-[12px] font-normal text-gray-300 dark:text-gray-200 truncate max-w-[200px]">
                 {activeProject?.name || "No Workspace"}
               </span>
@@ -1822,7 +1822,7 @@ export default function Sidebar() {
               </Button>
             </div>
           ) : (
-            <div className="w-full h-[52px] flex-none flex items-center justify-center border-b border-zinc-800/80 select-none">
+            <div className="w-full h-[52px] flex-none flex items-center justify-center border-b border-white/5 select-none">
               <Button
                 isIconOnly
                 className="w-8 h-8 min-w-0 rounded-lg text-default-450 hover:text-default-700 dark:text-default-400 dark:hover:text-default-250 bg-transparent hover:bg-default-200/50 transition-all duration-200"
@@ -3160,7 +3160,7 @@ export default function Sidebar() {
 
   if (!mounted) {
     return (
-      <div className="flex h-screen max-h-screen overflow-hidden border-r border-white/5 bg-[#0D0D0D] w-[64px] transition-all" />
+      <div className="flex h-screen max-h-screen overflow-hidden border-r border-white/5 bg-[#121212] w-[64px] transition-all" />
     );
   }
 
@@ -3251,17 +3251,19 @@ export default function Sidebar() {
           </div>
 
           <div className="flex flex-row border-t border-gray-200 dark:border-gray-800 w-full">
-            <button
-              className="flex-1 bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent rounded-none h-14 text-black dark:text-white font-medium text-sm outline-none border-none cursor-pointer"
-              onClick={closeKnowledgeModal}
+            <Button
+              disableRipple
+              className="flex-1 bg-transparent hover:bg-default-100 rounded-none h-14 text-black dark:text-white font-medium text-sm"
+              onPress={closeKnowledgeModal}
             >
               Cancel
-            </button>
+            </Button>
             <div className="w-[1px] shrink-0 bg-gray-200 dark:bg-gray-800 h-14" />
-            <button
-              className="flex-1 bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent rounded-none h-14 text-black dark:text-white font-medium text-sm outline-none border-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!knowledgeFolderName}
-              onClick={() => {
+            <Button
+              disableRipple
+              className="flex-1 bg-transparent hover:bg-default-100 rounded-none h-14 text-black dark:text-white font-medium text-sm"
+              isDisabled={!knowledgeFolderName}
+              onPress={() => {
                 const newFolder = {
                   id: "kf-" + Date.now(),
                   name: knowledgeFolderName,
@@ -3278,7 +3280,7 @@ export default function Sidebar() {
               }}
             >
               Create
-            </button>
+            </Button>
           </div>
         </ModalContent>
       </Modal>

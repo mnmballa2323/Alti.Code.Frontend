@@ -170,16 +170,9 @@ function ThemeSynchronizer() {
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;
-    const isTauri =
-      "__TAURI__" in window ||
-      "__TAURI_INTERNALS__" in window ||
-      "electron" in window ||
-      window.navigator.userAgent.includes("Electron");
-
-    if (isTauri && theme === "light") {
-       setTheme("dark");
-     }
-  }, [theme, setTheme]);
+    localStorage.setItem("theme", "light");
+    setTheme("light");
+  }, [setTheme]);
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;

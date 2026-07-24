@@ -184,8 +184,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
               >
                 {/* Left: Ghost Editor */}
                 <Panel
-                  className="h-full flex flex-col bg-background text-foreground light"
-                  data-theme="light"
+                  className="h-full flex flex-col bg-default-100 dark:bg-default-50"
                   defaultSize={40}
                   minSize={20}
                 >
@@ -199,8 +198,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
 
                 {/* Right: Prompt Swarm / Chat */}
                 <Panel
-                  className="h-full bg-background text-foreground border-l border-default-100 flex flex-col light"
-                  data-theme="light"
+                  className="h-full bg-white dark:bg-default-50 border-l border-default-100 flex flex-col"
                   defaultSize={60}
                   minSize={30}
                 >
@@ -211,10 +209,7 @@ export function PersistentLayout({ children }: { children: React.ReactNode }) {
               </Group>
             ) : (
               /* Full-width content — no resizable panel wrapper needed */
-              <div 
-                className="flex-1 h-full flex flex-col overflow-hidden bg-background text-foreground z-10 relative light"
-                data-theme="light"
-              >
+              <div className="flex-1 h-full flex flex-col overflow-hidden bg-white dark:bg-default-50 z-10 relative">
                 {children}
               </div>
             )}

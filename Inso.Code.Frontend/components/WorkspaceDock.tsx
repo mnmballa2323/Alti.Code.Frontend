@@ -83,7 +83,7 @@ export function WorkspaceDock() {
       )}
     >
       {/* Top Header Spacer (52px) with border-b to align with Sidebar header */}
-      <div className="h-[52px] w-full border-b border-zinc-800/80 flex-none select-none" />
+      <div className="h-[52px] w-full border-b border-white/5 flex-none select-none" />
 
       {/* Scrollable Workspaces List */}
       <div

@@ -1082,7 +1082,7 @@ function PromptInputFullLineComponent({
           onValueChange={setPrompt}
         />
 
-        <div className="flex w-full flex-row items-center justify-between px-4 pb-3 pt-2 mt-1 border-t border-zinc-300/80 dark:border-zinc-800">
+        <div className="flex w-full flex-row items-center justify-between px-4 pb-3 pt-2 mt-1 border-t border-gray-300 dark:border-zinc-700">
           <div className="flex flex-col gap-1.5">
             {/* Top row of bottom section */}
             <div className="flex items-center gap-2">
@@ -1116,7 +1116,7 @@ function PromptInputFullLineComponent({
                 >
                   <DropdownTrigger>
                     <button
-                      className="group flex items-center justify-center gap-1.5 h-8 px-3 rounded-full text-default-500 hover:text-foreground transition-all text-[13px] font-medium cursor-pointer border border-transparent outline-none shrink-0"
+                      className="group flex items-center justify-center gap-1.5 h-8 px-3 rounded-full text-default-500 hover:text-foreground hover:bg-default-100 dark:hover:bg-zinc-800 transition-all text-[13px] font-medium cursor-pointer border border-transparent hover:border-default-200 dark:hover:border-zinc-700 outline-none shrink-0"
                       type="button"
                     >
                       {defaultModel.includes("gemini") ? (
@@ -1192,15 +1192,13 @@ function PromptInputFullLineComponent({
                     ) : (
                       (null as any)
                     )}
-                    <DropdownSection
-                      classNames={{
-                        heading: "text-[10px] font-semibold tracking-wider text-white uppercase px-2 mb-2",
-                      }}
-                      title="Google Gemini"
-                    >
-                      {/* GEMINI MODELS (Available ONLY on Google Cloud) */}
-                      {mockCloudProvider === "gcp" ||
-                      mockCloudProvider === "all" ? (
+                    {(mockCloudProvider === "gcp" || mockCloudProvider === "all") && (
+                      <DropdownSection
+                        title="Google Gemini"
+                        classNames={{
+                          heading: "text-[10px] font-bold tracking-wider text-zinc-500 uppercase px-2 mb-1 mt-1",
+                        }}
+                      >
                         <DropdownItem
                           key="gemini-3.5-pro"
                           startContent={
@@ -1215,11 +1213,6 @@ function PromptInputFullLineComponent({
                         >
                           Gemini 3.1 Pro
                         </DropdownItem>
-                      ) : (
-                        (null as any)
-                      )}
-                      {mockCloudProvider === "gcp" ||
-                      mockCloudProvider === "all" ? (
                         <DropdownItem
                           key="gemini-3.6-flash"
                           startContent={
@@ -1234,18 +1227,15 @@ function PromptInputFullLineComponent({
                         >
                           Gemini 3.6 Flash
                         </DropdownItem>
-                      ) : (
-                        (null as any)
-                      )}
-                    </DropdownSection>
+                      </DropdownSection>
+                    )}
 
                     <DropdownSection
-                      classNames={{
-                        heading: "text-[10px] font-semibold tracking-wider text-white uppercase px-2 mb-2",
-                      }}
                       title="Anthropic Claude"
+                      classNames={{
+                        heading: "text-[10px] font-bold tracking-wider text-zinc-500 uppercase px-2 mb-1 mt-2.5",
+                      }}
                     >
-                      {/* CLAUDE MODELS (Available on ALL clouds) */}
                       <DropdownItem
                         key="claude-fable-5"
                         startContent={
