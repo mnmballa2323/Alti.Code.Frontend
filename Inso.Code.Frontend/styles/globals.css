@@ -582,7 +582,7 @@ input:-webkit-autofill:active {
   color: #4b5563 !important; /* Muted dark gray for icons and action buttons */
 }
 
-.inso-prompt-box button:hover svg {
+.inso-prompt-box button:hover svg:not(.inso-brand-icon) {
   color: #111827 !important;
 }
 
