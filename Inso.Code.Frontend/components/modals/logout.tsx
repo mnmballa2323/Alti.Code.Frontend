@@ -54,21 +54,19 @@ export function Logout() {
         </div>
 
         <div className="flex flex-row border-t border-gray-200 dark:border-gray-800 w-full">
-          <Button
-            disableRipple
-            className="flex-1 bg-transparent hover:bg-default-100 dark:hover:bg-default-200 rounded-none h-14 text-black dark:text-white font-medium text-sm"
-            onPress={onClose}
+          <button
+            className="flex-1 bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent rounded-none h-14 text-black dark:text-white font-medium text-sm outline-none border-none cursor-pointer"
+            onClick={onClose}
           >
             Cancel
-          </Button>
+          </button>
           <div className="w-[1px] shrink-0 bg-gray-200 dark:bg-gray-800 h-14" />
-          <Button
-            disableRipple
-            className="flex-1 bg-transparent hover:bg-default-100 dark:hover:bg-default-200 rounded-none h-14 text-black dark:text-white font-medium text-sm"
-            onPress={handleLogOut}
+          <button
+            className="flex-1 bg-transparent hover:bg-transparent focus:bg-transparent active:bg-transparent rounded-none h-14 text-black dark:text-white font-medium text-sm outline-none border-none cursor-pointer"
+            onClick={handleLogOut}
           >
             Logout
-          </Button>
+          </button>
         </div>
       </ModalContent>
     </Modal>

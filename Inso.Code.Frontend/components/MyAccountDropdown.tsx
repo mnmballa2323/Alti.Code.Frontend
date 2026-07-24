@@ -1,18 +1,8 @@
 "use client";
 
-import { LogOut, Shield, Activity } from "lucide-react";
+import { LogOut, Shield, Activity, Settings, Paintbrush } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-
-import { Button } from "./ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 
 import { useModalStore } from "@/store/useModalStore";
 import { getUserData } from "@/lib/user";
@@ -22,6 +12,7 @@ const MyAccountDropdown = () => {
   const router = useRouter();
   const [profile, setProfile] = useState<any>(null);
   const [isDesktop, setIsDesktop] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setIsDesktop(
@@ -48,58 +39,82 @@ const MyAccountDropdown = () => {
   }, []);
 
   return (
-    <div className="w-full">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button className="w-full h-9 bg-transparent hover:bg-gray-100 dark:hover:bg-white/5 border-none text-gray-400 text-xs font-medium rounded-xl focus-visible:ring-0 focus-visible:border-border transition-colors justify-start px-3 shadow-none">
-            My Account
-          </Button>
-        </DropdownMenuTrigger>
+    <div className="w-full relative">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full h-9 bg-transparent border-none text-gray-400 text-xs font-semibold rounded-xl focus-visible:ring-0 focus-visible:border-border transition-colors flex items-center justify-start px-3 shadow-none outline-none cursor-pointer hover:text-white"
+      >
+        My Account
+      </button>
 
-        <DropdownMenuContent
-          align="start"
-          className="w-[var(--radix-dropdown-menu-trigger-width)]"
-        >
-          <DropdownMenuGroup>
+      {isOpen && (
+        <>
+          {/* Overlay to close the dropdown on click outside */}
+          <div 
+            className="fixed inset-0 z-[140] cursor-default" 
+            onClick={() => setIsOpen(false)} 
+          />
+          
+          <div className="absolute bottom-11 left-0 w-48 bg-white dark:bg-[#0D0D0D] border border-zinc-200 dark:border-white/5 shadow-2xl rounded-2xl p-1.5 z-[150] flex flex-col gap-0.5 animate-in fade-in slide-in-from-bottom-2 duration-150">
+            {/* Admin Console (if applicable) */}
             {!isDesktop &&
               (profile?.role === "admin" || profile?.role === "ADMIN") && (
-                <DropdownMenuItem
-                  className="relative cursor-pointer"
-                  onSelect={() => router.push("/admin")}
+                <button
+                  className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-lg transition-colors cursor-pointer text-left border-none bg-transparent outline-none"
+                  onClick={() => {
+                    setIsOpen(false);
+                    router.push("/admin");
+                  }}
                 >
-                  <span className="flex items-center space-x-2 w-full">
-                    <Shield className="size-5 text-indigo-400" />
-                    <span>Admin Console</span>
-                  </span>
-                </DropdownMenuItem>
+                  <Shield className="size-4 text-indigo-500 shrink-0" />
+                  <span>Admin Console</span>
+                </button>
               )}
-            <DropdownMenuItem
-              className="relative cursor-pointer"
-              onSelect={() => router.push("/dashboard/token-usage")}
+
+            {/* Settings */}
+            <button
+              className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-lg transition-colors cursor-pointer text-left border-none bg-transparent outline-none"
+              onClick={() => {
+                setIsOpen(false);
+                onOpen({ type: "settings" });
+              }}
             >
-              <span className="flex items-center space-x-2 w-full">
-                <Activity className="size-4 text-black dark:text-white" />
-                <span>Token Usage</span>
-              </span>
-            </DropdownMenuItem>
-          </DropdownMenuGroup>
+              <Settings className="size-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
+              <span>Settings</span>
+            </button>
 
-          <DropdownMenuSeparator />
 
-          <DropdownMenuItem
-            onClick={() =>
-              // signOut({ callbackUrl: "/" })
-              onOpen({
-                type: "logout",
-              })
-            }
-          >
-            <span className="flex items-center space-x-2">
-              <LogOut className="size-5" /> <span>Logout</span>
-            </span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+
+            {/* Token Usage */}
+            <button
+              className="w-full flex items-center gap-2 px-3 py-2 text-xs font-medium text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-white/5 rounded-lg transition-colors cursor-pointer text-left border-none bg-transparent outline-none"
+              onClick={() => {
+                setIsOpen(false);
+                router.push("/dashboard/token-usage");
+              }}
+            >
+              <Activity className="size-4 text-zinc-500 dark:text-zinc-400 shrink-0" />
+              <span>Token Usage</span>
+            </button>
+
+            <div className="h-[1px] bg-zinc-100 dark:bg-white/5 my-1.5" />
+
+            {/* Logout */}
+            <button
+              className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-red-600 dark:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors cursor-pointer text-left border-none bg-transparent outline-none"
+              onClick={() => {
+                setIsOpen(false);
+                onOpen({
+                  type: "logout",
+                });
+              }}
+            >
+              <LogOut className="size-4 text-red-600 dark:text-red-500 shrink-0" />
+              <span>Logout</span>
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 };

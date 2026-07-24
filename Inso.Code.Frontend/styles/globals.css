@@ -96,7 +96,7 @@ label::after {
   to { transform: translateY(calc(-50% - var(--gap)/2)); }
 }
 
-:root {
+:root, .light {
   --font-sans: var(--font-geist-sans);
   --font-secondary: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -177,57 +177,57 @@ label::after {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --default-50: oklch(0.12 0 0);
-  --default-100: oklch(0.18 0 0);
-  --default-200: oklch(0.24 0 0);
-  --default-300: oklch(0.30 0 0);
-  --default-400: oklch(0.40 0 0);
-  --default-500: oklch(0.556 0 0);
-  --default-600: oklch(0.706 0 0);
-  --default-700: oklch(0.80 0 0);
-  --default-800: oklch(0.90 0 0);
+  --default-50: oklch(0.18 0 0);  /* Dark gray */
+  --default-100: oklch(0.22 0 0); /* Slightly lighter gray */
+  --default-200: oklch(0.28 0 0);
+  --default-300: oklch(0.34 0 0);
+  --default-400: oklch(0.44 0 0);
+  --default-500: oklch(0.55 0 0);
+  --default-600: oklch(0.68 0 0);
+  --default-700: oklch(0.78 0 0);
+  --default-800: oklch(0.88 0 0);
   --default-900: oklch(0.95 0 0);
-  --content1: oklch(0.16 0 0);
+  --content1: oklch(0.20 0 0);
 }
 
 .midnight-navy {
-  --background: oklch(0.12 0.01 240);
-  --foreground: oklch(0.98 0 0);
-  --card: oklch(0.14 0.01 240);
-  --card-foreground: oklch(0.98 0 0);
-  --popover: oklch(0.14 0.01 240);
-  --popover-foreground: oklch(0.98 0 0);
-  --primary: oklch(0.98 0 0);
-  --primary-foreground: oklch(0.12 0 0);
-  --secondary: oklch(0.18 0.01 240);
-  --secondary-foreground: oklch(0.98 0 0);
-  --muted: oklch(0.18 0.01 240);
-  --muted-foreground: oklch(0.65 0.01 240);
-  --accent: oklch(0.18 0.01 240);
-  --accent-foreground: oklch(0.98 0 0);
+  --background: oklch(0.18 0.035 250);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.22 0.035 250);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.22 0.035 250);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.18 0 0);
+  --secondary: oklch(0.26 0.03 250);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.26 0.03 250);
+  --muted-foreground: oklch(0.65 0.02 250);
+  --accent: oklch(0.26 0.03 250);
+  --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.6 0.18 20);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.98 0 0);
-  --sidebar: oklch(0.10 0.01 240);
-  --sidebar-foreground: oklch(0.98 0 0);
-  --sidebar-primary: oklch(0.98 0 0);
-  --sidebar-primary-foreground: oklch(0.12 0 0);
-  --sidebar-accent: oklch(0.18 0.01 240);
-  --sidebar-accent-foreground: oklch(0.98 0 0);
+  --ring: oklch(0.985 0 0);
+  --sidebar: oklch(0.11 0.03 250);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.985 0 0);
+  --sidebar-primary-foreground: oklch(0.18 0 0);
+  --sidebar-accent: oklch(0.26 0.03 250);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.98 0 0);
-  --default-50: oklch(0.15 0.01 240);
-  --default-100: oklch(0.18 0.01 240);
-  --default-200: oklch(0.24 0.01 240);
-  --default-300: oklch(0.30 0.01 240);
-  --default-400: oklch(0.40 0.01 240);
-  --default-500: oklch(0.55 0.01 240);
-  --default-600: oklch(0.70 0.01 240);
-  --default-700: oklch(0.80 0.01 240);
-  --default-800: oklch(0.90 0.01 240);
-  --default-900: oklch(0.98 0 0);
-  --content1: oklch(0.15 0.01 240);
+  --sidebar-ring: oklch(0.985 0 0);
+  --default-50: oklch(0.18 0.035 250);   /* Midnight blue content background */
+  --default-100: oklch(0.22 0.035 250);  /* panel background */
+  --default-200: oklch(0.26 0.03 250);
+  --default-300: oklch(0.32 0.03 250);
+  --default-400: oklch(0.42 0.02 250);
+  --default-500: oklch(0.55 0.02 250);
+  --default-600: oklch(0.68 0.02 250);
+  --default-700: oklch(0.78 0.01 250);
+  --default-800: oklch(0.88 0.01 250);
+  --default-900: oklch(0.95 0.005 250);
+  --content1: oklch(0.20 0.035 250);
 }
 
 .midnight-navy {
@@ -543,4 +543,56 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s !important;
   -webkit-text-fill-color: inherit !important;
+}
+
+/* ── Inso Prompt Box Light Gray Style ── */
+.inso-prompt-box {
+  background-color: #e5e7eb !important;
+  border-color: #d1d5db !important;
+  box-shadow: none !important;
+}
+
+.inso-prompt-box,
+.inso-prompt-box textarea,
+.inso-prompt-box input,
+.inso-prompt-box span,
+.inso-prompt-box p,
+.inso-prompt-box div {
+  color: #1f2937 !important; /* Dark text/content */
+}
+
+.inso-prompt-box textarea::placeholder,
+.inso-prompt-box input::placeholder {
+  color: #6b7280 !important; /* Darker gray placeholder for clear visibility */
+}
+
+.inso-prompt-box svg,
+.inso-prompt-box path,
+.inso-prompt-box button {
+  color: #4b5563 !important; /* Muted dark gray for icons and action buttons */
+}
+
+/* ── Brand Colors for Selected Model Icons ── */
+.inso-prompt-box svg.text-\[\#1A73E8\],
+.inso-prompt-box svg.text-\[\#1A73E8\] * {
+  color: #1A73E8 !important;
+}
+.inso-prompt-box svg.text-\[\#CC9980\],
+.inso-prompt-box svg.text-\[\#CC9980\] * {
+  color: #CC9980 !important;
+}
+
+.inso-prompt-box button:hover svg {
+  color: #111827 !important;
+}
+
+.inso-prompt-box .inso-send-btn {
+  background-color: #111827 !important; /* Circular button background */
+}
+
+.inso-prompt-box .inso-send-btn svg,
+.inso-prompt-box .inso-send-btn svg * {
+  color: #ffffff !important;   /* Solid white color */
+  stroke: #ffffff !important;  /* Solid white stroke */
+  fill: #ffffff !important;    /* Solid white fill if applicable */
 }

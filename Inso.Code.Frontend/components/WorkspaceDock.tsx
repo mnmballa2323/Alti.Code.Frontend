@@ -78,12 +78,12 @@ export function WorkspaceDock() {
   return (
     <div
       className={cn(
-        "dark h-screen max-h-screen overflow-hidden bg-[#070B16] border-r border-white/5 flex flex-col select-none shrink-0 z-[120] relative transition-all duration-300 ease-in-out",
+        "dark h-screen max-h-screen overflow-hidden bg-black border-r border-white/5 flex flex-col select-none shrink-0 z-[120] relative transition-all duration-300 ease-in-out",
         isDockExpanded ? "w-64 min-w-[256px]" : "w-[88px] min-w-[88px]",
       )}
     >
       {/* Top Header Spacer (52px) with border-b to align with Sidebar header */}
-      <div className="h-[52px] w-full border-b border-white/5 flex-none select-none" />
+      <div className="h-[52px] w-full border-b border-zinc-800/80 flex-none select-none" />
 
       {/* Scrollable Workspaces List */}
       <div

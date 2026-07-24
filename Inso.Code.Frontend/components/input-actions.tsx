@@ -1038,7 +1038,7 @@ function PromptInputFullLineComponent({
         </div>
       )}
       <Form
-        className="mx-auto w-full max-w-4xl flex flex-col overflow-hidden bg-white dark:bg-[#161b22] rounded-[24px] border border-default-200 dark:border-zinc-800/50 transition-all duration-300 shadow-sm"
+        className="inso-prompt-box mx-auto w-full max-w-4xl flex flex-col overflow-hidden rounded-[24px] border transition-all duration-300 shadow-sm"
         onSubmit={onSubmit}
       >
         <div
@@ -1064,7 +1064,7 @@ function PromptInputFullLineComponent({
             innerWrapper:
               "relative border-none outline-none focus:outline-none focus:ring-0 !bg-none bg-transparent [&::after]:hidden [&::before]:hidden ![mask-image:none] ![-webkit-mask-image:none]",
             input:
-              "text-[15px] leading-relaxed font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-default-400 placeholder:font-normal py-0 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none group-data-[focus=true]:!ring-0 !bg-none bg-transparent ![mask-image:none] ![-webkit-mask-image:none]",
+              "text-[15px] leading-relaxed font-normal h-auto w-full text-foreground overflow-y-auto scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] placeholder:text-zinc-400 placeholder:font-normal py-0 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none group-data-[focus=true]:!ring-0 !bg-none bg-transparent ![mask-image:none] ![-webkit-mask-image:none]",
             inputWrapper:
               "!bg-transparent shadow-none !border-0 px-4 pt-3 pb-1 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none focus-within:ring-0 focus-within:outline-none group-data-[focus=true]:!ring-0 group-data-[focus=true]:!border-transparent group-data-[focus-visible=true]:!ring-0 !bg-none [&::after]:hidden [&::before]:hidden ![mask-image:none] ![-webkit-mask-image:none] group-data-[hover=true]:!bg-transparent group-data-[focus=true]:!bg-transparent",
           }}
@@ -1082,7 +1082,7 @@ function PromptInputFullLineComponent({
           onValueChange={setPrompt}
         />
 
-        <div className="flex w-full flex-row items-center justify-between px-4 pb-3 pt-2 mt-1 border-t-[0.5px] border-default-200 dark:border-zinc-800/50">
+        <div className="flex w-full flex-row items-center justify-between px-4 pb-3 pt-2 mt-1 border-t border-zinc-300/80 dark:border-zinc-800">
           <div className="flex flex-col gap-1.5">
             {/* Top row of bottom section */}
             <div className="flex items-center gap-2">
@@ -1111,12 +1111,12 @@ function PromptInputFullLineComponent({
 
               {showModelDropdown && (
                 <Dropdown
-                  className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[240px] p-2"
+                  className="bg-default-100 dark:bg-default-50 border border-default-200/50 dark:border-white/5 shadow-2xl rounded-2xl min-w-[240px] p-2"
                   placement="top-start"
                 >
                   <DropdownTrigger>
                     <button
-                      className="group flex items-center justify-center gap-1.5 h-8 px-3 rounded-full text-default-500 hover:text-foreground hover:bg-default-100 dark:hover:bg-zinc-800 transition-all text-[13px] font-medium cursor-pointer border border-transparent hover:border-default-200 dark:hover:border-zinc-700 outline-none shrink-0"
+                      className="group flex items-center justify-center gap-1.5 h-8 px-3 rounded-full text-default-500 hover:text-foreground transition-all text-[13px] font-medium cursor-pointer border border-transparent outline-none shrink-0"
                       type="button"
                     >
                       {defaultModel.includes("gemini") ? (
@@ -1194,8 +1194,9 @@ function PromptInputFullLineComponent({
                     )}
                     <DropdownSection
                       classNames={{
-                        heading: "hidden",
+                        heading: "text-[10px] font-semibold tracking-wider text-white uppercase px-2 mb-2",
                       }}
+                      title="Google Gemini"
                     >
                       {/* GEMINI MODELS (Available ONLY on Google Cloud) */}
                       {mockCloudProvider === "gcp" ||
@@ -1236,7 +1237,14 @@ function PromptInputFullLineComponent({
                       ) : (
                         (null as any)
                       )}
+                    </DropdownSection>
 
+                    <DropdownSection
+                      classNames={{
+                        heading: "text-[10px] font-semibold tracking-wider text-white uppercase px-2 mb-2",
+                      }}
+                      title="Anthropic Claude"
+                    >
                       {/* CLAUDE MODELS (Available on ALL clouds) */}
                       <DropdownItem
                         key="claude-fable-5"
@@ -1332,7 +1340,7 @@ function PromptInputFullLineComponent({
           <div className="flex items-center gap-1">
             {false && !hideRunLocally && !hideDropdown && (
               <Dropdown
-                className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[220px] p-2"
+                className="bg-default-100 dark:bg-default-50 border border-default-200/50 dark:border-white/5 shadow-2xl rounded-2xl min-w-[220px] p-2"
                 placement="top-start"
               >
                 <DropdownTrigger>
@@ -1483,7 +1491,7 @@ function PromptInputFullLineComponent({
 
             {showRagToggle && (
               <Dropdown
-                className="bg-white dark:bg-[#161b22] border border-default-200/50 dark:border-gray-800 shadow-2xl rounded-2xl min-w-[260px] p-3 text-foreground"
+                className="bg-default-100 dark:bg-default-50 border border-default-200/50 dark:border-white/5 shadow-2xl rounded-2xl min-w-[260px] p-3 text-foreground"
                 placement="top-start"
               >
                 <DropdownTrigger>
@@ -1860,7 +1868,7 @@ function PromptInputFullLineComponent({
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
-                  className="bg-[#161b22] text-white hover:bg-[#161b22]/90 dark:bg-primary dark:text-primary-foreground shadow-sm size-6 flex items-center justify-center rounded-md transition-all"
+                  className="inso-send-btn bg-[#161b22] text-white hover:bg-[#161b22]/90 dark:bg-primary dark:text-primary-foreground shadow-sm size-6 flex items-center justify-center rounded-md transition-all"
                   type="button"
                   onClick={prompt ? handleSubmit : undefined}
                 >

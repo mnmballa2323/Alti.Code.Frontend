@@ -453,6 +453,7 @@ export default function LoginPage() {
   }
 
   // ── MFA Step ────────────────────────────────────────────────────────────────
+  if (mfaRequired) {
     return (
       <div className="flex w-full flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-300">
         <div className="flex flex-col items-center gap-4">

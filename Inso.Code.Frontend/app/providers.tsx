@@ -166,7 +166,20 @@ function UserFetcher({ children }: { children: React.ReactNode }) {
 }
 
 function ThemeSynchronizer() {
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+    const isTauri =
+      "__TAURI__" in window ||
+      "__TAURI_INTERNALS__" in window ||
+      "electron" in window ||
+      window.navigator.userAgent.includes("Electron");
+
+    if (isTauri && theme === "light") {
+       setTheme("dark");
+     }
+  }, [theme, setTheme]);
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;
