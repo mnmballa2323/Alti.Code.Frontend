@@ -135,7 +135,6 @@ function Navbar() {
   }, [pathname]);
 
   const sections = [
-    { name: "Azure Sovereign", id: "azure", href: "/clouds/azure" },
     { name: "Demo", id: "demo", href: "/demo" },
     { name: "Pricing", id: "pricing", href: "/pricing" },
     {
