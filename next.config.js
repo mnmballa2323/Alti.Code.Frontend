@@ -1,5 +1,8 @@
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  outputFileTracingRoot: path.join(__dirname),
   // Use standalone mode for optimized Docker builds, export for Desktop
   output: process.env.BUILD_TARGET === 'desktop' ? "export" : "standalone",
   devIndicators: {

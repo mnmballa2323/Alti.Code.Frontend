@@ -1,6 +1,6 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Inso Code",
+  name: "Alti Code Studio",
   description: "AI for Software Engineering",
 };
