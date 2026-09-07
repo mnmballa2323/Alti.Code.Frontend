@@ -86,7 +86,7 @@ export default function AgentSwarmAnimation() {
           }}
         >
           <Image
-            alt="Inso Code Logo"
+            alt="Alti Code Studio Logo"
             className="w-8 h-8 object-contain"
             height={32}
             src="/logo-white.png"

@@ -52,7 +52,7 @@ const mockLogs: AuditLog[] = [
     action: "KNOWLEDGE_FILE_UPLOAD",
     status: "SUCCESS",
     ipAddress: "192.168.1.142",
-    metadata: '{"filename":"inso code black.png","size":"0.02 MB"}',
+    metadata: '{"filename":"alti code studio black.png","size":"0.02 MB"}',
   },
   {
     _id: "log_04",

@@ -357,7 +357,6 @@ function Navbar() {
     "/privacy",
     "/terms",
     "/cookies",
-    "/clouds/azure",
   ].includes(pathname);
 
   const isTransparent = isLandingPage && !isScrolled;
@@ -384,20 +383,15 @@ function Navbar() {
             <div className="flex items-center gap-2 md:gap-3">
               <Image
                 priority
-                alt="Inso Logo Icon"
-                className="h-6 w-auto object-contain transition-all duration-300"
-                height={24}
-                src="/logo-white.png"
+                alt="Alti Code Studio Logo Icon"
+                className="h-7 w-auto object-contain transition-all duration-300"
+                height={28}
+                src="/app-icon.png"
                 width={28}
               />
-              <Image
-                priority
-                alt="Inso Code"
-                className="h-6 w-auto object-contain transition-all duration-300"
-                height={24}
-                src="/inso-logo-white.png"
-                width={120}
-              />
+              <span className="font-semibold text-base tracking-tight text-white font-sans">
+                Alti Code Studio
+              </span>
             </div>
           </Link>
 

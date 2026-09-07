@@ -30,7 +30,7 @@ export const Terminal = () => {
     {
       id: nextLogId(),
       type: "system",
-      text: "Inso Code Terminal v1.0.0",
+      text: "Alti Code Studio Terminal v1.0.0",
     },
     { id: nextLogId(), type: "system", text: "Connected to Local Shell" },
   ]);

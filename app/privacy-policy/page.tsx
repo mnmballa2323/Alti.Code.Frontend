@@ -31,7 +31,7 @@ export default function PrivacyPolicyPage() {
               1. Google Cloud Sovereign Commitment
             </h2>
             <p className="text-sm text-zinc-600 leading-relaxed font-medium">
-              Inso Code is built from the ground up for strict data sovereignty
+              Alti Code Studio is built from the ground up for strict data sovereignty
               and compliance. All data processing, agent swarms, and model
               inference run inside private Google Cloud Sovereign environments.
               We do not transmit, share, or egress customer codebases, prompts,

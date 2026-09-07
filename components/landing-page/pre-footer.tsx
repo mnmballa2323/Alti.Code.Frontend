@@ -30,7 +30,7 @@ function PreFooter() {
                   width={37}
                 />
                 <Image
-                  alt="Inso Code"
+                  alt="Alti Code Studio"
                   className="h-6 w-auto object-contain"
                   height={24}
                   src="/inso-logo-white.png"
@@ -43,7 +43,7 @@ function PreFooter() {
                   absolute speed and precision.
                 </p>
                 <p className="footer-dimmed text-xs mt-4 text-center lg:text-left">
-                  © {new Date().getFullYear()} Inso Code, Inc. All rights
+                  © {new Date().getFullYear()} Alti Code Studio, Inc. All rights
                   reserved.
                 </p>
               </div>

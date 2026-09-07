@@ -24,7 +24,7 @@ const initialState: TabsState = {
   tabs: [
     {
       id: "tab-inso-code-studio",
-      title: "Inso Code",
+      title: "Alti Code Studio",
       projectPath: "inso-code",
       activeView: "/code",
       chatSessionId: null,

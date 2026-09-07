@@ -113,7 +113,7 @@ export function LoginModal() {
           Sign In
         </DialogTitle>
         <DialogDescription className="sr-only">
-          Sign in to Inso Code
+          Sign in to Alti Code Studio
         </DialogDescription>
         <div className="w-full">
           {step === "email" ? (

@@ -1,7 +1,7 @@
 /**
  * sanitize-filename replacement (MIT License)
  * 
- * Copyright (c) 2026 Inso Code
+ * Copyright (c) 2026 Alti Code Studio
  * Licensed under the MIT License
  * 
  * Replaces the WTFPL-licensed `sanitize-filename` and `truncate-utf8-bytes` packages.

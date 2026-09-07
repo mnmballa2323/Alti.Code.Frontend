@@ -220,12 +220,12 @@ export default function AdminLayout({
         {/* Left header: aligns with sidebar width */}
         <div className="w-72 border-r border-neutral-100 dark:border-neutral-800 h-full flex items-center gap-3 px-6 shrink-0">
           <img
-            alt="Inso Code Logo"
+            alt="Alti Code Studio Logo"
             className="w-5 h-5 object-contain block dark:hidden animate-fade-in"
             src="/logo-black.png"
           />
           <img
-            alt="Inso Code Logo"
+            alt="Alti Code Studio Logo"
             className="w-5 h-5 object-contain hidden dark:block animate-fade-in"
             src="/logo-white.png"
           />

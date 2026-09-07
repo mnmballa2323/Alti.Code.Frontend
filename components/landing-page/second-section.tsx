@@ -24,7 +24,7 @@ function SecondSection() {
     <div className="wrapper flex flex-col justify-center items-center py-20">
       <div className="flex flex-col gap-5">
         <h2 className="font-secondary text-[#fff] font-bold text-5xl leading-[56px] text-center">
-          Why Choose Inso Code
+          Why Choose Alti Code Studio
         </h2>
         <p className="font-normal text-lg leading-[24px] text-center text-[#fff]">
           The complete AI coding solution built for speed, accuracy, and

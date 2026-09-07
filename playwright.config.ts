@@ -21,14 +21,10 @@ const getSovereignBaseUrl = () => {
   const cloud = process.env.SOVEREIGN_CLOUD || "local";
 
   switch (cloud) {
-    case "aws":
-      return process.env.E2E_AWS_URL || "https://aws.insocode.app";
-    case "azure":
-      return process.env.E2E_AZURE_URL || "https://azure.insocode.app";
     case "gcp":
-      return process.env.E2E_GCP_URL || "https://gcp.insocode.app";
+      return process.env.E2E_GCP_URL || "https://gcp.alticode.app";
     default:
-      return "http://localhost:3001";
+      return "http://localhost:3000";
   }
 };
 

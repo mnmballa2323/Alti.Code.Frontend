@@ -50,25 +50,12 @@ const INDUSTRIES = [
   "Other",
 ];
 
-const CLOUDS = [
-  {
-    id: "aws",
-    name: "Amazon Web Services (AWS)",
-    description: "Inference powered by AWS Bedrock. Best for global reach.",
-    icon: Cloud,
-  },
-  {
-    id: "azure",
-    name: "Microsoft Azure",
-    description:
-      "Inference powered by Azure AI Foundry. Best for enterprise Microsoft shops.",
-    icon: Cloud,
-  },
+const CLOUD_PROVIDERS = [
   {
     id: "gcp",
     name: "Google Cloud Platform (GCP)",
     description:
-      "Inference powered by Vertex AI. Best for Kubernetes-native shops.",
+      "Native sovereign execution powered exclusively by Google Cloud Run, Vertex AI, and Cloud SQL.",
     icon: Cloud,
   },
 ];

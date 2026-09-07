@@ -36,7 +36,7 @@ export default function DownloadWindowsPage() {
           {/* Left Side: Title & Action Buttons (col-span-6) */}
           <div className="md:col-span-6 flex flex-col items-center md:items-start text-center md:text-left gap-5">
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-black leading-tight md:whitespace-nowrap">
-              Downloading Inso Code
+              Downloading Alti Code Studio
             </h1>
             <p className="text-gray-500 text-sm md:text-base leading-relaxed">
               Your download for Windows should begin automatically. If it didn't
@@ -113,7 +113,7 @@ export default function DownloadWindowsPage() {
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-black">
-                    Launch Inso Code
+                    Launch Alti Code Studio
                   </h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
                     Double-click the desktop shortcut icon or search for Inso

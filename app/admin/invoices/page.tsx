@@ -21,7 +21,7 @@ export default function InvoicesPage() {
       id: "INV-2026-006",
       date: "June 1, 2026",
       description: "Monthly Seat Subscription",
-      ledgerItem: "Inso Code Developer Seat (1 Active Member)",
+      ledgerItem: "Alti Code Studio Developer Seat (1 Active Member)",
       amount: "$50.00",
       paymentMethod: "Visa ending in 4242",
     },
@@ -45,7 +45,7 @@ export default function InvoicesPage() {
       id: "INV-2026-003",
       date: "March 1, 2026",
       description: "Monthly Seat Subscription",
-      ledgerItem: "Inso Code Developer Seat (1 Active Member)",
+      ledgerItem: "Alti Code Studio Developer Seat (1 Active Member)",
       amount: "$50.00",
       paymentMethod: "Visa ending in 4242",
     },
@@ -61,7 +61,7 @@ export default function InvoicesPage() {
       id: "INV-2026-001",
       date: "January 1, 2026",
       description: "Monthly Seat Subscription",
-      ledgerItem: "Inso Code Developer Seat (1 Active Member)",
+      ledgerItem: "Alti Code Studio Developer Seat (1 Active Member)",
       amount: "$50.00",
       paymentMethod: "Visa ending in 4242",
     },
@@ -129,7 +129,7 @@ export default function InvoicesPage() {
         <body>
           <div className="header">
             <div>
-              <div className="company">INSO CODE</div>
+              <div className="company">ALTI CODE STUDIO</div>
               <div style="font-size: 13px; color: #6b7280; margin-top: 4px;">Sovereign Autonomous Software Engineering</div>
             </div>
             <div style="text-align: right;">
@@ -176,7 +176,7 @@ export default function InvoicesPage() {
           </div>
 
           <div className="footer" style="margin-top: 60px; text-align: center; font-size: 12px; color: #6b7280;">
-            Thank you for building with Inso Code. Official Tax Receipt & Ledger Breakdown.<br />
+            Thank you for building with Alti Code Studio. Official Tax Receipt & Ledger Breakdown.<br />
             Cryptographic Audit Hash: 0x8a92f...c491b
           </div>
           <script>

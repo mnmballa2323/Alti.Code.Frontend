@@ -47,8 +47,8 @@ export default function ModelProvidersSection() {
           <p className="text-lg text-zinc-600 dark:text-zinc-400 leading-relaxed font-medium max-w-3xl mx-auto">
             To guarantee absolute data sovereignty and compliance, the platform
             is <br className="hidden md:inline" /> powered exclusively by
-            premier models hosted securely on Azure AI Foundry and Azure OpenAI
-            Service.
+            premier models hosted securely on Google Cloud Vertex AI and Gemini
+            Foundation Models.
           </p>
         </div>
 

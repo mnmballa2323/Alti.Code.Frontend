@@ -24,8 +24,8 @@ export default function PrivacyPage() {
                 1. Scope and Applicability
               </h2>
               <p>
-                This Privacy Policy ("Policy") describes how Inso Code Inc.
-                ("Inso Code," "we," "us," or "our") collects, uses, stores, and
+                This Privacy Policy ("Policy") describes how Alti Code Studio Inc.
+                ("Alti Code Studio," "we," "us," or "our") collects, uses, stores, and
                 shares information when you access our website, platform, and
                 autonomous software engineering services (collectively, the
                 "Services"). This Policy applies to all users, including
@@ -39,21 +39,18 @@ export default function PrivacyPage() {
                 2. The Principle of Data Sovereignty & Zero-Retention
               </h2>
               <p className="mb-4">
-                Inso Code is fundamentally engineered around the principle of
+                Alti Code Studio is fundamentally engineered around the principle of
                 absolute data sovereignty. We recognize that your source code,
                 infrastructure architecture, and proprietary algorithms are your
                 most critical intellectual property.
               </p>
               <p>
-                Through our Triple Cloud Native architecture, our autonomous
-                agent swarms are deployed natively across our AWS, Azure, or GCP
-                Execution Planes. You select the cloud environment that matches
-                your organization's compliance requirements, ensuring your
-                codebase never crosses public internet boundaries or
-                unauthorized hyperscalers.{" "}
+                Through our Google Cloud Platform Native Sovereign architecture, our autonomous
+                agent swarms are deployed natively across our GCP Execution Planes (Cloud Run & GKE).
+                This guarantees your codebase never crosses unauthorized hyperscalers or unverified networks.{" "}
                 <strong>
-                  Inso Code operates a strict Zero-Retention Policy.
-                </strong>{" "}
+                  Alti Code Studio operates a strict Zero-Retention Policy.
+                </strong>
                 While your code is processed within our secure, isolated cloud
                 environments, we do not persistently store, log, or cache your
                 source code, database schemas, or proprietary business logic.
@@ -114,15 +111,14 @@ export default function PrivacyPage() {
               </h2>
               <p className="mb-4">
                 To facilitate the cognitive capabilities of our autonomous
-                agents, Inso Code routes generalized requests through authorized
-                hyperscaler AI APIs (e.g., AWS Bedrock, Azure AI, GCP Vertex).
+                agents, Alti Code Studio routes requests exclusively through Google Cloud Vertex AI
+                and Gemini enterprise models under zero-data-retention agreements.
               </p>
               <p>
-                <strong>Zero-Training Guarantee:</strong> We hold legally
-                binding, enterprise-grade contractual agreements with all
-                hyperscaler partners guaranteeing that zero data routed through
-                Inso Code will ever be used to train, retrain, or fine-tune
-                public foundation models. Your infrastructure interactions
+                <strong>Zero-Training Guarantee:</strong> We hold enterprise-grade
+                contractual agreements guaranteeing that zero data routed through
+                Alti Code Studio will ever be used to train, retrain, or fine-tune
+                foundation models. Your infrastructure interactions
                 remain strictly ephemeral.
               </p>
             </section>

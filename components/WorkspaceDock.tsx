@@ -186,7 +186,7 @@ export function WorkspaceDock() {
                 )}
               >
                 <img
-                  alt="Inso Code"
+                  alt="Alti Code Studio"
                   className="w-4 h-4 invert opacity-90"
                   src="/neutral-workspace.png"
                 />
@@ -199,7 +199,7 @@ export function WorkspaceDock() {
                     : "text-blue-200 group-hover:text-white",
                 )}
               >
-                Inso Code
+                Alti Code Studio
               </span>
             </div>
           </div>
@@ -220,7 +220,7 @@ export function WorkspaceDock() {
               )}
             >
               <img
-                alt="Inso Code"
+                alt="Alti Code Studio"
                 className="w-5 h-5 invert opacity-90"
                 src="/neutral-workspace.png"
               />

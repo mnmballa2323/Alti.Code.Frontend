@@ -1,4 +1,4 @@
-# 🖥 Inso Code — Frontend
+# 🖥 Alti Code Studio — Frontend
 
 > Next.js 14 · HeroUI v2 · TypeScript · Framer Motion · Socket.IO · OpenClaw Visualizer
 > Powered by **435+** hyper-specialized backend AI agents. **v8.3.0 — The Elite Architect Armada.**
@@ -7,7 +7,7 @@
 
 ## Overview
 
-The Inso Code frontend is a **full-stack AI developer platform UI** built on Next.js 14 (App Router). It provides real-time visualization of the AI agent swarm, mission orchestration, the Gemini CLI Hub, and a comprehensive security dashboard.
+The Alti Code Studio frontend is a **full-stack AI developer platform UI** built on Next.js 14 (App Router). It provides real-time visualization of the AI agent swarm, mission orchestration, the Gemini CLI Hub, and a comprehensive security dashboard.
 
 ---
 
@@ -95,4 +95,4 @@ npx tsc --noEmit --skipLibCheck  # type check
 
 ## License
 
-MIT © 2024–2026 Inso Code
+MIT © 2024–2026 Alti Code Studio

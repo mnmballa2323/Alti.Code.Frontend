@@ -24,7 +24,7 @@ export default function CookiesPage() {
                 1. Introduction
               </h2>
               <p>
-                Inso Code Inc. ("Inso Code") respects your privacy. This Cookies
+                Alti Code Studio Inc. ("Alti Code Studio") respects your privacy. This Cookies
                 Policy explains what cookies are, how we use them within our
                 enterprise platform, and your rights to control their usage. As
                 an enterprise security-first organization, our use of cookies is
@@ -50,7 +50,7 @@ export default function CookiesPage() {
               </h2>
               <p className="font-semibold text-white mb-2">We Do Not Track.</p>
               <p>
-                Inso Code expressly prohibits the use of third-party advertising
+                Alti Code Studio expressly prohibits the use of third-party advertising
                 cookies, retargeting pixels, or behavioral cross-site trackers
                 on our authenticated dashboards or public marketing surfaces.
                 Your institutional interest in sovereign AI architectures is
@@ -108,7 +108,7 @@ export default function CookiesPage() {
                 <em>Notice:</em> Because our platform relies entirely on secure
                 cryptographic tokens to authenticate infrastructure commands,
                 electing to block "Strictly Necessary" cookies will inherently
-                sever your ability to log into the Inso Code dashboard or
+                sever your ability to log into the Alti Code Studio dashboard or
                 interface with your deployed swarms.
               </p>
             </section>

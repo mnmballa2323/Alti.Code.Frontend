@@ -61,7 +61,7 @@ function PaymentSuccessContent() {
           Your subscription is now active.
         </p>
         <p className="text-gray-400 dark:text-gray-500 text-sm mb-8">
-          Welcome to the Inso Code platform.
+          Welcome to the Alti Code Studio platform.
         </p>
 
         {/* Sparkle divider */}

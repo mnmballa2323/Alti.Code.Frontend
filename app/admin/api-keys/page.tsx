@@ -131,7 +131,7 @@ export default function ApiKeysPage() {
                   API Keys
                 </h1>
                 <p className="text-[11px] text-neutral-400 font-medium">
-                  Manage programmatic access to the Inso Code API
+                  Manage programmatic access to the Alti Code Studio API
                 </p>
               </div>
             </div>

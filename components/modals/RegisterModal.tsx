@@ -110,7 +110,7 @@ export function RegisterModal() {
           Register
         </DialogTitle>
         <DialogDescription className="sr-only">
-          Register to Inso Code
+          Register to Alti Code Studio
         </DialogDescription>
         <div className="w-full">
           {step === "email" ? (

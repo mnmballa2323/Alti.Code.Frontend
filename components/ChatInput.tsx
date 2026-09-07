@@ -10,7 +10,7 @@ const ChatInput = () => {
         <div className="rounded-2xl border-2 border-gray-200 px-4 shadow-sm">
           <input
             className="w-full border-none px-2 py-2 outline-none z-20"
-            placeholder="Prompt inso code"
+            placeholder="Prompt alti code studio"
             type="text"
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}

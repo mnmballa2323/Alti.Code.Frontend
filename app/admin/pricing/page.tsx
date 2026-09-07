@@ -57,7 +57,7 @@ const AI_MODEL_PRICING: AIModelPricing[] = [
   },
   {
     id: "inso-code-swarm",
-    name: "Inso Code Swarm",
+    name: "Alti Code Studio Swarm",
     inputPrice: "$0.25",
     outputPrice: "$0.80",
     contextWindow: "Autonomous DAG",

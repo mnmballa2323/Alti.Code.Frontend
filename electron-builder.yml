@@ -1,7 +1,7 @@
 
-appId: com.insocode.app
-productName: Inso Code
-copyright: Copyright © 2026 Inso Code
+appId: com.alticode.app
+productName: Alti Code Studio
+copyright: Copyright © 2026 Alti Code Studio
 directories:
   output: dist
   buildResources: build

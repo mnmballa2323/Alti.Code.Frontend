@@ -155,7 +155,7 @@ export default function DeterministicControlSection() {
             Absolute Security.
           </h3>
           <p className="text-lg text-zinc-600 leading-relaxed font-medium text-balance max-w-3xl">
-            Most AI tools are unpredictable. Inso Code is built for enterprise
+            Most AI tools are unpredictable. Alti Code Studio is built for enterprise
             engineering teams, combining native guardrails and mandatory TDD
             workflows to build robust production systems.
           </p>

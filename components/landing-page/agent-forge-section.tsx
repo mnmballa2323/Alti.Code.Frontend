@@ -137,7 +137,7 @@ export default function AgentForgeSection() {
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
                 <div className="w-3 h-3 rounded-full bg-green-500/80" />
                 <span className="text-xs font-bold text-zinc-600 ml-2 font-mono">
-                  Inso Code
+                  Alti Code Studio
                 </span>
               </div>
               <button

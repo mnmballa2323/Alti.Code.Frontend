@@ -49,92 +49,93 @@ interface CloudFunctionAgent {
 }
 
 // ──── DYNAMIC CLOUD SPECIALIZATION MAPPING ────
+// ──── DYNAMIC CLOUD SPECIALIZATION MAPPING ────
 const getFunctionsForProvider = (provider: string): CloudFunctionAgent[] => {
   return [
     {
-      name: "Azure Kubernetes Service & VMs",
-      functionName: "Compute & Confidential Containers",
-      agentName: "Azure AKS Specialist (Tier 14)",
-      agentId: "azure_aks_specialist",
+      name: "Google Cloud Run & GKE",
+      functionName: "Compute & Serverless Containers",
+      agentName: "GCP Cloud Run Specialist (Tier 14)",
+      agentId: "gcp_cloud_run_specialist",
       status: "ACTIVE",
-      capabilities: ["aks-scaling", "confidential-computing", "azure-cni"],
+      capabilities: ["cloud-run-scaling", "gke-autopilot", "vpc-connector"],
       description:
-        "Optimizes Azure Kubernetes Service node pools, Intel SGX confidential enclaves, and Azure CNI networking.",
+        "Orchestrates Google Cloud Run serverless microservices and GKE Autopilot clusters with automated scaling.",
       icon: "Server",
     },
     {
-      name: "Azure Blob Storage",
-      functionName: "Object & Data Lake Storage",
-      agentName: "Azure Blob Specialist (Tier 14)",
-      agentId: "azure_blob_specialist",
+      name: "Google Cloud Storage",
+      functionName: "Object & Artifact Storage",
+      agentName: "GCS Storage Specialist (Tier 14)",
+      agentId: "gcp_storage_specialist",
       status: "ACTIVE",
       capabilities: [
+        "uniform-bucket-level-access",
         "lifecycle-management",
-        "immutable-storage",
-        "private-endpoints",
+        "cmek-encryption",
       ],
       description:
-        "Configures Private Endpoints, Hot/Cool/Archive tiers, and immutable WORM storage policies.",
+        "Manages Google Cloud Storage buckets, versioning, customer-managed encryption, and global CDN delivery.",
       icon: "Database",
     },
     {
-      name: "Azure Functions",
-      functionName: "Serverless Operations",
-      agentName: "Azure Functions Specialist (Tier 14)",
-      agentId: "azure_functions_specialist",
-      status: "OPTIMIZING",
+      name: "Vertex AI & Gemini Engine",
+      functionName: "Foundation Models & Vector Search",
+      agentName: "Vertex AI Specialist (Tier 14)",
+      agentId: "gcp_vertex_ai_specialist",
+      status: "SWARMING",
       capabilities: [
-        "event-grid-triggers",
-        "premium-plan",
-        "virtual-network-integration",
+        "gemini-2.5-pro",
+        "vector-search-hnsw",
+        "grounded-rag",
       ],
       description:
-        "Tunes Linux Consumption and Elastic Premium Functions, Event Grid triggers, and VNet integration.",
+        "Drives multimodal code intelligence with Gemini 2.5 Pro, high-speed subagent inference, and Vertex Vector Search.",
       icon: "Cpu",
     },
     {
-      name: "Azure Cosmos DB",
+      name: "Google Cloud SQL & Spanner",
       functionName: "Global Distributed Database",
-      agentName: "Azure Cosmos DB Specialist (Tier 14)",
-      agentId: "azure_cosmos_specialist",
+      agentName: "GCP Cloud SQL Specialist (Tier 14)",
+      agentId: "gcp_cloud_sql_specialist",
       status: "ACTIVE",
       capabilities: [
-        "multi-region-writes",
-        "autoscale-throughput",
-        "vector-indexing",
+        "postgres-ha",
+        "spanner-graph",
+        "private-service-access",
       ],
       description:
-        "Tunes Cosmos DB partition keys, multi-master replication, and integrated vector indexing.",
+        "Optimizes Google Cloud SQL PostgreSQL high availability and Google Cloud Spanner global graph schemas.",
       icon: "Database",
     },
     {
-      name: "Microsoft Entra ID",
-      functionName: "Identity & Zero-Trust Access",
-      agentName: "Azure Entra Guardian (Tier 14)",
-      agentId: "azure_entra_guardian",
-      status: "SWARMING",
+      name: "Google Cloud Secret Manager & KMS",
+      functionName: "Identity & Zero-Trust Security",
+      agentName: "GCP KMS Guardian (Tier 14)",
+      agentId: "gcp_kms_guardian",
+      status: "ACTIVE",
       capabilities: [
-        "managed-identities",
-        "conditional-access",
-        "rbac-policies",
+        "secret-manager",
+        "cloud-kms",
+        "iam-workload-identity",
       ],
       description:
-        "Audits Azure Managed Identities, Conditional Access policies, and fine-grained Azure RBAC role assignments.",
+        "Automates rotation of secrets in Google Cloud Secret Manager and enforces Google Cloud Workload Identity Federation.",
       icon: "Lock",
     },
     {
-      name: "Azure Resource Manager & Terraform",
-      functionName: "Infrastructure as Code",
-      agentName: "Azure IaC Specialist (Tier 14)",
-      agentId: "azure_iac_specialist",
+      name: "Google Cloud Pub/Sub & Terraform",
+      functionName: "Event Streaming & Infrastructure as Code",
+      agentName: "GCP IaC Specialist (Tier 14)",
+      agentId: "gcp_iac_specialist",
       status: "IDLE",
       capabilities: [
-        "azurerm-compilation",
-        "azure-bicep",
-        "azure-policy-guardrails",
+        "google-terraform-compilation",
+        "cloudbuild-cicd",
+        "cloud-armor-guardrails",
       ],
       description:
-        "Compiles declarative Terraform azurerm modules, validates Azure Policy compliance, and enforces deployment gates.",
+        "Compiles declarative Terraform Google provider modules, validates Cloud Armor security policies, and enforces Cloud Build gates.",
       icon: "Activity",
     },
   ];
@@ -210,76 +211,62 @@ export default function CloudPage() {
       } else {
         let workloads = [];
 
-        if (selectedProvider === "Azure Government") {
+        if (
+          selectedProvider?.includes("GCP") ||
+          selectedProvider?.includes("Google")
+        ) {
           workloads = [
             {
-              id: `aks-${Math.floor(Math.random() * 10000)}`,
-              name: "AKS Workload Nodes (Azure Gov)",
+              id: `gke-${Math.floor(Math.random() * 10000)}`,
+              name: "GKE Autopilot Workload Nodes (GCP Sovereign)",
               status: "Running",
-              region: "usgovvirginia",
-              cpu: "42%",
+              region: "us-central1",
+              cpu: "38%",
             },
             {
-              id: `foundry-${Math.floor(Math.random() * 1000)}`,
-              name: "Sovereign AI Gateway (Azure AI Foundry Gov FedRAMP)",
+              id: `vertex-${Math.floor(Math.random() * 1000)}`,
+              name: "Vertex AI Gemini 2.5 Inference Gateway",
               status: "Running",
-              region: "usgovvirginia",
-              cpu: "64%",
+              region: "us-central1",
+              cpu: "62%",
             },
             {
-              id: `cosmos-${Math.floor(Math.random() * 1000)}`,
-              name: "Azure Cosmos DB Multi-Region (IL5)",
+              id: `sql-${Math.floor(Math.random() * 1000)}`,
+              name: "Cloud SQL High Availability Postgres (CMEK)",
               status: "Running",
-              region: "usgovtexas",
-              cpu: "18%",
-            },
-          ];
-        } else if (selectedProvider === "Azure Dedicated") {
-          workloads = [
-            {
-              id: `aks-${Math.floor(Math.random() * 10000)}`,
-              name: "AKS Dedicated Enclave Nodes (SGX)",
-              status: "Running",
-              region: "eastus2",
-              cpu: "35%",
+              region: "us-central1",
+              cpu: "21%",
             },
             {
-              id: `foundry-${Math.floor(Math.random() * 1000)}`,
-              name: "Sovereign AI Gateway (Azure AI Foundry Dedicated)",
+              id: `gcs-${Math.floor(Math.random() * 1000)}`,
+              name: "Google Cloud Storage Multi-Region Bucket",
               status: "Running",
-              region: "eastus2",
-              cpu: "22%",
-            },
-            {
-              id: `cosmos-${Math.floor(Math.random() * 1000)}`,
-              name: "Azure Cosmos DB Private Link",
-              status: "Running",
-              region: "eastus2",
-              cpu: "12%",
+              region: "us-central1",
+              cpu: "14%",
             },
           ];
         } else {
           workloads = [
             {
-              id: `wk-${Math.floor(Math.random() * 1000)}`,
-              name: "Production Database Cluster",
+              id: `run-${Math.floor(Math.random() * 1000)}`,
+              name: "Cloud Run Serverless Agent Swarm Service",
               status: "Running",
-              region: "us-east-1",
-              cpu: "45%",
+              region: "us-central1",
+              cpu: "35%",
             },
             {
-              id: `wk-${Math.floor(Math.random() * 1000)}`,
-              name: "AI Inference Gateway",
+              id: `vertex-${Math.floor(Math.random() * 1000)}`,
+              name: "Vertex AI Grounding & Vector Search",
               status: "Running",
-              region: "eu-west-3",
-              cpu: "82%",
+              region: "us-central1",
+              cpu: "54%",
             },
             {
-              id: `wk-${Math.floor(Math.random() * 1000)}`,
-              name: "Edge Caching Nodes",
+              id: `pubsub-${Math.floor(Math.random() * 1000)}`,
+              name: "Cloud Pub/Sub Sovereign Event Broker",
               status: "Running",
-              region: "ap-northeast-1",
-              cpu: "12%",
+              region: "us-central1",
+              cpu: "18%",
             },
           ];
         }
@@ -297,76 +284,62 @@ export default function CloudPage() {
       setIsAuthenticated(true);
       let workloads = [];
 
-      if (selectedProvider === "Azure Government") {
+      if (
+        selectedProvider?.includes("GCP") ||
+        selectedProvider?.includes("Google")
+      ) {
         workloads = [
           {
-            id: `aks-${Math.floor(Math.random() * 10000)}`,
-            name: "AKS Workload Nodes (Azure Gov)",
+            id: `gke-${Math.floor(Math.random() * 10000)}`,
+            name: "GKE Autopilot Workload Nodes (GCP Sovereign)",
             status: "Running",
-            region: "usgovvirginia",
-            cpu: "42%",
+            region: "us-central1",
+            cpu: "38%",
           },
           {
-            id: `foundry-${Math.floor(Math.random() * 1000)}`,
-            name: "Azure AI Foundry Gov (FedRAMP)",
+            id: `vertex-${Math.floor(Math.random() * 1000)}`,
+            name: "Vertex AI Gemini 2.5 Inference Gateway",
             status: "Running",
-            region: "usgovvirginia",
-            cpu: "64%",
+            region: "us-central1",
+            cpu: "62%",
           },
           {
-            id: `cosmos-${Math.floor(Math.random() * 1000)}`,
-            name: "Azure Cosmos DB Multi-Region (IL5)",
+            id: `sql-${Math.floor(Math.random() * 1000)}`,
+            name: "Cloud SQL High Availability Postgres (CMEK)",
             status: "Running",
-            region: "usgovtexas",
-            cpu: "18%",
-          },
-        ];
-      } else if (selectedProvider === "Azure Dedicated") {
-        workloads = [
-          {
-            id: `aks-${Math.floor(Math.random() * 10000)}`,
-            name: "AKS Dedicated Enclave Nodes (SGX)",
-            status: "Running",
-            region: "eastus2",
-            cpu: "35%",
+            region: "us-central1",
+            cpu: "21%",
           },
           {
-            id: `foundry-${Math.floor(Math.random() * 1000)}`,
-            name: "Azure AI Foundry Dedicated (Sovereign)",
+            id: `gcs-${Math.floor(Math.random() * 1000)}`,
+            name: "Google Cloud Storage Multi-Region Bucket",
             status: "Running",
-            region: "eastus2",
-            cpu: "22%",
-          },
-          {
-            id: `cosmos-${Math.floor(Math.random() * 1000)}`,
-            name: "Azure Cosmos DB Private Link",
-            status: "Running",
-            region: "eastus2",
-            cpu: "12%",
+            region: "us-central1",
+            cpu: "14%",
           },
         ];
       } else {
         workloads = [
           {
-            id: `wk-${Math.floor(Math.random() * 1000)}`,
-            name: "Production Database Cluster",
+            id: `run-${Math.floor(Math.random() * 1000)}`,
+            name: "Cloud Run Serverless Agent Swarm Service",
             status: "Running",
-            region: "us-east-1",
-            cpu: "45%",
+            region: "us-central1",
+            cpu: "35%",
           },
           {
-            id: `wk-${Math.floor(Math.random() * 1000)}`,
-            name: "AI Inference Gateway",
+            id: `vertex-${Math.floor(Math.random() * 1000)}`,
+            name: "Vertex AI Grounding & Vector Search",
             status: "Running",
-            region: "eu-west-3",
-            cpu: "82%",
+            region: "us-central1",
+            cpu: "54%",
           },
           {
-            id: `wk-${Math.floor(Math.random() * 1000)}`,
-            name: "Edge Caching Nodes",
+            id: `pubsub-${Math.floor(Math.random() * 1000)}`,
+            name: "Cloud Pub/Sub Sovereign Event Broker",
             status: "Running",
-            region: "ap-northeast-1",
-            cpu: "12%",
+            region: "us-central1",
+            cpu: "18%",
           },
         ];
       }

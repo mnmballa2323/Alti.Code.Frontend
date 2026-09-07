@@ -35,7 +35,7 @@ export default function CapabilitiesBentoGrid() {
             Engineered for scale
           </h3>
           <p className="text-lg text-zinc-600 leading-relaxed font-medium">
-            Under the hood, inso code uses system level components that
+            Under the hood, alti code studio uses system level components that
             coordinate local daemons
             <br className="hidden md:block" />
             for unmatched execution speed, strict enterprise security, and
@@ -66,7 +66,7 @@ export default function CapabilitiesBentoGrid() {
                 Desktop IPC & CLI Steering
               </h4>
               <p className="text-xs xl:text-sm text-zinc-600 leading-relaxed font-medium">
-                Inso Code runs tools and modifies code directly on your machine
+                Alti Code Studio runs tools and modifies code directly on your machine
                 via secure local IPC, bypassing the need for slow virtual
                 machines completely.
               </p>

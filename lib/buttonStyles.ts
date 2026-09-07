@@ -1,5 +1,5 @@
 /**
- * Shared Button Style Utilities — Inso Code v3.1.0
+ * Shared Button Style Utilities — Alti Code Studio v3.1.0
  *
  * Use these as the canonical button variants across all pages.
  * Pass via `className` prop:

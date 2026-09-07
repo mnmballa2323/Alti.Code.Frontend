@@ -1,5 +1,5 @@
 /**
- * Unified API Client for Inso Code
+ * Unified API Client for Alti Code Studio
  * Used by Admin, Owner, and Desktop surfaces.
  */
 

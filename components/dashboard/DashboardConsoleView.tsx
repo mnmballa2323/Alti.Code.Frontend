@@ -146,7 +146,7 @@ export default function DashboardConsoleView() {
       {/* Central White Logo Watermark */}
       <div className="flex-1 flex items-center justify-center py-10 min-h-[250px]">
         <img
-          alt="Inso Code Logo"
+          alt="Alti Code Studio Logo"
           className="w-40 h-40 object-contain opacity-25 dark:opacity-40 select-none pointer-events-none animate-fade-in"
           src="/logo-white.png"
         />

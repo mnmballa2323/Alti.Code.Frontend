@@ -13,7 +13,7 @@ export default function AboutPage() {
           <div className="flex flex-col items-center gap-2 relative top-2 md:top-4 w-full">
             <h1 className="flex flex-col items-center justify-center font-bold tracking-tighter leading-[1.0] text-center">
               <span className="text-3xl sm:text-4xl md:text-5xl lg:text-[2.75rem] tracking-tight text-white whitespace-nowrap">
-                We Are Inso Code
+                We Are Alti Code Studio
               </span>
             </h1>
             <div className="max-w-6xl flex flex-col items-center text-zinc-400 text-lg font-normal leading-relaxed mt-2 px-4 text-center">

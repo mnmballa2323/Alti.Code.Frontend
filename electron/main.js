@@ -81,11 +81,11 @@ function createTray() {
     const trayIcon = nativeImage.createFromPath(trayIconPath).resize({ width: 18, height: 18 });
 
     tray = new Tray(trayIcon);
-    tray.setToolTip('Inso Code');
+    tray.setToolTip('Alti Code Studio');
 
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: 'Open Inso Code',
+            label: 'Open Alti Code Studio',
             click: () => {
                 if (mainWindow) {
                     mainWindow.show();
@@ -173,7 +173,7 @@ const createWindow = () => {
         height: savedState.height || 800,
         x: savedState.x,
         y: savedState.y,
-        title: "Inso Code",
+        title: "Alti Code Studio",
         icon: iconPath,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),

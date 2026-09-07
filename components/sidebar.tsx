@@ -870,7 +870,7 @@ const codeProjects = [
   },
   {
     id: "p2",
-    name: "Inso Code Studio",
+    name: "Alti Code Studio",
     runs: [
       "launch the desktop app",
       "Integrating Auth",
@@ -3106,11 +3106,11 @@ export default function Sidebar() {
                   {(() => {
                     const groups = [
                       {
-                        category: "Azure Sovereign Cloud",
+                        category: "Google Cloud Platform",
                         providers: [
-                          "Azure Commercial",
-                          "Azure Dedicated",
-                          "Azure Government",
+                          "Google Cloud Run",
+                          "Google Kubernetes Engine (GKE)",
+                          "Google Cloud Vertex AI",
                         ],
                       },
                       {
@@ -3163,7 +3163,7 @@ export default function Sidebar() {
                           "Cloudflare",
                           "Fastly",
                           "Akamai",
-                          "Azure Front Door & WAF",
+                          "Google Cloud Armor & CDN",
                           "Edgio",
                           "Tailscale",
                           "Ngrok",
@@ -3174,17 +3174,17 @@ export default function Sidebar() {
                         providers: [
                           "Docker Hub",
                           "Kubernetes",
-                          "Azure Container Apps",
-                          "Azure Kubernetes Service (AKS)",
+                          "Google Cloud Run",
+                          "Google Kubernetes Engine (GKE)",
                           "HashiCorp Nomad",
                         ],
                       },
                       {
                         category: "Serverless & Compute",
                         providers: [
-                          "Azure Functions (Commercial)",
-                          "Azure Functions (Dedicated)",
-                          "Azure Functions (Government)",
+                          "Google Cloud Functions (2nd Gen)",
+                          "Google Cloud Run Functions",
+                          "Google Vertex AI Compute",
                           "Cloudflare Workers",
                           "Deno Deploy",
                         ],
@@ -3197,7 +3197,7 @@ export default function Sidebar() {
                           "Bitbucket Pipelines",
                           "CircleCI",
                           "Travis CI",
-                          "Azure DevOps & Pipelines",
+                          "Google Cloud Build",
                           "ArgoCD",
                           "Spinnaker",
                         ],
@@ -3207,8 +3207,8 @@ export default function Sidebar() {
                         providers: [
                           "Confluent",
                           "RabbitMQ Cloud",
-                          "Azure Service Bus",
-                          "Azure Event Grid",
+                          "Google Cloud Pub/Sub",
+                          "Google Eventarc",
                         ],
                       },
                     ];
@@ -3336,7 +3336,6 @@ export default function Sidebar() {
                               height={18}
                               icon={member.icon}
                               style={
-                                member.id === "amazonaws-expert" ||
                                 member.id === "ibm-cloud-expert"
                                   ? { filter: "brightness(0) invert(1)" }
                                   : undefined

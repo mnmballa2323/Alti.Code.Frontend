@@ -36,7 +36,7 @@ export default function DownloadMacPage() {
           {/* Left Side: Title & Action Buttons (col-span-6) */}
           <div className="md:col-span-6 flex flex-col items-center md:items-start text-center md:text-left gap-5">
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-black leading-tight md:whitespace-nowrap">
-              Downloading Inso Code
+              Downloading Alti Code Studio
             </h1>
             <p className="text-gray-500 text-sm md:text-base leading-relaxed">
               Your download for macOS should begin automatically. If it didn't
@@ -101,7 +101,7 @@ export default function DownloadMacPage() {
                     Drag to Applications
                   </h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Drag the Inso Code application icon directly into the
+                    Drag the Alti Code Studio application icon directly into the
                     Applications folder in the setup window.
                   </p>
                 </div>
@@ -116,7 +116,7 @@ export default function DownloadMacPage() {
                     Open & Trust App
                   </h3>
                   <p className="text-xs text-gray-500 mt-1 leading-relaxed">
-                    Launch Inso Code from your Applications folder, and click
+                    Launch Alti Code Studio from your Applications folder, and click
                     Open if macOS prompts a security alert.
                   </p>
                 </div>

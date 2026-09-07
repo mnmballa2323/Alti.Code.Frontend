@@ -79,31 +79,16 @@ function isAllowedRoute(pathname: string): boolean {
 }
 
 /**
- * Triple-Cloud Sovereign Edge Router
+ * Google Cloud Sovereign Edge Router
  *
  * Intercepts requests destined for the backend and routes them dynamically
- * to the most optimal, healthy Cloud Provider (AWS, Azure, GCP).
- * Performs active-active failover natively at the edge.
+ * to the Google Cloud Platform backend (Cloud Run / GKE).
  */
 async function routeToSovereignBackend(request: NextRequest) {
-  const backendEndpoints = {
-    aws: process.env.NEXT_PUBLIC_AWS_BACKEND_URL,
-    azure: process.env.NEXT_PUBLIC_AZURE_BACKEND_URL,
-    gcp: process.env.NEXT_PUBLIC_GCP_BACKEND_URL,
-  };
-
-  // Preference derived from Geo-IP or strict compliance rules
-  const targetCloud =
-    request.headers.get("X-Sovereign-Cloud") ||
-    process.env.PRIMARY_CLOUD ||
-    "aws";
-
-  let targetUrl =
-    backendEndpoints[targetCloud as keyof typeof backendEndpoints];
-
-  if (!targetUrl) {
-    targetUrl = backendEndpoints.aws; // Fallback to AWS
-  }
+  const targetUrl =
+    process.env.NEXT_PUBLIC_GCP_BACKEND_URL ||
+    process.env.NEXT_PUBLIC_BACKEND_URL ||
+    "http://localhost:5000";
 
   const url = request.nextUrl.clone();
   const backendPath = url.pathname.replace(/^\/backend-api/, "");

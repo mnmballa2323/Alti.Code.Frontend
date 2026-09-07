@@ -134,7 +134,7 @@ export default function AdminSettingsPage() {
 
   /* Form state */
   const [org, setOrg] = useState<OrgSettings>({
-    name: "Inso Code",
+    name: "Alti Code Studio",
     domain: "alticode.dev",
     industry: "Technology",
     timezone: "America/New_York",

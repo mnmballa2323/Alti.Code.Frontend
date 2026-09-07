@@ -2,7 +2,7 @@ import { invoke } from "@tauri-apps/api/core";
 
 /**
  * --------------------------------------------------------------------------
- * Inso Code — Rust IPC Bridge
+ * Alti Code Studio — Rust IPC Bridge
  * --------------------------------------------------------------------------
  * This module connects the React frontend directly to the Rust binary
  * running in the Tauri host. It enables bare-metal file system access,

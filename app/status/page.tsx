@@ -227,7 +227,7 @@ export default function StatusPage() {
           <div className="flex items-center gap-3 mb-6">
             <Activity className="w-6 h-6 text-primary" />
             <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 tracking-tight">
-              Inso Code — System Status
+              Alti Code Studio — System Status
             </h1>
           </div>
 
