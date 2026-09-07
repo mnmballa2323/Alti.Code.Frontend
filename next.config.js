@@ -57,7 +57,7 @@ const nextConfig = {
                 // Local dev
                 "http://localhost:* ws://localhost:* wss://localhost:* http://127.0.0.1:* ws://127.0.0.1:*",
                 // Production backend (REST + WebSocket)
-                "https://api.insocode.com wss://api.insocode.com",
+                "https://api.alticode.com wss://api.alticode.com",
                 // Fallback env-driven override (set NEXT_PUBLIC_API_URL in production)
                 process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL.replace(/^http/, 'https') : '',
                 process.env.NEXT_PUBLIC_WS_URL ? process.env.NEXT_PUBLIC_WS_URL : '',

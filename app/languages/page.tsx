@@ -161,10 +161,8 @@ const getLanguageDisplayName = (id: string) => {
       return "Compliance & Legal";
     case "enterprise-architect":
       return "Enterprise Architecture";
-    case "aws-expert":
-      return "AWS";
     case "gcp-expert":
-      return "GCP";
+      return "Google Cloud";
     case "ibm-cloud-expert":
       return "IBM";
     case "sap-expert":

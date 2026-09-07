@@ -7,15 +7,10 @@ import dotenv from "dotenv";
 dotenv.config({ path: path.resolve(__dirname, ".env.local") });
 
 /**
- * Sovereign Triple-Cloud End-to-End Execution Matrix (Phase 27)
+ * Sovereign Google Cloud Platform End-to-End Execution Matrix
  *
  * Determines the target infrastructure natively.
- * In CI/CD, the test suite executes in a parallel matrix across:
- * 1. AWS Edge
- * 2. Azure FrontDoor
- * 3. GCP Cloud CDN
- *
- * Ensures absolute behavioral parity across all three environments.
+ * Executed against Google Cloud Run / Cloud CDN environments.
  */
 const getSovereignBaseUrl = () => {
   const cloud = process.env.SOVEREIGN_CLOUD || "local";

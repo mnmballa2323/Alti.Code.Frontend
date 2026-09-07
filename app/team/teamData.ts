@@ -27,19 +27,6 @@ export interface TeamMember {
 
 export const teamMembers: TeamMember[] = [
   {
-    id: "amazonaws-expert",
-    name: "AWS",
-    role: "AWS Architect",
-    type: "devops",
-    category: "Cloud",
-    specialties: ["API Integration", "Webhooks", "SDK Configuration"],
-    bio: "Integrates and configures AWS services into your application.",
-    status: "idle",
-    statusText: "Idle",
-    accentColor: "#232F3E",
-    icon: "logos:aws",
-  },
-  {
     id: "googlecloud-expert",
     name: "Google Cloud",
     role: "Google Cloud Architect",

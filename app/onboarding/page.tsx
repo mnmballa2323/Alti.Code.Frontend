@@ -60,6 +60,8 @@ const CLOUD_PROVIDERS = [
   },
 ];
 
+const CLOUDS = CLOUD_PROVIDERS;
+
 const PLANS = [
   {
     id: "multi-tenant",
@@ -71,8 +73,8 @@ const PLANS = [
     description: "Shared serverless compute resources.",
     features: [
       "Logically isolated application",
-      "Shared compute (Fargate/Cloud Run)",
-      "Standard database tier",
+      "Shared compute (Google Cloud Run)",
+      "Standard database tier (Cloud SQL)",
       "Standard SLA (99.5%)",
     ],
   },
@@ -87,7 +89,7 @@ const PLANS = [
     features: [
       "Physically isolated application",
       "Dedicated Hosts / Sole-Tenant Nodes",
-      "Highly Available (Multi-AZ) Database",
+      "Highly Available (Regional) Cloud SQL Database",
       "Enterprise SLA (99.9%)",
     ],
   },
@@ -98,7 +100,7 @@ const PLANS = [
     period: "",
     badge: "Compliance",
     badgeColor: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
-    description: "Deployed to GovCloud/Assured Workloads.",
+    description: "Deployed to Google Cloud Assured Workloads.",
     features: [
       "FedRAMP High Compliant Regions",
       "Strict data residency",
@@ -143,7 +145,7 @@ export default function OnboardingPage() {
   const [industry, setIndustry] = useState("Technology");
 
   // Step 2 — Cloud
-  const [selectedCloud, setSelectedCloud] = useState("aws");
+  const [selectedCloud, setSelectedCloud] = useState("gcp");
 
   // Step 3 — Plan
   const [selectedPlan, setSelectedPlan] = useState("multi-tenant");
