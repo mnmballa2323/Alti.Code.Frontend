@@ -1,8 +1,0 @@
-- `[x]` Upgrade `software_engineering_swarm.js` to execute real commands
-- `[x]` Create integration test `software_engineering_swarm.test.js`
-- `[x]` Run Vitest suite to verify Crabbox developer swarm
-- `[x]` Refactor `prisma.user.repository.js` to be async and include `deleteUser`
-- `[x]` Wrap vulnerable controller handlers in `catchAsync` & port to PostgreSQL
-- `[x]` Refactor `admin.service.js` to use Prisma for user checks and deletion
-- `[x]` Bump version in `VERSION` to `39.37.232`
-- `[x]` Update `CHANGELOG.md` with release notes

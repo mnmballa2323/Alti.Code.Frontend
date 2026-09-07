@@ -1,1 +1,6 @@
 Inso.Code.Backend/
+node_modules/
+.next/
+out/
+public/downloads/
+

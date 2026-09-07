@@ -1,0 +1,648 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "tw-animate-css";
+
+/* Webkit-based browsers (Chrome, Edge, Safari) */
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent !important;
+  display: none !important;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: transparent !important;
+  display: none !important;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+textarea {
+  resize: none;
+}
+
+/* Fix autofill background color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: inherit !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover, 
+.dark input:-webkit-autofill:focus, 
+.dark input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #171717 inset !important;
+  -webkit-text-fill-color: white !important;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none !important;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+html {
+  scroll-behavior: smooth !important;
+  overscroll-behavior-y: none;
+}
+
+tbody tr {
+  @apply border-b-[6px];
+}
+
+
+.wrapper {
+  @apply max-w-[1380px] mx-auto w-full px-5;
+}
+
+
+
+label::after {
+  content: none;
+  display: none;
+}
+
+@keyframes scrolling-banner {
+  from { transform: translateX(0); }
+  to { transform: translateX(calc(-50% - var(--gap)/2)); }
+}
+
+@keyframes scrolling-banner-vertical {
+  from { transform: translateY(0); }
+  to { transform: translateY(calc(-50% - var(--gap)/2)); }
+}
+
+:root {
+  --font-sans: var(--font-geist-sans);
+  --font-secondary: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.95 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.556 0 0);
+  --accent: oklch(0.95 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.88 0 0);
+  --input: oklch(0.88 0 0);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.95 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.88 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+  --default-50: oklch(0.95 0 0);
+  --default-100: oklch(0.91 0 0);
+  --default-200: oklch(0.85 0 0);
+  --default-300: oklch(0.78 0 0);
+  --default-400: oklch(0.706 0 0);
+  --default-500: oklch(0.556 0 0);
+  --default-600: oklch(0.439 0 0);
+  --default-700: oklch(0.37 0 0);
+  --default-800: oklch(0.269 0 0);
+  --default-900: oklch(0.205 0 0);
+  --content1: oklch(1 0 0);
+}
+
+.dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.15 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+  --default-50: oklch(0.18 0.035 250);  /* Deep, sophisticated midnight blue bg (~#111A2E) */
+  --default-100: oklch(0.22 0.035 250); /* panel backgrounds */
+  --default-200: oklch(0.26 0.03 250);
+  --default-300: oklch(0.32 0.03 250);
+  --default-400: oklch(0.42 0.02 250);
+  --default-500: oklch(0.55 0.02 250);
+  --default-600: oklch(0.68 0.02 250);
+  --default-700: oklch(0.78 0.01 250);
+  --default-800: oklch(0.88 0.01 250);
+  --default-900: oklch(0.95 0.005 250);
+  --content1: oklch(0.20 0.035 250);
+}
+
+.midnight-navy {
+  --background: oklch(0.18 0.035 250);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.22 0.035 250);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.22 0.035 250);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.18 0 0);
+  --secondary: oklch(0.26 0.03 250);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.26 0.03 250);
+  --muted-foreground: oklch(0.65 0.02 250);
+  --accent: oklch(0.26 0.03 250);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.6 0.18 20);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.985 0 0);
+  --sidebar: oklch(0.11 0.03 250);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.985 0 0);
+  --sidebar-primary-foreground: oklch(0.18 0 0);
+  --sidebar-accent: oklch(0.26 0.03 250);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.985 0 0);
+  --default-50: oklch(0.18 0.035 250);   /* Midnight blue content background */
+  --default-100: oklch(0.22 0.035 250);  /* panel background */
+  --default-200: oklch(0.26 0.03 250);
+  --default-300: oklch(0.32 0.03 250);
+  --default-400: oklch(0.42 0.02 250);
+  --default-500: oklch(0.55 0.02 250);
+  --default-600: oklch(0.68 0.02 250);
+  --default-700: oklch(0.78 0.01 250);
+  --default-800: oklch(0.88 0.01 250);
+  --default-900: oklch(0.95 0.005 250);
+  --content1: oklch(0.20 0.035 250);
+}
+
+.midnight-navy {
+  color-scheme: dark;
+}
+
+/* Sidebar styling (darker navy) */
+.midnight-navy .bg-white, 
+.midnight-navy .dark\:bg-black, 
+.midnight-navy .dark\:bg-\[\#0A0A0A\] {
+  background-color: var(--sidebar) !important;
+}
+
+/* Main panel background styling (lighter navy) */
+.midnight-navy .bg-\[\#F4F4F6\],
+.midnight-navy .dark\:bg-\[\#161616\] {
+  background-color: var(--background) !important;
+}
+
+.midnight-navy .dark\:bg-default-100,
+.midnight-navy .bg-default-100,
+.midnight-navy .dark\:bg-default-50,
+.midnight-navy .bg-default-50,
+.midnight-navy .bg-popover,
+.midnight-navy .bg-content1 {
+  background-color: var(--card) !important;
+}
+
+.midnight-navy .border-default-200,
+.midnight-navy .dark\:border-default-200,
+.midnight-navy .border-gray-200,
+.midnight-navy .dark\:border-gray-800 {
+  border-color: var(--border) !important;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    outline-color: color-mix(in srgb, var(--ring) 50%, transparent);
+  }
+  body {
+    --font-sans: var(--font-geist-sans) !important;
+    --font-secondary: var(--font-geist-sans) !important;
+    --font-serif: var(--font-geist-mono) !important;
+    @apply bg-background text-foreground;
+    overscroll-behavior-y: none;
+  }
+}
+
+/*
+  markdown css for chat:-
+*/
+.wmde-markdown {
+  background-color: transparent !important;
+  padding: 0;
+}
+
+[data-color-mode="light"] .wmde-markdown {
+  background-color: transparent !important;
+}
+
+[data-color-mode="dark"] .wmde-markdown {
+  background-color: transparent !important;
+}
+
+.wmde-markdown pre,
+.wmde-markdown code {
+  background-color: #f4f4f5 !important;
+  color: #000000 !important;
+}
+
+.wmde-markdown table th,
+.wmde-markdown table td {
+  background-color: transparent !important;
+}
+/* Premium Selection */
+::selection {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+/* Glassmorphism Utility */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dark .glass {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Custom Autofill Styles to prevent yellow/blue Chrome highlights */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: #000000 !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: #000000 !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #161b22 inset !important;
+  box-shadow: 0 0 0 1000px #161b22 inset !important;
+  -webkit-text-fill-color: #f3f4f6 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+.dark input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px #22272e inset !important;
+  box-shadow: 0 0 0 1000px #22272e inset !important;
+  -webkit-text-fill-color: #f3f4f6 !important;
+}
+
+/* Hide CopilotKit floating chat bubble/trigger button */
+.copilotKitButton {
+  display: none !important;
+}
+
+/* Hide NextUI/HeroUI Tabs scroll/nav buttons to prevent empty box glitches */
+[data-slot="prev-button"],
+[data-slot="next-button"],
+.nextui-tabs-scroll-button,
+.heroui-tabs-scroll-button,
+button[aria-label="Previous tabs"],
+button[aria-label="Next tabs"],
+[data-slot="base"] > button:not([role="tab"]),
+.nextui-tabs-container > button:not([role="tab"]),
+div[class*="tabs"] > button:not([role="tab"]) {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+/* Custom Lightning Border Beam and Glow Animations */
+@keyframes border-beam {
+  0% {
+    border-color: rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.05), inset 0 0 0px rgba(59, 130, 246, 0);
+  }
+  50% {
+    border-color: rgba(14, 165, 233, 0.8);
+    box-shadow: 0 0 25px rgba(14, 165, 233, 0.25), inset 0 0 10px rgba(14, 165, 233, 0.1);
+  }
+  100% {
+    border-color: rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.05), inset 0 0 0px rgba(59, 130, 246, 0);
+  }
+}
+
+.lightning-glow-card {
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lightning-glow-card:hover {
+  animation: border-beam 2.5s ease-in-out infinite;
+  transform: translateY(-4px);
+  border-color: rgba(59, 130, 246, 0.5) !important;
+}
+
+/* Extra active card style (like the middle pricing tier, or first step) */
+.lightning-glow-card-active {
+  animation: border-beam 3s ease-in-out infinite;
+  border-color: rgba(59, 130, 246, 0.6) !important;
+}
+
+/* Premium Animated Grid Background */
+.moving-grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(0, 0, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 50px 50px;
+  animation: grid-slide 25s linear infinite;
+}
+
+@keyframes grid-slide {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 50px 50px;
+  }
+}
+
+/* Premium Text Gradient Shifting */
+.gradient-text-shifting {
+  background: linear-gradient(to right, #0000ff, #2563eb, #60a5fa, #3b82f6, #0000ff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: text-gradient-shift 5s linear infinite;
+}
+
+@keyframes text-gradient-shift {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Terminal Cursor Blink */
+.terminal-cursor-blink::after {
+  content: '_';
+  color: #a855f7;
+  animation: cursor-blink 1.2s step-end infinite;
+  font-weight: bold;
+}
+
+@keyframes cursor-blink {
+  from, to { opacity: 0 }
+  50% { opacity: 1 }
+}
+
+/* Micro-Beam Button Hover Effect */
+.micro-beam-btn {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.micro-beam-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.25),
+    transparent
+  );
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.micro-beam-btn:hover::before {
+  left: 100%;
+}
+
+.micro-beam-btn:hover {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  border-color: rgba(59, 130, 246, 0.5) !important;
+}
+
+/* ── Landing Footer: force all text visible on dark bg ── */
+.landing-footer,
+.landing-footer * {
+  --foreground: #ffffff;
+  --color-foreground: #ffffff;
+}
+
+.landing-footer {
+  color: #ffffff !important;
+}
+
+.landing-footer p,
+.landing-footer li,
+.landing-footer span,
+.landing-footer div {
+  color: inherit;
+}
+
+.landing-footer .footer-muted {
+  color: #a1a1aa !important;
+}
+
+.landing-footer .footer-dimmed {
+  color: #71717a !important;
+}
+
+.landing-footer a {
+  color: #a1a1aa !important;
+}
+
+.landing-footer a:hover {
+  color: #ffffff !important;
+}
+
+/* Fix Chrome autofill background overriding */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  transition: background-color 5000s ease-in-out 0s !important;
+  -webkit-text-fill-color: inherit !important;
+}
+
+/* ── Inso Prompt Box White Style ── */
+.inso-prompt-box {
+  background-color: #ffffff !important; /* Pure white prompt box background */
+  border: 1px solid rgba(229, 231, 235, 0.6) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  border-radius: 10px !important;
+}
+
+/* Pure solid background enforcement & removal of any right-side fading/gradients */
+.copilotKitSidebar,
+.copilotKitSidebarContent,
+.copilotKitSidebarWrapper,
+[class*="copilotKit"] {
+  box-shadow: none !important;
+  background-image: none !important;
+  filter: none !important;
+}
+
+/* Ensure no visual changes, borders, outlines, or shadows on any children when focused or clicked */
+.inso-prompt-box *:focus,
+.inso-prompt-box *:focus-within,
+.inso-prompt-box *[data-focus="true"],
+.inso-prompt-box *[data-focus-visible="true"] {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+}
+
+.inso-prompt-box,
+.inso-prompt-box textarea,
+.inso-prompt-box input,
+.inso-prompt-box span,
+.inso-prompt-box p,
+.inso-prompt-box div {
+  color: #1f2937 !important; /* Dark text/content */
+}
+
+.inso-prompt-box textarea::placeholder,
+.inso-prompt-box input::placeholder {
+  color: #6b7280 !important; /* Darker gray placeholder for clear visibility */
+}
+
+.inso-prompt-box svg:not(.inso-brand-icon),
+.inso-prompt-box svg:not(.inso-brand-icon) path,
+.inso-prompt-box button {
+  color: #4b5563 !important; /* Muted dark gray for icons and action buttons */
+}
+
+.inso-prompt-box button:hover svg:not(.inso-brand-icon) {
+  color: #111827 !important;
+}
+
+.inso-prompt-box .inso-send-btn {
+  background-color: #111827 !important; /* Circular button background */
+}
+
+.inso-prompt-box .inso-send-btn svg,
+.inso-prompt-box .inso-send-btn svg * {
+  color: #ffffff !important;   /* Solid white color */
+  stroke: #ffffff !important;  /* Solid white stroke */
+  fill: #ffffff !important;    /* Solid white fill if applicable */
+}
+
+/* inso-paperclip-btn CSS removed to allow Tailwind classes to apply */
+
+/* Z-Index Overrides for Modals (to overlay Sidebar and Workspace Dock) */
+div[data-slot="backdrop"],
+div[data-slot="wrapper"] {
+  z-index: 99999 !important;
+}
+
+/* Disable focus outline/ring/border rectangles on all inputs globally */
+*:focus,
+*:focus-visible,
+*:active,
+*:focus-within,
+[data-slot="input-wrapper"],
+[data-slot="input-wrapper"] * {
+  outline: none !important;
+  outline-width: 0 !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
+  ring: 0 !important;
+  --tw-ring-width: 0px !important;
+  --tw-ring-offset-width: 0px !important;
+}
+
+/* Specifically remove HeroUI's after pseudo-element line/focus rings */
+[data-slot="input-wrapper"]::after,
+[data-slot="input-wrapper"]::before {
+  display: none !important;
+  content: none !important;
+}
+
+.moving-grid-dark {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px;
+  animation: grid-slide 25s linear infinite;
+}
