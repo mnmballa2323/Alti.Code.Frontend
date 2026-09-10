@@ -1330,32 +1330,7 @@ export default function Sidebar() {
 
 
 
-  const platformModes = [
-    {
-      mode: "code" as const,
-      label: "Code",
-      icon: Code,
-      path: "/code",
-    },
-    {
-      mode: "create" as const,
-      label: "Design",
-      icon: Wand2,
-      path: "/create",
-    },
-    {
-      mode: "cowork" as const,
-      label: "Agents",
-      icon: Bot,
-      path: "/cowork",
-    },
-    {
-      mode: "chat" as const,
-      label: "Chat",
-      icon: MessageSquare,
-      path: "/chat",
-    },
-  ];
+
 
 
 
@@ -1937,37 +1912,12 @@ export default function Sidebar() {
             isSidebarOpen ? "w-72" : "w-16",
           )}
         >
-          {/* Sidebar Header (Mode Toggle & Collapse Button) */}
+          {/* Sidebar Header (Title & Collapse Button) */}
           {isSidebarOpen ? (
-            <div className="w-full h-[52px] flex-none flex items-center justify-between px-2.5 gap-2 border-b border-zinc-800 select-none relative z-50">
-              {/* 4 Mode Toggle Buttons (Chat / Code / Create / Cowork) */}
-              <div className="flex items-center justify-between bg-[#08080a] border border-[#1c1c22] shadow-[inset_0_0_8px_rgba(0,0,255,0.15)] rounded-xl p-0.5 flex-1 gap-0.5 min-w-0">
-                {platformModes.map((item) => {
-                  const isActive = activeMode === item.mode;
-
-                  return (
-                    <button
-                      key={item.mode}
-                      className={cn(
-                        "flex items-center justify-center transition-all duration-200 h-[28px] flex-1 rounded-lg text-xs font-medium cursor-pointer select-none px-1 min-w-0",
-                        isActive
-                          ? "bg-[#0000ff]/30 text-white border border-[#0000ff] shadow-[0_0_12px_rgba(0,0,255,0.8)] font-bold"
-                          : "bg-transparent border border-transparent text-blue-200/60 hover:text-white hover:bg-white/5",
-                      )}
-                      type="button"
-                      onClick={() => {
-                        handleModeClick(item.mode);
-                        router.push(item.path);
-                      }}
-                    >
-                      <span className="text-[11px] font-semibold truncate">
-                        {item.label}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
+            <div className="w-full h-[48px] flex-none flex items-center justify-between px-3 border-b border-zinc-800 select-none relative z-50">
+              <span className="text-xs font-bold tracking-wider text-white">
+                Alti Code Studio
+              </span>
               <button
                 className="w-8 h-8 shrink-0 bg-transparent border-none text-default-400 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer"
                 title="Collapse Sidebar"
@@ -1978,7 +1928,7 @@ export default function Sidebar() {
               </button>
             </div>
           ) : (
-            <div className="w-full h-[52px] flex-none flex items-center justify-center border-b border-zinc-800 select-none">
+            <div className="w-full h-[48px] flex-none flex items-center justify-center border-b border-zinc-800 select-none">
               <button
                 className="w-8 h-8 shrink-0 bg-transparent border-none text-default-400 hover:text-white flex items-center justify-center transition-all duration-200 cursor-pointer"
                 title="Expand Sidebar"
