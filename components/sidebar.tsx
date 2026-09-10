@@ -1328,37 +1328,7 @@ export default function Sidebar() {
 
   const modeParam = searchParams?.get("mode");
 
-  const activeNavItem = (() => {
-    if (pathname === "/agents" || pathname?.startsWith("/agents/"))
-      return "Agents";
-    if (pathname === "/vault") return "Vault";
-    if (
-      pathname === "/instructions" ||
-      pathname === "/guardrails" ||
-      pathname === "/knowledge" ||
-      pathname === "/repository" ||
-      pathname === "/apis" ||
-      pathname === "/sdk" ||
-      pathname === "/mcp"
-    )
-      return "Tuning";
-    if (
-      pathname === "/chat" ||
-      pathname?.startsWith("/chat/") ||
-      pathname === "/new-chat"
-    )
-      return "Chat";
-    if (
-      pathname === "/connect-apps" ||
-      pathname === "/integrations" ||
-      pathname === "/database" ||
-      pathname === "/cloud"
-    )
-      return "Integrations";
-    if (pathname === "/code") return "Code";
 
-    return "Code";
-  })();
 
   const platformModes = [
     {
@@ -1387,46 +1357,7 @@ export default function Sidebar() {
     },
   ];
 
-  const navigationItems = [
-    {
-      label: "Code",
-      icon: Code,
-      path: "/code",
-      isActive: activeNavItem === "Code",
-      onClick: () => {
-        dispatch(startNewChat());
-      },
-    },
-    {
-      label: "Integrations",
-      icon: Blocks,
-      path: "/connect-apps",
-      isActive: activeNavItem === "Integrations",
-      onClick: () => {},
-    },
-    {
-      label: "Tuning",
-      icon: SlidersHorizontal,
-      path: "/instructions",
-      isActive: activeNavItem === "Tuning",
-      onClick: () => {},
-    },
-    {
-      label: "Vault",
-      icon: Lock,
-      path: "/vault",
-      isActive: activeNavItem === "Vault",
-      onClick: () => {
-        if (pathname === "/vault") {
-          window.dispatchEvent(
-            new CustomEvent("select-secret", { detail: null }),
-          );
-        }
-      },
-    },
-  ];
 
-  const filteredNavigationItems = navigationItems;
 
   const getPlusTooltipContent = () => {
     if (pathname === "/" || pathname === "/code") return "New Code";
@@ -2136,47 +2067,6 @@ export default function Sidebar() {
             </div>
           )}
 
-          {/* Navigation Sub-Toggle Bar when in Code mode */}
-          {isSidebarOpen && activeMode === "code" && (
-            <div className="flex items-center justify-between border-b border-white/5 w-full flex-none py-1.5 px-2.5">
-              <div className="flex items-center justify-between bg-[#08080a] border border-[#1c1c22] shadow-[inset_0_0_8px_rgba(0,0,255,0.15)] rounded-xl p-1 w-full gap-1">
-                {navigationItems.map((item) => {
-                  const IconComponent = item.icon;
-
-                  return (
-                    <Tooltip
-                      key={item.label}
-                      classNames={{
-                        content:
-                          "bg-black text-white px-2 py-1 text-xs rounded-md shadow-lg z-[99999]",
-                      }}
-                      closeDelay={0}
-                      content={item.label}
-                      delay={0}
-                      placement="bottom"
-                    >
-                      <Link
-                        className={cn(
-                          "flex items-center justify-center transition-all duration-200 h-[26px] flex-1 rounded-lg text-xs font-semibold cursor-pointer border border-transparent",
-                          item.isActive
-                            ? "bg-[#0000ff]/30 text-white border-[#0000ff] shadow-[0_0_10px_rgba(0,0,255,0.6)] font-bold"
-                            : "bg-transparent text-gray-400 hover:text-white hover:bg-white/5",
-                        )}
-                        href={item.path}
-                        onClick={() => {
-                          if (item.onClick) {
-                            item.onClick();
-                          }
-                        }}
-                      >
-                        <IconComponent className="size-3.5 shrink-0" />
-                      </Link>
-                    </Tooltip>
-                  );
-                })}
-              </div>
-            </div>
-          )}
 
           {/* Cowork Sub-Toggle Bar when in Cowork mode */}
           {isSidebarOpen && activeMode === "cowork" && (
