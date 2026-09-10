@@ -2,17 +2,7 @@
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState, Suspense } from "react";
-import {
-  Paperclip,
-  MessageSquare,
-  Search,
-  Sparkles,
-  PenLine,
-  Wand2,
-  Code2,
-  Activity,
-  Bot,
-} from "lucide-react";
+import { Paperclip } from "lucide-react";
 
 import { useSettingsStore } from "@/store/useSettingsStore";
 import ChatBotLayout from "@/components/ChatbotLayout";
@@ -36,15 +26,15 @@ type PromptCategory =
   | "monitor"
   | "agent";
 
-const PROMPT_CATEGORIES: { id: PromptCategory; label: string; icon: any }[] = [
-  { id: "chat", label: "Chat", icon: MessageSquare },
-  { id: "search", label: "Search", icon: Search },
-  { id: "research", label: "Research", icon: Sparkles },
-  { id: "write", label: "Write", icon: PenLine },
-  { id: "create", label: "Create", icon: Wand2 },
-  { id: "code", label: "Code", icon: Code2 },
-  { id: "monitor", label: "Monitor", icon: Activity },
-  { id: "agent", label: "Agent", icon: Bot },
+const PROMPT_CATEGORIES: { id: PromptCategory; label: string }[] = [
+  { id: "chat", label: "Chat" },
+  { id: "search", label: "Search" },
+  { id: "research", label: "Research" },
+  { id: "write", label: "Write" },
+  { id: "create", label: "Create" },
+  { id: "code", label: "Code" },
+  { id: "monitor", label: "Monitor" },
+  { id: "agent", label: "Agent" },
 ];
 
 function CodeHomeContent() {
@@ -152,9 +142,9 @@ function CodeHomeContent() {
   };
 
   const renderLeftActions = (
-    <div className="flex items-center gap-2 max-w-full">
+    <div className="flex items-center gap-1.5 max-w-full">
       <button
-        className="inso-paperclip-btn bg-gray-100 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700/50 border border-transparent dark:border-white/5 h-[28px] w-[28px] flex items-center justify-center rounded-md transition-all shrink-0 cursor-pointer"
+        className="inso-paperclip-btn bg-gray-100 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700/50 border border-transparent dark:border-white/5 h-[26px] w-[26px] flex items-center justify-center rounded-md transition-all shrink-0 cursor-pointer"
         type="button"
         title="Attach File"
         onClick={() => {
@@ -169,9 +159,8 @@ function CodeHomeContent() {
       </button>
 
       {/* 8-Item Menu Toggle: Chat / Search / Research / Write / Create / Code / Monitor / Agent */}
-      <div className="flex items-center bg-gray-100/90 dark:bg-[#141416] border border-gray-200/80 dark:border-white/10 rounded-lg p-0.5 gap-0.5 overflow-x-auto no-scrollbar max-w-[calc(100vw-180px)] sm:max-w-none">
+      <div className="flex items-center bg-gray-100/90 dark:bg-[#141416] border border-gray-200/80 dark:border-white/10 rounded-lg p-0.5 gap-0.5 shrink-0">
         {PROMPT_CATEGORIES.map((item) => {
-          const Icon = item.icon;
           const isActive = activeCategory === item.id;
 
           return (
@@ -180,14 +169,13 @@ function CodeHomeContent() {
               type="button"
               onClick={() => setActiveCategory(item.id)}
               className={cn(
-                "flex items-center gap-1.5 px-2.5 h-[26px] rounded-md text-[11px] font-medium transition-all duration-150 shrink-0 cursor-pointer select-none",
+                "px-2 h-[22px] rounded-md text-[10.5px] font-medium leading-none transition-all duration-150 shrink-0 cursor-pointer select-none",
                 isActive
-                  ? "bg-white dark:bg-[#252528] text-gray-900 dark:text-white shadow-sm border border-black/5 dark:border-white/10 font-semibold"
-                  : "text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 hover:bg-gray-200/50 dark:hover:bg-white/5 border border-transparent",
+                  ? "bg-white dark:bg-[#252528] text-gray-900 dark:text-white shadow-xs font-semibold"
+                  : "text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 hover:bg-gray-200/50 dark:hover:bg-white/5",
               )}
             >
-              <Icon className="w-3.5 h-3.5 shrink-0" />
-              <span>{item.label}</span>
+              {item.label}
             </button>
           );
         })}
@@ -224,7 +212,7 @@ function CodeHomeContent() {
             <div className="flex w-full flex-col items-center gap-6 z-20 px-6 md:px-12 lg:px-16">
               <div className="flex flex-col items-center text-center z-30 mb-6 h-[40px] justify-center">
                 <h1
-                  className="text-4xl font-semibold tracking-tight text-foreground"
+                  className="text-4xl font-light tracking-tight text-foreground"
                   style={{ fontFamily: "var(--font-secondary)" }}
                 >
                   Let's Build Together
