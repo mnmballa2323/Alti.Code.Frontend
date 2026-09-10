@@ -387,8 +387,8 @@ export const SAAS_MOCKS = [
     icon: "logos:gitlab",
   },
   {
-    name: "GCP Kubernetes Service (AKS)",
-    slug: "mcp_gcp_aks",
+    name: "Google Kubernetes Engine (GKE)",
+    slug: "mcp_gcp_gke",
     icon: "logos:gcp-icon",
   },
   {
@@ -572,7 +572,7 @@ export const SAAS_MOCKS = [
     icon: "logos:ngrok",
   },
   {
-    name: "MinIO S3 Compatible Object Store",
+    name: "MinIO High-Performance Object Store",
     slug: "mcp_minio",
     icon: "logos:minio",
   },

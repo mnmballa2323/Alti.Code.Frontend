@@ -424,7 +424,7 @@ export const GEMINI_EXTENSIONS: GeminiExtension[] = [
   },
   {
     name: "async-remote-agent-extension",
-    description: "Managing remote agent sandboxes on AKS.",
+    description: "Managing remote agent sandboxes on Google Kubernetes Engine (GKE).",
     githubUrl: "https://github.com/derrickchwong/remote-agent-extension",
     category: "Cloud",
   },

@@ -1,8 +1,18 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState, useRef, Suspense } from "react";
-import { Paperclip, ChevronDown } from "lucide-react";
+import { useEffect, useState, Suspense } from "react";
+import {
+  Paperclip,
+  MessageSquare,
+  Search,
+  Sparkles,
+  PenLine,
+  Wand2,
+  Code2,
+  Activity,
+  Bot,
+} from "lucide-react";
 
 import { useSettingsStore } from "@/store/useSettingsStore";
 import ChatBotLayout from "@/components/ChatbotLayout";
@@ -15,52 +25,26 @@ import {
   startNewChat,
 } from "@/store/messagesSlice";
 import { cn } from "@/lib/utils";
-const CODE_MODELS = [
-  {
-    id: "gemini-3.6-flash",
-    label: "Gemini 3.6 Flash High",
-    description: "Google Cloud · Vertex AI",
-  },
-  {
-    id: "gemini-3.1-pro",
-    label: "Gemini 3.1 Pro",
-    description: "Google Cloud · Vertex AI",
-  },
-  {
-    id: "gemini-3.0-ultra",
-    label: "Gemini 3.0 Ultra",
-    description: "Google Cloud · Vertex AI",
-  },
-  {
-    id: "claude-opus-4.6",
-    label: "Claude Opus 4.6",
-    description: "Google Cloud · Vertex AI Model Garden",
-  },
-  {
-    id: "claude-sonnet-4.5",
-    label: "Claude Sonnet 4.5",
-    description: "Google Cloud · Vertex AI Model Garden",
-  },
-  {
-    id: "claude-haiku-4",
-    label: "Claude Haiku 4",
-    description: "Google Cloud · Vertex AI Model Garden",
-  },
-  {
-    id: "deepseek-coder-v3",
-    label: "DeepSeek Coder V3",
-    description: "Google Cloud · Vertex AI Model Garden",
-  },
-  {
-    id: "qwen-3-coder",
-    label: "Qwen 3 Coder",
-    description: "Google Cloud · Vertex AI Model Garden",
-  },
-  {
-    id: "phi-4",
-    label: "Phi-4",
-    description: "Google Cloud · Vertex AI Model Garden",
-  },
+
+type PromptCategory =
+  | "chat"
+  | "search"
+  | "research"
+  | "write"
+  | "create"
+  | "code"
+  | "monitor"
+  | "agent";
+
+const PROMPT_CATEGORIES: { id: PromptCategory; label: string; icon: any }[] = [
+  { id: "chat", label: "Chat", icon: MessageSquare },
+  { id: "search", label: "Search", icon: Search },
+  { id: "research", label: "Research", icon: Sparkles },
+  { id: "write", label: "Write", icon: PenLine },
+  { id: "create", label: "Create", icon: Wand2 },
+  { id: "code", label: "Code", icon: Code2 },
+  { id: "monitor", label: "Monitor", icon: Activity },
+  { id: "agent", label: "Agent", icon: Bot },
 ];
 
 function CodeHomeContent() {
@@ -127,14 +111,7 @@ function CodeHomeContent() {
     return () =>
       window.removeEventListener("inso-mode-change", handleModeChange);
   }, [searchParams]);
-  const [selectedModel, setSelectedModel] = useState("");
-  const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
-  const [dropdownPosition, setDropdownPosition] = useState<{
-    top: number;
-    left: number;
-  } | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const [activeCategory, setActiveCategory] = useState<PromptCategory>("code");
 
   useEffect(() => {
     dispatch(startNewChat());
@@ -142,42 +119,6 @@ function CodeHomeContent() {
       setChatContext({ sessionId: null, model: "code", domain: "Code" }),
     );
   }, [dispatch]);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsModelDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // Calculate dropdown position when it opens
-  useEffect(() => {
-    if (isModelDropdownOpen && buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-
-      setDropdownPosition({
-        top: rect.bottom + 8,
-        left: rect.left,
-      });
-    }
-  }, [isModelDropdownOpen]);
-
-  const getSelectedModelLabel = () => {
-    if (!selectedModel) return "Select Model";
-
-    return (
-      CODE_MODELS.find((m) => m.id === selectedModel)?.label || "Select Model"
-    );
-  };
 
   const handleFirstMessageSend = (
     prompt: string,
@@ -191,19 +132,15 @@ function CodeHomeContent() {
       router.push(`/chat/${newSessionId}`);
     };
 
+    const categoryLabel =
+      PROMPT_CATEGORIES.find((c) => c.id === activeCategory)?.label || "Code";
+
     dispatch(
       sendMessage({
         prompt,
-        model:
-          activePromptMode === "research"
-            ? "Deep Research"
-            : getSelectedModelLabel(),
-        domain:
-          activePromptMode === "code"
-            ? "Code"
-            : activePromptMode === "research"
-              ? "Research"
-              : "Chat",
+        model: "Gemini 2.5 Pro",
+        domain: categoryLabel,
+        mode: activeCategory,
         language,
         sessionId: sessionId,
         ragMode,
@@ -215,10 +152,11 @@ function CodeHomeContent() {
   };
 
   const renderLeftActions = (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2 max-w-full">
       <button
         className="inso-paperclip-btn bg-gray-100 dark:bg-gray-800/50 hover:bg-gray-200 dark:hover:bg-gray-700/50 border border-transparent dark:border-white/5 h-[28px] w-[28px] flex items-center justify-center rounded-md transition-all shrink-0 cursor-pointer"
         type="button"
+        title="Attach File"
         onClick={() => {
           const fileInput = document.querySelector(
             'input[type="file"]',
@@ -230,58 +168,29 @@ function CodeHomeContent() {
         <Paperclip className="w-3.5 h-3.5 text-gray-500 dark:text-gray-400" />
       </button>
 
-      {/* Model Picker Dropdown */}
-      <div ref={dropdownRef} className="relative">
-        <button
-          ref={buttonRef}
-          className={cn(
-            "flex items-center gap-1.5 px-2.5 h-[28px] rounded-md text-[12px] font-normal transition-all cursor-pointer",
-            "bg-gray-100 dark:bg-gray-800/50 text-gray-500 dark:text-gray-400 border border-transparent dark:border-white/5",
-            "hover:bg-gray-200 dark:hover:bg-gray-700/50 hover:text-gray-900 dark:hover:text-white",
-          )}
-          type="button"
-          onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
-        >
-          {getSelectedModelLabel()}
-          <ChevronDown
-            className={cn(
-              "w-3 h-3 transition-transform duration-200",
-              isModelDropdownOpen && "rotate-180",
-            )}
-          />
-        </button>
+      {/* 8-Item Menu Toggle: Chat / Search / Research / Write / Create / Code / Monitor / Agent */}
+      <div className="flex items-center bg-gray-100/90 dark:bg-[#141416] border border-gray-200/80 dark:border-white/10 rounded-lg p-0.5 gap-0.5 overflow-x-auto no-scrollbar max-w-[calc(100vw-180px)] sm:max-w-none">
+        {PROMPT_CATEGORIES.map((item) => {
+          const Icon = item.icon;
+          const isActive = activeCategory === item.id;
 
-        {isModelDropdownOpen && dropdownPosition && (
-          <div
-            className="fixed w-[240px] bg-white dark:bg-[#161b22] border border-gray-200 dark:border-gray-800 rounded-xl shadow-2xl overflow-hidden"
-            style={{
-              top: dropdownPosition.top,
-              left: dropdownPosition.left,
-              zIndex: 99999,
-            }}
-          >
-            <div className="p-1.5 max-h-[220px] overflow-y-auto scrollbar-thin">
-              {CODE_MODELS.map((model) => (
-                <button
-                  key={model.id}
-                  className={cn(
-                    "w-full px-3 py-2 rounded-lg text-left transition-all cursor-pointer text-[12px] font-medium flex flex-col gap-0.5",
-                    selectedModel === model.id
-                      ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400"
-                      : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/5",
-                  )}
-                  type="button"
-                  onClick={() => {
-                    setSelectedModel(model.id);
-                    setIsModelDropdownOpen(false);
-                  }}
-                >
-                  <span>{model.label}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+          return (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setActiveCategory(item.id)}
+              className={cn(
+                "flex items-center gap-1.5 px-2.5 h-[26px] rounded-md text-[11px] font-medium transition-all duration-150 shrink-0 cursor-pointer select-none",
+                isActive
+                  ? "bg-white dark:bg-[#252528] text-gray-900 dark:text-white shadow-sm border border-black/5 dark:border-white/10 font-semibold"
+                  : "text-gray-500 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-zinc-200 hover:bg-gray-200/50 dark:hover:bg-white/5 border border-transparent",
+              )}
+            >
+              <Icon className="w-3.5 h-3.5 shrink-0" />
+              <span>{item.label}</span>
+            </button>
+          );
+        })}
       </div>
     </div>
   );

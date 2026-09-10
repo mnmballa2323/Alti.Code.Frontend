@@ -18,22 +18,6 @@ const providers = [
     rgb: "217, 119, 6",
     color: "#D97706",
   },
-  {
-    id: "grok",
-    name: "Grok",
-    icon: "custom:xai",
-    rgb: "113, 113, 122",
-    color: "#71717A",
-    isMonochrome: true,
-  },
-  {
-    id: "llama",
-    name: "Llama",
-    icon: "simple-icons:meta",
-    rgb: "6, 104, 225",
-    color: "#0668E1",
-    isMonochrome: true,
-  },
 ];
 
 export default function ModelProvidersSection() {
@@ -53,8 +37,8 @@ export default function ModelProvidersSection() {
         </div>
 
         {/* Static Grid Container */}
-        <div className="w-full max-w-5xl px-4 mt-2">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 justify-center">
+        <div className="w-full max-w-2xl px-4 mt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 justify-center">
             {providers.map((provider, idx) => (
               <div
                 key={idx}
