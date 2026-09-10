@@ -206,18 +206,10 @@ function CodeHomeContent() {
           </div>
         ) : (
           <div
-            className="relative flex flex-1 w-full flex-col items-center justify-start pt-[35vh] overflow-hidden bg-[#DFDFDF] dark:bg-[#161616] bg-none"
+            className="relative flex flex-1 w-full flex-col items-center justify-start pt-[38vh] overflow-hidden bg-[#DFDFDF] dark:bg-[#161616] bg-none"
             style={{ backgroundImage: "none" }}
           >
-            <div className="flex w-full flex-col items-center gap-6 z-20 px-6 md:px-12 lg:px-16">
-              <div className="flex flex-col items-center text-center z-30 mb-6 h-[40px] justify-center">
-                <h1
-                  className="text-4xl font-light tracking-tight text-foreground"
-                  style={{ fontFamily: "var(--font-secondary)" }}
-                >
-                  Let's Build Together
-                </h1>
-              </div>
+            <div className="flex w-full flex-col items-center z-20 px-6 md:px-12 lg:px-16">
               <div className="flex w-full flex-col gap-4 max-w-2xl lg:max-w-3xl">
                 <PromptInputFullLineWithBottomActions
                   leftActionsOverride={renderLeftActions}
