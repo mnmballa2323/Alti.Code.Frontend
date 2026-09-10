@@ -1915,7 +1915,7 @@ export default function Sidebar() {
           {/* Sidebar Header (Title & Collapse Button) */}
           {isSidebarOpen ? (
             <div className="w-full h-[48px] flex-none flex items-center justify-between px-3 border-b border-zinc-800 select-none relative z-50">
-              <span className="text-xs font-bold tracking-wider text-white">
+              <span className="text-xs font-light tracking-wider text-zinc-300">
                 Alti Code Studio
               </span>
               <button
