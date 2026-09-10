@@ -1054,7 +1054,7 @@ function PromptInputFullLineComponent({
       )}
       {singleHeight ? (
         <Form
-          className="inso-prompt-box mx-auto w-full max-w-4xl flex flex-row items-center h-[50px] min-h-[50px] max-h-[50px] px-3 gap-2 overflow-hidden rounded-xl border transition-all duration-300 shadow-sm bg-white dark:bg-[#161616] border-gray-200 dark:border-zinc-800 focus-within:border-blue-500/50"
+          className="inso-prompt-box mx-auto w-full max-w-4xl flex flex-row items-center h-[50px] min-h-[50px] max-h-[50px] px-3 gap-2 overflow-hidden rounded-md border transition-all duration-300 shadow-sm bg-white dark:bg-[#161616] border-gray-200 dark:border-zinc-800 focus-within:border-blue-500/50"
           onSubmit={onSubmit}
         >
           {leftActionsOverride !== undefined ? (
@@ -1123,7 +1123,7 @@ function PromptInputFullLineComponent({
         </Form>
       ) : (
         <Form
-          className="inso-prompt-box mx-auto w-full max-w-4xl flex flex-col overflow-hidden rounded-lg border transition-all duration-300 shadow-sm"
+          className="inso-prompt-box mx-auto w-full max-w-4xl flex flex-col overflow-hidden rounded-md border transition-all duration-300 shadow-sm"
           onSubmit={onSubmit}
         >
           <div

@@ -550,7 +550,7 @@ input:-webkit-autofill:active {
   background-color: #ffffff !important; /* Pure white prompt box background */
   border: 1px solid rgba(229, 231, 235, 0.6) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-  border-radius: 10px !important;
+  border-radius: 6px !important;
 }
 
 /* Pure solid background enforcement & removal of any right-side fading/gradients */
